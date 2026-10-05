@@ -11,7 +11,7 @@ import types
 import typing
 import warnings
 from collections.abc import Iterator, Sequence
-from enum import IntEnum
+from enum import Enum, IntEnum, StrEnum
 from threading import Lock
 from typing import cast, Any, BinaryIO, ClassVar, TextIO, TypeVar, Union
 
@@ -185,7 +185,14 @@ class Group:
                         setattr(self, k, v)
                         break
                     if cls is not bool and issubclass(cls, type(v)):
-                        # upcast, i.e. int -> IntEnum, str -> Path
+                        # upcast, i.e. int -> IntEnum, str -> Path | StrEnum
+                        # Validate enums
+                        if issubclass(cls, Enum):
+                            valid_values = [member.value for member in cls]
+                            if v not in valid_values:
+                                raise ValueError(
+                                    f"'{v}' is not a valid option for {k}. Must be one of: {valid_values}."
+                                )
                         setattr(self, k, cls.__call__(v))
                         break
                     if issubclass(cls, (tuple, set)) and isinstance(v, list):
@@ -550,7 +557,7 @@ class ServerOptions(Group):
         for a total of 5
         """
 
-    class ReleaseMode(str):
+    class ReleaseMode(StrEnum):
         """
         Release modes
         A Release sends out the remaining items *from* a world that releases
@@ -560,8 +567,13 @@ class ServerOptions(Group):
         "auto-enabled" -> automatic release on goal completion and manual release is also enabled
         "goal" -> release is allowed after goal completion
         """
+        DISABLED = "disabled"
+        ENABLED = "enabled"
+        AUTO = "auto"
+        AUTO_ENABLED = "auto-enabled"
+        GOAL = "goal"
 
-    class CollectMode(str):
+    class CollectMode(StrEnum):
         """
         Collect modes
         A Collect sends the remaining items *to* a world that collects
@@ -571,8 +583,13 @@ class ServerOptions(Group):
         "auto-enabled" -> automatic collect on goal completion and manual collect is also enabled
         "goal" -> collect is allowed after goal completion
         """
+        DISABLED = "disabled"
+        ENABLED = "enabled"
+        AUTO = "auto"
+        AUTO_ENABLED = "auto-enabled"
+        GOAL = "goal"
 
-    class RemainingMode(str):
+    class RemainingMode(StrEnum):
         """
         Remaining modes
         !remaining handling, that tells a client which items remain in their pool
@@ -580,8 +597,11 @@ class ServerOptions(Group):
         "disabled" -> Client can never ask for remaining items
         "goal" -> Client can ask for remaining items after goal completion
         """
+        ENABLED = "enabled"
+        DISABLED = "disabled"
+        GOAL = "goal"
 
-    class CountdownMode(str):
+    class CountdownMode(StrEnum):
         """
         Countdown modes
         Determines whether or not a player can initiate a countdown with !countdown
@@ -591,6 +611,9 @@ class ServerOptions(Group):
         "disabled" -> Client can never initiate a countdown with !countdown.
         "auto" -> !countdown will be available for any room with less than 30 slots.
         """
+        ENABLED = "enabled"
+        DISABLED = "disabled"
+        AUTO = "auto"
 
     class AutoShutdown(int):
         """Automatically shut down the server after this many seconds without new location checks, 0 to keep running"""
@@ -683,13 +706,16 @@ class GeneratorOptions(Group):
         OFF = 0
         ON = 1
 
-    class PanicMethod(str):
+    class PanicMethod(StrEnum):
         """
         What to do if the current item placements appear unsolvable.
         raise -> Raise an exception and abort.
         swap -> Attempt to fix it by swapping prior placements around. (Default)
         start_inventory -> Move remaining items to start_inventory, generate additional filler items to fill locations.
         """
+        RAISE = "raise"
+        SWAP = "swap"
+        START_INVENTORY = "start_inventory"
 
     player_files_path: PlayerFilesPath = PlayerFilesPath("Players")
     players: Players = Players(0)
