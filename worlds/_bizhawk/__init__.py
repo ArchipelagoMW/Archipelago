@@ -134,10 +134,7 @@ async def send_requests(ctx: BizHawkContext, req_list: list[dict[str, Any]]) -> 
             errors.append(ConnectorError(response["err"]))
 
     if errors:
-        if sys.version_info >= (3, 11, 0):
-            raise ExceptionGroup("Connector script returned errors", errors)  # noqa
-        else:
-            raise errors[0]
+        raise ExceptionGroup("Connector script returned errors", errors)
 
     return responses
 

@@ -1,6 +1,5 @@
 import math
-from typing import Any, Callable
-from typing_extensions import override
+from typing import Any, Callable, override
 from uuid import uuid4
 
 from werkzeug.routing import BaseConverter
