@@ -14,6 +14,14 @@ class DeathLinkAmnesty(Range):
     range_end = 30
     default = 10
 
+class DeathLinkReceiptStyle(Choice):
+    """
+    What happens when you receive a deathlink
+    """
+    display_name = "DeathLink Receipt Style"
+    option_death = 0
+    option_restart_chapter = 1
+
 class TrapLink(Toggle):
     """
     Whether your received traps are linked to other players
@@ -23,10 +31,27 @@ class TrapLink(Toggle):
     """
     display_name = "Trap Link"
 
+class LogicDifficulty(Choice):
+    """
+    What level of movement, tricks, and skips the logic will expect you to do
+
+    Developer Intended: The logic for a room only requires movement that the developers would expect a first-time player to know in that room
+
+    Vanilla Movement: The logic for a room could require any movement or tricks learned anywhere in the vanilla game
+
+    Assist Mode: The logic expects you to use invincibility, infinite dashes, and infinite stamina
+    """
+    display_name = "Logic Difficulty"
+    option_developer_intended = 0
+    option_vanilla_movement = 1
+    option_assist_mode = 2
+
 
 class GoalArea(Choice):
     """
     What Area must be cleared to gain access to the Epilogue and complete the game
+
+    Poetry Slam requires receiving all 16 Crystal Heart items and assembling the poem in the correct order to receive Granny's House Keys. Strawberries are still required.
     """
     display_name = "Goal Area"
     option_the_summit_a = 0
@@ -38,6 +63,7 @@ class GoalArea(Choice):
     option_empty_space = 6
     option_farewell = 7
     option_farewell_golden = 8
+    option_poetry_slam = 9
     default = 0
 
 class LockGoalArea(DefaultOnToggle):
@@ -68,7 +94,7 @@ class StrawberriesRequiredPercentage(Range):
     display_name = "Strawberries Required Percentage"
     range_start = 0
     range_end = 100
-    default = 80
+    default = 0
 
 
 class Checkpointsanity(Toggle):
@@ -113,6 +139,15 @@ class IncludeGoldens(Toggle):
     """
     display_name = "Include Goldens"
 
+class GoldenAmnesty(Range):
+    """
+    How many deaths it takes to restart a level with a Golden Strawberry
+    """
+    display_name = "Golden Amnesty"
+    range_start = 1
+    range_end = 30
+    default = 1
+
 
 class IncludeCore(Toggle):
     """
@@ -143,6 +178,73 @@ class IncludeCSides(Toggle):
     display_name = "Include C-Sides"
 
 
+class DashShuffle(Choice):
+    """
+    Whether the ability to dash is shuffled into the item pool, and in what manner
+
+    None: Dashing is not shuffled
+
+    Unified: A single `Dash` item exists, which gives you all 8 directions of dash
+
+    Cardinal Loose: Dash items exist for the four cardinal directions (up, right, down, left) exist, and receiving one allows you to dash in the adjacent diagonal directions as well
+
+    Cardinal Restrictive: Dash items exist for the four cardinal directions exist, but you must receive both cardinal directions to be able to dash in the diagonal direction between them
+
+    Octal: Separate dash items exist for all 8 dash directions
+    """
+    display_name = "Dash Shuffle"
+    option_none = 0
+    option_unified = 1
+    option_cardinal_loose = 2
+    option_cardinal_restrictive = 3
+    option_octal = 4
+    default = 0
+
+class ClimbShuffle(Choice):
+    """
+    Whether the ability to climb is shuffled into the item pool, and in what manner
+
+    NOTE: Due to extreme difficulty, this option is disabled in `Developer Intended` logic difficulty
+
+    None: Climbing is not shuffled
+
+    Unified: A single `Climb` item exists, which gives allows you to climb to the left and right
+
+    Split: Separate items exist to enable the ability to climb to the left and to the right
+    """
+    display_name = "Climb Shuffle"
+    option_none = 0
+    option_unified = 1
+    option_split = 2
+    default = 0
+
+class CrouchShuffle(Toggle):
+    """
+    Whether the ability to crouch is shuffled into the item pool
+    """
+    display_name = "Crouch Shuffle"
+
+
+class SplitInteractables(Choice):
+    """
+    Whether there are separate interactable items per-level
+
+    None: There is one item per interactable, which allows its use everywhere
+
+    Per Level: There is one item per interactable for each level, which allows its use in any side of that level
+
+    Per Side: There is one item per interactable for each side, which allows its use in that side of any level
+
+    Per Level And Side: There is one item per interactable for each combination of level and side, which allows its use in that side of that level
+    """
+    display_name = "Split Interactables"
+    option_none = 0
+    option_per_level = 1
+    option_per_side = 2
+    option_per_level_and_side = 3
+    default = 0
+
+
 class JunkFillPercentage(Range):
     """
     Replace a percentage of non-required Strawberries in the item pool with junk items
@@ -151,6 +253,12 @@ class JunkFillPercentage(Range):
     range_start = 0
     range_end = 100
     default = 50
+
+class ReduceRaspberries(Toggle):
+    """
+    Reduces the number of Raspberries in the item pool
+    """
+    display_name = "Reduce Raspberries"
 
 class TrapFillPercentage(Range):
     """
@@ -262,6 +370,12 @@ class ZoomTrapWeight(BaseTrapWeight):
     """
     display_name = "Zoom Trap Weight"
 
+class TinyTrapWeight(BaseTrapWeight):
+    """
+    Likelihood of a receiving a trap which causes Maddy to be Tiny
+    """
+    display_name = "Tiny Trap Weight"
+
 
 class MusicShuffle(Choice):
     """
@@ -284,6 +398,25 @@ class RequireCassettes(Toggle):
     Determines whether you must receive a level's Cassette Item to hear that level's music
     """
     display_name = "Require Cassettes"
+
+class TorchBehavior(Choice):
+    """
+    How Torches behave
+
+    Vanilla: Yellow Torches begin lit, Blue Torches do not
+
+    Start Lit: Blue and Yellow Torches both begin lit (if you have the corresponding Item)
+
+    Start Unlit: Blue and Yellow Torches both begin unlit
+
+    Never Lit: Blue and Yellow Torches begin unlit, and their items are not added to the item pool
+    """
+    display_name = "Torch Behavior"
+    option_vanilla = 0
+    option_start_lit = 1
+    option_start_unlit = 2
+    option_never_lit = 3
+    default = 0
 
 
 class MadelineHairLength(Choice):
@@ -388,13 +521,23 @@ celeste_option_groups = [
         Carsanity,
         Roomsanity,
         IncludeGoldens,
+        GoldenAmnesty,
         IncludeCore,
         IncludeFarewell,
         IncludeBSides,
         IncludeCSides,
     ]),
+    OptionGroup("Movement Options", [
+        DashShuffle,
+        ClimbShuffle,
+        CrouchShuffle,
+    ]),
+    OptionGroup("Item Options", [
+        SplitInteractables,
+    ]),
     OptionGroup("Junk and Traps", [
         JunkFillPercentage,
+        ReduceRaspberries,
         TrapFillPercentage,
         TrapExpirationAction,
         TrapExpirationAmount,
@@ -410,10 +553,12 @@ celeste_option_groups = [
         LaughterTrapWeight,
         HiccupTrapWeight,
         ZoomTrapWeight,
+        TinyTrapWeight,
     ]),
     OptionGroup("Aesthetic Options", [
         MusicShuffle,
         RequireCassettes,
+        TorchBehavior,
         MadelineHairLength,
         MadelineOneDashHairColor,
         MadelineTwoDashHairColor,
@@ -424,6 +569,10 @@ celeste_option_groups = [
 
 
 def resolve_options(world: World):
+    # Disable Climb Shuffle on Developer Intended Logic
+    if world.options.logic_difficulty.value == 0:
+        world.options.climb_shuffle.value = 0
+
     # One Dash Hair
     if isinstance(world.options.madeline_one_dash_hair_color.value, str):
         try:
@@ -481,7 +630,9 @@ def resolve_options(world: World):
 class CelesteOptions(PerGameCommonOptions):
     death_link: DeathLink
     death_link_amnesty: DeathLinkAmnesty
+    death_link_receipt_style: DeathLinkReceiptStyle
     trap_link: TrapLink
+    logic_difficulty: LogicDifficulty
 
     goal_area: GoalArea
     lock_goal_area: LockGoalArea
@@ -489,7 +640,14 @@ class CelesteOptions(PerGameCommonOptions):
     total_strawberries: TotalStrawberries
     strawberries_required_percentage: StrawberriesRequiredPercentage
 
+    dash_shuffle: DashShuffle
+    climb_shuffle: ClimbShuffle
+    crouch_shuffle: CrouchShuffle
+
+    split_interactables: SplitInteractables
+
     junk_fill_percentage: JunkFillPercentage
+    reduce_raspberries: ReduceRaspberries
     trap_fill_percentage: TrapFillPercentage
     trap_expiration_action: TrapExpirationAction
     trap_expiration_amount: TrapExpirationAmount
@@ -505,6 +663,7 @@ class CelesteOptions(PerGameCommonOptions):
     laughter_trap_weight: LaughterTrapWeight
     hiccup_trap_weight: HiccupTrapWeight
     zoom_trap_weight: ZoomTrapWeight
+    tiny_trap_weight: TinyTrapWeight
 
     checkpointsanity: Checkpointsanity
     binosanity: Binosanity
@@ -513,6 +672,7 @@ class CelesteOptions(PerGameCommonOptions):
     carsanity: Carsanity
     roomsanity: Roomsanity
     include_goldens: IncludeGoldens
+    golden_amnesty: GoldenAmnesty
     include_core: IncludeCore
     include_farewell: IncludeFarewell
     include_b_sides: IncludeBSides
@@ -520,6 +680,7 @@ class CelesteOptions(PerGameCommonOptions):
 
     music_shuffle: MusicShuffle
     require_cassettes: RequireCassettes
+    torch_behavior: TorchBehavior
 
     madeline_hair_length: MadelineHairLength
     madeline_one_dash_hair_color: MadelineOneDashHairColor
