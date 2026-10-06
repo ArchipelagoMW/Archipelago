@@ -20,7 +20,7 @@ For more information on plando, you can reference the [general plando guide](/tu
 Triggers may be defined in either the root or in the relevant game sections. Generally, the best place to do this is the
 bottom of the YAML for clear organization.
 
-Each trigger consists of four parts:
+Each trigger consists of at least four parts:
 - `option_category` specifies the section which the triggering option is defined in.
     - Example: `A Link to the Past`
     - This is the category the option is located in. If the option you're triggering off of is in root then you
@@ -32,6 +32,9 @@ Each trigger consists of four parts:
     - Example: `15`
     - Each trigger must be used for exactly one option result. If you would like the same thing to occur with multiple
       results, you would need multiple triggers for this.
+- `option_compare` is an optional argument that specifies how the value of the option is compared. Valid values are "="
+, "<", "<=", ">=", ">", or "!=". This defaults to "=" if not specified.
+    - Example: `"<"`
 - `options` is where you define what will happen when the trigger activates. This can be something as simple as ensuring
   another option also gets selected or placing an item in a certain location. It is possible to have multiple things
   happen in this section.
@@ -59,13 +62,14 @@ The above examples all together will end up looking like this:
     - option_category: A Link to the Past
       option_name: shop_item_slots
       option_result: 15
+      option_compare: "<="
       options:
         A Link to the Past:
           start_inventory:
             Rupees(300): 2
   ```
 
-For this example, if the generator happens to roll 15 shuffled in shop item slots for your game, you'll be granted 600
+For this example, if the generator happens to roll 15 or fewer shuffled in shop item slots for your game, you'll be granted 600
 rupees at the beginning. Triggers can also be used to change other options.
 
 For example:
