@@ -7,7 +7,7 @@ from .Options import SM64Options
 from .Regions import connect_regions, SM64Levels, sm64_level_to_paintings, sm64_paintings_to_level,\
 sm64_level_to_secrets, sm64_secrets_to_level, sm64_entrances_to_level, sm64_level_to_entrances,\
 valid_move_randomizer_start_courses
-from .Items import action_item_data_table
+from .Items import action_item_data_table, ut_glitch_item_name
 
 def shuffle_dict_keys(multiworld: MultiWorld, dictionary: dict) -> dict:
     keys = list(dictionary.keys())
@@ -27,35 +27,42 @@ def fix_reg(entrance_map: Dict[SM64Levels, str], entrance: SM64Levels, invalid_r
     swapdict.pop(entrance)
 
 def set_rules(multiworld: MultiWorld, options: SM64Options, player: int, area_connections: dict, star_costs: dict, move_rando_bitvec: int):
-    randomized_level_to_paintings = sm64_level_to_paintings.copy()
-    randomized_level_to_secrets = sm64_level_to_secrets.copy()
-
-    if options.area_rando > options.area_rando.option_Off:  # Some randomization is happening, randomize Courses
-        randomized_level_to_paintings = shuffle_dict_keys(multiworld, sm64_level_to_paintings)
-
-    if options.area_rando == options.area_rando.option_Courses_and_Secrets_Separate:  # Randomize Secrets as well
-        randomized_level_to_secrets = shuffle_dict_keys(multiworld, sm64_level_to_secrets)
-
-    randomized_entrances = {**randomized_level_to_paintings, **randomized_level_to_secrets} # Concatenate courses and secrets for rest
-
-    if options.area_rando == options.area_rando.option_Courses_and_Secrets:  # Randomize Courses and Secrets in one pool
-        randomized_entrances = shuffle_dict_keys(multiworld, randomized_entrances)
-    
-    # Now, fix assignment if necessary
-    swapdict = randomized_entrances.copy()
-    if move_rando_bitvec == 0:
-        fix_reg(randomized_entrances, SM64Levels.BOB_OMB_BATTLEFIELD, sm64_secrets_to_level.keys(), swapdict, multiworld)
+    using_slot_area_connections = bool(area_connections)
+    if using_slot_area_connections:
+        randomized_entrances = {
+            int(entrance_lvl): sm64_level_to_entrances[int(destination_lvl)]
+            for entrance_lvl, destination_lvl in area_connections.items()
+        }
     else:
-        invalid_start_courses = {course for course in randomized_entrances.values() if course not in valid_move_randomizer_start_courses}
-        fix_reg(randomized_entrances, SM64Levels.BOB_OMB_BATTLEFIELD, invalid_start_courses, swapdict, multiworld)
-        fix_reg(randomized_entrances, SM64Levels.WHOMPS_FORTRESS, invalid_start_courses, swapdict, multiworld)
-    # Guarantee BITFS is not mapped to DDD
-    fix_reg(randomized_entrances, SM64Levels.BOWSER_IN_THE_FIRE_SEA, {"Dire, Dire Docks"}, swapdict, multiworld)
-    # Guarantee COTMC is not mapped to HMC, cuz thats impossible. If BitFS -> HMC, also no COTMC -> DDD.
-    if randomized_entrances[SM64Levels.BOWSER_IN_THE_FIRE_SEA] == "Hazy Maze Cave":
-        fix_reg(randomized_entrances, SM64Levels.CAVERN_OF_THE_METAL_CAP, {"Hazy Maze Cave", "Dire, Dire Docks"}, swapdict, multiworld)
-    else:
-        fix_reg(randomized_entrances, SM64Levels.CAVERN_OF_THE_METAL_CAP, {"Hazy Maze Cave"}, swapdict, multiworld)
+        randomized_level_to_paintings = sm64_level_to_paintings.copy()
+        randomized_level_to_secrets = sm64_level_to_secrets.copy()
+
+        if options.area_rando > options.area_rando.option_Off:  # Some randomization is happening, randomize Courses
+            randomized_level_to_paintings = shuffle_dict_keys(multiworld, sm64_level_to_paintings)
+
+        if options.area_rando == options.area_rando.option_Courses_and_Secrets_Separate:  # Randomize Secrets as well
+            randomized_level_to_secrets = shuffle_dict_keys(multiworld, sm64_level_to_secrets)
+
+        randomized_entrances = {**randomized_level_to_paintings, **randomized_level_to_secrets} # Concatenate courses and secrets for rest
+
+        if options.area_rando == options.area_rando.option_Courses_and_Secrets:  # Randomize Courses and Secrets in one pool
+            randomized_entrances = shuffle_dict_keys(multiworld, randomized_entrances)
+
+        # Now, fix assignment if necessary
+        swapdict = randomized_entrances.copy()
+        if move_rando_bitvec == 0:
+            fix_reg(randomized_entrances, SM64Levels.BOB_OMB_BATTLEFIELD, sm64_secrets_to_level.keys(), swapdict, multiworld)
+        else:
+            invalid_start_courses = {course for course in randomized_entrances.values() if course not in valid_move_randomizer_start_courses}
+            fix_reg(randomized_entrances, SM64Levels.BOB_OMB_BATTLEFIELD, invalid_start_courses, swapdict, multiworld)
+            fix_reg(randomized_entrances, SM64Levels.WHOMPS_FORTRESS, invalid_start_courses, swapdict, multiworld)
+        # Guarantee BITFS is not mapped to DDD
+        fix_reg(randomized_entrances, SM64Levels.BOWSER_IN_THE_FIRE_SEA, {"Dire, Dire Docks"}, swapdict, multiworld)
+        # Guarantee COTMC is not mapped to HMC, cuz thats impossible. If BitFS -> HMC, also no COTMC -> DDD.
+        if randomized_entrances[SM64Levels.BOWSER_IN_THE_FIRE_SEA] == "Hazy Maze Cave":
+            fix_reg(randomized_entrances, SM64Levels.CAVERN_OF_THE_METAL_CAP, {"Hazy Maze Cave", "Dire, Dire Docks"}, swapdict, multiworld)
+        else:
+            fix_reg(randomized_entrances, SM64Levels.CAVERN_OF_THE_METAL_CAP, {"Hazy Maze Cave"}, swapdict, multiworld)
 
     # Destination Format: LVL | AREA with LVL = LEVEL_x, AREA = Area as used in sm64 code
     # Cast to int to not rely on availability of SM64Levels enum. Will cause crash in MultiServer otherwise
@@ -383,11 +390,11 @@ class RuleFactory:
         if token == "CANN":
             return cannon_name
         if token == "CAPLESS":
-            return self.capless
+            return True if self.capless else ut_glitch_item_name
         if token == "CANNLESS":
-            return self.cannonless
+            return True if self.cannonless else ut_glitch_item_name
         if token == "MOVELESS":
-            return self.moveless
+            return True if self.moveless else ut_glitch_item_name
         if token == "NAR":
             return not self.area_randomizer
         item = self.token_table.get(token, None)
@@ -399,4 +406,3 @@ class RuleFactory:
                 # This action item is not randomized.
                 return True
         return item
-
