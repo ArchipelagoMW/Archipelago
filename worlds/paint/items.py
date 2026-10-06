@@ -41,8 +41,14 @@ item_data_table: Dict[str, PaintItemData] = {
     "Invert Colors Trap":               PaintItemData(198526, ItemClassification.trap),
     "Flip Horizontal Trap":             PaintItemData(198527, ItemClassification.trap),
     "Flip Vertical Trap":               PaintItemData(198528, ItemClassification.trap),
+    "Help Trap":                        PaintItemData(198529, ItemClassification.trap),
+    "Zoom In Trap":                     PaintItemData(198530, ItemClassification.trap),
+    "Zoom Out Trap":                    PaintItemData(198531, ItemClassification.trap),
+    "Tool Swap Trap":                   PaintItemData(198532, ItemClassification.trap),
 }
 
 item_table = {name: data.code for name, data in item_data_table.items()}
-traps = ["Undo Trap", "Clear Image Trap", "Invert Colors Trap", "Flip Horizontal Trap", "Flip Vertical Trap"]
-deathlink_traps = ["Invert Colors Trap", "Flip Horizontal Trap", "Flip Vertical Trap"]
+traps = [
+    "Undo Trap", "Clear Image Trap", "Invert Colors Trap", "Flip Horizontal Trap", "Flip Vertical Trap", "Help Trap",
+    "Zoom In Trap", "Zoom Out Trap", "Tool Swap Trap"
+]
