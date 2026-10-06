@@ -119,14 +119,22 @@ def process_move_data(world):
         world.local_move_data["Dragon Rage"]["power"] = 80
         world.local_move_data["Horn Drill"]["effect"] = 0
         world.local_move_data["Horn Drill"]["power"] = 70
-        world.local_move_data["Horn Drill"]["accuracy"] = 90
+        world.local_move_data["Horn Drill"]["accuracy"] = 95
+        world.local_move_data["Horn Drill"]["pp"] = 15
         world.local_move_data["Guillotine"]["effect"] = 0
         world.local_move_data["Guillotine"]["power"] = 70
-        world.local_move_data["Guillotine"]["accuracy"] = 90
+        world.local_move_data["Guillotine"]["accuracy"] = 95
+        world.local_move_data["Guillotine"]["pp"] = 15
         world.local_move_data["Fissure"]["effect"] = 0
         world.local_move_data["Fissure"]["power"] = 70
-        world.local_move_data["Fissure"]["accuracy"] = 90
+        world.local_move_data["Fissure"]["accuracy"] = 95
+        world.local_move_data["Fissure"]["pp"] = 15
         world.local_move_data["Blizzard"]["accuracy"] = 70
+
+    if world.options.no_trapping_moves:
+        for move in world.local_move_data.values():
+            if move["effect"] == 42:
+                move["effect"] = 29
 
     if world.options.randomize_tm_moves:
         world.local_tms = world.random.sample([move for move in poke_data.moves.keys() if move not in
@@ -354,7 +362,7 @@ def verify_hm_moves(multiworld, world, player):
     def intervene(move, test_state):
         move_bit = pow(2, poke_data.hm_moves.index(move) + 2)
         viable_mons = [mon for mon in world.local_poke_data if world.local_poke_data[mon]["tms"][6] & move_bit]
-        if world.options.randomize_wild_pokemon and viable_mons:
+        if world.options.randomize_pokemon_locations and viable_mons:
             accessible_slots = [loc for loc in multiworld.get_reachable_locations(test_state, player) if
                                 loc.type == "Wild Encounter"]
 
