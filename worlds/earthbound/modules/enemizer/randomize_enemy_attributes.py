@@ -35,7 +35,7 @@ def randomize_enemy_attributes(world: "EarthBoundWorld", rom: "LocalRom") -> Non
     taken_names = []
     for enemy in world.enemies:
         if enemy not in excluded_enemies and " (" not in enemy:
-            new_name = "FFFFFFFFFFFFFFFFFFFFFFFFFF"
+            new_name = "FFFFFFFFFFFFFFFFFFFFFFFFFF" # Dummy name that makes sure we roll a valid one
             pixel_width = calc_pixel_width(new_name)
             species = "Null"
             while not (len(new_name) <= 25 and new_name not in taken_names and pixel_width <= 95):
