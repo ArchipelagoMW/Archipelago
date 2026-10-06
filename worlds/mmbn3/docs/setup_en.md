@@ -31,10 +31,8 @@ Once Bizhawk has been installed, open Bizhawk and change the following settings:
 - Under Config > Hotkeys, many hotkeys are listed, with many bound to common keys on the keyboard. You will likely want
   to disable most of these, which you can do quickly using `Esc`.
 
-It is strongly recommended to associate GBA rom extensions (\*.gba) to the Bizhawk we've just installed.
-To do so, we simply have to search any GBA rom we happened to own, right click and select "Open with...", unfold
-the list that appears and select the bottom option "Look for another application", then browse to the Bizhawk folder
-and select EmuHawk.exe.
+The first time you open a `.apbn3` patch file, the client will ask you to locate `EmuHawk.exe` inside your BizHawk
+install. After that, the client remembers it and launches BizHawk for you automatically.
 
 ## Extracting a ROM from the Legacy Collection
 
@@ -66,20 +64,28 @@ the host will provide you with either a link to download your data file, or with
 files. Your data file should have a `.apbn3` extension.
 
 Double-click on your `.apbn3` file to start your client and start the ROM patch process. Once the process is finished
-(this can take a while), the client and the emulator will be started automatically (if you associated the extension
-to the emulator as recommended).
+(this can take a while), the MMBN3 Client and BizHawk will be started automatically. BizHawk loads the patched ROM and
+the `connector_mmbn3.lua` script for you — you do **not** need to open the Lua Console yourself.
 
 ### Connect to the Multiserver
 
-Once both the client and the emulator are started, you must connect them. Within the emulator click on the "Tools"
-menu and select "Lua Console". Click the folder button or press Ctrl+O to open a Lua script.
+To connect the client to the multiserver, put `<address>:<port>` in the textfield at the top of the MMBN3 Client and
+press enter (if the server uses a password, type `/connect <address>:<port> [password]` in the bottom textfield).
 
-Navigate to your Archipelago install folder and open `data/lua/connector_mmbn3.lua`.  
-**NOTE:** The MMBN3 Lua file depends on other shared Lua files inside of the `data` directory in the Archipelago
+The client and BizHawk connect to each other automatically once both are running. The client window will indicate when
+it has recognized MMBN3.
+
+### Reconnecting / manual connection
+
+If you ever close BizHawk or the client mid-game, reopen the client from the Archipelago Launcher and make sure BizHawk
+is running the patched ROM with the connector loaded. If BizHawk was started without the connector (for example, you
+opened the ROM by hand), connect it manually:
+
+1. In BizHawk, click the "Tools" menu and select "Lua Console". Click the folder button or press Ctrl+O.
+2. Navigate to your Archipelago install folder and open `data/lua/connector_mmbn3.lua`.
+
+**NOTE:** The MMBN3 Lua file depends on other shared Lua files inside the `data` directory in the Archipelago
 installation. Do not move this Lua file from its default location or you may run into issues connecting.
-
-To connect the client to the multiserver simply put `<address>:<port>` on the textfield on top and press enter (if the
-server uses password, type in the bottom textfield `/connect <address>:<port> [password]`)
 
 Don't forget to start manipulating RNG early by shouting during generation:
 
