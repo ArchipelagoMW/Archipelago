@@ -411,7 +411,7 @@ imported.
 
 If a dependency is python version-specific, then copies of it should be included for each currently
 [supported version](/docs/running%20from%20source.md#general) of python in order to work across installations. If
-intendding to support multiple platforms, then copies for different platforms may be necessary as well.
+you intend to support multiple platforms, then copies for different platforms may be necessary as well.
 
 Worlds that are included within the project directly can instead list their requirements inside of a
 `worlds/<world_name>/requirements.txt`. `ModuleUpdate.py` will automatically pick up and install them when ran on
