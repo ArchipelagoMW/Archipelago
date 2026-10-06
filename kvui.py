@@ -31,6 +31,15 @@ os.environ["KIVY_HOME"] = os.path.join(platformdirs.user_config_dir("Archipelago
 os.makedirs(os.environ["KIVY_HOME"], exist_ok=True)
 
 from kivy.config import Config
+from kivy.core.gl import glGetString, GL_VENDOR
+
+if b"NVIDIA" in glGetString(GL_VENDOR):
+    # This might only take effect on subsequent runs,
+    # since the act of retrieving the OpenGL context info created a context with potentially vsync already enabled.
+    # Context: NVIDIA driver may delay any OpenGL call to implement vsync, kivy may be holding GIL during that though,
+    # blocking execution of other python threads.
+    Config.set("graphics", "vsync", "0")
+    logging.warning("NVIDIA OpenGL detected, forcing vsync to disabled. May require a program restart to take effect.")
 
 Config.set("input", "mouse", "mouse,disable_multitouch")
 Config.set("kivy", "exit_on_escape", "0")
