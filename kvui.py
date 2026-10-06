@@ -33,13 +33,22 @@ os.makedirs(os.environ["KIVY_HOME"], exist_ok=True)
 from kivy.config import Config
 from kivy.core.gl import glGetString, GL_VENDOR
 
-if b"NVIDIA" in glGetString(GL_VENDOR):
-    # This might only take effect on subsequent runs,
-    # since the act of retrieving the OpenGL context info created a context with potentially vsync already enabled.
+if b"NVIDIA" in glGetString(GL_VENDOR) and sys.platform == "win32":
     # Context: NVIDIA driver may delay any OpenGL call to implement vsync, kivy may be holding GIL during that though,
     # blocking execution of other python threads.
-    Config.set("graphics", "vsync", "0")
-    logging.warning("NVIDIA OpenGL detected, forcing vsync to disabled. May require a program restart to take effect.")
+    opengl32 = ctypes.WinDLL("opengl32.dll")
+
+    opengl32.wglGetProcAddress.argtypes = (ctypes.c_char_p,)
+    opengl32.wglGetProcAddress.restype = ctypes.c_void_p
+
+    address = opengl32.wglGetProcAddress(b"wglSwapIntervalEXT")
+
+    if address:
+        # Grab the VSYNC Extension
+        wglSwapIntervalEXT = ctypes.WINFUNCTYPE(ctypes.c_int, ctypes.c_int)(address)
+        # turn it off
+        wglSwapIntervalEXT(0)
+        logging.warning("NVIDIA OpenGL detected, forcing vsync to disabled.")
 
 Config.set("input", "mouse", "mouse,disable_multitouch")
 Config.set("kivy", "exit_on_escape", "0")
