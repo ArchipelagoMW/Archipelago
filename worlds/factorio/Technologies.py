@@ -265,7 +265,7 @@ del machines_future
 
 # build requirements graph for all technology ingredients
 
-all_ingredient_names: Set[str] = set(Options.MaxSciencePack.get_ordered_science_packs())
+all_ingredient_names: Set[str] = set(Options.RecipeIngredientsPool.get_ordered_science_packs())
 
 
 def unlock_just_tech(recipe: Recipe, _done) -> Set[Technology]:
@@ -393,7 +393,7 @@ for root in base_starts:
     progressive_rows["progressive-" + root] = tuple(progressive)
 
 # science packs
-progressive_rows["progressive-science-pack"] = tuple(Options.MaxSciencePack.get_ordered_science_packs())[1:]
+progressive_rows["progressive-science-pack"] = tuple(Options.RecipeIngredientsPool.get_ordered_science_packs())[1:]
 
 # manual progressive
 progressive_rows["progressive-processing"] = (
@@ -496,7 +496,7 @@ def get_science_pack_pools() -> Dict[str, Set[str]]:
     science_pack_pools: Dict[str, Set[str]] = {}
     already_taken = exclusion_list.copy()
     current_difficulty = 5
-    for science_pack in Options.MaxSciencePack.get_ordered_science_packs():
+    for science_pack in Options.RecipeIngredientsPool.get_ordered_science_packs():
         current = science_pack_pools[science_pack] = set()
         for name, recipe in recipes.items():
             if (science_pack != "automation-science-pack" or not recipe.recursive_unlocking_technologies) \
