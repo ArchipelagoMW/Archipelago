@@ -4,6 +4,7 @@ from ..data.requirement import FestivalItemReceivedRequirement
 from ..options import FestivalLocations
 from ..stardew_rule import StardewRule
 from ..strings.animal_product_names import AnimalProduct
+from ..strings.ap_names.ap_option_names import CustomLogicOptionName
 from ..strings.book_names import Book
 from ..strings.crop_names import Fruit, Vegetable
 from ..strings.festival_check_names import FestivalCheck
@@ -119,7 +120,10 @@ class FestivalLogic(BaseLogic):
         if self.options.festival_locations == FestivalLocations.option_disabled:
             return self.logic.festival.can_squidfest_iridium_reward()
         else:
-            return self.logic.received(f"Book: {Book.the_art_o_crabbing}")
+            if CustomLogicOptionName.critical_free_samples in self.options.custom_logic:
+                return self.logic.received(f"Book: {Book.the_art_o_crabbing}")
+            else:
+                return self.logic.received(f"Book: {Book.the_art_o_crabbing}") & self.logic.festival.can_squidfest_iridium_reward()
 
     def can_win_egg_hunt(self) -> StardewRule:
         return self.logic.relationship.exists(NPC.lewis)
