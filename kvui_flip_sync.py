@@ -1,6 +1,6 @@
 """
 Moves the vsync wait off the GIL (kivy/kivy#9411). Kivy releases the GIL only
-around the buffer swap, but NVIDIA's Windows driver returns from the swap at
+around the buffer swap, but some drivers return from the swap at
 once and stalls the next frame's first GL call, made with the GIL held, until
 vblank. After each swap this clears and finishes through ctypes, which releases
 the GIL for each call, so the wait lands there. Config graphics.sync_after_flip.
@@ -84,23 +84,21 @@ def _disable(reason: str) -> None:
     Logger.warning("FlipSync: off for this session, %s", reason)
 
 
-def install_flip_sync() -> None:
+def install_flip_sync() -> bool:
     """Patch WindowSDL.flip once, when graphics.sync_after_flip is on and the
     window has an NVIDIA desktop GL context; the GL functions resolve on the
     first flip."""
     global _state
     if _state != "off" or not _sync_enabled() or not isinstance(Window, WindowSDL):
-        return
+        return False
     backend = cgl_get_initialized_backend_name()
+    print("FlipSync: backend %s,", backend )
     if backend == "mock":  # no GL context at all
-        return
+        return False
     if backend == "angle_sdl2":
         _state = "unavailable (ANGLE renders through Direct3D)"
-        return
-    vendor = glGetString(GL_VENDOR)
-    if not vendor.startswith(b"NVIDIA"):  # AMD and Intel wait inside the swap
-        _state = f"unavailable (GL vendor {vendor.decode(errors='replace')})"
-        return
+        return False
+    # everything else is sdl2 - flip them.
     original = WindowSDL.flip
     gl = None
 
@@ -120,8 +118,9 @@ def install_flip_sync() -> None:
             try:
                 clear(_GL_COLOR_BUFFER_BIT)
                 finish()
-            except OSError as error:  # ctypes' form of a Windows access violation
+            except OSError as error:
                 _disable(f"GL call failed: {error}")
 
     WindowSDL.flip = flip
     _state = "pending"
+    return True

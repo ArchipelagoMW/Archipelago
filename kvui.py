@@ -35,8 +35,8 @@ from kivy.config import Config
 Config.set("input", "mouse", "mouse,disable_multitouch")
 Config.set("kivy", "exit_on_escape", "0")
 Config.set("graphics", "multisamples", "0")  # multisamples crash old intel drivers
-# kvui_flip_sync; the NVIDIA vsync stall it works around is Windows-only.
-Config.setdefault("graphics", "sync_after_flip", "1" if sys.platform == "win32" else "0")
+# kvui_flip_sync start on, set to 0 if it isn't needed and it won't run again
+Config.setdefault("graphics", "sync_after_flip", "1")
 
 # Workaround for Kivy issue #9226.
 # caused by kivy by default using probesysfs,
@@ -61,7 +61,10 @@ for classobj in SoundLoader._classes:
 
 from kvui_flip_sync import install_flip_sync
 
-install_flip_sync()
+default_flip_vsync = install_flip_sync()
+
+# kvui_flip_sync - grabs any opengl
+Config.set("graphics", "sync_after_flip", "0" if not default_flip_vsync else "1")
 
 from kivymd.uix.divider import MDDivider
 from kivy.core.window import Window
