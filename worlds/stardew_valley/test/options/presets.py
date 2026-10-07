@@ -1,10 +1,10 @@
 from ... import options
+from ...mods.mod_data import ModNames
 from ...strings.ap_names.ap_option_names import EatsanityOptionName
 
 
 def default_6_x_x():
     return {
-        options.ArcadeMachineLocations.internal_name: options.ArcadeMachineLocations.default,
         options.BackpackProgression.internal_name: options.BackpackProgression.default,
         options.BackpackSize.internal_name: options.BackpackSize.option_12,
         options.Booksanity.internal_name: options.Booksanity.default,
@@ -28,6 +28,8 @@ def default_6_x_x():
         options.Goal.internal_name: options.Goal.default,
         options.Hatsanity.internal_name: options.Hatsanity.preset_none,
         options.IncludeEndgameLocations.internal_name: options.IncludeEndgameLocations.option_false,
+        options.JourneyOfThePrairieKing.internal_name: options.JourneyOfThePrairieKing.default,
+        options.JunimoKart.internal_name: options.JunimoKart.default,
         options.Mods.internal_name: options.Mods.default,
         options.Monstersanity.internal_name: options.Monstersanity.default,
         options.Moviesanity.internal_name: options.Moviesanity.option_none,
@@ -47,7 +49,6 @@ def default_6_x_x():
 
 def maxsanity_no_mods_6_x_x():
     return {
-        options.ArcadeMachineLocations.internal_name: options.ArcadeMachineLocations.option_full_shuffling,
         options.BackpackProgression.internal_name: options.BackpackProgression.option_progressive,
         options.BackpackSize.internal_name: options.BackpackSize.option_12,
         options.Booksanity.internal_name: options.Booksanity.option_all,
@@ -71,6 +72,8 @@ def maxsanity_no_mods_6_x_x():
         options.Goal.internal_name: options.Goal.option_perfection,
         options.Hatsanity.internal_name: options.Hatsanity.preset_none,
         options.IncludeEndgameLocations.internal_name: options.IncludeEndgameLocations.option_false,
+        options.JourneyOfThePrairieKing.internal_name: options.JourneyOfThePrairieKing.option_full_shuffle,
+        options.JunimoKart.internal_name: options.JunimoKart.option_full_shuffle,
         options.Mods.internal_name: frozenset(),
         options.Monstersanity.internal_name: options.Monstersanity.option_progressive_goals,
         options.Moviesanity.internal_name: options.Moviesanity.option_none,
@@ -88,21 +91,8 @@ def maxsanity_no_mods_6_x_x():
     }
 
 
-def maxsanity_mods_6_x_x_exclude_disabled():
-    maxsanity = maxsanity_no_mods_6_x_x()
-    maxsanity.update({options.Mods.internal_name: frozenset(options.enabled_mods_except_invalid_combinations)})
-    return maxsanity
-
-
-def maxsanity_mods_6_x_x():
-    maxsanity = maxsanity_no_mods_6_x_x()
-    maxsanity.update({options.Mods.internal_name: frozenset(options.all_mods_except_invalid_combinations)})
-    return maxsanity
-
-
 def default_7_x_x():
     return {
-        options.ArcadeMachineLocations.internal_name: options.ArcadeMachineLocations.default,
         options.BackpackProgression.internal_name: options.BackpackProgression.default,
         options.BackpackSize.internal_name: options.BackpackSize.default,
         options.Booksanity.internal_name: options.Booksanity.default,
@@ -126,6 +116,8 @@ def default_7_x_x():
         options.Goal.internal_name: options.Goal.default,
         options.Hatsanity.internal_name: options.Hatsanity.default,
         options.IncludeEndgameLocations.internal_name: options.IncludeEndgameLocations.default,
+        options.JourneyOfThePrairieKing.internal_name: options.JourneyOfThePrairieKing.default,
+        options.JunimoKart.internal_name: options.JunimoKart.default,
         options.Mods.internal_name: options.Mods.default,
         options.Monstersanity.internal_name: options.Monstersanity.default,
         options.Moviesanity.internal_name: options.Moviesanity.option_none,
@@ -145,7 +137,6 @@ def default_7_x_x():
 
 def maxsanity_no_mods_7_x_x():
     return {
-        options.ArcadeMachineLocations.internal_name: options.ArcadeMachineLocations.option_full_shuffling,
         options.BackpackProgression.internal_name: options.BackpackProgression.option_progressive,
         options.BackpackSize.internal_name: options.BackpackSize.option_1,
         options.Booksanity.internal_name: options.Booksanity.option_all,
@@ -170,6 +161,8 @@ def maxsanity_no_mods_7_x_x():
         options.Goal.internal_name: options.Goal.option_perfection,
         options.Hatsanity.internal_name: options.Hatsanity.preset_all,
         options.IncludeEndgameLocations.internal_name: options.IncludeEndgameLocations.option_true,
+        options.JourneyOfThePrairieKing.internal_name: options.JourneyOfThePrairieKing.option_full_shuffle,
+        options.JunimoKart.internal_name: options.JunimoKart.option_full_shuffle,
         options.Mods.internal_name: frozenset(),
         options.Monstersanity.internal_name: options.Monstersanity.option_progressive_goals,
         options.Moviesanity.internal_name: options.Moviesanity.option_all_movies_and_all_loved_snacks,
@@ -190,19 +183,12 @@ def maxsanity_no_mods_7_x_x():
 
 def maxsanity_mods_7_x_x():
     maxsanity = maxsanity_no_mods_7_x_x()
-    maxsanity.update({options.Mods.internal_name: frozenset(options.all_mods_except_invalid_combinations)})
-    return maxsanity
-
-
-def maxsanity_mods_7_x_x_exclude_disabled():
-    maxsanity = maxsanity_no_mods_7_x_x()
-    maxsanity.update({options.Mods.internal_name: frozenset(options.enabled_mods_except_invalid_combinations)})
+    maxsanity.update({options.Mods.internal_name: frozenset(ModNames.enabled_mods_except_invalid_combinations())})
     return maxsanity
 
 
 def get_minsanity_options():
     return {
-        options.ArcadeMachineLocations.internal_name: options.ArcadeMachineLocations.option_disabled,
         options.BackpackProgression.internal_name: options.BackpackProgression.option_vanilla,
         options.BackpackSize.internal_name: options.BackpackSize.option_12,
         options.Booksanity.internal_name: options.Booksanity.option_none,
@@ -226,6 +212,8 @@ def get_minsanity_options():
         options.FriendsanityHeartSize.internal_name: 8,
         options.Goal.internal_name: options.Goal.option_bottom_of_the_mines,
         options.IncludeEndgameLocations.internal_name: options.IncludeEndgameLocations.option_false,
+        options.JourneyOfThePrairieKing.internal_name: options.JourneyOfThePrairieKing.option_disabled,
+        options.JunimoKart.internal_name: options.JunimoKart.option_disabled,
         options.Mods.internal_name: frozenset(),
         options.Monstersanity.internal_name: options.Monstersanity.option_none,
         options.Moviesanity.internal_name: options.Moviesanity.option_none,
@@ -245,7 +233,6 @@ def get_minsanity_options():
 
 def minimal_locations_maximal_items():
     min_max_options = {
-        options.ArcadeMachineLocations.internal_name: options.ArcadeMachineLocations.option_disabled,
         options.BackpackProgression.internal_name: options.BackpackProgression.option_vanilla,
         options.BackpackSize.internal_name: options.BackpackSize.option_12,
         options.Booksanity.internal_name: options.Booksanity.option_none,
@@ -269,6 +256,8 @@ def minimal_locations_maximal_items():
         options.FriendsanityHeartSize.internal_name: 8,
         options.Goal.internal_name: options.Goal.option_craft_master,
         options.IncludeEndgameLocations.internal_name: options.IncludeEndgameLocations.option_false,
+        options.JourneyOfThePrairieKing.internal_name: options.JourneyOfThePrairieKing.option_disabled,
+        options.JunimoKart.internal_name: options.JunimoKart.option_disabled,
         options.Mods.internal_name: frozenset(),
         options.Monstersanity.internal_name: options.Monstersanity.option_none,
         options.Moviesanity.internal_name: options.Moviesanity.option_none,
@@ -296,7 +285,6 @@ def minimal_locations_maximal_items_with_island():
 
 def setting_mins_and_maxes():
     low_orphan_options = {
-        options.ArcadeMachineLocations.internal_name: [options.ArcadeMachineLocations.option_disabled, options.ArcadeMachineLocations.option_full_shuffling],
         options.BackpackProgression.internal_name: [options.BackpackProgression.option_vanilla, options.BackpackProgression.option_progressive],
         options.BackpackSize.internal_name: [options.BackpackSize.option_1, options.BackpackSize.option_12],
         options.Booksanity.internal_name: [options.Booksanity.option_none, options.Booksanity.option_power_skill, options.Booksanity.option_power, options.Booksanity.option_all],
@@ -318,8 +306,10 @@ def setting_mins_and_maxes():
         options.Fishsanity.internal_name: [options.Fishsanity.option_none, options.Fishsanity.option_all],
         options.Friendsanity.internal_name: [options.Friendsanity.option_none, options.Friendsanity.option_all_with_marriage],
         options.FriendsanityHeartSize.internal_name: [1, 8],
-        options.Goal.internal_name: options.Goal.option_maxsanity,
+        options.Goal.internal_name: options.Goal.option_allsanity,
         options.IncludeEndgameLocations.internal_name: [options.IncludeEndgameLocations.option_false, options.IncludeEndgameLocations.option_true],
+        options.JourneyOfThePrairieKing.internal_name: [options.JourneyOfThePrairieKing.option_disabled, options.JourneyOfThePrairieKing.option_full_shuffle],
+        options.JunimoKart.internal_name: [options.JunimoKart.option_disabled, options.JunimoKart.option_full_shuffle],
         options.Mods.internal_name: frozenset(),
         options.Monstersanity.internal_name: [options.Monstersanity.option_none, options.Monstersanity.option_one_per_monster],
         options.Moviesanity.internal_name: [options.Moviesanity.option_none, options.Moviesanity.option_all_movies_and_all_loved_snacks],

@@ -60,6 +60,10 @@ class CombatLogic(BaseLogic):
     def has_slingshot(self) -> StardewRule:
         return self.logic.received(APWeapon.slingshot)
 
+    @cached_property
+    def has_master_slingshot(self) -> StardewRule:
+        return self.logic.received(APWeapon.slingshot, 2)
+
     @cache_self1
     def has_specific_boots(self, boots: str) -> StardewRule:
         tier = tier_by_boots[boots]

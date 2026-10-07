@@ -4,6 +4,7 @@ from Utils import cache_self1
 from .base_logic import BaseLogicMixin, BaseLogic
 from ..content.vanilla.base import base_game
 from ..data.harvest import HarvestCropSource
+from ..options import ExcludeGingerIsland, SpecialOrderLocations
 from ..stardew_rule import StardewRule, true_, True_, False_
 from ..strings.ap_names.ap_option_names import EatsanityOptionName
 from ..strings.currency_names import Currency
@@ -13,6 +14,7 @@ from ..strings.metal_names import Mineral
 from ..strings.performance_names import Performance
 from ..strings.quality_names import ForageQuality
 from ..strings.region_names import Region, LogicRegion
+from ..strings.seed_names import DistantLandsSeed
 from ..strings.skill_names import Skill, all_mod_skills, all_vanilla_skills
 from ..strings.tool_names import ToolMaterial, Tool, FishingRod
 from ..strings.wallet_item_names import Wallet
@@ -45,6 +47,10 @@ class SkillLogic(BaseLogic):
         elif skill == Skill.foraging:
             xp_rule = (self.can_get_foraging_xp & self.logic.tool.has_tool(Tool.axe, tool_material)) | \
                       self.logic.magic.can_use_clear_debris_instead_of_tool_level(tool_level)
+            if level > 5:
+                stump_rule = self.logic.region.can_reach(Region.secret_woods)
+                xp_rule = xp_rule & stump_rule
+
         elif skill == Skill.mining:
             xp_rule = self.logic.tool.has_tool(Tool.pickaxe, tool_material) | \
                       self.logic.magic.can_use_clear_debris_instead_of_tool_level(tool_level)
@@ -112,9 +118,12 @@ class SkillLogic(BaseLogic):
                 foods_only_with_seasoning_level.extend(potential_foods[level])
 
         normal_food_rule = self.logic.or_(*[self.logic.has(food) for food in foods_correct_level], allow_empty=True)
-        qi_seasoning_food_rule = self.logic.has(Ingredient.qi_seasoning) &\
+        if self.options.exclude_ginger_island == ExcludeGingerIsland.option_false and self.options.special_order_locations & SpecialOrderLocations.value_qi:
+            qi_seasoning_food_rule = self.logic.has(Ingredient.qi_seasoning) &\
                                  self.logic.or_(*[self.logic.cooking.can_cook(food) for food in foods_only_with_seasoning_level], allow_empty=True)
-        food_rule = normal_food_rule | qi_seasoning_food_rule
+            food_rule = normal_food_rule | qi_seasoning_food_rule
+        else:
+            food_rule = normal_food_rule
 
         if EatsanityOptionName.lock_effects in self.options.eatsanity:
             enzyme_rule = self.logic.received("Fishing Enzyme", buff_levels)
@@ -164,6 +173,8 @@ class SkillLogic(BaseLogic):
         sources = self.content.find_sources_of_type(HarvestCropSource)
         crop_rules = []
         for crop_source in sources:
+            if crop_source.seed in [DistantLandsSeed.vile_ancient_fruit, DistantLandsSeed.void_mint]:
+                continue # These seeds require farming levels to reach, so they can't be used to earn farming levels
             crop_rules.append(self.logic.harvesting.can_harvest_crop_from(crop_source))
         return self.logic.or_(*crop_rules)
 
@@ -171,8 +182,7 @@ class SkillLogic(BaseLogic):
     def can_get_foraging_xp(self) -> StardewRule:
         tool_rule = self.logic.tool.has_tool(Tool.axe)
         tree_rule = self.logic.region.can_reach(Region.forest) & self.logic.season.has_any_not_winter()
-        stump_rule = self.logic.region.can_reach(Region.secret_woods) & self.logic.tool.has_tool(Tool.axe, ToolMaterial.copper)
-        return tool_rule & (tree_rule | stump_rule)
+        return tool_rule & tree_rule
 
     @cached_property
     def can_get_mining_xp(self) -> StardewRule:

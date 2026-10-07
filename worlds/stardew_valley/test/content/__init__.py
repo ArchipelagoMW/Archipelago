@@ -1,7 +1,7 @@
 import unittest
 from typing import ClassVar, Tuple
 
-from ...content import content_packs, ContentPack, StardewContent, unpack_content, StardewFeatures, feature
+from ...content import ContentPack, StardewContent, StardewFeatures, content_packs, feature, unpack_content
 from ...strings.building_names import Building
 
 default_features = StardewFeatures(

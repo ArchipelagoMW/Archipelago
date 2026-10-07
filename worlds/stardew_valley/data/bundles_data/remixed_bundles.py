@@ -140,7 +140,7 @@ bait_bundle = BundleTemplate(CCRoom.fish_tank, BundleName.bait, bait_items, 3, 2
 specific_bait_items = [BundleItem(ArtisanGood.targeted_bait, flavor=fish.name).as_amount(10) for fish in content_packs.pelican_town.fishes]
 specific_bait_bundle = BundleTemplate(CCRoom.fish_tank, BundleName.specific_bait, specific_bait_items, 6, 3)
 
-deep_fishing_items = [blobfish, spook_fish, midnight_squid, sea_cucumber, super_cucumber, octopus, pearl, seaweed]
+deep_fishing_items = [blobfish, spookfish, midnight_squid, sea_cucumber, super_cucumber, octopus, pearl, seaweed]
 deep_fishing_bundle = FestivalBundleTemplate(CCRoom.fish_tank, BundleName.deep_fishing, deep_fishing_items, 4, 3)
 
 smokeable_fish = [Fish.largemouth_bass, Fish.bream, Fish.bullhead, Fish.chub, Fish.ghostfish, Fish.flounder, Fish.shad, Fish.rainbow_trout, Fish.tilapia,
@@ -229,16 +229,16 @@ bulletin_board_remixed = BundleRoomTemplate(CCRoom.bulletin_board, bulletin_boar
 abandoned_joja_mart_remixed = abandoned_joja_mart_thematic
 
 # Vault
-vault_gambler_items = BundleItem(Currency.qi_coin, 10000)
+vault_gambler_items = BundleItem(Currency.qi_coin, 10000, source=BundleItem.Sources.content_currency)
 vault_gambler_bundle = CurrencyBundleTemplate(CCRoom.vault, BundleName.gambler, vault_gambler_items)
 
 vault_carnival_items = BundleItem(Currency.star_token, 2500, source=BundleItem.Sources.festival)
 vault_carnival_bundle = CurrencyBundleTemplate(CCRoom.vault, BundleName.carnival, vault_carnival_items)
 
-vault_walnut_hunter_items = BundleItem(Currency.golden_walnut, 25)
+vault_walnut_hunter_items = BundleItem(Currency.golden_walnut, 25, source=BundleItem.Sources.content_currency)
 vault_walnut_hunter_bundle = CurrencyBundleTemplate(CCRoom.vault, BundleName.walnut_hunter, vault_walnut_hunter_items)
 
-vault_qi_helper_items = BundleItem(Currency.qi_gem, 25, source=BundleItem.Sources.island)
+vault_qi_helper_items = BundleItem(Currency.qi_gem, 25, source=BundleItem.Sources.content_currency)
 vault_qi_helper_bundle = CurrencyBundleTemplate(CCRoom.vault, BundleName.qi_helper, vault_qi_helper_items)
 
 vault_bundles_remixed = [*vault_bundles_vanilla, vault_gambler_bundle, vault_qi_helper_bundle, vault_carnival_bundle]  # , vault_walnut_hunter_bundle

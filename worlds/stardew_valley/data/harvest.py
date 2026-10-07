@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import Tuple, Sequence, Mapping
+from typing import Tuple, Mapping
 
 from .game_item import Source, ItemTag
 from ..strings.season_names import Season
@@ -11,16 +11,7 @@ class ForagingSource(Source):
     seasons: Tuple[str, ...] = Season.all
     require_all_regions: bool = False
     grind_months: int = 0
-
-
-@dataclass(frozen=True, kw_only=True)
-class SeasonalForagingSource(Source):
-    season: str
-    days: Sequence[int]
-    regions: Tuple[str, ...]
-
-    def as_foraging_source(self) -> ForagingSource:
-        return ForagingSource(seasons=(self.season,), regions=self.regions)
+    days: Tuple[int, ...] = ()
 
 
 @dataclass(frozen=True, kw_only=True)
@@ -53,6 +44,7 @@ class HarvestCropSource(Source):
 
     seed: str
     seasons: Tuple[str, ...] = Season.all
+    growth_time: int = -1
     """Empty means it can't be grown on the farm."""
 
     @property

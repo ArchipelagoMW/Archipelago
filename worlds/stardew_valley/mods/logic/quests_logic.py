@@ -44,7 +44,7 @@ class ModQuestLogic(BaseLogic):
 
         return {
             ModQuest.JunaCola: self.logic.relationship.has_hearts(ModNPC.juna, 3) & self.logic.has(Beverage.joja_cola),
-            ModQuest.JunaSpaghetti: self.logic.relationship.has_hearts(ModNPC.juna, 6) & self.logic.has(Meal.spaghetti)
+            ModQuest.JunaSpaghetti: self.logic.relationship.has_hearts(ModNPC.juna, 6) & self.logic.has(Meal.spaghetti),
         }
 
     def _get_mr_ginger_quest_rules(self):
@@ -60,8 +60,8 @@ class ModQuestLogic(BaseLogic):
             return {}
 
         return {
-            ModQuest.AyeishaEnvelope: (self.logic.season.has(Season.spring) | self.logic.season.has(Season.fall)),
-            ModQuest.AyeishaRing: self.logic.season.has(Season.winter)
+            ModQuest.AyeishaEnvelope: (self.logic.season.has(Season.spring) | self.logic.season.has(Season.fall)) & self.logic.relationship.can_meet(ModNPC.ayeisha),
+            ModQuest.AyeishaRing: self.logic.season.has(Season.winter) & self.logic.relationship.can_meet(ModNPC.ayeisha),
         }
 
     def _get_sve_quest_rules(self):
@@ -70,14 +70,14 @@ class ModQuestLogic(BaseLogic):
 
         return {
             ModQuest.RailroadBoulder: self.logic.received(Wallet.skull_key) & self.logic.has_all(*(Ore.iridium, Material.coal)) &
-                                      self.logic.region.can_reach(Region.blacksmith) & self.logic.region.can_reach(Region.railroad),
+                                      self.logic.region.can_reach(Region.blacksmith_shop) & self.logic.region.can_reach(Region.railroad) & self.logic.relationship.can_meet(NPC.clint),
             ModQuest.GrandpasShed: self.logic.has_all(*(Material.hardwood, MetalBar.iron, ArtisanGood.battery_pack, Material.stone)) &
-                                   self.logic.region.can_reach(SVERegion.grandpas_shed),
+                                   self.logic.region.can_reach(SVERegion.grandpas_shed) & self.logic.relationship.can_meet(NPC.robin),
             ModQuest.MarlonsBoat: self.logic.has_all(*(Loot.void_essence, Loot.solar_essence, Loot.slime, Loot.bat_wing, Loot.bug_meat)) &
-                                  self.logic.relationship.can_meet(ModNPC.lance) & self.logic.region.can_reach(SVERegion.guild_summit),
+                                  self.logic.relationship.can_meet_all(ModNPC.lance, ModNPC.marlon) & self.logic.region.can_reach(SVERegion.guild_summit),
             ModQuest.AuroraVineyard: self.logic.region.can_reach(SVERegion.aurora_vineyard) & self.logic.received(SVEQuestItem.aurora_vineyard_tablet) &
-                                     self.logic.has(Fruit.starfruit) & self.logic.region.can_reach(Region.forest),
-            ModQuest.MonsterCrops: self.logic.has_all(*(SVEVegetable.monster_mushroom, SVEFruit.slime_berry, SVEFruit.monster_fruit, SVEVegetable.void_root)),
+                                     self.logic.has(Fruit.starfruit) & self.logic.region.can_reach(Region.forest) & self.logic.relationship.exists(ModNPC.apples),
+            ModQuest.MonsterCrops: self.logic.has_all(*(SVEVegetable.monster_mushroom, SVEFruit.slime_berry, SVEFruit.monster_fruit, SVEVegetable.void_root)) & self.logic.relationship.can_meet(ModNPC.lance),
             ModQuest.VoidSoul: self.logic.has(ModLoot.void_soul) & self.logic.region.can_reach(Region.farm) &
                                self.logic.season.has_any_not_winter() & self.logic.region.can_reach(SVERegion.badlands_entrance) &
                                self.logic.relationship.has_hearts(NPC.krobus, 10) & self.logic.quest.can_complete_quest(ModQuest.MonsterCrops) &
@@ -95,12 +95,12 @@ class ModQuestLogic(BaseLogic):
 
         return {
             ModQuest.CorruptedCropsTask: self.logic.region.can_reach(Region.wizard_tower) & self.logic.has(Fertilizer.deluxe) &
-                                         self.logic.quest.can_complete_quest(Quest.magic_ink),
+                                         self.logic.quest.can_complete_quest(Quest.magic_ink) & self.logic.relationship.can_meet(ModNPC.goblin),
             ModQuest.WitchOrder: self.logic.region.can_reach(Region.witch_swamp) & self.logic.has(Fertilizer.deluxe) &
-                                 self.logic.quest.can_complete_quest(Quest.magic_ink),
-            ModQuest.ANewPot: self.logic.region.can_reach(Region.saloon) &
-                              self.logic.region.can_reach(Region.sam_house) & self.logic.region.can_reach(Region.pierre_store) &
-                              self.logic.region.can_reach(Region.blacksmith) & self.logic.has(MetalBar.iron) & self.logic.relationship.has_hearts(ModNPC.goblin,
+                                 self.logic.quest.can_complete_quest(Quest.magic_ink) & self.logic.relationship.can_meet_all(ModNPC.alecto, ModNPC.goblin),
+            ModQuest.ANewPot: self.logic.region.can_reach(Region.saloon_shop) &
+                              self.logic.region.can_reach(Region.sam_house) & self.logic.region.can_reach(Region.pierre_house) &
+                              self.logic.region.can_reach(Region.blacksmith_shop) & self.logic.has(MetalBar.iron) & self.logic.relationship.has_hearts(ModNPC.goblin,
                                                                                                                                                   6),
             ModQuest.FancyBlanketTask: self.logic.region.can_reach(Region.haley_house) & self.logic.has(AnimalProduct.wool) &
                                        self.logic.has(ArtisanGood.cloth) & self.logic.relationship.has_hearts(ModNPC.goblin, 10) &
@@ -113,7 +113,7 @@ class ModQuestLogic(BaseLogic):
             return {}
 
         return {
-            ModQuest.PumpkinSoup: self.logic.region.can_reach(BoardingHouseRegion.boarding_house_first) & self.logic.has(Vegetable.pumpkin)
+            ModQuest.PumpkinSoup: self.logic.region.can_reach(BoardingHouseRegion.boarding_house_first) & self.logic.has(Vegetable.pumpkin) & self.logic.relationship.can_meet_all(ModNPC.gregory, ModNPC.sheila),
         }
 
     def _get_hat_mouse_quest_rules(self):
@@ -121,5 +121,5 @@ class ModQuestLogic(BaseLogic):
             return {}
 
         return {
-            ModQuest.HatMouseHat: self.logic.relationship.has_hearts(ModNPC.lacey, 2) & self.logic.time.has_lived_months(4)
+            ModQuest.HatMouseHat: self.logic.relationship.has_hearts(ModNPC.lacey, 2) & self.logic.time.has_lived_months(4),
         }

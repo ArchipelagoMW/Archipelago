@@ -1,10 +1,16 @@
-from .. import SVContentPackTestBase
-from ...bases import SVTestBase
+import unittest
+
 from .... import options
 from ....content import content_packs
 from ....mods.mod_data import ModNames
 from ....strings.fish_names import SVEFish
-from ....strings.villager_names import ModNPC, NPC
+from ....strings.villager_names import NPC, ModNPC
+from ...bases import SVTestBase
+from ...options.utils import skip_if_mod_disabled
+from .. import SVContentPackTestBase
+
+if not ModNames.sve.is_enabled:
+    raise unittest.SkipTest("SVE is disabled")
 
 vanilla_villagers = 33
 vanilla_villagers_with_leo = 34
@@ -22,6 +28,7 @@ class TestVanilla(SVContentPackTestBase):
         self.assertFalse(self.content.villagers[NPC.wizard].bachelor)
 
 
+@skip_if_mod_disabled(ModNames.sve)
 class TestSVE(SVContentPackTestBase):
     mods = (ModNames.sve,)
 

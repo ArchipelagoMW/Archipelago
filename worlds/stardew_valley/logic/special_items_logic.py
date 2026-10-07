@@ -9,6 +9,7 @@ from ..strings.quest_names import Quest
 from ..strings.region_names import Region
 from ..strings.season_names import Season
 from ..strings.special_item_names import SpecialItem
+from ..strings.special_order_names import SpecialOrder
 from ..strings.villager_names import NPC
 
 
@@ -21,10 +22,18 @@ class SpecialItemsLogicMixin(BaseLogicMixin):
 class SpecialItemsLogic(BaseLogic):
 
     def has_purple_shorts(self) -> StardewRule:
-        has_first_shorts = self.logic.season.has(Season.summer) &\
-                           self.logic.region.can_reach(Region.ranch) &\
+        scepter_is_logic = self.options.include_endgame_locations == self.options.include_endgame_locations.option_true
+
+        has_first_shorts = self.logic.season.has(Season.summer) & \
+                           self.logic.region.can_reach(Region.ranch) & \
                            self.logic.relationship.has_hearts(NPC.marnie, 2)
-        has_repeatable_shorts = self.logic.region.can_reach(Region.purple_shorts_maze) & self.logic.has(Consumable.warp_totem_farm)
+        if scepter_is_logic and self.options.entrance_randomization.randomized_fast_travel_warps():
+            can_warp_away = self.logic.has(Consumable.warp_totem_farm) & self.logic.received("Return Scepter")
+        elif scepter_is_logic:
+            can_warp_away = self.logic.has(Consumable.warp_totem_farm) | self.logic.received("Return Scepter")
+        else:
+            can_warp_away = self.logic.has(Consumable.warp_totem_farm)
+        has_repeatable_shorts = self.logic.region.can_reach(Region.purple_shorts_maze) & can_warp_away
         return has_first_shorts & has_repeatable_shorts
 
     def has_far_away_stone(self) -> StardewRule:
@@ -43,3 +52,13 @@ class SpecialItemsLogic(BaseLogic):
         if ginger_island_content_pack.name in self.content.registered_packs:
             return george_rule
         return self.logic.quest.can_complete_quest(Quest.the_pirates_wife) & george_rule
+
+    def has_prismatic_jelly(self) -> StardewRule:
+        wizard_rule = self.logic.relationship.exists(NPC.wizard)
+        order_rule = self.logic.special_order.can_complete_special_order(SpecialOrder.prismatic_jelly)
+        return wizard_rule & order_rule
+
+    def has_ectoplasm(self) -> StardewRule:
+        wizard_rule = self.logic.relationship.exists(NPC.wizard)
+        order_rule = self.logic.special_order.can_complete_special_order(SpecialOrder.a_curious_substance)
+        return wizard_rule & order_rule

@@ -2,8 +2,12 @@ from typing import Dict, List
 
 
 class Catalogue:
-    wizard = "Wizard Catalogue"
+    catalogue = "Catalogue"
     furniture = "Furniture Catalogue"
+    joja = "Joja Furniture Catalogue"
+    retro = "Retro Catalogue"
+    junimo = "Junimo Catalogue"
+    wizard = "Wizard Catalogue"
 
 
 items_by_catalogue: Dict[str, List[str]] = dict()

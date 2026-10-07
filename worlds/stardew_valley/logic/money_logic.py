@@ -1,9 +1,11 @@
-from Options import DeathLink
 from Utils import cache_self1
-from .base_logic import BaseLogicMixin, BaseLogic
+
+from Options import DeathLink
+
 from ..content.vanilla.qi_board import qi_board_content_pack
-from ..data.shop import ShopSource, HatMouseSource
-from ..stardew_rule import StardewRule, True_, HasProgressionPercent, False_, true_
+from ..data.hats_data import Hats
+from ..data.shop import HatMouseSource, ShopSource
+from ..stardew_rule import False_, HasProgressionPercent, StardewRule, True_, true_
 from ..strings.animal_names import Animal
 from ..strings.ap_names.ap_option_names import CustomLogicOptionName
 from ..strings.ap_names.event_names import Event
@@ -12,9 +14,11 @@ from ..strings.building_names import Building
 from ..strings.crop_names import Vegetable
 from ..strings.currency_names import Currency, MemeCurrency
 from ..strings.food_names import Beverage
-from ..strings.region_names import Region, LogicRegion
+from ..strings.region_names import LogicRegion, Region
 from ..strings.season_names import Season
 from ..strings.tool_names import Tool, ToolMaterial
+from ..strings.villager_names import NPC
+from .base_logic import BaseLogic, BaseLogicMixin
 
 qi_gem_rewards = ("100 Qi Gems", "50 Qi Gems", "40 Qi Gems", "35 Qi Gems", "25 Qi Gems",
                   "20 Qi Gems", "15 Qi Gems", "10 Qi Gems")
@@ -40,32 +44,38 @@ class MoneyLogic(BaseLogic):
         elif CustomLogicOptionName.easy_money in self.options.custom_logic:
             amount *= 4
 
+        shipping_rule = self.logic.shipping.can_use_any_shipping_bin
+
         if amount <= 1000:
             return self.logic.true_
 
-        shipping_rule = self.logic.shipping.can_use_shipping_bin
-        pierre_rule = self.logic.region.can_reach_all(Region.pierre_store, Region.forest)
-        willy_rule = self.logic.region.can_reach_all(Region.fish_shop, LogicRegion.fishing)
-        clint_rule = self.logic.region.can_reach_all(Region.blacksmith, Region.mines_floor_5) & self.logic.tool.has_tool(Tool.pickaxe)
-        robin_rule = self.logic.region.can_reach_all(Region.carpenter, Region.secret_woods) & self.logic.tool.has_tool(Tool.axe, ToolMaterial.copper)
         farming_rule = self.logic.farming.can_plant_and_grow_item(Season.not_winter)
 
-        if amount <= 2000:
-            selling_any_rule = shipping_rule | pierre_rule | willy_rule | clint_rule | robin_rule
-            return selling_any_rule
-
-        if amount <= 3000:
-            selling_any_rule = shipping_rule | pierre_rule | willy_rule
-            return selling_any_rule
-
         if amount <= 5000:
-            selling_all_rule = shipping_rule | (pierre_rule & farming_rule) | (pierre_rule & willy_rule & clint_rule & robin_rule)
-            return selling_all_rule
+            pierre_forage_rule = self.logic.region.can_reach_all(Region.pierre_shop, Region.forest)
+            willy_rule = self.logic.region.can_reach_all(Region.fish_shop, LogicRegion.fishing)
+            clint_rule = self.logic.region.can_reach_all(Region.blacksmith_shop, Region.mines_floor_5) & self.logic.tool.has_tool(Tool.pickaxe)
+            if self.options.tool_progression.is_progressive:
+                robin_rule = self.logic.region.can_reach_all(Region.carpenter_shop, Region.secret_woods) & self.logic.tool.has_tool(Tool.axe, ToolMaterial.copper)
+            else:
+                robin_rule = self.logic.false_ # If you earn your own tools, you'll need money for the axe, so this would make an infinite loop
+
+            if amount <= 2000:
+                selling_any_rule = shipping_rule | pierre_forage_rule | willy_rule | clint_rule | robin_rule
+                return selling_any_rule
+
+            if amount <= 3000:
+                selling_any_rule = shipping_rule | pierre_forage_rule | willy_rule
+                return selling_any_rule
+
+            if amount <= 5000:
+                selling_all_rule = shipping_rule | (pierre_forage_rule & farming_rule) | (pierre_forage_rule & willy_rule & clint_rule & robin_rule)
+                return selling_all_rule
 
         if amount <= 10000:
             return shipping_rule & farming_rule
 
-        seed_rules = self.logic.region.can_reach(Region.pierre_store)
+        seed_rules = self.logic.region.can_reach(Region.pierre_shop)
         if amount <= 40000:
             return shipping_rule & seed_rules & farming_rule
 
@@ -76,6 +86,11 @@ class MoneyLogic(BaseLogic):
     def can_spend(self, amount: int) -> StardewRule:
         if self.options.starting_money == -1:
             return True_()
+
+        if Currency.money not in self.content.currencies:
+            assert Currency.money in self.content.currencies, f"Cannot purchase using currency {Currency.money} because it is not in the enabled content packs"
+            return self.logic.false_
+
         spend_earned_multiplier = 5  # We assume that if you earned 5x an amount, you can reasonably spend that amount on things
         return self.logic.money.can_have_earned_total(amount * spend_earned_multiplier)
 
@@ -92,6 +107,10 @@ class MoneyLogic(BaseLogic):
     @cache_self1
     def can_shop_from(self, source: ShopSource) -> StardewRule:
         season_rule = self.logic.season.has_any(source.seasons)
+        if source.price is not None and source.price > 0:
+            if source.currency not in self.content.currencies:
+                assert source.currency in self.content.currencies, f"Cannot purchase using currency {source.currency} because it is not in the enabled content packs"
+                return self.logic.false_
         if source.currency == Currency.money:
             money_rule = self.logic.money.can_spend(source.price) if source.price is not None else true_
         else:
@@ -110,6 +129,9 @@ class MoneyLogic(BaseLogic):
     def can_trade(self, currency: str, amount: int) -> StardewRule:
         if amount == 0:
             return self.logic.true_
+        if currency not in self.content.currencies:
+            assert currency in self.content.currencies, f"Cannot purchase using currency {currency} because it is not in the enabled content packs"
+            return self.logic.false_
 
         if currency == Currency.money or currency == MemeCurrency.bank_money:
             return self.can_spend(amount)
@@ -120,7 +142,7 @@ class MoneyLogic(BaseLogic):
         if currency == Currency.qi_gem:
             if self.content.is_enabled(qi_board_content_pack):
                 return self.logic.received(Event.received_qi_gems, amount * 3)
-            return self.logic.region.can_reach_all(Region.qi_walnut_room, Region.saloon) & self.can_have_earned_total(5000)
+            return self.logic.region.can_reach_all(Region.qi_walnut_room, Region.saloon_shop) & self.can_have_earned_total(5000)
         if currency == Currency.golden_walnut:
             return self.can_spend_walnut(amount)
 
@@ -137,7 +159,7 @@ class MoneyLogic(BaseLogic):
             return self.logic.time.has_lived_months(amount // 10000)
 
         if currency == MemeCurrency.cookies:
-            return self.logic.time.has_lived_months(amount // 10000)
+            return self.logic.relationship.can_meet(NPC.evelyn) & self.logic.time.has_lived_months(amount // 10000)
         if currency == MemeCurrency.child:
             return self.logic.relationship.has_children(1)
         if currency == MemeCurrency.dead_crops:
@@ -151,6 +173,11 @@ class MoneyLogic(BaseLogic):
             return self.logic.has(ArtisanGood.honey) & self.logic.building.has_building(Building.well)
         if currency == MemeCurrency.goat:
             return self.logic.animal.has_animal(Animal.goat)
+        if currency == MemeCurrency.yeehaw:
+            yeehaw_hats = [Hats.cowgal_hat, Hats.blue_cowboy_hat, Hats.red_cowboy_hat, Hats.dark_cowboy_hat, Hats.magic_cowboy_hat] # , Hats.cowboy, Hats.cowpoke_hat, Hats.deluxe_cowboy_hat
+            return self.logic.or_(*(self.logic.hat.can_wear(hat) for hat in yeehaw_hats))
+        if currency == MemeCurrency.error:
+            return self.logic.true_
 
         if currency == MemeCurrency.sleep_days:
             if not self.options.multiple_day_sleep_enabled.value:

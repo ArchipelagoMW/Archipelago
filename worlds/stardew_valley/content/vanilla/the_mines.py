@@ -1,24 +1,28 @@
-from .pelican_town import pelican_town as pelican_town_content_pack
-from ..game_content import ContentPack
 from ...data import fish_data, villagers_data
-from ...data.game_item import Tag, ItemTag
+from ...data.game_item import ItemTag, Tag
 from ...data.harvest import ForagingSource
 from ...data.hats_data import Hats
 from ...data.monster_data import MonsterSource
-from ...data.requirement import ToolRequirement, RegionRequirement
-from ...logic.tailoring_logic import TailoringSource
-from ...logic.time_logic import MAX_MONTHS
+from ...data.requirement import RegionRequirement, ToolRequirement
+from ...data.shop import TailoringSource
+from ...data.time import MAX_MONTHS
+from ...strings.currency_names import MemeCurrency
 from ...strings.fish_names import Fish
 from ...strings.forageable_names import Forageable, Mushroom
 from ...strings.monster_names import Monster
 from ...strings.region_names import Region
 from ...strings.tool_names import Tool
+from ..game_content import ContentPack
+from .pelican_town import pelican_town as pelican_town_content_pack
 
 the_mines = ContentPack(
     "The Mines (Vanilla)",
     dependencies=(
         pelican_town_content_pack.name,
     ),
+    currencies={
+        MemeCurrency.deathlinks,
+    },
     harvest_sources={
         Forageable.cave_carrot: (
             Tag(ItemTag.FORAGE),

@@ -1,11 +1,14 @@
 from __future__ import annotations
 
+from collections.abc import Callable, Iterable, Mapping
 from graphlib import TopologicalSorter
-from typing import Iterable, Mapping, Callable
 
-from .game_content import StardewContent, ContentPack, StardewFeatures
-from .vanilla.base import base_game as base_game_content_pack
 from ..data.game_item import Source
+from ..data.regions import ginger_island_regions, vanilla_regions
+from .game_content import ContentPack, StardewContent, StardewFeatures
+from .override import override
+from .vanilla.base import base_game as base_game_content_pack
+from .vanilla.ginger_island import ginger_island_content_pack
 
 
 def unpack_content(features: StardewFeatures, packs: Iterable[ContentPack]) -> StardewContent:
@@ -35,6 +38,7 @@ def unpack_content(features: StardewFeatures, packs: Iterable[ContentPack]) -> S
             packs_to_finalize.append(pack)
 
     prune_inaccessible_items(content)
+    prune_inaccessible_regions(content)
 
     for pack in packs_to_finalize:
         pack.finalize_hook(content)
@@ -50,8 +54,11 @@ def register_pack(content: StardewContent, pack: ContentPack):
 
     register_sources_and_call_hook(content, pack.harvest_sources, pack.harvest_source_hook)
     register_sources_and_call_hook(content, pack.shop_sources, pack.shop_source_hook)
-    register_sources_and_call_hook(content, pack.crafting_sources, pack.crafting_hook)
     register_sources_and_call_hook(content, pack.artisan_good_sources, pack.artisan_good_hook)
+
+    for currency in pack.currencies:
+        content.currencies.add(currency)
+    # pack.currency_hook(content)
 
     for fish in pack.fishes:
         content.fishes[fish.name] = fish
@@ -64,6 +71,10 @@ def register_pack(content: StardewContent, pack: ContentPack):
     for building in pack.farm_buildings:
         content.farm_buildings[building.name] = building
     pack.farm_building_hook(content)
+
+    for tool_upgrade in pack.tool_upgrades:
+        content.tool_upgrades[tool_upgrade.tool_upgrade_name] = tool_upgrade
+    pack.tool_upgrade_hook(content)
 
     for animal in pack.animals:
         content.animals[animal.name] = animal
@@ -79,6 +90,18 @@ def register_pack(content: StardewContent, pack: ContentPack):
         if item.sources:
             content.hats[hat.name] = hat
     pack.hat_source_hook(content)
+
+    for festival in pack.festivals:
+        content.festivals[festival.name] = festival
+    pack.festival_source_hook(content)
+
+    for cooking_recipe in pack.cooking_recipes:
+        content.cooking_recipes[cooking_recipe.name] = cooking_recipe
+    pack.cooking_recipe_source_hook(content)
+
+    for crafting_recipe in pack.crafting_recipes:
+        content.crafting_recipes[crafting_recipe.name] = crafting_recipe
+    pack.crafting_recipe_source_hook(content)
 
     # register_quests
 
@@ -97,5 +120,20 @@ def register_sources_and_call_hook(content: StardewContent,
 
 def prune_inaccessible_items(content: StardewContent):
     for item in list(content.game_items.values()):
-        if not item.sources:
+        # This crafting recipe stuff can be replaced once crafts are added to content packs
+        if not item.sources and item.name not in content.crafting_recipes:
             content.game_items.pop(item.name)
+
+
+def prune_inaccessible_regions(content: StardewContent):
+    inaccessible_regions = []
+    allowed_regions = [region.name for region in vanilla_regions]
+    if ginger_island_content_pack.name not in content.registered_packs:
+        inaccessible_regions.extend([region.name for region in ginger_island_regions if region.name not in allowed_regions])
+    prune_inaccessible_fish_regions(content, inaccessible_regions)
+
+
+def prune_inaccessible_fish_regions(content: StardewContent, inaccessible_regions: list[str]):
+    for fish_name, fish_content in content.fishes.items():
+        pruned_regions = tuple([region for region in fish_content.locations if region not in inaccessible_regions])
+        content.fishes[fish_name] = override(fish_content, locations=pruned_regions)

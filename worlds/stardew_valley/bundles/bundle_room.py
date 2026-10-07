@@ -39,7 +39,7 @@ class BundleRoomTemplate:
     number_bundles: int
 
     def create_bundle_room(self, random: Random, content: StardewContent, options: StardewValleyOptions, player_name: str = "", is_entire_cc: bool = False):
-        filtered_bundles = [bundle for bundle in self.bundles if bundle.can_appear(options)]
+        filtered_bundles = [bundle for bundle in self.bundles if bundle.can_appear(content, options)]
 
         whitelist_bundles = []
         unpriority_bundles = []

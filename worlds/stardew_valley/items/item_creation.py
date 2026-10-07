@@ -13,10 +13,11 @@ from ..content.vanilla.qi_board import qi_board_content_pack
 from ..data.game_item import ItemTag
 from ..mods.mod_data import ModNames
 from ..options import StardewValleyOptions, FestivalLocations, SpecialOrderLocations, SeasonRandomization, Museumsanity, \
-    ElevatorProgression, BackpackProgression, ArcadeMachineLocations, Monstersanity, Goal, \
+    ElevatorProgression, BackpackProgression, Monstersanity, Goal, \
     Chefsanity, Craftsanity, BundleRandomization, EntranceRandomization, Shipsanity, Walnutsanity, Moviesanity
-from ..options.options import IncludeEndgameLocations, Friendsanity
-from ..strings.ap_names.ap_option_names import WalnutsanityOptionName, SecretsanityOptionName, EatsanityOptionName, ChefsanityOptionName, StartWithoutOptionName
+from ..options.options import IncludeEndgameLocations, Friendsanity, JunimoKart, JourneyOfThePrairieKing, DataRandomizationBehavior
+from ..strings.ap_names.ap_option_names import WalnutsanityOptionName, SecretsanityOptionName, EatsanityOptionName, ChefsanityOptionName, \
+    StartWithoutOptionName, DataRandomizationOptionName, CustomLogicOptionName
 from ..strings.ap_names.ap_weapon_names import APWeapon
 from ..strings.ap_names.buff_names import Buff
 from ..strings.ap_names.community_upgrade_names import CommunityUpgrade, Bookseller
@@ -25,6 +26,7 @@ from ..strings.backpack_tiers import Backpack
 from ..strings.building_names import Building
 from ..strings.currency_names import Currency
 from ..strings.tool_names import Tool
+from ..strings.tv_channel_names import Channel
 from ..strings.wallet_item_names import Wallet
 
 logger = logging.getLogger(__name__)
@@ -96,6 +98,7 @@ def create_unique_items(item_factory: StardewItemFactory, options: StardewValley
     create_tools(item_factory, content, items)
     create_skills(item_factory, content, items)
     create_wizard_buildings(item_factory, options, content, items)
+    create_return_scepter(item_factory, options, content, items)
     create_carpenter_buildings(item_factory, options, content, items)
     items.append(item_factory("Railroad Boulder Removed"))
     items.append(item_factory(CommunityUpgrade.fruit_bats))
@@ -108,7 +111,6 @@ def create_unique_items(item_factory: StardewItemFactory, options: StardewValley
     create_arcade_machine_items(item_factory, options, items)
     create_movement_buffs(item_factory, options, items)
     create_traveling_merchant_items(item_factory, items)
-    items.append(item_factory("Return Scepter"))
     create_seasons(item_factory, options, items)
     create_seeds(item_factory, content, items)
     create_friendsanity_items(item_factory, options, content, items, random)
@@ -125,6 +127,7 @@ def create_unique_items(item_factory: StardewItemFactory, options: StardewValley
     create_secrets_items(item_factory, content, options, items)
     create_eatsanity_enzyme_items(item_factory, options, items)
     create_endgame_locations_items(item_factory, options, items)
+    create_villager_items(item_factory, content, options, items)
 
     create_goal_items(item_factory, options, items)
     items.append(item_factory("Golden Egg"))
@@ -155,7 +158,8 @@ def create_backpack_items(item_factory: StardewItemFactory, options: StardewVall
     if options.backpack_progression == BackpackProgression.option_vanilla:
         return
     num_per_tier = options.backpack_size.count_per_tier()
-    backpack_tier_names = Backpack.get_purchasable_tiers(ModNames.big_backpack in content.registered_packs, StartWithoutOptionName.backpack in options.start_without)
+    backpack_tier_names = Backpack.get_purchasable_tiers(ModNames.big_backpack in content.registered_packs,
+                                                         StartWithoutOptionName.backpack in options.start_without)
     num_backpacks = len(backpack_tier_names) * num_per_tier
 
     items.extend(item_factory(item) for item in ["Progressive Backpack"] * num_backpacks)
@@ -170,7 +174,7 @@ def create_weapons(item_factory: StardewItemFactory, options: StardewValleyOptio
     items.extend(item_factory(item) for item in [APWeapon.slingshot] * 2)
     monstersanity = options.monstersanity
 
-    ring_classification = ItemClassification.progression if options.bundle_randomization == BundleRandomization.option_meme else ItemClassification.useful
+    ring_classification = ItemClassification.progression if options.bundle_randomization.is_meme() else ItemClassification.useful
     rings_items = [item for item in items_by_group[Group.FILLER_RING] if item.classification is not ItemClassification.filler]
 
     if monstersanity == Monstersanity.option_none:  # Without monstersanity, might not be enough checks to split the weapons
@@ -233,9 +237,11 @@ def create_skills(item_factory: StardewItemFactory, content: StardewContent, ite
 
 
 def create_wizard_buildings(item_factory: StardewItemFactory, options: StardewValleyOptions, content: StardewContent, items: List[Item]):
-    useful_buildings_classification = ItemClassification.progression_skip_balancing if goal_is_perfection(options) else ItemClassification.useful
-    items.append(item_factory("Earth Obelisk", classification_pre_fill=useful_buildings_classification))
-    items.append(item_factory("Water Obelisk", classification_pre_fill=useful_buildings_classification))
+    useful_buildings_classification = (ItemClassification.progression_skip_balancing if goal_is_perfection(options) else ItemClassification.useful)
+    er_obelisk_classification = (ItemClassification.progression_skip_balancing
+                                 if goal_is_perfection(options) or options.entrance_randomization.randomized_fast_travel_warps() else ItemClassification.useful)
+    items.append(item_factory("Earth Obelisk", classification_pre_fill=er_obelisk_classification))
+    items.append(item_factory("Water Obelisk", classification_pre_fill=er_obelisk_classification))
     items.append(item_factory("Desert Obelisk"))
     items.append(item_factory("Junimo Hut"))
     items.append(item_factory("Gold Clock", classification_pre_fill=useful_buildings_classification))
@@ -245,6 +251,12 @@ def create_wizard_buildings(item_factory: StardewItemFactory, options: StardewVa
         items.append(item_factory("Woods Obelisk"))
 
 
+def create_return_scepter(item_factory: StardewItemFactory, options: StardewValleyOptions, content: StardewContent, items: list[Item]):
+    return_scepter_classification = (ItemClassification.progression_skip_balancing
+                                     if options.entrance_randomization.randomized_fast_travel_warps() else ItemClassification.useful)
+    items.append(item_factory("Return Scepter", classification_pre_fill=return_scepter_classification))
+
+
 def create_carpenter_buildings(item_factory: StardewItemFactory, options: StardewValleyOptions, content: StardewContent, items: List[Item]):
     building_progression = content.features.building_progression
     if not building_progression.is_progressive:
@@ -252,7 +264,7 @@ def create_carpenter_buildings(item_factory: StardewItemFactory, options: Starde
 
     for building in content.farm_buildings.values():
         item_name, _ = building_progression.to_progressive_item(building.name)
-        if item_name in [Building.stable, Building.well] and options.bundle_randomization != BundleRandomization.option_meme:
+        if item_name in [Building.stable, Building.well] and not options.bundle_randomization.is_meme():
             items.append(item_factory(item_name, classification_pre_fill=ItemClassification.useful))
         else:
             items.append(item_factory(item_name))
@@ -343,7 +355,7 @@ def create_babies(item_factory: StardewItemFactory, items: List[Item], random: R
 
 
 def create_arcade_machine_items(item_factory: StardewItemFactory, options: StardewValleyOptions, items: List[Item]):
-    if options.arcade_machine_locations == ArcadeMachineLocations.option_full_shuffling:
+    if options.journey_of_the_prairie_king == JourneyOfThePrairieKing.option_full_shuffle:
         items.append(item_factory("JotPK: Progressive Boots"))
         items.append(item_factory("JotPK: Progressive Boots"))
         items.append(item_factory("JotPK: Progressive Gun"))
@@ -356,6 +368,7 @@ def create_arcade_machine_items(item_factory: StardewItemFactory, options: Stard
         items.append(item_factory("JotPK: Extra Life"))
         items.append(item_factory("JotPK: Extra Life"))
         items.append(item_factory("JotPK: Increased Drop Rate"))
+    if options.junimo_kart == JunimoKart.option_full_shuffle:
         items.extend(item_factory(item) for item in ["Junimo Kart: Extra Life"] * 8)
 
 
@@ -384,7 +397,8 @@ def create_seeds(item_factory: StardewItemFactory, content: StardewContent, item
     if not content.features.cropsanity.is_enabled:
         return
 
-    items.extend(item_factory(item_table[seed.name]) for seed in content.find_tagged_items(ItemTag.CROPSANITY_SEED))
+    cropsanity_seed_items = content.find_tagged_items(ItemTag.CROPSANITY_SEED)
+    items.extend(item_factory(item_table[content.features.cropsanity.to_prog_item_name(seed.name)]) for seed in cropsanity_seed_items)
 
 
 def create_festival_rewards(item_factory: StardewItemFactory, options: StardewValleyOptions, items: List[Item]):
@@ -474,7 +488,15 @@ def create_tv_channels(item_factory: StardewItemFactory, options: StardewValleyO
     channels = [channel for channel in items_by_group[Group.TV_CHANNEL]]
     if options.entrance_randomization == EntranceRandomization.option_disabled:
         channels = [channel for channel in channels if channel.name != "The Gateway Gazette"]
-    items.extend([item_factory(item) for item in channels])
+    fibs_classification = ItemClassification.useful
+    if options.data_randomization_behavior != DataRandomizationBehavior.option_off and CustomLogicOptionName.no_fibs not in options.custom_logic:
+        if DataRandomizationOptionName.fish_season in options.data_randomization or DataRandomizationOptionName.fish_location in options.data_randomization or DataRandomizationOptionName.fish_weather in options.data_randomization:
+            fibs_classification = ItemClassification.progression
+    for item in channels:
+        if item.name == Channel.fibs:
+            items.append(item_factory(item, classification_pre_fill=fibs_classification))
+        else:
+            items.append(item_factory(item))
 
 
 def create_crafting_recipes(item_factory: StardewItemFactory, options: StardewValleyOptions, content: StardewContent, items: List[Item]):
@@ -576,18 +598,18 @@ def create_eatsanity_enzyme_items(item_factory: StardewItemFactory, options: Sta
     # These items unlock progressively stronger ability to digest food items that give the associated buff
     # Upon receiving the enzyme, you also get a temporary buff of whatever the effect is
     # Stamina and Health items can go beyond their original max value, but the buffs cannot.
-    items.extend(item_factory(item) for item in ["Stamina Enzyme"]*10)
-    items.extend(item_factory(item) for item in ["Health Enzyme"]*10)
-    items.extend(item_factory(item) for item in ["Speed Enzyme"]*5)
-    items.extend(item_factory(item) for item in ["Luck Enzyme"]*5)
-    items.extend(item_factory(item) for item in ["Farming Enzyme"]*5)
-    items.extend(item_factory(item) for item in ["Foraging Enzyme"]*5)
-    items.extend(item_factory(item) for item in ["Fishing Enzyme"]*5)
-    items.extend(item_factory(item) for item in ["Mining Enzyme"]*5)
-    items.extend(item_factory(item) for item in ["Magnetism Enzyme"]*2)
-    items.extend(item_factory(item) for item in ["Defense Enzyme"]*5)
-    items.extend(item_factory(item) for item in ["Attack Enzyme"]*5)
-    items.extend(item_factory(item) for item in ["Max Stamina Enzyme"]*3)
+    items.extend(item_factory(item) for item in ["Stamina Enzyme"] * 10)
+    items.extend(item_factory(item) for item in ["Health Enzyme"] * 10)
+    items.extend(item_factory(item) for item in ["Speed Enzyme"] * 5)
+    items.extend(item_factory(item) for item in ["Luck Enzyme"] * 5)
+    items.extend(item_factory(item) for item in ["Farming Enzyme"] * 5)
+    items.extend(item_factory(item) for item in ["Foraging Enzyme"] * 5)
+    items.extend(item_factory(item) for item in ["Fishing Enzyme"] * 5)
+    items.extend(item_factory(item) for item in ["Mining Enzyme"] * 5)
+    items.extend(item_factory(item) for item in ["Magnetism Enzyme"] * 2)
+    items.extend(item_factory(item) for item in ["Defense Enzyme"] * 5)
+    items.extend(item_factory(item) for item in ["Attack Enzyme"] * 5)
+    items.extend(item_factory(item) for item in ["Max Stamina Enzyme"] * 3)
     items.extend(item_factory(item) for item in ["Squid Ink Enzyme"])
     items.extend(item_factory(item) for item in ["Monster Musk Enzyme"])
     items.extend(item_factory(item) for item in ["Oil Of Garlic Enzyme"])
@@ -603,6 +625,18 @@ def create_endgame_locations_items(item_factory: StardewItemFactory, options: St
     if options.friendsanity != Friendsanity.option_all_with_marriage:
         for portrait in items_by_group[Group.REQUIRES_FRIENDSANITY_MARRIAGE]:
             items_to_add.remove(portrait)
+    items.extend(item_factory(item) for item in items_to_add)
+
+
+def create_villager_items(item_factory: StardewItemFactory, content: StardewContent, options: StardewValleyOptions, items: List[Item]):
+    items_to_add = []
+    items_to_add.extend(items_by_group[Group.VILLAGER_ALWAYS])
+
+    if StartWithoutOptionName.villagers in options.start_without:
+        villager_arrival_items = [item for item in items_by_group[Group.VILLAGER] if item.name[:-len(" Arrival")] in content.villagers]
+        items_to_add.extend(villager_arrival_items)
+
+
     items.extend(item_factory(item) for item in items_to_add)
 
 

@@ -1,18 +1,43 @@
 import functools
-from typing import Any, Iterable
+import math
+from collections.abc import Iterable
+from typing import Any
 
-from .base_logic import BaseLogicMixin, BaseLogic
-from .tailoring_logic import TailoringSource
 from ..data.animal import IncubatorSource, OstrichIncubatorSource
 from ..data.artisan import MachineSource
 from ..data.fish_data import FishingSource
-from ..data.game_item import GenericSource, Source, GameItem, CustomRuleSource, AllRegionsSource
-from ..data.harvest import ForagingSource, FruitBatsSource, MushroomCaveSource, SeasonalForagingSource, \
-    HarvestCropSource, HarvestFruitTreeSource, ArtifactSpotSource
+from ..data.game_item import AllRegionsSource, CustomRuleSource, GameItem, GenericSource, Source
+from ..data.harvest import (
+    ArtifactSpotSource,
+    ForagingSource,
+    FruitBatsSource,
+    HarvestCropSource,
+    HarvestFruitTreeSource,
+    MushroomCaveSource,
+)
 from ..data.monster_data import MonsterSource
-from ..data.shop import ShopSource, MysteryBoxSource, ArtifactTroveSource, PrizeMachineSource, FishingTreasureChestSource, HatMouseSource
+from ..data.recipe_source import (
+    FriendshipSource,
+    MasterySource,
+    QueenOfSauceSource,
+    QuestSource,
+    SkillSource,
+    SpecialOrderSource,
+    StarterSource,
+)
+from ..data.shop import (
+    ArtifactTroveSource,
+    FishingTreasureChestSource,
+    HatMouseSource,
+    MysteryBoxSource,
+    PrizeMachineSource,
+    ShopSource,
+    TailoringSource,
+)
 from ..strings.ap_names.ap_option_names import CustomLogicOptionName
 from ..strings.skill_names import Skill
+from ..strings.tv_channel_names import Channel
+from .base_logic import BaseLogic, BaseLogicMixin
 
 
 class SourceLogicMixin(BaseLogicMixin):
@@ -27,7 +52,8 @@ class SourceLogic(BaseLogic):
         rules = []
 
         if self.content.features.cropsanity.is_included(item):
-            unlock_rule = self.logic.received(item.name)
+            cropsanity_prog_item_name = self.content.features.cropsanity.to_prog_item_name(item.name)
+            unlock_rule = self.logic.received(cropsanity_prog_item_name)
             if CustomLogicOptionName.critical_free_samples in self.options.custom_logic:
                 return unlock_rule
             rules.append(unlock_rule)
@@ -38,6 +64,43 @@ class SourceLogic(BaseLogic):
     def has_access_to_any(self, sources: Iterable[Source]):
         return self.logic.or_(*(self.logic.source.has_access_to(source) & self.logic.requirement.meet_all_requirements(source.other_requirements)
                                 for source in sources))
+
+    def has_access_to_any_with_multiplier(self, sources: Iterable[Source], multiplier: float):
+        multiplied_sources = []
+        for source in sources:
+            # There might be other source types to multiply later, but for now it's the only one so I didn't code them all
+            if isinstance(source, ShopSource):
+                multiplied_source = ShopSource(shop_region=source.shop_region,
+                                               price=math.ceil(source.price * multiplier),
+                                               items_price=tuple((math.ceil(price * multiplier), item) for price, item in source.items_price) if source.items_price else None,
+                                               seasons=source.seasons,
+                                               currency=source.currency,
+                                               forbidden_items=source.forbidden_items,
+                                               other_requirements=source.other_requirements)
+            else:
+                multiplied_source = source
+            multiplied_sources.append(multiplied_source)
+        return self.logic.or_(*(self.logic.source.has_access_to(source) & self.logic.requirement.meet_all_requirements(source.other_requirements)
+                                for source in multiplied_sources))
+
+    def has_access_to_any_without_other_requirements(self, sources: Iterable[Source]):
+        return self.logic.or_(*(self.logic.source.has_access_to(source) for source in sources))
+
+    def has_access_to_any_without_other_requirements_of_types(
+        self, sources: Iterable[Source], bypassed_requirement_types: Iterable[type]
+    ):
+        if bypassed_requirement_types is None:
+            return self.has_access_to_any(sources)
+        rules = []
+        for source in sources:
+            access_rule = self.logic.source.has_access_to(source)
+            valid_requirements = []
+            for requirement in source.other_requirements:
+                if any(isinstance(requirement, bypass_type) for bypass_type in bypassed_requirement_types):
+                    valid_requirements.append(requirement)
+            requirements_rule = self.logic.requirement.meet_all_requirements(valid_requirements)
+            rules.append(access_rule & requirements_rule)
+        return self.logic.or_(*rules)
 
     @functools.singledispatchmethod
     def has_access_to(self, source: Any):
@@ -58,11 +121,6 @@ class SourceLogic(BaseLogic):
     @has_access_to.register
     def _(self, source: ForagingSource):
         return self.logic.harvesting.can_forage_from(source)
-
-    @has_access_to.register
-    def _(self, source: SeasonalForagingSource):
-        # Implementation could be different with some kind of "calendar shuffle"
-        return self.logic.harvesting.can_forage_from(source.as_foraging_source())
 
     @has_access_to.register
     def _(self, _: FruitBatsSource):
@@ -131,3 +189,31 @@ class SourceLogic(BaseLogic):
     @has_access_to.register
     def _(self, source: FishingSource):
         return self.logic.fishing.can_fish_at(source.region) & self.logic.skill.has_level(Skill.fishing, source.fishing_level) & self.logic.tool.has_fishing_rod(source.minimum_rod)
+
+    @has_access_to.register
+    def _(self, source: FriendshipSource):
+        return self.logic.relationship.has_hearts(source.friend, source.hearts)
+
+    @has_access_to.register
+    def _(self, source: QueenOfSauceSource):
+        return self.logic.action.can_watch(Channel.queen_of_sauce) & self.logic.season.has(source.season)
+
+    @has_access_to.register
+    def _(self, source: SkillSource):
+        return self.logic.skill.has_level(source.skill, source.level)
+
+    @has_access_to.register
+    def _(self, source: StarterSource):
+        return self.logic.requirement.meet_all_requirements(source.other_requirements)
+
+    @has_access_to.register
+    def _(self, source: SpecialOrderSource):
+        return self.logic.special_order.can_complete_special_order(source.special_order)
+
+    @has_access_to.register
+    def _(self, source: MasterySource):
+        return self.logic.skill.has_mastery(source.skill)
+
+    @has_access_to.register
+    def _(self, source: QuestSource):
+        return self.logic.quest.can_complete_quest(source.quest)
