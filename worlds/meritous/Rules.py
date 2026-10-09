@@ -32,6 +32,11 @@ def set_rules(world, player, include_evolution_traps):
 
     # Storage key minimum strength logic
     for i in range(1,4):
-        add_rule(world.get_location(f"PSI Key Storage {i}",player), 
+        if i == 1 and not include_evolution_traps:
+            add_rule(world.get_location(f"PSI Key Storage {i}",player), 
+                    lambda state: state.has_from_list(["Circuit Charge upgrade", "Circuit Refill upgrade"], player, 
+                                                    15))
+        else:
+            add_rule(world.get_location(f"PSI Key Storage {i}",player), 
                 lambda state: state.has_from_list(["Circuit Charge upgrade", "Circuit Refill upgrade"], player, 
-                                                  15 if i == 1 and not include_evolution_traps else 20))
+                                                  20))
