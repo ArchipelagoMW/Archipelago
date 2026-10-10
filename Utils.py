@@ -240,7 +240,7 @@ def open_file(filename: typing.Union[str, "pathlib.Path"]) -> None:
         assert open_command, "Didn't find program for open_file! Please report this together with system details."
 
         env = env_cleared_lib_path()
-        subprocess.call([open_command, filename], env=env)
+        subprocess.Popen([open_command, filename], env=env)
 
 
 # from https://gist.github.com/pypt/94d747fe5180851196eb#gistcomment-4015118 with some changes
