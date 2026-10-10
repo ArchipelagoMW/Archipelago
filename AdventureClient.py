@@ -421,8 +421,7 @@ async def run_game(romfile):
     auto_start = options.rom_start
     rom_args = options.rom_args
     if auto_start is True:
-        import webbrowser
-        webbrowser.open(romfile)
+        Utils.open_file(romfile)
     elif os.path.isfile(auto_start):
         open_args = [auto_start, romfile]
         if rom_args is not None:

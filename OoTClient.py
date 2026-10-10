@@ -284,8 +284,7 @@ async def n64_sync_task(ctx: OoTContext):
 async def run_game(romfile):
     auto_start = OOTWorld.settings.rom_start
     if auto_start is True:
-        import webbrowser
-        webbrowser.open(romfile)
+        Utils.open_file(romfile)
     elif os.path.isfile(auto_start):
         subprocess.Popen([auto_start, romfile],
                          stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
