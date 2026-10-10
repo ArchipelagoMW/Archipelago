@@ -41,21 +41,22 @@ def set_rules(multiworld: MultiWorld, options: SM64Options, player: int, area_co
     if options.area_rando == options.area_rando.option_Courses_and_Secrets:  # Randomize Courses and Secrets in one pool
         randomized_entrances = shuffle_dict_keys(multiworld, randomized_entrances)
     
-    # Now, fix assignment if necessary
-    swapdict = randomized_entrances.copy()
-    if move_rando_bitvec == 0:
-        fix_reg(randomized_entrances, SM64Levels.BOB_OMB_BATTLEFIELD, sm64_secrets_to_level.keys(), swapdict, multiworld)
-    else:
-        invalid_start_courses = {course for course in randomized_entrances.values() if course not in valid_move_randomizer_start_courses}
-        fix_reg(randomized_entrances, SM64Levels.BOB_OMB_BATTLEFIELD, invalid_start_courses, swapdict, multiworld)
-        fix_reg(randomized_entrances, SM64Levels.WHOMPS_FORTRESS, invalid_start_courses, swapdict, multiworld)
-    # Guarantee BITFS is not mapped to DDD
-    fix_reg(randomized_entrances, SM64Levels.BOWSER_IN_THE_FIRE_SEA, {"Dire, Dire Docks"}, swapdict, multiworld)
-    # Guarantee COTMC is not mapped to HMC, cuz thats impossible. If BitFS -> HMC, also no COTMC -> DDD.
-    if randomized_entrances[SM64Levels.BOWSER_IN_THE_FIRE_SEA] == "Hazy Maze Cave":
-        fix_reg(randomized_entrances, SM64Levels.CAVERN_OF_THE_METAL_CAP, {"Hazy Maze Cave", "Dire, Dire Docks"}, swapdict, multiworld)
-    else:
-        fix_reg(randomized_entrances, SM64Levels.CAVERN_OF_THE_METAL_CAP, {"Hazy Maze Cave"}, swapdict, multiworld)
+    # If area rando is off, fix assignment if necessary
+    if options.area_rando > options.area_rando.option_Off:
+        swapdict = randomized_entrances.copy()
+        if move_rando_bitvec == 0:
+            fix_reg(randomized_entrances, SM64Levels.BOB_OMB_BATTLEFIELD, sm64_secrets_to_level.keys(), swapdict, multiworld)
+        else:
+            invalid_start_courses = {course for course in randomized_entrances.values() if course not in valid_move_randomizer_start_courses}
+            fix_reg(randomized_entrances, SM64Levels.BOB_OMB_BATTLEFIELD, invalid_start_courses, swapdict, multiworld)
+            fix_reg(randomized_entrances, SM64Levels.WHOMPS_FORTRESS, invalid_start_courses, swapdict, multiworld)
+        # Guarantee BITFS is not mapped to DDD
+        fix_reg(randomized_entrances, SM64Levels.BOWSER_IN_THE_FIRE_SEA, {"Dire, Dire Docks"}, swapdict, multiworld)
+        # Guarantee COTMC is not mapped to HMC, cuz thats impossible. If BitFS -> HMC, also no COTMC -> DDD.
+        if randomized_entrances[SM64Levels.BOWSER_IN_THE_FIRE_SEA] == "Hazy Maze Cave":
+            fix_reg(randomized_entrances, SM64Levels.CAVERN_OF_THE_METAL_CAP, {"Hazy Maze Cave", "Dire, Dire Docks"}, swapdict, multiworld)
+        else:
+            fix_reg(randomized_entrances, SM64Levels.CAVERN_OF_THE_METAL_CAP, {"Hazy Maze Cave"}, swapdict, multiworld)
 
     # Destination Format: LVL | AREA with LVL = LEVEL_x, AREA = Area as used in sm64 code
     # Cast to int to not rely on availability of SM64Levels enum. Will cause crash in MultiServer otherwise
