@@ -284,24 +284,11 @@ def identify(path: None | str) -> tuple[None | str, None | Component]:
 
 def open_host_yaml():
     import settings
-    import subprocess
-    from shutil import which
-    from Utils import is_linux, is_macos, env_cleared_lib_path
     s = settings.get_settings()
     file = s.filename
     s.save()
     assert file, "host.yaml missing"
-    if is_linux:
-        exe = which('sensible-editor') or which('gedit') or \
-              which('xdg-open') or which('gnome-open') or which('kde-open')
-    elif is_macos:
-        exe = which("open")
-    else:
-        webbrowser.open(file)
-        return
-
-    env = env_cleared_lib_path()
-    subprocess.Popen([exe, file], env=env)
+    open_file(file)
 
 def generate_yamls(*args):
     import argparse
@@ -325,21 +312,15 @@ def browse_files():
 def open_folder(folder_path):
     import subprocess
     from shutil import which
-    from Utils import is_linux, is_macos, env_cleared_lib_path
+    from Utils import is_windows
 
-    if is_linux:
-        exe = which('xdg-open') or which('gnome-open') or which('kde-open')
-    elif is_macos:
-        exe = which("open")
+    if is_windows:
+        exe = which("explorer")
+        assert exe, "cannot find explorer to browse files with"
+        subprocess.Popen([exe, folder_path])
     else:
-        webbrowser.open(folder_path)
-        return
-
-    if exe:
-        env = env_cleared_lib_path()
-        subprocess.Popen([exe, folder_path], env=env)
-    else:
-        logging.warning(f"No file browser available to open {folder_path}")
+        # Method to open file and folder is the same for linux/mac, so we can just call to open_file
+        open_file(folder_path)
 
 
 components: list[Component] = [
