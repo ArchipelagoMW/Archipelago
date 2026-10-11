@@ -19,9 +19,9 @@ Other notable locations include:
 
 ## When the player receives an item, what happens?
 
-When the player receives an item in DELTARUNE, it will go into their inventory if they have space.
+When the player receives an item in DELTARUNE, it will go into their inventory if they have space. All items have been backported to previous chapters.
 
-If you're in the wrong chapter for a specific item, it'll be sent to you as soon as you go to that chapter. Returning to the chapter select and going in-between chapters is something that'll  a lot.
+If you're in the wrong chapter for a key item, it'll be sent to you as soon as you go to that chapter. Returning to the chapter select and going in-between chapters is something that'll  a lot.
 
 Currently if you have no space left, the item is discarded, which is a bug that will be fixed soon. Luckily, this is very unlikely to happen, as you now have 192 storage, 48 weapon, and 60 armor slots in every chapter, which is more than you'll reasonably need.
 
