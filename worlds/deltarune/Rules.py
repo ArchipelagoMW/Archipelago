@@ -124,7 +124,7 @@ can_recruit_tasque_manager = (
         )
     )
 )
-can_recruit_mauswheel = have_kris | can_act_spare_susie | can_recruit_with_violence_ralsei
+can_recruit_mauswheel = have_kris | can_act_spare_susie
 can_recruit_werewerewire = have_kris | can_act_spare_susie | can_recruit_with_violence_ralsei | can_spam_spare
 
 ### CHAPTER 2 LOST

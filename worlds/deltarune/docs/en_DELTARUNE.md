@@ -136,6 +136,6 @@ The following commands are only available when using the DELTARUNE Client to pla
 - `/resync` Manually trigger a resync.
 - `/auto_patch` Patch the game automatically.
 - `/patch` Patch the game. Only use this command if `/auto_patch` fails.
-- `/linux_proxy` Use this if you're a linux user to create a proxy between the Archipelago Server and your game.
+- `/linux_proxy` Use this to create a proxy between the Archipelago Server and your game.
 - `/delete_saves` Delete all archipelago saves and caches.
 - `/inspect_datastore` Inspect the contents of your datastore.

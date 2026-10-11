@@ -131,9 +131,9 @@ If you want to change the preview items color, it's configurable by switching me
 
 Not required, but you can also open the DELTARUNE Client in the Archipelago Launcher to use Text commands. You can also use Universal Tracker features if you have the tracker APWorld installed.
 
-### Linux users
+### Linux Proxy
 
-Linux users require the usage of a proxy. Start the Archipelago Deltarune Client, then connect to the room and use the command `/linux_proxy`. You should now be able to connect with the window method with `localhost` for host and `1225` as port.
+Linux users require the usage of a proxy, though **it can be used by anyone who's having difficulties connecting in-game**. Start the Archipelago Deltarune Client, then connect to the room and use the command `/linux_proxy`. You should now be able to connect with the window method with `localhost` for host and `1225` as port.
 
 <img width="638" height="477" alt="image" src="https://github.com/user-attachments/assets/8f99a79d-be22-4abb-afc2-ca64a628e189" />
 

@@ -105,7 +105,7 @@ class DeltaruneCommandProcessor(ClientCommandProcessor):
             self.output("Patched.")
 
     async def _cmd_linux_proxy(self):
-        """Use this if you're a linux user to create a proxy between Archipelago Server and your game"""
+        """Use this to create a proxy between Archipelago Server and your game"""
         self.ctx.proxy = websockets.serve(
             functools.partial(proxy, ctx=self.ctx),
             host="localhost",
