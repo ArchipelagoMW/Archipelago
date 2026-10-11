@@ -6,6 +6,7 @@ import sys
 import webbrowser
 from enum import Enum
 from typing import Optional, Callable, Iterable, Sequence
+from typing_extensions import deprecated
 
 from Launcher import launch as launch_exe
 from Utils import local_path, open_filename, is_frozen, is_kivy_running, open_file, user_path, read_apignore, \
@@ -302,25 +303,16 @@ def generate_yamls(*args):
     target = user_path("Players", "Templates")
     generate_yaml_templates(target, False)
     if not args.skip_open_folder:
-        open_folder(target)
+        open_file(target)
 
 
 def browse_files():
-    open_folder(user_path())
+    open_file(user_path())
 
 
+@deprecated("open_folder is deprecated in favor of Utils.open_file and will be removed in a future version.")
 def open_folder(folder_path):
-    import subprocess
-    from shutil import which
-    from Utils import is_windows
-
-    if is_windows:
-        exe = which("explorer")
-        assert exe, "cannot find explorer to browse files with"
-        subprocess.Popen([exe, folder_path])
-    else:
-        # Method to open file and folder is the same for linux/mac, so we can just call to open_file
-        open_file(folder_path)
+    open_file(folder_path)
 
 
 components: list[Component] = [
@@ -445,7 +437,7 @@ if not is_frozen():
                 zf.writestr(apworld.manifest_path, json.dumps(manifest))
 
         if not args.skip_open_folder:
-            open_folder(apworlds_folder)
+            open_file(apworlds_folder)
 
     components.append(Component("Build APWorlds", func=_build_apworlds, cli=True,
                                 description="Build APWorlds from loose-file world folders."))

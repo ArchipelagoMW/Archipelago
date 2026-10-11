@@ -231,7 +231,11 @@ def output_path(*path: str) -> str:
     return path
 
 
-def open_file(filename: typing.Union[str, "pathlib.Path"]) -> None:
+def open_file(filename: str | pathlib.Path) -> None:
+    """
+    Opens the given file in the default program for its filetype.
+    If given a path to a folder, opens it inside of a file browser instead.
+    """
     if is_windows:
         os.startfile(filename)  # type: ignore
     else:
