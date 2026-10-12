@@ -41,7 +41,7 @@ def set_rules(multiworld: MultiWorld, options: SM64Options, player: int, area_co
     if options.area_rando == options.area_rando.option_Courses_and_Secrets:  # Randomize Courses and Secrets in one pool
         randomized_entrances = shuffle_dict_keys(multiworld, randomized_entrances)
     
-    # If area rando is off, fix assignment if necessary
+    # If area rando is on, fix assignment if necessary
     if options.area_rando > options.area_rando.option_Off:
         swapdict = randomized_entrances.copy()
         if move_rando_bitvec == 0:
