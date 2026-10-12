@@ -1,7 +1,7 @@
 {% macro dict_to_lua(dict) -%}
 {
 {%- for key, value in dict.items() -%}
-    ["{{ key }}"] = {{ variable_to_lua(value) }}{% if not loop.last %},{% endif %}
+    [{{ variable_to_lua(key) }}] = {{ variable_to_lua(value) }}{% if not loop.last %},{% endif %}
 {% endfor -%}
 }
 {% endmacro %}
@@ -15,7 +15,7 @@
 {%- macro variable_to_lua(value) %}
 {%- if value is mapping -%}{{ dict_to_lua(value) }}
 {%- elif value is boolean -%}{{ value | string | lower }}
-{%- elif value is string -%}"{{ value | safe }}"
+{%- elif value is string -%}"{{ value | replace("\\", "\\\\") | replace("\"", "\\\"") | safe }}"
 {%- elif value is iterable -%}{{ list_to_lua(value) }}
 {%- else -%} {{ value | safe }}
 {%- endif -%}
