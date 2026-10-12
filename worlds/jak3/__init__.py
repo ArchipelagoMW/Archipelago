@@ -105,7 +105,19 @@ It adds new weapons, devices and playable areas.
     orb_bundle_item_name: str = ""
     orb_bundle_item_id: int = 0
 
+    # Universal Tracker: allow regenerating this world from slot data, no YAML needed.
+    ut_can_gen_without_yaml = True
+
     def generate_early(self) -> None:
+        # Universal Tracker support: overwrite our options with the ones from the real seed's slot data.
+        if hasattr(self.multiworld, "re_gen_passthrough"):
+            if jak3_name in self.multiworld.re_gen_passthrough:
+                for key, val in self.multiworld.re_gen_passthrough[jak3_name].items():
+                    try:
+                        getattr(self.options, key).value = val
+                    except AttributeError:
+                        pass
+
         self.completion_type = self.options.jak_3_completion_condition.value
         if self.completion_type == options.CompletionCondition.option_complete_specific_mission:
             self.completion_value = self.options.specific_mission_for_completion.value
@@ -271,42 +283,16 @@ It adds new weapons, devices and playable areas.
                     mission_tree_region.add_jak_mission(loc_id, name, mission.rule)
 
     def _add_secrets(self, mission_tree_region: Jak3Region) -> None:
-        # Secrets menu purchases — tiered by real orb cost so cheap secrets
-        # unlock early and expensive ones require more progress, avoiding
-        # "stuck in front of a secret you can't afford" soft-stalls.
-        secret_names_in_order = [
-            s.name for s in sorted(secrets_table.values(), key=lambda s: (s.cost, s.secret_id))
-        ]
+        # Secrets are bought with orbs in the game, so each one needs enough reachable orbs to pay for it.
+        # Costs are cumulative: buying the cheaper secrets first uses up orbs, so the Nth secret
+        # (sorted by cost) needs the running total of every cost up to and including its own.
         secret_locations = get_secret_locations()
-        num_secrets = len(secret_names_in_order)
-
-        if self.options.orbsanity:
-            num_bundles = self._num_bundles()
-            bundle_item_name = self.orb_bundle_item_name
-
-            def make_bundle_rule(required: int, bundle_item_name: str) -> CollectionRule:
-                def rule(state, player):
-                    return state.count(bundle_item_name, player) >= required
-                return rule
-
-            for i, name in enumerate(secret_names_in_order, start=1):
-                loc_id = secret_locations[name]
-                required = max(1, round((i / num_secrets) * num_bundles))
-                mission_tree_region.add_jak_mission(loc_id, name, make_bundle_rule(required, bundle_item_name))
-        else:
-            gated_main_missions = [miss for miss in main_mission_table.values() if miss.has_rule]
-            num_gated_main_missions = len(gated_main_missions)
-
-            def make_mission_count_rule(required: int, gated_main_missions: list) -> CollectionRule:
-                def rule(state, player):
-                    completed = sum(1 for miss in gated_main_missions if miss.rule(state, player))
-                    return completed >= required
-                return rule
-
-            for i, name in enumerate(secret_names_in_order, start=1):
-                loc_id = secret_locations[name]
-                required = max(1, round((i / num_secrets) * num_gated_main_missions))
-                mission_tree_region.add_jak_mission(loc_id, name, make_mission_count_rule(required, gated_main_missions))
+        spent = 0
+        for secret in sorted(secrets_table.values(), key=lambda s: (s.cost, s.secret_id)):
+            spent += secret.cost
+            mission_tree_region.add_jak_mission(
+                secret_locations[secret.name], secret.name,
+                lambda state, player, needed=spent: can_reach_orbs(state, player, needed))
 
     def _add_orbsanity_bundles(self, mission_tree_region: Jak3Region) -> None:
         # Orbsanity bundles — only active when the Orbsanity option is enabled.

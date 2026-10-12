@@ -235,6 +235,11 @@ class Jak3ReplClient:
                 self.log_error(logger, "Failed to disable cheat mode.")
                 return
 
+            await asyncio.sleep(0.5)
+            if not await self.send_form("(set! *debug-segment* #f)", print_ok=False):
+                self.log_error(logger, "Failed to disable the debug flag.")
+                return
+
             self.log_info(logger, "[5/5] Run the title screen...")
             if not await self.send_form("(start 'play (get-continue-by-name *game-info* \"title-start\"))"):
                 self.log_error(logger, "Failed to run title screen.")

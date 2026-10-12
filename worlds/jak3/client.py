@@ -24,7 +24,7 @@ from PyMemoryEditor import OpenProcess, ProcessNotFoundError
 import ModuleUpdate
 import Utils
 
-from CommonClient import ClientCommandProcessor, CommonContext, server_loop, gui_enabled
+from CommonClient import server_loop, gui_enabled
 from NetUtils import ClientStatus
 
 # Jak imports
@@ -34,6 +34,20 @@ from .agents.repl_client import Jak3ReplClient
 from . import Jak3World
 from .options import CompletionCondition
 from .items import item_table, ITEM_ID_FILLER_START, ITEM_ID_FILLER_END, TRAP_ID_START, TRAP_ID_END, SECRET_ID_START, SECRET_ID_END
+
+# Load Universal Tracker
+tracker_loaded: bool = False
+try:
+    from worlds.tracker.TrackerClient import (
+        TrackerCommandProcessor as ClientCommandProcessor,
+        TrackerGameContext as CommonContext,
+        UT_VERSION
+    )
+
+    tracker_loaded = True
+except ImportError:
+    from CommonClient import ClientCommandProcessor, CommonContext
+    UT_VERSION = 0
 
 ModuleUpdate.update()
 logger = logging.getLogger("Jak3Client")
@@ -109,16 +123,23 @@ class Jak3Context(CommonContext):
                                    self.memr)
         super().__init__(server_address, password)
 
+    def run_generator(self):
+        if tracker_loaded:
+            super().run_generator()
+
+    def make_gui(self):
+        ui = super().make_gui()
+        ui.base_title = "Jak 3 ArchipelaGOAL Client"
+        if tracker_loaded:
+            ui.base_title += f" | Universal Tracker {UT_VERSION}"
+
+        # AP version is added behind this automatically
+        ui.base_title += " | Archipelago"
+        return ui
+
     def run_gui(self):
-        from kvui import GameManager
-
-        class Jak3Manager(GameManager):
-            logging_pairs = [
-                ("Client", "Archipelago")
-            ]
-            base_title = "Jak 3 ArchipelaGOAL Client"
-
-        self.ui = Jak3Manager(self)
+        ui_class = self.make_gui()
+        self.ui = ui_class(self)
         self.ui_task = asyncio.create_task(self.ui.async_run(), name="UI")
 
     async def server_auth(self, password_requested: bool = False):
@@ -139,6 +160,7 @@ class Jak3Context(CommonContext):
         await super(Jak3Context, self).disconnect(allow_autoreconnect)
 
     def on_package(self, cmd: str, args: dict):
+        super().on_package(cmd, args)
 
         if cmd == "RoomInfo":
             self.slot_seed = args["seed_name"]
@@ -155,6 +177,8 @@ class Jak3Context(CommonContext):
             self.memr.checks_per_mission = slot_data["checks_per_mission"]
             self.memr.location_check_mode = slot_data.get("location_check_mode", 1)
             self.memr.orb_bundle_count = slot_data.get("orb_bundle_count", 600)
+            self.memr.orb_bundle_size = (slot_data.get("orbs_per_bundle", 20)
+                                         if slot_data.get("orbsanity", 0) else 0)
 
             if not self.repl.received_initial_items and self.repl.initial_item_count < 0:
                 self.repl.initial_item_count = 0
@@ -582,6 +606,12 @@ async def main():
     Utils.init_logging("Jak3Client", exception_logger="Client")
 
     ctx = Jak3Context(None, None)
+
+    # If UT is loaded, run the generator and remove the tracker tag so we're treated as a game client.
+    if tracker_loaded:
+        ctx.run_generator()
+        ctx.tags.discard("Tracker")
+
     ctx.server_task = asyncio.create_task(server_loop(ctx), name="server loop")
     ctx.repl_task = create_task_log_exception(ctx.run_repl_loop())
     ctx.memr_task = create_task_log_exception(ctx.run_memr_loop())

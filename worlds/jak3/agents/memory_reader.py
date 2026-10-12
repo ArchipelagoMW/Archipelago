@@ -141,6 +141,7 @@ class Jak3MemoryReader:
     # Number of orb bundle locations the generator created for this seed (from slot data).
     # Bundles above this number are ignored. Default = max, i.e. no filtering until set.
     orb_bundle_count: int = 600
+    orb_bundle_size: int = 0   # orbs per bundle (0 = orbsanity off)
 
     # Deathlink handling
     deathlink_enabled: bool = False
@@ -416,6 +417,18 @@ class Jak3MemoryReader:
                     self.location_outbox.append(loc_id)
                     logger.debug(f"Orb bundle checked! Bundle ID: {raw_bundle_id}"
                                  f" -> Location ID: {loc_id}")
+
+            # Catch up any bundles the game skipped (e.g. when several orbs are
+            # awarded at once and the running total jumps past a multiple).
+            if self.orb_bundle_size > 0:
+                orbs_found = self.read_goal_address(orbs_found_offset, sizeof_uint32)
+                bundles_earned = min(orbs_found // self.orb_bundle_size, self.orb_bundle_count)
+                for bundle_id in range(1, bundles_earned + 1):
+                    loc_id = get_orb_bundle_location_id(bundle_id)
+                    if loc_id not in self.location_outbox:
+                        self.location_outbox.append(loc_id)
+                        logger.debug(f"Orb bundle caught up! Bundle ID: {bundle_id}"
+                                     f" -> Location ID: {loc_id}")
 
             # Deathlink handling
             death_count = self.read_goal_address(death_count_offset, sizeof_uint32)
