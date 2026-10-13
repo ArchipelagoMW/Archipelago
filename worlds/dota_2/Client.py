@@ -79,7 +79,7 @@ class Dota2Save:
     unique_heroes_won: list[Hero] = field(default_factory=list)
     
     # Anti-duplicate
-    submitted_match_ids: list[str] = field(default_factory=list)
+    submitted_match_ids: list[int] = field(default_factory=list)
 
     most_recent_game_time: int = 0
 
@@ -90,9 +90,6 @@ class Dota2Save:
     items_received_index: int = 0
 
     def __post_init__(self) -> None:
-        print("POST_INIT unique_heroes_won =", self.unique_heroes_won)
-        print("POST_INIT TYPE =", type(self.unique_heroes_won))
-
         if self.submitted_match_ids is None:
             self.submitted_match_ids = []
         if not self.start_date_local:
@@ -205,10 +202,11 @@ async def _check_goal_and_send_if_met(
 
 def _unlock_next_hero_group(ctx: "Dota2Context") -> None:
     hero_group_i = ctx.save.progressive_hero_group_unlocks
-    for hero in ctx.save.hero_groups[hero_group_i]:
-        ctx.save.heroes_unlocked.append(hero)
+    if hero_group_i < len(ctx.save.hero_groups):
+        for hero in ctx.save.hero_groups[hero_group_i]:
+            ctx.save.heroes_unlocked.append(hero)
 
-    ctx.save.progressive_hero_group_unlocks += 1    
+        ctx.save.progressive_hero_group_unlocks += 1        
         
 
 
@@ -268,7 +266,6 @@ class Dota2Context(CommonContext):
             setattr(self, "slot_data", args.get("slot_data") or {})
             starting_hero_names = self.slot_data.get("starting_hero_pool", [])
             hero_group_names = self.slot_data.get("hero_groups", [])
-            self.save.progressive_hero_group_unlocks = self.slot_data.get("progressive_hero_group_unlocks", [])
 
             self.save.all_heroes = get_all_heroes()
 
@@ -288,21 +285,12 @@ class Dota2Context(CommonContext):
                 for hero in self.save.heroes_unlocked
             ]
 
-            if isinstance(self.save.unique_heroes_won, dict):
-                self.save.unique_heroes_won = [self.save.unique_heroes_won]
+            self.save.unique_heroes_won = [
+                hero_by_id[hero["id"]] if isinstance(hero, dict) else hero
+                for hero in self.save.unique_heroes_won
+            ]
 
-            if isinstance(self.save.unique_heroes_won, list):
-                saved_names = {
-                    hero["name"]
-                    for hero in self.save.unique_heroes_won
-                    if isinstance(hero, dict)
-                }
-
-                self.save.unique_heroes_won = [
-                    hero
-                    for hero in self.save.all_heroes
-                    if hero.name in saved_names
-                ]
+            match_ids = self.save.submitted_match_ids
 
             raw_item_id_to_name = self.slot_data.get("item_name_to_id", {})
             self.save.item_name_to_id = {name: int(item_id) for item_id, name in raw_item_id_to_name.items()}
@@ -499,9 +487,11 @@ class Dota2Context(CommonContext):
             return
 
         #most importantly check if win: do no need to win to send some checks:
+        #Do not add to win counter if match already played
         win = False
-        if(match_data.win == 1):
+        if(match_data.win == 1 and not match_data.match_id in self.save.submitted_match_ids):
             self.save.wins_total += 1
+            self.save.submitted_match_ids.append(match_data.match_id)
             win = True
 
         self.output(win)
