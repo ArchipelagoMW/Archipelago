@@ -46,7 +46,6 @@ dist
 /prof/
 README.html
 .vs/
-EnemizerCLI/
 /Players/
 /SNI/
 /sni-*/
@@ -69,6 +68,7 @@ Output Logs/
 /setup.ini
 /installdelete.iss
 /data/user.kv
+/data/jak1/
 /datapackage
 /custom_worlds
 

@@ -38,6 +38,7 @@ class BindSongOptionAccessTest(AquariaTestBase):
             AquariaLocationNames.ENERGY_TEMPLE_THIRD_AREA_BULB_IN_THE_BOTTOM_PATH,
             AquariaLocationNames.ENERGY_TEMPLE_BOSS_AREA_FALLEN_GOD_TOOTH,
             AquariaLocationNames.ENERGY_TEMPLE_BLASTER_ROOM_BLASTER_EGG,
+            AquariaLocationNames.SITTING_ON_THRONE,
             *after_home_water_locations
         ]
         items = [[ItemNames.BIND_SONG]]

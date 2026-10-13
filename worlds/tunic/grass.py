@@ -2280,10 +2280,10 @@ grass_location_table: dict[str, TunicLocationData] = {
     "East Forest - East Forest Grass (222) (150.5, 8.0, -0.5)": TunicLocationData("East Forest", "East Forest"),
     "East Forest - East Forest Grass (220) (151.5, 8.0, -0.5)": TunicLocationData("East Forest", "East Forest"),
     "East Forest - East Forest Grass (223) (151.5, 8.0, -1.5)": TunicLocationData("East Forest", "East Forest"),
-    "East Forest - East Forest Grass (546) (167.0, 7.8, -23.5)": TunicLocationData("East Forest", "East Forest"),
-    "East Forest - East Forest Grass (545) (167.0, 7.8, -22.5)": TunicLocationData("East Forest", "East Forest"),
-    "East Forest - East Forest Grass (543) (166.0, 7.8, -22.5)": TunicLocationData("East Forest", "East Forest"),
-    "East Forest - East Forest Grass (544) (166.0, 7.8, -23.5)": TunicLocationData("East Forest", "East Forest"),
+    "East Forest - East Forest Grass (546) (167.0, 7.8, -23.5)": TunicLocationData("none", "East Forest above Guard House 2"),
+    "East Forest - East Forest Grass (545) (167.0, 7.8, -22.5)": TunicLocationData("none", "East Forest above Guard House 2"),
+    "East Forest - East Forest Grass (543) (166.0, 7.8, -22.5)": TunicLocationData("none", "East Forest above Guard House 2"),
+    "East Forest - East Forest Grass (544) (166.0, 7.8, -23.5)": TunicLocationData("none", "East Forest above Guard House 2"),
     "East Forest - East Forest Grass (167) (130.0, 24.0, 52.0)": TunicLocationData("East Forest", "East Forest"),
     "East Forest - East Forest Grass (164) (130.0, 24.0, 53.0)": TunicLocationData("East Forest", "East Forest"),
     "East Forest - East Forest Grass (165) (131.0, 24.0, 52.0)": TunicLocationData("East Forest", "East Forest"),
@@ -3642,13 +3642,13 @@ grass_location_table: dict[str, TunicLocationData] = {
     "West Garden - West Garden Grass (179) (-334.0, 4.0, 103.0)": TunicLocationData("none", "West Garden after Terry"),
     "West Garden - West Garden Grass (176) (-335.0, 4.0, 103.0)": TunicLocationData("none", "West Garden after Terry"),
     "West Garden - West Garden Grass (178) (-334.0, 4.0, 102.0)": TunicLocationData("none", "West Garden after Terry"),
-    "West Garden - West Garden Portal Grass (243) (-202.5, 8.0, -19.9)": TunicLocationData("none", "West Garden Portal"),
-    "West Garden - West Garden Portal Grass (244) (-203.4, 8.0, -20.9)": TunicLocationData("none", "West Garden Portal"),
-    "West Garden - West Garden Portal Grass (242) (-203.6, 8.0, -19.9)": TunicLocationData("none", "West Garden Portal"),
-    "West Garden - West Garden Portal Grass (233) (-197.4, 8.0, -20.9)": TunicLocationData("none", "West Garden Portal"),
-    "West Garden - West Garden Portal Grass (232) (-198.4, 8.0, -19.9)": TunicLocationData("none", "West Garden Portal"),
-    "West Garden - West Garden Portal Grass (234) (-197.4, 8.0, -19.9)": TunicLocationData("none", "West Garden Portal"),
-    "West Garden - West Garden Portal Grass (231) (-196.4, 8.0, -19.9)": TunicLocationData("none", "West Garden Portal"),
+    "West Garden - West Garden Portal Grass (243) (-202.5, 8.0, -19.9)": TunicLocationData("none", "West Garden by Portal"),
+    "West Garden - West Garden Portal Grass (244) (-203.4, 8.0, -20.9)": TunicLocationData("none", "West Garden by Portal"),
+    "West Garden - West Garden Portal Grass (242) (-203.6, 8.0, -19.9)": TunicLocationData("none", "West Garden by Portal"),
+    "West Garden - West Garden Portal Grass (233) (-197.4, 8.0, -20.9)": TunicLocationData("none", "West Garden by Portal"),
+    "West Garden - West Garden Portal Grass (232) (-198.4, 8.0, -19.9)": TunicLocationData("none", "West Garden by Portal"),
+    "West Garden - West Garden Portal Grass (234) (-197.4, 8.0, -19.9)": TunicLocationData("none", "West Garden by Portal"),
+    "West Garden - West Garden Portal Grass (231) (-196.4, 8.0, -19.9)": TunicLocationData("none", "West Garden by Portal"),
     "West Garden - West Garden Laurels Exit Grass (261) (-182.8, 2.0, 75.0)": TunicLocationData("none", "West Garden Laurels Exit Region"),
     "West Garden - West Garden Laurels Exit Grass (259) (-183.8, 2.0, 75.0)": TunicLocationData("none", "West Garden Laurels Exit Region"),
     "West Garden - West Garden Laurels Exit Grass (258) (-184.8, 2.0, 75.0)": TunicLocationData("none", "West Garden Laurels Exit Region"),
@@ -7764,6 +7764,8 @@ excluded_grass_locations = {
     "Overworld - East Overworld Bush (58) (58.0, 44.0, -109.0)",
     "Overworld - East Overworld Bush (62) (66.5, 44.0, -111.0)",
     "Overworld - East Overworld Bush (64) (56.0, 44.0, -107.0)",
+    "East Forest - East Forest Bush (16) (151.0, 8.0, 7.0)",
+    "East Forest - East Forest Bush (17) (153.0, 8.0, 7.0)"
 }
 
 grass_base_id = base_id + 302
@@ -7775,6 +7777,7 @@ for loc_name, loc_data in grass_location_table.items():
     # adding it to the normal location group and a grass-only one
     grass_location_name_groups.setdefault(area_name, set()).add(loc_name)
     grass_location_name_groups.setdefault(area_name + " Grass", set()).add(loc_name)
+    grass_location_name_groups.setdefault("Grass", set()).add(loc_name)
 
 
 def can_break_grass(state: CollectionState, world: "TunicWorld") -> bool:

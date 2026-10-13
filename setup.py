@@ -22,7 +22,7 @@ SNI_VERSION = "v0.0.100"  # change back to "latest" once tray icon issues are fi
 
 
 # This is a bit jank. We need cx-Freeze to be able to run anything from this script, so install it
-requirement = 'cx-Freeze==8.4.0'
+requirement = "cx-Freeze==8.6.4"
 try:
     import pkg_resources
     try:
@@ -41,9 +41,9 @@ if install_cx_freeze:
     except ImportError:
         raise RuntimeError("pip not available. Please install pip.")
     # install and import cx_freeze
-    if '--yes' not in sys.argv and '-y' not in sys.argv:
-        input(f'Requirement {requirement} is not satisfied, press enter to install it')
-    subprocess.call([sys.executable, '-m', 'pip', 'install', requirement, '--upgrade'])
+    if "--yes" not in sys.argv and "-y" not in sys.argv:
+        input(f"Requirement {requirement} is not satisfied, press enter to install it")
+    subprocess.call([sys.executable, "-m", "pip", "install", requirement, "-c", "setup_constraints.txt"])
     import pkg_resources
 
 import cx_Freeze
@@ -71,7 +71,6 @@ non_apworlds: set[str] = {
     "Ocarina of Time",
     "Overcooked! 2",
     "Raft",
-    "Sudoku",
     "Super Mario 64",
     "VVVVVV",
     "Wargroove",
@@ -189,7 +188,7 @@ exes = [
         script=f"{c.script_name}.py",
         target_name=c.frozen_name + (".exe" if is_windows else ""),
         icon=resolve_icon(c.icon),
-        base="Win32GUI" if is_windows and not c.cli else None
+        base="gui" if is_windows and not c.cli else None
     ) for c in components if c.script_name and c.frozen_name
 ]
 
@@ -202,7 +201,7 @@ if is_windows:
         icon=resolve_icon(c.icon),
     ))
 
-extra_data = ["LICENSE", "data", "EnemizerCLI", "SNI"]
+extra_data = ["LICENSE", "data", "SNI"]
 extra_libs = ["libssl.so", "libcrypto.so"] if is_linux else []
 
 
@@ -457,9 +456,8 @@ class BuildExeCommand(cx_Freeze.command.build_exe.build_exe):
                              for world_directory in folders_to_remove)
         else:
             # make sure extra programs are executable
-            enemizer_exe = self.buildfolder / 'EnemizerCLI/EnemizerCLI.Core'
             sni_exe = self.buildfolder / 'SNI/sni'
-            extra_exes = (enemizer_exe, sni_exe)
+            extra_exes = (sni_exe,)
             for extra_exe in extra_exes:
                 if extra_exe.is_file():
                     extra_exe.chmod(0o755)
@@ -658,7 +656,7 @@ cx_Freeze.setup(
     options={
         "build_exe": {
             "packages": ["worlds", "kivy", "cymem", "websockets", "kivymd"],
-            "includes": [],
+            "includes": ["rule_builder.cached_world"],
             "excludes": ["numpy", "Cython", "PySide2", "PIL",
                          "pandas"],
             "zip_includes": [],

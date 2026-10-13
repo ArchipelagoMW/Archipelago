@@ -128,8 +128,8 @@ class ZillionWorld(World):
     """
     logic_cache: ZillionLogicCache | None = None
 
-    def __init__(self, world: MultiWorld, player: int) -> None:
-        super().__init__(world, player)
+    def __init__(self, multiworld: MultiWorld, player: int) -> None:
+        super().__init__(multiworld, player)
         self.logger = logging.getLogger("Zillion")
         self.lsi = ZillionWorld.LogStreamInterface(self.logger)
         self.zz_system = System()

@@ -6,6 +6,11 @@
 - Die [APQuest-apworld](https://github.com/NewSoupVi/Archipelago/releases), 
   falls diese nicht mit deiner Version von Archipelago gebündelt ist.
 
+## Optionale Software
+
+- [APQuest AP Tracker](https://github.com/palex00/ap-quest-tracker/releases/latest), zur Verwendung mit
+[PopTracker](https://github.com/black-sliver/PopTracker/releases)
+
 ## Wie man spielt
 
 Zuerst brauchst du einen Raum, mit dem du dich verbinden kannst.
@@ -41,3 +46,15 @@ Du solltest jetzt verbunden sein und kannst APQuest spielen.
 Der APQuest Client kann zwischen verschiedenen Slots wechseln, ohne neugestartet werden zu müssen, 
 
 Klicke einfach den "Disconnect"-Knopf. Dann verbinde dich mit dem anderen Raum / Slot.
+
+
+## Automatisches Tracken
+
+AP Quest verfügt über einen voll funktionsfähigen, automatischen Tracker mit Karten der Spielwelt.
+
+1. Lade [APQuest AP Tracker](https://github.com/palex00/ap-quest-tracker/releases/latest) und
+[PopTracker](https://github.com/black-sliver/PopTracker/releases) herunter.
+2. Lege das Tracker-Pack im Ordner „packs/“ deiner PopTracker-Installation ab.
+3. Öffne PopTracker und lade das APQuest-Pack.
+4. Für das automatische Tracking klick oben auf das „AP“-Symbol.
+5. Gib die Serveradresse von Archipelago (die, mit der du deinen Client verbunden hast), den Slot-Namen und das Passwort ein.

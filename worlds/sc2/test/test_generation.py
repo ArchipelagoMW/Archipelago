@@ -1,20 +1,24 @@
 """
 Unit tests for world generation
 """
-from typing import *
-
+from typing import Any
 from .test_base import Sc2SetupTestBase
 
-from .. import mission_groups, mission_tables, options, locations, SC2Mission, SC2Campaign, SC2Race, unreleased_items, \
-    RequiredTactics
+from .. import (
+    mission_groups, mission_tables, options, locations,
+    SC2Mission, SC2Campaign, SC2Race, unreleased_items,
+    RequiredTactics,
+)
 from ..item import item_groups, item_tables, item_names
 from .. import get_all_missions, get_random_first_mission
-from ..options import EnabledCampaigns, NovaGhostOfAChanceVariant, MissionOrder, ExcludeOverpoweredItems, \
-    VanillaItemsOnly, MaximumCampaignSize
+from ..options import (
+    EnabledCampaigns, NovaGhostOfAChanceVariant, MissionOrder, ExcludeOverpoweredItems,
+    VanillaItemsOnly, MaximumCampaignSize,
+)
 
 
 class TestItemFiltering(Sc2SetupTestBase):
-    def test_explicit_locks_excludes_interact_and_set_flags(self):
+    def test_explicit_locks_excludes_interact_and_set_flags(self) -> None:
         world_options = {
             **self.ALL_CAMPAIGNS,
             'locked_items': {
@@ -46,7 +50,7 @@ class TestItemFiltering(Sc2SetupTestBase):
         regen_biosteel_items = [x for x in itempool if x == item_names.PROGRESSIVE_REGENERATIVE_BIO_STEEL]
         self.assertEqual(len(regen_biosteel_items), 2)
 
-    def test_unexcludes_cancel_out_excludes(self):
+    def test_unexcludes_cancel_out_excludes(self) -> None:
         world_options = {
             'grant_story_tech': options.GrantStoryTech.option_grant,
             'excluded_items': {
@@ -121,7 +125,7 @@ class TestItemFiltering(Sc2SetupTestBase):
         itempool = [item.name for item in self.multiworld.itempool]
         self.assertNotIn(item_names.MARINE, itempool)
 
-    def test_excluding_groups_excludes_all_items_in_group(self):
+    def test_excluding_groups_excludes_all_items_in_group(self) -> None:
         world_options = {
             'excluded_items': {
                 item_groups.ItemGroupNames.BARRACKS_UNITS.lower(): -1,
@@ -133,7 +137,7 @@ class TestItemFiltering(Sc2SetupTestBase):
         for item_name in item_groups.barracks_units:
             self.assertNotIn(item_name, itempool)
 
-    def test_excluding_mission_groups_excludes_all_missions_in_group(self):
+    def test_excluding_mission_groups_excludes_all_missions_in_group(self) -> None:
         world_options = {
             **self.ZERG_CAMPAIGNS,
             'enable_race_swap': options.EnableRaceSwapVariants.option_shuffle_all,
@@ -164,7 +168,7 @@ class TestItemFiltering(Sc2SetupTestBase):
             self.assertNotEqual(item_data.type, item_tables.TerranItemType.Nova_Gear)
             self.assertNotEqual(item_name, item_names.NOVA_PROGRESSIVE_STEALTH_SUIT_MODULE)
 
-    def test_starter_unit_populates_start_inventory(self):
+    def test_starter_unit_populates_start_inventory(self) -> None:
         world_options = {
             'enabled_campaigns': {
                 SC2Campaign.WOL.campaign_name,
@@ -308,7 +312,7 @@ class TestItemFiltering(Sc2SetupTestBase):
         self.generate_world(world_options)
         world_items = [(item.name, item_tables.item_table[item.name]) for item in self.multiworld.itempool]
         self.assertTrue(world_items)
-        occurrences: Dict[str, int] = {}
+        occurrences: dict[str, int] = {}
         for item_name, _ in world_items:
             if item_name in item_groups.terran_progressive_items:
                 if item_name in item_groups.nova_equipment:
@@ -528,7 +532,7 @@ class TestItemFiltering(Sc2SetupTestBase):
         Orbital command got replaced. The item is still there for backwards compatibility.
         It shouldn't be generated.
         """
-        world_options = {}
+        world_options: dict[str, Any] = {}
 
         self.generate_world(world_options)
         itempool = [item.name for item in self.multiworld.itempool]
@@ -595,7 +599,7 @@ class TestItemFiltering(Sc2SetupTestBase):
         self.assertIn(speedrun_location_name, all_location_names)
         self.assertNotIn(speedrun_location_name, world_location_names)
 
-    def test_nco_and_wol_picks_correct_starting_mission(self):
+    def test_nco_and_wol_picks_correct_starting_mission(self) -> None:
         world_options = {
             'mission_order': MissionOrder.option_vanilla,
             'enabled_campaigns': {
@@ -606,7 +610,7 @@ class TestItemFiltering(Sc2SetupTestBase):
         self.generate_world(world_options)
         self.assertEqual(get_random_first_mission(self.world, self.world.custom_mission_order), mission_tables.SC2Mission.LIBERATION_DAY)
 
-    def test_excluding_mission_short_name_excludes_all_variants_of_mission(self):
+    def test_excluding_mission_short_name_excludes_all_variants_of_mission(self) -> None:
         world_options = {
             'excluded_missions': [
                 mission_tables.SC2Mission.ZERO_HOUR.mission_name.split(" (")[0]
@@ -625,7 +629,7 @@ class TestItemFiltering(Sc2SetupTestBase):
         self.assertNotIn(mission_tables.SC2Mission.ZERO_HOUR_Z, missions)
         self.assertNotIn(mission_tables.SC2Mission.ZERO_HOUR_P, missions)
 
-    def test_excluding_mission_variant_excludes_just_that_variant(self):
+    def test_excluding_mission_variant_excludes_just_that_variant(self) -> None:
         world_options = {
             'excluded_missions': [
                 mission_tables.SC2Mission.ZERO_HOUR.mission_name
@@ -644,7 +648,7 @@ class TestItemFiltering(Sc2SetupTestBase):
         self.assertIn(mission_tables.SC2Mission.ZERO_HOUR_Z, missions)
         self.assertIn(mission_tables.SC2Mission.ZERO_HOUR_P, missions)
 
-    def test_weapon_armor_upgrades(self):
+    def test_weapon_armor_upgrades(self) -> None:
         world_options = {
             # Vanilla WoL with all missions
             'mission_order': options.MissionOrder.option_vanilla,
@@ -682,7 +686,7 @@ class TestItemFiltering(Sc2SetupTestBase):
         self.assertGreaterEqual(len(vehicle_weapon_items), 3)
         self.assertEqual(len(other_bundle_items), 0)
 
-    def test_weapon_armor_upgrades_with_bundles(self):
+    def test_weapon_armor_upgrades_with_bundles(self) -> None:
         world_options = {
             # Vanilla WoL with all missions
             'mission_order': options.MissionOrder.option_vanilla,
@@ -720,7 +724,7 @@ class TestItemFiltering(Sc2SetupTestBase):
         self.assertGreaterEqual(len(vehicle_upgrade_items), 3)
         self.assertEqual(len(other_bundle_items), 0)
 
-    def test_weapon_armor_upgrades_all_in_air(self):
+    def test_weapon_armor_upgrades_all_in_air(self) -> None:
         world_options = {
             # Vanilla WoL with all missions
             'mission_order': options.MissionOrder.option_vanilla,
@@ -753,7 +757,7 @@ class TestItemFiltering(Sc2SetupTestBase):
         self.assertGreaterEqual(len(vehicle_weapon_items), 3)
         self.assertGreaterEqual(len(ship_weapon_items), 3)
 
-    def test_weapon_armor_upgrades_generic_upgrade_missions(self):
+    def test_weapon_armor_upgrades_generic_upgrade_missions(self) -> None:
         """
         Tests the case when there aren't enough missions in order to get required weapon/armor upgrades
         for logic requirements.
@@ -782,7 +786,7 @@ class TestItemFiltering(Sc2SetupTestBase):
         # Under standard tactics you need to place L3 upgrades for available unit classes
         self.assertEqual(len(upgrade_items), 3)
 
-    def test_weapon_armor_upgrades_generic_upgrade_missions_no_logic(self):
+    def test_weapon_armor_upgrades_generic_upgrade_missions_no_logic(self) -> None:
         """
         Tests the case when there aren't enough missions in order to get required weapon/armor upgrades
         for logic requirements.
@@ -813,7 +817,7 @@ class TestItemFiltering(Sc2SetupTestBase):
         # No logic won't take the fallback to trigger
         self.assertEqual(len(upgrade_items), 0)
 
-    def test_weapon_armor_upgrades_generic_upgrade_missions_no_countermeasure_needed(self):
+    def test_weapon_armor_upgrades_generic_upgrade_missions_no_countermeasure_needed(self) -> None:
         world_options = {
             # Vanilla WoL with all missions
             'mission_order': options.MissionOrder.option_vanilla,
@@ -837,7 +841,7 @@ class TestItemFiltering(Sc2SetupTestBase):
         # No additional starting inventory item placement is needed
         self.assertEqual(len(upgrade_items), 0)
 
-    def test_kerrigan_levels_per_mission_triggering_pre_fill(self):
+    def test_kerrigan_levels_per_mission_triggering_pre_fill(self) -> None:
         world_options = {
             **self.ALL_CAMPAIGNS,
             'mission_order': options.MissionOrder.option_custom,
@@ -878,7 +882,7 @@ class TestItemFiltering(Sc2SetupTestBase):
 
         self.assertGreater(len(kerrigan_1_stacks), 0)
 
-    def test_kerrigan_levels_per_mission_and_generic_upgrades_both_triggering_pre_fill(self):
+    def test_kerrigan_levels_per_mission_and_generic_upgrades_both_triggering_pre_fill(self) -> None:
         world_options = {
             **self.ALL_CAMPAIGNS,
             'mission_order': options.MissionOrder.option_custom,
@@ -925,7 +929,7 @@ class TestItemFiltering(Sc2SetupTestBase):
         self.assertNotIn(item_names.KERRIGAN_LEVELS_70, itempool)
         self.assertNotIn(item_names.KERRIGAN_LEVELS_70, starting_inventory)
 
-    def test_locking_required_items(self):
+    def test_locking_required_items(self) -> None:
         world_options = {
             **self.ALL_CAMPAIGNS,
             'mission_order': options.MissionOrder.option_custom,
@@ -962,7 +966,7 @@ class TestItemFiltering(Sc2SetupTestBase):
         self.assertIn(item_names.KERRIGAN_MEND, itempool)
 
     
-    def test_fully_balanced_mission_races(self):
+    def test_fully_balanced_mission_races(self) -> None:
         """
         Tests whether fully balanced mission race balancing actually is fully balanced.
         """
@@ -1080,7 +1084,7 @@ class TestItemFiltering(Sc2SetupTestBase):
 
         self.generate_world(world_options)
         itempool = [item.name for item in self.multiworld.itempool]
-        upgrade_item_counts: Dict[str, int] = {}
+        upgrade_item_counts: dict[str, int] = {}
         for item_name in itempool:
             if item_tables.item_table[item_name].type in (
                 item_tables.TerranItemType.Upgrade,
@@ -1252,7 +1256,7 @@ class TestItemFiltering(Sc2SetupTestBase):
         self.generate_world(world_options)
         itempool = [item.name for item in self.multiworld.itempool]
 
-        items_to_check: List[str] = unreleased_items
+        items_to_check: list[str] = unreleased_items
         for item in items_to_check:
             self.assertNotIn(item, itempool)
 
@@ -1273,7 +1277,7 @@ class TestItemFiltering(Sc2SetupTestBase):
         self.generate_world(world_options)
         itempool = [item.name for item in self.multiworld.itempool]
 
-        items_to_check: List[str] = unreleased_items
+        items_to_check: list[str] = unreleased_items
         for item in items_to_check:
             self.assertIn(item, itempool)
 

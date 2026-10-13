@@ -1,4 +1,5 @@
 import argparse
+import ssl
 import zipfile
 from io import BytesIO
 
@@ -8,12 +9,13 @@ import hashlib
 import json
 import logging
 import os
+
+import certifi
 import requests
-import secrets
 import shutil
-import subprocess
+import subprocess  # nosec
 from tkinter import messagebox
-from typing import Any, Dict, Set
+from typing import Any, Dict, Set, List
 import urllib
 import urllib.parse
 
@@ -90,7 +92,7 @@ def get_timestamp(date: str) -> float:
 
 def send_request(request_url: str) -> UrlResponse:
     """Fetches status code and json response from given url"""
-    response = requests.get(request_url)
+    response = requests.get(request_url, timeout=10)
     if response.status_code == 200:  # success
         try:
             data = response.json()
@@ -129,13 +131,16 @@ def update(target_asset: str, url: str) -> bool:
         if update_available and messagebox.askyesnocancel(f"New {target_asset}",
                                                           "Would you like to install the new version now?"):
             # unzip and patch
-            with urllib.request.urlopen(release_url) as download:
+            if not release_url.lower().startswith("https"):
+                raise ValueError(f'Unexpected scheme for url "{release_url}".')
+            context = ssl.create_default_context(ssl.Purpose.SERVER_AUTH, cafile=certifi.where())
+            with urllib.request.urlopen(release_url, context=context) as download:  # nosec
                 with zipfile.ZipFile(BytesIO(download.read())) as zf:
                     zf.extractall()
             patch_game()
             set_date(target_asset, newest_date)
-    except (ValueError, RuntimeError, urllib.error.HTTPError):
-        update_error = f"Failed to apply update."
+    except (ValueError, RuntimeError, urllib.error.HTTPError, urllib.error.URLError) as e:
+        update_error = f"Failed to apply update:\n{e}"
         messagebox.showerror("Failure", update_error)
         raise RuntimeError(update_error)
     return True
@@ -158,8 +163,8 @@ def is_install_valid() -> bool:
         if not os.path.exists(file_name):
             return False
         with open(file_name, "rb") as clean:
-            current_hash = hashlib.md5(clean.read()).hexdigest()
-        if not secrets.compare_digest(current_hash, expected_hash):
+            current_hash = hashlib.md5(clean.read(), usedforsecurity=False).hexdigest()
+        if current_hash != expected_hash:
             return False
     return True
 
@@ -189,12 +194,16 @@ def install() -> None:
 
     logging.info("Extracting files from cab archive.")
     if Utils.is_windows:
-        subprocess.run(["Extrac32", "/Y", "/E", "saving_princess.cab"])
+        windows_path = os.environ["WINDIR"]
+        extractor_path = f"{windows_path}/System32/Extrac32"
+        subprocess.run([extractor_path, "/Y", "/E", "saving_princess.cab"])  #nosec
     else:
-        if shutil.which("wine") is not None:
-            subprocess.run(["wine", "Extrac32", "/Y", "/E", "saving_princess.cab"])
-        elif shutil.which("7z") is not None:
-            subprocess.run(["7z", "e", "saving_princess.cab"])
+        wine_path = shutil.which("wine")
+        p7zip_path = shutil.which("7z")
+        if wine_path is not None:
+            subprocess.run([wine_path, "Extrac32", "/Y", "/E", "saving_princess.cab"])  #nosec
+        elif p7zip_path is not None:
+            subprocess.run([p7zip_path, "e", "saving_princess.cab"])  #nosec
         else:
             error = "Could not find neither wine nor 7z.\n\nPlease install either the wine or the p7zip package."
             messagebox.showerror("Missing package!", f"Error: {error}")
@@ -250,7 +259,10 @@ def launch(*args: str) -> Any:
     if SavingPrincessWorld.settings.launch_game:
         logging.info("Launching game.")
         try:
-            subprocess.Popen(f"{SavingPrincessWorld.settings.launch_command} {name} {password} {server}")
+            game: str = os.path.join(os.getcwd(), "Saving Princess v0_8.exe")
+            launch_command: List[str] = (SavingPrincessWorld.settings.launch_command_with_args
+                                         + [game, name, password, server])
+            subprocess.Popen(launch_command)  # nosec
         except FileNotFoundError:
             error = ("Could not run the game!\n\n"
                      "Please check that launch_command in options.yaml or host.yaml is set up correctly.")

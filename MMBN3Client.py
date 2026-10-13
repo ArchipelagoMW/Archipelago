@@ -241,8 +241,8 @@ async def gba_sync_task(ctx: MMBN3Context):
                                 await ctx.server_auth(False)
                     else:
                         if not ctx.version_warning:
-                            logger.warning(f"Your Lua script is version {reported_version}, expected {script_version}."
-                                           "Please update to the latest version."
+                            logger.warning(f"Your Lua script is version {reported_version}, expected {script_version}. "
+                                           "Please update to the latest version. "
                                            "Your connection to the Archipelago server will not be accepted.")
                             ctx.version_warning = True
                 except asyncio.TimeoutError:
@@ -279,7 +279,7 @@ async def gba_sync_task(ctx: MMBN3Context):
                 logger.debug("Attempting to connect to GBA")
                 ctx.gba_streams = await asyncio.wait_for(asyncio.open_connection("localhost", 28922), timeout=10)
                 ctx.gba_status = CONNECTION_TENTATIVE_STATUS
-            except TimeoutError:
+            except (TimeoutError, OSError):
                 logger.debug("Connection Timed Out, Trying Again")
                 ctx.gba_status = CONNECTION_TIMING_OUT_STATUS
                 continue

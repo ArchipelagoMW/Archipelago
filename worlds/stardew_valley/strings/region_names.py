@@ -1,3 +1,6 @@
+from .tool_names import ToolMaterial
+
+
 class Region:
     menu = "Menu"
     stardew_valley = "Stardew Valley"
@@ -31,6 +34,7 @@ class Region:
     mines = "The Mines"
     skull_cavern_entrance = "Skull Cavern Entrance"
     skull_cavern = "Skull Cavern"
+    skull_cavern_mining = "Skull Cavern Mining"
     sewer = "Sewer"
     mutant_bug_lair = "Mutant Bug Lair"
     witch_swamp = "Witch's Swamp"
@@ -106,8 +110,11 @@ class Region:
     boat_tunnel = "Boat Tunnel"
     tide_pools = "Tide Pools"
     bathhouse_entrance = "Bathhouse Entrance"
-    locker_room = "Locker Room"
+    mens_locker_room = "Men's Locker Room"
+    womens_locker_room = "Women's Locker Room"
     public_bath = "Public Bath"
+    lewis_bedroom = "Lewis's Bedroom"
+    purple_shorts_maze = "Purple Shorts Maze"
     jotpk_world_1 = "JotPK World 1"
     jotpk_world_2 = "JotPK World 2"
     jotpk_world_3 = "JotPK World 3"
@@ -142,6 +149,8 @@ class Region:
     dangerous_mines_20 = "Dangerous Mines - Floor 20"
     dangerous_mines_60 = "Dangerous Mines - Floor 60"
     dangerous_mines_100 = "Dangerous Mines - Floor 100"
+    outside_adventure_guild = "Outside Adventure Guild"
+    trash_bear = "Trash Bear"
 
 
 class LogicRegion:
@@ -164,10 +173,10 @@ class LogicRegion:
     def blacksmith_upgrade(material: str) -> str:
         return f"Blacksmith {material} Upgrades"
 
-    blacksmith_copper = blacksmith_upgrade("Copper")
-    blacksmith_iron = blacksmith_upgrade("Iron")
-    blacksmith_gold = blacksmith_upgrade("Gold")
-    blacksmith_iridium = blacksmith_upgrade("Iridium")
+    blacksmith_copper = blacksmith_upgrade(ToolMaterial.copper)
+    blacksmith_iron = blacksmith_upgrade(ToolMaterial.iron)
+    blacksmith_gold = blacksmith_upgrade(ToolMaterial.gold)
+    blacksmith_iridium = blacksmith_upgrade(ToolMaterial.iridium)
 
     spring_farming = "Spring Farming"
     summer_farming = "Summer Farming"
@@ -190,11 +199,30 @@ class LogicRegion:
     winter_star = "Feast of the Winter Star"
     squidfest = "SquidFest"
     raccoon_daddy = "Raccoon Bundles"
-    raccoon_shop = "Raccoon Shop"
-    bookseller_1 = "Bookseller Experience Books"
-    bookseller_2 = "Bookseller Year 1 Books"
-    bookseller_3 = "Bookseller Year 3 Books"
+    raccoon_request_1 = "Raccoon Request 1"
+    raccoon_request_2 = "Raccoon Request 2"
+    raccoon_request_3 = "Raccoon Request 3"
+    raccoon_request_4 = "Raccoon Request 4"
+    raccoon_request_5 = "Raccoon Request 5"
+    raccoon_request_6 = "Raccoon Request 6"
+    raccoon_request_7 = "Raccoon Request 7"
+    raccoon_request_8 = "Raccoon Request 8"
+    raccoon_shop_1 = "Raccoon Shop After 1 Request"
+    raccoon_shop_2 = "Raccoon Shop After 2 Requests"
+    raccoon_shop_3 = "Raccoon Shop After 3 Requests"
+    raccoon_shop_4 = "Raccoon Shop After 4 Requests"
+    raccoon_shop_5 = "Raccoon Shop After 5 Requests"
+    raccoon_shop_6 = "Raccoon Shop After 6 Requests"
+    bookseller = "Bookseller"
+    bookseller_permanent = "Bookseller Permanent Books"
+    bookseller_rare = "Bookseller Rare Books"
+    bookseller_experience = "Bookseller Experience Books"
     forest_waterfall = "Waterfall"
+    secret_notes = "Secret Notes"
+    hat_mouse = "Hat Mouse"
+    lost_items_shop = "Lost Items Shop"
+    garbage_cans = "Garbage Cans"
+    wizard_blueprints = "Wizard Blueprints"
 
 
 class DeepWoodsRegion:

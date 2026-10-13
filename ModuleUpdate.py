@@ -5,15 +5,16 @@ import multiprocessing
 import warnings
 
 
-if sys.platform in ("win32", "darwin") and sys.version_info < (3, 11, 9):
+if sys.platform in ("win32", "darwin") and not (3, 11, 9) <= sys.version_info < (3, 14, 0):
     # Official micro version updates. This should match the number in docs/running from source.md.
-    raise RuntimeError(f"Incompatible Python Version found: {sys.version_info}. Official 3.11.9+ is supported.")
+    raise RuntimeError(f"Incompatible Python Version found: {sys.version_info}. "
+                       "Official 3.11.9 through 3.13.x is supported.")
 elif sys.platform in ("win32", "darwin") and sys.version_info < (3, 11, 13):
     # There are known security issues, but no easy way to install fixed versions on Windows for testing.
     warnings.warn(f"Python Version {sys.version_info} has security issues. Don't use in production.")
-elif sys.version_info < (3, 11, 0):
+elif not (3, 11, 0) <= sys.version_info < (3, 14, 0):
     # Other platforms may get security backports instead of micro updates, so the number is unreliable.
-    raise RuntimeError(f"Incompatible Python Version found: {sys.version_info}. 3.11.0+ is supported.")
+    raise RuntimeError(f"Incompatible Python Version found: {sys.version_info}. 3.11.0 through 3.13.x is supported.")
 
 # don't run update if environment is frozen/compiled or if not the parent process (skip in subprocess)
 _skip_update = bool(
@@ -37,7 +38,8 @@ class RequirementsSet(set):
 
 
 local_dir = os.path.dirname(__file__)
-requirements_files = RequirementsSet((os.path.join(local_dir, 'requirements.txt'),))
+core_constraints = os.path.join(local_dir, 'requirements.txt')
+requirements_files = RequirementsSet((core_constraints,))
 
 if not update_ran:
     for entry in os.scandir(os.path.join(local_dir, "worlds")):
@@ -68,7 +70,7 @@ def confirm(msg: str):
 def update_command():
     check_pip()
     for file in requirements_files:
-        subprocess.call([sys.executable, "-m", "pip", "install", "-r", file, "--upgrade"])
+        subprocess.call([sys.executable, "-m", "pip", "install", "-r", file, "--constraint", core_constraints])
 
 
 def install_pkg_resources(yes=False):
@@ -78,7 +80,7 @@ def install_pkg_resources(yes=False):
         check_pip()
         if not yes:
             confirm("pkg_resources not found, press enter to install it")
-        subprocess.call([sys.executable, "-m", "pip", "install", "--upgrade", "setuptools>=75,<81"])
+        subprocess.call([sys.executable, "-m", "pip", "install", "setuptools>=75,<81"])
 
 
 def update(yes: bool = False, force: bool = False) -> None:

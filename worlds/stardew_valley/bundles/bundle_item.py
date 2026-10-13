@@ -37,6 +37,11 @@ class MasteryItemSource(BundleItemSource):
         return content.features.skill_progression.are_masteries_shuffled
 
 
+class QiBoardItemSource(BundleItemSource):
+    def can_appear(self, content: StardewContent, options: StardewValleyOptions) -> bool:
+        return content_packs.qi_board_content_pack.name in content.registered_packs
+
+
 class ContentItemSource(BundleItemSource):
     """This is meant to be used for items that are managed by the content packs."""
 
@@ -51,6 +56,7 @@ class BundleItem:
         island = IslandItemSource()
         festival = FestivalItemSource()
         masteries = MasteryItemSource()
+        qi_board = QiBoardItemSource()
         content = ContentItemSource()
 
     item_name: str

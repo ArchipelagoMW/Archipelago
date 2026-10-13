@@ -29,7 +29,7 @@ jobs:
       - name: Set env
         run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV  # tag x.y.z will become "Archipelago x.y.z"
       - name: Create Release
-        uses: softprops/action-gh-release@975c1b265e11dd76618af1c374e7981f9a6ff44a
+        uses: softprops/action-gh-release@b4309332981a82ec1c5618f44dd2e27cc8bfbfda  # v3.0.0
         with:
           draft: true  # don't publish right away, especially since windows build is added by hand
           prerelease: false
@@ -48,9 +48,9 @@ jobs:
         shell: bash
         run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
       # - code below copied from build.yml -
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6.0.2
       - name: Install python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6.2.0
         with:
           python-version: '~3.12.7'
           check-latest: true
@@ -88,7 +88,7 @@ jobs:
           echo "SETUP_NAME=$SETUP_NAME" >> $Env:GITHUB_ENV
       # - code above copied from build.yml -
       - name: Attest Build
-        uses: actions/attest-build-provenance@v2
+        uses: actions/attest@v4.1.0
         with:
           subject-path: |
             build/exe.*/ArchipelagoLauncher.exe
@@ -97,13 +97,15 @@ jobs:
             build/exe.*/ArchipelagoServer.exe
             setups/*
       - name: Add to Release
-        uses: softprops/action-gh-release@975c1b265e11dd76618af1c374e7981f9a6ff44a
+        uses: softprops/action-gh-release@b4309332981a82ec1c5618f44dd2e27cc8bfbfda  # v3.0.0
         with:
           draft: true  # see above
           prerelease: false
           name: Archipelago ${{ env.RELEASE_VERSION }}
           files: |
             setups/*
+          fail_on_unmatched_files: true
+          overwrite_files: false  # Windows release is usually built by hand
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -114,14 +116,14 @@ jobs:
       - name: Set env
         run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
       # - code below copied from build.yml -
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6.0.2
       - name: Install base dependencies
         run: |
           sudo apt update
           sudo apt -y install build-essential p7zip xz-utils wget libglib2.0-0
           sudo apt -y install python3-gi libgirepository1.0-dev  # should pull dependencies for gi installation below
       - name: Get a recent python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6.2.0
         with:
           python-version: '~3.12.7'
           check-latest: true
@@ -157,7 +159,7 @@ jobs:
           echo "TAR_NAME=$TAR_NAME" >> $GITHUB_ENV
       # - code above copied from build.yml -
       - name: Attest Build
-        uses: actions/attest-build-provenance@v2
+        uses: actions/attest@v4.1.0
         with:
           subject-path: |
             build/exe.*/ArchipelagoLauncher
@@ -165,12 +167,14 @@ jobs:
             build/exe.*/ArchipelagoServer
             dist/*
       - name: Add to Release
-        uses: softprops/action-gh-release@975c1b265e11dd76618af1c374e7981f9a6ff44a
+        uses: softprops/action-gh-release@b4309332981a82ec1c5618f44dd2e27cc8bfbfda  # v3.0.0
         with:
           draft: true  # see above
           prerelease: false
           name: Archipelago ${{ env.RELEASE_VERSION }}
           files: |
             dist/*
+          fail_on_unmatched_files: true
+          overwrite_files: false  # should never happen; avoids accidentally changing a release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

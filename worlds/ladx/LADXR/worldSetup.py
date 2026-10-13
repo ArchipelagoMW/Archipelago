@@ -28,7 +28,7 @@ class WorldSetup:
         self.boss_mapping = list(range(9))
         self.miniboss_mapping = {
             # Main minibosses
-            0: "ROLLING_BONES", 1: "HINOX", 2: "DODONGO", 3: "CUE_BALL", 4: "GHOMA", 5: "SMASHER", 6: "GRIM_CREEPER", 7: "BLAINO",
+            '0': "ROLLING_BONES", '1': "HINOX", '2': "DODONGO", '3': "CUE_BALL", '4': "GHOMA", '5': "SMASHER", '6': "GRIM_CREEPER", '7': "BLAINO",
             # Color dungeon needs to be special, as always.
             "c1": "AVALAUNCH", "c2": "GIANT_BUZZ_BLOB",
             # Overworld
