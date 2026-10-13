@@ -1,11 +1,11 @@
 """
 Classes and functions related to AP items for Pokemon Emerald
 """
-from typing import Dict, FrozenSet, Set, Optional
+from typing import Dict, FrozenSet, Optional
 
 from BaseClasses import Item, ItemClassification
 
-from .data import BASE_OFFSET, data
+from .data import BASE_OFFSET, PokemonSource, data
 
 
 class PokemonEmeraldItem(Item):
@@ -19,6 +19,20 @@ class PokemonEmeraldItem(Item):
             self.tags = frozenset(["Event"])
         else:
             self.tags = data.items[reverse_offset_item_value(code)].tags
+
+
+class PokemonEmeraldObtainPokemonEventItem(PokemonEmeraldItem):
+    source: PokemonSource
+    species: int
+
+    def __init__(self, player: int, source: PokemonSource, species: int) -> None:
+        super().__init__("", ItemClassification.progression, None, player)
+        self.replace_species(species)
+        self.source = source
+    
+    def replace_species(self, new_species: int):
+        self.species = new_species
+        self.name = f"OBTAIN_{data.species[new_species].name}"
 
 
 def offset_item_value(item_value: int) -> int:
