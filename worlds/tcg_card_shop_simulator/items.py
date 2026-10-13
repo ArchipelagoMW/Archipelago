@@ -359,7 +359,7 @@ not_sellable_dict: Dict[str, ItemData] = {
     "Empty Box Storage": ItemData(239, ItemClassification.useful),
     "Bulk Donation Box": ItemData(240, ItemClassification.useful),
     "Card Storage Shelf": ItemData(241, ItemClassification.useful),
-    "Grading Unlock": ItemData(340, ItemClassification.progression),
+"Grading Unlock": ItemData(340, ItemClassification.progression),
 }
 
 # unused 0x1F2800D7

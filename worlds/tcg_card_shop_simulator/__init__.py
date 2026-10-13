@@ -11,6 +11,7 @@ from .locations import *
 from .items import *
 from .rules import *
 from .data.LocationData import *
+from .world_base import TCGSimulatorBase
 
 
 class TCGSimulatorWeb(WebWorld):
@@ -43,13 +44,11 @@ class TCGSimulatorSettings(settings.Group):
 
 
 
-class TCGSimulatorWorld(World):
+class TCGSimulatorWorld(TCGSimulatorBase):
 
     game = "TCG Card Shop Simulator"
     web = TCGSimulatorWeb()
     options_dataclass = TCGSimulatorOptions
-    options: TCGSimulatorOptions
-
     settings: ClassVar[TCGSimulatorSettings]
 
     item_name_to_id: ClassVar[Dict[str, int]] = {item_name: item_data.code for item_name, item_data in full_item_dict.items()}
