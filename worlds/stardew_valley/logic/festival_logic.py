@@ -47,7 +47,7 @@ class FestivalLogic(BaseLogic):
             FestivalCheck.spirit_eve_maze: self.logic.true_,
             FestivalCheck.jack_o_lantern: self.logic.festival.has_access_to_source(FestivalCheck.jack_o_lantern),
             FestivalCheck.rarecrow_2: self.logic.festival.has_access_to_source(FestivalCheck.rarecrow_2),
-            FestivalCheck.fishing_competition: self.logic.festival.can_win_fishing_competition() & self.logic.relationship.exists(NPC.lewis),
+            FestivalCheck.fishing_competition: self.logic.festival.can_win_fishing_competition(),
             FestivalCheck.rarecrow_4: self.logic.festival.has_access_to_source(FestivalCheck.rarecrow_4),
             FestivalCheck.mermaid_show: self.logic.true_,
             FestivalCheck.cone_hat: self.logic.festival.has_access_to_source(Hats.cone_hat.clarified_name),
@@ -193,7 +193,7 @@ class FestivalLogic(BaseLogic):
         return animal_rule & artisan_rule & cooking_rule & fish_rule & forage_rule & fruit_rule & mineral_rule & vegetable_rule
 
     def can_win_fishing_competition(self) -> StardewRule:
-        return self.logic.fishing.can_fish(60)
+        return self.logic.fishing.can_fish(60) & self.logic.relationship.exists(NPC.lewis)
 
     def has_all_rarecrows(self) -> StardewRule:
         rules = []
