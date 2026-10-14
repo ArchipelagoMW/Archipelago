@@ -10,7 +10,7 @@ from datetime import datetime
 
 from .constants import PROGRESSIVE_GROUP_UNLOCK_ID, PRIMORDIAL_FRAGMENT_ID, FILLER_ITEM_ID
 from .dota_api import parse_most_recent_match_data, DotaMatchData
-from .locations import LocationDef, load_item_locations 
+from .locations import LocationDef, load_item_locations, build_item_name_to_dname
 from .hero import Hero, get_all_heroes, hero_from_dict
 
 from CommonClient import CommonContext, gui_enabled, server_loop, console_loop, ClientCommandProcessor
@@ -88,6 +88,8 @@ class Dota2Save:
     progressive_hero_group_unlocks: int = 0
 
     items_received_index: int = 0
+
+    item_name_to_dname: dict = field(default_factory=dict)
 
     def __post_init__(self) -> None:
         if self.submitted_match_ids is None:
@@ -290,7 +292,7 @@ class Dota2Context(CommonContext):
                 for hero in self.save.unique_heroes_won
             ]
 
-            match_ids = self.save.submitted_match_ids
+            self.save.item_name_to_dname = build_item_name_to_dname()
 
             raw_item_id_to_name = self.slot_data.get("item_name_to_id", {})
             self.save.item_name_to_id = {name: int(item_id) for item_id, name in raw_item_id_to_name.items()}
@@ -464,7 +466,8 @@ class Dota2Context(CommonContext):
                         group_name = f"Group {i}"
                         break
 
-            self.output(f"{hero.name} - {group_name}")
+            role = "Carry" if "Carry" in hero.roles else "Support"
+            self.output(f"{hero.name} - {group_name} - {hero.primary_attr} - {hero.attack_type} - {hero.legs} legs - {role}")
 
     def get_hero_wins(self) -> None:
         self.output(f"Hero Wins: {len(self.save.unique_heroes_won)}")
@@ -608,17 +611,21 @@ class Dota2Context(CommonContext):
     def check_purchases(self, purchases : list[str], all_item_locations: list[LocationDef]) -> list[str]:
             valid_purchases = []
             for purchase in purchases:
-                item_location = next((location for location in all_item_locations if location.name == purchase), None)
+                dname = self.save.item_name_to_dname.get(purchase)
+                if dname == None:
+                    continue
+
+                item_location = next((location for location in all_item_locations if location.name == dname), None)
 
                 if item_location == None:
                     continue
 
                 if item_location.requirements == None or len(item_location.requirements) == 0 :
-                    valid_purchases.append(purchase)
+                    valid_purchases.append(dname)
                 else:
                     requirements_met = self.item_requirements_met(item_location.requirements)
                     if requirements_met:
-                        valid_purchases.append(purchase)
+                        valid_purchases.append(dname)
             return valid_purchases
             
     def item_requirements_met(self, requirements: list[str]) -> bool:

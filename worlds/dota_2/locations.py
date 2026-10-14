@@ -61,11 +61,21 @@ def load_item_locations() -> List[LocationDef]:
         for item_name, item_data in data.items():
             requirements = item_data.get("requirements") or []
             type = 'ITEM_BUY'
-            name = item_name
+            name = item_data["dname"]
 
             locs.append(LocationDef(name = name, type=type, requirements=requirements))
 
     return locs
+
+def build_item_name_to_dname() -> List[LocationDef]:
+    item_name_to_dname: dict
+
+    with resources.files(__package__).joinpath("data/dotaShopLocations.json").open("r", encoding="utf-8") as f:
+        data = json.load(f)
+
+        item_name_to_dname = {item_name: item_data["dname"] for item_name, item_data in data.items() if item_data.get("dname")}
+
+    return item_name_to_dname
 
 def load_game_stat_locations() -> List[LocationDef]:
     locs: List[LocationDef] = []

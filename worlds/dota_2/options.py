@@ -5,18 +5,6 @@ from dataclasses import dataclass
 from importlib import resources
 from Options import Choice, Range, PerGameCommonOptions
 
-# def _load_hero_names() -> list[str]:
-#     """Hero names in order (matches heroes.csv; used for FinalCharacter option value -> name)."""
-#     names: list[str] = []
-#     try:
-#         with resources.files(__package__).joinpath("data/heroes.json").open("r", encoding="utf-8") as f:
-#             data = json.load(f)
-#             for hero in data["dota_heroes"]:
-#                 names.append(hero["localized_name"])
-#     except Exception:
-#         pass
-#     return names if names else ["Dragon Knight"]
-
 class GoalType(Choice):
     """How game completion is determined.
 
