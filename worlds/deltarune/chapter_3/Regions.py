@@ -18,6 +18,7 @@ from worlds.deltarune.Rules import (
     have_kris_susie_and_ralsei,
     have_kris,
     have_susie_or_ralsei,
+    annoying_farming_logic,
 )
 from worlds.deltarune.Items import items, ItemIDs, glitched_item_name
 from worlds.deltarune.Locations import LocationIDs, locations
@@ -69,9 +70,8 @@ def create_regions(world: "DeltaruneWorld"):
                 have_susie_or_ralsei
                 & (
                     have_actions  # Susie or Ralsei can do the fight if they have actions
-                    | Has(
-                        glitched_item_name
-                    )  # Or an obscure tactic is fighting Elnina Lanino, too obscure to be in logic
+                    | annoying_farming_logic
+                    # Or an obscure tactic is fighting Elnina Lanino, though it takes TOO LONG
                 )
             )
         ),

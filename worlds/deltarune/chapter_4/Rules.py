@@ -27,6 +27,7 @@ from worlds.deltarune.Rules import (
     can_recruit_organikk,
     can_lost_chapter4,
     speedrun_glitch_logic,
+    annoying_farming_logic,
 )
 
 if TYPE_CHECKING:
@@ -43,7 +44,10 @@ def set_rules(world: "DeltaruneWorld"):
 
     world.set_rule(
         world.get_location(locations[LocationIDs.ch4_castle_town_lanino_elnina_challenge]),
-        have_kris | (have_actions & (have_susie | have_ralsei)),
+        (
+            (have_kris | (have_actions & (have_susie | have_ralsei)))
+                | annoying_farming_logic # You can fight them but it's really long and annoying
+        ),
     )
 
     world.set_rule(
