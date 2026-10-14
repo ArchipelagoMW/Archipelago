@@ -390,6 +390,10 @@ LOCATION_TABLE: dict[str, LocationData] = {
     "CANCELLED!":                      LocationData("The Life of a Showgirl"),
     "Honey":                           LocationData("The Life of a Showgirl"),
     "The Life of a Showgirl (feat. Sabrina Carpenter)": LocationData("The Life of a Showgirl"),
+    "Patient Zero": LocationData("The Life of a Showgirl", False, True, False),
+    "Cleveland!": LocationData("The Life of a Showgirl", False, True, False),
+    "Pink Clouding": LocationData("The Life of a Showgirl", False, True, False),
+    "Babylon": LocationData("The Life of a Showgirl", False, True, False)
 }
 
 LOCATION_NAME_TO_ID = {
