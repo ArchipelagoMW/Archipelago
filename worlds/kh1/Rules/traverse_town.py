@@ -4,7 +4,6 @@ from worlds.generic.Rules import add_item_rule
 from ._constants import ALL_ARTS, ALL_SUMMON_GEMS
 from ._option_filters import ABOVE_BEGINNER, ABOVE_NORMAL, ABOVE_PROUD
 from ._context import RuleContext
-from ._custom_rules import HasCappedSum
 from ._helpers import has_all_magic_lvx_rule, has_item_workshop_rule, has_puppies_rule, has_x_worlds_rule_pinned_to_beginner
 
 
@@ -85,7 +84,12 @@ def build_rules(ctx: RuleContext, kh1world) -> dict[str, Rule]:
             & HasAll(*ALL_ARTS)
             & has_x_worlds_rule_pinned_to_beginner(8)
         ),
-        "Traverse Town Synth 15 Items": HasCappedSum({"Orichalcum": 9, "Mythril": 9}, threshold=15) & item_workshop,
+        "Traverse Town Synth 15 Items": Or(
+            HasAllCounts({"Orichalcum": 6, "Mythril": 9}),
+            HasAllCounts({"Orichalcum": 7, "Mythril": 8}),
+            HasAllCounts({"Orichalcum": 8, "Mythril": 7}),
+            HasAllCounts({"Orichalcum": 9, "Mythril": 6}),
+        ) & item_workshop,
 
         **{f"Traverse Town Mail Postcard {i:02} Event": Has("Postcard", count=i) for i in range(1, 11)},
         **{

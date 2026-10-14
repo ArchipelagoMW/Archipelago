@@ -22,7 +22,6 @@ from . import (
 )
 from ._constants import KEYBLADES, WORLDS
 from ._context import build_context
-from ._custom_rules import HasCappedSum
 from ._helpers import has_final_rest_door_rule, has_lucky_emblems_rule, has_x_worlds_rule
 from ._option_filters import (
     EOTW_UNLOCK_LUCKY_EMBLEMS,
@@ -32,12 +31,11 @@ from ._option_filters import (
     NOT_EXACTLY_BEGINNER,
 )
 
-__all__ = ["set_rules", "build_rule_dicts", "export_rules_to_dict", "HasCappedSum"]
+__all__ = ["set_rules", "build_rule_dicts"]
 
 
 def build_rule_dicts(kh1world) -> tuple[dict[str, Rule], dict[str, Rule]]:
-    """Builds KH1's (unresolved) access rules. Doesn't touch the world - callers either
-    resolve+apply them (set_rules) or export them (_export.py)."""
+    """Builds KH1's (unresolved) access rules. Doesn't touch the world - set_rules applies them."""
     player = kh1world.player
     options = kh1world.options
 
@@ -132,6 +130,3 @@ def set_rules(kh1world) -> None:
         kh1world.set_rule(kh1world.get_location(name), rule)
 
     kh1world.multiworld.completion_condition[kh1world.player] = lambda state: state.has("Victory", kh1world.player)
-
-
-from ._export import export_rules_to_dict
