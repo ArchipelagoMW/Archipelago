@@ -81,6 +81,7 @@ Sent to clients when they connect to an Archipelago server.
 | password              | bool                                          | Denoted whether a password is required to join this room.                                                                                                                                                                             |
 | permissions           | dict\[str, [Permission](#Permission)\]        | Mapping of permission name to [Permission](#Permission), keys are: "release", "collect" and "remaining".                                                                                                                              |
 | hint_cost             | int                                           | The percentage of total locations that need to be checked to receive a hint from the server.                                                                                                                                          |
+| hint_mode             | str                                           | Optional. Hint detail display: `default`, `own`, or `all`. Defaults to `default` on older servers. |
 | location_check_points | int                                           | The amount of hint points you receive per item/location check completed.                                                                                                                                                              |
 | games                 | list\[str\]                                   | List of games present in this multiworld.                                                                                                                                                                                             |
 | datapackage_checksums | dict[str, str]                                | Checksum hash of the individual games' data packages the server will send. Used by newer clients to decide which games' caches are outdated. See [Data Package Contents](#Data-Package-Contents) for more information.                | 
@@ -179,6 +180,8 @@ Sent to clients purely to display a message to the player. While various message
 | receiving | int | ItemSend, ItemCheat, Hint | Destination player's ID |
 | item | [NetworkItem](#NetworkItem) | ItemSend, ItemCheat, Hint | Source player's ID, location ID, item ID and item flags |
 | found | bool | Hint | Whether the location hinted for was checked |
+| hidden | bool | Hint | Optional. Whether the exact location and entrance are concealed in the rendered hint. |
+| item_hidden | bool | Hint | Optional. Whether the exact item is concealed in the rendered hint. |
 | team | int | Join, Part, Chat, TagsChanged, Goal, Release, Collect, ItemCheat | Team of the triggering player |
 | slot | int | Join, Part, Chat, TagsChanged, Goal, Release, Collect | Slot of the triggering player |
 | message | str | Chat, ServerChat | Original chat message without sender prefix |
@@ -714,7 +717,13 @@ class Hint(NamedTuple):
     entrance: str = ""
     item_flags: int = 0
     status: HintStatus = HintStatus.HINT_UNSPECIFIED
+    hidden: bool = False
+    item_hidden: bool = False
 ```
+
+`hidden` conceals the exact location and entrance in an item hint. `item_hidden` conceals the exact item
+in a location hint; its classification may still be displayed. These flags control presentation: raw IDs
+remain available in the protocol. Checking the location clears both flags.
 
 ### Data Package Contents
 A data package is a JSON object which may contain arbitrary metadata to enable a client to interact with the Archipelago

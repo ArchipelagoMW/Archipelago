@@ -141,6 +141,20 @@ Warning: playthrough can take a significant amount of time for larger multiworld
                                         </select>
                                     </td>
                                 </tr>
+                                <tr>
+                                    <td>
+                                        <label for="hint_mode">Hint Mode:
+                                            <span class="interactive" data-tooltip="Conceal exact locations in item hints and exact items in location hints until hinted again or checked.">(?)</span>
+                                        </label>
+                                    </td>
+                                    <td>
+                                        <select name="hint_mode" id="hint_mode">
+                                            <option selected="selected" value="default">Show full hints</option>
+                                            <option value="own">Conceal details for local placements</option>
+                                            <option value="all">Conceal details for all placements</option>
+                                        </select>
+                                    </td>
+                                </tr>
                             </tbody>
                         </table>
                         </div>
