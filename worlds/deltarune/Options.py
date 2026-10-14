@@ -44,6 +44,20 @@ class Accessibility(Choice):
     alias_items = 0
     default = 0
 
+class OptionsCreatorReminder(Choice): # Yeah, I can't believe we need this either...
+    """
+    EACH OPTION WILL BE DESCRIPTIVE AS TO WHAT IT MODIFIES.
+
+    WITH YOUR CURSOR POINTER, HOVER OVER THE NAME OF EACH OPTION TO VIEW ITS DESCRIPTION.
+    
+    CONTEMPLATE THE TEXT ACCORDINGLY AND MAKE YOUR CHOICE.
+
+    (If you editing this with notepad or something instead of Options Creator, you can ignore this.)
+    """
+
+    display_name = "(Hover Over to) Read Option Description"
+    option_understood = 0
+
 
 class HaveStarwalker(Toggle):
     """
@@ -61,7 +75,7 @@ class ShuffleOST(Toggle):
     THE BACKGROUND MUSIC WILL BE UNLIKE HOW YOU RECALL IT.
 
     (Just a basic music randomizer.)
-    (Will likely not include rhythm games or the Sweet Cap'n Cakes fight.)
+    (Will likely not include things like the rhythm games or the Sweet Cap'n Cakes fight.)
     (Also, expect things like multiple soundtracks overlapping. This isn't a bug, it's just how the game is programmed.)
     """
 
@@ -232,7 +246,7 @@ class ExcludeZRankBoard(Toggle):
 
 class PhysicalChallengeRankSanity(Toggle):
     """
-    THE RANKS AQCUIRED ON THE LORD OF SCREEN'S CHALLENGES WILL BE COUNTED AS LOCATIONS.
+    THE RANKS ACQUIRED ON THE LORD OF SCREEN'S CHALLENGES WILL BE COUNTED AS LOCATIONS.
     """
 
     display_name = "Physical Challenge Sanity"
@@ -266,7 +280,7 @@ class ChosenRoute(Choice):
     - **Normal Route** *Progress through the story normally.*
     - **Weird Route** *Proceed through the "Weird Route" storyline. Can we rename this to Side B yet*
     - **All Recruits** *Progress through the story normally, but you have to recruit everyone to complete the chapter.*
-    - **[DISABLED]** **All Routes**
+    - **Both Routes** *Beat each chapter with All Recruits, as well as chapter 2 and 5 a second time for their Side B ending.*
     """
 
     display_name = "Chosen Route"
@@ -798,6 +812,9 @@ class IncludeUnusedItemsOptions(StrEnum):
 class IncludeMike(Choice):
     """
     WILL THE DEFEAT OF THE MICROPHONE IMITATORS AS WELL AS THEIR GAMES COUNT AS CHECK LOCATIONS?
+
+    (Reminder that Mike needs a mouse to be played to its fullest.)
+    (Feel free to disable this if you don't plan on having one, i.e. Steam Deck users.)
     """
 
     display_name = "Include Mike"
@@ -970,6 +987,7 @@ deltarune_option_groups = [
 @dataclass
 class DeltaruneOptions(PerGameCommonOptions):
     # No Group
+    options_creator_reminder: OptionsCreatorReminder
     progression_balancing: ProgressionBalancing
     accessibility: Accessibility
     have_starwalker: HaveStarwalker

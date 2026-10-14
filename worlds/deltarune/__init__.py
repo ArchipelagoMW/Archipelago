@@ -263,6 +263,7 @@ class DeltaruneWorld(World):
         return {
             "options": self.options.as_dict(
                 # No Group
+                "options_creator_reminder",
                 "progression_balancing",
                 "accessibility",
                 "have_starwalker",
