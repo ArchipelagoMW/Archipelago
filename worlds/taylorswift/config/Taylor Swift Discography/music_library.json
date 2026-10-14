@@ -1754,6 +1754,26 @@
           "title": "The Life of a Showgirl (feat. Sabrina Carpenter)",
           "location": "The Life of a Showgirl (feat. Sabrina Carpenter)",
           "type": "normal"
+        },
+        {
+          "title": "Patient Zero",
+          "location": "Patient Zero",
+          "type": "deluxe"
+        },
+        {
+          "title": "Cleveland!",
+          "location": "Cleveland!",
+          "type": "deluxe"
+        },
+        {
+          "title": "Pink Clouding",
+          "location": "Pink Clouding",
+          "type": "deluxe"
+        },
+        {
+          "title": "Babylon",
+          "location": "Babylon",
+          "type": "deluxe"
         }
       ]
     }
