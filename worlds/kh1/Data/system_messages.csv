@@ -1,0 +1,489 @@
+text
+{0x08}{0xFF}{0xFF}{0xFF}●No controller detected.
+{0x0E}《{0xFF}Please reinsert {lf}the Kingdom Hearts game disc.
+Hard Disk Drive Error.{0x03}{0x1B}Refer to the Hard Disk Drive{0x03}{0x1B}instruction manual for{0x03}{0x1B}further information.
+Continue game without{0x03}{0x1B}Hard Disk Drive.
+P
+A
+U
+S
+E
+"Kingdom{0x0D}{0x06}{eol}Hearts has not been properly{0x03}{0x1B}installed. If you wish to play Kingdom{0x0D}{0x06}{eol}Hearts{0x03}{0x1B},{0x03}{0x1B}please try reinstalling."
+There is not enough free space on the system storage device to create new save data. Return to the title screen?
+There is not enough free space on the system storage device to create new save data. Return to the title screen?
+There is not enough free space on the system storage device to create new save data. Return to the title screen?
+The system storage device is not connected. Game progress will not be saved. Begin game?
+Now Loading...
+Sora
+Donald
+{0x0D} {eol}Goofy
+Tarzan
+Pooh
+Aladdin
+Ariel
+Jack
+Peter Pan
+Beast
+{-}{-}{-}
+Destiny Islands
+Disney Castle
+Traverse Town
+Wonderland
+Deep Jungle
+100 Acre Wood
+{-}{-}{-}
+Agrabah
+Atlantica
+Halloween Town
+Olympus Coliseum
+Monstro
+Neverland
+{-}{-}{-}
+Hollow Bastion
+End of the World
+OK
+Yes
+No
+On
+Off
+{0x0D}《{0xFF}{0x0E}{0xFF}{0xFF}{0x0F}{0x1B}
+{0x0D}《{0xFF}{0x0E}{0xFF}{0xFF}{0x0F}{0x1A}
+{0x0D}《{0xFF}{0x0E}{0xFF}{0xFF}{0x0F}{0x19}
+:
+...
+Munny
+Time
+Done
+Stock
+Gummi
+Keyblade
+Key Chain
+{0x0F}W
+{0x0F}X
+{0x0F}b
+{0x0F}a
+{0x0F}j
+{0x0F}i
+{0x0F}q
+{0x0F}r
+{0x0F}s
+{0x0F}t
+{0x0F}n
+{0x0F}c
+{0x0F}d
+{0x0F}e
+{0x0F}f
+{0x0F}g
+{0x0F}h
+Lv.
+HP
+MP
+EXP
+AP
+Strength
+Defense
+/
+X
+Space
+NEW GAME
+{0x0E}á{0xFF}Select game difficulty level.
+{0x0E}Ï{0xFF}Select vibration setting for gamepad.{lf}{lf}{0x0E}R{eol}{0x08}{---}ä{eol}●{0x0C}{0x14}(Settings can be changed at any time in the Config menu.)
+Final Mix
+Final Mix: Proud
+{0x0D}H{eol}Difficulty:{0x0D}{0x08}{eol}{0x0A}
+{0x0D}N{eol}Vibration:{0x0D}{0x06}{eol}{0x0A}
+Proceed?
+{0x0C}{0x18}P{0x0D}{0x14}{eol}A{0x0D}{0x14}{eol}U{0x0D}{0x14}{eol}S{0x0D}{0x14}{eol}E
+Continue
+Restart
+Quit
+Continue
+Load Game
+Load this game?
+Item
+Price
+Total
+Items
+Equipment
+Abilities
+Customize
+Status
+Journal
+Config
+Save Menu
+Use or equip items the party has{lf}obtained.
+Equip weapons and accessories.
+Assign abilities to the party members.
+Displays party members' attributes.
+Customize party members' action patterns.
+Configure game settings.
+"Read Jiminy's journal, which contains{lf}his notes and other records."
+Displays save menu.
+E
+Items equipped by Sora.{lf}Select the Items command to use them.
+Items equipped by {0x0A}.{lf}Currently assigned fighting style{lf}determines how they will be used.
+Items in stock.{lf}Equip to use in the field.
+Gummi blocks to be used for{lf}building gummi ships.
+Use the item on Sora.
+Use the item on {0x0A}.
+Discard {0x0A}?
+Use item.
+Exchange item.
+Move item to stock.
+Discard item.
+""
+Take item from party member{lf}or stock and equip it.
+Take item from stock and equip it.
+""
+Use item.
+Exchange item.
+""
+Discard item.
+This item cannot be used.
+This item cannot be equipped.
+Already in stock.
+This item cannot be discarded.
+Use
+Stock
+Discard
+Exchange
+Take Out
+Select character to use the item on.
+{-}{-}{-}
+""
+Used item.
+Restored HP.
+Restored MP.
+Restored HP and MP.
+Powered up Strength.
+Powered up Defense.
+Raised max AP.
+This item will have no effect at this time.
+Stock's slot for this item is full.
+Stock is empty.
+Discarded {0x0A}.
+Change whose equipment?
+Change Sora's equipment.
+Change {0x0A}'s equipment.
+{-}{-}{-}
+""
+Remove equipped accessory.
+Removing this item lowers AP count.{lf}Remove ability first.
+{0x08}{0xFF}{0xFF}—●Keyblade
+{0x08}{0xFF}{0xFF}—●Weapon
+{0x08}äää●Strength{0x13}N{eol}{0x14}■{eol}{0x0D}{0x04}{eol}{0x0B} {0x03}{eol}{0x0D}{0x09}{eol}►{0x13}{iPotion}{eol}{0x09}{0x0B} {0x03}{eol}
+{0x08}{0xFF}{0xFF}—●Accessory
+{0x08}OÄu●HP{0x0C}{0x12}{0x0E}{lf}{eol}{0x13}j{eol}{0x08}äää●{0x0B} {0x03}{eol}{0x0D}{0x03}{eol}►{0x13}■{eol}{0x09}{0x0B} {0x03}{eol}
+{0x08}O●Ä●MP{0x0C}{0x12}{0x0E}{lf}{eol}{0x13}j{eol}{0x08}äää●{0x0B} {0x03}{eol}{0x0D}{0x03}{eol}►{0x13}■{eol}{0x09}{0x0B} {0x03}{eol}
+{0x08}ì{-}{-}●AP{0x0C}{0x12}{0x0E}{lf}{eol}{0x13}j{eol}{0x08}äää●{0x0B} {0x03}{eol}{0x0D}{0x03}{eol}►{0x13}■{eol}{0x09}{0x0B} {0x03}{eol}
+{0x08}←←←●STR{0x0C}{0x12}{0x0E}{lf}{eol}{0x13}j{eol}{0x08}äää●{0x0B} {0x03}{eol}{0x0D}{0x03}{eol}►{0x13}■{eol}{0x09}{0x0B} {0x03}{eol}
+{0x08}←←←●DEF{0x0C}{0x12}{0x0E}{lf}{eol}{0x13}j{eol}{0x08}äää●{0x0B} {0x03}{eol}{0x0D}{0x03}{eol}►{0x13}■{eol}{0x09}{0x0B} {0x03}{eol}
+{-}{-}{-}
+Equip selected ability.
+Rearrange selected abilities.
+Sort the list of abilities.
+Remove equipped ability.
+Equip
+Remove
+Rearrange
+Sort
+Equip/Remove Sora's abilities.
+Equip/Remove {0x0A}'s abilities.
+Equip/Remove shared abilities.
+Shared
+By Type
+By AP
+Equipped
+Sort abilities by type.
+Sort abilities by AP cost.
+Separate equipped and non{-}equipped{lf}abilities.
+Sorting completed.
+Ability removed.
+Ability equipped.
+Not enough AP.
+Moved item.
+Customize Sora.
+Customize {0x0A}.
+{0x0D}{0x16}{eol}{0x0F}b
+{0x0D}{0x16}{eol}{0x0F}a
+{0x0D}{0x16}{eol}{0x0F}W
+Assign a spell to the shortcut menu.{lf}Cast it with {0x0F}c + {0x0F}b.
+Assign a spell to the shortcut menu.{lf}Cast it with {0x0F}c + {0x0F}a.
+Assign a spell to the shortcut menu.{lf}Cast it with {0x0F}c + {0x0F}W.
+{-}
+Unleashes a small burst of flame.{lf}Consumes a small amount of MP.
+Unleashes a potent burst of flame.{lf}Consumes a small amount of MP.
+Unleashes an incredible burst of flame.{lf}Consumes a small amount of MP.
+Unleashes a gust of frost.{lf}Consumes a small amount of MP.
+Unleashes a gust of frost.{lf}Longer range than Blizzard.{lf}Consumes a small amount of MP.
+Unleashes a gust of frost.{lf}Longest range.{lf}Consumes a small amount of MP.
+Calls bolts of lightning to{lf}the target area.{lf}Consumes 1 MP.
+Calls a powerful lightning{lf}storm to the target area.{lf}Consumes 1 MP.
+Calls a great maelstrom of{lf}lightning to the target area.{lf}Consumes 1 MP.
+Restores a little HP to one character.{lf}Consumes 1 MP.
+Restores a lot of HP to one character.{lf}Consumes 1 MP.
+Restores a massive amount{lf}of HP to one character.{lf}Consumes 1 MP.
+Wrings a percentage of HP from the target.{lf}Effective against enemies with lots of HP.{lf}Consumes 1 MP.
+Wrings a percentage of HP from the target.{lf}Wider area of effect than Gravity.{lf}Consumes 1 MP.
+Wrings a percentage of HP from the target.{lf}Wider area of effect than Gravira.{lf}Consumes 1 MP.
+Prevents target from taking action{lf}for a limited time.{lf}Consumes 2 MP.
+Prevents targets from taking action for{lf}a limited time. Wide area of effect.{lf}Consumes 2 MP.
+Prevents targets from taking action for{lf}a limited time. Widest area of effect.{lf}Consumes 2 MP.
+Deploys a barrier that absorbs damage.{lf}Consumes 2 MP.
+Deploys a barrier that absorbs damage.{lf}Damages enemies on contact.{lf}Consumes 2 MP.
+Deploys a barrier that absorbs damage.{lf}Deflects certain attacks.{lf}Consumes 2 MP.
+Remove the spell from the{lf}shortcut menu.
+Offensive
+Defensive
+Conservative
+Balanced
+Personal
+Manual
+{0x0C}{0x13}Focuses on attacking.{lf}Switch styles with {0x0F}s{0x0F}t.{lf}Press {0x0F}W to configure manually.
+{0x0C}{0x13}Focuses on recovery and defense.{lf}Switch styles with {0x0F}s{0x0F}t.{lf}Press {0x0F}W to configure manually.
+{0x0C}{0x13}Focuses on conserving MP and items.{lf}Switch styles with {0x0F}s{0x0F}t.{lf}Press {0x0F}W to configure manually.
+{0x0C}{0x13}Good balance of offense and defense.{lf}Switch styles with {0x0F}s{0x0F}t.{lf}Press {0x0F}W to configure manually.
+{0x0C}{0x13}Reflects character's own unique style.{lf}Switch styles with {0x0F}s{0x0F}t.{lf}Press {0x0F}W to configure manually.
+{0x0C}{0x13}Create your own fighting style.{lf}Switch styles with {0x0F}s{0x0F}t.{lf}Press {0x0F}W to configure.
+Regular Attacks
+{0x0D} {eol}H{0x0D}{lf}{eol}P{0x0D} {eol} Items
+{0x0D} {eol}M{0x0D}{lf}{eol}P{0x0D} {eol} Items
+Offensive Magic
+Defensive Magic
+Advanced Magic
+Support Actions
+Defensive Moves
+Shield Techniques
+Special Attacks
+Tells how often to perform melee attacks.
+Tells how often to use HP{-}restoring items.
+Tells how often to use MP{-}restoring items.
+Tells how often to use attack magic{lf}that consumes MP.
+Tells how often to use restorative and{lf}protective magic that consumes MP.
+Tells how often to cast special magic{lf}that consumes MP.
+Tells how often to use abilities{lf}that support the party and consume MP.
+Tells how often to use restorative and{lf}defensive abilities that consume MP.
+Tells how often to perform defensive{lf}actions with the shield.
+Tells how often to use offensive{lf}abilities that consume MP.
+Constantly
+Frequently
+Occasionally
+Immediately
+Only in emergency
+Sora's status.{lf}Use {0x0F}s{0x0F}t to turn the page.
+{0x0A}'s status.{lf}Use {0x0F}s{0x0F}t to turn the page.
+{0x08}《{0xFF}{eol}●Status
+{0x08}《{0xFF}{eol}●Equipped
+{0x08}《{0xFF}{eol}●Equipped
+{0x08}《{0xFF}{eol}●Learned
+{0x08}《{0xFF}{eol}●Summon List
+{0x08}OÄu●HP{0x08}OÄuu{0x0D}{lf}{eol}/{0x0D}{lf}{eol}Max HP{0x13}{0x06} {0x08}OÄu●{0x0B} {0x03}{eol}{0x08}OÄuu/{0x13}X {0x0B} {0x03}{eol}
+{0x08}O●Ä●MP{0x08}O●Äu{0x0D}{eol}{eol}/{0x0D}{lf}{eol}Max MP{0x13}{0x06} {0x08}O●Ä●{0x0B} {0x03}{eol}{0x08}O●Äu/{0x13}X {0x0B} {0x03}{eol}
+{0x08}ì{-}{-}●AP{0x08}ì{-}{-}u{0x0D}{lf}{eol}/{0x0D}{lf}{eol}Max AP{0x13}{0x06} {0x08}ì{-}{-}●{0x0B} {0x03}{eol}{0x08}ì{-}{-}u/{0x13}X {0x0B} {0x03}{eol}
+{0x08}←←←●STR{0x13}{0xA1}{eol}{0x0B} {eol}{eol}
+{0x08}←←←●DEF{0x13}{0xA1}{eol}{0x0B} {eol}{eol}
+{0x08}ÁÄO●LV{0x13}{0xA1}{eol}{0x0B} {eol}{eol}
+{0x08}À<7●EXP{0x13}{0xA1}{eol}{0x0B} {eol}{eol}
+{0x08}←←←●EXP to next level:{0x13}X {0x14}{0xBA}{eol}{0x0B} {eol}{eol}
+{0x08}î{-}{-}●Weapon{0x13}{0xBE}{eol}{0x08}äää●Keyblade
+{0x13}U{eol}{0x14}P{eol}{0x08}î{-}{-}●Key Chain:{0x13}{0xBE}{eol}{0x08}äää●{0x0A}
+{0x08}î{-}{-}●Weapon{0x13}{0xBE}{eol}{0x08}äää●{0x0A}
+{0x08}□{0xA5}{0xB1}●Accessories
+{0x08}iÏ?●Items
+{0x08}ŒŒH●Abilities
+{0x08}Ì{iStaff}5●Summon
+Auto Lock
+On
+Off
+{-}{-}{-}
+Automatically lock on to the nearest{lf}target. Press {0x0F}W to view control{lf}settings.
+Target Lock
+Auto
+Manual
+"""Auto"" keeps a target locked until{lf}disengaged. ""Manual"" locks target only{lf}while {0x0F}d is held down."
+Camera
+Auto
+Manual
+Select automatic or manual camera{lf}movement. Press {0x0F}W to view control{lf}settings.
+Cursor
+Set
+Default
+Choose to whether or not memorize{lf}the cursor's placement on menu screen.
+Vibration
+On
+Off
+Turn the vibration on/off.
+CAMERA Y{-}Axis
+Inverted
+Normal
+Set Y{-}Axis controls inverted or normal.
+Difficulty
+Final Mix
+Final Mix: Proud
+Set the difficulty level of battles{lf}in the game. It cannot be changed{lf}once the game begins.
+{0x0C}{0x12}Default Settings
+Cancel changes to default settings.
+Control Settings
+{0x0F}eChange Target
+{0x0F}cMagic Shortcut
+{0x0F}q{0x0F}r{0x0F}s{0x0F}tSelect Command
+{0x0F}iFirst{-}Person View
+{0x0F}jMenu/Pause
+{0x0F}u{0x0F}v{0x0F}w{0x0F}xMove Sora
+{0x0F}dLock On
+{0x0F}bCall Help
+{0x0F}aSpecial Action
+{0x0F}XJump
+{0x0F}WExecute Command
+{0x0F}lCamera
+Change targets while locked on.{lf}Press {0x0F}e to lock on to the next{lf}available target.
+"Hold down to open the shortcut menu,{lf}which allows you to cast preassigned{lf}spells quickly."
+Select various commands.
+See the world through Sora's eyes.{lf}Press {0x0F}i again to return to{lf}standard view.
+Pause the game and display the{lf}menu screen. The menu cannot be{lf}viewed during battle.
+Maneuver Sora.
+Lock on to the nearest target.{lf}Sora will automatically direct his{lf}actions toward the locked target.
+Call for party members' help. Party{lf}members will direct their actions toward the{lf}locked target when you call for their help.
+Execute special ability actions.
+Allows Sora to jump.{lf}Hold down longer for a higher jump.
+Execute selected command.
+Rotate the camera in the field.{lf}Press {0x0F}h to shift the camera{lf}behind Sora.
+Characters
+Chronicles
+101 Dalmatians
+Mini Games
+Ansem's Report
+Trinity List
+Save
+Party
+Gummi Ship
+Menu
+Save your game.
+Switch party members.
+Board gummi ship.
+Displays main menu.
+You can't board the gummi ship.
+Board the gummi ship?
+New file
+Game data
+{0x0C}{0x10}Other game data
+{0x0C}{0x0F}{0x0D}ú{0xFF}{0x0E}{lf}{eol}MEMORY CARD slot 1
+{0x0C}{0x0F}{0x0D}ú{0xFF}{0x0E}{lf}{eol}MEMORY CARD slot 2
+Select a SAVE slot.
+Checking...
+Checking...[{0x0B}{eol}{lf} ]
+Save failed.
+Unformatted.
+Formatting...
+Saving...
+Overwriting saved data...
+Deleting file. Please wait...
+Check failed.
+Format failed.
+Failed to delete file.
+""
+Check failed.
+[{0x0B}{eol}{lf} ]
+Save file is corrupted.
+Unable to read data.{0x0D}{0x0A}{eol}{0x0B}{eol}{eol} 
+Cannot save to new file.
+Save to new file.
+{0x0B}{eol}{lf} :{0x0B}{eol}{lf} {0x0D}o{eol}{0x0B} {0x05}{eol}{0x0D}{0x03}{eol}munny{0x0D}{0x0B}{eol}LV{0x0B}{eol}{0x03}{eol}
+{0x0E}{0x06}{eol}Select save file.
+Accessing the system storage.{lf}Do not turn your PC off.
+Save data is corrupted. {lf}Do you wish to overwrite it?
+Overwrite existing file?
+Memory card (PS2) is not inserted.
+{0x0C}{0x10}{0x0D}°{0xFF}{0x0E}《{0xFF}Memory card (PS2) is unformatted.{lf}{0x0D}°{0xFF}Do you wish to format it?
+Format failed.
+{0x0C}{0x11}There is not enough free space on the system storage.{lf}At least 92KB of free space is required. 
+{0x0C}{0x11}The system storage device has been removed. {lf}Resuming game.
+No available party member.
+Form your party.
+{0x0D}{0xFF}{0xFF}Load Menu
+Load
+Empty
+Save data
+{0x0C}{0x10}Other game data
+{0x0C}{0x0F}{0x0D}ú{0xFF}{0x0E}{lf}{eol}MEMORY CARD slot 1
+{0x0C}{0x0F}{0x0D}ú{0xFF}{0x0E}{lf}{eol}MEMORY CARD slot 2
+Select MEMORY CARD slot.
+Checking save data...
+Checking...[{0x0B}{eol}{lf} ]
+Load failed.
+Unformatted.
+Loading...
+Check failed.
+Check failed.
+[{0x0B}{eol}{lf} ]
+Save file is corrupted.
+{-}{-}{-}
+{0x0B}{eol}{lf} :{0x0B}{eol}{lf} {0x0D}o{eol}{0x0B} {0x05}{eol}{0x0D}{0x03}{eol}munny{0x0D}{0x0B}{eol}LV{0x0B}{eol}{0x03}{eol}
+{0x0E}{0x06}{eol}Select data to load.
+Accessing the system storage.{lf}Do not turn your PC off.
+The system storage device has been removed. {lf}Resuming game.
+{0x0C}{0x10}{0x0D}》{0xFF}{0x0E}《{0xFF}Memory card (PS2) not formatted.
+The system storage device has been removed. {lf}Resuming game.
+Item Synthesis
+Created
+Need{0x0D}{0x0A}{eol}/{0x0D}{0x0A}{eol}Quantity
+Stock
+{0x0B} {lf}{eol}/{0x0B}{eol}{lf}{eol}
+{0x0C}{0x14}{-}Battle Record{-}
+{0x0C}{0x14}Heartless defeated:
+{0x0C}{0x14}Times defeated:
+{0x0C}{0x14}Attacks deflected:
+{0x0C}{0x14}Times hit by an enemy:
+{0x0C}{0x14}Total item usage:
+{0x0C}{0x14}Party member knockouts:
+{0x0C}{0x14}Curative spells cast on friend:
+Memory card (PS2) is not inserted{lf}into MEMORY CARD slot 1.
+Memory card (PS2) is not inserted{lf}into MEMORY CARD slot 2.
+Memory card (PS2) is not inserted{lf}into MEMORY CARD slot 1.
+Memory card (PS2) is not inserted{lf}into MEMORY CARD slot 2.
+KHFM
+KHFMPR
+KHFM
+KHFMPR
+Inverted
+Normal
+{0x0E}á{0xFF}9
+{0x0D}3{eol}9{0x0D}{0x06}{eol}{0x0A}
+CAMERA X{-}Axis
+Inverted
+Normal
+Set X{-}Axis controls inverted or normal.
+{0x0D}{0x06}{eol}:{0x0D}{0x06}{eol}{0x0C}{0x10}{0x0E}{0x04}{eol}Begin with rare items in easy mode.
+{0x0D}{0x06}{eol}:{0x0D}{0x06}{eol}{0x0C}{0x10}{0x0E}{0x04}{eol}A balanced mode recommended for first{-}timers.
+{0x0D}{0x06}{eol}:{0x0D}{0x06}{eol}{0x0C}{0x10}{0x0E}{0x04}{eol}Encounter tough enemies for thrilling battles.
+Final Mix: Beginner
+KHFMBG
+KHFMBG
+Final Mix: Beginner
+""
+Continue
+Skip Scene
+{0x0D}{lf}{eol}{0x0E} {eol}{0x0E}{lf}{eol}{0x08}{eol}{eol}{eol}—{iMickey}{0x0D}ñ{0xFF}{0x0E}{0xFE}{0xFF}{0x08}{0xFF}ë{eol}●{iMickey}{0x0D}ó{0xFF}{0x0E} {eol}{0x08}{eol}{eol}{eol}F{iMickey}
+{0x0E}á{0xFF}{0x0C}{0x14}Select camera settings.{lf}{0x0E}g{eol}{0x08}{---}ä{eol}●{0x0C}{0x14}(Settings can be changed at any time in the Config menu.)
+Auto
+Manual
+{0x0D}{0x06}{eol}:{0x0D}{0x06}{eol}{0x0E}{0xFD}{0xFF}{0x0C}{0x14}Automatically rotate camera in the field.
+{0x0D}{0x06}{eol}:{0x0D}{0x06}{eol}{0x0C}{0x14}Manually rotate camera using {0x0F}l.
+{0x0D}d{eol}Camera:{0x0D}{0x06}{eol}{0x0A}
+{0x0D}ì{0xFF}P{0x0D}{0x14}{eol}A{0x0D}{0x14}{eol}U{0x0D}{0x14}{eol}S{0x0D}{0x14}{eol}E
+Continue
+Select World
+{0x0E}á{0xFF}9
+{0x0D}3{eol}9
+9
+9
+{0x08}äää●MP{0x13}N{eol}{0x14}®{eol}{0x0D}{0x04}{eol}{0x0B} {0x03}{eol}{0x0D}{0x09}{eol}►{0x13}{iPotion}{eol}{0x09}{0x0B} {0x03}{eol}
+9
+{0x14}I{eol}{0x0F}b: Delete file
+Delete selected file?
+File has been deleted.
+Title Screen
+Return to the Title Screen.
+You will be returned to the Title Screen.{lf}You will lose your progress if you haven't{lf}saved your game.{lf}Continue?
+This contains a restricted character {lf}combination.
+Names can only contain up to 5 numbers.

@@ -1,10 +1,9 @@
 from rule_builder.rules import Has, Rule
 
-from ._context import RuleContext
 from ._helpers import has_key_item_rule, has_offensive_magic_rule
 
 
-def build_rules(ctx: RuleContext, enabled: bool) -> dict[str, Rule]:
+def build_rules() -> dict[str, Rule]:
     crystal_trident = has_key_item_rule("Crystal Trident")
     offensive_magic = has_offensive_magic_rule()
     ursula_2_rule = Has("Mermaid Kick") & offensive_magic & crystal_trident
@@ -20,4 +19,4 @@ def build_rules(ctx: RuleContext, enabled: bool) -> dict[str, Rule]:
         "Atlantica Triton's Palace Thunder Clam": Has("Progressive Thunder"),
         "Atlantica Cavern Nook Clam": crystal_trident,
         "Atlantica Defeat Ursula II Ansem's Report 3": ursula_2_rule,
-    } if enabled else {}
+    }

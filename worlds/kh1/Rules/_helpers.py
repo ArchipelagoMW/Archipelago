@@ -1,54 +1,47 @@
 from rule_builder.field_resolvers import FromOption
-from rule_builder.rules import AtLeast, Has, HasAll, HasAllCounts, HasAny, HasAnyCount, HasGroup, Or, Rule, True_
+from rule_builder.rules import AtLeast, Has, HasAll, HasAllCounts, HasAny
+from rule_builder.rules import HasAnyCount, HasGroup, Or, Rule, True_
 
-from ..Data import EVIDENCE_ITEMS, SLIDE_ITEMS, WORLD_KEY_ITEMS
+from ..Items import item_name_groups
 from ..Options import RequiredLuckyEmblemsDoor, RequiredLuckyEmblemsEotW
-from ._constants import ALL_MAGIC, DODGE_AIRGUARD, EMBLEM_PIECES, HJ_GLIDE, KEYBLADES, WORLDS
-from ._field_resolvers import PuppiesRequiredCount
-from ._option_filters import (
-    ABOVE_BEGINNER,
-    ABOVE_NORMAL,
-    ABOVE_PROUD,
-    AT_LEAST_MINIMAL,
-    BELOW_MINIMAL,
-    EVIDENCE_BUNDLE_OFF,
-    EVIDENCE_BUNDLE_ON,
-    FINAL_REST_DOOR_LUCKY_EMBLEMS,
-    FINAL_REST_DOOR_NOT_LUCKY_EMBLEMS,
-    HALLOWEEN_TOWN_KEY_ITEM_BUNDLE_ON,
-    HUNDRED_ACRE_WOOD_OFF,
-    HUNDRED_ACRE_WOOD_ON,
-    KEYBLADES_UNLOCK_CHESTS_OFF,
-    KEYBLADES_UNLOCK_CHESTS_ON,
-    SLIDES_BUNDLE_OFF,
-    SLIDES_BUNDLE_ON,
-    STACKING_WORLD_ITEMS_ON,
-)
+from ..Data import CHEST_KEYBLADES, WORLD_KEY_ITEMS
+from ._option_filters import ABOVE_BEGINNER, ABOVE_NORMAL, ABOVE_PROUD, EOTW_UNLOCK_LUCKY_EMBLEMS
+from ._option_filters import EVIDENCE_BUNDLE_OFF, EVIDENCE_BUNDLE_ON, FINAL_REST_DOOR_LUCKY_EMBLEMS
+from ._option_filters import FINAL_REST_DOOR_NOT_LUCKY_EMBLEMS, HALLOWEEN_TOWN_KEY_ITEM_BUNDLE_ON
+from ._option_filters import KEYBLADES_UNLOCK_CHESTS_OFF, SLIDES_BUNDLE_OFF
+from ._option_filters import SLIDES_BUNDLE_ON, STACKING_WORLD_ITEMS_ON
+
+
+def by_difficulty(beginner: Rule | bool | None = None, normal: Rule | bool | None = None,
+                  proud: Rule | bool | None = None, minimal: Rule | bool | None = None) -> Rule:
+    tiers = [(beginner, None), (normal, ABOVE_BEGINNER), (proud, ABOVE_NORMAL), (minimal, ABOVE_PROUD)]
+    alternatives: list[Rule] = []
+    for rule, difficulty in tiers:
+        if rule is None:
+            continue
+        if rule is True:
+            rule = True_()
+        alternatives.append(rule if difficulty is None else rule & difficulty)
+    return Or(*alternatives)
 
 
 def _x_worlds_clauses() -> list[Rule]:
     clauses: list[Rule] = []
-    for i, world in enumerate(WORLDS):
+    for world, keyblade in CHEST_KEYBLADES.items():
         if world == "Traverse Town":
             world_clause: Rule = True_()
         elif world == "100 Acre Wood":
-            world_clause = Or(
-                Has("Progressive Fire") & HUNDRED_ACRE_WOOD_ON,
-                Has(world) & HUNDRED_ACRE_WOOD_OFF,
-            )
+            world_clause = Has("Progressive Fire")
         else:
             world_clause = Has(world)
         clauses.append(world_clause)
-        clauses.append(Or(
-            (world_clause & Has(KEYBLADES[i])) & KEYBLADES_UNLOCK_CHESTS_ON,
-            world_clause & KEYBLADES_UNLOCK_CHESTS_OFF,
-        ))
+        clauses.append(world_clause & (Has(keyblade) | KEYBLADES_UNLOCK_CHESTS_OFF))
     return clauses
 
 
 def has_x_worlds_rule(num_of_worlds: int) -> Rule:
     at_least = AtLeast(num_of_worlds * 2, *_x_worlds_clauses())
-    return Or(True_() & AT_LEAST_MINIMAL, at_least & BELOW_MINIMAL)
+    return by_difficulty(beginner=at_least, minimal=True)
 
 
 def has_x_worlds_rule_pinned_to_beginner(num_of_worlds: int) -> Rule:
@@ -56,22 +49,18 @@ def has_x_worlds_rule_pinned_to_beginner(num_of_worlds: int) -> Rule:
 
 
 def has_emblems_rule() -> Rule:
-    return HasAll(*EMBLEM_PIECES) & has_x_worlds_rule(6)
-
-
-def has_puppies_rule(puppies_required: int) -> Rule:
-    return Has("Puppy", count=PuppiesRequiredCount(puppies_required))
+    return HasAll(*sorted(item_name_groups["Emblem Pieces"])) & Has("Hollow Bastion") & has_x_worlds_rule(6)
 
 
 def has_all_magic_lvx_rule(level: int) -> Rule:
-    return HasAllCounts({spell: level for spell in ALL_MAGIC})
+    return HasAllCounts({spell: level for spell in sorted(item_name_groups["Spells"])})
 
 
 def has_offensive_magic_rule() -> Rule:
-    return Or(
-        HasAny("Progressive Fire", "Progressive Blizzard"),
-        HasAny("Progressive Thunder", "Progressive Gravity") & ABOVE_NORMAL,
-        Has("Progressive Stop") & ABOVE_PROUD,
+    return by_difficulty(
+        beginner=HasAny("Progressive Fire", "Progressive Blizzard"),
+        proud=HasAny("Progressive Thunder", "Progressive Gravity"),
+        minimal=Has("Progressive Stop"),
     )
 
 
@@ -91,7 +80,7 @@ def has_defensive_tools_rule() -> Rule:
         HasAllCounts({"Progressive Cure": 2, "Leaf Bracer": 1, "Dodge Roll": 1})
         & HasAnyCount({"Second Chance": 1, "MP Rage": 1, "Progressive Aero": 2})
     )
-    return Or(True_() & AT_LEAST_MINIMAL, tools & BELOW_MINIMAL)
+    return by_difficulty(beginner=tools, minimal=True)
 
 
 def has_basic_tools_rule() -> Rule:
@@ -104,34 +93,32 @@ def has_basic_tools_rule() -> Rule:
 
 
 def can_dumbo_skip_rule() -> Rule:
-    return Has("Dumbo") & HasGroup("Magic")
+    return Has("Dumbo") & HasGroup("Spells")
 
 
 def has_oogie_manor_rule() -> Rule:
-    return Or(
-        Has("Progressive Fire"),
-        Has("High Jump", count=3) & ABOVE_BEGINNER,
-        Has("High Jump", count=2) & ABOVE_NORMAL,
-        HasAll(*HJ_GLIDE),
-        can_dumbo_skip_rule(),
-        HasAny(*HJ_GLIDE) & ABOVE_PROUD,
+    return by_difficulty(
+        beginner=Has("Progressive Fire") | HasAll("High Jump", "Progressive Glide") | can_dumbo_skip_rule(),
+        normal=Has("High Jump", count=3),
+        proud=Has("High Jump", count=2),
+        minimal=HasAny("High Jump", "Progressive Glide"),
     )
 
 
 def has_item_workshop_rule() -> Rule:
-    return Or(
-        Has("Green Trinity"),
-        (Has("High Jump", count=2) | (can_dumbo_skip_rule() & Has("Summon Anywhere"))) & ABOVE_NORMAL,
+    return by_difficulty(
+        beginner=Has("Green Trinity"),
+        proud=Has("High Jump", count=2) | (can_dumbo_skip_rule() & Has("Summon Anywhere")),
     )
 
 
 def has_parasite_cage_rule() -> Rule:
     return (
         Has("Monstro")
-        & Or(
-            Has("High Jump"),
-            Has("Progressive Glide") & ABOVE_BEGINNER,
-            (can_dumbo_skip_rule() & Has("Summon Anywhere")) & ABOVE_NORMAL,
+        & by_difficulty(
+            beginner=Has("High Jump"),
+            normal=Has("Progressive Glide"),
+            proud=can_dumbo_skip_rule() & Has("Summon Anywhere"),
         )
         & has_x_worlds_rule(3)
     )
@@ -145,32 +132,53 @@ def has_key_item_rule(key_item: str) -> Rule:
     if key_item == "Slide 1":
         clauses = [
             Has("Slide 1") & SLIDES_BUNDLE_ON,
-            HasAll(*SLIDE_ITEMS) & SLIDES_BUNDLE_OFF,
+            HasAll(*sorted(item_name_groups["Slides"])) & SLIDES_BUNDLE_OFF,
             Has(WORLD_KEY_ITEMS[key_item], count=2) & STACKING_WORLD_ITEMS_ON,
         ]
     if key_item == "Footprints":
         clauses = [
             Has("Footprints") & EVIDENCE_BUNDLE_ON,
-            HasAny(*EVIDENCE_ITEMS) & EVIDENCE_BUNDLE_OFF,
+            HasAny(*sorted(item_name_groups["Evidence"])) & EVIDENCE_BUNDLE_OFF,
             Has(WORLD_KEY_ITEMS[key_item], count=2) & STACKING_WORLD_ITEMS_ON,
         ]
     if key_item == "Jack-In-The-Box":
         clauses.append(Has("Forget-Me-Not") & HALLOWEEN_TOWN_KEY_ITEM_BUNDLE_ON)
     rule = Or(*clauses)
     if key_item == "Crystal Trident":
-        rule = rule & Or(Has("Crabclaw") & KEYBLADES_UNLOCK_CHESTS_ON, True_() & KEYBLADES_UNLOCK_CHESTS_OFF)
+        rule = rule & (Has("Crabclaw") | KEYBLADES_UNLOCK_CHESTS_OFF)
     return rule
 
 
 def can_early_tea_rule() -> Rule:
-    return Or(
-        Has("Progressive Glide"),
-        (HasAll(*DODGE_AIRGUARD) & Has("Progressive High Jump", count=3)) & ABOVE_NORMAL,
-        (
+    return by_difficulty(
+        beginner=Has("Progressive Glide"),
+        proud=HasAll("Dodge Roll", "Air Guard/Dodge Roll") & Has("Progressive High Jump", count=3),
+        minimal=(
             HasAllCounts({"Combo Master": 1, "High Jump": 3, "Air Combo Plus": 2})
             | (
-                HasAll(*DODGE_AIRGUARD)
+                HasAll("Dodge Roll", "Air Guard/Dodge Roll")
                 & (Has("High Jump", count=2) | HasAllCounts({"Combo Master": 1, "High Jump": 1, "Air Combo Plus": 2}))
             )
-        ) & ABOVE_PROUD,
+        ),
     )
+
+
+DUMBO_SKIP = can_dumbo_skip_rule()
+DUMBO_SUMMON = DUMBO_SKIP & Has("Summon Anywhere")
+EMBLEMS = has_emblems_rule()
+X_WORLDS_3 = has_x_worlds_rule(3)
+X_WORLDS_4 = has_x_worlds_rule(4)
+X_WORLDS_6 = has_x_worlds_rule(6)
+X_WORLDS_8 = has_x_worlds_rule(8)
+PARASITE_CAGE = has_parasite_cage_rule()
+BASIC_TOOLS = has_basic_tools_rule()
+DEFENSIVE_TOOLS = has_defensive_tools_rule()
+HIGH_JUMP = Has("High Jump")
+HIGH_JUMP_2 = Has("High Jump", count=2)
+HIGH_JUMP_3 = Has("High Jump", count=3)
+GLIDE = Has("Progressive Glide")
+HIGH_JUMP_AND_GLIDE = HasAll("High Jump", "Progressive Glide")
+HIGH_JUMP_OR_GLIDE = HasAny("High Jump", "Progressive Glide")
+DODGE_ROLL_AND_AIR_GUARD = HasAll("Dodge Roll", "Air Guard/Dodge Roll")
+COMBO_MASTER = Has("Combo Master")
+EOTW_ACCESS = Or(has_lucky_emblems_rule() & EOTW_UNLOCK_LUCKY_EMBLEMS, Has("End of the World"))

@@ -1,12 +1,18 @@
-from rule_builder.rules import Has, Or, Rule, True_
+from rule_builder.rules import Has, Rule
 
-from ._option_filters import ABOVE_BEGINNER, ABOVE_NORMAL, ABOVE_PROUD
-from ._context import RuleContext
+from ._helpers import COMBO_MASTER, DODGE_ROLL_AND_AIR_GUARD, HIGH_JUMP_AND_GLIDE
+from ._helpers import HIGH_JUMP_OR_GLIDE, by_difficulty
 
 
-def build_rules(ctx: RuleContext, enabled: bool) -> dict[str, Rule]:
-    torn_page_4_jump_bonus = Or(ctx.hj_glide_all, ctx.hj_glide_any & ABOVE_BEGINNER, True_() & ABOVE_NORMAL)
+def build_rules() -> dict[str, Rule]:
+    torn_page_4_jump_bonus = by_difficulty(beginner=HIGH_JUMP_AND_GLIDE, normal=HIGH_JUMP_OR_GLIDE, proud=True)
     torn_page_4_rule = Has("Torn Page", count=4) & torn_page_4_jump_bonus
+
+    rare_nut_5_rule = Has("Torn Page", count=4) & by_difficulty(
+        beginner=HIGH_JUMP_AND_GLIDE,
+        normal=HIGH_JUMP_OR_GLIDE,
+        minimal=COMBO_MASTER | DODGE_ROLL_AND_AIR_GUARD,
+    )
 
     return {
         "100 Acre Wood Bouncing Spot Left Cliff Chest": torn_page_4_rule,
@@ -20,11 +26,10 @@ def build_rules(ctx: RuleContext, enabled: bool) -> dict[str, Rule]:
         "100 Acre Wood Pooh's House Start Fire": Has("Torn Page", count=3),
         "100 Acre Wood Bouncing Spot Break Log": Has("Torn Page", count=4),
         "100 Acre Wood Bouncing Spot Fall Through Top of Tree Next to Pooh": torn_page_4_rule,
-        "100 Acre Wood Bouncing Spot Turn in Rare Nut 5": Has("Torn Page", count=4) & Or(
-            ctx.hj_glide_all,
-            ctx.hj_glide_any & ABOVE_BEGINNER,
-            (ctx.combo_master | ctx.dodge_airguard_all) & ABOVE_PROUD,
-        ),
-
-        **{f"100 Acre Wood Convert Torn Page {i}": Has("Torn Page", count=i) for i in range(1, 6)},
-    } if enabled else {}
+        "100 Acre Wood Bouncing Spot Turn in Rare Nut 5": rare_nut_5_rule,
+        "100 Acre Wood Convert Torn Page 1": Has("Torn Page", count=1),
+        "100 Acre Wood Convert Torn Page 2": Has("Torn Page", count=2),
+        "100 Acre Wood Convert Torn Page 3": Has("Torn Page", count=3),
+        "100 Acre Wood Convert Torn Page 4": Has("Torn Page", count=4),
+        "100 Acre Wood Convert Torn Page 5": Has("Torn Page", count=5),
+    }

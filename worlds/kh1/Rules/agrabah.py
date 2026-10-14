@@ -1,28 +1,62 @@
-from rule_builder.rules import Has, HasAll, HasAny, HasAnyCount, HasGroup, Or, Rule, True_
+from rule_builder.rules import Has, HasAll, HasAny, HasAnyCount, HasGroup, Rule
 
-from ._option_filters import ABOVE_BEGINNER, ABOVE_NORMAL, ABOVE_PROUD
-from ._context import RuleContext
+from ._helpers import COMBO_MASTER, DEFENSIVE_TOOLS, DODGE_ROLL_AND_AIR_GUARD, DUMBO_SKIP
+from ._helpers import DUMBO_SUMMON, GLIDE
+from ._helpers import HIGH_JUMP, HIGH_JUMP_2, HIGH_JUMP_3
+from ._helpers import HIGH_JUMP_AND_GLIDE, HIGH_JUMP_OR_GLIDE, X_WORLDS_8, by_difficulty
 
 
-def build_rules(ctx: RuleContext, super_bosses: bool) -> dict[str, Rule]:
-    hidden_room_rule = Or(
-        Has("Yellow Trinity"),
-        ctx.hj1 & ABOVE_BEGINNER,
-        ctx.glide & ABOVE_NORMAL,
-    )
+def build_rules() -> dict[str, Rule]:
+    hidden_room_rule = by_difficulty(beginner=Has("Yellow Trinity"), normal=HIGH_JUMP, proud=GLIDE)
 
-    kurt_zisa_magic = Or(
-        Has("Progressive Blizzard", count=3),
-        HasAnyCount({"Progressive Blizzard": 2, "Progressive Fire": 3, "Progressive Thunder": 3,
-                     "Progressive Gravity": 3}) & ABOVE_BEGINNER,
-        HasAnyCount({"Progressive Blizzard": 1, "Progressive Fire": 2, "Progressive Thunder": 2,
-                     "Progressive Gravity": 2}) & ABOVE_NORMAL,
-        (
+    kurt_zisa_magic = by_difficulty(
+        beginner=Has("Progressive Blizzard", count=3),
+        normal=HasAnyCount({
+            "Progressive Blizzard": 2,
+            "Progressive Fire": 3,
+            "Progressive Thunder": 3,
+            "Progressive Gravity": 3,
+        }),
+        proud=HasAnyCount({
+            "Progressive Blizzard": 1,
+            "Progressive Fire": 2,
+            "Progressive Thunder": 2,
+            "Progressive Gravity": 2,
+        }),
+        minimal=(
             HasAny("Progressive Fire", "Progressive Thunder", "Progressive Gravity")
-            | (HasGroup("Magic") & HasAll("Mushu", "Genie", "Dumbo"))
-        ) & ABOVE_PROUD,
+            | (HasGroup("Spells") & HasAll("Mushu", "Genie", "Dumbo"))
+        ),
     )
-    kurt_zisa_rule = ctx.emblems & ctx.x_worlds_8 & ctx.defensive_tools & kurt_zisa_magic
+    kurt_zisa_rule = X_WORLDS_8 & DEFENSIVE_TOOLS & kurt_zisa_magic
+
+    main_street_high_chest_rule = by_difficulty(
+        beginner=HIGH_JUMP,
+        normal=GLIDE,
+        proud=DUMBO_SKIP,
+    )
+    palace_gates_opposite_chest_rule = by_difficulty(
+        beginner=HIGH_JUMP,
+        proud=GLIDE,
+        minimal=True,
+    )
+    palace_gates_close_chest_rule = by_difficulty(
+        beginner=HIGH_JUMP_AND_GLIDE,
+        normal=HIGH_JUMP_3,
+        proud=HIGH_JUMP_2 | GLIDE | HasAll("High Jump", "Combo Master"),
+        minimal=COMBO_MASTER | DUMBO_SUMMON,
+    )
+    tall_tower_chest_rule = by_difficulty(
+        beginner=GLIDE,
+        normal=HIGH_JUMP_2,
+        proud=COMBO_MASTER | DUMBO_SKIP | HIGH_JUMP | DODGE_ROLL_AND_AIR_GUARD,
+        minimal=True,
+    )
+    bottomless_hall_pillar_chest_rule = by_difficulty(
+        beginner=GLIDE,
+        normal=HIGH_JUMP,
+        proud=True,
+    )
 
     rules: dict[str, Rule] = {
         "Agrabah Storage Green Trinity Chest": Has("Green Trinity"),
@@ -30,45 +64,16 @@ def build_rules(ctx: RuleContext, super_bosses: bool) -> dict[str, Rule]:
         "Agrabah Cave of Wonders Entrance White Trinity Chest": Has("White Trinity"),
         "Agrabah Bazaar Blue Trinity": Has("Blue Trinity"),
         "Agrabah Cave of Wonders Treasure Room Red Trinity": Has("Red Trinity"),
-
-        "Agrabah Main Street High Above Palace Gates Entrance Chest": Or(
-            ctx.hj1,
-            ctx.glide & ABOVE_BEGINNER,
-            ctx.dumbo_skip & ABOVE_NORMAL,
-        ),
-        "Agrabah Palace Gates High Opposite Palace Chest": Or(
-            ctx.hj1,
-            ctx.glide & ABOVE_NORMAL,
-            True_() & ABOVE_PROUD,
-        ),
-        "Agrabah Palace Gates High Close to Palace Chest": Or(
-            ctx.hj_glide_all,
-            ctx.hj3 & ABOVE_BEGINNER,
-            (ctx.hj2 | ctx.glide | HasAll("High Jump", "Combo Master")) & ABOVE_NORMAL,
-            (ctx.combo_master | ctx.dumbo_summon) & ABOVE_PROUD,
-        ),
-        "Agrabah Cave of Wonders Entrance Tall Tower Chest": Or(
-            ctx.glide,
-            ctx.hj2 & ABOVE_BEGINNER,
-            (ctx.combo_master | ctx.dumbo_skip | ctx.hj1 | ctx.dodge_airguard_all) & ABOVE_NORMAL,
-            True_() & ABOVE_PROUD,
-        ),
-        "Agrabah Cave of Wonders Bottomless Hall Pillar Chest": Or(
-            ctx.glide,
-            ctx.hj1 & ABOVE_BEGINNER,
-            True_() & ABOVE_NORMAL,
-        ),
+        "Agrabah Main Street High Above Palace Gates Entrance Chest": main_street_high_chest_rule,
+        "Agrabah Palace Gates High Opposite Palace Chest": palace_gates_opposite_chest_rule,
+        "Agrabah Palace Gates High Close to Palace Chest": palace_gates_close_chest_rule,
+        "Agrabah Cave of Wonders Entrance Tall Tower Chest": tall_tower_chest_rule,
+        "Agrabah Cave of Wonders Bottomless Hall Pillar Chest": bottomless_hall_pillar_chest_rule,
         "Agrabah Cave of Wonders Hidden Room Right Chest": hidden_room_rule,
         "Agrabah Cave of Wonders Hidden Room Left Chest": hidden_room_rule,
-        "Agrabah Cave of Wonders Dark Chamber Near Save Chest": Or(
-            ctx.hj_glide_any,
-            True_() & ABOVE_BEGINNER,
-        ),
-
-        **({
-            "Agrabah Defeat Kurt Zisa Ansem's Report 11": kurt_zisa_rule,
-            "Agrabah Defeat Kurt Zisa Zantetsuken Event": kurt_zisa_rule,
-        } if super_bosses else {}),
+        "Agrabah Cave of Wonders Dark Chamber Near Save Chest": by_difficulty(beginner=HIGH_JUMP_OR_GLIDE, normal=True),
+        "Agrabah Defeat Kurt Zisa Ansem's Report 11": kurt_zisa_rule,
+        "Agrabah Defeat Kurt Zisa Zantetsuken Event": kurt_zisa_rule,
     }
 
     return rules

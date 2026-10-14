@@ -1,0 +1,798 @@
+id,name,region,groups
+2650011,Destiny Islands Chest,Destiny Islands,Chest
+2650211,Traverse Town 1st District Candle Puzzle Chest,Traverse Town,Chest
+2650212,Traverse Town 1st District Accessory Shop Roof Chest,Traverse Town,Chest;Postcard
+2650213,Traverse Town 2nd District Boots and Shoes Awning Chest,Traverse Town,Chest;Postcard
+2650214,Traverse Town 2nd District Rooftop Chest,Traverse Town,Chest
+2650251,Traverse Town 2nd District Gizmo Shop Facade Chest,Traverse Town,Chest
+2650252,Traverse Town Alleyway Balcony Chest,Traverse Town,Chest
+2650253,Traverse Town Alleyway Blue Room Awning Chest,Traverse Town,Chest
+2650254,Traverse Town Alleyway Corner Chest,Traverse Town,Chest
+2650292,Traverse Town Green Room Clock Puzzle Chest,Traverse Town,Chest
+2650293,Traverse Town Green Room Table Chest,Traverse Town,Chest
+2650294,Traverse Town Red Room Chest,Traverse Town,Chest
+2650331,Traverse Town Mystical House Yellow Trinity Chest,Traverse Town,Chest
+2650332,Traverse Town Accessory Shop Chest,Traverse Town,Chest
+2650333,Traverse Town Secret Waterway White Trinity Chest,Traverse Town,Chest
+2650334,Traverse Town Geppetto's House Chest,Traverse Town,Chest;Boss
+2650371,Traverse Town Item Workshop Right Chest,Traverse Town,Chest
+2650411,Traverse Town 1st District Blue Trinity Balcony Chest,Traverse Town,Chest;Postcard
+2650891,Traverse Town Mystical House Glide Chest,Traverse Town,Chest;Puppy
+2650892,Traverse Town Alleyway Behind Crates Chest,Traverse Town,Chest;Puppy
+2650893,Traverse Town Item Workshop Left Chest,Traverse Town,Chest;Puppy
+2650894,Traverse Town Secret Waterway Near Stairs Chest,Traverse Town,Chest;Puppy
+2650931,Wonderland Rabbit Hole Green Trinity Chest,Wonderland,Chest
+2650932,Wonderland Rabbit Hole Defeat Heartless 1 Chest,Wonderland,Chest
+2650933,Wonderland Rabbit Hole Defeat Heartless 2 Chest,Wonderland,Chest
+2650934,Wonderland Rabbit Hole Defeat Heartless 3 Chest,Wonderland,Chest
+2650971,Wonderland Bizarre Room Green Trinity Chest,Wonderland,Chest
+2651011,Wonderland Queen's Castle Hedge Left Red Chest,Wonderland,Chest
+2651012,Wonderland Queen's Castle Hedge Right Blue Chest,Wonderland,Chest;Puppy
+2651013,Wonderland Queen's Castle Hedge Right Red Chest,Wonderland,Chest
+2651014,Wonderland Lotus Forest Thunder Plant Chest,Wonderland,Chest
+2651051,Wonderland Lotus Forest Through the Painting Thunder Plant Chest,Wonderland,Chest;Puppy
+2651052,Wonderland Lotus Forest Glide Chest,Wonderland,Chest
+2651053,Wonderland Lotus Forest Nut Chest,Wonderland,Chest;Puppy
+2651054,Wonderland Lotus Forest Corner Chest,Wonderland,Chest
+2651091,Wonderland Bizarre Room Lamp Chest,Wonderland,Chest
+2651093,Wonderland Tea Party Garden Above Lotus Forest Entrance 2nd Chest,Wonderland,Chest
+2651094,Wonderland Tea Party Garden Above Lotus Forest Entrance 1st Chest,Wonderland,Chest;Puppy
+2651131,Wonderland Tea Party Garden Bear and Clock Puzzle Chest,Wonderland,Chest
+2651132,Wonderland Tea Party Garden Across From Bizarre Room Entrance Chest,Wonderland,Chest
+2651133,Wonderland Lotus Forest Through the Painting White Trinity Chest,Wonderland,Chest
+2651213,Deep Jungle Tree House Beneath Tree House Chest,Deep Jungle,Chest
+2651214,Deep Jungle Tree House Rooftop Chest,Deep Jungle,Chest
+2651251,Deep Jungle Hippo's Lagoon Center Chest,Deep Jungle,Chest;Puppy
+2651252,Deep Jungle Hippo's Lagoon Left Chest,Deep Jungle,Chest
+2651253,Deep Jungle Hippo's Lagoon Right Chest,Deep Jungle,Chest
+2651291,Deep Jungle Vines Chest,Deep Jungle,Chest
+2651292,Deep Jungle Vines 2 Chest,Deep Jungle,Chest;Puppy
+2651293,Deep Jungle Climbing Trees Blue Trinity Chest,Deep Jungle,Chest
+2651331,Deep Jungle Tunnel Chest,Deep Jungle,Chest
+2651332,Deep Jungle Cavern of Hearts White Trinity Chest,Deep Jungle,Chest;Boss
+2651333,Deep Jungle Camp Blue Trinity Chest,Deep Jungle,Chest;Puppy
+2651334,Deep Jungle Tent Chest,Deep Jungle,Chest
+2651371,Deep Jungle Waterfall Cavern Low Chest,Deep Jungle,Chest;Boss
+2651372,Deep Jungle Waterfall Cavern Middle Chest,Deep Jungle,Chest;Boss;Puppy
+2651373,Deep Jungle Waterfall Cavern High Wall Chest,Deep Jungle,Chest;Boss
+2651374,Deep Jungle Waterfall Cavern High Middle Chest,Deep Jungle,Chest;Boss
+2651411,Deep Jungle Cliff Right Cliff Left Chest,Deep Jungle,Chest
+2651412,Deep Jungle Cliff Right Cliff Right Chest,Deep Jungle,Chest
+2651413,Deep Jungle Tree House Suspended Boat Chest,Deep Jungle,Chest
+2651654,100 Acre Wood Meadow Inside Log Chest,100 Acre Wood,Chest
+2651691,100 Acre Wood Bouncing Spot Left Cliff Chest,100 Acre Wood,Chest
+2651692,100 Acre Wood Bouncing Spot Right Tree Alcove Chest,100 Acre Wood,Chest
+2651693,100 Acre Wood Bouncing Spot Under Giant Pot Chest,100 Acre Wood,Chest
+2651972,Agrabah Plaza By Storage Chest,Agrabah,Chest
+2651973,Agrabah Plaza Raised Terrace Chest,Agrabah,Chest
+2651974,Agrabah Plaza Top Corner Chest,Agrabah,Chest
+2652011,Agrabah Alley Chest,Agrabah,Chest
+2652012,Agrabah Bazaar Across Windows Chest,Agrabah,Chest
+2652013,Agrabah Bazaar High Corner Chest,Agrabah,Chest
+2652014,Agrabah Main Street Right Palace Entrance Chest,Agrabah,Chest
+2652051,Agrabah Main Street High Above Alley Entrance Chest,Agrabah,Chest
+2652052,Agrabah Main Street High Above Palace Gates Entrance Chest,Agrabah,Chest
+2652053,Agrabah Palace Gates Low Chest,Agrabah,Chest;Boss
+2652054,Agrabah Palace Gates High Opposite Palace Chest,Agrabah,Chest;Boss;Puppy
+2652091,Agrabah Palace Gates High Close to Palace Chest,Agrabah,Chest;Boss
+2652092,Agrabah Storage Green Trinity Chest,Agrabah,Chest
+2652093,Agrabah Storage Behind Barrel Chest,Agrabah,Chest
+2652094,Agrabah Cave of Wonders Entrance Left Chest,Agrabah,Chest;Boss
+2652131,Agrabah Cave of Wonders Entrance Tall Tower Chest,Agrabah,Chest;Boss;Puppy
+2652132,Agrabah Cave of Wonders Hall High Left Chest,Agrabah,Chest;Boss
+2652133,Agrabah Cave of Wonders Hall Near Bottomless Hall Chest,Agrabah,Chest;Boss
+2652134,Agrabah Cave of Wonders Bottomless Hall Raised Platform Chest,Agrabah,Chest;Boss
+2652171,Agrabah Cave of Wonders Bottomless Hall Pillar Chest,Agrabah,Chest;Boss
+2652172,Agrabah Cave of Wonders Bottomless Hall Across Chasm Chest,Agrabah,Chest;Boss
+2652173,Agrabah Cave of Wonders Treasure Room Across Platforms Chest,Agrabah,Chest;Boss;Puppy
+2652174,Agrabah Cave of Wonders Treasure Room Small Treasure Pile Chest,Agrabah,Chest;Boss
+2652211,Agrabah Cave of Wonders Treasure Room Large Treasure Pile Chest,Agrabah,Chest;Boss
+2652212,Agrabah Cave of Wonders Treasure Room Above Fire Chest,Agrabah,Chest;Boss
+2652213,Agrabah Cave of Wonders Relic Chamber Jump from Stairs Chest,Agrabah,Chest;Boss
+2652214,Agrabah Cave of Wonders Relic Chamber Stairs Chest,Agrabah,Chest;Boss
+2652251,Agrabah Cave of Wonders Dark Chamber Abu Gem Chest,Agrabah,Chest;Boss
+2652252,Agrabah Cave of Wonders Dark Chamber Across from Relic Chamber Entrance Chest,Agrabah,Chest;Boss
+2652253,Agrabah Cave of Wonders Dark Chamber Bridge Chest,Agrabah,Chest;Boss
+2652254,Agrabah Cave of Wonders Dark Chamber Near Save Chest,Agrabah,Chest;Boss
+2652291,Agrabah Cave of Wonders Silent Chamber Blue Trinity Chest,Agrabah,Chest;Boss
+2652292,Agrabah Cave of Wonders Hidden Room Right Chest,Agrabah,Chest;Boss
+2652293,Agrabah Cave of Wonders Hidden Room Left Chest,Agrabah,Chest;Boss;Puppy
+2652294,Agrabah Aladdin's House Main Street Entrance Chest,Agrabah,Chest
+2652331,Agrabah Aladdin's House Plaza Entrance Chest,Agrabah,Chest
+2652332,Agrabah Cave of Wonders Entrance White Trinity Chest,Agrabah,Chest;Boss
+2652413,Monstro Chamber 6 Other Platform Chest,Monstro,Chest
+2652414,Monstro Chamber 6 Platform Near Chamber 5 Entrance Chest,Monstro,Chest
+2652451,Monstro Chamber 6 Raised Area Near Chamber 1 Entrance Chest,Monstro,Chest
+2652452,Monstro Chamber 6 Low Chest,Monstro,Chest;Puppy
+2652531,Atlantica Sunken Ship In Flipped Boat Chest,Atlantica,Chest
+2652532,Atlantica Sunken Ship Seabed Chest,Atlantica,Chest
+2652533,Atlantica Sunken Ship Inside Ship Chest,Atlantica,Chest
+2652534,Atlantica Ariel's Grotto High Chest,Atlantica,Chest
+2652571,Atlantica Ariel's Grotto Middle Chest,Atlantica,Chest
+2652572,Atlantica Ariel's Grotto Low Chest,Atlantica,Chest
+2652573,Atlantica Ursula's Lair Use Fire on Urchin Chest,Atlantica,Chest;Boss
+2652574,Atlantica Undersea Gorge Jammed by Ariel's Grotto Chest,Atlantica,Chest
+2652611,Atlantica Triton's Palace White Trinity Chest,Atlantica,Chest
+2653014,Halloween Town Moonlight Hill White Trinity Chest,Halloween Town,Chest;Puppy
+2653051,Halloween Town Bridge Under Bridge,Halloween Town,Chest
+2653052,Halloween Town Boneyard Tombstone Puzzle Chest,Halloween Town,Chest
+2653053,Halloween Town Bridge Right of Gate Chest,Halloween Town,Chest
+2653054,Halloween Town Cemetery Behind Grave Chest,Halloween Town,Chest;Boss
+2653091,Halloween Town Cemetery By Cat Shape Chest,Halloween Town,Chest;Boss;Puppy
+2653092,Halloween Town Cemetery Between Graves Chest,Halloween Town,Chest;Boss
+2653093,Halloween Town Oogie's Manor Lower Iron Cage Chest,Halloween Town,Chest
+2653094,Halloween Town Oogie's Manor Upper Iron Cage Chest,Halloween Town,Chest
+2653131,Halloween Town Oogie's Manor Hollow Chest,Halloween Town,Chest;Boss;Puppy
+2653132,Halloween Town Oogie's Manor Grounds Red Trinity Chest,Halloween Town,Chest
+2653133,Halloween Town Guillotine Square High Tower Chest,Halloween Town,Chest
+2653134,Halloween Town Guillotine Square Pumpkin Structure Left Chest,Halloween Town,Chest
+2653171,Halloween Town Oogie's Manor Entrance Steps Chest,Halloween Town,Chest
+2653172,Halloween Town Oogie's Manor Inside Entrance Chest,Halloween Town,Chest
+2653291,Halloween Town Bridge Left of Gate Chest,Halloween Town,Chest
+2653292,Halloween Town Cemetery By Striped Grave Chest,Halloween Town,Chest;Boss
+2653293,Halloween Town Guillotine Square Under Jack's House Stairs Chest,Halloween Town,Chest
+2653294,Halloween Town Guillotine Square Pumpkin Structure Right Chest,Halloween Town,Chest;Puppy
+2653332,Olympus Coliseum Coliseum Gates Left Behind Columns Chest,Olympus Coliseum,Chest
+2653333,Olympus Coliseum Coliseum Gates Right Blue Trinity Chest,Olympus Coliseum,Chest;Puppy
+2653334,Olympus Coliseum Coliseum Gates Left Blue Trinity Chest,Olympus Coliseum,Chest
+2653371,Olympus Coliseum Coliseum Gates White Trinity Chest,Olympus Coliseum,Chest
+2653372,Olympus Coliseum Coliseum Gates Blizzara Chest,Olympus Coliseum,Chest
+2653373,Olympus Coliseum Coliseum Gates Blizzaga Chest,Olympus Coliseum,Chest
+2653454,Monstro Mouth Boat Deck Chest,Monstro,Chest;Boss
+2653491,Monstro Mouth High Platform Boat Side Chest,Monstro,Chest
+2653492,Monstro Mouth High Platform Across from Boat Chest,Monstro,Chest;Puppy
+2653493,Monstro Mouth Near Ship Chest,Monstro,Chest
+2653494,Monstro Mouth Green Trinity Top of Boat Chest,Monstro,Chest;Boss
+2653534,Monstro Chamber 2 Ground Chest,Monstro,Chest
+2653571,Monstro Chamber 2 Platform Chest,Monstro,Chest
+2653613,Monstro Chamber 5 Platform Chest,Monstro,Chest
+2653614,Monstro Chamber 3 Ground Chest,Monstro,Chest
+2653651,Monstro Chamber 3 Platform Above Chamber 2 Entrance Chest,Monstro,Chest;Puppy
+2653652,Monstro Chamber 3 Near Chamber 6 Entrance Chest,Monstro,Chest
+2653653,Monstro Chamber 3 Platform Near Chamber 6 Entrance Chest,Monstro,Chest
+2653732,Monstro Mouth High Platform Near Teeth Chest,Monstro,Chest;Boss
+2653733,Monstro Chamber 5 Atop Barrel Chest,Monstro,Chest;Puppy
+2653734,Monstro Chamber 5 Low 2nd Chest,Monstro,Chest
+2653771,Monstro Chamber 5 Low 1st Chest,Monstro,Chest
+2653772,Neverland Pirate Ship Deck White Trinity Chest,Neverland,Chest;Boss;Puppy
+2653773,Neverland Pirate Ship Crows Nest Chest,Neverland,Chest;Boss
+2653774,Neverland Hold Yellow Trinity Right Blue Chest,Neverland,Chest
+2653811,Neverland Hold Yellow Trinity Left Blue Chest,Neverland,Chest
+2653812,Neverland Galley Chest,Neverland,Chest
+2653813,Neverland Cabin Chest,Neverland,Chest;Boss
+2653814,Neverland Hold Flight 1st Chest,Neverland,Chest;Boss;Puppy
+2654014,Neverland Clock Tower Chest,Neverland,Chest;Boss
+2654051,Neverland Hold Flight 2nd Chest,Neverland,Chest;Boss
+2654052,Neverland Hold Yellow Trinity Green Chest,Neverland,Chest;Puppy
+2654053,Neverland Captain's Cabin Chest,Neverland,Chest;Boss;Puppy
+2654054,Hollow Bastion Rising Falls Water's Surface Chest,Hollow Bastion,Chest
+2654091,Hollow Bastion Rising Falls Under Water 1st Chest,Hollow Bastion,Chest
+2654092,Hollow Bastion Rising Falls Under Water 2nd Chest,Hollow Bastion,Chest;Boss
+2654093,Hollow Bastion Rising Falls Floating Platform Near Save Chest,Hollow Bastion,Chest;Puppy
+2654094,Hollow Bastion Rising Falls Floating Platform Near Bubble Chest,Hollow Bastion,Chest
+2654131,Hollow Bastion Rising Falls High Platform Chest,Hollow Bastion,Chest
+2654132,Hollow Bastion Castle Gates Gravity Chest,Hollow Bastion,Chest;Puppy
+2654133,Hollow Bastion Castle Gates Freestanding Pillar Chest,Hollow Bastion,Chest
+2654134,Hollow Bastion Castle Gates High Pillar Chest,Hollow Bastion,Chest
+2654171,Hollow Bastion Great Crest Lower Chest,Hollow Bastion,Chest;Boss
+2654172,Hollow Bastion Great Crest After Battle Platform Chest,Hollow Bastion,Chest;Boss
+2654173,Hollow Bastion High Tower 2nd Gravity Chest,Hollow Bastion,Chest;Boss
+2654174,Hollow Bastion High Tower 1st Gravity Chest,Hollow Bastion,Chest;Boss
+2654211,Hollow Bastion High Tower Above Sliding Blocks Chest,Hollow Bastion,Chest;Boss
+2654213,Hollow Bastion Library Top of Bookshelf Chest,Hollow Bastion,Chest;Boss
+2654214,Hollow Bastion Library 1st Floor Turn the Carousel Chest,Hollow Bastion,Chest;Boss
+2654251,Hollow Bastion Library Top of Bookshelf Turn the Carousel Chest,Hollow Bastion,Chest;Boss
+2654252,Hollow Bastion Library 2nd Floor Turn the Carousel 1st Chest,Hollow Bastion,Chest;Boss
+2654253,Hollow Bastion Library 2nd Floor Turn the Carousel 2nd Chest,Hollow Bastion,Chest;Boss
+2654254,Hollow Bastion Lift Stop Library Node After High Tower Switch Gravity Chest,Hollow Bastion,Chest;Boss
+2654291,Hollow Bastion Lift Stop Library Node Gravity Chest,Hollow Bastion,Chest;Boss
+2654292,Hollow Bastion Lift Stop Under High Tower Sliding Blocks Chest,Hollow Bastion,Chest;Boss
+2654293,Hollow Bastion Lift Stop Outside Library Gravity Chest,Hollow Bastion,Chest;Boss;Puppy
+2654294,Hollow Bastion Lift Stop Heartless Sigil Door Gravity Chest,Hollow Bastion,Chest;Boss
+2654331,Hollow Bastion Base Level Bubble Under the Wall Platform Chest,Hollow Bastion,Chest
+2654332,Hollow Bastion Base Level Platform Near Entrance Chest,Hollow Bastion,Chest
+2654333,Hollow Bastion Base Level Near Crystal Switch Chest,Hollow Bastion,Chest
+2654334,Hollow Bastion Waterway Near Save Chest,Hollow Bastion,Chest
+2654371,Hollow Bastion Waterway Blizzard on Bubble Chest,Hollow Bastion,Chest
+2654372,Hollow Bastion Waterway Unlock Passage from Base Level Chest,Hollow Bastion,Chest
+2654373,Hollow Bastion Dungeon By Candles Chest,Hollow Bastion,Chest
+2654374,Hollow Bastion Dungeon Corner Chest,Hollow Bastion,Chest
+2654454,Hollow Bastion Grand Hall Steps Right Side Chest,Hollow Bastion,Chest;Boss
+2654491,Hollow Bastion Grand Hall Oblivion Chest,Hollow Bastion,Chest;Boss
+2654492,Hollow Bastion Grand Hall Left of Gate Chest,Hollow Bastion,Chest;Boss;Puppy
+2654212,Hollow Bastion Entrance Hall Left of Emblem Door Chest,Hollow Bastion,Chest;Boss
+2654494,Hollow Bastion Rising Falls White Trinity Chest,Hollow Bastion,Chest;Boss
+2654531,End of the World Final Dimension 1st Chest,End of the World,Chest;Boss
+2654532,End of the World Final Dimension 2nd Chest,End of the World,Chest;Boss
+2654533,End of the World Final Dimension 3rd Chest,End of the World,Chest;Boss
+2654534,End of the World Final Dimension 4th Chest,End of the World,Chest;Boss
+2654571,End of the World Final Dimension 5th Chest,End of the World,Chest;Boss
+2654572,End of the World Final Dimension 6th Chest,End of the World,Chest;Boss
+2654573,End of the World Final Dimension 10th Chest,End of the World,Chest;Boss
+2654574,End of the World Final Dimension 9th Chest,End of the World,Chest;Boss
+2654611,End of the World Final Dimension 8th Chest,End of the World,Chest;Boss
+2654612,End of the World Final Dimension 7th Chest,End of the World,Chest;Boss
+2654613,End of the World Giant Crevasse 3rd Chest,End of the World,Chest;Boss
+2654614,End of the World Giant Crevasse 5th Chest,End of the World,Chest;Boss
+2654651,End of the World Giant Crevasse 1st Chest,End of the World,Chest;Boss
+2654652,End of the World Giant Crevasse 4th Chest,End of the World,Chest;Boss
+2654653,End of the World Giant Crevasse 2nd Chest,End of the World,Chest;Boss
+2654654,End of the World World Terminus Traverse Town Chest,End of the World,Chest;Boss
+2654691,End of the World World Terminus Wonderland Chest,End of the World,Chest;Boss
+2654692,End of the World World Terminus Olympus Coliseum Chest,End of the World,Chest;Boss
+2654693,End of the World World Terminus Deep Jungle Chest,End of the World,Chest;Boss
+2654694,End of the World World Terminus Agrabah Chest,End of the World,Chest;Boss
+2654731,End of the World World Terminus Atlantica Chest,End of the World,Chest;Boss
+2654732,End of the World World Terminus Halloween Town Chest,End of the World,Chest;Boss
+2654733,End of the World World Terminus Neverland Chest,End of the World,Chest;Boss
+2654734,End of the World World Terminus 100 Acre Wood Chest,End of the World,Chest;Boss
+2654771,End of the World World Terminus Hollow Bastion Chest,End of the World,Chest;Boss
+2654772,End of the World Final Rest Chest,End of the World,Chest;Boss
+2655092,Monstro Chamber 6 White Trinity Chest,Monstro,Chest;Boss
+2656011,Traverse Town Defeat Guard Armor Dodge Roll Event,Traverse Town,
+2656012,Traverse Town Defeat Guard Armor Fire Event,Traverse Town,
+2656013,Traverse Town Defeat Guard Armor Blue Trinity Event,Traverse Town,
+2656014,Traverse Town Leon Secret Waterway Earthshine Event,Traverse Town,
+2656015,Traverse Town Kairi Secret Waterway Oathkeeper Event,Traverse Town,
+2656016,Traverse Town Defeat Guard Armor Brave Warrior Event,Traverse Town,
+2656017,Traverse Town Defeat Guard Armor 500 Munny Reward,Traverse Town,
+2656021,Deep Jungle Defeat Sabor White Fang Event,Deep Jungle,Boss
+2656022,Deep Jungle Defeat Clayton Cure Event,Deep Jungle,Boss
+2656023,Deep Jungle Seal Keyhole Jungle King Event,Deep Jungle,Boss
+2656024,Deep Jungle Seal Keyhole Red Trinity Event,Deep Jungle,Boss
+2656031,Olympus Coliseum Clear Phil's Training Thunder Event,Olympus Coliseum,
+2656033,Olympus Coliseum Defeat Cerberus Inferno Band Event,Olympus Coliseum,Boss
+2656041,Wonderland Defeat Trickmaster Blizzard Event,Wonderland,Boss
+2656042,Wonderland Defeat Trickmaster Ifrit's Horn Event,Wonderland,Boss
+2656051,Agrabah Defeat Pot Centipede Ray of Light Event,Agrabah,Boss
+2656052,Agrabah Defeat Jafar Blizzard Event,Agrabah,Boss
+2656053,Agrabah Defeat Jafar Genie Fire Event,Agrabah,Boss
+2656054,Agrabah Seal Keyhole Genie Event,Agrabah,Boss
+2656055,Agrabah Seal Keyhole Three Wishes Event,Agrabah,Boss
+2656056,Agrabah Seal Keyhole Green Trinity Event,Agrabah,Boss
+2656061,Monstro Defeat Parasite Cage I Goofy Cheer Event,Monstro,Boss
+2656062,Monstro Defeat Parasite Cage II Stop Event,Monstro,Boss
+2656071,Atlantica Defeat Ursula I Mermaid Kick Event,Atlantica,Boss
+2656072,Atlantica Defeat Ursula II Thunder Event,Atlantica,Boss
+2656073,Atlantica Seal Keyhole Crabclaw Event,Atlantica,Boss
+2656081,Halloween Town Defeat Oogie Boogie Holy Circlet Event,Halloween Town,Boss
+2656082,Halloween Town Defeat Oogie's Manor Gravity Event,Halloween Town,Boss
+2656083,Halloween Town Seal Keyhole Pumpkinhead Event,Halloween Town,Boss
+2656091,Neverland Defeat Anti Sora Raven's Claw Event,Neverland,Boss
+2656092,Neverland Encounter Hook Cure Event,Neverland,Boss
+2656093,Neverland Seal Keyhole Fairy Harp Event,Neverland,Boss
+2656094,Neverland Seal Keyhole Tinker Bell Event,Neverland,Boss
+2656095,Neverland Seal Keyhole Glide Event,Neverland,Boss
+2656096,Neverland Defeat Phantom Stop Event,Neverland,Boss;Super Boss
+2656097,Neverland Defeat Captain Hook Ars Arcanum Event,Neverland,Boss
+2656101,Hollow Bastion Defeat Riku I White Trinity Event,Hollow Bastion,Boss
+2656102,Hollow Bastion Defeat Maleficent Donald Cheer Event,Hollow Bastion,Boss
+2656103,Hollow Bastion Defeat Dragon Maleficent Fireglow Event,Hollow Bastion,Boss
+2656104,Hollow Bastion Defeat Riku II Ragnarok Event,Hollow Bastion,Boss
+2656105,Hollow Bastion Defeat Behemoth Omega Arts Event,Hollow Bastion,Boss
+2656106,Hollow Bastion Speak to Princesses Fire Event,Hollow Bastion,Boss
+2656111,End of the World Defeat Chernabog Superglide Event,End of the World,Boss
+2656112,Neverland Seal Keyhole Navi-G Piece Event,Neverland,Boss
+2656113,Traverse Town Secret Waterway Navi Gummi Event,Traverse Town,
+2656114,Traverse Town Magician's Study Earthshine Event,Traverse Town,
+2656115,Traverse Town Magician's Study Naturespark Event,Traverse Town,
+2656116,Traverse Town Magician's Study Watergleam Event,Traverse Town,
+2656117,Traverse Town Magician's Study Fireglow Event,Traverse Town,
+2656118,Traverse Town Magician's Study Lord Fortune Event,Traverse Town,
+2656120,Traverse Town Mail Postcard 01 Event,Traverse Town,
+2656121,Traverse Town Mail Postcard 02 Event,Traverse Town,
+2656122,Traverse Town Mail Postcard 03 Event,Traverse Town,
+2656123,Traverse Town Mail Postcard 04 Event,Traverse Town,
+2656124,Traverse Town Mail Postcard 05 Event,Traverse Town,
+2656125,Traverse Town Mail Postcard 06 Event,Traverse Town,
+2656126,Traverse Town Mail Postcard 07 Event,Traverse Town,
+2656127,Traverse Town Mail Postcard 08 Event,Traverse Town,
+2656128,Traverse Town Mail Postcard 09 Event,Traverse Town,
+2656129,Traverse Town Mail Postcard 10 Event,Traverse Town,
+2656131,Traverse Town Defeat Opposite Armor Aero Event,Traverse Town,Boss
+2656132,Traverse Town Defeat Opposite Armor Navi-G Piece Event,Traverse Town,Boss
+2656201,Atlantica Undersea Gorge Blizzard Clam,Atlantica,
+2656202,Atlantica Undersea Gorge Ocean Floor Clam,Atlantica,
+2656203,Atlantica Undersea Valley Higher Cave Clam,Atlantica,
+2656204,Atlantica Undersea Valley Lower Cave Clam,Atlantica,
+2656205,Atlantica Undersea Valley Fire Clam,Atlantica,
+2656206,Atlantica Undersea Valley Wall Clam,Atlantica,
+2656207,Atlantica Undersea Valley Pillar Clam,Atlantica,
+2656208,Atlantica Undersea Valley Ocean Floor Clam,Atlantica,
+2656209,Atlantica Triton's Palace Thunder Clam,Atlantica,
+2656210,Atlantica Triton's Palace Wall Right Clam,Atlantica,
+2656211,Atlantica Triton's Palace Near Path Clam,Atlantica,
+2656212,Atlantica Triton's Palace Wall Left Clam,Atlantica,
+2656213,Atlantica Cavern Nook Clam,Atlantica,
+2656214,Atlantica Below Deck Clam,Atlantica,
+2656215,Atlantica Undersea Garden Clam,Atlantica,
+2656216,Atlantica Undersea Cave Clam,Atlantica,
+2656303,Traverse Town Geppetto's House Geppetto Reward Cid Blueprint,Traverse Town,Boss
+2656304,Traverse Town Geppetto's House Geppetto Reward Geppetto Blueprint,Traverse Town,Boss
+2656305,Traverse Town Geppetto's House Geppetto Reward Aerith Blueprint,Traverse Town,Boss
+2656306,Traverse Town Geppetto's House Geppetto Reward Yuffie Blueprint,Traverse Town,Boss
+2656307,Traverse Town Geppetto's House Geppetto Reward Leon Blueprint,Traverse Town,Boss
+2656308,Traverse Town Geppetto's House Geppetto Reward Cactaur Blueprint,Traverse Town,Boss
+2656309,Traverse Town Geppetto's House Geppetto Reward Hyperion Blueprint,Traverse Town,Boss
+2656310,Traverse Town Geppetto's House Pinocchio Reward Chocobo Blueprint,Traverse Town,Boss
+2656311,Traverse Town Magician's Study Obtained All Arts Items,Traverse Town,
+2656312,Traverse Town Magician's Study Obtained All LV1 Magic,Traverse Town,
+2656313,Traverse Town Magician's Study Obtained All LV3 Magic,Traverse Town,
+2656314,Traverse Town Piano Room Return 10 Puppies,Traverse Town,
+2656315,Traverse Town Piano Room Return 20 Puppies,Traverse Town,
+2656316,Traverse Town Piano Room Return 30 Puppies,Traverse Town,
+2656317,Traverse Town Piano Room Return 40 Puppies,Traverse Town,
+2656318,Traverse Town Piano Room Return 50 Puppies Reward 1,Traverse Town,
+2656319,Traverse Town Piano Room Return 50 Puppies Reward 2,Traverse Town,
+2656320,Traverse Town Piano Room Return 60 Puppies,Traverse Town,
+2656321,Traverse Town Piano Room Return 70 Puppies,Traverse Town,
+2656322,Traverse Town Piano Room Return 80 Puppies,Traverse Town,
+2656324,Traverse Town Piano Room Return 90 Puppies,Traverse Town,
+2656326,Traverse Town Piano Room Return 99 Puppies Reward 1,Traverse Town,
+2656327,Traverse Town Piano Room Return 99 Puppies Reward 2,Traverse Town,
+2656032,Olympus Coliseum Cloud Sonic Blade Event,Olympus Coliseum,Boss
+2656328,Olympus Coliseum Defeat Sephiroth One-Winged Angel Event,Olympus Coliseum,Boss;Super Boss
+2656329,Olympus Coliseum Defeat Ice Titan Diamond Dust Event,Olympus Coliseum,Boss;Super Boss
+2656330,Olympus Coliseum Gates Purple Jar After Defeating Hades,Olympus Coliseum,Boss
+2656331,Halloween Town Guillotine Square Ring Jack's Doorbell 3 Times,Halloween Town,
+2656332,Neverland Clock Tower 01:00 Door,Neverland,Boss
+2656333,Neverland Clock Tower 02:00 Door,Neverland,Boss
+2656334,Neverland Clock Tower 03:00 Door,Neverland,Boss
+2656335,Neverland Clock Tower 04:00 Door,Neverland,Boss
+2656336,Neverland Clock Tower 05:00 Door,Neverland,Boss
+2656337,Neverland Clock Tower 06:00 Door,Neverland,Boss
+2656338,Neverland Clock Tower 07:00 Door,Neverland,Boss
+2656339,Neverland Clock Tower 08:00 Door,Neverland,Boss
+2656340,Neverland Clock Tower 09:00 Door,Neverland,Boss
+2656341,Neverland Clock Tower 10:00 Door,Neverland,Boss
+2656342,Neverland Clock Tower 11:00 Door,Neverland,Boss
+2656343,Neverland Clock Tower 12:00 Door,Neverland,Boss
+2656344,Neverland Hold Aero Chest,Neverland,Chest
+2656345,100 Acre Wood Bouncing Spot Turn in Rare Nut 1,100 Acre Wood,
+2656346,100 Acre Wood Bouncing Spot Turn in Rare Nut 2,100 Acre Wood,
+2656347,100 Acre Wood Bouncing Spot Turn in Rare Nut 3,100 Acre Wood,
+2656348,100 Acre Wood Bouncing Spot Turn in Rare Nut 4,100 Acre Wood,
+2656349,100 Acre Wood Bouncing Spot Turn in Rare Nut 5,100 Acre Wood,
+2656350,100 Acre Wood Pooh's House Owl Cheer,100 Acre Wood,
+2656351,100 Acre Wood Convert Torn Page 1,100 Acre Wood,
+2656352,100 Acre Wood Convert Torn Page 2,100 Acre Wood,
+2656353,100 Acre Wood Convert Torn Page 3,100 Acre Wood,
+2656354,100 Acre Wood Convert Torn Page 4,100 Acre Wood,
+2656355,100 Acre Wood Convert Torn Page 5,100 Acre Wood,
+2656356,100 Acre Wood Pooh's House Start Fire,100 Acre Wood,
+2656357,100 Acre Wood Pooh's Room Cabinet,100 Acre Wood,
+2656358,100 Acre Wood Pooh's Room Chimney,100 Acre Wood,
+2656359,100 Acre Wood Bouncing Spot Break Log,100 Acre Wood,
+2656360,100 Acre Wood Bouncing Spot Fall Through Top of Tree Next to Pooh,100 Acre Wood,
+2656361,Deep Jungle Camp Hi-Potion Experiment,Deep Jungle,
+2656362,Deep Jungle Camp Ether Experiment,Deep Jungle,
+2656363,Deep Jungle Camp Replication Experiment,Deep Jungle,
+2656364,Deep Jungle Cliff Save Gorillas,Deep Jungle,
+2656365,Deep Jungle Tree House Save Gorillas,Deep Jungle,
+2656366,Deep Jungle Camp Save Gorillas,Deep Jungle,
+2656367,Deep Jungle Bamboo Thicket Save Gorillas,Deep Jungle,
+2656368,Deep Jungle Climbing Trees Save Gorillas,Deep Jungle,
+2656369,Olympus Coliseum Olympia Chest,Olympus Coliseum,Boss
+2656370,Deep Jungle Jungle Slider 10 Fruits,Deep Jungle,Boss;Jungle Slider
+2656371,Deep Jungle Jungle Slider 20 Fruits,Deep Jungle,Boss;Jungle Slider
+2656372,Deep Jungle Jungle Slider 30 Fruits,Deep Jungle,Boss;Jungle Slider
+2656373,Deep Jungle Jungle Slider 40 Fruits,Deep Jungle,Boss;Jungle Slider
+2656374,Deep Jungle Jungle Slider 50 Fruits,Deep Jungle,Boss;Jungle Slider
+2656375,Traverse Town 1st District Speak with Cid Event,Traverse Town,
+2656376,Wonderland Bizarre Room Read Book,Wonderland,
+2656377,Olympus Coliseum Coliseum Gates Green Trinity,Olympus Coliseum,
+2656378,Agrabah Defeat Kurt Zisa Zantetsuken Event,Agrabah,Boss;Super Boss
+2656379,Hollow Bastion Defeat Unknown EXP Necklace Event,Hollow Bastion,Boss;Super Boss
+2656380,Olympus Coliseum Coliseum Gates Hero's License Event,Olympus Coliseum,Boss
+2656381,Atlantica Sunken Ship Crystal Trident Event,Atlantica,Chest
+2656382,Halloween Town Graveyard Forget-Me-Not Event,Halloween Town,
+2656383,Deep Jungle Tent Protect-G Event,Deep Jungle,
+2656384,Deep Jungle Cavern of Hearts Navi-G Piece Event,Deep Jungle,Boss
+2656385,Wonderland Bizarre Room Navi-G Piece Event,Wonderland,Boss
+2656386,Olympus Coliseum Coliseum Gates Entry Pass Event,Olympus Coliseum,
+2656387,Deep Jungle Camp Slide 1,Deep Jungle,
+2656388,Deep Jungle Camp Slide 2,Deep Jungle,
+2656389,Deep Jungle Camp Slide 3,Deep Jungle,
+2656390,Deep Jungle Camp Slide 4,Deep Jungle,
+2656391,Deep Jungle Camp Slide 5,Deep Jungle,
+2656392,Deep Jungle Camp Slide 6,Deep Jungle,
+2656393,Wonderland Footprints Evidence Box,Wonderland,Chest
+2656394,Wonderland Claw Marks Evidence Box,Wonderland,Chest
+2656395,Wonderland Stench Evidence Box,Wonderland,Chest
+2656396,Wonderland Antenna Evidence Box,Wonderland,Chest
+2656400,Traverse Town Synth 15 Items,Traverse Town,
+2656401,Traverse Town Synth Item 01,Traverse Town,Synth
+2656402,Traverse Town Synth Item 02,Traverse Town,Synth
+2656403,Traverse Town Synth Item 03,Traverse Town,Synth
+2656404,Traverse Town Synth Item 04,Traverse Town,Synth
+2656405,Traverse Town Synth Item 05,Traverse Town,Synth
+2656406,Traverse Town Synth Item 06,Traverse Town,Synth
+2656407,Traverse Town Synth Item 07,Traverse Town,Synth
+2656408,Traverse Town Synth Item 08,Traverse Town,Synth
+2656409,Traverse Town Synth Item 09,Traverse Town,Synth
+2656410,Traverse Town Synth Item 10,Traverse Town,Synth
+2656411,Traverse Town Synth Item 11,Traverse Town,Synth
+2656412,Traverse Town Synth Item 12,Traverse Town,Synth
+2656413,Traverse Town Synth Item 13,Traverse Town,Synth
+2656414,Traverse Town Synth Item 14,Traverse Town,Synth
+2656415,Traverse Town Synth Item 15,Traverse Town,Synth
+2656416,Traverse Town Synth Item 16,Traverse Town,Synth
+2656417,Traverse Town Synth Item 17,Traverse Town,Synth
+2656418,Traverse Town Synth Item 18,Traverse Town,Synth
+2656419,Traverse Town Synth Item 19,Traverse Town,Synth
+2656420,Traverse Town Synth Item 20,Traverse Town,Synth
+2656421,Traverse Town Synth Item 21,Traverse Town,Synth
+2656422,Traverse Town Synth Item 22,Traverse Town,Synth
+2656423,Traverse Town Synth Item 23,Traverse Town,Synth
+2656424,Traverse Town Synth Item 24,Traverse Town,Synth
+2656425,Traverse Town Synth Item 25,Traverse Town,Synth
+2656426,Traverse Town Synth Item 26,Traverse Town,Synth
+2656427,Traverse Town Synth Item 27,Traverse Town,Synth
+2656428,Traverse Town Synth Item 28,Traverse Town,Synth
+2656429,Traverse Town Synth Item 29,Traverse Town,Synth
+2656430,Traverse Town Synth Item 30,Traverse Town,Synth
+2656431,Traverse Town Synth Item 31,Traverse Town,Synth
+2656432,Traverse Town Synth Item 32,Traverse Town,Synth
+2656433,Traverse Town Synth Item 33,Traverse Town,Synth
+2656500,Traverse Town Item Shop Postcard,Traverse Town,Postcard
+2656501,Traverse Town 1st District Safe Postcard,Traverse Town,Postcard
+2656502,Traverse Town Gizmo Shop Postcard 1,Traverse Town,Postcard
+2656503,Traverse Town Gizmo Shop Postcard 2,Traverse Town,Postcard
+2656504,Traverse Town Item Workshop Postcard,Traverse Town,Postcard
+2656505,Traverse Town 3rd District Balcony Postcard,Traverse Town,Postcard
+2656506,Traverse Town Geppetto's House Postcard,Traverse Town,Boss;Postcard
+2656508,Halloween Town Lab Torn Page,Halloween Town,
+2656516,Hollow Bastion Entrance Hall Emblem Piece (Flame),Hollow Bastion,Boss
+2656517,Hollow Bastion Entrance Hall Emblem Piece (Chest),Hollow Bastion,Chest;Boss
+2656518,Hollow Bastion Entrance Hall Emblem Piece (Statue),Hollow Bastion,Boss
+2656519,Hollow Bastion Entrance Hall Emblem Piece (Fountain),Hollow Bastion,Boss
+2656520,Traverse Town 1st District Leon Gift,Traverse Town,
+2656521,Traverse Town 1st District Aerith Gift,Traverse Town,
+2656522,Hollow Bastion Library Speak to Belle Divine Rose,Hollow Bastion,Boss
+2656523,Hollow Bastion Library Speak to Aerith Cure,Hollow Bastion,Boss
+2656600,Traverse Town 1st District Blue Trinity by Exit Door,Traverse Town,
+2656601,Traverse Town 3rd District Blue Trinity,Traverse Town,
+2656602,Traverse Town Magician's Study Blue Trinity,Traverse Town,
+2656603,Wonderland Lotus Forest Blue Trinity in Alcove,Wonderland,
+2656604,Wonderland Lotus Forest Blue Trinity by Moving Boulder,Wonderland,
+2656605,Agrabah Bazaar Blue Trinity,Agrabah,
+2656606,Monstro Mouth Blue Trinity,Monstro,Boss
+2656607,Monstro Chamber 5 Blue Trinity,Monstro,
+2656608,Hollow Bastion Great Crest Blue Trinity,Hollow Bastion,Boss
+2656609,Hollow Bastion Dungeon Blue Trinity,Hollow Bastion,Boss
+2656610,Deep Jungle Treetop Green Trinity,Deep Jungle,
+2656611,Agrabah Cave of Wonders Treasure Room Red Trinity,Agrabah,Boss
+2656612,Monstro Throat Blue Trinity,Monstro,Boss
+2656613,Wonderland Bizarre Room Examine Flower Pot,Wonderland,
+2656614,Wonderland Lotus Forest Red Ether Flower Across from Queen's Castle,Wonderland,
+2656615,Wonderland Lotus Forest Yellow Potion Flower in Center Alcove,Wonderland,
+2656616,Wonderland Lotus Forest Yellow Elixir Flower Through Painting,Wonderland,
+2656617,Wonderland Lotus Forest Red Flower Raise Lily Pads,Wonderland,
+2656618,Wonderland Tea Party Garden Left Cushioned Chair,Wonderland,
+2656619,Wonderland Tea Party Garden Left Pink Chair,Wonderland,
+2656620,Wonderland Tea Party Garden Right Yellow Chair,Wonderland,
+2656621,Wonderland Tea Party Garden Left Gray Chair,Wonderland,
+2656622,Wonderland Tea Party Garden Right Brown Chair,Wonderland,
+2656623,Hollow Bastion Lift Stop from Waterway Examine Node,Hollow Bastion,Boss
+2656624,Wonderland Lotus Forest Yellow Potion Flower Through Painting,Wonderland,
+2656625,Wonderland Lotus Forest Red Ether Flower Along Wall,Wonderland,
+2656700,Destiny Islands Seashore Capture Fish 1 (Day 2),Destiny Islands,
+2656701,Destiny Islands Seashore Capture Fish 2 (Day 2),Destiny Islands,
+2656702,Destiny Islands Seashore Capture Fish 3 (Day 2),Destiny Islands,
+2656703,Destiny Islands Seashore Gather Seagull Egg (Day 2),Destiny Islands,
+2656704,Destiny Islands Seashore Log on Riku's Island (Day 1),Destiny Islands,
+2656705,Destiny Islands Seashore Log under Bridge (Day 1),Destiny Islands,
+2656706,Destiny Islands Seashore Gather Cloth (Day 1),Destiny Islands,
+2656707,Destiny Islands Seashore Gather Rope (Day 1),Destiny Islands,
+2656711,Destiny Islands Secret Place Gather Mushroom (Day 2),Destiny Islands,
+2656712,Destiny Islands Cove Gather Mushroom Near Zip Line (Day 2),Destiny Islands,
+2656713,Destiny Islands Cove Gather Mushroom in Small Cave (Day 2),Destiny Islands,
+2656714,Destiny Islands Cove Talk to Kairi (Day 2),Destiny Islands,
+2656715,Destiny Islands Gather Drinking Water (Day 2),Destiny Islands,
+2655100,Destiny Islands Seashore Defeat Riku (Day 1),Destiny Islands,
+2655101,Destiny Islands Seashore Defeat Trio (Day 1),Destiny Islands,
+2655102,Destiny Islands Gather Coconut (Day 2),Destiny Islands,
+2655103,Destiny Islands Seashore Talk to Kairi Potion Reward (Day 1),Destiny Islands,
+2655104,Destiny Islands Seashore Talk to Kairi Hi-Potion Reward (Day 1),Destiny Islands,
+2655105,Destiny Islands Cove Race Riku (Day 2),Destiny Islands,
+2655106,Destiny Islands Cove Talk to Kairi Potion Reward (Day 2),Destiny Islands,
+2655107,Destiny Islands Cove Talk to Kairi Hi-Potion Reward (Day 2),Destiny Islands,
+2656800,Donald Starting Accessory 1,Traverse Town,Accessory
+2656801,Donald Starting Accessory 2,Traverse Town,Accessory
+2656802,Goofy Starting Accessory 1,Traverse Town,Accessory
+2656803,Goofy Starting Accessory 2,Traverse Town,Accessory
+2656804,Tarzan Starting Accessory 1,Deep Jungle,Accessory
+2656805,Aladdin Starting Accessory 1,Agrabah,Accessory
+2656806,Aladdin Starting Accessory 2,Agrabah,Accessory
+2656807,Ariel Starting Accessory 1,Atlantica,Accessory
+2656808,Ariel Starting Accessory 2,Atlantica,Accessory
+2656809,Ariel Starting Accessory 3,Atlantica,Accessory
+2656810,Jack Starting Accessory 1,Halloween Town,Accessory
+2656811,Jack Starting Accessory 2,Halloween Town,Accessory
+2656812,Peter Pan Starting Accessory 1,Neverland,Accessory
+2656813,Peter Pan Starting Accessory 2,Neverland,Accessory
+2656814,Beast Starting Accessory 1,Hollow Bastion,Accessory
+2657018,Agrabah Defeat Jafar Genie Ansem's Report 1,Agrabah,Boss
+2657017,Hollow Bastion Speak with Aerith Ansem's Report 2,Hollow Bastion,Boss
+2657016,Atlantica Defeat Ursula II Ansem's Report 3,Atlantica,Boss
+2657015,Hollow Bastion Speak with Aerith Ansem's Report 4,Hollow Bastion,Boss
+2657014,Hollow Bastion Defeat Maleficent Ansem's Report 5,Hollow Bastion,Boss
+2657013,Hollow Bastion Speak with Aerith Ansem's Report 6,Hollow Bastion,Boss
+2657012,Halloween Town Defeat Oogie Boogie Ansem's Report 7,Halloween Town,Boss
+2657011,Olympus Coliseum Defeat Hades Ansem's Report 8,Olympus Coliseum,Boss
+2657028,Neverland Defeat Hook Ansem's Report 9,Neverland,Boss
+2657027,Hollow Bastion Speak with Aerith Ansem's Report 10,Hollow Bastion,Boss
+2657026,Agrabah Defeat Kurt Zisa Ansem's Report 11,Agrabah,Boss;Super Boss
+2657025,Olympus Coliseum Defeat Sephiroth Ansem's Report 12,Olympus Coliseum,Boss;Super Boss
+2657024,Hollow Bastion Defeat Unknown Ansem's Report 13,Hollow Bastion,Boss;Super Boss
+2658002,Level 002 (Slot 1),Levels,
+2658003,Level 003 (Slot 1),Levels,
+2658004,Level 004 (Slot 1),Levels,
+2658005,Level 005 (Slot 1),Levels,
+2658006,Level 006 (Slot 1),Levels,
+2658007,Level 007 (Slot 1),Levels,
+2658008,Level 008 (Slot 1),Levels,
+2658009,Level 009 (Slot 1),Levels,
+2658010,Level 010 (Slot 1),Levels,
+2658011,Level 011 (Slot 1),Levels,
+2658012,Level 012 (Slot 1),Levels,
+2658013,Level 013 (Slot 1),Levels,
+2658014,Level 014 (Slot 1),Levels,
+2658015,Level 015 (Slot 1),Levels,
+2658016,Level 016 (Slot 1),Levels,
+2658017,Level 017 (Slot 1),Levels,
+2658018,Level 018 (Slot 1),Levels,
+2658019,Level 019 (Slot 1),Levels,
+2658020,Level 020 (Slot 1),Levels,
+2658021,Level 021 (Slot 1),Levels,
+2658022,Level 022 (Slot 1),Levels,
+2658023,Level 023 (Slot 1),Levels,
+2658024,Level 024 (Slot 1),Levels,
+2658025,Level 025 (Slot 1),Levels,
+2658026,Level 026 (Slot 1),Levels,
+2658027,Level 027 (Slot 1),Levels,
+2658028,Level 028 (Slot 1),Levels,
+2658029,Level 029 (Slot 1),Levels,
+2658030,Level 030 (Slot 1),Levels,
+2658031,Level 031 (Slot 1),Levels,
+2658032,Level 032 (Slot 1),Levels,
+2658033,Level 033 (Slot 1),Levels,
+2658034,Level 034 (Slot 1),Levels,
+2658035,Level 035 (Slot 1),Levels,
+2658036,Level 036 (Slot 1),Levels,
+2658037,Level 037 (Slot 1),Levels,
+2658038,Level 038 (Slot 1),Levels,
+2658039,Level 039 (Slot 1),Levels,
+2658040,Level 040 (Slot 1),Levels,
+2658041,Level 041 (Slot 1),Levels,
+2658042,Level 042 (Slot 1),Levels,
+2658043,Level 043 (Slot 1),Levels,
+2658044,Level 044 (Slot 1),Levels,
+2658045,Level 045 (Slot 1),Levels,
+2658046,Level 046 (Slot 1),Levels,
+2658047,Level 047 (Slot 1),Levels,
+2658048,Level 048 (Slot 1),Levels,
+2658049,Level 049 (Slot 1),Levels,
+2658050,Level 050 (Slot 1),Levels,
+2658051,Level 051 (Slot 1),Levels,
+2658052,Level 052 (Slot 1),Levels,
+2658053,Level 053 (Slot 1),Levels,
+2658054,Level 054 (Slot 1),Levels,
+2658055,Level 055 (Slot 1),Levels,
+2658056,Level 056 (Slot 1),Levels,
+2658057,Level 057 (Slot 1),Levels,
+2658058,Level 058 (Slot 1),Levels,
+2658059,Level 059 (Slot 1),Levels,
+2658060,Level 060 (Slot 1),Levels,
+2658061,Level 061 (Slot 1),Levels,
+2658062,Level 062 (Slot 1),Levels,
+2658063,Level 063 (Slot 1),Levels,
+2658064,Level 064 (Slot 1),Levels,
+2658065,Level 065 (Slot 1),Levels,
+2658066,Level 066 (Slot 1),Levels,
+2658067,Level 067 (Slot 1),Levels,
+2658068,Level 068 (Slot 1),Levels,
+2658069,Level 069 (Slot 1),Levels,
+2658070,Level 070 (Slot 1),Levels,
+2658071,Level 071 (Slot 1),Levels,
+2658072,Level 072 (Slot 1),Levels,
+2658073,Level 073 (Slot 1),Levels,
+2658074,Level 074 (Slot 1),Levels,
+2658075,Level 075 (Slot 1),Levels,
+2658076,Level 076 (Slot 1),Levels,
+2658077,Level 077 (Slot 1),Levels,
+2658078,Level 078 (Slot 1),Levels,
+2658079,Level 079 (Slot 1),Levels,
+2658080,Level 080 (Slot 1),Levels,
+2658081,Level 081 (Slot 1),Levels,
+2658082,Level 082 (Slot 1),Levels,
+2658083,Level 083 (Slot 1),Levels,
+2658084,Level 084 (Slot 1),Levels,
+2658085,Level 085 (Slot 1),Levels,
+2658086,Level 086 (Slot 1),Levels,
+2658087,Level 087 (Slot 1),Levels,
+2658088,Level 088 (Slot 1),Levels,
+2658089,Level 089 (Slot 1),Levels,
+2658090,Level 090 (Slot 1),Levels,
+2658091,Level 091 (Slot 1),Levels,
+2658092,Level 092 (Slot 1),Levels,
+2658093,Level 093 (Slot 1),Levels,
+2658094,Level 094 (Slot 1),Levels,
+2658095,Level 095 (Slot 1),Levels,
+2658096,Level 096 (Slot 1),Levels,
+2658097,Level 097 (Slot 1),Levels,
+2658098,Level 098 (Slot 1),Levels,
+2658099,Level 099 (Slot 1),Levels,
+2658100,Level 100 (Slot 1),Levels,
+2658102,Level 002 (Slot 2),Levels,
+2658103,Level 003 (Slot 2),Levels,
+2658104,Level 004 (Slot 2),Levels,
+2658105,Level 005 (Slot 2),Levels,
+2658106,Level 006 (Slot 2),Levels,
+2658107,Level 007 (Slot 2),Levels,
+2658108,Level 008 (Slot 2),Levels,
+2658109,Level 009 (Slot 2),Levels,
+2658110,Level 010 (Slot 2),Levels,
+2658111,Level 011 (Slot 2),Levels,
+2658112,Level 012 (Slot 2),Levels,
+2658113,Level 013 (Slot 2),Levels,
+2658114,Level 014 (Slot 2),Levels,
+2658115,Level 015 (Slot 2),Levels,
+2658116,Level 016 (Slot 2),Levels,
+2658117,Level 017 (Slot 2),Levels,
+2658118,Level 018 (Slot 2),Levels,
+2658119,Level 019 (Slot 2),Levels,
+2658120,Level 020 (Slot 2),Levels,
+2658121,Level 021 (Slot 2),Levels,
+2658122,Level 022 (Slot 2),Levels,
+2658123,Level 023 (Slot 2),Levels,
+2658124,Level 024 (Slot 2),Levels,
+2658125,Level 025 (Slot 2),Levels,
+2658126,Level 026 (Slot 2),Levels,
+2658127,Level 027 (Slot 2),Levels,
+2658128,Level 028 (Slot 2),Levels,
+2658129,Level 029 (Slot 2),Levels,
+2658130,Level 030 (Slot 2),Levels,
+2658131,Level 031 (Slot 2),Levels,
+2658132,Level 032 (Slot 2),Levels,
+2658133,Level 033 (Slot 2),Levels,
+2658134,Level 034 (Slot 2),Levels,
+2658135,Level 035 (Slot 2),Levels,
+2658136,Level 036 (Slot 2),Levels,
+2658137,Level 037 (Slot 2),Levels,
+2658138,Level 038 (Slot 2),Levels,
+2658139,Level 039 (Slot 2),Levels,
+2658140,Level 040 (Slot 2),Levels,
+2658141,Level 041 (Slot 2),Levels,
+2658142,Level 042 (Slot 2),Levels,
+2658143,Level 043 (Slot 2),Levels,
+2658144,Level 044 (Slot 2),Levels,
+2658145,Level 045 (Slot 2),Levels,
+2658146,Level 046 (Slot 2),Levels,
+2658147,Level 047 (Slot 2),Levels,
+2658148,Level 048 (Slot 2),Levels,
+2658149,Level 049 (Slot 2),Levels,
+2658150,Level 050 (Slot 2),Levels,
+2658151,Level 051 (Slot 2),Levels,
+2658152,Level 052 (Slot 2),Levels,
+2658153,Level 053 (Slot 2),Levels,
+2658154,Level 054 (Slot 2),Levels,
+2658155,Level 055 (Slot 2),Levels,
+2658156,Level 056 (Slot 2),Levels,
+2658157,Level 057 (Slot 2),Levels,
+2658158,Level 058 (Slot 2),Levels,
+2658159,Level 059 (Slot 2),Levels,
+2658160,Level 060 (Slot 2),Levels,
+2658161,Level 061 (Slot 2),Levels,
+2658162,Level 062 (Slot 2),Levels,
+2658163,Level 063 (Slot 2),Levels,
+2658164,Level 064 (Slot 2),Levels,
+2658165,Level 065 (Slot 2),Levels,
+2658166,Level 066 (Slot 2),Levels,
+2658167,Level 067 (Slot 2),Levels,
+2658168,Level 068 (Slot 2),Levels,
+2658169,Level 069 (Slot 2),Levels,
+2658170,Level 070 (Slot 2),Levels,
+2658171,Level 071 (Slot 2),Levels,
+2658172,Level 072 (Slot 2),Levels,
+2658173,Level 073 (Slot 2),Levels,
+2658174,Level 074 (Slot 2),Levels,
+2658175,Level 075 (Slot 2),Levels,
+2658176,Level 076 (Slot 2),Levels,
+2658177,Level 077 (Slot 2),Levels,
+2658178,Level 078 (Slot 2),Levels,
+2658179,Level 079 (Slot 2),Levels,
+2658180,Level 080 (Slot 2),Levels,
+2658181,Level 081 (Slot 2),Levels,
+2658182,Level 082 (Slot 2),Levels,
+2658183,Level 083 (Slot 2),Levels,
+2658184,Level 084 (Slot 2),Levels,
+2658185,Level 085 (Slot 2),Levels,
+2658186,Level 086 (Slot 2),Levels,
+2658187,Level 087 (Slot 2),Levels,
+2658188,Level 088 (Slot 2),Levels,
+2658189,Level 089 (Slot 2),Levels,
+2658190,Level 090 (Slot 2),Levels,
+2658191,Level 091 (Slot 2),Levels,
+2658192,Level 092 (Slot 2),Levels,
+2658193,Level 093 (Slot 2),Levels,
+2658194,Level 094 (Slot 2),Levels,
+2658195,Level 095 (Slot 2),Levels,
+2658196,Level 096 (Slot 2),Levels,
+2658197,Level 097 (Slot 2),Levels,
+2658198,Level 098 (Slot 2),Levels,
+2658199,Level 099 (Slot 2),Levels,
+2658200,Level 100 (Slot 2),Levels,
+2659001,Complete Phil Cup,Olympus Coliseum,Boss
+2659002,Complete Phil Cup Solo,Olympus Coliseum,Boss
+2659003,Complete Phil Cup Time Trial,Olympus Coliseum,Boss
+2659004,Complete Pegasus Cup,Olympus Coliseum,Boss
+2659005,Complete Pegasus Cup Solo,Olympus Coliseum,Boss
+2659006,Complete Pegasus Cup Time Trial,Olympus Coliseum,Boss
+2659007,Complete Hercules Cup,Olympus Coliseum,Boss
+2659008,Complete Hercules Cup Solo,Olympus Coliseum,Boss
+2659009,Complete Hercules Cup Time Trial,Olympus Coliseum,Boss
+2659010,Complete Hades Cup,Olympus Coliseum,Boss
+2659011,Complete Hades Cup Solo,Olympus Coliseum,Boss
+2659012,Complete Hades Cup Time Trial,Olympus Coliseum,Boss
+2659013,Hades Cup Defeat Cloud and Leon Event,Olympus Coliseum,Boss
+2659014,Hades Cup Defeat Yuffie Event,Olympus Coliseum,Boss
+2659015,Hades Cup Defeat Cerberus Event,Olympus Coliseum,Boss
+2659016,Hades Cup Defeat Behemoth Event,Olympus Coliseum,Boss
+2659017,Hades Cup Defeat Hades Event,Olympus Coliseum,Boss
+2659018,Hercules Cup Defeat Cloud Event,Olympus Coliseum,Boss
+2659019,Hercules Cup Yellow Trinity Event,Olympus Coliseum,Boss
+2659100,Accessory Protect Chain,Accessories,Augment
+2659101,Accessory Protera Chain,Accessories,Augment
+2659102,Accessory Protega Chain,Accessories,Augment
+2659103,Accessory Fire Ring,Accessories,Augment
+2659104,Accessory Fira Ring,Accessories,Augment
+2659105,Accessory Firaga Ring,Accessories,Augment
+2659106,Accessory Blizzard Ring,Accessories,Augment
+2659107,Accessory Blizzara Ring,Accessories,Augment
+2659108,Accessory Blizzaga Ring,Accessories,Augment
+2659109,Accessory Thunder Ring,Accessories,Augment
+2659110,Accessory Thundara Ring,Accessories,Augment
+2659111,Accessory Thundaga Ring,Accessories,Augment
+2659112,Accessory Ability Stud,Accessories,Augment
+2659113,Accessory Guard Earring,Accessories,Augment
+2659114,Accessory Master Earring,Accessories,Augment
+2659115,Accessory Chaos Ring,Accessories,Augment
+2659116,Accessory Dark Ring,Accessories,Augment
+2659117,Accessory Element Ring,Accessories,Augment
+2659118,Accessory Three Stars,Accessories,Augment
+2659119,Accessory Power Chain,Accessories,Augment
+2659120,Accessory Golem Chain,Accessories,Augment
+2659121,Accessory Titan Chain,Accessories,Augment
+2659122,Accessory Energy Bangle,Accessories,Augment
+2659123,Accessory Angel Bangle,Accessories,Augment
+2659124,Accessory Gaia Bangle,Accessories,Augment
+2659125,Accessory Magic Armlet,Accessories,Augment
+2659126,Accessory Rune Armlet,Accessories,Augment
+2659127,Accessory Atlas Armlet,Accessories,Augment
+2659128,Accessory Heartguard,Accessories,Augment
+2659129,Accessory Ribbon,Accessories,Augment
+2659130,Accessory Crystal Crown,Accessories,Augment
+2659131,Accessory Brave Warrior,Accessories,Augment
+2659132,Accessory Ifrit's Horn,Accessories,Augment
+2659133,Accessory Inferno Band,Accessories,Augment
+2659134,Accessory White Fang,Accessories,Augment
+2659135,Accessory Ray of Light,Accessories,Augment
+2659136,Accessory Holy Circlet,Accessories,Augment
+2659137,Accessory Raven's Claw,Accessories,Augment
+2659138,Accessory Omega Arts,Accessories,Augment
+2659139,Accessory EXP Earring,Accessories,Augment
+2659141,Accessory EXP Ring,Accessories,Augment
+2659142,Accessory EXP Bracelet,Accessories,Augment
+2659143,Accessory EXP Necklace,Accessories,Augment
+2659144,Accessory Firagun Band,Accessories,Augment
+2659145,Accessory Blizzagun Band,Accessories,Augment
+2659146,Accessory Thundagun Band,Accessories,Augment
+2659147,Accessory Ifrit Belt,Accessories,Augment
+2659148,Accessory Shiva Belt,Accessories,Augment
+2659149,Accessory Ramuh Belt,Accessories,Augment
+2659150,Accessory Moogle Badge,Accessories,Augment
+2659151,Accessory Cosmic Arts,Accessories,Augment
+2659152,Accessory Royal Crown,Accessories,Augment
+2659153,Accessory Prime Cap,Accessories,Augment
+2659154,Accessory Obsidian Ring,Accessories,Augment

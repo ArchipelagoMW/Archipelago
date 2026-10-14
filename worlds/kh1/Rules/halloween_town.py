@@ -1,19 +1,43 @@
-from rule_builder.rules import Or, Has, Rule, True_
+from rule_builder.rules import Has, Rule
 
-from ._option_filters import ABOVE_BEGINNER, ABOVE_NORMAL, ABOVE_PROUD
-from ._context import RuleContext
-from ._helpers import has_key_item_rule, has_oogie_manor_rule
+from ._helpers import BASIC_TOOLS, COMBO_MASTER, DODGE_ROLL_AND_AIR_GUARD, DUMBO_SKIP, GLIDE
+from ._helpers import HIGH_JUMP, HIGH_JUMP_2, HIGH_JUMP_3, HIGH_JUMP_AND_GLIDE
+from ._helpers import HIGH_JUMP_OR_GLIDE, by_difficulty, has_key_item_rule, has_oogie_manor_rule
 
 
-def build_rules(ctx: RuleContext) -> dict[str, Rule]:
+def build_rules() -> dict[str, Rule]:
     forget_me_not = has_key_item_rule("Forget-Me-Not")
     jack_in_the_box = has_key_item_rule("Jack-In-The-Box")
     fmn_and_jitb = forget_me_not & jack_in_the_box
     oogie_manor = has_oogie_manor_rule()
 
     pumpkin_structure = (
-        Or(ctx.hj1, ctx.glide & ABOVE_BEGINNER, ctx.dumbo_skip & ABOVE_NORMAL)
-        & Or(ctx.glide, ctx.hj2 & ABOVE_BEGINNER, (ctx.combo_master | ctx.dodge_airguard_all) & ABOVE_NORMAL)
+        by_difficulty(beginner=HIGH_JUMP, normal=GLIDE, proud=DUMBO_SKIP)
+        & by_difficulty(beginner=GLIDE, normal=HIGH_JUMP_2, proud=COMBO_MASTER | DODGE_ROLL_AND_AIR_GUARD)
+    )
+
+    bridge_right_of_gate_chest_rule = fmn_and_jitb & by_difficulty(
+        beginner=GLIDE | HIGH_JUMP_3,
+        normal=HIGH_JUMP_2,
+        proud=HIGH_JUMP,
+        minimal=True,
+    )
+    lower_iron_cage_chest_rule = fmn_and_jitb & oogie_manor & by_difficulty(
+        beginner=BASIC_TOOLS | GLIDE,
+        normal=True,
+    )
+    upper_iron_cage_chest_rule = fmn_and_jitb & oogie_manor & by_difficulty(
+        beginner=BASIC_TOOLS | HIGH_JUMP_AND_GLIDE,
+        normal=True,
+    )
+    guillotine_square_high_tower_chest_rule = by_difficulty(
+        beginner=HIGH_JUMP_AND_GLIDE,
+        normal=HIGH_JUMP_OR_GLIDE,
+        proud=DUMBO_SKIP,
+    )
+    bridge_left_of_gate_chest_rule = fmn_and_jitb & by_difficulty(
+        beginner=GLIDE | HIGH_JUMP,
+        proud=True,
     )
 
     return {
@@ -32,25 +56,11 @@ def build_rules(ctx: RuleContext) -> dict[str, Rule]:
         "Halloween Town Defeat Oogie's Manor Gravity Event": fmn_and_jitb & oogie_manor,
         "Halloween Town Seal Keyhole Pumpkinhead Event": fmn_and_jitb & oogie_manor,
         "Halloween Town Defeat Oogie Boogie Ansem's Report 7": fmn_and_jitb & oogie_manor,
-
-        "Halloween Town Bridge Right of Gate Chest": fmn_and_jitb & Or(
-            ctx.glide, ctx.hj3,
-            ctx.hj2 & ABOVE_BEGINNER,
-            ctx.hj1 & ABOVE_NORMAL,
-            True_() & ABOVE_PROUD,
-        ),
-        "Halloween Town Oogie's Manor Lower Iron Cage Chest": fmn_and_jitb & oogie_manor & Or(
-            True_() & ABOVE_BEGINNER, ctx.basic_tools, ctx.glide,
-        ),
-        "Halloween Town Oogie's Manor Upper Iron Cage Chest": fmn_and_jitb & oogie_manor & Or(
-            True_() & ABOVE_BEGINNER, ctx.basic_tools, ctx.hj_glide_all,
-        ),
-        "Halloween Town Guillotine Square High Tower Chest": Or(
-            ctx.hj_glide_all,
-            ctx.hj_glide_any & ABOVE_BEGINNER,
-            ctx.dumbo_skip & ABOVE_NORMAL,
-        ),
+        "Halloween Town Bridge Right of Gate Chest": bridge_right_of_gate_chest_rule,
+        "Halloween Town Oogie's Manor Lower Iron Cage Chest": lower_iron_cage_chest_rule,
+        "Halloween Town Oogie's Manor Upper Iron Cage Chest": upper_iron_cage_chest_rule,
+        "Halloween Town Guillotine Square High Tower Chest": guillotine_square_high_tower_chest_rule,
         "Halloween Town Guillotine Square Pumpkin Structure Left Chest": pumpkin_structure,
         "Halloween Town Guillotine Square Pumpkin Structure Right Chest": pumpkin_structure,
-        "Halloween Town Bridge Left of Gate Chest": fmn_and_jitb & Or(ctx.glide, ctx.hj1, True_() & ABOVE_NORMAL),
+        "Halloween Town Bridge Left of Gate Chest": bridge_left_of_gate_chest_rule,
     }

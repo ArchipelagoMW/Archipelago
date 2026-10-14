@@ -2,10 +2,9 @@ from rule_builder.field_resolvers import FromOption
 from rule_builder.rules import Has, Rule
 
 from ..Options import Day2Materials, HomecomingMaterials
-from ._context import RuleContext
 
 
-def build_rules(ctx: RuleContext, enabled: bool) -> dict[str, Rule]:
+def build_rules() -> dict[str, Rule]:
     raft_materials_rule = Has("Raft Materials", count=FromOption(Day2Materials))
     homecoming_materials_rule = Has("Raft Materials", count=FromOption(HomecomingMaterials))
 
@@ -26,4 +25,4 @@ def build_rules(ctx: RuleContext, enabled: bool) -> dict[str, Rule]:
         "Destiny Islands Cove Race Riku (Day 2)": raft_materials_rule,
         "Destiny Islands Cove Talk to Kairi Potion Reward (Day 2)": homecoming_materials_rule,
         "Destiny Islands Cove Talk to Kairi Hi-Potion Reward (Day 2)": homecoming_materials_rule,
-    } if enabled else {}
+    }

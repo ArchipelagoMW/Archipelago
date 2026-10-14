@@ -1,0 +1,362 @@
+id,name,groups,classification,max_quantity,active
+2641001,Potion,Consumables;Items,filler,1,1
+2641002,Hi-Potion,Consumables;Items,filler,1,1
+2641003,Ether,Consumables;Items,filler,1,1
+2641004,Elixir,Consumables;Items,filler,1,1
+2641005,B05,Consumables;Items,filler,1,0
+2641006,Mega-Potion,Consumables;Items,filler,1,1
+2641007,Mega-Ether,Consumables;Items,filler,1,1
+2641008,Megalixir,Consumables;Items,filler,1,1
+2641009,Torn Page,Torn Pages;Items,progression,5,1
+2641010,Final Door Key,Key Items;Items,progression,1,1
+2641011,Destiny Islands,Worlds;Items,progression,1,1
+2641012,Raft Materials,Key Items;Items,progression,2,1
+2641013,Frost Stone,Synthesis Materials;Items,filler,1,0
+2641014,Lightning Stone,Synthesis Materials;Items,filler,1,0
+2641015,Dazzling Stone,Synthesis Materials;Items,filler,1,0
+2641016,Stormy Stone,Synthesis Materials;Items,filler,1,0
+2641017,Protect Chain,Accessories;Items,progression,1,1
+2641018,Protera Chain,Accessories;Items,progression,1,1
+2641019,Protega Chain,Accessories;Items,progression,1,1
+2641020,Fire Ring,Accessories;Items,progression,1,1
+2641021,Fira Ring,Accessories;Items,progression,1,1
+2641022,Firaga Ring,Accessories;Items,progression,1,1
+2641023,Blizzard Ring,Accessories;Items,progression,1,1
+2641024,Blizzara Ring,Accessories;Items,progression,1,1
+2641025,Blizzaga Ring,Accessories;Items,progression,1,1
+2641026,Thunder Ring,Accessories;Items,progression,1,1
+2641027,Thundara Ring,Accessories;Items,progression,1,1
+2641028,Thundaga Ring,Accessories;Items,progression,1,1
+2641029,Ability Stud,Accessories;Items,progression,1,1
+2641030,Guard Earring,Accessories;Items,progression,1,1
+2641031,Master Earring,Accessories;Items,progression,1,1
+2641032,Chaos Ring,Accessories;Items,progression,1,1
+2641033,Dark Ring,Accessories;Items,progression,1,1
+2641034,Element Ring,Accessories;Items,progression,1,1
+2641035,Three Stars,Accessories;Items,progression,1,1
+2641036,Power Chain,Accessories;Items,progression,1,1
+2641037,Golem Chain,Accessories;Items,progression,1,1
+2641038,Titan Chain,Accessories;Items,progression,1,1
+2641039,Energy Bangle,Accessories;Items,progression,1,1
+2641040,Angel Bangle,Accessories;Items,progression,1,1
+2641041,Gaia Bangle,Accessories;Items,progression,1,1
+2641042,Magic Armlet,Accessories;Items,progression,1,1
+2641043,Rune Armlet,Accessories;Items,progression,1,1
+2641044,Atlas Armlet,Accessories;Items,progression,1,1
+2641045,Heartguard,Accessories;Items,progression,1,1
+2641046,Ribbon,Accessories;Items,progression,1,1
+2641047,Crystal Crown,Accessories;Items,progression,1,1
+2641048,Brave Warrior,Accessories;Items,progression,1,1
+2641049,Ifrit's Horn,Accessories;Items,progression,1,1
+2641050,Inferno Band,Accessories;Items,progression,1,1
+2641051,White Fang,Accessories;Items,progression,1,1
+2641052,Ray of Light,Accessories;Items,progression,1,1
+2641053,Holy Circlet,Accessories;Items,progression,1,1
+2641054,Raven's Claw,Accessories;Items,progression,1,1
+2641055,Omega Arts,Accessories;Items,progression,1,1
+2641056,EXP Earring,Accessories;Items,progression,1,1
+2641057,A41,Accessories;Items,progression,1,0
+2641058,EXP Ring,Accessories;Items,progression,1,1
+2641059,EXP Bracelet,Accessories;Items,progression,1,1
+2641060,EXP Necklace,Accessories;Items,progression,1,1
+2641061,Firagun Band,Accessories;Items,progression,1,1
+2641062,Blizzagun Band,Accessories;Items,progression,1,1
+2641063,Thundagun Band,Accessories;Items,progression,1,1
+2641064,Ifrit Belt,Accessories;Items,progression,1,1
+2641065,Shiva Belt,Accessories;Items,progression,1,1
+2641066,Ramuh Belt,Accessories;Items,progression,1,1
+2641067,Moogle Badge,Accessories;Items,progression,1,1
+2641068,Cosmic Arts,Accessories;Items,progression,1,1
+2641069,Royal Crown,Accessories;Items,progression,1,1
+2641070,Prime Cap,Accessories;Items,progression,1,1
+2641071,Obsidian Ring,Accessories;Items,progression,1,1
+2641072,A56,Accessories;Items,filler,1,0
+2641073,A57,Accessories;Items,filler,1,0
+2641074,A58,Accessories;Items,filler,1,0
+2641075,A59,Accessories;Items,filler,1,0
+2641076,A60,Accessories;Items,filler,1,0
+2641077,A61,Accessories;Items,filler,1,0
+2641078,A62,Accessories;Items,filler,1,0
+2641079,A63,Accessories;Items,filler,1,0
+2641080,A64,Accessories;Items,filler,1,0
+2641081,Kingdom Key,Keyblades;Items,useful,1,0
+2641082,Dream Sword,Keyblades;Items,useful,1,1
+2641083,Dream Shield,Keyblades;Items,useful,1,1
+2641084,Dream Rod,Keyblades;Items,useful,1,1
+2641085,Wooden Sword,Keyblades;Items,useful,1,1
+2641086,Jungle King,Keyblades;Items,progression,1,1
+2641087,Three Wishes,Keyblades;Items,progression,1,1
+2641088,Fairy Harp,Keyblades;Items,progression,1,1
+2641089,Pumpkinhead,Keyblades;Items,progression,1,1
+2641090,Crabclaw,Keyblades;Items,progression,1,1
+2641091,Divine Rose,Keyblades;Items,progression,1,1
+2641092,Spellbinder,Keyblades;Items,progression,1,1
+2641093,Olympia,Keyblades;Items,progression,1,1
+2641094,Lionheart,Keyblades;Items,progression,1,1
+2641095,Metal Chocobo,Keyblades;Items,useful,1,1
+2641096,Oathkeeper,Keyblades;Items,progression,1,1
+2641097,Oblivion,Keyblades;Items,progression,1,1
+2641098,Lady Luck,Keyblades;Items,progression,1,1
+2641099,Wishing Star,Keyblades;Items,progression,1,1
+2641100,Ultima Weapon,Keyblades;Items,useful,1,1
+2641101,Diamond Dust,Keyblades;Items,useful,1,1
+2641102,One-Winged Angel,Keyblades;Items,useful,1,1
+2641103,Mage's Staff,Weapons;Items,filler,1,0
+2641104,Morning Star,Weapons;Items,useful,1,1
+2641105,Shooting Star,Weapons;Items,useful,1,1
+2641106,Magus Staff,Weapons;Items,useful,1,1
+2641107,Wisdom Staff,Weapons;Items,useful,1,1
+2641108,Warhammer,Weapons;Items,useful,1,1
+2641109,Silver Mallet,Weapons;Items,useful,1,1
+2641110,Grand Mallet,Weapons;Items,useful,1,1
+2641111,Lord Fortune,Weapons;Items,useful,1,1
+2641112,Violetta,Weapons;Items,useful,1,1
+2641113,Dream Rod (Donald),Weapons;Items,useful,1,1
+2641114,Save the Queen,Weapons;Items,useful,1,1
+2641115,Wizard's Relic,Weapons;Items,useful,1,1
+2641116,Meteor Strike,Weapons;Items,useful,1,1
+2641117,Fantasista,Weapons;Items,useful,1,1
+2641118,Unused (Donald),Weapons;Items,filler,1,0
+2641119,Knight's Shield,Weapons;Items,filler,1,0
+2641120,Mythril Shield,Weapons;Items,useful,1,1
+2641121,Onyx Shield,Weapons;Items,useful,1,1
+2641122,Stout Shield,Weapons;Items,useful,1,1
+2641123,Golem Shield,Weapons;Items,useful,1,1
+2641124,Adamant Shield,Weapons;Items,useful,1,1
+2641125,Smasher,Weapons;Items,useful,1,1
+2641126,Gigas Fist,Weapons;Items,useful,1,1
+2641127,Genji Shield,Weapons;Items,useful,1,1
+2641128,Herc's Shield,Weapons;Items,useful,1,1
+2641129,Dream Shield (Goofy),Weapons;Items,useful,1,1
+2641130,Save the King,Weapons;Items,useful,1,1
+2641131,Defender,Weapons;Items,useful,1,1
+2641132,Mighty Shield,Weapons;Items,useful,1,1
+2641133,Seven Elements,Weapons;Items,useful,1,1
+2641134,Unused (Goofy),Weapons;Items,filler,1,0
+2641135,Spear,Weapons;Items,filler,1,0
+2641136,No Weapon,Weapons;Items,filler,1,0
+2641137,Genie,Weapons;Items,filler,1,0
+2641138,No Weapon,Weapons;Items,filler,1,0
+2641139,No Weapon,Weapons;Items,filler,1,0
+2641140,Dagger,Weapons;Items,filler,1,0
+2641141,Claws,Weapons;Items,filler,1,0
+2641142,Tent,Camping Items;Items,filler,1,1
+2641143,Camping Set,Camping Items;Items,filler,1,1
+2641144,Cottage,Camping Items;Items,filler,1,1
+2641145,C04,Camping Items;Items,filler,1,0
+2641146,C05,Camping Items;Items,filler,1,0
+2641147,C06,Camping Items;Items,filler,1,0
+2641148,C07,Camping Items;Items,filler,1,0
+2641149,Wonderland,Worlds;Items,progression,1,1
+2641150,Olympus Coliseum,Worlds;Items,progression,1,1
+2641151,Deep Jungle,Worlds;Items,progression,1,1
+2641152,Power Up,Stat Ups;Items,filler,1,1
+2641153,Defense Up,Stat Ups;Items,filler,1,1
+2641154,AP Up,Stat Ups;Items,filler,1,1
+2641155,Agrabah,Worlds;Items,progression,1,1
+2641156,Monstro,Worlds;Items,progression,1,1
+2641157,Atlantica,Worlds;Items,progression,1,1
+2641158,Fire Arts,Key Items;Items;Arts,progression,1,1
+2641159,Blizzard Arts,Key Items;Items;Arts,progression,1,1
+2641160,Thunder Arts,Key Items;Items;Arts,progression,1,1
+2641161,Cure Arts,Key Items;Items;Arts,progression,1,1
+2641162,Gravity Arts,Key Items;Items;Arts,progression,1,1
+2641163,Stop Arts,Key Items;Items;Arts,progression,1,1
+2641164,Aero Arts,Key Items;Items;Arts,progression,1,1
+2641165,Neverland,Worlds;Items,progression,1,1
+2641166,Halloween Town,Worlds;Items,progression,1,1
+2641167,Puppy,Key Items;Items,progression,1,1
+2641168,Hollow Bastion,Worlds;Items,progression,1,1
+2641169,End of the World,Worlds;Items,progression,1,1
+2641170,Blue Trinity,Trinities;Items,progression,1,1
+2641171,Red Trinity,Trinities;Items,progression,1,1
+2641172,Green Trinity,Trinities;Items,progression,1,1
+2641173,Yellow Trinity,Trinities;Items,progression,1,1
+2641174,White Trinity,Trinities;Items,progression,1,1
+2641175,Progressive Fire,Spells;Items,progression,3,1
+2641176,Progressive Blizzard,Spells;Items,progression,3,1
+2641177,Progressive Thunder,Spells;Items,progression,3,1
+2641178,Progressive Cure,Spells;Items,progression,3,1
+2641179,Progressive Gravity,Spells;Items,progression,3,1
+2641180,Progressive Stop,Spells;Items,progression,3,1
+2641181,Progressive Aero,Spells;Items,progression,3,1
+2641182,Phil Cup,Key Items;Cups;Items,progression,1,1
+2641183,Theon Vol. 6,Key Items;Items,progression,1,1
+2641184,Pegasus Cup,Key Items;Cups;Items,progression,1,1
+2641185,Hercules Cup,Key Items;Cups;Items,progression,1,1
+2641186,Empty Bottle,Key Items;Items,progression,1,1
+2641187,Old Book,Key Items;Items,progression,1,1
+2641188,Emblem Piece (Flame),Key Items;Emblem Pieces;Items,progression,1,1
+2641189,Emblem Piece (Chest),Key Items;Emblem Pieces;Items,progression,1,1
+2641190,Emblem Piece (Statue),Key Items;Emblem Pieces;Items,progression,1,1
+2641191,Emblem Piece (Fountain),Key Items;Emblem Pieces;Items,progression,1,1
+2641192,Log,Key Items;Items,progression,2,0
+2641193,Cloth,Key Items;Items,progression,1,0
+2641194,Rope,Key Items;Items,progression,1,0
+2641195,Seagull Egg,Key Items;Items,progression,1,0
+2641196,Fish,Key Items;Items,progression,3,0
+2641197,Mushroom,Key Items;Items,progression,3,0
+2641198,Coconut,Key Items;Items,progression,2,0
+2641199,Drinking Water,Key Items;Items,progression,1,0
+2641200,Navi-G Piece 1,Key Items;Items,progression,1,0
+2641201,Navi-G Piece 2,Key Items;Items,progression,1,0
+2641202,Navi-Gummi Unused,Key Items;Items,progression,1,0
+2641203,Navi-G Piece 3,Key Items;Items,progression,1,0
+2641204,Navi-G Piece 4,Key Items;Items,progression,1,0
+2641205,Navi-Gummi,Key Items;Items,progression,1,0
+2641206,Watergleam,Key Items;Items;Summon Gems,progression,1,1
+2641207,Naturespark,Key Items;Items;Summon Gems,progression,1,1
+2641208,Fireglow,Key Items;Items;Summon Gems,progression,1,1
+2641209,Earthshine,Key Items;Items;Summon Gems,progression,1,1
+2641210,Crystal Trident,Key Items;Items,progression,1,1
+2641211,Postcard,Key Items;Items,progression,10,1
+2641212,Torn Page 1,Torn Pages;Items,progression,1,0
+2641213,Torn Page 2,Torn Pages;Items,progression,1,0
+2641214,Torn Page 3,Torn Pages;Items,progression,1,0
+2641215,Torn Page 4,Torn Pages;Items,progression,1,0
+2641216,Torn Page 5,Torn Pages;Items,progression,1,0
+2641217,Slide 1,Key Items;Slides;Items,progression,1,1
+2641218,Slide 2,Key Items;Slides;Items,progression,1,1
+2641219,Slide 3,Key Items;Slides;Items,progression,1,1
+2641220,Slide 4,Key Items;Slides;Items,progression,1,1
+2641221,Slide 5,Key Items;Slides;Items,progression,1,1
+2641222,Slide 6,Key Items;Slides;Items,progression,1,1
+2641223,Footprints,Key Items;Evidence;Items,progression,1,1
+2641224,Claw Marks,Key Items;Evidence;Items,progression,1,1
+2641225,Stench,Key Items;Evidence;Items,progression,1,1
+2641226,Antenna,Key Items;Evidence;Items,progression,1,1
+2641227,Forget-Me-Not,Key Items;Items,progression,1,1
+2641228,Jack-In-The-Box,Key Items;Items,progression,1,1
+2641229,Entry Pass,Key Items;Items,progression,1,1
+2641230,AP Item,Key Items;Items,progression,1,0
+2641231,Dumbo,Summons;Items,progression,1,1
+2641232,N41,Synthesis Materials;Items,filler,1,0
+2641233,Bambi,Summons;Items,progression,1,1
+2641234,Genie,Summons;Items,progression,1,1
+2641235,Tinker Bell,Summons;Items,progression,1,1
+2641236,Mushu,Summons;Items,progression,1,1
+2641237,Simba,Summons;Items,progression,1,1
+2641238,Lucky Emblem,Key Items;Items,progression,1,1
+2641239,Max HP Increase,Level Ups;Items,useful,15,1
+2641240,Max MP Increase,Level Ups;Items,useful,15,1
+2641241,Max AP Increase,Level Ups;Items,useful,15,1
+2641242,Strength Increase,Level Ups;Items,useful,15,1
+2641243,Defense Increase,Level Ups;Items,useful,15,1
+2641244,Item Slot Increase,Limited Level Ups;Items,useful,15,1
+2641245,Accessory Slot Increase,Limited Level Ups;Items,useful,15,1
+2641246,Thunder Gem,Synthesis Materials;Items,filler,1,0
+2641247,Shiny Crystal,Synthesis Materials;Items,filler,1,0
+2641248,Bright Shard,Synthesis Materials;Items,filler,1,0
+2641249,Bright Gem,Synthesis Materials;Items,filler,1,0
+2641250,Bright Crystal,Synthesis Materials;Items,filler,1,0
+2641251,Mystery Goo,Synthesis Materials;Items,filler,1,0
+2641252,Gale,Synthesis Materials;Items,filler,1,0
+2641253,Mythril Shard,Synthesis Materials;Items,filler,1,0
+2641254,Mythril,Key Items;Items,progression,16,1
+2641255,Orichalcum,Key Items;Items,progression,17,1
+2642001,High Jump,Shared Abilities;Abilities,progression,1,1
+2642002,Mermaid Kick,Shared Abilities;Abilities,progression,1,1
+2642003,Progressive Glide,Shared Abilities;Abilities,progression,2,1
+2642004,Superglide,Shared Abilities;Abilities,progression,1,0
+2643005,Treasure Magnet,Abilities,useful,2,1
+2643006,Combo Plus,Abilities,useful,4,1
+2643007,Air Combo Plus,Abilities,progression,2,1
+2643008,Critical Plus,Abilities,useful,3,1
+2643009,Second Wind,Abilities,useful,1,0
+2643010,Scan,Abilities;Augments,useful,1,1
+2643011,Sonic Blade,Abilities;Augments,progression,1,1
+2643012,Ars Arcanum,Abilities;Augments,useful,1,1
+2643013,Strike Raid,Abilities;Augments,progression,1,1
+2643014,Ragnarok,Abilities;Augments,useful,1,1
+2643015,Trinity Limit,Abilities;Augments,useful,1,1
+2643016,Cheer,Abilities;Augments,useful,1,1
+2643017,Vortex,Abilities;Augments,useful,1,1
+2643018,Aerial Sweep,Abilities;Augments,useful,1,1
+2643019,Counterattack,Abilities;Augments,progression,1,1
+2643020,Blitz,Abilities;Augments,useful,1,1
+2643021,Guard,Abilities;Augments,progression,1,1
+2643022,Dodge Roll,Abilities;Augments,progression,1,1
+2643023,MP Haste,Abilities;Augments,useful,1,1
+2643024,MP Rage,Abilities;Augments,progression,1,1
+2643025,Second Chance,Abilities;Augments,progression,1,1
+2643026,Berserk,Abilities;Augments,useful,1,1
+2643027,Jackpot,Abilities,useful,1,1
+2643028,Lucky Strike,Abilities,useful,1,1
+2643029,Charge,Abilities,useful,1,0
+2643030,Rocket,Abilities,useful,1,0
+2643031,Tornado,Abilities,useful,1,0
+2643032,MP Gift,Abilities,useful,1,0
+2643033,Raging Boar,Abilities,useful,1,0
+2643034,Asp's Bite,Abilities,useful,1,0
+2643035,Healing Herb,Abilities,useful,1,0
+2643036,Wind Armor,Abilities,useful,1,0
+2643037,Crescent,Abilities,useful,1,0
+2643038,Sandstorm,Abilities,useful,1,0
+2643039,Applause!,Abilities,useful,1,0
+2643040,Blazing Fury,Abilities,useful,1,0
+2643041,Icy Terror,Abilities,useful,1,0
+2643042,Bolts of Sorrow,Abilities,useful,1,0
+2643043,Ghostly Scream,Abilities,useful,1,0
+2643044,Humming Bird,Abilities,useful,1,0
+2643045,Time-Out,Abilities,useful,1,0
+2643046,Storm's Eye,Abilities,useful,1,0
+2643047,Ferocious Lunge,Abilities,useful,1,0
+2643048,Furious Bellow,Abilities,useful,1,0
+2643049,Spiral Wave,Abilities,useful,1,0
+2643050,Thunder Potion,Abilities,useful,1,0
+2643051,Cure Potion,Abilities,useful,1,0
+2643052,Aero Potion,Abilities,useful,1,0
+2643053,Slapshot,Abilities;Augments,useful,1,1
+2643054,Sliding Dash,Abilities;Augments,useful,1,1
+2643055,Hurricane Blast,Abilities;Augments,useful,1,1
+2643056,Ripple Drive,Abilities;Augments,useful,1,1
+2643057,Stun Impact,Abilities;Augments,useful,1,1
+2643058,Gravity Break,Abilities;Augments,useful,1,1
+2643059,Zantetsuken,Abilities;Augments,useful,1,1
+2643060,Tech Boost,Abilities,useful,4,1
+2643061,Encounter Plus,Abilities,useful,1,1
+2643062,Leaf Bracer,Abilities;Augments,progression,1,1
+2643063,Evolution,Abilities,useful,1,0
+2643064,EXP Zero,Abilities,useful,1,1
+2643065,Combo Master,Abilities;Augments,progression,1,1
+2644000,Finisher Lock,Augments,useful,1,1
+2644001,Air Finisher Lock,Augments,useful,1,1
+2644002,Haste,Augments,useful,1,1
+2644003,Hastera,Augments,useful,1,1
+2644004,Hastega,Augments,useful,1,1
+2644005,Slow,Augments,trap,1,1
+2644006,Slowra,Augments,trap,1,1
+2644007,Slowga,Augments,trap,1,1
+2644008,Air Guard/Dodge Roll,Augments,progression,1,1
+2644009,Air Items,Augments,useful,1,0
+2644010,Fire Cost Up,Augments,trap,1,1
+2644011,Blizzard Cost Up,Augments,trap,1,1
+2644012,Thunder Cost Up,Augments,trap,1,1
+2644013,Cure Cost Up,Augments,trap,1,1
+2644014,Gravity Cost Up,Augments,trap,1,1
+2644015,Stop Cost Up,Augments,trap,1,1
+2644016,Aero Cost Up,Augments,trap,1,1
+2644017,Fire Cost Down,Augments,useful,1,1
+2644018,Blizzard Cost Down,Augments,useful,1,1
+2644019,Thunder Cost Down,Augments,useful,1,1
+2644020,Cure Cost Down,Augments,useful,1,1
+2644021,Gravity Cost Down,Augments,useful,1,1
+2644022,Stop Cost Down,Augments,useful,1,1
+2644023,Aero Cost Down,Augments,useful,1,1
+2644024,Fire Boost,Augments,useful,1,1
+2644025,Blizzard Boost,Augments,useful,1,1
+2644026,Thunder Boost,Augments,useful,1,1
+2644027,Cure Boost,Augments,useful,1,1
+2644028,Gravity Boost,Augments,useful,1,1
+2644029,Stop Boost,Augments,useful,1,1
+2644030,Aero Boost,Augments,useful,1,1
+2644031,Fire Down,Augments,trap,1,1
+2644032,Blizzard Down,Augments,trap,1,1
+2644033,Thunder Down,Augments,trap,1,1
+2644034,Cure Down,Augments,trap,1,1
+2644035,Gravity Down,Augments,trap,1,1
+2644036,Stop Down,Augments,trap,1,1
+2644037,Aero Down,Augments,trap,1,1
+2644038,Summon Anywhere,Augments,useful,1,1
+2644039,Summon Boost,Augments,useful,1,1
+2644040,Grounded,Augments,useful,1,1

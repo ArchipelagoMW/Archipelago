@@ -11,11 +11,8 @@ from copy import deepcopy
 
 from .Locations import location_table
 from .Items import item_table
-from .Data import CHAR_TO_KH, WORD, ITEMHELP, SYSMSG
-
+from .Data import CHAR_TO_KH, ITEMHELP, MP_COST_LABELS, SPELL_LEVELS_BY_SPELL, SYSMSG, WORD
 from worlds.Files import APPlayerContainer
-
-
 
 class KH1Container(APPlayerContainer):
     game: str = 'Kingdom Hearts'
@@ -70,7 +67,7 @@ def get_item_location_map(world):
     location_item_map = {}
     for location in world.multiworld.get_filled_locations(world.player):
         if location.name != "Final Ansem":
-            if world.player != location.item.player or (world.player == location.item.player and world.options.remote_items.current_key == "full" and (location_table[location.name].type not in ["Starting Accessory", "Augment"])):
+            if world.player != location.item.player or (world.player == location.item.player and world.options.remote_items.current_key == "full" and {"Accessory", "Augment"}.isdisjoint(location_table[location.name].groups)):
                 item_id = 2641230
             else:
                 item_id = location.item.code
@@ -80,17 +77,12 @@ def get_item_location_map(world):
     return location_item_map
 
 def get_items():
-    return {data.code: {"name": name, "category": data.category, "type": data.type} for name, data in item_table.items()}
+    return {data.code: {"name": name} for name, data in item_table.items()}
 
 def get_locations():
-    return {data.code: {"name": name, "category": data.category, "type": data.type} for name, data in location_table.items()}
+    return {data.code: {"name": name, "category": data.region, "type": ";".join(data.groups)} for name, data in location_table.items()}
 
 def get_location_spheres(world):
-    """
-    Maps this player's location codes to the logical sphere they fall in
-    (0-indexed, in playthrough order). Locations that turn out to be
-    unreachable (e.g. under minimal accessibility) are mapped to -1.
-    """
     location_spheres = {}
     reachable = True
     for sphere_index, sphere in enumerate(world.multiworld.get_spheres()):
@@ -201,7 +193,7 @@ def generate_itemhelp(keyblade_stats, item_location_map):
     # Handle augments
     item_code_to_name = {data.code: name for name, data in item_table.items()}
     for _, loc_data in location_table.items():
-        if loc_data.type == "Augment":
+        if "Augment" in loc_data.groups:
             item_id = item_location_map.get(loc_data.code)
             if item_id is not None:
                 item_name = item_code_to_name.get(item_id, "Unknown")
@@ -216,25 +208,12 @@ def generate_itemhelp(keyblade_stats, item_location_map):
         encoded_itemhelp.append(bytes(encoded_entry))
     return b"\x00".join(encoded_itemhelp)
 
-_MP_COST_LABELS = {15: "0.5 CP", 30: "1 CP", 100: "1 MP", 200: "2 MP", 300: "3 MP"}
-
-_SPELL_GROUPS = [
-    (212, ["Fire",    "Fira",    "Firaga"   ]),
-    (215, ["Blizzard","Blizzara","Blizzaga" ]),
-    (218, ["Thunder", "Thundara","Thundaga" ]),
-    (221, ["Cure",    "Cura",    "Curaga"   ]),
-    (224, ["Gravity", "Gravira", "Graviga"  ]),
-    (227, ["Stop",    "Stopra",  "Stopga"   ]),
-    (230, ["Aero",    "Aerora",  "Aeroga"   ]),
-]
-
 def generate_sysmsg(mp_costs):
     messages = list(SYSMSG)
-    for group_idx, (sysmsg_idx, names) in enumerate(_SPELL_GROUPS):
-        base = group_idx * 3
-        desc = "{lf}".join(f"{names[i]} - {_MP_COST_LABELS[mp_costs[base + i]]}" for i in range(3))
-        for i in range(3):
-            messages[sysmsg_idx + i] = desc
+    for levels in SPELL_LEVELS_BY_SPELL.values():
+        desc = "{lf}".join(f"{level.name} - {MP_COST_LABELS[mp_costs[level.index]]}" for level in levels)
+        for level in levels:
+            messages[level.sysmsg_index] = desc
 
     encoded_messages = []
     for message in messages:

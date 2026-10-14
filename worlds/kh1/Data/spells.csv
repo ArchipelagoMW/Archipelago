@@ -1,0 +1,22 @@
+item,level,sysmsg_index,vanilla_cost,vanilla_effectiveness
+Progressive Fire,Fire,212,30,20
+Progressive Fire,Fira,213,30,28
+Progressive Fire,Firaga,214,30,36
+Progressive Blizzard,Blizzard,215,30,22
+Progressive Blizzard,Blizzara,216,30,27
+Progressive Blizzard,Blizzaga,217,30,34
+Progressive Thunder,Thunder,218,100,16
+Progressive Thunder,Thundara,219,100,20
+Progressive Thunder,Thundaga,220,100,26
+Progressive Cure,Cure,221,100,15
+Progressive Cure,Cura,222,100,27
+Progressive Cure,Curaga,223,100,36
+Progressive Gravity,Gravity,224,100,40
+Progressive Gravity,Gravira,225,100,55
+Progressive Gravity,Graviga,226,100,70
+Progressive Stop,Stop,227,200,2
+Progressive Stop,Stopra,228,200,2
+Progressive Stop,Stopga,229,200,2
+Progressive Aero,Aero,230,200,18
+Progressive Aero,Aerora,231,200,18
+Progressive Aero,Aeroga,232,200,18

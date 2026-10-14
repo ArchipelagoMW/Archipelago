@@ -1,12 +1,17 @@
-from rule_builder.rules import Has, Or, Rule, True_
+from rule_builder.rules import Has, Rule
 
-from ._option_filters import ABOVE_BEGINNER, ABOVE_NORMAL
-from ._context import RuleContext
-from ._helpers import has_key_item_rule
+from ._helpers import GLIDE, HIGH_JUMP, HIGH_JUMP_AND_GLIDE
+from ._helpers import HIGH_JUMP_OR_GLIDE, by_difficulty, has_key_item_rule
 
 
-def build_rules(ctx: RuleContext, jungle_slider: bool) -> dict[str, Rule]:
+def build_rules() -> dict[str, Rule]:
     slides = has_key_item_rule("Slide 1")
+
+    hippos_lagoon_right_chest_rule = by_difficulty(
+        beginner=HIGH_JUMP_AND_GLIDE,
+        normal=HIGH_JUMP_OR_GLIDE,
+        proud=True,
+    )
 
     return {
         "Deep Jungle Climbing Trees Blue Trinity Chest": Has("Blue Trinity"),
@@ -30,18 +35,12 @@ def build_rules(ctx: RuleContext, jungle_slider: bool) -> dict[str, Rule]:
         "Deep Jungle Climbing Trees Save Gorillas": slides,
         "Deep Jungle Cavern of Hearts Navi-G Piece Event": slides,
         "Deep Jungle Treetop Green Trinity": Has("Green Trinity"),
-
-        "Deep Jungle Hippo's Lagoon Right Chest": Or(
-            ctx.hj_glide_all, ctx.hj_glide_any & ABOVE_BEGINNER, True_() & ABOVE_NORMAL,
-        ),
-        "Deep Jungle Tree House Rooftop Chest": Or(ctx.hj1, True_() & ABOVE_NORMAL),
-        "Deep Jungle Tree House Suspended Boat Chest": Or(ctx.glide, True_() & ABOVE_NORMAL),
-
-        **({
-            "Deep Jungle Jungle Slider 10 Fruits": slides,
-            "Deep Jungle Jungle Slider 20 Fruits": slides,
-            "Deep Jungle Jungle Slider 30 Fruits": slides,
-            "Deep Jungle Jungle Slider 40 Fruits": slides,
-            "Deep Jungle Jungle Slider 50 Fruits": slides,
-        } if jungle_slider else {}),
+        "Deep Jungle Hippo's Lagoon Right Chest": hippos_lagoon_right_chest_rule,
+        "Deep Jungle Tree House Rooftop Chest": by_difficulty(beginner=HIGH_JUMP, proud=True),
+        "Deep Jungle Tree House Suspended Boat Chest": by_difficulty(beginner=GLIDE, proud=True),
+        "Deep Jungle Jungle Slider 10 Fruits": slides,
+        "Deep Jungle Jungle Slider 20 Fruits": slides,
+        "Deep Jungle Jungle Slider 30 Fruits": slides,
+        "Deep Jungle Jungle Slider 40 Fruits": slides,
+        "Deep Jungle Jungle Slider 50 Fruits": slides,
     }
