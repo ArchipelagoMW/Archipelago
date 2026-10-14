@@ -5,7 +5,7 @@ from typing import TYPE_CHECKING
 from BaseClasses import ItemClassification, CollectionRule, LocationProgressType, EntranceType
 from rule_builder.rules import Rule, True_
 
-from ..world_base import BurnoutParadiseRemasteredBase
+from ..world_base import TCGSimulatorBase
 
 
 
@@ -52,7 +52,7 @@ class GeneratedLocationData:
     name: str
     location_id: int
     region: RegionTypeEnum
-    rule: CollectionRule | Rule[BurnoutParadiseRemasteredBase] = field(
+    rule: CollectionRule | Rule[TCGSimulatorBase] = field(
         default_factory=True_
     )
     progress_type: LocationProgressType = LocationProgressType.DEFAULT
