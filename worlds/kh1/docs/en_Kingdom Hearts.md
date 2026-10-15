@@ -7,7 +7,7 @@ configure and export a config file.
 
 ## What does randomization do to this game?
 
-The Kingdom Hearts AP Randomizer randomizes rewards in the game and adds several items which are used to unlock worlds, Olympus Coliseum cups, and world progression.
+The Kingdom Hearts AP Randomizer randomizes rewards in the game and adds several items which are used to unlock world access and progression.
 
 Worlds can only be accessed by finding the corresponding item.  For example, you need to find the `Monstro` item to enter Monstro.
 
@@ -38,7 +38,7 @@ certain items to your own world.
 
 ## When the player receives an item, what happens?
 
-When the player receives an item, your client will display a message displaying the item you have obtained.  You will also see a notification in the "INFORMATION" box.
+When the player receives an item, your game will play and sound and display a message box with the item you have obtained.
 
 ## What do I do if I encounter a bug with the game?
 

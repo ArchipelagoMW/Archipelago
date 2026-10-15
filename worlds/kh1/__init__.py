@@ -76,11 +76,11 @@ class KH1World(World):
         self.spell_effectiveness = None
 
     def generate_early(self):
-        self.disable_augment_abilities_from_pool_without_remote_items()
         self.sort_lucky_emblem_counts()
         self.sort_raft_material_counts()
         self.force_bundles_for_stacking_world_items()
         self.force_puppy_value_for_vanilla_puppies()
+        self.exclude_content()
 
     def create_regions(self):
         create_regions(self)
@@ -151,11 +151,6 @@ class KH1World(World):
         logging.info(f"{self.player_name}'s value {old_value} for \"{option_name}\" was invalid. "
                      f"Setting \"{option_name}\" to {new_value}")
 
-    def disable_augment_abilities_from_pool_without_remote_items(self) -> None:
-        if self.options.remote_items.current_key == "off" and self.options.augment_abilities_from_pool:
-            self.log_option_change("Augment Abilities from Pool", True, False)
-            self.options.augment_abilities_from_pool.value = False
-
     def sort_lucky_emblem_counts(self) -> None:
         eotw = self.options.required_lucky_emblems_eotw
         door = self.options.required_lucky_emblems_door
@@ -170,7 +165,7 @@ class KH1World(World):
             self.sort_option_values([door, in_pool])
 
     def sort_raft_material_counts(self) -> None:
-        options = [self.options.day_2_materials, self.options.homecoming_materials, self.options.materials_in_pool]
+        options = [self.options.day_1_materials, self.options.day_2_materials, self.options.materials_in_pool]
         self.sort_option_values(options)
 
     def sort_option_values(self, options: list) -> None:
@@ -198,6 +193,10 @@ class KH1World(World):
             self.log_option_change("Puppy Value", self.options.puppy_value.value, 3)
             self.options.puppy_value.value = 3
 
+
+    def exclude_content(self) -> None:
+        for group in self.options.excluded_content.value:
+            self.options.exclude_locations.value.update(location_name_groups[group])
 
     def place_final_door_key(self) -> None:
         location_name = self.get_final_door_key_location()
@@ -414,7 +413,7 @@ class KH1World(World):
                             f"{len(locations)} level checks. The rest can hold any item.")
         placed = {id(item) for item in items}
         self.multiworld.itempool = [item for item in self.multiworld.itempool if id(item) not in placed]
-        fill_restrictive(self.multiworld, self.multiworld.get_all_state(False), locations, items,
+        fill_restrictive(self.multiworld, self.multiworld.get_all_state(), locations, items,
                          single_player_placement=True, lock=True, allow_partial=True, name="KH1 Level Checks")
 
     def get_starting_accessory_locations(self) -> list[str]:
@@ -584,7 +583,6 @@ class KH1World(World):
     def fill_slot_data(self) -> dict:
         return {
             "accessory_augments": bool(self.options.accessory_augments),
-            "atlantica": True,
             "augment_abilities_from_pool": bool(self.options.augment_abilities_from_pool),
             "auto_attack": bool(self.options.auto_attack),
             "auto_save": bool(self.options.auto_save),
@@ -593,8 +591,8 @@ class KH1World(World):
             "consistent_finishers": bool(self.options.consistent_finishers),
             "cups_standard": int(self.options.cups_standard.value),
             "cups_solo_time_trial": int(self.options.cups_solo_time_trial.value),
+            "day_1_materials": int(self.options.day_1_materials.value),
             "day_2_materials": int(self.options.day_2_materials.value),
-            "destiny_islands": True,
             "donald_death_link": bool(self.options.donald_death_link),
             "early_skip": bool(self.options.early_skip),
             "end_of_the_world_unlock": str(self.options.end_of_the_world_unlock.current_key),
@@ -609,7 +607,6 @@ class KH1World(World):
             "halloween_town_key_item_bundle": bool(self.options.halloween_town_key_item_bundle),
             "slides_bundle": bool(self.options.slides_bundle),
             "evidence_bundle": bool(self.options.evidence_bundle),
-            "homecoming_materials": int(self.options.homecoming_materials.value),
             "skip_hundred_acre_wood_minigames": bool(self.options.skip_hundred_acre_wood_minigames),
             "individual_spell_level_costs": bool(self.options.individual_spell_level_costs),
             "interact_in_battle": bool(self.options.interact_in_battle),
@@ -619,6 +616,7 @@ class KH1World(World):
             "level_stats": str(self.options.level_stats.current_key),
             "logic_difficulty": str(self.options.logic_difficulty.current_key),
             "materials_in_pool": int(self.options.materials_in_pool.value),
+            "raft_finish": bool(self.options.raft_finish),
             "max_ap_cost": int(self.options.max_ap_cost.value),
             "min_ap_cost": int(self.options.min_ap_cost.value),
             "mythril_in_pool": int(self.options.mythril_in_pool.value),

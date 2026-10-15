@@ -2,7 +2,7 @@ from rule_builder.options import OptionFilter
 
 from ..Options import EndoftheWorldUnlock, EvidenceBundle, FinalRestDoorKey
 from ..Options import HalloweenTownKeyItemBundle, KeybladesUnlockChests
-from ..Options import LogicDifficulty, SlidesBundle, StackingWorldItems
+from ..Options import LogicDifficulty, RaftFinish, SlidesBundle, StackingWorldItems
 
 LOGIC_BEGINNER = LogicDifficulty.option_beginner
 LOGIC_NORMAL = LogicDifficulty.option_normal
@@ -19,6 +19,7 @@ SLIDES_BUNDLE_ON = OptionFilter(SlidesBundle, True, "eq")
 SLIDES_BUNDLE_OFF = OptionFilter(SlidesBundle, False, "eq")
 EVIDENCE_BUNDLE_ON = OptionFilter(EvidenceBundle, True, "eq")
 EVIDENCE_BUNDLE_OFF = OptionFilter(EvidenceBundle, False, "eq")
+RAFT_FINISH_ON = OptionFilter(RaftFinish, True, "eq")
 
 FINAL_REST_DOOR_LUCKY_EMBLEMS = OptionFilter(FinalRestDoorKey, "lucky_emblems", "eq")
 FINAL_REST_DOOR_NOT_LUCKY_EMBLEMS = OptionFilter(FinalRestDoorKey, "lucky_emblems", "ne")

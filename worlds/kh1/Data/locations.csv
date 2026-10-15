@@ -263,7 +263,7 @@ id,name,region,groups
 2656093,Neverland Seal Keyhole Fairy Harp Event,Neverland,Boss
 2656094,Neverland Seal Keyhole Tinker Bell Event,Neverland,Boss
 2656095,Neverland Seal Keyhole Glide Event,Neverland,Boss
-2656096,Neverland Defeat Phantom Stop Event,Neverland,Boss;Super Boss
+2656096,Neverland Defeat Phantom Stop Event,Neverland,Boss;Super Bosses
 2656097,Neverland Defeat Captain Hook Ars Arcanum Event,Neverland,Boss
 2656101,Hollow Bastion Defeat Riku I White Trinity Event,Hollow Bastion,Boss
 2656102,Hollow Bastion Defeat Maleficent Donald Cheer Event,Hollow Bastion,Boss
@@ -331,8 +331,8 @@ id,name,region,groups
 2656326,Traverse Town Piano Room Return 99 Puppies Reward 1,Traverse Town,
 2656327,Traverse Town Piano Room Return 99 Puppies Reward 2,Traverse Town,
 2656032,Olympus Coliseum Cloud Sonic Blade Event,Olympus Coliseum,Boss
-2656328,Olympus Coliseum Defeat Sephiroth One-Winged Angel Event,Olympus Coliseum,Boss;Super Boss
-2656329,Olympus Coliseum Defeat Ice Titan Diamond Dust Event,Olympus Coliseum,Boss;Super Boss
+2656328,Olympus Coliseum Defeat Sephiroth One-Winged Angel Event,Olympus Coliseum,Boss;Super Bosses
+2656329,Olympus Coliseum Defeat Ice Titan Diamond Dust Event,Olympus Coliseum,Boss;Super Bosses
 2656330,Olympus Coliseum Gates Purple Jar After Defeating Hades,Olympus Coliseum,Boss
 2656331,Halloween Town Guillotine Square Ring Jack's Doorbell 3 Times,Halloween Town,
 2656332,Neverland Clock Tower 01:00 Door,Neverland,Boss
@@ -381,8 +381,8 @@ id,name,region,groups
 2656375,Traverse Town 1st District Speak with Cid Event,Traverse Town,
 2656376,Wonderland Bizarre Room Read Book,Wonderland,
 2656377,Olympus Coliseum Coliseum Gates Green Trinity,Olympus Coliseum,
-2656378,Agrabah Defeat Kurt Zisa Zantetsuken Event,Agrabah,Boss;Super Boss
-2656379,Hollow Bastion Defeat Unknown EXP Necklace Event,Hollow Bastion,Boss;Super Boss
+2656378,Agrabah Defeat Kurt Zisa Zantetsuken Event,Agrabah,Boss;Super Bosses
+2656379,Hollow Bastion Defeat Unknown EXP Necklace Event,Hollow Bastion,Boss;Super Bosses
 2656380,Olympus Coliseum Coliseum Gates Hero's License Event,Olympus Coliseum,Boss
 2656381,Atlantica Sunken Ship Crystal Trident Event,Atlantica,Chest
 2656382,Halloween Town Graveyard Forget-Me-Not Event,Halloween Town,
@@ -522,9 +522,9 @@ id,name,region,groups
 2657011,Olympus Coliseum Defeat Hades Ansem's Report 8,Olympus Coliseum,Boss
 2657028,Neverland Defeat Hook Ansem's Report 9,Neverland,Boss
 2657027,Hollow Bastion Speak with Aerith Ansem's Report 10,Hollow Bastion,Boss
-2657026,Agrabah Defeat Kurt Zisa Ansem's Report 11,Agrabah,Boss;Super Boss
-2657025,Olympus Coliseum Defeat Sephiroth Ansem's Report 12,Olympus Coliseum,Boss;Super Boss
-2657024,Hollow Bastion Defeat Unknown Ansem's Report 13,Hollow Bastion,Boss;Super Boss
+2657026,Agrabah Defeat Kurt Zisa Ansem's Report 11,Agrabah,Boss;Super Bosses
+2657025,Olympus Coliseum Defeat Sephiroth Ansem's Report 12,Olympus Coliseum,Boss;Super Bosses
+2657024,Hollow Bastion Defeat Unknown Ansem's Report 13,Hollow Bastion,Boss;Super Bosses
 2658002,Level 002 (Slot 1),Levels,
 2658003,Level 003 (Slot 1),Levels,
 2658004,Level 004 (Slot 1),Levels,

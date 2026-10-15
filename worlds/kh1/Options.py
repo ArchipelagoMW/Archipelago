@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 
-from Options import NamedRange, Choice, Range, Toggle, DefaultOnToggle, PerGameCommonOptions, StartInventoryPool, OptionGroup
+from Options import NamedRange, Choice, Range, Toggle, DefaultOnToggle, OptionSet, OptionGroup
+from Options import PerGameCommonOptions, StartInventoryPool
 
 class LevelStats(Choice):
     """
@@ -335,13 +336,13 @@ class BadKingdomKey(Toggle):
 
 class DonaldDeathLink(Toggle):
     """
-    If Donald is KO'ed, so is Sora.  If Death Link is toggled on in your client, this will send a death to everyone who enabled death link.
+    If Donald is KO'ed, so is Sora.
     """
     display_name = "Donald Death Link"
 
 class GoofyDeathLink(Toggle):
     """
-    If Goofy is KO'ed, so is Sora.  If Death Link is toggled on in your client, this will send a death to everyone who enabled death link.
+    If Goofy is KO'ed, so is Sora.
     """
     display_name = "Goofy Death Link"
 
@@ -384,7 +385,8 @@ class LogicDifficulty(Choice):
 
 class ExtraSharedAbilities(DefaultOnToggle):
     """
-    If on, adds extra shared abilities to the pool.  These can stack, so multiple high jumps make you jump higher and multiple glides make you superglide faster.
+    If on, adds extra shared abilities to the pool.
+    These can stack, so multiple high jumps make you jump higher and multiple glides make you superglide faster.
     """
     display_name = "Extra Shared Abilities"
 
@@ -414,6 +416,13 @@ class RandomizePostcards(Choice):
     option_all = 0
     option_chests = 1
     option_vanilla = 2
+
+class ExcludedContent(OptionSet):
+    """
+    Locations in these groups will only contain filler.
+    """
+    display_name = "Excluded Content"
+    valid_keys = ["Super Bosses", "Jungle Slider"]
 
 class StartingWorlds(Range):
     """
@@ -618,32 +627,38 @@ class MinAPCost(Range):
     range_start = 0
     range_end = 2
 
-class Day2Materials(Range):
+class Day1Materials(Range):
     """
-    The amount of Raft Materials required to access Day 2.
+    The amount of Raft Materials required to finish Day 1.
     """
-    display_name = "Day 2 Materials"
+    display_name = "Day 1 Materials"
     default = 4
     range_start = 0
     range_end = 20
 
-class HomecomingMaterials(Range):
+class Day2Materials(Range):
     """
-    The amount of Raft Materials required to access Homecoming (Final Bosses).
+    The amount of Raft Materials required to finish Day 2.
     """
-    display_name = "Homecoming Materials"
+    display_name = "Day 2 Materials"
     default = 10
     range_start = 0
     range_end = 20
 
 class MaterialsInPool(Range):
     """
-    The amount of Raft Materials required to access Homecoming (Final Bosses).
+    The amount of Raft Materials in the item pool.
     """
     display_name = "Materials in Pool"
     default = 13
     range_start = 0
     range_end = 20
+
+class RaftFinish(Toggle):
+    """
+    If on, finishing Day 2 lets you warp to Homecoming (Final Bosses).
+    """
+    display_name = "Raft Finish"
 
 class StackingWorldItems(DefaultOnToggle):
     """
@@ -755,8 +770,6 @@ class AccessoryAugments(Toggle):
 class AugmentAbilitiesFromPool(Toggle):
     """
     If accessory augments is on, if an accessory's augment is assigned an ability, that ability can only be found on that accessory.
-    
-    This is forced to false if Remote Items is OFF.
     """
     display_name = "Augment Abilities from Pool"
 
@@ -774,6 +787,7 @@ class KH1Options(PerGameCommonOptions):
     cups_solo_time_trial: CupsSoloTimeTrial
     randomize_puppies: RandomizePuppies
     puppy_value: PuppyValue
+    excluded_content: ExcludedContent
     starting_worlds: StartingWorlds
     keyblades_unlock_chests: KeybladesUnlockChests
     interact_in_battle: InteractInBattle
@@ -827,9 +841,10 @@ class KH1Options(PerGameCommonOptions):
     randomize_ap_costs: RandomizeAPCosts
     max_ap_cost: MaxAPCost
     min_ap_cost: MinAPCost
+    day_1_materials: Day1Materials
     day_2_materials: Day2Materials
-    homecoming_materials: HomecomingMaterials
     materials_in_pool: MaterialsInPool
+    raft_finish: RaftFinish
     stacking_world_items: StackingWorldItems
     halloween_town_key_item_bundle: HalloweenTownKeyItemBundle
     slides_bundle: SlidesBundle
@@ -852,9 +867,10 @@ kh1_option_groups = [
         LuckyEmblemsInPool,
         RequiredPostcards,
         RequiredPuppies,
+        Day1Materials,
         Day2Materials,
-        HomecomingMaterials,
         MaterialsInPool,
+        RaftFinish,
     ]),
     OptionGroup("Locations", [
         CupsStandard,
@@ -864,6 +880,7 @@ kh1_option_groups = [
         RandomizePostcards,
         RandomizePuppies,
         PuppyValue,
+        ExcludedContent,
     ]),
     OptionGroup("Levels", [
         EXPMultiplier,

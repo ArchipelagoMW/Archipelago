@@ -16,7 +16,7 @@ software and applying your seed's mod.
 ## Obtaining and using the patch
 
 - [Generate an Archipelago game](https://archipelago.gg/generate) using the KH1 yaml generated from the KH1 [options page](https://archipelago.gg/games/Kingdom%20Hearts/player-options). 
-- When you generate a game you will see a download link for a KH1 patch (.kh1rpatch) on the room page.
+- When you generate a game you will see a download link for a KH1 patch on the room page.
 - Follow the [Installing the Mod](https://www.kh1fmrando.com/installing_the_mod) guide to apply this patch and launch your modded game.
 
 ## Connecting to your multiworld

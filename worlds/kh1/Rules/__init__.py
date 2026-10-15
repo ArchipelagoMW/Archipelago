@@ -4,14 +4,14 @@ from rule_builder.rules import Has, HasAll, Rule
 from worlds.generic.Rules import add_item_rule
 from ..Locations import get_locations_by_group
 from ..Items import item_name_groups
-from ..Options import HomecomingMaterials
+from ..Options import Day2Materials
 from . import agrabah, atlantica, deep_jungle, destiny_islands, end_of_the_world
 from . import halloween_town, hollow_bastion, hundred_acre_wood, monstro
 from . import neverland, olympus_coliseum, traverse_town, wonderland
 from ..Data import CHEST_KEYBLADES
 from ._helpers import BASIC_TOOLS, DEFENSIVE_TOOLS, EOTW_ACCESS, X_WORLDS_3, X_WORLDS_4, X_WORLDS_6
 from ._helpers import X_WORLDS_8, by_difficulty, has_final_rest_door_rule, has_x_worlds_rule
-from ._option_filters import KEYBLADES_UNLOCK_CHESTS_OFF
+from ._option_filters import KEYBLADES_UNLOCK_CHESTS_OFF, RAFT_FINISH_ON
 
 
 def add_location_rule(location_rules: dict[str, Rule], location_name: str, rule: Rule) -> None:
@@ -56,7 +56,7 @@ def build_accessory_rules(kh1world) -> dict[str, Rule]:
 
 
 def build_final_ansem_rule() -> Rule:
-    raft_route = Has("Destiny Islands") & Has("Raft Materials", count=FromOption(HomecomingMaterials))
+    raft_route = Has("Destiny Islands") & Has("Raft Materials", count=FromOption(Day2Materials)) & RAFT_FINISH_ON
     final_rest_route = EOTW_ACCESS & has_final_rest_door_rule()
     return X_WORLDS_8 & (raft_route | final_rest_route) & DEFENSIVE_TOOLS
 
