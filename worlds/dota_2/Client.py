@@ -550,7 +550,7 @@ class Dota2Context(CommonContext):
         purchases = match_data.purchase
 
         KILL_THRESHOLDS = [1, 5, 10]
-        DEWARD_THRESHOLDS = [1, 5, 10]
+        DEWARD_THRESHOLDS = [1, 3, 7]
         ASSIST_THRESHOLDS = [5, 10, 20]
         LASTHIT_THRESHOLDS = [75, 125, 175]
         DENIES_THRESHOLDS = [8, 16, 32]
