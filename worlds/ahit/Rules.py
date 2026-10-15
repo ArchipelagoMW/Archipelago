@@ -128,83 +128,85 @@ def can_clear_metro(state: CollectionState, world: "HatInTimeWorld") -> bool:
 
 
 def set_rules(world: "HatInTimeWorld"):
-    # First, chapter access
-    starting_chapter = ChapterIndex(world.options.StartingChapter)
-    world.chapter_timepiece_costs[starting_chapter] = 0
+    # Don't randomize chapter costs when UT generation
+    if not getattr(world.multiworld, "generation_is_fake",False):
+        # First, chapter access
+        starting_chapter = ChapterIndex(world.options.StartingChapter)
+        world.chapter_timepiece_costs[starting_chapter] = 0
 
-    # Chapter costs increase progressively. Randomly decide the chapter order, except for Finale
-    chapter_list: List[ChapterIndex] = [ChapterIndex.MAFIA, ChapterIndex.BIRDS,
-                                        ChapterIndex.SUBCON, ChapterIndex.ALPINE]
+        # Chapter costs increase progressively. Randomly decide the chapter order, except for Finale
+        chapter_list: List[ChapterIndex] = [ChapterIndex.MAFIA, ChapterIndex.BIRDS,
+                                            ChapterIndex.SUBCON, ChapterIndex.ALPINE]
 
-    final_chapter = ChapterIndex.FINALE
-    if world.options.EndGoal == EndGoal.option_rush_hour:
-        final_chapter = ChapterIndex.METRO
-        chapter_list.append(ChapterIndex.FINALE)
-    elif world.options.EndGoal == EndGoal.option_seal_the_deal:
-        final_chapter = None
-        chapter_list.append(ChapterIndex.FINALE)
-
-    if world.is_dlc1():
-        chapter_list.append(ChapterIndex.CRUISE)
-
-    if world.is_dlc2() and final_chapter != ChapterIndex.METRO:
-        chapter_list.append(ChapterIndex.METRO)
-
-    chapter_list.remove(starting_chapter)
-    world.random.shuffle(chapter_list)
-
-    # Make sure Alpine is unlocked before any DLC chapters are, as the Alpine door needs to be open to access them
-    if starting_chapter != ChapterIndex.ALPINE and (world.is_dlc1() or world.is_dlc2()):
-        index1 = 69
-        index2 = 69
-        pos: int
-        lowest_index: int
-        chapter_list.remove(ChapterIndex.ALPINE)
+        final_chapter = ChapterIndex.FINALE
+        if world.options.EndGoal == EndGoal.option_rush_hour:
+            final_chapter = ChapterIndex.METRO
+            chapter_list.append(ChapterIndex.FINALE)
+        elif world.options.EndGoal == EndGoal.option_seal_the_deal:
+            final_chapter = None
+            chapter_list.append(ChapterIndex.FINALE)
 
         if world.is_dlc1():
-            index1 = chapter_list.index(ChapterIndex.CRUISE)
+            chapter_list.append(ChapterIndex.CRUISE)
 
         if world.is_dlc2() and final_chapter != ChapterIndex.METRO:
-            index2 = chapter_list.index(ChapterIndex.METRO)
+            chapter_list.append(ChapterIndex.METRO)
 
-        lowest_index = min(index1, index2)
-        if lowest_index == 0:
-            pos = 0
-        else:
-            pos = world.random.randint(0, lowest_index)
+        chapter_list.remove(starting_chapter)
+        world.random.shuffle(chapter_list)
 
-        chapter_list.insert(pos, ChapterIndex.ALPINE)
+        # Make sure Alpine is unlocked before any DLC chapters are, as the Alpine door needs to be open to access them
+        if starting_chapter != ChapterIndex.ALPINE and (world.is_dlc1() or world.is_dlc2()):
+            index1 = 69
+            index2 = 69
+            pos: int
+            lowest_index: int
+            chapter_list.remove(ChapterIndex.ALPINE)
 
-    lowest_cost: int = world.options.LowestChapterCost.value
-    highest_cost: int = world.options.HighestChapterCost.value
-    cost_increment: int = world.options.ChapterCostIncrement.value
-    min_difference: int = world.options.ChapterCostMinDifference.value
-    last_cost = 0
+            if world.is_dlc1():
+                index1 = chapter_list.index(ChapterIndex.CRUISE)
 
-    for i, chapter in enumerate(chapter_list):
-        min_range: int = lowest_cost + (cost_increment * i)
-        if min_range >= highest_cost:
-            min_range = highest_cost-1
+            if world.is_dlc2() and final_chapter != ChapterIndex.METRO:
+                index2 = chapter_list.index(ChapterIndex.METRO)
 
-        value: int = world.random.randint(min_range, min(highest_cost, max(lowest_cost, last_cost + cost_increment)))
-        cost = world.random.randint(value, min(value + cost_increment, highest_cost))
-        if i >= 1:
-            if last_cost + min_difference > cost:
-                cost = last_cost + min_difference
+            lowest_index = min(index1, index2)
+            if lowest_index == 0:
+                pos = 0
+            else:
+                pos = world.random.randint(0, lowest_index)
 
-        cost = min(cost, highest_cost)
-        world.chapter_timepiece_costs[chapter] = cost
-        last_cost = cost
+            chapter_list.insert(pos, ChapterIndex.ALPINE)
 
-    if final_chapter is not None:
-        final_chapter_cost: int
-        if world.options.FinalChapterMinCost == world.options.FinalChapterMaxCost:
-            final_chapter_cost = world.options.FinalChapterMaxCost.value
-        else:
-            final_chapter_cost = world.random.randint(world.options.FinalChapterMinCost.value,
-                                                      world.options.FinalChapterMaxCost.value)
+        lowest_cost: int = world.options.LowestChapterCost.value
+        highest_cost: int = world.options.HighestChapterCost.value
+        cost_increment: int = world.options.ChapterCostIncrement.value
+        min_difference: int = world.options.ChapterCostMinDifference.value
+        last_cost = 0
 
-        world.chapter_timepiece_costs[final_chapter] = final_chapter_cost
+        for i, chapter in enumerate(chapter_list):
+            min_range: int = lowest_cost + (cost_increment * i)
+            if min_range >= highest_cost:
+                min_range = highest_cost-1
+
+            value: int = world.random.randint(min_range, min(highest_cost, max(lowest_cost, last_cost + cost_increment)))
+            cost = world.random.randint(value, min(value + cost_increment, highest_cost))
+            if i >= 1:
+                if last_cost + min_difference > cost:
+                    cost = last_cost + min_difference
+
+            cost = min(cost, highest_cost)
+            world.chapter_timepiece_costs[chapter] = cost
+            last_cost = cost
+
+        if final_chapter is not None:
+            final_chapter_cost: int
+            if world.options.FinalChapterMinCost == world.options.FinalChapterMaxCost:
+                final_chapter_cost = world.options.FinalChapterMaxCost.value
+            else:
+                final_chapter_cost = world.random.randint(world.options.FinalChapterMinCost.value,
+                                                          world.options.FinalChapterMaxCost.value)
+
+            world.chapter_timepiece_costs[final_chapter] = final_chapter_cost
 
     add_rule(world.multiworld.get_entrance("Telescope -> Mafia Town", world.player),
              lambda state: state.has("Time Piece", world.player, world.chapter_timepiece_costs[ChapterIndex.MAFIA]))

@@ -875,9 +875,11 @@ def create_badge_seller(world: "HatInTimeWorld") -> Region:
     badge_seller = Region("Badge Seller", world.player, world.multiworld)
     world.multiworld.regions.append(badge_seller)
     count = 0
-    max_items = 0
+    # badge_seller_count is 0 unless pulled from slot data
+    max_items = world.badge_seller_count
 
-    if world.options.BadgeSellerMaxItems > 0:
+    # don't randomize if UT generation
+    if world.options.BadgeSellerMaxItems > 0 and not getattr(world.multiworld, "generation_is_fake",False):
         max_items = world.random.randint(world.options.BadgeSellerMinItems.value,
                                          world.options.BadgeSellerMaxItems.value)
 

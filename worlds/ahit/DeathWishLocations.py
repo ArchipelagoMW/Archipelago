@@ -170,30 +170,37 @@ def create_dw_regions(world: "HatInTimeWorld"):
     add_rule(entrance, lambda state: state.has("Time Piece", world.player, world.options.DWTimePieceRequirement))
 
     if world.options.DWShuffle:
-        # Connect Death Wishes randomly to one another in a linear sequence
-        dw_list: List[str] = []
-        for name in death_wishes.keys():
-            # Don't shuffle excluded or invalid Death Wishes
-            if not world.is_dlc2() and name == "Snatcher Coins in Nyakuza Metro" or world.is_dw_excluded(name):
-                continue
 
-            dw_list.append(name)
-
-        world.random.shuffle(dw_list)
-        count = world.random.randint(world.options.DWShuffleCountMin.value, world.options.DWShuffleCountMax.value)
         dw_shuffle: List[str] = []
-        total = min(len(dw_list), count)
-        for i in range(total):
-            dw_shuffle.append(dw_list[i])
 
-        # Seal the Deal is always last if it's the goal
-        if world.options.EndGoal == EndGoal.option_seal_the_deal:
-            if "Seal the Deal" in dw_shuffle:
-                dw_shuffle.remove("Seal the Deal")
+        # Already have dw_shuffle built if UT generation
+        if getattr(world.multiworld, "generation_is_fake",False):
+            dw_shuffle = world.dw_shuffle
+        else:
+            # Connect Death Wishes randomly to one another in a linear sequence
+            dw_list: List[str] = []
+            for name in death_wishes.keys():
+                # Don't shuffle excluded or invalid Death Wishes
+                if not world.is_dlc2() and name == "Snatcher Coins in Nyakuza Metro" or world.is_dw_excluded(name):
+                    continue
 
-            dw_shuffle.append("Seal the Deal")
+                dw_list.append(name)
 
-        world.dw_shuffle = dw_shuffle
+            world.random.shuffle(dw_list)
+            count = world.random.randint(world.options.DWShuffleCountMin.value, world.options.DWShuffleCountMax.value)
+            total = min(len(dw_list), count)
+            for i in range(total):
+                dw_shuffle.append(dw_list[i])
+
+            # Seal the Deal is always last if it's the goal
+            if world.options.EndGoal == EndGoal.option_seal_the_deal:
+                if "Seal the Deal" in dw_shuffle:
+                    dw_shuffle.remove("Seal the Deal")
+
+                dw_shuffle.append("Seal the Deal")
+
+            world.dw_shuffle = dw_shuffle
+
         prev_dw = dw_map
         for death_wish_name in dw_shuffle:
             dw = create_region(world, death_wish_name)
