@@ -297,7 +297,7 @@ def set_entrance_rules(logic: StardewLogic, rule_collector: StardewRuleCollector
     rule_collector.set_entrance_rule(Entrance.adventurer_guild_to_bedroom, logic.monster.can_kill_max(Generic.any))
     if world_options.include_endgame_locations == IncludeEndgameLocations.option_true:
         rule_collector.set_entrance_rule(LogicEntrance.purchase_wizard_blueprints, logic.quest.has_magic_ink())
-    rule_collector.set_entrance_rule(LogicEntrance.search_garbage_cans, logic.time.has_lived_months(MAX_MONTHS / 2))
+    rule_collector.set_entrance_rule(LogicEntrance.search_garbage_cans, logic.time.has_lived_months(MAX_MONTHS // 2))
 
     rule_collector.set_entrance_rule(Entrance.forest_beach_shortcut, logic.received("Forest To Beach Shortcut"))
     rule_collector.set_entrance_rule(Entrance.mountain_jojamart_shortcut, logic.received("Mountain Shortcuts"))
@@ -323,7 +323,10 @@ def set_bookseller_rules(logic, rule_collector):
 
 
 def set_raccoon_rules(logic: StardewLogic, rule_collector: StardewRuleCollector, bundle_rooms: List[BundleRoom], world_options: StardewValleyOptions):
-    rule_collector.set_entrance_rule(LogicEntrance.has_giant_stump, logic.received(CommunityUpgrade.raccoon))
+    if world_options.quest_locations.has_story_quests():
+        rule_collector.set_entrance_rule(LogicEntrance.has_giant_stump, logic.received(CommunityUpgrade.raccoon, 2))
+    else:
+        rule_collector.set_entrance_rule(LogicEntrance.has_giant_stump, logic.quest.can_complete_quest(Quest.giant_stump))
     rule_collector.set_entrance_rule(LogicEntrance.buy_from_raccoon_1, logic.quest.has_raccoon_shop())
     rule_collector.set_entrance_rule(LogicEntrance.buy_from_raccoon_2, logic.quest.has_raccoon_shop(2))
     rule_collector.set_entrance_rule(LogicEntrance.buy_from_raccoon_3, logic.quest.has_raccoon_shop(3))
