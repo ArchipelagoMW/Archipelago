@@ -141,18 +141,17 @@ class HatInTimeWorld(World):
             # Need to get the key from dw_classes because slot data only has dw_classes values
             # dw_shuffle is a list of dw_classes keys
             if self.is_dw() and self.options.DWShuffle:
-                dw_count = dw_classes.len()
+                dw_count = len(dw_classes)
 
                 for i in range(dw_count):
-                    dw_class = slot_data[f"dw_{i}"]
-
-                    if not dw_class:
+                    if f"dw_{i}" in slot_data:
+                        dw_class = slot_data[f"dw_{i}"]
+                        for key, value in dw_classes.items():
+                            if value == dw_class:
+                                self.dw_shuffle.append(key)
+                                break
+                    else:
                         break
-
-                    for key, value in dw_classes.items():
-                        if value == dw_class:
-                            self.dw_shuffle.append(key)
-                            break
 
         adjust_options(self)
 
