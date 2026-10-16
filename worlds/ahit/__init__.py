@@ -92,6 +92,10 @@ class HatInTimeWorld(World):
             # Get the passed through slot data from the real generation
             slot_data: dict[str, Any] = re_gen_passthrough[self.game]
 
+            # TODO: Remove
+            # print("Slot data:")
+            # print(slot_data)
+
             # Set all your options here instead of getting them from the yaml
             for key, value in slot_data.items():
                 opt: Option[Any] | None = getattr(self.options, key, None)
@@ -122,10 +126,11 @@ class HatInTimeWorld(World):
                 self.hat_craft_order[3] = slot_data["Hat4"]
                 self.hat_craft_order[4] = slot_data["Hat5"]
 
-            # Set randomized act locations from slot data
+            # Get randomized act locations from slot data
             if self.options.ActRandomizer:
-                for name in self.act_connections.keys():
-                    self.act_connections[name] = slot_data[name]
+                for key, value in chapter_act_info.items():
+                    if value in slot_data:
+                        self.act_connections[value] = slot_data[value]
 
             # Set number of badge seller items from slot data
             self.badge_seller_count = slot_data["BadgeSellerItemCount"]
@@ -142,7 +147,6 @@ class HatInTimeWorld(World):
             # dw_shuffle is a list of dw_classes keys
             if self.is_dw() and self.options.DWShuffle:
                 dw_count = len(dw_classes)
-
                 for i in range(dw_count):
                     if f"dw_{i}" in slot_data:
                         dw_class = slot_data[f"dw_{i}"]
@@ -151,6 +155,7 @@ class HatInTimeWorld(World):
                                 self.dw_shuffle.append(key)
                                 break
                     else:
+                        # No more dw in slot data
                         break
 
         adjust_options(self)
@@ -162,6 +167,7 @@ class HatInTimeWorld(World):
             return
 
         # Take care of some extremely restrictive starts in other chapters with act shuffle off
+        # TODO: see if the random zipline is an issue for UT
         if not self.options.ActRandomizer:
             start_chapter = self.options.StartingChapter
             if start_chapter == ChapterIndex.ALPINE:
@@ -251,8 +257,7 @@ class HatInTimeWorld(World):
 
             return
 
-        # Don't randomize acts if UT generation
-        if self.options.ActRandomizer and not getattr(self.multiworld, "generation_is_fake",False):
+        if self.options.ActRandomizer:
             randomize_act_entrances(self)
 
         set_rules(self)
