@@ -22,7 +22,10 @@ class TestTowerOfHera(TestDungeon):
 
             ["Tower of Hera - Compass Chest", False, []],
             ["Tower of Hera - Compass Chest", False, [], ['Big Key (Tower of Hera)']],
+            ["Tower of Hera - Compass Chest", False, ['Big Key (Tower of Hera)', 'Progressive Bow']],
             ["Tower of Hera - Compass Chest", True, ['Big Key (Tower of Hera)', 'Progressive Sword']],
+            ["Tower of Hera - Compass Chest", True, ['Big Key (Tower of Hera)', 'Hammer']],
+            ["Tower of Hera - Compass Chest", True, ['Big Key (Tower of Hera)', 'Silver Bow']],
 
             ["Tower of Hera - Big Chest", False, []],
             ["Tower of Hera - Big Chest", False, [], ['Big Key (Tower of Hera)']],
