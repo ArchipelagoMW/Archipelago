@@ -41,12 +41,9 @@ jobs:
       matrix:
         os: [ubuntu-latest]
         python:
-          - {version: '3.11.2'} # Change to '3.11' around 2026-06-10
           - {version: '3.12'}
           - {version: '3.13'}
         include:
-          - python: {version: '3.11'}  # old compat
-            os: windows-latest
           - python: {version: '3.13'}  # current
             os: windows-latest
           - python: {version: '3.13'}  # current
