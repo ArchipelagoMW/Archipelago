@@ -39,6 +39,7 @@ ITEM_NAME_TO_ID = {
     "Secret Message": 2009,
     "Studio Session": 2010,
     "Friendship Bracelet": 2011,
+    "Audio Reversal": 2012
 }
 
 DEFAULT_ITEM_CLASSIFICATIONS = {
@@ -65,6 +66,7 @@ DEFAULT_ITEM_CLASSIFICATIONS = {
     "Secret Message": ItemClassification.filler,
     "Studio Session": ItemClassification.filler,
     "Friendship Bracelet": ItemClassification.filler,
+    "Audio Reversal": ItemClassification.trap
 }
 
 ALBUM_OPTIONS = {
@@ -98,6 +100,10 @@ FILLER_NAMES = [
     "Friendship Bracelet",
 ]
 
+TRAP_NAMES = [
+    "Audio Reversal"
+]
+
 
 def create_item_with_correct_classification(world, name: str) -> TaylorSwiftItem:
     classification = DEFAULT_ITEM_CLASSIFICATIONS[name]
@@ -123,6 +129,10 @@ def create_all_items(world) -> None:
 
     number_of_unfilled_locations = len(world.multiworld.get_unfilled_locations(world.player))
     needed_filler = number_of_unfilled_locations - len(itempool)
+    number_of_traps = int(needed_filler * 0.1)
+    needed_filler -= number_of_traps
+    for i in range(number_of_traps):
+        itempool.append(world.create_item(world.random.choice(TRAP_NAMES)))
     itempool += [world.create_filler() for _ in range(needed_filler)]
 
     world.multiworld.itempool += itempool
