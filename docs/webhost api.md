@@ -11,6 +11,8 @@ Current endpoints:
     - [`/datapackage`](#datapackage)
     - [`/datapackage/<string:checksum>`](#datapackagestringchecksum)
     - [`/datapackage_checksum`](#datapackagechecksum)
+- Datastorage API
+    - [`/datastorage/<suuid:room_id>`](#datastorage)
 - Generation API
     - [`/generate`](#generate)
     - [`/status/<suuid:seed>`](#status)
@@ -113,6 +115,30 @@ Example:
 }
 ```
 
+## Datastorage Endpoint
+<a name="datastorage"></a>
+This endpoint is used to retreive a room's datastorage keys from the multiserver.
+
+### `/datastorage/<suuid:room_id>`
+**Cache timer: 60 seconds**
+
+You'll receive a dict with each of the datastorage keys for a room.  
+
+Due to the custom nature of datastorage, there is not a standard naming convention for keys.  
+Thus, need to know what you're looking for, to read the returned data effectively.  
+
+If no keys are saved, this endpoint will return an empty dict.
+
+Example:
+```json
+{
+    "TestDict": {
+        "NestedInt": 123,
+        "NestedStr": "Hello There!"
+    },
+    "TestInt": 456
+}
+```
 
 ## Generation Endpoint
 These endpoints are used internally for the WebHost to generate games and validate their generation. They are also used by external applications to generate games automatically.
