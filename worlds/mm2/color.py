@@ -1,4 +1,4 @@
-from typing import Dict, Tuple, List, TYPE_CHECKING, Union
+from typing import TYPE_CHECKING
 from . import names
 from zlib import crc32
 import struct
@@ -8,7 +8,7 @@ if TYPE_CHECKING:
     from . import MM2World
     from .rom import MM2ProcedurePatch
 
-HTML_TO_NES: Dict[str, int] = {
+HTML_TO_NES: dict[str, int] = {
     "SNOW": 0x20,
     "LINEN": 0x36,
     "SEASHELL": 0x36,
@@ -56,7 +56,7 @@ HTML_TO_NES: Dict[str, int] = {
     # can add more as needed
 }
 
-MM2_COLORS: Dict[str, Tuple[int, int]] = {
+MM2_COLORS: dict[str, tuple[int, int]] = {
     names.atomic_fire: (0x28, 0x15),
     names.air_shooter: (0x20, 0x11),
     names.leaf_shield: (0x20, 0x19),
@@ -78,13 +78,23 @@ MM2_COLORS: Dict[str, Tuple[int, int]] = {
     names.crash_man_stage: (0x30, 0x16)
 }
 
-MM2_KNOWN_COLORS: Dict[str, Tuple[int, int]] = {
+MM2_KNOWN_COLORS: dict[str, tuple[int, int]] = {
     **MM2_COLORS,
+    # Metroid series
+    "Varia Suit": (0x27, 0x16),
+    "Gravity Suit": (0x14, 0x16),
+    "Phazon Suit": (0x06, 0x1D),
     # Street Fighter, technically
     "Hadouken": (0x3C, 0x11),
     "Shoryuken": (0x38, 0x16),
     # X Series
     "Z-Saber": (0x20, 0x16),
+    "Helmet Upgrade": (0x20, 0x01),
+    "Body Upgrade": (0x20, 0x01),
+    "Arms Upgrade": (0x20, 0x01),
+    "Plasma Shot Upgrade": (0x20, 0x01),
+    "Stock Charge Upgrade": (0x20, 0x01),
+    "Legs Upgrade": (0x20, 0x01),
     # X1
     "Homing Torpedo": (0x3D, 0x37),
     "Chameleon Sting": (0x3B, 0x1A),
@@ -112,9 +122,18 @@ MM2_KNOWN_COLORS: Dict[str, Tuple[int, int]] = {
     "Gravity Well": (0x38, 0x14),
     "Parasitic Bomb": (0x31, 0x28),
     "Frost Shield": (0x23, 0x2C),
+    # X4
+    "Lightning Web": (0x3D, 0x28),
+    "Aiming Laser": (0x2C, 0x14),
+    "Double Cyclone": (0x28, 0x1A),
+    "Rising Fire": (0x20, 0x16),
+    "Ground Hunter": (0x2C, 0x15),
+    "Soul Body": (0x37, 0x27),
+    "Twin Slasher": (0x28, 0x00),
+    "Frost Tower": (0x3D, 0x2C),
 }
 
-palette_pointers: Dict[str, List[int]] = {
+palette_pointers: dict[str, list[int]] = {
     "Mega Buster": [0x3D314],
     "Atomic Fire":  [0x3D318],
     "Air Shooter":  [0x3D31C],
@@ -138,7 +157,7 @@ palette_pointers: Dict[str, List[int]] = {
 }
 
 
-def add_color_to_mm2(name: str, color: Tuple[int, int]) -> None:
+def add_color_to_mm2(name: str, color: tuple[int, int]) -> None:
     """
     Add a color combo for Mega Man 2 to recognize as the color to display for a given item.
     For information on available colors: https://www.nesdev.org/wiki/PPU_palettes#2C02
@@ -146,7 +165,7 @@ def add_color_to_mm2(name: str, color: Tuple[int, int]) -> None:
     MM2_KNOWN_COLORS[name] = validate_colors(*color)
 
 
-def extrapolate_color(color: int) -> Tuple[int, int]:
+def extrapolate_color(color: int) -> tuple[int, int]:
     if color > 0x1F:
         color_1 = color
         color_2 = color_1 - 0x10
@@ -156,7 +175,7 @@ def extrapolate_color(color: int) -> Tuple[int, int]:
     return color_1, color_2
 
 
-def validate_colors(color_1: int, color_2: int, allow_match: bool = False) -> Tuple[int, int]:
+def validate_colors(color_1: int, color_2: int, allow_match: bool = False) -> tuple[int, int]:
     # Black should be reserved for outlines, a gray should suffice
     if color_1 in [0x0D, 0x0E, 0x0F, 0x1E, 0x2E, 0x3E, 0x1F, 0x2F, 0x3F]:
         color_1 = 0x10
@@ -170,7 +189,7 @@ def validate_colors(color_1: int, color_2: int, allow_match: bool = False) -> Tu
     return color_1, color_2
 
 
-def get_colors_for_item(name: str) -> Tuple[int, int]:
+def get_colors_for_item(name: str) -> tuple[int, int]:
     if name in MM2_KNOWN_COLORS:
         return MM2_KNOWN_COLORS[name]
 
@@ -201,7 +220,7 @@ def get_colors_for_item(name: str) -> Tuple[int, int]:
     return color_1, color_2
 
 
-def parse_color(colors: List[str]) -> Tuple[int, int]:
+def parse_color(colors: list[str]) -> tuple[int, int]:
     color_a = colors[0]
     if color_a.startswith("$"):
         color_1 = int(color_a[1:], 16)
@@ -221,8 +240,8 @@ def parse_color(colors: List[str]) -> Tuple[int, int]:
 
 
 def write_palette_shuffle(world: "MM2World", rom: "MM2ProcedurePatch") -> None:
-    palette_shuffle: Union[int, str] = world.options.palette_shuffle.value
-    palettes_to_write: Dict[str, Tuple[int, int]] = {}
+    palette_shuffle: int | str = world.options.palette_shuffle.value
+    palettes_to_write: dict[str, tuple[int, int]] = {}
     if isinstance(palette_shuffle, str):
         color_sets = palette_shuffle.split(";")
         if len(color_sets) == 1:
