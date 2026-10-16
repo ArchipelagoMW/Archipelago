@@ -1,13 +1,12 @@
-from ..bases import SVTestBase
 from ... import options
-from ...content.content_packs import ginger_island_content_pack
-from ...data.recipe_data import all_cooking_recipes
+from ...mods.mod_data import ModNames
+from ..bases import SVTestBase
 
 
 class TestRecipeContainingGingerIslandIngredientsAreTaggedWithGingerIslandContentPack(SVTestBase):
-    options = {
+    options = {  # noqa: RUF012
         options.ExcludeGingerIsland: options.ExcludeGingerIsland.option_true,
-        options.Mods: frozenset(options.all_mods_except_invalid_combinations),
+        options.Mods: frozenset(ModNames.enabled_mods_except_invalid_combinations()),
     }
 
     def test_recipe_without_content_pack_contains_only_pure_vanilla_ingredients(self):
@@ -16,18 +15,15 @@ class TestRecipeContainingGingerIslandIngredientsAreTaggedWithGingerIslandConten
 
         logic = self.world.logic
 
-        for recipe in all_cooking_recipes:
-            if recipe.content_pack is ginger_island_content_pack.name or recipe.content_pack not in self.world.options.mods:
-                continue
-
-            with self.subTest(recipe.meal):
-                for item in recipe.ingredients:
+        for recipe in self.world.content.cooking_recipes.values():
+            with self.subTest(recipe.name):
+                for item, amount in recipe.ingredients:
                     rule = logic.has(item)
                     self.assert_rule_true(rule, self.multiworld.state)
 
 
 class TestRecipeLearnLogic(SVTestBase):
-    options = {
+    options = {  # noqa: RUF012
         options.BuildingProgression: options.BuildingProgression.option_progressive,
         options.Cropsanity: options.Cropsanity.option_enabled,
         options.Cooksanity: options.Cooksanity.option_all,
@@ -51,7 +47,7 @@ class TestRecipeLearnLogic(SVTestBase):
 
 
 class TestRecipeReceiveLogic(SVTestBase):
-    options = {
+    options = {  # noqa: RUF012
         options.StartWithout: options.StartWithout.preset_none,
         options.BuildingProgression: options.BuildingProgression.option_progressive,
         options.Cropsanity: options.Cropsanity.option_enabled,

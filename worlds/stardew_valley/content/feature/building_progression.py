@@ -9,10 +9,10 @@ progressive_house = "Progressive House"
 
 # This assumes that the farm house is always available, which might not be true forever...
 progressive_house_by_upgrade_name = {
-    Building.farm_house: 0,
-    Building.kitchen: 1,
-    Building.kids_room: 2,
-    Building.cellar: 3
+    Building.farm_house: 1,
+    Building.kitchen: 2,
+    Building.kids_room: 3,
+    Building.cellar: 4,
 }
 
 

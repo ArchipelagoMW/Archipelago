@@ -50,6 +50,8 @@ class BundleLogic(BaseLogic):
     def get_special_bundle_requirement(self, bundle: Bundle) -> StardewRule:
         if bundle.name == MemeBundleName.pomnut:
             return self.logic.building.has_building(Building.stable)
+        if bundle.name == MemeBundleName.commitment:
+            return self.logic.relationship.can_get_divorced() & self.logic.relationship.can_dove_children(2)
         return self.logic.true_
 
     def get_quality_rules(self, qualities: List[str]) -> StardewRule:
@@ -61,7 +63,7 @@ class BundleLogic(BaseLogic):
         if crop_quality != CropQuality.basic:
             quality_rules.append(self.logic.quality.can_grow_crop_quality(crop_quality))
         if fish_quality != FishQuality.basic:
-            quality_rules.append(self.logic.fishing.can_catch_quality_fish(fish_quality))
+            quality_rules.append(self.logic.fishing.can_catch_quality_fish_rod(fish_quality))
         if forage_quality != ForageQuality.basic:
             quality_rules.append(self.logic.skill.can_forage_quality(forage_quality))
         if artisan_quality != ArtisanQuality.basic:

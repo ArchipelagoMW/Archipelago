@@ -1,5 +1,4 @@
 from ..mod_data import ModNames
-from ...data.craftable_data import all_crafting_recipes_by_name
 from ...logic.base_logic import BaseLogicMixin, BaseLogic
 from ...strings.ap_names.community_upgrade_names import CommunityUpgrade
 from ...strings.artisan_good_names import ArtisanGood
@@ -48,7 +47,7 @@ class ModSpecialOrderLogic(BaseLogic):
                                               self.logic.region.can_reach(Region.island_south) & (
                                                       self.logic.action.can_open_geode(Geode.frozen) | self.logic.action.can_open_geode(Geode.omni)) &
                                               self.logic.region.can_reach(SVERegion.blue_moon_vineyard),
-                ModSpecialOrder.homemade_fertilizer: self.logic.crafting.can_craft(all_crafting_recipes_by_name[Fertilizer.quality]) &
+                ModSpecialOrder.homemade_fertilizer: self.logic.crafting.can_craft(self.content.crafting_recipes[Fertilizer.quality]) &
                                                      self.logic.region.can_reach(SVERegion.susans_house)  # quest requires you make the fertilizer
             })
 

@@ -7,6 +7,7 @@ class Tool:
     pan = "Pan"
     fishing_rod = "Fishing Rod"
     scythe = "Scythe"
+    return_scepter = "Return Scepter"
 
 
 class ToolMaterial:
@@ -26,11 +27,11 @@ class ToolMaterial:
 
 
 class FishingRod:
-    training = "Training"
-    bamboo = "Bamboo"
-    fiberglass = "Fiberglass"
-    iridium = "Iridium"
-    advanced_iridium = "Advanced Iridium"
+    training = "Training Rod"
+    bamboo = "Bamboo Pole"
+    fiberglass = "Fiberglass Rod"
+    iridium = "Iridium Rod"
+    advanced_iridium = "Advanced Iridium Rod"
     tiers = {
         1: training,
         2: bamboo,

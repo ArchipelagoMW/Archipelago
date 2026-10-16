@@ -4,7 +4,8 @@ from ... import options
 
 class TestArcadeMachinesLogic(SVTestBase):
     options = {
-        options.ArcadeMachineLocations.internal_name: options.ArcadeMachineLocations.option_full_shuffling,
+        options.JourneyOfThePrairieKing.internal_name: options.JourneyOfThePrairieKing.option_full_shuffle,
+        options.JunimoKart.internal_name: options.JunimoKart.option_full_shuffle,
     }
 
     def test_prairie_king(self):

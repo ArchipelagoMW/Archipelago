@@ -15,7 +15,7 @@ register_mod_content_pack(ContentPack(
             ModBuilding.tractor_garage,
             sources=(
                 ShopSource(
-                    shop_region=Region.carpenter,
+                    shop_region=Region.carpenter_shop,
                     price=150_000,
                     items_price=((20, MetalBar.iron), (5, MetalBar.iridium), (1, ArtisanGood.battery_pack)),
                 ),

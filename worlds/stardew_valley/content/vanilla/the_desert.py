@@ -1,35 +1,45 @@
-from .pelican_town import pelican_town as pelican_town_content_pack
-from ..game_content import ContentPack
 from ...data import fish_data, villagers_data
+from ...data.festival_data import all_festival_data
 from ...data.game_item import CustomRuleSource, ItemTag, Tag
 from ...data.harvest import ForagingSource, HarvestCropSource
 from ...data.hats_data import Hats
 from ...data.monster_data import MonsterSource
-from ...data.requirement import RegionRequirement, MeetRequirement, MonsterKillRequirement
-from ...data.shop import ShopSource
-from ...logic.tailoring_logic import TailoringSource
-from ...logic.time_logic import MAX_MONTHS
+from ...data.requirement import MeetRequirement, MonsterKillRequirement, RegionRequirement, SpecificFriendRequirement
+from ...data.shop import ShopSource, TailoringSource
+from ...data.time import MAX_MONTHS
+from ...strings.artisan_good_names import ArtisanGood
 from ...strings.crop_names import Fruit, Vegetable
 from ...strings.currency_names import Currency
+from ...strings.festival_check_names import FestivalCheck
+from ...strings.food_names import Meal
 from ...strings.forageable_names import Forageable, Mushroom
 from ...strings.geode_names import Geode
+from ...strings.gift_names import Gift
 from ...strings.metal_names import Artifact
+from ...strings.monster_drop_names import Loot
 from ...strings.monster_names import Monster
-from ...strings.region_names import Region, LogicRegion
+from ...strings.region_names import LogicRegion, Region
 from ...strings.season_names import Season
 from ...strings.seed_names import Seed
 from ...strings.villager_names import NPC
+from ..game_content import ContentPack
+from .forbidden_items import forbidden_items_for_seeds
+from .pelican_town import pelican_town as pelican_town_content_pack
 
 the_desert = ContentPack(
     "The Desert (Vanilla)",
     dependencies=(
         pelican_town_content_pack.name,
     ),
+    currencies={
+        Currency.qi_coin,
+        Currency.calico_egg,
+    },
     harvest_sources={
         Forageable.cactus_fruit: (
             Tag(ItemTag.FORAGE),
             ForagingSource(regions=(Region.desert,)),
-            HarvestCropSource(seed=Seed.cactus, seasons=())
+            HarvestCropSource(seed=Seed.cactus, seasons=(), growth_time=2)
         ),
         Forageable.coconut: (
             Tag(ItemTag.FORAGE),
@@ -40,15 +50,24 @@ the_desert = ContentPack(
             ForagingSource(regions=(Region.skull_cavern_25,)),
         ),
 
-        Fruit.rhubarb: (HarvestCropSource(seed=Seed.rhubarb, seasons=(Season.spring,)),),
-        Fruit.starfruit: (HarvestCropSource(seed=Seed.starfruit, seasons=(Season.summer,)),),
-        Vegetable.beet: (HarvestCropSource(seed=Seed.beet, seasons=(Season.fall,)),),
+        Fruit.rhubarb: (HarvestCropSource(seed=Seed.rhubarb, seasons=(Season.spring,), growth_time=13),),
+        Fruit.starfruit: (HarvestCropSource(seed=Seed.starfruit, seasons=(Season.summer,), growth_time=13),),
+        Vegetable.beet: (HarvestCropSource(seed=Seed.beet, seasons=(Season.fall,), growth_time=6),),
     },
     shop_sources={
-        Seed.cactus: (ShopSource(price=150, shop_region=Region.oasis),),
-        Seed.rhubarb: (ShopSource(price=100, shop_region=Region.oasis, seasons=(Season.spring,)),),
-        Seed.starfruit: (ShopSource(price=400, shop_region=Region.oasis, seasons=(Season.summer,)),),
-        Seed.beet: (ShopSource(price=20, shop_region=Region.oasis, seasons=(Season.fall,)),),
+        Seed.cactus: (ShopSource(price=150, shop_region=Region.oasis_shop, forbidden_items=forbidden_items_for_seeds),),
+        Seed.rhubarb: (ShopSource(price=100, shop_region=Region.oasis_shop, seasons=(Season.spring,), forbidden_items=forbidden_items_for_seeds),),
+        Seed.starfruit: (ShopSource(price=400, shop_region=Region.oasis_shop, seasons=(Season.summer,), forbidden_items=forbidden_items_for_seeds),),
+        Seed.beet: (ShopSource(price=20, shop_region=Region.oasis_shop, seasons=(Season.fall,), forbidden_items=forbidden_items_for_seeds),),
+
+        FestivalCheck.rarecrow_3: (ShopSource(price=10_000, currency=Currency.qi_coin, shop_region=Region.casino),),
+        Gift.void_ghost_pendant: (ShopSource(price=0, items_price=((200, Loot.void_essence),), shop_region=Region.desert,
+                                             other_requirements=(SpecificFriendRequirement(NPC.krobus, 10),)),),
+
+        Meal.ice_cream: (ShopSource(price=240, currency=Currency.money, shop_region=Region.oasis_shop),),
+        ArtisanGood.honey: (ShopSource(price=200, currency=Currency.money, shop_region=Region.oasis_shop),),
+
+        FestivalCheck.calico_statue: (ShopSource(price=30, currency=Currency.calico_egg, shop_region=LogicRegion.desert_festival),),
     },
     fishes=(
         fish_data.sandfish,
@@ -71,9 +90,9 @@ the_desert = ContentPack(
         Hats.mummy_mask: (Tag(ItemTag.HAT), ShopSource(price=120, currency=Currency.calico_egg, shop_region=LogicRegion.desert_festival),),
         Hats.arcane_hat: (Tag(ItemTag.HAT), ShopSource(price=20000, shop_region=Region.adventurer_guild,
                                                             other_requirements=(MonsterKillRequirement((Monster.mummy,), 100),)),),
-        Hats.green_turban: (Tag(ItemTag.HAT), ShopSource(price=50, currency=Geode.omni, shop_region=Region.desert,),),
-        Hats.magic_cowboy_hat: (Tag(ItemTag.HAT), ShopSource(price=333, currency=Geode.omni, shop_region=Region.desert,),),
-        Hats.magic_turban: (Tag(ItemTag.HAT), ShopSource(price=333, currency=Geode.omni, shop_region=Region.desert,),),
+        Hats.green_turban: (Tag(ItemTag.HAT), ShopSource(price=0, currency=Currency.money, items_price=((50, Geode.omni),), shop_region=Region.desert,),),
+        Hats.magic_cowboy_hat: (Tag(ItemTag.HAT), ShopSource(price=0, currency=Currency.money, items_price=((333, Geode.omni),), shop_region=Region.desert,),),
+        Hats.magic_turban: (Tag(ItemTag.HAT), ShopSource(price=0, currency=Currency.money, items_price=((333, Geode.omni),), shop_region=Region.desert,),),
 
         Hats.laurel_wreath_crown: (Tag(ItemTag.HAT), CustomRuleSource(create_rule=lambda logic: logic.hat.can_get_unlikely_hat_at_outfit_services),),
         Hats.joja_cap: (Tag(ItemTag.HAT), CustomRuleSource(create_rule=lambda logic: logic.hat.can_get_unlikely_hat_at_outfit_services),),
@@ -85,5 +104,8 @@ the_desert = ContentPack(
         Hats.white_turban: (Tag(ItemTag.HAT), ForagingSource(regions=(Region.skull_cavern_100,))),
         Hats.knights_helmet: (Tag(ItemTag.HAT), MonsterSource(monsters=(Monster.pepper_rex,), amount_tier=MAX_MONTHS,
                                                                    other_requirements=(RegionRequirement(region=Region.adventurer_guild),)),),
-    }
+    },
+    festivals=(
+        all_festival_data[LogicRegion.desert_festival],
+    ),
 )

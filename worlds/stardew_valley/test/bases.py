@@ -5,20 +5,22 @@ import os
 import threading
 import typing
 import unittest
-from collections.abc import Iterable
 from contextlib import contextmanager
 from copy import deepcopy
-from typing import Optional, Dict, Union, Any, List, Iterable
+from typing import Iterable
 
-from BaseClasses import get_seed, MultiWorld, Location, Item, Region, Entrance, CollectionState
+from BaseClasses import CollectionState, Entrance, Item, Location, MultiWorld, Region, get_seed
+from test.general import gen_steps
+from test.general import setup_solo_multiworld as setup_base_solo_multiworld
+
 from test.bases import WorldTestBase
-from test.general import gen_steps, setup_solo_multiworld as setup_base_solo_multiworld
 from worlds.AutoWorld import call_all
-from .assertion import RuleAssertMixin
-from .options.utils import parse_class_option_keys, fill_namespace_with_default
-from .. import StardewValleyWorld, StardewItem, StardewRule
+
+from .. import StardewItem, StardewRule, StardewValleyWorld
 from ..logic.time_logic import MONTH_COEFFICIENT
-from ..options import StardewValleyOption, options
+from ..options import options
+from .assertion import RuleAssertMixin
+from .options.utils import SVTestOptions, fill_namespace_with_default, parse_class_option_keys
 
 logger = logging.getLogger(__name__)
 
@@ -34,6 +36,9 @@ def skip_long_tests() -> bool:
     return not bool(os.environ.get("long", False))
 
 
+skip_if_no_long_tests = unittest.skipIf(skip_long_tests(), "Long tests disabled")
+
+
 class SVTestCase(unittest.TestCase):
     skip_default_tests: bool = skip_default_tests()
     """Set False to not skip the base fill tests"""
@@ -41,13 +46,9 @@ class SVTestCase(unittest.TestCase):
     """Set False to run tests that take long"""
 
     @contextmanager
-    def solo_world_sub_test(self, msg: str | None = None,
-                            /,
-                            world_options: dict[str | type[StardewValleyOption], typing.Any] | None = None,
-                            *,
-                            seed=DEFAULT_TEST_SEED,
-                            world_caching=True,
-                            **kwargs) -> Iterable[tuple[MultiWorld, StardewValleyWorld]]:
+    def solo_world_sub_test(
+        self, msg: str | None = None, /, world_options: SVTestOptions | None = None, *, seed=DEFAULT_TEST_SEED, world_caching=True, **kwargs
+    ) -> Iterable[tuple[MultiWorld, StardewValleyWorld]]:
         if msg is not None:
             msg += " "
         else:
@@ -62,6 +63,7 @@ class SVTestCase(unittest.TestCase):
 class SVTestBase(RuleAssertMixin, WorldTestBase, SVTestCase):
     game = "Stardew Valley"
     world: StardewValleyWorld
+    options: SVTestOptions
 
     seed = DEFAULT_TEST_SEED
 
@@ -120,10 +122,10 @@ class SVTestBase(RuleAssertMixin, WorldTestBase, SVTestCase):
         for item in non_event_items:
             self.multiworld.state.collect(item)
 
-    def collect_all_except(self, item_to_not_collect: str):
+    def collect_all_except(self, *items_to_not_collect: str):
         non_event_items = [i for i in self.multiworld.get_items() if i.advancement and i.code]
         for item in non_event_items:
-            if item.name != item_to_not_collect:
+            if item.name not in items_to_not_collect:
                 self.multiworld.state.collect(item)
 
     def get_real_locations(self) -> list[Location]:
@@ -213,10 +215,9 @@ pre_generated_worlds = {}
 
 
 @contextmanager
-def solo_multiworld(world_options: dict[str | type[StardewValleyOption], typing.Any] | None = None,
-                    *,
-                    seed=DEFAULT_TEST_SEED,
-                    world_caching=True) -> Iterable[tuple[MultiWorld, StardewValleyWorld]]:
+def solo_multiworld(
+    world_options: SVTestOptions | None = None, *, seed=DEFAULT_TEST_SEED, world_caching=True
+) -> Iterable[tuple[MultiWorld, StardewValleyWorld]]:
     if not world_caching:
         multiworld = setup_solo_multiworld(world_options, seed, _cache={})
         yield multiworld, typing.cast(StardewValleyWorld, multiworld.worlds[1])
@@ -238,11 +239,21 @@ def solo_multiworld(world_options: dict[str | type[StardewValleyOption], typing.
             multiworld.lock.release()
 
 
+def get_permissive_settings(settings):
+    for key in settings:
+        if key.startswith("allow"):
+            settings[key] = True
+
+    return settings
+
+
 # Mostly a copy of test.general.setup_solo_multiworld, I just don't want to change the core.
-def setup_solo_multiworld(test_options: dict[str | type[StardewValleyOption], str] | None = None,
-                          seed=DEFAULT_TEST_SEED,
-                          _cache: dict[frozenset, MultiWorld] = {},  # noqa
-                          _steps=gen_steps) -> MultiWorld:
+def setup_solo_multiworld(
+    test_options: SVTestOptions | None = None,
+    seed=DEFAULT_TEST_SEED,
+    _cache: dict[frozenset, MultiWorld] = {},  # noqa
+    _steps=gen_steps,
+) -> MultiWorld:
     test_options = parse_class_option_keys(test_options)
 
     # Yes I reuse the worlds generated between tests, its speeds the execution by a couple seconds
@@ -260,6 +271,9 @@ def setup_solo_multiworld(test_options: dict[str | type[StardewValleyOption], st
 
     args = fill_namespace_with_default(test_options)
     multiworld.set_options(args)
+
+    # We want to allow every host.yaml setting when running tests, as we sometimes need to test options that host.yaml might be blocking
+    multiworld.worlds[1].settings = get_permissive_settings(multiworld.worlds[1].settings)
 
     if "start_inventory" in test_options:
         for item, amount in test_options["start_inventory"].items():
@@ -280,6 +294,11 @@ def setup_solo_multiworld(test_options: dict[str | type[StardewValleyOption], st
 
 def should_cache_world(test_options):
     if "start_inventory" in test_options:
+        return False
+
+    entrance_plando_key = "entrance_plando"
+    entrance_plando = test_options.get(entrance_plando_key, {})
+    if len(entrance_plando) > 0:
         return False
 
     trap_distribution_key = "trap_distribution"
