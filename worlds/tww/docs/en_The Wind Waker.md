@@ -109,6 +109,7 @@ This randomizer would not be possible without the help from:
 - BigSharkZ: (icon artwork)
 - Celeste (Maëlle): (logic and typo fixes, additional programming)
 - Chavu: (logic difficulty document)
+- ChinchyPandora7: (Spanish Translation of Guides)
 - CrainWWR: (multiworld and Dolphin memory assistance, additional programming)
 - Cyb3R: (reference for `TWWClient`)
 - DeamonHunter: (additional programming)
