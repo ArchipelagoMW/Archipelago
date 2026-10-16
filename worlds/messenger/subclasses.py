@@ -1,7 +1,8 @@
 from functools import cached_property
 from typing import TYPE_CHECKING
 
-from BaseClasses import CollectionState, Item, ItemClassification, Location, Region
+from BaseClasses import Item, ItemClassification, Location, Region
+
 from .regions import LOCATIONS, MEGA_SHARDS
 from .shop import FIGURINES, SHOP_ITEMS
 
@@ -72,11 +73,6 @@ class MessengerShopLocation(MessengerLocation):
                 prereq_cost += loc.cost
             return world.shop_prices[name] + prereq_cost
         return world.shop_prices[name]
-
-    def access_rule(self, state: CollectionState) -> bool:
-        world = state.multiworld.worlds[self.player]
-        can_afford = state.has("Shards", self.player, min(self.cost, world.total_shards))
-        return can_afford
 
 
 class MessengerItem(Item):
