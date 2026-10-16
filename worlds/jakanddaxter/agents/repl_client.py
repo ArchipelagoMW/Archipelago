@@ -14,6 +14,7 @@ import asyncio
 from asyncio import StreamReader, StreamWriter, Lock
 
 from NetUtils import NetworkItem
+from .utils import user_data_path
 from ..game_id import jak1_id, jak1_max, jak1_gk, jak1_goalc
 from ..items import item_table, trap_item_table
 from ..locs import (
@@ -280,12 +281,14 @@ class JakAndDaxterReplClient:
     # - It must be a valid character from the ALLOWED_CHARACTERS list.
     # - All lowercase letters must be uppercase.
     # - It must be wrapped in double quotes (for the REPL command).
-    # - Apostrophes must be handled specially - GOAL uses invisible ASCII character 0x12.
+    # - Single quotes must be replaced - GOAL uses invisible ASCII character 0x12.
+    # - Double quotes must be prepended with a backslash to escape it.
     # I also only allotted 32 bytes to each string in OpenGOAL, so we must truncate.
     @staticmethod
     def sanitize_game_text(text: str) -> str:
         result = "".join([c if c in ALLOWED_CHARACTERS else "?" for c in text[:32]]).upper()
         result = result.replace("'", "\\c12")
+        result = result.replace("\"", "\\\"")
         return f"\"{result}\""
 
     # Like sanitize_game_text, but the settings file will NOT allow any whitespace in the slot_name or slot_seed data.
@@ -502,7 +505,7 @@ class JakAndDaxterReplClient:
         return ok
 
     async def save_data(self):
-        with open("jakanddaxter_item_inbox.json", "w+") as f:
+        with open(user_data_path("jakanddaxter_item_inbox.json"), "w+") as f:
             dump = {
                 "inbox_index": self.inbox_index,
                 "item_inbox": [{
@@ -517,7 +520,7 @@ class JakAndDaxterReplClient:
 
     def load_data(self):
         try:
-            with open("jakanddaxter_item_inbox.json", "r") as f:
+            with open(user_data_path("jakanddaxter_item_inbox.json"), "r") as f:
                 load = json.load(f)
                 self.inbox_index = load["inbox_index"]
                 self.item_inbox = {k: NetworkItem(
