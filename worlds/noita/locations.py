@@ -208,7 +208,7 @@ location_region_mapping: dict[str, dict[str, LocationData]] = {
 
 
 def make_location_range(location_name: str, base_id: int, amt: int) -> dict[str, int]:
-    if amt == 1:
+    if amt == 1 and "Chest" not in location_name and "Pedestal" not in location_name:
         return {location_name: base_id}
     return {f"{location_name} {i+1}": base_id + i for i in range(amt)}
 
