@@ -13,7 +13,7 @@ from .EntranceShuffle import link_entrances, link_inverted_entrances, plando_con
 from .InvertedRegions import create_inverted_regions, mark_dark_world_regions
 from .ItemPool import generate_itempool, difficulties
 from .Items import item_init_table, item_name_groups, item_table, GetBeemizerItem
-from .Options import ALTTPOptions, small_key_shuffle
+from .Options import ALTTPOptions, big_key_shuffle, small_key_shuffle
 from .PotShuffle import generate_pot_shuffle
 from .Regions import lookup_name_to_id, create_regions, mark_light_world_regions, lookup_vanilla_location_to_entrance, \
     is_main_entrance, key_drop_data
@@ -550,6 +550,18 @@ class ALTTPWorld(World):
     def stage_pre_fill(cls, world):
         from .Dungeons import fill_dungeons_restrictive
         fill_dungeons_restrictive(world)
+        for lttp_world in world.get_game_worlds(cls.game):
+            if (lttp_world.options.small_key_shuffle != small_key_shuffle.option_original_dungeon and
+                    lttp_world.options.big_key_shuffle != big_key_shuffle.option_original_dungeon):
+                continue
+            for location in lttp_world.get_locations():
+                item = location.item
+                if item and item.player == location.player and (
+                        (item.smallkey and lttp_world.options.small_key_shuffle ==
+                         small_key_shuffle.option_original_dungeon)
+                        or (item.bigkey and lttp_world.options.big_key_shuffle ==
+                            big_key_shuffle.option_original_dungeon)):
+                    location.progression_balancing_sphere = False
 
     @classmethod
     def stage_generate_output(cls, multiworld, output_directory):

@@ -234,6 +234,11 @@ Classification is one of `LocationProgressType.DEFAULT`, `PRIORITY` or `EXCLUDED
 The Fill algorithm will force progression items to be placed at priority locations, giving a higher chance of them being
 required, and will prevent progression and useful items from being placed at excluded locations.
 
+By default, progression found at a location advances progression balancing to a new sphere. Set the location's
+`progression_balancing_sphere` attribute to `False` to collect its progression while expanding the current balancing
+sphere instead. This can be useful for local progression that opens more of the same logical area, such as dungeon keys
+that cannot leave their original dungeon.
+
 ### Items
 
 Items are all things that can "drop" for your game. This may be RPG items like weapons, or technologies you normally
@@ -256,8 +261,9 @@ Other classifications include:
 * `useful`: item that is especially useful. Cannot be placed on excluded or unreachable locations. When combined with
 another flag like "progression", it means "an especially useful progression item".
 * `trap`: negative impact on the player
-* `skip_balancing`: denotes that an item should not be moved to an earlier sphere for the purpose of balancing (to be
-  combined with `progression`; see below)
+* `skip_balancing`: denotes that an item should not be moved by progression balancing. On progression items, it prevents
+  the item from being moved to an earlier sphere. On non-progression items, it prevents the item from being displaced
+  into a later sphere.
 * `progression_skip_balancing`: the combination of `progression` and `skip_balancing`, i.e., a progression item that
   will not be moved around by progression balancing; used, e.g., for currency or tokens, to not flood early spheres
 * `deprioritized`: denotes that an item should not be placed on priority locations
