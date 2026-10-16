@@ -112,17 +112,17 @@ LttPCreditsText = {
                                        "I can make it harder for 'em",
                                        "Pranks for sale",
                                        "This tune sucks, I'm angry now"),
-    "Crystals x500": MeritousLttPText("Pile of Rocks",
+    "Small Crystal Cache": MeritousLttPText("Pile of Rocks",
                                       "Shiny collector kid",
                                       "A backroom exchange",
                                       "Currency conversion here",
                                       "Quarter-full tip jar"),
-    "Crystals x1000": MeritousLttPText("Pile of Rocks",
+    "Medium Crystal Cache": MeritousLttPText("Pile of Rocks",
                                        "Shiny collector kid",
                                        "A backroom exchange",
                                        "Currency conversion here",
                                        "Half-full tip jar"),
-    "Crystals x2000": MeritousLttPText("Pile of Rocks",
+    "Large Crystal Cache": MeritousLttPText("Pile of Rocks",
                                        "Shiny collector kid",
                                        "A backroom exchange",
                                        "Currency conversion here",
@@ -152,7 +152,9 @@ class MeritousItem(Item):
             self.type = "PSI Key"
         elif "upgrade" in name:
             self.type = "Enhancement"
-        elif "Crystals x" in name:
+            if advancement:
+                self.classification = ItemClassification.progression_deprioritized_skip_balancing
+        elif "Crystal Cache" in name:
             self.type = "Crystals"
         elif name == "Nothing":
             self.type = "Nothing"
@@ -189,9 +191,9 @@ item_table = {
     "Cursed Seal": offset + 16,
     "Agate Knife": offset + 17,
     "Evolution Trap": offset + 18,
-    "Crystals x500": offset + 19,
-    "Crystals x1000": offset + 20,
-    "Crystals x2000": offset + 21,
+    "Small Crystal Cache": offset + 19,
+    "Medium Crystal Cache": offset + 20,
+    "Large Crystal Cache": offset + 21,
     "Extra Life": offset + 22
 }
 
@@ -202,7 +204,7 @@ item_groups = {
                   "Metabolism", "Dodge Enhancer", "Ethereal Monocle", "Crystal Gatherer",
                   "Portable Compass"],
     "Important Artifacts": ["Shield Boost", "Circuit Booster", "Metabolism", "Dodge Enhancer"],
-    "Crystals": ["Crystals x500", "Crystals x1000", "Crystals x2000"]
+    "Crystals": ["Small Crystal Cache", "Medium Crystal Cache", "Large Crystal Cache"]
 }
 
 try:
