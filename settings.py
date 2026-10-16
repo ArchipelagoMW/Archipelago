@@ -672,6 +672,16 @@ class GeneratorOptions(Group):
         PLAYTHROUGH = 2
         FULL = 3
 
+    class PlaythroughMode(IntEnum):
+        """
+        Mode for playthrough generation.
+        0 -> Standard playthrough generation using greedy removal
+        1 -> Sphere regression playthrough generation
+        """
+
+        STANDARD = 0
+        SPHERE_FULFILLMENT = 1
+
     class PlandoOptions(str):
         """
         List of options that can be plando'd. Can be combined, for example "bosses, items"
@@ -697,6 +707,7 @@ class GeneratorOptions(Group):
     weights_file_path: WeightsFilePath = WeightsFilePath("weights.yaml")
     meta_file_path: MetaFilePath = MetaFilePath("meta.yaml")
     spoiler: Spoiler = Spoiler(3)
+    playthrough_mode: PlaythroughMode = PlaythroughMode(0)
     race: Race = Race(0)
     plando_options: PlandoOptions = PlandoOptions("bosses, connections, texts")
     panic_method: PanicMethod = PanicMethod("swap")
