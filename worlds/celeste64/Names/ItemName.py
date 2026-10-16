@@ -28,5 +28,16 @@ checkpoint_8  = "Double Dash House Checkpoint"
 checkpoint_9  = "Badeline Tower Checkpoint"
 checkpoint_10 = "Badeline Island Checkpoint"
 
+bald_trap       = "Bald Trap"
+bubble_trap     = "Bubble Trap"
+hiccup_trap     = "Hiccup Trap"
+ice_trap        = "Ice Trap"
+invisible_trap  = "Invisible Trap"
+literature_trap = "Literature Trap"
+reverse_trap    = "Reverse Trap"
+stun_trap       = "Stun Trap"
+zoom_in_trap    = "Zoom In Trap"
+zoom_out_trap   = "Zoom Out Trap"
+
 # Item used for logic definitions that are not possible with the given options
 cannot_access = "CANNOT ACCESS"
