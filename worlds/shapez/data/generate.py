@@ -115,19 +115,21 @@ if __name__ == "__main__":
     generate_shapesanity_pool()
     print(time.time() - start)
     with open("shapesanity_pool.py", "w") as outfile:
-        outfile.writelines(["shapesanity_simple = {\n"]
-                           + [f"    \"{name}\": \"{shapesanity_simple[name]}\",\n"
-                              for name in shapesanity_simple]
-                           + ["}\n\nshapesanity_1_4 = {\n"]
-                           + [f"    \"{name}\": \"{shapesanity_1_4[name]}\",\n"
-                              for name in shapesanity_1_4]
-                           + ["}\n\nshapesanity_two_sided = {\n"]
-                           + [f"    \"{name}\": \"{shapesanity_two_sided[name]}\",\n"
-                              for name in shapesanity_two_sided]
-                           + ["}\n\nshapesanity_three_parts = {\n"]
-                           + [f"    \"{name}\": \"{shapesanity_three_parts[name]}\",\n"
-                              for name in shapesanity_three_parts]
-                           + ["}\n\nshapesanity_four_parts = {\n"]
-                           + [f"    \"{name}\": \"{shapesanity_four_parts[name]}\",\n"
-                              for name in shapesanity_four_parts]
-                           + ["}\n"])
+        for dict_name, shape_dict in (("shapesanity_simple", shapesanity_simple),
+                                      ("shapesanity_1_4", shapesanity_1_4),
+                                      ("shapesanity_two_sided", shapesanity_two_sided),
+                                      ("shapesanity_three_parts", shapesanity_three_parts),
+                                      ("shapesanity_four_parts", shapesanity_four_parts),):
+            by_region = {}
+            for shape_name, region in shape_dict.items():
+                if region not in by_region:
+                    by_region[region] = []
+                by_region[region].append(shape_name)
+            outfile.write(f"# flake8: noqa\n\n{dict_name}: tuple[tuple[str, str], ...] = (\n")
+            for region, shapes_list in by_region.items():
+                outfile.write(f"    *((shape, \"{region}\") for shape in (\n")
+                for i in range(0, len(shapes_list), 4):
+                    line = '\", \"'.join(shapes_list[i:min(i+4, len(shapes_list))])
+                    outfile.write(f"        \"{line}\",\n")
+                outfile.write(f"    )),\n")
+            outfile.write(f")\n")
