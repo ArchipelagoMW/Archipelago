@@ -59,7 +59,7 @@ def addHints(rom, rnd, hint_texts):
         hint = hint_texts_copy.pop()
         if not hint:
             hint = rnd.choice(hints).format(*rnd.choice(useless_hint))
-        rom.texts[text_id] = formatText(hint)
+        rom.texts[text_id] = formatText(hint, skip_names=True)
 
     for text_id in range(0x200, 0x20C, 2):
         rom.texts[text_id] = formatText("Read this book?", ask="YES  NO")
@@ -91,8 +91,6 @@ def generate_hint_texts(world):
             name = "Your"
         else:
             name = f"{world.multiworld.player_name[location.item.player]}'s"
-            # filter out { and } since they cause issues with string.format later on
-            name = name.replace("{", "").replace("}", "")
 
         if isinstance(location, LinksAwakeningLocation):
             location_name = location.ladxr_item.metadata.name
@@ -101,8 +99,7 @@ def generate_hint_texts(world):
 
         hint = f"{name} {location.item} is at {location_name}"
         if location.player != world.player:
-            # filter out { and } since they cause issues with string.format later on
-            player_name = world.multiworld.player_name[location.player].replace("{", "").replace("}", "")
+            player_name = world.multiworld.player_name[location.player]
             hint += f" in {player_name}'s world"
 
         # Cap hint size at 85
