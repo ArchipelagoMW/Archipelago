@@ -1,0 +1,136 @@
+[
+  {
+    "name": "Quillshroom Marsh",
+    "sections": [
+      {
+        "name": "Quillshroom Marsh - Seashell"
+      },
+      {
+        "name": "Quillshroom Marsh Seal - Spikey Window"
+      },
+      {
+        "name": "Quillshroom Marsh Seal - Sand Trap"
+      },
+      {
+        "name": "Quillshroom Marsh Seal - Do the Spike Wave"
+      },
+      {
+        "name": "Quillshroom Marsh Mega Shard"
+      },
+      {
+        "name": "Quillshroom Marsh - Queen of Quills"
+      }
+    ],
+    "map_locations": [
+      {
+        "map": "Overworld",
+        "x": 985,
+        "y": 342,
+        "size": 30
+      }
+    ]
+  },
+  {
+    "name": "Quillshroom Marsh - Key locations",
+    "children": [
+      {
+        "sections": [
+          {
+            "name": "Quillshroom Marsh - Seashell"
+          }
+        ],
+        "map_locations": [
+          {
+            "map": "Quillshroom Marsh",
+            "x": 240,
+            "y": 129
+          }
+        ]
+      },
+      {
+        "sections": [
+          {
+            "name": "Quillshroom Marsh - Queen of Quills"
+          }
+        ],
+        "map_locations": [
+          {
+            "map": "Quillshroom Marsh",
+            "x": 835,
+            "y": 70
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Quillshroom Marsh - Power Seals",
+    "children": [
+      {
+        "name": "Quillshroom Marsh Seal",
+        "sections": [
+          {
+            "name": "Quillshroom Marsh Seal - Spikey Window"
+          }
+        ],
+        "map_locations": [
+          {
+            "map": "Quillshroom Marsh",
+            "x": 280,
+            "y": 48
+          }
+        ]
+      },
+      {
+        "name": "Quillshroom Marsh Seal",
+        "sections": [
+          {
+            "name": "Quillshroom Marsh Seal - Sand Trap"
+          }
+        ],
+        "map_locations": [
+          {
+            "map": "Quillshroom Marsh",
+            "x": 559,
+            "y": 68
+          }
+        ]
+      },
+      {
+        "name": "Quillshroom Marsh Seal",
+        "sections": [
+          {
+            "name": "Quillshroom Marsh Seal - Do the Spike Wave"
+          }
+        ],
+        "map_locations": [
+          {
+            "map": "Quillshroom Marsh",
+            "x": 738,
+            "y": 48
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Quillshroom Marsh - Mega Shards",
+    "children": [
+      {
+        "name": "Quillshroom Marsh Mega Shard",
+        "sections": [
+          {
+            "name": "Quillshroom Marsh Mega Shard"
+          }
+        ],
+        "map_locations": [
+          {
+            "map": "Quillshroom Marsh",
+            "x": 155,
+            "y": 95
+          }
+        ]
+      }
+    ]
+  }
+]
