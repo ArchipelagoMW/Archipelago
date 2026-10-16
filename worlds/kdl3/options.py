@@ -417,19 +417,6 @@ class Gifting(Toggle):
     display_name = "Gifting"
 
 
-class TotalHeartStars(NamedRange):
-    """
-    Deprecated. Use max_heart_stars instead. Supported for only one version.
-    """
-    default = -1
-    range_start = 5
-    range_end = 99
-    special_range_names = {
-        "default": -1
-    }
-    visibility = Visibility.none
-
-
 @dataclass
 class KDL3Options(PerGameCommonOptions, DeathLinkMixin):
     remote_items: RemoteItems
@@ -463,8 +450,6 @@ class KDL3Options(PerGameCommonOptions, DeathLinkMixin):
     gooey_flavor: GooeyFlavor
     music_shuffle: MusicShuffle
     virtual_console: VirtualConsoleChanges
-
-    total_heart_stars: TotalHeartStars  # remove in 2 versions
 
 
 kdl3_option_groups: List[OptionGroup] = [
