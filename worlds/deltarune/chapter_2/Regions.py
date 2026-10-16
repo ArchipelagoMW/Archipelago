@@ -98,26 +98,6 @@ def create_regions(world: "DeltaruneWorld"):
         rule=(Has(items[ItemIDs.safety_vest]) & have_kris_susie_or_ralsei),
     )
 
-    cyber_field.connect(
-        mansion_lobby_warp_door,
-        get_entrance_name(cyber_field, mansion_lobby_warp_door, "BagelOverflow"),
-        rule=speedrun_glitch_logic,
-    )
-    mansion_lobby_warp_door.connect(
-        cyber_field_post_dj,
-        get_entrance_name(mansion_lobby_warp_door, cyber_field_post_dj, "Plot update after BagelOverflow"),
-    )
-    mansion_lobby_warp_door.connect(
-        cyber_city,
-        get_entrance_name(mansion_lobby_warp_door, cyber_city, "Plot update after BagelOverflow"),
-        rule=have_kris_susie_or_ralsei,
-    )
-    mansion_lobby_warp_door.connect(
-        trash_zone,
-        get_entrance_name(mansion_lobby_warp_door, trash_zone, "Plot update after BagelOverflow"),
-        rule=have_kris_susie_or_ralsei,
-    )
-
     if normal_route(world):
         spamton_shop = Region(Regions.ch2_spamton_shop, world.player, world.multiworld)
         swatch_cafe = Region(Regions.ch2_swatch_cafe, world.player, world.multiworld)
@@ -140,6 +120,27 @@ def create_regions(world: "DeltaruneWorld"):
             tunnel_of_love,
             fountain,
         ]
+
+        # Mansion warp door unavailable during weird route to prevent you locking yourself out of the route
+        cyber_field.connect(
+            mansion_lobby_warp_door,
+            get_entrance_name(cyber_field, mansion_lobby_warp_door, "BagelOverflow"),
+            rule=speedrun_glitch_logic,
+        )
+        mansion_lobby_warp_door.connect(
+            cyber_field_post_dj,
+            get_entrance_name(mansion_lobby_warp_door, cyber_field_post_dj, "Plot update after BagelOverflow"),
+        )
+        mansion_lobby_warp_door.connect(
+            cyber_city,
+            get_entrance_name(mansion_lobby_warp_door, cyber_city, "Plot update after BagelOverflow"),
+            rule=have_kris_susie_or_ralsei,
+        )
+        mansion_lobby_warp_door.connect(
+            trash_zone,
+            get_entrance_name(mansion_lobby_warp_door, trash_zone, "Plot update after BagelOverflow"),
+            rule=have_kris_susie_or_ralsei,
+        )
 
         for region in regions_normal_route:
             if region.name in chapter2_locations:
