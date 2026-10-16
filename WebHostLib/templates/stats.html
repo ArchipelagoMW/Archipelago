@@ -19,7 +19,7 @@
 
         <div id="charts-wrapper">
         {% for chart in charts %}
-            <div class="chart-container">
+            <div class="chart-container{% if loop.index0 < 2 %} full-width{% endif %}">
                 {{ chart|indent(16)|safe }}
             </div>
         {% endfor %}
