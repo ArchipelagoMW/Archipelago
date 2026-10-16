@@ -311,8 +311,11 @@ def run_gui(launch_components: list["Component"], args: Any) -> None:
         def component_action(button):
             open_text = "Opening in a new window..."
             if button.component.func:
-                # Note: if we want to draw the Snackbar before running func, func needs to be wrapped in schedule_once
-                button.component.func()
+                # TODO: Once opening a terminal works for func components, tailor the message to whether one is found
+                if button.component.cli:
+                    open_text = "Running in the background..."
+                thread = threading.Thread(target=button.component.func)
+                thread.start()
             else:
                 # if launch returns False, it started the process in background (not in a new terminal)
                 from worlds.LauncherComponents import get_exe
