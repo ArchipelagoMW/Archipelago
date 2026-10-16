@@ -5,7 +5,7 @@ data.raw["item"]["rocket-part"].hidden = false
 data.raw["rocket-silo"]["rocket-silo"].fluid_boxes = {
     {
         production_type = "input",
-        pipe_picture = assembler2pipepictures(),
+        pipe_picture = require("__base__.prototypes.entity.assembler-pictures").assembler2pipepictures,
         pipe_covers = pipecoverspictures(),
         volume = 1000,
         base_area = 10,
@@ -19,7 +19,7 @@ data.raw["rocket-silo"]["rocket-silo"].fluid_boxes = {
     },
     {
         production_type = "input",
-        pipe_picture = assembler2pipepictures(),
+        pipe_picture = require("__base__.prototypes.entity.assembler-pictures").assembler2pipepictures,
         pipe_covers = pipecoverspictures(),
         volume = 1000,
         base_area = 10,
@@ -33,7 +33,7 @@ data.raw["rocket-silo"]["rocket-silo"].fluid_boxes = {
     },
     {
         production_type = "input",
-        pipe_picture = assembler2pipepictures(),
+        pipe_picture = require("__base__.prototypes.entity.assembler-pictures").assembler2pipepictures,
         pipe_covers = pipecoverspictures(),
         volume = 1000,
         base_area = 10,
@@ -49,7 +49,7 @@ data.raw["rocket-silo"]["rocket-silo"].fluid_boxes = {
 data.raw["rocket-silo"]["rocket-silo"].fluid_boxes_off_when_no_fluid_recipe = true
 
 {%- for recipe_name, recipe in custom_recipes.items() %}
-data.raw["recipe"]["{{recipe_name}}"].category = "{{recipe.category}}"
+data.raw["recipe"]["{{recipe_name}}"].categories = {{ variable_to_lua([recipe.category]) }}
 data.raw["recipe"]["{{recipe_name}}"].ingredients = {{ dict_to_recipe(recipe.ingredients, liquids) }}
 {%- endfor %}
 
