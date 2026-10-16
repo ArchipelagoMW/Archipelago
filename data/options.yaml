@@ -44,7 +44,7 @@ requires:
     # Maximum value is {{ option.range_end }}
     {%- set data, notes = dictify_range(option, option_val) %}
     {%- for entry, default in data.items() %}
-    {{ entry }}: {{ default }}{% if notes[entry] %} # {{ notes[entry] }}{% endif %}
+    {{ yaml_dump(entry) }}: {{ default }}{% if notes[entry] %} # {{ notes[entry] }}{% endif %}
     {%- endfor -%}
 {% endmacro %}
 
