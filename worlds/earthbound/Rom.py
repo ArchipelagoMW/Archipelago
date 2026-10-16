@@ -3,7 +3,6 @@ import os
 import Utils
 import typing
 import struct
-import settings
 from worlds.Files import APProcedurePatch, APTokenMixin, APTokenTypes, APPatchExtension
 from .game_data import local_data
 from .game_data.battle_bg_data import battle_bg_bpp
@@ -78,7 +77,7 @@ class LocalRom(object):
         return bytes(self.file)
 
 
-def patch_rom(world: "EarthBoundWorld", rom: LocalRom, player: int) -> None:
+def patch_rom(world: "EarthBoundWorld", rom, player: int) -> None:
     rom.copy_bytes(0x1578DD, 0x3E, 0x34A060)  # Threed/Saturn teleport move
     rom.copy_bytes(0x15791B, 0xF8, 0x157959)
 
@@ -686,7 +685,7 @@ def patch_rom(world: "EarthBoundWorld", rom: LocalRom, player: int) -> None:
     rom.write_bytes(0x17FD00, world.credits_player)
     rom.write_bytes(0x155027, world.badge_name)
     rom.write_bytes(0x17FD50, struct.pack("H", world.multiworld.players))
-    rom.write_bytes(0x3FF0A0, world.world_version.encode("ascii"))
+    rom.write_bytes(0x3FF0A0, world.local_world_version.encode("ascii"))
     display_version = text_encoder(world_version, 15)
     display_version.extend([0x02])
     rom.write_bytes(0x3CFFBF, display_version)
@@ -726,7 +725,7 @@ class EBProcPatch(APProcedurePatch, APTokenMixin):
 
     def write_bytes(self, offset: int, value: typing.Iterable[int]) -> None:
         self.write_token(APTokenTypes.WRITE, offset, bytes(value))
-    
+
     def copy_bytes(self, source: int, amount: int, destination: int) -> None:
         self.write_token(APTokenTypes.COPY, destination, (amount, source))
 
@@ -837,9 +836,9 @@ def get_base_rom_bytes(file_name: str = "") -> bytes:
 
 
 def get_base_rom_path(file_name: str = "") -> str:
-    options: settings.Settings = settings.get_settings()
+    from worlds.earthbound import EarthBoundWorld
     if not file_name:
-        file_name = options["earthbound_options"]["rom_file"]
+        file_name = EarthBoundWorld.settings.rom_file
     if not os.path.exists(file_name):
         file_name = Utils.user_path(file_name)
     return file_name
