@@ -77,6 +77,7 @@ class MultiWorld():
     regions: RegionManager
     itempool: List[Item]
     is_race: bool = False
+    generation_is_fake: bool = False
     precollected_items: Dict[int, List[Item]]
     state: CollectionState
 
