@@ -25,6 +25,7 @@ class Victory(Choice):
     Voidling: Defeat the Voidling in The Planetarium (SOTV DLC required! Will select any if not enabled.)
     Limbo: Defeat the Scavenger in Hidden Realm: A Moment, Whole
     Falseson: Defeat False son and gift an item to the altar in Prime Meridian (SOTS DLC required! Will select any if not enabled.)
+    Solus: Defeat the Solus Control Unit in Neural Sanctum (AC DLC required! Will select any if not enabled.)
     Any: Any victory in the game will count. See Final Stage Death for additional ways.
     """
     display_name = "Victory Condition"
@@ -33,6 +34,7 @@ class Victory(Choice):
     option_voidling = 2
     option_limbo = 3
     option_falseson = 4
+    option_solus = 5
     default = 0
 
 
@@ -136,12 +138,14 @@ class FinalStageDeath(Toggle):
     """The following will count as a win if set to "true", and victory is set to "any":
     Dying in Commencement.
     Dying in The Planetarium.
+    Dying in Neural Sanctum.
     Obliterating yourself
     If not use the following to tell if final stage death will count:
     Victory: mithrix - only dying in Commencement will count.
     Victory: voidling - only dying in The Planetarium will count.
     Victory: limbo - Obliterating yourself will count.
-    Victory: falseson - only dying in Prime Meridian will count."""
+    Victory: falseson - only dying in Prime Meridian will count.
+    Victory: solus - only dying in Neural Sanctum will count."""
     display_name = "Final Stage Death is Win"
 
 
@@ -159,6 +163,14 @@ class DLC_SOTS(Toggle):
      Affects environment availability for Explore Mode.
      """
     display_name = "Enable DLC - SOTS"
+
+
+class DLC_ALLOYED(Toggle):
+    """
+     Enable if you are using the Alloyed Collective DLC.
+     Affects environment availability for Explore Mode.
+     """
+    display_name = "Enable DLC - AC"
 
 
 class RequireStages(DefaultOnToggle):
@@ -457,6 +469,7 @@ class ROR2Options(PerGameCommonOptions):
     final_stage_death: FinalStageDeath
     dlc_sotv: DLC_SOTV
     dlc_sots: DLC_SOTS
+    dlc_alloyed: DLC_ALLOYED
     require_stages: RequireStages
     progressive_stages: ProgressiveStages
     stage_variants: StageVariants

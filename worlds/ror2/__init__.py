@@ -5,7 +5,8 @@ from .locations import RiskOfRainLocation, item_pickups, get_locations
 from .rules import set_rules
 from .ror2environments import environment_vanilla_table, environment_vanilla_orderedstages_table, \
     environment_sotv_orderedstages_table, environment_sotv_table, environment_sost_orderedstages_table, \
-    environment_sost_table, collapse_dict_list_vertical, shift_by_offset, environment_vanilla_variants_table, \
+    environment_sost_table, environment_ac_orderedstages_table, environment_ac_table, \
+    collapse_dict_list_vertical, shift_by_offset, environment_vanilla_variants_table, \
     environment_vanilla_variant_orderedstages_table, environment_sots_variants_table, \
     environment_sots_variants_orderedstages_table
 
@@ -67,6 +68,7 @@ class RiskOfRainWorld(World):
                     altars=self.options.altars_per_stage.value,
                     dlc_sotv=bool(self.options.dlc_sotv.value),
                     dlc_sots=bool(self.options.dlc_sots.value),
+                    dlc_alloyed=bool(self.options.dlc_alloyed.value),
                     stage_variants=bool(self.options.stage_variants)
                 )
             )
@@ -77,6 +79,8 @@ class RiskOfRainWorld(World):
         if self.options.victory == "voidling" and not self.options.dlc_sotv:
             self.options.victory.value = self.options.victory.option_any
         if self.options.victory == "falseson" and not self.options.dlc_sots:
+            self.options.victory.value = self.options.victory.option_any
+        if self.options.victory == "solus" and not self.options.dlc_alloyed:
             self.options.victory.value = self.options.victory.option_any
 
     def create_regions(self) -> None:
@@ -130,6 +134,10 @@ class RiskOfRainWorld(World):
                 environment_available_orderedstages_table = \
                     collapse_dict_list_vertical(environment_available_orderedstages_table,
                                                 environment_sots_variants_orderedstages_table)
+            if self.options.dlc_alloyed:
+                environment_available_orderedstages_table = \
+                    collapse_dict_list_vertical(environment_available_orderedstages_table,
+                                                environment_ac_orderedstages_table)
 
             if self.options.stage_variants:
                 environment_offset_table = shift_by_offset(environment_vanilla_variants_table, environment_offset)
@@ -143,6 +151,10 @@ class RiskOfRainWorld(World):
             # SOTS Variant Environments
             if self.options.dlc_sots and self.options.stage_variants:
                 environment_offset_table = shift_by_offset(environment_sots_variants_table, environment_offset)
+                environments_pool = {**environments_pool, **environment_offset_table}
+            # Alloyed Collective Environments
+            if self.options.dlc_alloyed:
+                environment_offset_table = shift_by_offset(environment_ac_table, environment_offset)
                 environments_pool = {**environments_pool, **environment_offset_table}
 
             # percollect starting environment for stage 1
@@ -178,6 +190,7 @@ class RiskOfRainWorld(World):
                     altars=self.options.altars_per_stage.value,
                     dlc_sotv=bool(self.options.dlc_sotv.value),
                     dlc_sots=bool(self.options.dlc_sots.value),
+                    dlc_alloyed=bool(self.options.dlc_alloyed.value),
                     stage_variants=bool(self.options.stage_variants)
                 )
             )
@@ -258,6 +271,9 @@ class RiskOfRainWorld(World):
                                             "progressive_stages", "stage_variants", "show_seer_portals", casing="camel")
         return {
             **options_dict,
+            "dlcSotv": bool(self.options.dlc_sotv.value),
+            "dlcSots": bool(self.options.dlc_sots.value),
+            "dlcAlloyed": bool(self.options.dlc_alloyed.value),
             "seed": "".join(self.random.choice(string.digits) for _ in range(16)),
             "offset": offset
         }
