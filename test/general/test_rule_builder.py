@@ -1513,3 +1513,5 @@ class TestFieldResolvers(RuleBuilderTestCase):
         rule, expected = self.rules
         resolved_rule = rule.resolve(world)
         self.assertEqual(resolved_rule, expected, f"\n{resolved_rule}\n{expected}")
+
+
