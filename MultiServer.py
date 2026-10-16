@@ -259,11 +259,15 @@ class Client(Endpoint):
 
     @items_handling.setter
     def items_handling(self, value: int):
-        if not (value & 0b001) and (value & 0b110):
-            raise ValueError("Invalid flag combination")
+        self.check_items_handling(value)
         self.no_items = not (value & 0b001)
         self.remote_items = bool(value & 0b010)
         self.remote_start_inventory = bool(value & 0b100)
+
+    @staticmethod
+    def check_items_handling(value: int) -> None:
+        if not (value & 0b001) and (value & 0b110):
+            raise ValueError("Invalid flag combination")
 
     @property
     def name(self) -> str:
@@ -1975,7 +1979,7 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
             if minver > args['version']:
                 errors.add('IncompatibleVersion')
             try:
-                client.items_handling = args['items_handling']
+                Client.check_items_handling(args['items_handling'])
             except (ValueError, TypeError):
                 errors.add('InvalidItemsHandling')
 
@@ -1988,11 +1992,12 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
         else:
             team, slot = ctx.connect_names[args['name']]
             if client.auth and client.team is not None and client.slot in ctx.clients[client.team]:
-                ctx.clients[team][slot].remove(client)  # re-auth, remove old entry
+                ctx.clients[client.team][client.slot].remove(client)  # re-auth, remove old entry
                 if client.team != team or client.slot != slot:
                     client.auth = False  # swapping Team/Slot
             client.team = team
             client.slot = slot
+            client.items_handling = args['items_handling']
 
             ctx.client_ids[client.team, client.slot] = args["uuid"]
             ctx.clients[team][slot].append(client)
