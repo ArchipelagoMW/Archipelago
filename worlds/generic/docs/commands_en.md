@@ -67,7 +67,8 @@ including the exclamation point.
 - `/option <option name> <option value>` Set a server option. For a list of options, use the `/options` command.
 - `/alias <player name> <alias name>` Assign a player an alias, allowing you to reference the player by the alias in commands.
   `!alias <player name>` on its own will reset the alias to the player's original name.
-
+- `/item_groups <player name>` Lists all the item group names for the specified player's game.
+- `/location_groups <player name>` Lists all the location group names for the specified player's game.
 
 ### Collect/Release
 - `/collect <player name>` Send out any items remaining in the multiworld belonging to the given player.
