@@ -344,22 +344,30 @@ class TooltipLabel(HovererableLabel, MDTooltip):
 
 
 class ServerLabel(HoverBehavior, MDTooltip, MDBoxLayout):
-    tooltip_display_delay = 0.1
+    tooltip_display_delay = 0.0
     text: str = StringProperty("Server:")
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.add_widget(MDIcon(icon="information", font_size=sp(15)))
+        self.add_widget(MDIcon(icon="information", font_size=sp(15), pos_hint={"center_x": 0.5, "center_y": 0.55}))
         self.add_widget(TooltipLabel(text=self.text, pos_hint={"center_x": 0.5, "center_y": 0.5},
                                      font_size=sp(15)))
         self._tooltip = ServerToolTip(text="Test")
+        self._active = False
 
-    def on_enter(self):
+    def on_enter(self, *args):
+        self.remove_tooltip()
+        self._active = True
         self._tooltip.text = self.get_text()
         self.display_tooltip()
 
-    def on_leave(self):
+    def on_leave(self, *args):
+        self._active
         self.animation_tooltip_dismiss()
+
+    def _on_dismiss_anim_complete(self, *args):
+        if not self._active:
+            return super()._on_dismiss_anim_complete(*args)
 
     @property
     def ctx(self) -> context_type:
@@ -921,7 +929,7 @@ class GameManager(ThemedApp):
         self.grid = MainLayout()
         self.grid.cols = 1
         self.connect_layout = MDBoxLayout(orientation="horizontal", size_hint_y=None, height=dp(40),
-                                          spacing=5, padding=(5, 10))
+                                          spacing=5, padding=(5, 0))
         # top part
         server_label = ServerLabel(width=dp(75))
         self.connect_layout.add_widget(server_label)
