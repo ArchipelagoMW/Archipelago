@@ -6,6 +6,7 @@ import logging
 import random
 import secrets
 import warnings
+import time
 from argparse import Namespace
 from collections import Counter, deque, defaultdict
 from collections.abc import Callable, Collection, Iterable, Iterator, Mapping, MutableSequence, Set as AbstractSet
@@ -1728,7 +1729,7 @@ class Spoiler:
             collection_spheres.append(sphere)
             state_cache.append(state.copy())
 
-            logging.debug('Calculated sphere %i, containing %i of %i progress items.', len(collection_spheres),
+            logging.info('Calculated sphere %i, containing %i of %i progress items.', len(collection_spheres),
                           len(sphere),
                           len(prog_locations))
             if not sphere:
@@ -1747,7 +1748,9 @@ class Spoiler:
         # reducing each range of influence to the bare minimum required inside it
         required_locations = {location for sphere in collection_spheres for location in sphere}
         for num, sphere in reversed(tuple(enumerate(collection_spheres))):
+            logging.info('Processing sphere %i of %i, containing %i items', num+1, len(collection_spheres),len(sphere))
             to_delete: Set[Location] = set()
+            starttime = time.monotonic_ns()
             for location in sphere:
                 # we remove the location from required_locations to sweep from, and check if the game is still beatable
                 logging.debug('Checking if %s (Player %d) is required to beat the game.', location.item.name,
@@ -1759,12 +1762,15 @@ class Spoiler:
                     # still required, got to keep it around
                     required_locations.add(location)
 
+            time_elapsed = int((time.monotonic_ns()-starttime)/1e6)/1e3
+            logging.info('Sphere %i of %i, culled %i items (%.3f s) (%.4f s/item)', num+1,len(collection_spheres),len(to_delete),time_elapsed, time_elapsed/len(sphere))
             # cull entries in spheres for spoiler walkthrough at end
             sphere -= to_delete
 
         # second phase, sphere 0
         removed_precollected: List[Item] = []
-
+        logging.info('Processing precollected items (%i)',len(multiworld.precollected_items))
+        starttime = time.monotonic_ns()
         for precollected_items in multiworld.precollected_items.values():
             # The list of items is mutated by removing one item at a time to determine if each item is required to beat
             # the game, and re-adding that item if it was required, so a copy needs to be made before iterating.
@@ -1779,7 +1785,7 @@ class Spoiler:
                     multiworld.push_precollected(item)
                 else:
                     removed_precollected.append(item)
-
+        logging.info('Precollected items: culled %i items (%.3f s)',len(removed_precollected),((time.monotonic_ns()-starttime)/1e6)/1e3)
         # we are now down to just the required progress items in collection_spheres. Unfortunately
         # the previous pruning stage could potentially have made certain items dependant on others
         # in the same or later sphere (because the location had 2 ways to access but the item originally
@@ -1797,7 +1803,7 @@ class Spoiler:
 
             collection_spheres.append(sphere)
 
-            logging.debug('Calculated final sphere %i, containing %i of %i progress items.', len(collection_spheres),
+            logging.info('Calculated final sphere %i, containing %i of %i progress items.', len(collection_spheres),
                           len(sphere), len(required_locations))
 
             required_locations -= sphere
