@@ -3,6 +3,9 @@
 Welcome to The Wind Waker Archipelago! This guide will help you set up the randomizer and play your first multiworld.
 If you're playing The Wind Waker, you must follow a few simple steps to get started.
 
+Dolphin is the default supported backend. For experimental real-Wii support in this source branch,
+see [Wii / Nintendont AP Bridge (v0.1)](wii_ap_bridge.md).
+
 ## Requirements
 
 You'll need the following components to be able to play The Wind Waker:

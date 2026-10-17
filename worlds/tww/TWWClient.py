@@ -3,30 +3,33 @@ import time
 import traceback
 from typing import TYPE_CHECKING, Any, Optional
 
-import dolphin_memory_engine
-
 import Utils
 from CommonClient import ClientCommandProcessor, CommonContext, get_base_parser, gui_enabled, logger, server_loop
 from NetUtils import ClientStatus
 
 from .Items import ITEM_TABLE, LOOKUP_ID_TO_NAME
 from .Locations import ISLAND_NAME_TO_SALVAGE_BIT, LOCATION_TABLE, TWWLocation, TWWLocationData, TWWLocationType
+from .Memory import APBridgeError, APBridgeWriteUncertainError, ConsoleMemory, DolphinMemory, WiiMemory
 from .randomizers.Charts import ISLAND_NUMBER_TO_NAME
 
 if TYPE_CHECKING:
     import kvui
 
 CONNECTION_REFUSED_GAME_STATUS = (
-    "Dolphin failed to connect. Please load a randomized ROM for The Wind Waker. Trying again in 5 seconds..."
+    "{backend} failed to connect. Please load a randomized ROM for The Wind Waker. Trying again in 5 seconds..."
 )
 CONNECTION_REFUSED_SAVE_STATUS = (
-    "Dolphin failed to connect. Please load into the save file. Trying again in 5 seconds..."
+    "{backend} failed to connect. Please load into the save file. Trying again in 5 seconds..."
 )
 CONNECTION_LOST_STATUS = (
-    "Dolphin connection was lost. Please restart your emulator and make sure The Wind Waker is running."
+    "{backend} connection was lost. Please check the game and connection."
 )
-CONNECTION_CONNECTED_STATUS = "Dolphin connected successfully."
-CONNECTION_INITIAL_STATUS = "Dolphin connection has not been initiated."
+CONNECTION_CONNECTED_STATUS = "{backend} connected successfully."
+CONNECTION_INITIAL_STATUS = "{backend} connection has not been initiated."
+ITEM_DELIVERY_UNCERTAIN_STATUS = (
+    "Item delivery is paused because a Wii item write or index update could not be confirmed. "
+    "To avoid duplicate or missing items, do not save this session. Reload your last save, then restart the client."
+)
 
 
 # This address is used to check/set the player's health for DeathLink.
@@ -109,14 +112,38 @@ class TWWCommandProcessor(ClientCommandProcessor):
         Display the current Dolphin emulator connection status.
         """
         if isinstance(self.ctx, TWWContext):
-            logger.info(f"Dolphin Status: {self.ctx.dolphin_status}")
+            if isinstance(self.ctx.memory, DolphinMemory):
+                logger.info(f"Dolphin Status: {self.ctx.console_status}")
+            else:
+                logger.info(f"Dolphin is inactive. Selected console: {self.ctx.memory.description}")
+
+    def _cmd_console(self, address: str = "") -> bool:
+        """Select Wii AP Bridge with /console <IPv4 address>, /console off for Dolphin, or /console for status."""
+        if not isinstance(self.ctx, TWWContext):
+            return False
+        if not address:
+            self.output(f"Console: {self.ctx.memory.description}. {self.ctx.console_status}")
+            if self.ctx.pending_memory is not None:
+                self.output(f"Switching to {self.ctx.pending_memory.description}...")
+            if self.ctx.item_delivery_uncertain:
+                self.output(ITEM_DELIVERY_UNCERTAIN_STATUS)
+            return True
+        try:
+            memory = DolphinMemory() if address.lower() == "off" else WiiMemory(address)
+        except ValueError as error:
+            self.output(f"Invalid Wii IPv4 address: {error}. Use /console <IPv4 address> or /console off.")
+            return False
+        self.ctx.pending_memory = memory
+        self.ctx.watcher_event.set()
+        self.output(f"Selecting {memory.description}. Use /connect to join your AP server after switching.")
+        return True
 
 
 class TWWContext(CommonContext):
     """
     The context for The Wind Waker client.
 
-    This class manages all interactions with the Dolphin emulator and the Archipelago server for The Wind Waker.
+    This class manages all interactions with the selected console and the Archipelago server for The Wind Waker.
     """
 
     command_processor = TWWCommandProcessor
@@ -133,7 +160,10 @@ class TWWContext(CommonContext):
 
         super().__init__(server_address, password)
         self.dolphin_sync_task: Optional[asyncio.Task[None]] = None
-        self.dolphin_status: str = CONNECTION_INITIAL_STATUS
+        self.memory: ConsoleMemory = DolphinMemory()
+        self.pending_memory: Optional[ConsoleMemory] = None
+        self.console_status: str = CONNECTION_INITIAL_STATUS.format(backend=self.memory.name)
+        self.item_delivery_uncertain: bool = False
         self.awaiting_rom: bool = False
         self.has_send_death: bool = False
 
@@ -166,6 +196,36 @@ class TWWContext(CommonContext):
         # Length of the item get array in memory.
         self.len_give_item_array: int = 0x10
 
+    @property
+    def connected_status(self) -> str:
+        return CONNECTION_CONNECTED_STATUS.format(backend=self.memory.name)
+
+    def memory_connection_lost(self, error: Exception) -> None:
+        self.memory.un_hook()
+        self.console_status = CONNECTION_LOST_STATUS.format(backend=self.memory.name)
+        logger.error(f"{self.console_status} {error}. Reconnecting...")
+        self.watcher_event.set()
+
+    def pause_item_delivery(self) -> None:
+        # This must survive reconnects and backend switches. The wire protocol
+        # cannot tell us whether an item was consumed after a lost acknowledgment.
+        self.item_delivery_uncertain = True
+        logger.error(ITEM_DELIVERY_UNCERTAIN_STATUS)
+
+    async def switch_memory(self) -> None:
+        memory = self.pending_memory
+        assert memory is not None
+        self.pending_memory = None
+        self.memory.un_hook()
+        # Never carry a server slot or an item list into a different console.
+        await self.disconnect()
+        self.reset_server_state()
+        self.reset_session_state()
+        self.memory = memory
+        self.console_status = CONNECTION_INITIAL_STATUS.format(backend=memory.name)
+        self.received_magic_idx = -1
+        self.has_send_death = False
+
     async def disconnect(self, allow_autoreconnect: bool = False) -> None:
         """
         Disconnect the client from the server and reset game state variables.
@@ -174,6 +234,7 @@ class TWWContext(CommonContext):
 
         """
         self.auth = None
+        self.awaiting_rom = False
         self.salvage_locations_map = {}
         self.current_stage_name = ""
         self.visited_stage_names = None
@@ -191,7 +252,7 @@ class TWWContext(CommonContext):
             if self.awaiting_rom:
                 return
             self.awaiting_rom = True
-            logger.info("Awaiting connection to Dolphin to get player information.")
+            logger.info(f"Awaiting connection to {self.memory.name} to get player information.")
             return
         await self.send_connect()
 
@@ -203,7 +264,7 @@ class TWWContext(CommonContext):
         :param args: The command arguments.
         """
         if cmd == "Connected":
-            self.update_salvage_locations_map()
+            self.salvage_locations_map = {}
             if "death_link" in args["slot_data"]:
                 Utils.async_start(self.update_death_link(bool(args["slot_data"]["death_link"])))
             # Request the connected slot's dictionary (used as a set) of visited stages.
@@ -233,7 +294,11 @@ class TWWContext(CommonContext):
         :param data: The data associated with the DeathLink event.
         """
         super().on_deathlink(data)
-        _give_death(self)
+        try:
+            _give_death(self)
+        except APBridgeError as error:
+            # DeathLink is delivered outside the memory sync task.
+            self.memory_connection_lost(error)
 
     def make_gui(self) -> type["kvui.GameManager"]:
         """
@@ -271,47 +336,48 @@ class TWWContext(CommonContext):
 
         This is necessary for the client to handle randomized charts correctly.
         """
-        self.salvage_locations_map = {}
+        salvage_locations_map = {}
         for offset in range(49):
             island_name = ISLAND_NUMBER_TO_NAME[offset + 1]
             salvage_bit = ISLAND_NAME_TO_SALVAGE_BIT[island_name]
 
-            shuffled_island_number = read_short(CHARTS_MAPPING_ADDR + offset * 2)
+            shuffled_island_number = read_short(self, CHARTS_MAPPING_ADDR + offset * 2)
             shuffled_island_name = ISLAND_NUMBER_TO_NAME[shuffled_island_number]
             salvage_location_name = f"{shuffled_island_name} - Sunken Treasure"
 
-            self.salvage_locations_map[salvage_location_name] = salvage_bit
+            salvage_locations_map[salvage_location_name] = salvage_bit
+        self.salvage_locations_map = salvage_locations_map
 
 
-def read_short(console_address: int) -> int:
+def read_short(ctx: TWWContext, console_address: int) -> int:
     """
-    Read a 2-byte short from Dolphin memory.
+    Read a 2-byte short from console memory.
 
     :param console_address: Address to read from.
     :return: The value read from memory.
     """
-    return int.from_bytes(dolphin_memory_engine.read_bytes(console_address, 2), byteorder="big")
+    return int.from_bytes(ctx.memory.read_bytes(console_address, 2), byteorder="big")
 
 
-def write_short(console_address: int, value: int) -> None:
+def write_short(ctx: TWWContext, console_address: int, value: int) -> None:
     """
-    Write a 2-byte short to Dolphin memory.
+    Write a 2-byte short to console memory.
 
     :param console_address: Address to write to.
     :param value: Value to write.
     """
-    dolphin_memory_engine.write_bytes(console_address, value.to_bytes(2, byteorder="big"))
+    ctx.memory.write_bytes(console_address, value.to_bytes(2, byteorder="big"))
 
 
-def read_string(console_address: int, strlen: int) -> str:
+def read_string(ctx: TWWContext, console_address: int, strlen: int) -> str:
     """
-    Read a string from Dolphin memory.
+    Read a string from console memory.
 
     :param console_address: Address to start reading from.
     :param strlen: Length of the string to read.
     :return: The string.
     """
-    return dolphin_memory_engine.read_bytes(console_address, strlen).split(b"\0", 1)[0].decode()
+    return ctx.memory.read_bytes(console_address, strlen).split(b"\0", 1)[0].decode()
 
 
 def _give_death(ctx: TWWContext) -> None:
@@ -322,12 +388,12 @@ def _give_death(ctx: TWWContext) -> None:
     """
     if (
         ctx.slot is not None
-        and dolphin_memory_engine.is_hooked()
-        and ctx.dolphin_status == CONNECTION_CONNECTED_STATUS
-        and check_ingame()
+        and ctx.memory.is_hooked()
+        and ctx.console_status == ctx.connected_status
+        and check_ingame(ctx)
     ):
         ctx.has_send_death = True
-        write_short(CURR_HEALTH_ADDR, 0)
+        write_short(ctx, CURR_HEALTH_ADDR, 0)
 
 
 def _give_item(ctx: TWWContext, item_name: str) -> bool:
@@ -338,14 +404,15 @@ def _give_item(ctx: TWWContext, item_name: str) -> bool:
     :param item_name: Name of the item to give.
     :return: Whether the item was successfully given.
     """
-    if not check_ingame() or dolphin_memory_engine.read_byte(CURR_STAGE_ID_ADDR) == 0xFF:
+    if not check_ingame(ctx) or ctx.memory.read_byte(CURR_STAGE_ID_ADDR) == 0xFF:
         return False
 
     item_id = ITEM_TABLE[item_name].item_id
+    assert item_id is not None
 
     # Loop through the item array, placing the item in an empty slot.
     for idx in range(ctx.len_give_item_array):
-        slot = dolphin_memory_engine.read_byte(GIVE_ITEM_ARRAY_ADDR + idx)
+        slot = ctx.memory.read_byte(GIVE_ITEM_ARRAY_ADDR + idx)
         if slot == 0xFF:
             # Special case: Use a different item ID for the second progressive magic meter.
             if item_name == "Progressive Magic Meter":
@@ -353,7 +420,7 @@ def _give_item(ctx: TWWContext, item_name: str) -> bool:
                     ctx.received_magic_idx = idx
                 elif idx > ctx.received_magic_idx:
                     item_id = 0xB2
-            dolphin_memory_engine.write_byte(GIVE_ITEM_ARRAY_ADDR + idx, item_id)
+            ctx.memory.write_byte(GIVE_ITEM_ARRAY_ADDR + idx, item_id)
             return True
 
     # If unable to place the item in the array, return `False`.
@@ -366,10 +433,12 @@ async def give_items(ctx: TWWContext) -> None:
 
     :param ctx: The Wind Waker client context.
     """
-    if check_ingame() and dolphin_memory_engine.read_byte(CURR_STAGE_ID_ADDR) != 0xFF:
+    if ctx.item_delivery_uncertain:
+        return
+    if check_ingame(ctx) and ctx.memory.read_byte(CURR_STAGE_ID_ADDR) != 0xFF:
         # Read the expected index of the player, which is the index of the next item they're expecting to receive.
         # The expected index starts at 0 for a fresh save file.
-        expected_idx = read_short(EXPECTED_INDEX_ADDR)
+        expected_idx = read_short(ctx, EXPECTED_INDEX_ADDR)
 
         # Check if there are new items.
         received_items = ctx.items_received
@@ -381,14 +450,28 @@ async def give_items(ctx: TWWContext) -> None:
         # Give the player all items at an index greater than or equal to the expected index.
         for idx, item in enumerate(received_items[expected_idx:], start=expected_idx):
             # Attempt to give the item and increment the expected index.
-            while not _give_item(ctx, LOOKUP_ID_TO_NAME[item.item]):
-                await asyncio.sleep(0.01)
+            try:
+                while True:
+                    if ctx.exit_event.is_set() or ctx.pending_memory is not None:
+                        return
+                    if _give_item(ctx, LOOKUP_ID_TO_NAME[item.item]):
+                        break
+                    await asyncio.sleep(0.01)
+            except APBridgeWriteUncertainError:
+                ctx.pause_item_delivery()
+                raise
 
             # Increment the expected index.
-            write_short(EXPECTED_INDEX_ADDR, idx + 1)
+            try:
+                write_short(ctx, EXPECTED_INDEX_ADDR, idx + 1)
+            except APBridgeError:
+                # Even a rejected index write leaves the acknowledged item queued
+                # or consumed, so the old index must not cause another delivery.
+                ctx.pause_item_delivery()
+                raise
 
 
-def check_special_location(location_name: str, data: TWWLocationData) -> bool:
+def check_special_location(ctx: TWWContext, location_name: str, data: TWWLocationData) -> bool:
     """
     Check that the player has checked a given location.
     This function handles locations that require special logic.
@@ -403,39 +486,43 @@ def check_special_location(location_name: str, data: TWWLocationData) -> bool:
     # 0x6 is delivered the final picture for Lenzo, 0x7 is a day has passed since becoming his assistant
     # Either is fine for sending the check, so check both conditions.
     if location_name == "Windfall Island - Lenzo's House - Become Lenzo's Assistant":
+        assert data.address is not None
         checked = (
-            dolphin_memory_engine.read_byte(data.address) & 0x6 == 0x6
-            or dolphin_memory_engine.read_byte(data.address) & 0x7 == 0x7
+            ctx.memory.read_byte(data.address) & 0x6 == 0x6
+            or ctx.memory.read_byte(data.address) & 0x7 == 0x7
         )
 
     # The "Windfall Island - Maggie - Delivery Reward" flag remains unknown.
     # However, as a temporary workaround, we can check if the player had Moblin's letter at some point, but it's no
     # longer in their Delivery Bag.
     elif location_name == "Windfall Island - Maggie - Delivery Reward":
-        was_moblins_owned = (dolphin_memory_engine.read_word(LETTER_OWND_ADDR) >> 15) & 1
-        dbag_contents = [dolphin_memory_engine.read_byte(LETTER_BASE_ADDR + offset) for offset in range(8)]
-        checked = was_moblins_owned and 0x9B not in dbag_contents
+        was_moblins_owned = (ctx.memory.read_word(LETTER_OWND_ADDR) >> 15) & 1
+        dbag_contents = [ctx.memory.read_byte(LETTER_BASE_ADDR + offset) for offset in range(8)]
+        checked = bool(was_moblins_owned and 0x9B not in dbag_contents)
 
     # For Letter from Hoskit's Girlfriend, we need to check two bytes.
     # 0x1 = Golden Feathers delivered, 0x2 = Mail sent by Hoskit's Girlfriend, 0x3 = Mail read by Link
     elif location_name == "Mailbox - Letter from Hoskit's Girlfriend":
-        checked = dolphin_memory_engine.read_byte(data.address) & 0x3 == 0x3
+        assert data.address is not None
+        checked = ctx.memory.read_byte(data.address) & 0x3 == 0x3
 
     # For Letter from Baito's Mother, we need to check two bytes.
     # 0x1 = Note to Mom sent, 0x2 = Mail sent by Baito's Mother, 0x3 = Mail read by Link
     elif location_name == "Mailbox - Letter from Baito's Mother":
-        checked = dolphin_memory_engine.read_byte(data.address) & 0x3 == 0x3
+        assert data.address is not None
+        checked = ctx.memory.read_byte(data.address) & 0x3 == 0x3
 
     # For Letter from Grandma, we need to check two bytes.
     # 0x1 = Grandma saved, 0x2 = Mail sent by Grandma, 0x3 = Mail read by Link
     elif location_name == "Mailbox - Letter from Grandma":
-        checked = dolphin_memory_engine.read_byte(data.address) & 0x3 == 0x3
+        assert data.address is not None
+        checked = ctx.memory.read_byte(data.address) & 0x3 == 0x3
 
     # We check if the bits for turning all five statues are set for the Ankle's reward.
     # For some reason, the bit for the Dragon Tingle Statue is separate from the rest.
     elif location_name == "Tingle Island - Ankle - Reward for All Tingle Statues":
-        dragon_tingle_statue_rewarded = dolphin_memory_engine.read_byte(TINGLE_STATUE_1_ADDR) & 0x40 == 0x40
-        other_tingle_statues_rewarded = dolphin_memory_engine.read_byte(TINGLE_STATUE_2_ADDR) & 0x0F == 0x0F
+        dragon_tingle_statue_rewarded = ctx.memory.read_byte(TINGLE_STATUE_1_ADDR) & 0x40 == 0x40
+        other_tingle_statues_rewarded = ctx.memory.read_byte(TINGLE_STATUE_2_ADDR) & 0x0F == 0x0F
         checked = dragon_tingle_statue_rewarded and other_tingle_statues_rewarded
 
     else:
@@ -493,7 +580,7 @@ async def check_locations(ctx: TWWContext) -> None:
     :param ctx: The Wind Waker client context.
     """
     # Read the bitfield for sunken treasure locations.
-    ctx.charts_bitfield = int.from_bytes(dolphin_memory_engine.read_bytes(CHARTS_BITFLD_ADDR, 8), byteorder="big")
+    ctx.charts_bitfield = int.from_bytes(ctx.memory.read_bytes(CHARTS_BITFLD_ADDR, 8), byteorder="big")
 
     # Read the bitfields once before the loop to speed things up a bit.
     ctx.chests_bitfields = {}
@@ -504,20 +591,20 @@ async def check_locations(ctx: TWWContext) -> None:
         switches_bitfield_addr = BASE_SWITCHES_BITFLD_ADDR + (0x24 * stage_id)
         pickups_bitfield_addr = BASE_PICKUPS_BITFLD_ADDR + (0x24 * stage_id)
 
-        ctx.chests_bitfields[stage_id] = int(dolphin_memory_engine.read_word(chest_bitfield_addr))
+        ctx.chests_bitfields[stage_id] = int(ctx.memory.read_word(chest_bitfield_addr))
         ctx.switches_bitfields[stage_id] = int.from_bytes(
-            dolphin_memory_engine.read_bytes(switches_bitfield_addr, 10), byteorder="big"
+            ctx.memory.read_bytes(switches_bitfield_addr, 10), byteorder="big"
         )
-        ctx.pickups_bitfields[stage_id] = int(dolphin_memory_engine.read_word(pickups_bitfield_addr))
+        ctx.pickups_bitfields[stage_id] = int(ctx.memory.read_word(pickups_bitfield_addr))
 
-    ctx.curr_stage_chests_bitfield = int(dolphin_memory_engine.read_word(CURR_STAGE_CHESTS_BITFLD_ADDR))
+    ctx.curr_stage_chests_bitfield = int(ctx.memory.read_word(CURR_STAGE_CHESTS_BITFLD_ADDR))
     ctx.curr_stage_switches_bitfield = int.from_bytes(
-        dolphin_memory_engine.read_bytes(CURR_STAGE_SWITCHES_BITFLD_ADDR, 10), byteorder="big"
+        ctx.memory.read_bytes(CURR_STAGE_SWITCHES_BITFLD_ADDR, 10), byteorder="big"
     )
-    ctx.curr_stage_pickups_bitfield = int(dolphin_memory_engine.read_word(CURR_STAGE_PICKUPS_BITFLD_ADDR))
+    ctx.curr_stage_pickups_bitfield = int(ctx.memory.read_word(CURR_STAGE_PICKUPS_BITFLD_ADDR))
 
     # We check which locations are currently checked on the current stage.
-    curr_stage_id = dolphin_memory_engine.read_byte(CURR_STAGE_ID_ADDR)
+    curr_stage_id = ctx.memory.read_byte(CURR_STAGE_ID_ADDR)
 
     # Loop through all locations to see if each has been checked.
     for location, data in LOCATION_TABLE.items():
@@ -528,11 +615,12 @@ async def check_locations(ctx: TWWContext) -> None:
             checked = bool((ctx.charts_bitfield >> salvage_bit) & 1)
         elif data.type == TWWLocationType.BOCTO:
             assert data.address is not None
-            checked = bool((read_short(data.address) >> data.bit) & 1)
+            checked = bool((read_short(ctx, data.address) >> data.bit) & 1)
         elif data.type == TWWLocationType.EVENT:
-            checked = bool((dolphin_memory_engine.read_byte(data.address) >> data.bit) & 1)
+            assert data.address is not None
+            checked = bool((ctx.memory.read_byte(data.address) >> data.bit) & 1)
         elif data.type == TWWLocationType.SPECL:
-            checked = check_special_location(location, data)
+            checked = check_special_location(ctx, location, data)
         else:
             checked = check_regular_location(ctx, curr_stage_id, data)
 
@@ -556,14 +644,14 @@ async def check_current_stage_changed(ctx: TWWContext) -> None:
 
     :param ctx: The Wind Waker client context.
     """
-    new_stage_name = read_string(CURR_STAGE_NAME_ADDR, 8)
+    new_stage_name = read_string(ctx, CURR_STAGE_NAME_ADDR, 8)
 
     # Special handling is required for the Cliff Plateau Isles Inner Cave exit, which exits out onto the sea stage
     # rather than a unique stage.
     if (
         new_stage_name == "sea"
-        and dolphin_memory_engine.read_byte(MOST_RECENT_ROOM_NUMBER_ADDR) == CLIFF_PLATEAU_ISLES_ROOM_NUMBER
-        and read_short(MOST_RECENT_SPAWN_ID_ADDR) == CLIFF_PLATEAU_ISLES_HIGHEST_ISLE_SPAWN_ID
+        and ctx.memory.read_byte(MOST_RECENT_ROOM_NUMBER_ADDR) == CLIFF_PLATEAU_ISLES_ROOM_NUMBER
+        and read_short(ctx, MOST_RECENT_SPAWN_ID_ADDR) == CLIFF_PLATEAU_ISLES_HIGHEST_ISLE_SPAWN_ID
     ):
         new_stage_name = CLIFF_PLATEAU_ISLES_HIGHEST_ISLE_DUMMY_STAGE_NAME
 
@@ -587,13 +675,13 @@ async def check_current_stage_changed(ctx: TWWContext) -> None:
             await ctx.update_visited_stages(new_stage_name)
 
 
-async def check_alive() -> bool:
+async def check_alive(ctx: TWWContext) -> bool:
     """
     Check if the player is currently alive in-game.
 
     :return: `True` if the player is alive, otherwise `False`.
     """
-    cur_health = read_short(CURR_HEALTH_ADDR)
+    cur_health = read_short(ctx, CURR_HEALTH_ADDR)
     return cur_health > 0
 
 
@@ -604,8 +692,8 @@ async def check_death(ctx: TWWContext) -> None:
 
     :return: `True` if the player is dead, otherwise `False`.
     """
-    if ctx.slot is not None and check_ingame():
-        cur_health = read_short(CURR_HEALTH_ADDR)
+    if ctx.slot is not None and check_ingame(ctx):
+        cur_health = read_short(ctx, CURR_HEALTH_ADDR)
         if cur_health <= 0:
             if not ctx.has_send_death and time.time() >= ctx.last_death_link + 3:
                 ctx.has_send_death = True
@@ -614,84 +702,95 @@ async def check_death(ctx: TWWContext) -> None:
             ctx.has_send_death = False
 
 
-def check_ingame() -> bool:
+def check_ingame(ctx: TWWContext) -> bool:
     """
     Check if the player is currently in-game.
 
     :return: `True` if the player is in-game, otherwise `False`.
     """
-    return read_string(CURR_STAGE_NAME_ADDR, 8) not in ["", "sea_T", "Name"]
+    return read_string(ctx, CURR_STAGE_NAME_ADDR, 8) not in ["", "sea_T", "Name"]
 
 
 async def dolphin_sync_task(ctx: TWWContext) -> None:
     """
-    The task loop for managing the connection to Dolphin.
+    Manage the selected console connection and synchronize game state.
 
-    While connected, read the emulator's memory to look for any relevant changes made by the player in the game.
-
-    :param ctx: The Wind Waker client context.
+    The task keeps its original name for compatibility with the client startup.
     """
-    logger.info("Starting Dolphin connector. Use /dolphin for status information.")
+    logger.info("Starting console connector. Use /console for selection/status or /dolphin for Dolphin status.")
     sleep_time = 0.0
-    while not ctx.exit_event.is_set():
-        if sleep_time > 0.0:
-            try:
-                # ctx.watcher_event gets set when receiving ReceivedItems or LocationInfo, or when shutting down.
-                await asyncio.wait_for(ctx.watcher_event.wait(), sleep_time)
-            except asyncio.TimeoutError:
-                pass
-            sleep_time = 0.0
-        ctx.watcher_event.clear()
+    try:
+        while not ctx.exit_event.is_set():
+            if sleep_time > 0.0:
+                try:
+                    # Also wake when the user selects a different console.
+                    await asyncio.wait_for(ctx.watcher_event.wait(), sleep_time)
+                except asyncio.TimeoutError:
+                    pass
+                sleep_time = 0.0
+            ctx.watcher_event.clear()
+            if ctx.exit_event.is_set():
+                break
 
-        try:
-            if dolphin_memory_engine.is_hooked() and ctx.dolphin_status == CONNECTION_CONNECTED_STATUS:
-                if not check_ingame():
-                    # Reset the give item array while not in the game.
-                    dolphin_memory_engine.write_bytes(GIVE_ITEM_ARRAY_ADDR, bytes([0xFF] * ctx.len_give_item_array))
-                    sleep_time = 0.1
+            try:
+                if ctx.pending_memory is not None:
+                    await ctx.switch_memory()
                     continue
-                if ctx.slot is not None:
-                    if "DeathLink" in ctx.tags:
-                        await check_death(ctx)
-                    await give_items(ctx)
-                    await check_locations(ctx)
-                    await check_current_stage_changed(ctx)
-                else:
-                    if not ctx.auth:
-                        ctx.auth = read_string(SLOT_NAME_ADDR, 0x40)
-                    if ctx.awaiting_rom:
-                        await ctx.server_auth()
-                sleep_time = 0.1
-            else:
-                if ctx.dolphin_status == CONNECTION_CONNECTED_STATUS:
-                    logger.info("Connection to Dolphin lost, reconnecting...")
-                    ctx.dolphin_status = CONNECTION_LOST_STATUS
-                logger.info("Attempting to connect to Dolphin...")
-                dolphin_memory_engine.hook()
-                if dolphin_memory_engine.is_hooked():
-                    if dolphin_memory_engine.read_bytes(0x80000000, 6) != b"GZLE99":
-                        logger.info(CONNECTION_REFUSED_GAME_STATUS)
-                        ctx.dolphin_status = CONNECTION_REFUSED_GAME_STATUS
-                        dolphin_memory_engine.un_hook()
-                        sleep_time = 5
+                if ctx.memory.is_hooked() and ctx.console_status == ctx.connected_status:
+                    if not check_ingame(ctx):
+                        # Reset the give item array while not in the game.
+                        ctx.memory.write_bytes(GIVE_ITEM_ARRAY_ADDR, bytes([0xFF] * ctx.len_give_item_array))
+                        sleep_time = 0.1
+                        continue
+                    if ctx.slot is not None:
+                        # Read charts here so transport errors use the same reconnect
+                        # path as other memory operations, rather than escaping on_package.
+                        if not ctx.salvage_locations_map:
+                            ctx.update_salvage_locations_map()
+                        if "DeathLink" in ctx.tags:
+                            await check_death(ctx)
+                        await give_items(ctx)
+                        if ctx.pending_memory is not None or ctx.exit_event.is_set():
+                            continue
+                        await check_locations(ctx)
+                        await check_current_stage_changed(ctx)
                     else:
-                        logger.info(CONNECTION_CONNECTED_STATUS)
-                        ctx.dolphin_status = CONNECTION_CONNECTED_STATUS
-                        ctx.locations_checked = set()
+                        if not ctx.auth:
+                            ctx.auth = read_string(ctx, SLOT_NAME_ADDR, 0x40)
+                        if ctx.awaiting_rom:
+                            await ctx.server_auth()
+                    sleep_time = 0.1
                 else:
-                    logger.info("Connection to Dolphin failed, attempting again in 5 seconds...")
-                    ctx.dolphin_status = CONNECTION_LOST_STATUS
-                    await ctx.disconnect()
-                    sleep_time = 5
-                    continue
-        except Exception:
-            dolphin_memory_engine.un_hook()
-            logger.info("Connection to Dolphin failed, attempting again in 5 seconds...")
-            logger.error(traceback.format_exc())
-            ctx.dolphin_status = CONNECTION_LOST_STATUS
-            await ctx.disconnect()
-            sleep_time = 5
-            continue
+                    if ctx.console_status == ctx.connected_status:
+                        logger.info(f"Connection to {ctx.memory.name} lost, reconnecting...")
+                        ctx.console_status = CONNECTION_LOST_STATUS.format(backend=ctx.memory.name)
+                    logger.info(f"Attempting to connect to {ctx.memory.description}...")
+                    ctx.memory.hook()
+                    if ctx.memory.is_hooked():
+                        if ctx.memory.read_bytes(0x80000000, 6) != b"GZLE99":
+                            ctx.console_status = CONNECTION_REFUSED_GAME_STATUS.format(backend=ctx.memory.name)
+                            logger.info(ctx.console_status)
+                            ctx.memory.un_hook()
+                            sleep_time = 5
+                        else:
+                            ctx.console_status = ctx.connected_status
+                            logger.info(ctx.console_status)
+                            ctx.locations_checked = set()
+                    else:
+                        logger.info(f"Connection to {ctx.memory.name} failed, attempting again in 5 seconds...")
+                        ctx.console_status = CONNECTION_LOST_STATUS.format(backend=ctx.memory.name)
+                        await ctx.disconnect()
+                        sleep_time = 5
+            except Exception as error:
+                ctx.memory_connection_lost(error)
+                if not isinstance(error, APBridgeError):
+                    logger.error(traceback.format_exc())
+                await ctx.disconnect()
+                # memory_connection_lost also wakes this task when called by DeathLink.
+                ctx.watcher_event.clear()
+                sleep_time = 5
+    finally:
+        ctx.memory.un_hook()
 
 
 def main(*args: str) -> None:
