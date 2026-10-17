@@ -8,7 +8,7 @@ from worlds.AutoWorld import WebWorld, World
 from BaseClasses import Tutorial
 from .constants import TCG_CARD_SHOP_SIM_NAME, STARTING_LICENSES_COUNT
 from .data.items import all_items, BoosterPackItems, AccessoriesItems, FigurineItems, TableTopItems, Events, Workers
-from .data.items.shop_licenses import get_total_licenses
+from .data.items.shop_licenses import get_total_licenses, ITEM_BY_ID
 from .data.locations import all_Enum_locations, all_Generated_locations
 from .options import *
 from .locations import *
@@ -91,6 +91,7 @@ class TCGSimulatorWorld(TCGSimulatorBase):
         self.itempool = []
         self.starting_items: list[Item] = []
 
+        self.ghost_item_counts = 0
         self.total_licenses = 0
         self.license_items = []
         self.starting_license_items = []
@@ -123,11 +124,11 @@ class TCGSimulatorWorld(TCGSimulatorBase):
         if self.options.card_sanity.value > 0 and not self.settings.allow_card_sanity:
             self.options.card_sanity.value = 0
 
-        if False:
+        if 0 == sum(self.options.filler_weights.value.values()):
             raise OptionError("All Filler Weights are Zero")
 
-        if self.options.trap_fill.value != 0 and False:
-            raise OptionError("All Trap Weights are Zero")
+        if self.options.trap_fill.value != 0 and 0 == sum(self.options.trap_weights.value.values()):
+            raise OptionError("Trap Fill is On and All Trap Weights are Zero")
 
         self.options.max_level.value = math.ceil(self.options.max_level.value / 5) * 5
 
@@ -135,7 +136,7 @@ class TCGSimulatorWorld(TCGSimulatorBase):
 
         available_licenses = min(
             get_total_licenses(),
-            STARTING_LICENSES_COUNT + total_steps * self.licenses_per
+            STARTING_LICENSES_COUNT + total_steps * self.options.licenses_per_cap.value
         )
 
         self.total_licenses = available_licenses
@@ -149,6 +150,7 @@ class TCGSimulatorWorld(TCGSimulatorBase):
         licenses, starting_licenses = locations.create_regions(self)
         self.license_items = licenses
         self.starting_license_items = starting_licenses
+        items.create_events(self)
         locations.create_entrances(self)
 
     def connect_entrances(self) -> None:
@@ -176,9 +178,6 @@ class TCGSimulatorWorld(TCGSimulatorBase):
     def set_rules(self):
         set_goal(self)
 
-    #def connect_entrances(self):
-       # print("connecting entrances")
-
     def generate_output(self, output_directory: str):
         print("Generating Output")
         visualize_regions(self.multiworld.get_region("Menu", self.player), f"Player{self.player}_output.puml",
@@ -192,13 +191,8 @@ class TCGSimulatorWorld(TCGSimulatorBase):
         return {
             "ModVersion": "1.1.0",
 
-            "license_checks": [
-                {
-                    "type": type(item).__name__,
-                    "name": item.name,
-                }
-                for item in self.license_items
-            ],
+            "license_checks": [item.item_id for item in self.license_items],
+            "GhostCounts": self.ghost_item_counts,
 
             "MaxLevel": self.options.max_level.value,
             "LicensesPerCap": self.options.licenses_per_cap.value,
@@ -222,9 +216,6 @@ class TCGSimulatorWorld(TCGSimulatorBase):
             "NoFormat": self.options.no_formats.value,
         }
 
-    def extend_hint_information(self, hint_data: Dict[int, Dict[int, str]]):
-        hint_data[self.player] = self.hints
-
     def handle_ut_yamless(
             self, slot_data: dict[str, Any] | None
     ) -> dict[str, Any] | None:
@@ -233,34 +224,20 @@ class TCGSimulatorWorld(TCGSimulatorBase):
         if not slot_data:
             return None
 
-        ITEM_ENUMS = {
-            enum.__name__: enum
-            for enum in (
-                BoosterPackItems,
-                AccessoriesItems,
-                FigurineItems,
-                TableTopItems,
-            )
-        }
-
         # fill in options
         self.starting_item_ids = [int(x) for x in slot_data["StartingIds"]]
 
-        self.license_items = [
-            ITEM_ENUMS[item["type"]][item["name"]]
-            for item in slot_data["license_checks"]
-        ]
+        self.license_items = [ITEM_BY_ID[item_id] for item_id in slot_data["license_checks"]]
+        self.ghost_item_counts = slot_data["GhostCounts"]
 
         self.options.max_level.value = slot_data["MaxLevel"]
-        self.options.licenses_per_region.value = slot_data["LicensesPerRegion"]
+        self.options.licenses_per_cap.value = slot_data["LicensesPerRegion"]
         self.options.goal.value = slot_data["Goal"]
         self.options.collection_goal_percentage.value = slot_data["CollectionGoalPercent"]
         self.options.ghost_goal_amount.value = slot_data["GhostGoalAmount"]
 
         self.options.auto_renovate.value = slot_data["AutoRenovate"]
-        self.options.extra_starting_item_checks.value = slot_data["ExtraStartingItemChecks"]
         self.options.sell_check_amount.value = slot_data["SellCheckAmount"]
-        self.options.bulk_box.value = slot_data["BulkBoxChecks"]
         self.options.checks_opening_difficulty.value = slot_data["CardOpeningCheckDifficulty"]
         self.options.checks_selling_difficulty.value = slot_data["CardSellingCheckDifficulty"]
         self.options.checks_grading_difficulty.value = slot_data["CardGradingCheckDifficulty"]

@@ -1,4 +1,4 @@
-import math
+from __future__ import annotations
 from dataclasses import dataclass
 from typing import TYPE_CHECKING, override
 
@@ -7,16 +7,55 @@ from rule_builder.rules import Rule, Has
 from ..items import BoosterPackItems, AccessoriesItems, FigurineItems
 from ..items.shop_licenses import ProgressiveLicenses
 from ... import TCG_CARD_SHOP_SIM_NAME, get_total_licenses, STARTING_LICENSES_COUNT
+from ...world_base import TCGSimulatorBase
 
 if TYPE_CHECKING:
-    from ...world_base import TCGSimulatorBase
     from ... import  TCGSimulatorWorld
 
 def accessToTetramonBasePacks():
-    return Has(BoosterPackItems.PROGRESSIVE_BASIC_CARD_BOX.value)
+    return (
+            (Has(BoosterPackItems.PROGRESSIVE_BASIC_CARD_PACK.value) |
+        Has(BoosterPackItems.PROGRESSIVE_BASIC_CARD_BOX.value)) |
+            (Has(BoosterPackItems.PROGRESSIVE_RARE_CARD_PACK.value) |
+        Has(BoosterPackItems.PROGRESSIVE_RARE_CARD_BOX.value)) |
+            (Has(BoosterPackItems.PROGRESSIVE_EPIC_CARD_PACK.value) |
+        Has(BoosterPackItems.PROGRESSIVE_EPIC_CARD_BOX.value)) |
+            (Has(BoosterPackItems.PROGRESSIVE_LEGENDARY_CARD_PACK.value) |
+        Has(BoosterPackItems.PROGRESSIVE_LEGENDARY_CARD_BOX.value))
+            )
 
 def accessToTetramonDestinyPacks():
-    return Has(BoosterPackItems.PROGRESSIVE_BASIC_CARD_BOX.value)
+    return (
+            (Has(BoosterPackItems.PROGRESSIVE_BASIC_DESTINY_PACK.value) |
+        Has(BoosterPackItems.PROGRESSIVE_BASIC_DESTINY_BOX.value)) |
+            (Has(BoosterPackItems.PROGRESSIVE_RARE_DESTINY_PACK.value) |
+        Has(BoosterPackItems.PROGRESSIVE_RARE_DESTINY_BOX.value)) |
+            (Has(BoosterPackItems.PROGRESSIVE_EPIC_DESTINY_PACK.value) |
+        Has(BoosterPackItems.PROGRESSIVE_EPIC_DESTINY_BOX.value)) |
+            (Has(BoosterPackItems.PROGRESSIVE_LEGENDARY_DESTINY_PACK.value) |
+        Has(BoosterPackItems.PROGRESSIVE_LEGENDARY_DESTINY_BOX.value))
+            )
+
+def hasAllPacks():
+    return (
+            (Has(BoosterPackItems.PROGRESSIVE_BASIC_CARD_PACK.value) |
+             Has(BoosterPackItems.PROGRESSIVE_BASIC_CARD_BOX.value)) &
+            (Has(BoosterPackItems.PROGRESSIVE_RARE_CARD_PACK.value) |
+             Has(BoosterPackItems.PROGRESSIVE_RARE_CARD_BOX.value)) &
+            (Has(BoosterPackItems.PROGRESSIVE_EPIC_CARD_PACK.value) |
+             Has(BoosterPackItems.PROGRESSIVE_EPIC_CARD_BOX.value)) &
+            (Has(BoosterPackItems.PROGRESSIVE_LEGENDARY_CARD_PACK.value) |
+             Has(BoosterPackItems.PROGRESSIVE_LEGENDARY_CARD_BOX.value))
+            &
+            (Has(BoosterPackItems.PROGRESSIVE_BASIC_DESTINY_PACK.value) |
+            Has(BoosterPackItems.PROGRESSIVE_BASIC_DESTINY_BOX.value)) &
+            (Has(BoosterPackItems.PROGRESSIVE_RARE_DESTINY_PACK.value) |
+            Has(BoosterPackItems.PROGRESSIVE_RARE_DESTINY_BOX.value)) &
+            (Has(BoosterPackItems.PROGRESSIVE_EPIC_DESTINY_PACK.value) |
+            Has(BoosterPackItems.PROGRESSIVE_EPIC_DESTINY_BOX.value)) &
+            (Has(BoosterPackItems.PROGRESSIVE_LEGENDARY_DESTINY_PACK.value) |
+            Has(BoosterPackItems.PROGRESSIVE_LEGENDARY_DESTINY_BOX.value))
+        )
 
 @dataclass(kw_only=True)
 class HasLicensesForLevel(Rule[TCGSimulatorBase], game=TCG_CARD_SHOP_SIM_NAME):
@@ -72,4 +111,4 @@ class HasLicensesForLevel(Rule[TCGSimulatorBase], game=TCG_CARD_SHOP_SIM_NAME):
 
         @override
         def __str__(self) -> str:
-            return f"Has {self.amount} Licenses"
+            return f"Has licenses for {self.level}"

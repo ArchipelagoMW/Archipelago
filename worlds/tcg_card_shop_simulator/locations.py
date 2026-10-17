@@ -10,10 +10,11 @@ from .data.locations import CardAchievementFamily, generate_level_locations, gen
 from .data.locations.achievements import generate_open_achievement_locations, generate_sell_achievement_locations, \
     generate_grade_achievement_locations
 from .data.regions.entrances import Entrances, LevelEntrances, PackEntrances
-from .data.regions.regions import DefaultRegions, Regions
+from .data.regions.regions import DefaultRegions, Regions, get_level_region
+from .data.items.shop_licenses import BoosterPackItems, AccessoriesItems, FigurineItems, TableTopItems
 
 if TYPE_CHECKING:
-    from . import TCGSimulatorWorld, BoosterPackItems, AccessoriesItems, FigurineItems, TableTopItems
+    from . import TCGSimulatorWorld
 
 
 def create_location(world, data: GeneratedLocationData):
@@ -83,10 +84,10 @@ def create_regions(world: "TCGSimulatorWorld"):
         for _location in generate_event_locations(list(EventFormat), world.options.play_table_checks.value):
             locations_by_region[_location.region].append(_location)
 
-    booster_pack_items: list[ItemTypeEnum] = list(BoosterPackItems)
-    accessories_items: list[ItemTypeEnum] = list(AccessoriesItems)
-    figurine_items: list[ItemTypeEnum] = list(FigurineItems)
-    tabletop_items: list[ItemTypeEnum] = list(TableTopItems)
+    booster_pack_items: list[ItemTypeEnum] = sorted(list(BoosterPackItems), key=lambda x: x.value)
+    accessories_items: list[ItemTypeEnum] = sorted(list(AccessoriesItems), key=lambda x: x.value)
+    figurine_items: list[ItemTypeEnum] = sorted(list(FigurineItems), key=lambda x: x.value)
+    tabletop_items: list[ItemTypeEnum] = sorted(list(TableTopItems), key=lambda x: x.value)
 
     shops = [
         booster_pack_items,
@@ -131,7 +132,6 @@ def create_regions(world: "TCGSimulatorWorld"):
     for item in license_items:
         for _location in generate_license_locations(ShopProduct(item.item_id-ITEMS_LICENSE_OFFSET), world.options.sell_check_amount.value):
             locations_by_region[_location.region].append(_location)
-
 
     for region in Regions:
         create_region(world, region, locations_by_region)

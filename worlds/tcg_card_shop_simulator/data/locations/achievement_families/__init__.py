@@ -1,10 +1,7 @@
 from dataclasses import dataclass, field
 from enum import IntEnum
 
-from BaseClasses import CollectionRule
-from rule_builder.rules import Rule, True_
-from worlds.tcg_card_shop_simulator import TCGSimulatorBase
-from ... import RegionTypeEnum, GeneratedLocationData
+from ... import GeneratedLocationData
 from ...helpers.card_types import (
     Border, CardAction, CardSpecies, Difficulty, Expansion, Foil, Rarity,
     SPECIES_NAMES, SPECIES_RARITIES,

@@ -1,11 +1,14 @@
+from __future__ import annotations
+
 from enum import IntEnum
 from dataclasses import dataclass, field
-from itertools import product
-from collections.abc import Iterable, Iterator
+from typing import TYPE_CHECKING
 
 from BaseClasses import CollectionRule
 from rule_builder.rules import Rule, True_
-from worlds.tcg_card_shop_simulator import TCGSimulatorBase
+if TYPE_CHECKING:
+    from ....world_base import TCGSimulatorBase
+
 from . import CardAchievementFamily, CardAchievementDefinition, ACHIEVEMENT_FLAG, AchievementKind, FAMILY_SHIFT, \
     MAX_LOCATION_ID, encode, ACTION_TO_CODE
 from ... import RegionTypeEnum
@@ -80,7 +83,7 @@ class CardTemplate:
     foil: Foil | None = None
     species: CardSpecies | None = None
     minimum_grade: int | None = None
-    rule: CollectionRule | Rule[TCGSimulatorBase] = True_()
+    rule: CollectionRule | Rule[TCGSimulatorBase] = field(default_factory=True_)
     region: RegionTypeEnum
 
     def get_location_id(self, difficulty: Difficulty) -> int:
@@ -157,10 +160,21 @@ OPEN_TEMPLATES: dict[CardAchievementFamily, tuple[CardTemplate, ...]] = {
         CardTemplate(
             action=CardAction.OPEN,
             tiers=(Tier(5, Difficulty.EASY), Tier(15, Difficulty.MEDIUM),
-                   Tier(30, Difficulty.HARD), Tier(30, Difficulty.IMPOSSIBLE)),
+                   Tier(30, Difficulty.HARD), Tier(50, Difficulty.IMPOSSIBLE)),
             region=Regions.GENERIC_OPEN_PACKS
         ),
     ),
+    CardAchievementFamily.FOIL: (),
+    CardAchievementFamily.RARITY: (),
+    CardAchievementFamily.EXPANSION: (),
+    CardAchievementFamily.BORDER: (),
+    CardAchievementFamily.SPECIFIC_SPECIES: (),
+    CardAchievementFamily.DISTINCT_SPECIES: (),
+    CardAchievementFamily.SAME_SPECIES: (),
+    CardAchievementFamily.SAME_VARIANT: (),
+    CardAchievementFamily.RARE_FOILS: (),
+    CardAchievementFamily.HIGH_GRADE: (),
+    CardAchievementFamily.PACK_RARITY: (),
 }
 
 SELL_TEMPLATES: dict[CardAchievementFamily, tuple[CardTemplate, ...]] = {
@@ -171,7 +185,18 @@ SELL_TEMPLATES: dict[CardAchievementFamily, tuple[CardTemplate, ...]] = {
                    Tier(25, Difficulty.HARD), Tier(50, Difficulty.IMPOSSIBLE)),
             region=Regions.GENERIC_SELL_CARDS
         ),
-    )
+    ),
+    CardAchievementFamily.FOIL: (),
+    CardAchievementFamily.RARITY: (),
+    CardAchievementFamily.EXPANSION: (),
+    CardAchievementFamily.BORDER: (),
+    CardAchievementFamily.SPECIFIC_SPECIES: (),
+    CardAchievementFamily.DISTINCT_SPECIES: (),
+    CardAchievementFamily.SAME_SPECIES: (),
+    CardAchievementFamily.SAME_VARIANT: (),
+    CardAchievementFamily.RARE_FOILS: (),
+    CardAchievementFamily.HIGH_GRADE: (),
+    CardAchievementFamily.PACK_RARITY: (),
 }
 
 GRADE_TEMPLATES: dict[CardAchievementFamily, tuple[CardTemplate, ...]] = {
@@ -182,5 +207,16 @@ GRADE_TEMPLATES: dict[CardAchievementFamily, tuple[CardTemplate, ...]] = {
                    Tier(6, Difficulty.HARD), Tier(12, Difficulty.IMPOSSIBLE)),
             region=Regions.GENERIC_GRADE_CARDS
         ),
-    )
+    ),
+    CardAchievementFamily.FOIL: (),
+    CardAchievementFamily.RARITY: (),
+    CardAchievementFamily.EXPANSION: (),
+    CardAchievementFamily.BORDER: (),
+    CardAchievementFamily.SPECIFIC_SPECIES: (),
+    CardAchievementFamily.DISTINCT_SPECIES: (),
+    CardAchievementFamily.SAME_SPECIES: (),
+    CardAchievementFamily.SAME_VARIANT: (),
+    CardAchievementFamily.RARE_FOILS: (),
+    CardAchievementFamily.HIGH_GRADE: (),
+    CardAchievementFamily.PACK_RARITY: (),
 }

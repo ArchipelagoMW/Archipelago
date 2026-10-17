@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from enum import IntEnum
 from typing import TYPE_CHECKING
 
@@ -131,6 +133,8 @@ class ShopProduct(IntEnum):
     MAFIA_WORKS = 86
     NECROMONSTERS = 84
     CLAIM = 85
+    EVO_BLAZOAR = 125
+    EVO_STARFISH = 126
 
 
 PRODUCT_DATA: dict[ShopProduct, tuple[str, CollectionRule | Rule[TCGSimulatorBase]]] = {
@@ -433,6 +437,14 @@ PRODUCT_DATA: dict[ShopProduct, tuple[str, CollectionRule | Rule[TCGSimulatorBas
     ),
     ShopProduct.TOON_Z_PLUSHIE: (
         'ToonZ Plushie', Has(FigurineItems.TOONZ_PLUSHIE.value)
+    ),
+
+ShopProduct.EVO_BLAZOAR: (
+        'EVO Blazoar', Has(FigurineItems.EVO_BLAZOAR.value)
+    ),
+
+ShopProduct.EVO_STARFISH: (
+        'EVO Starfish', Has(FigurineItems.EVO_STARFISH.value)
     ),
 
     # Tabletop Products

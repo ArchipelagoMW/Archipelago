@@ -1,7 +1,7 @@
 {
     "game": "TCG Card Shop Simulator",
-    "world_version": "1.2.0",
-    "mod_version": "0.1.0",
+    "world_version": "2.0.0",
+    "mod_version": "2.0.0",
     "minimum_ap_version": "0.6.7",
     "authors": ["FyreDay"]
 }

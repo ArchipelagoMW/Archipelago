@@ -21,12 +21,12 @@ all_Generated_locations: list[GeneratedLocationData] = (
     [
         location
         for event in EventFormat
-        for location in generate_event_locations([event])
+        for location in generate_event_locations([event], games_per_format=999)
     ]
     +
     [
         location
-        for location in generate_card_sanity_locations(True, 1, None)
+        for location in generate_card_sanity_locations(True, 0, None)
     ]
     +
     [
@@ -37,6 +37,6 @@ all_Generated_locations: list[GeneratedLocationData] = (
     [
         location
         for product in ShopProduct
-        for location in generate_license_locations(product, 1000)
+        for location in generate_license_locations(product, 999)
     ]
 )

@@ -140,3 +140,14 @@ class TableTopItems(ItemTypeEnum):
 
 def get_total_licenses():
     return len(TableTopItems) + len(FigurineItems) + len(AccessoriesItems) + len(BoosterPackItems)
+
+ITEM_BY_ID = {
+    item.item_id: item
+    for enum in (
+        BoosterPackItems,
+        AccessoriesItems,
+        FigurineItems,
+        TableTopItems,
+    )
+    for item in enum
+}
