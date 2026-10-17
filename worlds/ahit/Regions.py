@@ -478,122 +478,136 @@ def create_tasksanity_locations(world: "HatInTimeWorld"):
 
 
 def randomize_act_entrances(world: "HatInTimeWorld"):
-    region_list: List[Region] = get_shuffleable_act_regions(world)
-    world.random.shuffle(region_list)
-    region_list.sort(key=sort_acts)
-    candidate_list: List[Region] = region_list.copy()
     rift_dict: Dict[str, Region] = {}
 
-    # Check if Plando's are valid, if so, map them
-    if world.options.ActPlando:
-        player_name = world.multiworld.get_player_name(world.player)
-        for (name1, name2) in world.options.ActPlando.items():
-            region: Region
-            act: Region
-            try:
-                region = world.multiworld.get_region(name1, world.player)
-            except KeyError:
-                print(f"ActPlando ({player_name}) - "
-                      f"Act \"{name1}\" does not exist in the multiworld. "
-                      f"Possible reasons are typos, case-sensitivity, or DLC options.")
+    # Don't randomize if UT generation
+    if getattr(world.multiworld, "generation_is_fake",False):
+        for key in world.act_connections:
+            for ent in chapter_act_info:
+                if key == chapter_act_info[ent]:
+                    ent_region = world.multiworld.get_region(ent, world.player)
+                    for exit in chapter_act_info:
+                        if world.act_connections[key] == chapter_act_info[exit]:
+                            exit_region = world.multiworld.get_region(exit, world.player)
+                            connect_acts(world, ent_region, exit_region, rift_dict)
+                            break
+                    break
+    else:
+        region_list: List[Region] = get_shuffleable_act_regions(world)
+        world.random.shuffle(region_list)
+        region_list.sort(key=sort_acts)
+        candidate_list: List[Region] = region_list.copy()
+
+        # Check if Plando's are valid, if so, map them
+        if world.options.ActPlando:
+            player_name = world.multiworld.get_player_name(world.player)
+            for (name1, name2) in world.options.ActPlando.items():
+                region: Region
+                act: Region
+                try:
+                    region = world.multiworld.get_region(name1, world.player)
+                except KeyError:
+                    print(f"ActPlando ({player_name}) - "
+                          f"Act \"{name1}\" does not exist in the multiworld. "
+                          f"Possible reasons are typos, case-sensitivity, or DLC options.")
+                    continue
+
+                try:
+                    act = world.multiworld.get_region(name2, world.player)
+                except KeyError:
+                    print(f"ActPlando ({player_name}) - "
+                          f"Act \"{name2}\" does not exist in the multiworld. "
+                          f"Possible reasons are typos, case-sensitivity, or DLC options.")
+                    continue
+
+                if is_valid_plando(world, region.name, act.name):
+                    region_list.remove(region)
+                    candidate_list.remove(act)
+                    connect_acts(world, region, act, rift_dict)
+                else:
+                    print(f"ActPlando "
+                          f"({player_name}) - "
+                          f"\"{name1}: {name2}\" "
+                          f"is an invalid or disallowed act plando combination!")
+
+        # Decide what should be on the first few levels before randomizing the rest
+        first_acts: List[Region] = []
+        first_chapter_name = chapter_regions[ChapterIndex(world.options.StartingChapter)]
+        first_acts.append(get_act_by_number(world, first_chapter_name, 1))
+        # Chapter 3 and 4 only have one level accessible at the start
+        if first_chapter_name == "Mafia Town" or first_chapter_name == "Battle of the Birds":
+            first_acts.append(get_act_by_number(world, first_chapter_name, 2))
+            first_acts.append(get_act_by_number(world, first_chapter_name, 3))
+
+        valid_first_acts: List[Region] = []
+        for candidate in candidate_list:
+            if is_valid_first_act(world, candidate):
+                valid_first_acts.append(candidate)
+
+        total_locations = 0
+        for level in first_acts:
+            if level not in region_list:  # make sure it hasn't been plando'd
                 continue
 
-            try:
-                act = world.multiworld.get_region(name2, world.player)
-            except KeyError:
-                print(f"ActPlando ({player_name}) - "
-                      f"Act \"{name2}\" does not exist in the multiworld. "
-                      f"Possible reasons are typos, case-sensitivity, or DLC options.")
-                continue
+            candidate = valid_first_acts[world.random.randint(0, len(valid_first_acts)-1)]
+            region_list.remove(level)
+            candidate_list.remove(candidate)
+            valid_first_acts.remove(candidate)
+            connect_acts(world, level, candidate, rift_dict)
 
-            if is_valid_plando(world, region.name, act.name):
-                region_list.remove(region)
-                candidate_list.remove(act)
-                connect_acts(world, region, act, rift_dict)
+            # Only allow one purple rift
+            if candidate.name in purple_time_rifts:
+                for act in reversed(valid_first_acts):
+                    if act.name in purple_time_rifts:
+                        valid_first_acts.remove(act)
+
+            total_locations += get_region_location_count(world, candidate.name)
+            if "Time Rift" not in candidate.name:
+                chapter = act_chapters.get(candidate.name)
+                if chapter == "Mafia Town":
+                    total_locations += get_region_location_count(world, "Mafia Town Area (HUMT)")
+                    if candidate.name != "Heating Up Mafia Town":
+                        total_locations += get_region_location_count(world, "Mafia Town Area")
+                elif chapter == "Subcon Forest":
+                    total_locations += get_region_location_count(world, "Subcon Forest Area")
+                elif chapter == "The Arctic Cruise":
+                    total_locations += get_region_location_count(world, "Cruise Ship")
+
+            # If we have enough Sphere 1 locations, we can allow the rest to be randomized
+            if total_locations >= MIN_FIRST_SPHERE_LOCATIONS:
+                break
+
+        ignore_certain_rules: bool = False
+        while len(region_list) > 0:
+            region = region_list[0]
+            candidate: Region
+            valid_candidates: List[Region] = []
+
+            # Look for candidates to map this act to
+            for c in candidate_list:
+                if is_valid_act_combo(world, region, c, ignore_certain_rules):
+                    valid_candidates.append(c)
+
+            if len(valid_candidates) > 0:
+                candidate = valid_candidates[world.random.randint(0, len(valid_candidates)-1)]
             else:
-                print(f"ActPlando "
-                      f"({player_name}) - "
-                      f"\"{name1}: {name2}\" "
-                      f"is an invalid or disallowed act plando combination!")
+                # If we fail here, try again with less shuffle rules. If we still somehow fail, there's an issue for sure
+                if ignore_certain_rules:
+                    raise Exception(f"Failed to find act shuffle candidate for {region}"
+                                    f"\nRemaining acts to map to: {region_list}"
+                                    f"\nRemaining candidates: {candidate_list}")
 
-    # Decide what should be on the first few levels before randomizing the rest
-    first_acts: List[Region] = []
-    first_chapter_name = chapter_regions[ChapterIndex(world.options.StartingChapter)]
-    first_acts.append(get_act_by_number(world, first_chapter_name, 1))
-    # Chapter 3 and 4 only have one level accessible at the start
-    if first_chapter_name == "Mafia Town" or first_chapter_name == "Battle of the Birds":
-        first_acts.append(get_act_by_number(world, first_chapter_name, 2))
-        first_acts.append(get_act_by_number(world, first_chapter_name, 3))
+                ignore_certain_rules = True
+                continue
 
-    valid_first_acts: List[Region] = []
-    for candidate in candidate_list:
-        if is_valid_first_act(world, candidate):
-            valid_first_acts.append(candidate)
+            ignore_certain_rules = False
+            region_list.remove(region)
+            candidate_list.remove(candidate)
+            connect_acts(world, region, candidate, rift_dict)
 
-    total_locations = 0
-    for level in first_acts:
-        if level not in region_list:  # make sure it hasn't been plando'd
-            continue
-
-        candidate = valid_first_acts[world.random.randint(0, len(valid_first_acts)-1)]
-        region_list.remove(level)
-        candidate_list.remove(candidate)
-        valid_first_acts.remove(candidate)
-        connect_acts(world, level, candidate, rift_dict)
-
-        # Only allow one purple rift
-        if candidate.name in purple_time_rifts:
-            for act in reversed(valid_first_acts):
-                if act.name in purple_time_rifts:
-                    valid_first_acts.remove(act)
-
-        total_locations += get_region_location_count(world, candidate.name)
-        if "Time Rift" not in candidate.name:
-            chapter = act_chapters.get(candidate.name)
-            if chapter == "Mafia Town":
-                total_locations += get_region_location_count(world, "Mafia Town Area (HUMT)")
-                if candidate.name != "Heating Up Mafia Town":
-                    total_locations += get_region_location_count(world, "Mafia Town Area")
-            elif chapter == "Subcon Forest":
-                total_locations += get_region_location_count(world, "Subcon Forest Area")
-            elif chapter == "The Arctic Cruise":
-                total_locations += get_region_location_count(world, "Cruise Ship")
-
-        # If we have enough Sphere 1 locations, we can allow the rest to be randomized
-        if total_locations >= MIN_FIRST_SPHERE_LOCATIONS:
-            break
-
-    ignore_certain_rules: bool = False
-    while len(region_list) > 0:
-        region = region_list[0]
-        candidate: Region
-        valid_candidates: List[Region] = []
-
-        # Look for candidates to map this act to
-        for c in candidate_list:
-            if is_valid_act_combo(world, region, c, ignore_certain_rules):
-                valid_candidates.append(c)
-
-        if len(valid_candidates) > 0:
-            candidate = valid_candidates[world.random.randint(0, len(valid_candidates)-1)]
-        else:
-            # If we fail here, try again with less shuffle rules. If we still somehow fail, there's an issue for sure
-            if ignore_certain_rules:
-                raise Exception(f"Failed to find act shuffle candidate for {region}"
-                                f"\nRemaining acts to map to: {region_list}"
-                                f"\nRemaining candidates: {candidate_list}")
-
-            ignore_certain_rules = True
-            continue
-
-        ignore_certain_rules = False
-        region_list.remove(region)
-        candidate_list.remove(candidate)
-        connect_acts(world, region, candidate, rift_dict)
-
-    for name in blacklisted_acts.values():
-        region: Region = world.multiworld.get_region(name, world.player)
-        update_chapter_act_info(world, region, region)
+        for name in blacklisted_acts.values():
+            region: Region = world.multiworld.get_region(name, world.player)
+            update_chapter_act_info(world, region, region)
 
     set_rift_rules(world, rift_dict)
 
@@ -875,9 +889,11 @@ def create_badge_seller(world: "HatInTimeWorld") -> Region:
     badge_seller = Region("Badge Seller", world.player, world.multiworld)
     world.multiworld.regions.append(badge_seller)
     count = 0
-    max_items = 0
+    # badge_seller_count is 0 unless pulled from slot data
+    max_items = world.badge_seller_count
 
-    if world.options.BadgeSellerMaxItems > 0:
+    # don't randomize if UT generation
+    if world.options.BadgeSellerMaxItems > 0 and not getattr(world.multiworld, "generation_is_fake",False):
         max_items = world.random.randint(world.options.BadgeSellerMinItems.value,
                                          world.options.BadgeSellerMaxItems.value)
 
