@@ -158,7 +158,10 @@ class HatInTimeWorld(World):
                         # No more dw in slot data
                         break
 
-        adjust_options(self)
+        # TODO: Verify if this is actually causing issues one way or the other, decide how I want to leave it (doing this seems to have changed nothing in the fuzzer)
+        # Options being passed should already be adjusted properly
+        if not getattr(self.multiworld, "generation_is_fake",False):
+            adjust_options(self)
 
         if self.options.StartWithCompassBadge:
             self.multiworld.push_precollected(self.create_item("Compass Badge"))
@@ -468,15 +471,13 @@ class HatInTimeWorld(World):
         # Trigger a regen in UT instead of attempting tracker gen with a likely randomized yaml
         return slot_data
 
-        # TODO: Add UT defered entrances logic for acts locked behind other acts
+        # TODO: Add UT defered entrances logic for acts locked behind other acts - looks like most of the logic is in Rules act_connections already? Would need to tie the deferral to those act completions I guess.
 
         # TODO: Add "Glitched" logic
 
         # TODO: Add Custom Sorting? Could group region checks together. (I likely won't do this)
 
-        # TODO: Add UT to AHIT client
-
-        # TODO: Add IT map tracker support
+        # TODO: Add UT map tracker support
 
         # TODO: Add any Logic explanation overrides desired (I likely won't do this)
 
