@@ -671,8 +671,7 @@ async def game_watcher(ctx: SNIContext) -> None:
 async def run_game(romfile: str) -> None:
     auto_start = settings.get_settings().sni_options.snes_rom_start
     if auto_start is True:
-        import webbrowser
-        webbrowser.open(romfile)
+        Utils.open_file(romfile)
     elif isinstance(auto_start, str) and os.path.isfile(auto_start):
         subprocess.Popen([auto_start, romfile],
                          stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
