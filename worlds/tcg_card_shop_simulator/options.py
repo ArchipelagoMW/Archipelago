@@ -1,5 +1,7 @@
 from dataclasses import dataclass
-from Options import Choice, PerGameCommonOptions, OptionGroup, Range, Toggle, DefaultOnToggle, DeathLink
+from Options import Choice, PerGameCommonOptions, OptionGroup, Range, Toggle, DefaultOnToggle, DeathLink, OptionCounter
+from worlds.tcg_card_shop_simulator.data.items.filler import get_filler_default_dict
+from worlds.tcg_card_shop_simulator.data.items.traps import get_traps_default_dict
 
 
 class MaxLevel(Range):
@@ -15,29 +17,19 @@ class MaxLevel(Range):
     range_end = 100
     default = 20
 
-class LicensesPerLevelGroup(Range):
+class LicensesPerLevelCap(Range):
     """
-    Number of licenses available every 5 levels.
+    Number of licenses you need to remove a level cap.
 
-    Distributed as evenly as possible across all 4 shop pages.
+    This and your max level determine how many licenses are in the world
+
+    **WARNING** this value will be lowered if there are not enough licenses to fill all levels
     """
 
-    display_name = "Licenses Per Level Group"
-    range_start = 6
+    display_name = "Licenses Per 5 Levels"
+    range_start = 4
     range_end = 14
     default = 6
-
-class RequiredLicensesForProgress(Range):
-    """
-    Number of sellable Product Licenses within your current level to unlock the next 5 levels.
-
-    Lower values make progression easier.
-    """
-
-    display_name = "Required licenses Per Level Group"
-    range_start = 2
-    range_end = 10
-    default = 5
 
 
 class Goal(Choice):
@@ -46,18 +38,18 @@ class Goal(Choice):
 
     Max Level: Reach the max level
     Collection Builder: Unlock all packs and collect a target amount of cards.
-    Sell Ghost Cards: Find and sell ghost cards hidden in the multiworld.
+    Grade Ghost Cards: Find and grade ghost cards hidden in the multiworld.
     """
 
     display_name = "Goal"
     option_reach_max_level = 0
     option_collection_builder = 1
-    option_sell_ghost_cards = 2
+    option_grade_ghost_cards = 2
     default = 0
 
 class GhostGoalAmount(Range):
     """
-    Number of ghost cards required for victory.
+    Number of Unique ghost cards required for victory.
 
     Ghost card items will be added to the multiworld.
     """
@@ -104,18 +96,6 @@ class AutoRenovate(DefaultOnToggle):
     """
     display_name = "Auto Renovate"
 
-class ExtraStartingItemChecks(Range):
-    """
-    Adds extra early checks to prevent generation failures on limited starts.
-
-    Checks per item are capped at 16 regardless of this setting
-    """
-
-    display_name = "Extra Starting Item Checks"
-    range_start = 4
-    range_end = 8
-    default = 4
-
 class SellCheckAmount(Range):
     """
     Number of sell checks per product.
@@ -124,8 +104,35 @@ class SellCheckAmount(Range):
     """
     display_name = "Sell Check Amount"
     range_start = 2
-    range_end = 16
+    range_end = 100
     default = 2
+
+class CardSanity(Choice):
+    """
+    Individual cards become location checks. By default, these will be local filled with Filler
+
+    Enabled:
+    Different card variants count as separate checks based on Card Opening difficulty. 1452 checks
+
+    Unique Foils:
+    Foil cards also count as separate checks. 2904 checks
+    """
+    display_name = "Card Sanity"
+    option_disabled = 0
+    option_enabled = 1
+    option_uniqueFoils = 2
+    default = 0
+
+class CardSanityCheckPercentage(Range):
+    """
+    What percentage of Card Sanity Checks should be allowed to hold items from other games?
+
+    This can be limited by Host Yaml
+    """
+    display_name = "Sell Check Amount"
+    range_start = 4
+    range_end = 100
+    default = 4
 
 class CardOpeningCheckDifficulty(Choice):
     """
@@ -146,33 +153,6 @@ class CardOpeningCheckDifficulty(Choice):
     option_hard = 3
     option_impossible = 4
     default = 2
-
-class CardSanity(Choice):
-    """
-    Individual cards become location checks.
-
-    Enabled:
-    Different card variants count as separate checks based on Card Opening difficulty.
-
-    Unique Foils:
-    Foil cards also count as separate checks.
-
-    Each enabled card variant adds 242 checks.
-    Impossible difficulty with Unique Foils adds 2904 checks.
-
-    This is based on your choice of card opening difficulty above.
-
-    Card variants by opening difficulty:
-    Easy: Basic
-    Medium: Basic, 1st Edition, Silver Edition
-    Hard: Basic, 1st Edition, Silver Edition, Gold Edition
-    Impossible: All Cards
-    """
-    display_name = "Card Sanity"
-    option_disabled = 0
-    option_enabled = 1
-    option_uniqueFoils = 2
-    default = 0
 
 class CardSellingCheckDifficulty(Choice):
     """
@@ -216,14 +196,6 @@ class CardGradingCheckDifficulty(Choice):
     option_impossible = 4
     default = 0
 
-class BulkBoxChecks(Choice):
-    """
-    Selling bulk boxes from the workbench can grant checks.
-    """
-    display_name = "Bulk Box Checks"
-    option_disabled = 0
-    option_normal_bulk = 1
-    default = 0
 
 class NoFormats(Toggle):
     """
@@ -233,61 +205,35 @@ class NoFormats(Toggle):
 
 class PlayTableChecks(Range):
     """
-    Number of checks available per play table format.
+    Number of checks available per play table format. Large values take a long time.
     """
     display_name = "Number of PlayTable Checks"
     range_start = 0
-    range_end = 15
+    range_end = 100
     default = 10
 
-class MoneyBags(Range):
+class FillerWeights(OptionCounter):
     """
-    Weight for filler items that give money.
-    """
-    display_name = "Money Filler"
-    range_start = 0
-    range_end = 100
-    default = 50
+    Change the weights of each trap
 
-class XpBoosts(Range):
+    Valid Options:
+        - **Flip Controls Trap** - Invert your controls
+        - **Floor Is Lava Trap** - Leave a trail of lava
+        - **Giant Trap** - Mina gets larger
+        - **2x Giant Trap** - Mina gets VERY large
+        - **Giant Enemies Trap** - All enemies get larger
+        - **2x Giant Enemies Trap** - All enemies get VERY large
+        - **Invisible Trap** - Mina becomes invisible
+        - **No HUD Trap** - Remove your HUD
+        - **Rotate Camera Trap** - Slowly rotate your camera for a short time
+        - **Rotate Camera Input Trap** - Moving now rotates your camera slowly
+        - **Mirror Screen Trap** - Mirror your screen
+        - **Upsidedown Screen Trap** - Mirror your screen vertically
     """
-    Weight for filler items that give shop XP.
-    """
-    display_name = "XP Filler"
-    range_start = 0
-    range_end = 100
-    default = 50
-
-
-class RandomNewCard(Range):
-    """
-    Weight for filler items that give a random new card.
-    """
-    display_name = "Random Card Filler"
-    range_start = 0
-    range_end = 100
-    default = 50
-
-class CustomerWalletSize(Range):
-    """
-    Weight for filler items that increase customer spending money.
-    """
-    display_name = "Customer Wallet Size Filler"
-    range_start = 0
-    range_end = 100
-    default = 50
-
-class CardLuck(Range):
-    """
-     Weight for filler items that increase card luck.
-
-    At max card luck (100) you have the same chance to open a non-foil basic card and a foil full art card
-    """
-    display_name = "Card Luck Filler"
-    range_start = 0
-    range_end = 100
-    default = 50
-
+    display_name = "Filler Weights"
+    default = get_filler_default_dict()
+    min = 0
+    valid_keys = get_filler_default_dict().keys()
 
 class TrapFill(Range):
     """
@@ -298,75 +244,33 @@ class TrapFill(Range):
     range_end = 80
     default = 0
 
-class StinkTrap(Range):
+class TrapWeights(OptionCounter):
     """
-    You know what this does. Stinky.
-    Weight for traps that are Stink Traps.
+    Change the weights of each trap
 
-    Requires traps to be enabled.
+    Valid Options:
+        - **Flip Controls Trap** - Invert your controls
+        - **Floor Is Lava Trap** - Leave a trail of lava
+        - **Giant Trap** - Mina gets larger
+        - **2x Giant Trap** - Mina gets VERY large
+        - **Giant Enemies Trap** - All enemies get larger
+        - **2x Giant Enemies Trap** - All enemies get VERY large
+        - **Invisible Trap** - Mina becomes invisible
+        - **No HUD Trap** - Remove your HUD
+        - **Rotate Camera Trap** - Slowly rotate your camera for a short time
+        - **Rotate Camera Input Trap** - Moving now rotates your camera slowly
+        - **Mirror Screen Trap** - Mirror your screen
+        - **Upsidedown Screen Trap** - Mirror your screen vertically
     """
-    display_name = "Stink Trap"
-    range_start = 0
-    range_end = 100
-    default = 50
-
-class PoltergeistTrap(Range):
-    """
-    Something is messing with the lights
-    Weight for traps that are Poltergeist Traps.
-
-    Requires traps to be enabled.
-    """
-    display_name = "Poltergeist Trap"
-    range_start = 0
-    range_end = 100
-    default = 50
-
-# class MarketChangeTrap(Range):
-#     """
-#     Not used
-#     """
-#     display_name = "Market Change Trap"
-#     range_start = 0
-#     range_end = 100
-#     default = 50
-# class CurrencyTrap(Range):
-#     """
-#     Not used
-#     """
-#     display_name = "Currency Trap"
-#     range_start = 0
-#     range_end = 100
-#     default = 0
-
-class DecreaseCardLuckTrap(Range):
-    """
-    Weight for traps that reduce card luck.
-
-    Requires traps to be enabled.
-    """
-    display_name = "Reduce Card Luck Trap"
-    range_start = 0
-    range_end = 100
-    default = 20
-
-class CreditCardFailureTrap(Range):
-    """
-    Sometimes they only have cash.
-    Weight for traps that disable credit card payments temporarily.
-
-    Requires traps to be enabled.
-    """
-    display_name = "Credit Card Failure Trap"
-    range_start = 0
-    range_end = 100
-    default = 50
+    display_name = "Trap Weights"
+    default = get_traps_default_dict()
+    min = 0
+    valid_keys = get_traps_default_dict().keys()
 
 tcg_cardshop_simulator_option_groups= [
     OptionGroup("Goal Options", [
         MaxLevel,
-        LicensesPerLevelGroup,
-        RequiredLicensesForProgress,
+        LicensesPerLevelCap,
         Goal,
         CollectionGoalPercentage,
         GhostGoalAmount,
@@ -374,9 +278,7 @@ tcg_cardshop_simulator_option_groups= [
     OptionGroup("General", [
         StartWithWorker,
         AutoRenovate,
-        ExtraStartingItemChecks,
         SellCheckAmount,
-        BulkBoxChecks,
         PlayTableChecks,
         NoFormats,
         # DecoShop,
@@ -388,59 +290,39 @@ tcg_cardshop_simulator_option_groups= [
     ]),
     OptionGroup("Sanity", [
         CardSanity,
+        CardSanityCheckPercentage,
     ]),
     OptionGroup("Death Link", [
         DeathLink
     ]),
     OptionGroup("Filler", [
-        MoneyBags,
-        XpBoosts,
-        RandomNewCard,
-        CustomerWalletSize,
-        CardLuck
+        FillerWeights
     ]),
     OptionGroup("Traps", [
         TrapFill,
-        StinkTrap,
-        PoltergeistTrap,
-        CreditCardFailureTrap,
-        # MarketChangeTrap,
-        # CurrencyTrap,
-        DecreaseCardLuckTrap
+        TrapWeights
     ]),
 ]
     
 @dataclass
 class TCGSimulatorOptions(PerGameCommonOptions):
     max_level: MaxLevel
-    licenses_per_region: LicensesPerLevelGroup
-    required_licenses: RequiredLicensesForProgress
+    licenses_per_cap: LicensesPerLevelCap
     goal: Goal
     collection_goal_percentage: CollectionGoalPercentage
     ghost_goal_amount: GhostGoalAmount
     start_with_worker: StartWithWorker
     auto_renovate: AutoRenovate
     sell_check_amount: SellCheckAmount
-    bulk_box: BulkBoxChecks
-    extra_starting_item_checks: ExtraStartingItemChecks
     play_table_checks: PlayTableChecks
     no_formats: NoFormats
     checks_opening_difficulty: CardOpeningCheckDifficulty
     card_sanity: CardSanity
+    card_sanity_percentage: CardSanityCheckPercentage
     checks_selling_difficulty: CardSellingCheckDifficulty
     checks_grading_difficulty: CardGradingCheckDifficulty
     deathlink: DeathLink
 
-    money_filler: MoneyBags
-    xp_filler: XpBoosts
-    card_filler: RandomNewCard
-    wallet_filler: CustomerWalletSize
-    luck_filler: CardLuck
-
     trap_fill: TrapFill
-    stink_trap: StinkTrap
-    poltergeist_trap: PoltergeistTrap
-    credit_card_failure_trap: CreditCardFailureTrap
-    # market_change_trap: MarketChangeTrap
-    # currency_trap: CurrencyTrap
-    decrease_card_luck_trap: DecreaseCardLuckTrap
+    trap_weights: TrapWeights
+    filler_weights: FillerWeights

@@ -15,5 +15,10 @@ class Fillers(ItemTypeEnum):
     PROGRESSIVE_CUSTOMER_MONEY = ("Progressive Customer Money", ITEMS_FILLER_OFFSET + 8, ItemClassification.filler)
     INCREASE_CARD_LUCK = ("Increase Card Luck", ITEMS_FILLER_OFFSET + 9, ItemClassification.filler)
 
+def get_filler_default_dict():
+    return {
+        filler.value: 50
+        for filler in Fillers
+    }
 
 

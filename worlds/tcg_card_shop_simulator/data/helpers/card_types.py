@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from enum import Enum, IntEnum
+from enum import Enum, IntEnum, StrEnum
 
 
 class Rarity(IntEnum):
@@ -28,13 +28,15 @@ class Foil(IntEnum):
     FOIL = 1
 
 
-class CardAction(str, Enum):
+
+class CardAction(StrEnum):
     OPEN = "Open"
     SELL = "Sell"
     GRADE = "Grade"
 
 
 class Difficulty(IntEnum):
+    DISABLED = 0
     EASY = 1
     MEDIUM = 2
     HARD = 3

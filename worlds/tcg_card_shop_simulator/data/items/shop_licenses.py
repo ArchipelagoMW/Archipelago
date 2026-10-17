@@ -3,7 +3,7 @@ from .. import ItemTypeEnum
 from ...constants import ITEMS_PROGRESSIVE_LICENSE_OFFSET, ITEMS_LICENSE_OFFSET
 
 
-class ProgresiveLicenses(ItemTypeEnum):
+class ProgressiveLicenses(ItemTypeEnum):
     PROGRESSIVE_BOOSTER_PACK_LICENSE = ("Progressive Booster Pack Shop License", ITEMS_PROGRESSIVE_LICENSE_OFFSET + 0, ItemClassification.progression)
     PROGRESSIVE_ACCESSORIES_LICENSE = ( "Progressive Accessories Shop License", ITEMS_PROGRESSIVE_LICENSE_OFFSET + 1, ItemClassification.progression)
     PROGRESSIVE_FIGURINE_LICENSE = ("Progressive Figurine Shop License", ITEMS_PROGRESSIVE_LICENSE_OFFSET + 2, ItemClassification.progression)
@@ -136,3 +136,7 @@ class TableTopItems(ItemTypeEnum):
     MAFIA_WORKS = ("Mafia Works", ITEMS_LICENSE_OFFSET + 86, ItemClassification.progression)
     NECROMONSTERS = ("Necromonsters", ITEMS_LICENSE_OFFSET + 84, ItemClassification.progression)
     CLAIM = ("Claim!", ITEMS_LICENSE_OFFSET + 85, ItemClassification.progression)
+
+
+def get_total_licenses():
+    return len(TableTopItems) + len(FigurineItems) + len(AccessoriesItems) + len(BoosterPackItems)

@@ -1,7 +1,16 @@
 from enum import IntEnum
+from typing import TYPE_CHECKING
+
+from BaseClasses import CollectionRule
+from rule_builder.rules import Rule, Has, AtLeast
 from .. import GeneratedLocationData
+from ..items import DIYItems, BoosterPackItems, TableTopItems, FigurineItems, AccessoriesItems
+from ..regions.regions import Regions
+from ..rules.state_rules import accessToTetramonBasePacks, accessToTetramonDestinyPacks
 from ...constants import LOCATIONS_SELL_OFFSET
 
+if TYPE_CHECKING:
+    from ...world_base import TCGSimulatorBase
 
 class Shop(IntEnum):
     BOOSTER_PACK_SHOP = 1
@@ -124,118 +133,362 @@ class ShopProduct(IntEnum):
     CLAIM = 85
 
 
-PRODUCT_NAMES: dict[ShopProduct, str] = {
-    ShopProduct.BULKBOX_TETRAMON: 'Bulk Box of Tetramon Base Cards',
-    ShopProduct.BULKBOX_DESTINY: 'Bulk Box of Tetramon Destiny Cards',
-    ShopProduct.BASIC_CARD_PACK: 'Basic Card Pack',
-    ShopProduct.BASIC_CARD_BOX: 'Basic Card Box',
-    ShopProduct.RARE_CARD_PACK: 'Rare Card Pack',
-    ShopProduct.RARE_CARD_BOX: 'Rare Card Box',
-    ShopProduct.EPIC_CARD_PACK: 'Epic Card Pack',
-    ShopProduct.EPIC_CARD_BOX: 'Epic Card Box',
-    ShopProduct.LEGENDARY_CARD_PACK: 'Legendary Card Pack',
-    ShopProduct.LEGENDARY_CARD_BOX: 'Legendary Card Box',
-    ShopProduct.BASIC_DESTINY_PACK: 'Basic Destiny Pack',
-    ShopProduct.BASIC_DESTINY_BOX: 'Basic Destiny Box',
-    ShopProduct.RARE_DESTINY_PACK: 'Rare Destiny Pack',
-    ShopProduct.RARE_DESTINY_BOX: 'Rare Destiny Box',
-    ShopProduct.EPIC_DESTINY_PACK: 'Epic Destiny Pack',
-    ShopProduct.EPIC_DESTINY_BOX: 'Epic Destiny Box',
-    ShopProduct.LEGENDARY_DESTINY_PACK: 'Legendary Destiny Pack',
-    ShopProduct.LEGENDARY_DESTINY_BOX: 'Legendary Destiny Box',
-    ShopProduct.FIRE_BATTLE_DECK: 'Fire Battle Deck',
-    ShopProduct.EARTH_BATTLE_DECK: 'Earth Battle Deck',
-    ShopProduct.WATER_BATTLE_DECK: 'Water Battle Deck',
-    ShopProduct.WIND_BATTLE_DECK: 'Wind Battle Deck',
-    ShopProduct.FIRE_DESTINY_DECK: 'Fire Destiny Deck',
-    ShopProduct.EARTH_DESTINY_DECK: 'Earth Destiny Deck',
-    ShopProduct.WATER_DESTINY_DECK: 'Water Destiny Deck',
-    ShopProduct.WIND_DESTINY_DECK: 'Wind Destiny Deck',
-    ShopProduct.CLEANSER: 'Cleanser',
-    ShopProduct.CARD_SLEEVES_CLEAR: 'Card Sleeves (Clear)',
-    ShopProduct.CARD_SLEEVES_TETRAMON: 'Card Sleeves (Tetramon)',
-    ShopProduct.D20_DICE_RED: 'D20 Dice Red',
-    ShopProduct.D20_DICE_BLUE: 'D20 Dice Blue',
-    ShopProduct.D20_DICE_BLACK: 'D20 Dice Black',
-    ShopProduct.D20_DICE_WHITE: 'D20 Dice White',
-    ShopProduct.CARD_SLEEVES_FIRE: 'Card Sleeves (Fire)',
-    ShopProduct.CARD_SLEEVES_EARTH: 'Card Sleeves (Earth)',
-    ShopProduct.CARD_SLEEVES_WATER: 'Card Sleeves (Water)',
-    ShopProduct.CARD_SLEEVES_WIND: 'Card Sleeves (Wind)',
-    ShopProduct.DECK_BOX_RED: 'Deck Box Red',
-    ShopProduct.DECK_BOX_GREEN: 'Deck Box Green',
-    ShopProduct.DECK_BOX_BLUE: 'Deck Box Blue',
-    ShopProduct.DECK_BOX_YELLOW: 'Deck Box Yellow',
-    ShopProduct.COLLECTION_BOOK: 'Collection Book',
-    ShopProduct.PREMIUM_COLLECTION_BOOK: 'Premium Collection Book',
-    ShopProduct.PLAYMAT_DRILCEROS: 'Playmat (Drilceros)',
-    ShopProduct.PLAYMAT_CLAMIGO: 'Playmat (Clamigo)',
-    ShopProduct.PLAYMAT_WISPO: 'Playmat (Wispo)',
-    ShopProduct.PLAYMAT_LUNIGHT: 'Playmat (Lunight)',
-    ShopProduct.PLAYMAT_KYRONE: 'Playmat (Kyrone)',
-    ShopProduct.PLAYMAT_DUEL: 'Playmat (Duel)',
-    ShopProduct.PLAYMAT_DRACUNIX1: 'Playmat (Dracunix1)',
-    ShopProduct.PLAYMAT_THE_FOUR_DRAGONS: 'Playmat (The Four Dragons)',
-    ShopProduct.PLAYMAT_DRAKON: 'Playmat (Drakon)',
-    ShopProduct.PLAYMAT_GIGATRON_X_EVO: 'Playmat (GigatronX Evo)',
-    ShopProduct.PLAYMAT_FIRE: 'Playmat (Fire)',
-    ShopProduct.PLAYMAT_EARTH: 'Playmat (Earth)',
-    ShopProduct.PLAYMAT_WATER: 'Playmat (Water)',
-    ShopProduct.PLAYMAT_WIND: 'Playmat (Wind)',
-    ShopProduct.PLAYMAT_TETRAMON: 'Playmat (Tetramon)',
-    ShopProduct.PLAYMAT_DRACUNIX2: 'Playmat (Dracunix2)',
-    ShopProduct.PLAYMAT_GIGATRON_X: 'Playmat (GigatronX)',
-    ShopProduct.PLAYMAT_KATENGU_BLACK: 'Playmat (Katengu Black)',
-    ShopProduct.PLAYMAT_KATENGU_WHITE: 'Playmat (Katengu White)',
-    ShopProduct.MANGA_1: 'Manga 1',
-    ShopProduct.MANGA_2: 'Manga 2',
-    ShopProduct.MANGA_3: 'Manga 3',
-    ShopProduct.MANGA_4: 'Manga 4',
-    ShopProduct.MANGA_5: 'Manga 5',
-    ShopProduct.MANGA_6: 'Manga 6',
-    ShopProduct.MANGA_7: 'Manga 7',
-    ShopProduct.MANGA_8: 'Manga 8',
-    ShopProduct.MANGA_9: 'Manga 9',
-    ShopProduct.MANGA_10: 'Manga 10',
-    ShopProduct.MANGA_11: 'Manga 11',
-    ShopProduct.MANGA_12: 'Manga 12',
-    ShopProduct.PIGNI_PLUSHIE: 'Pigni Plushie',
-    ShopProduct.NANOMITE_PLUSHIE: 'Nanomite Plushie',
-    ShopProduct.MINSTAR_PLUSHIE: 'Minstar Plushie',
-    ShopProduct.NOCTI_PLUSHIE: 'Nocti Plushie',
-    ShopProduct.BURPIG_FIGURINE: 'Burpig Figurine',
-    ShopProduct.DECIMITE_FIGURINE: 'Decimite Figurine',
-    ShopProduct.TRICKSTAR_FIGURINE: 'Trickstar Figurine',
-    ShopProduct.LUNIGHT_FIGURINE: 'Lunight Figurine',
-    ShopProduct.INFERHOG_FIGURINE: 'Inferhog Figurine',
-    ShopProduct.MEGANITE_FIGURINE: 'Meganite Figurine',
-    ShopProduct.PRINCESTAR_FIGURINE: 'Princestar Figurine',
-    ShopProduct.VAMPICANT_FIGURINE: 'Vampicant Figurine',
-    ShopProduct.BLAZOAR_PLUSHIE: 'Blazoar Plushie',
-    ShopProduct.GIGANITE_STATUE: 'Giganite Statue',
-    ShopProduct.KINGSTAR_PLUSHIE: 'Kingstar Plushie',
-    ShopProduct.DRACUNIX_FIGURINE: 'Dracunix Figurine',
-    ShopProduct.BONFIOX_PLUSHIE: 'Bonfiox Plushie',
-    ShopProduct.DRILCEROS_ACTION_FIGURE: 'Drilceros Action Figure',
-    ShopProduct.TOON_Z_PLUSHIE: 'ToonZ Plushie',
-    ShopProduct.PENNY_SLEEVES: 'Penny Sleeves',
-    ShopProduct.TOWER_DECKBOX: 'Tower Deckbox',
-    ShopProduct.MAGNETIC_HOLDER: 'Magnetic Holder',
-    ShopProduct.TOPLOADER: 'Toploader',
-    ShopProduct.CARD_PRESERVER: 'Card Preserver',
-    ShopProduct.PLAYMAT_GRAY: 'Playmat Gray',
-    ShopProduct.PLAYMAT_GREEN: 'Playmat Green',
-    ShopProduct.PLAYMAT_PURPLE: 'Playmat Purple',
-    ShopProduct.PLAYMAT_YELLOW: 'Playmat Yellow',
-    ShopProduct.POCKET_PAGES: 'Pocket Pages',
-    ShopProduct.CARD_HOLDER: 'Card Holder',
-    ShopProduct.COLLECTORS_ALBUM: 'Collectors Album',
-    ShopProduct.SYSTEM_GATE_1: 'System Gate #1',
-    ShopProduct.SYSTEM_GATE_2: 'System Gate #2',
-    ShopProduct.MAFIA_WORKS: 'Mafia Works',
-    ShopProduct.NECROMONSTERS: 'Necromonsters',
-    ShopProduct.CLAIM: 'Claim!',
+PRODUCT_DATA: dict[ShopProduct, tuple[str, CollectionRule | Rule[TCGSimulatorBase]]] = {
+    # Bulk Boxes
+    ShopProduct.BULKBOX_TETRAMON: (
+        'Bulk Box of Tetramon Base Cards',
+        Has(DIYItems.WORKBENCH.value) & accessToTetramonBasePacks()
+    ),
+    ShopProduct.BULKBOX_DESTINY: (
+        'Bulk Box of Tetramon Destiny Cards',
+        Has(DIYItems.WORKBENCH.value) & accessToTetramonDestinyPacks()
+    ),
+
+    # Tetramon Card Packs and Boxes
+    ShopProduct.BASIC_CARD_PACK: (
+        'Basic Card Pack',
+        Has(BoosterPackItems.PROGRESSIVE_BASIC_CARD_PACK.value) |
+        Has(BoosterPackItems.PROGRESSIVE_BASIC_CARD_BOX.value)
+    ),
+    ShopProduct.BASIC_CARD_BOX: (
+        'Basic Card Box',
+        Has(BoosterPackItems.PROGRESSIVE_BASIC_CARD_BOX.value)
+    ),
+    ShopProduct.RARE_CARD_PACK: (
+        'Rare Card Pack',
+        Has(BoosterPackItems.PROGRESSIVE_RARE_CARD_PACK.value) |
+        Has(BoosterPackItems.PROGRESSIVE_RARE_CARD_BOX.value)
+    ),
+    ShopProduct.RARE_CARD_BOX: (
+        'Rare Card Box',
+        Has(BoosterPackItems.PROGRESSIVE_RARE_CARD_BOX.value)
+    ),
+    ShopProduct.EPIC_CARD_PACK: (
+        'Epic Card Pack',
+        Has(BoosterPackItems.PROGRESSIVE_EPIC_CARD_PACK.value) |
+        Has(BoosterPackItems.PROGRESSIVE_EPIC_CARD_BOX.value)
+    ),
+    ShopProduct.EPIC_CARD_BOX: (
+        'Epic Card Box',
+        Has(BoosterPackItems.PROGRESSIVE_EPIC_CARD_BOX.value)
+    ),
+    ShopProduct.LEGENDARY_CARD_PACK: (
+        'Legendary Card Pack',
+        Has(BoosterPackItems.PROGRESSIVE_LEGENDARY_CARD_PACK.value) |
+        Has(BoosterPackItems.PROGRESSIVE_LEGENDARY_CARD_BOX.value)
+    ),
+    ShopProduct.LEGENDARY_CARD_BOX: (
+        'Legendary Card Box',
+        Has(BoosterPackItems.PROGRESSIVE_LEGENDARY_CARD_BOX.value)
+    ),
+
+    # Destiny Card Packs and Boxes
+    ShopProduct.BASIC_DESTINY_PACK: (
+        'Basic Destiny Pack',
+        Has(BoosterPackItems.PROGRESSIVE_BASIC_DESTINY_PACK.value) |
+        Has(BoosterPackItems.PROGRESSIVE_BASIC_DESTINY_BOX.value)
+    ),
+    ShopProduct.BASIC_DESTINY_BOX: (
+        'Basic Destiny Box',
+        Has(BoosterPackItems.PROGRESSIVE_BASIC_DESTINY_BOX.value)
+    ),
+    ShopProduct.RARE_DESTINY_PACK: (
+        'Rare Destiny Pack',
+        Has(BoosterPackItems.PROGRESSIVE_RARE_DESTINY_PACK.value) |
+        Has(BoosterPackItems.PROGRESSIVE_RARE_DESTINY_BOX.value)
+    ),
+    ShopProduct.RARE_DESTINY_BOX: (
+        'Rare Destiny Box',
+        Has(BoosterPackItems.PROGRESSIVE_RARE_DESTINY_BOX.value)
+    ),
+    ShopProduct.EPIC_DESTINY_PACK: (
+        'Epic Destiny Pack',
+        Has(BoosterPackItems.PROGRESSIVE_EPIC_DESTINY_PACK.value) |
+        Has(BoosterPackItems.PROGRESSIVE_EPIC_DESTINY_BOX.value)
+    ),
+    ShopProduct.EPIC_DESTINY_BOX: (
+        'Epic Destiny Box',
+        Has(BoosterPackItems.PROGRESSIVE_EPIC_DESTINY_BOX.value)
+    ),
+    ShopProduct.LEGENDARY_DESTINY_PACK: (
+        'Legendary Destiny Pack',
+        Has(BoosterPackItems.PROGRESSIVE_LEGENDARY_DESTINY_PACK.value) |
+        Has(BoosterPackItems.PROGRESSIVE_LEGENDARY_DESTINY_BOX.value)
+    ),
+    ShopProduct.LEGENDARY_DESTINY_BOX: (
+        'Legendary Destiny Box',
+        Has(BoosterPackItems.PROGRESSIVE_LEGENDARY_DESTINY_BOX.value)
+    ),
+
+    # Battle Decks
+    ShopProduct.FIRE_BATTLE_DECK: (
+        'Fire Battle Deck', Has(BoosterPackItems.FIRE_BATTLE_DECK.value)
+    ),
+    ShopProduct.EARTH_BATTLE_DECK: (
+        'Earth Battle Deck', Has(BoosterPackItems.EARTH_BATTLE_DECK.value)
+    ),
+    ShopProduct.WATER_BATTLE_DECK: (
+        'Water Battle Deck', Has(BoosterPackItems.WATER_BATTLE_DECK.value)
+    ),
+    ShopProduct.WIND_BATTLE_DECK: (
+        'Wind Battle Deck', Has(BoosterPackItems.WIND_BATTLE_DECK.value)
+    ),
+    ShopProduct.FIRE_DESTINY_DECK: (
+        'Fire Destiny Deck', Has(BoosterPackItems.FIRE_DESTINY_DECK.value)
+    ),
+    ShopProduct.EARTH_DESTINY_DECK: (
+        'Earth Destiny Deck', Has(BoosterPackItems.EARTH_DESTINY_DECK.value)
+    ),
+    ShopProduct.WATER_DESTINY_DECK: (
+        'Water Destiny Deck', Has(BoosterPackItems.WATER_DESTINY_DECK.value)
+    ),
+    ShopProduct.WIND_DESTINY_DECK: (
+        'Wind Destiny Deck', Has(BoosterPackItems.WIND_DESTINY_DECK.value)
+    ),
+
+    # Accessories
+    ShopProduct.CLEANSER: (
+        'Cleanser', Has(AccessoriesItems.PROGRESSIVE_CLEANSER.value)
+    ),
+    ShopProduct.CARD_SLEEVES_CLEAR: (
+        'Card Sleeves (Clear)', Has(AccessoriesItems.CARD_SLEEVES_CLEAR.value)
+    ),
+    ShopProduct.CARD_SLEEVES_TETRAMON: (
+        'Card Sleeves (Tetramon)', Has(AccessoriesItems.CARD_SLEEVES_TETRAMON.value)
+    ),
+    ShopProduct.D20_DICE_RED: (
+        'D20 Dice Red', Has(AccessoriesItems.D20_DICE_RED.value)
+    ),
+    ShopProduct.D20_DICE_BLUE: (
+        'D20 Dice Blue', Has(AccessoriesItems.D20_DICE_BLUE.value)
+    ),
+    ShopProduct.D20_DICE_BLACK: (
+        'D20 Dice Black', Has(AccessoriesItems.D20_DICE_BLACK.value)
+    ),
+    ShopProduct.D20_DICE_WHITE: (
+        'D20 Dice White', Has(AccessoriesItems.D20_DICE_WHITE.value)
+    ),
+    ShopProduct.CARD_SLEEVES_FIRE: (
+        'Card Sleeves (Fire)', Has(AccessoriesItems.CARD_SLEEVES_FIRE.value)
+    ),
+    ShopProduct.CARD_SLEEVES_EARTH: (
+        'Card Sleeves (Earth)', Has(AccessoriesItems.CARD_SLEEVES_EARTH.value)
+    ),
+    ShopProduct.CARD_SLEEVES_WATER: (
+        'Card Sleeves (Water)', Has(AccessoriesItems.CARD_SLEEVES_WATER.value)
+    ),
+    ShopProduct.CARD_SLEEVES_WIND: (
+        'Card Sleeves (Wind)', Has(AccessoriesItems.CARD_SLEEVES_WIND.value)
+    ),
+
+    # Deck Boxes
+    ShopProduct.DECK_BOX_RED: (
+        'Deck Box Red', Has(AccessoriesItems.PROGRESSIVE_DECK_BOX_RED.value)
+    ),
+    ShopProduct.DECK_BOX_GREEN: (
+        'Deck Box Green', Has(AccessoriesItems.PROGRESSIVE_DECK_BOX_GREEN.value)
+    ),
+    ShopProduct.DECK_BOX_BLUE: (
+        'Deck Box Blue', Has(AccessoriesItems.PROGRESSIVE_DECK_BOX_BLUE.value)
+    ),
+    ShopProduct.DECK_BOX_YELLOW: (
+        'Deck Box Yellow', Has(AccessoriesItems.PROGRESSIVE_DECK_BOX_YELLOW.value)
+    ),
+
+    # Collection Books
+    ShopProduct.COLLECTION_BOOK: (
+        'Collection Book', Has(AccessoriesItems.COLLECTION_BOOK.value)
+    ),
+    ShopProduct.PREMIUM_COLLECTION_BOOK: (
+        'Premium Collection Book', Has(AccessoriesItems.PREMIUM_COLLECTION_BOOK.value)
+    ),
+
+    # Playmats
+    ShopProduct.PLAYMAT_DRILCEROS: (
+        'Playmat (Drilceros)', Has(AccessoriesItems.PLAYMAT_DRILCEROS.value)
+    ),
+    ShopProduct.PLAYMAT_CLAMIGO: (
+        'Playmat (Clamigo)', Has(AccessoriesItems.PLAYMAT_CLAMIGO.value)
+    ),
+    ShopProduct.PLAYMAT_WISPO: (
+        'Playmat (Wispo)', Has(AccessoriesItems.PLAYMAT_WISPO.value)
+    ),
+    ShopProduct.PLAYMAT_LUNIGHT: (
+        'Playmat (Lunight)', Has(AccessoriesItems.PLAYMAT_LUNIGHT.value)
+    ),
+    ShopProduct.PLAYMAT_KYRONE: (
+        'Playmat (Kyrone)', Has(AccessoriesItems.PLAYMAT_KYRONE.value)
+    ),
+    ShopProduct.PLAYMAT_DUEL: (
+        'Playmat (Duel)', Has(AccessoriesItems.PLAYMAT_DUEL.value)
+    ),
+    ShopProduct.PLAYMAT_DRACUNIX1: (
+        'Playmat (Dracunix1)', Has(AccessoriesItems.PLAYMAT_DRACUNIX1.value)
+    ),
+    ShopProduct.PLAYMAT_THE_FOUR_DRAGONS: (
+        'Playmat (The Four Dragons)', Has(AccessoriesItems.PLAYMAT_THE_FOUR_DRAGONS.value)
+    ),
+    ShopProduct.PLAYMAT_DRAKON: (
+        'Playmat (Drakon)', Has(AccessoriesItems.PLAYMAT_DRAKON.value)
+    ),
+    ShopProduct.PLAYMAT_GIGATRON_X_EVO: (
+        'Playmat (GigatronX Evo)', Has(AccessoriesItems.PLAYMAT_GIGATRONX_EVO.value)
+    ),
+    ShopProduct.PLAYMAT_FIRE: (
+        'Playmat (Fire)', Has(AccessoriesItems.PLAYMAT_FIRE.value)
+    ),
+    ShopProduct.PLAYMAT_EARTH: (
+        'Playmat (Earth)', Has(AccessoriesItems.PLAYMAT_EARTH.value)
+    ),
+    ShopProduct.PLAYMAT_WATER: (
+        'Playmat (Water)', Has(AccessoriesItems.PLAYMAT_WATER.value)
+    ),
+    ShopProduct.PLAYMAT_WIND: (
+        'Playmat (Wind)', Has(AccessoriesItems.PLAYMAT_WIND.value)
+    ),
+    ShopProduct.PLAYMAT_TETRAMON: (
+        'Playmat (Tetramon)', Has(AccessoriesItems.PLAYMAT_TETRAMON.value)
+    ),
+    ShopProduct.PLAYMAT_DRACUNIX2: (
+        'Playmat (Dracunix2)', Has(AccessoriesItems.PLAYMAT_DRACUNIX2.value)
+    ),
+    ShopProduct.PLAYMAT_GIGATRON_X: (
+        'Playmat (GigatronX)', Has(AccessoriesItems.PLAYMAT_GIGATRONX.value)
+    ),
+    ShopProduct.PLAYMAT_KATENGU_BLACK: (
+        'Playmat (Katengu Black)', Has(AccessoriesItems.PLAYMAT_KATENGU_BLACK.value)
+    ),
+    ShopProduct.PLAYMAT_KATENGU_WHITE: (
+        'Playmat (Katengu White)', Has(AccessoriesItems.PLAYMAT_KATENGU_WHITE.value)
+    ),
+
+    # Manga
+    ShopProduct.MANGA_1: ('Manga 1', Has(AccessoriesItems.MANGA_1.value)),
+    ShopProduct.MANGA_2: ('Manga 2', Has(AccessoriesItems.MANGA_2.value)),
+    ShopProduct.MANGA_3: ('Manga 3', Has(AccessoriesItems.MANGA_3.value)),
+    ShopProduct.MANGA_4: ('Manga 4', Has(AccessoriesItems.MANGA_4.value)),
+    ShopProduct.MANGA_5: ('Manga 5', Has(AccessoriesItems.MANGA_5.value)),
+    ShopProduct.MANGA_6: ('Manga 6', Has(AccessoriesItems.MANGA_6.value)),
+    ShopProduct.MANGA_7: ('Manga 7', Has(AccessoriesItems.MANGA_7.value)),
+    ShopProduct.MANGA_8: ('Manga 8', Has(AccessoriesItems.MANGA_8.value)),
+    ShopProduct.MANGA_9: ('Manga 9', Has(AccessoriesItems.MANGA_9.value)),
+    ShopProduct.MANGA_10: ('Manga 10', Has(AccessoriesItems.MANGA_10.value)),
+    ShopProduct.MANGA_11: ('Manga 11', Has(AccessoriesItems.MANGA_11.value)),
+    ShopProduct.MANGA_12: ('Manga 12', Has(AccessoriesItems.MANGA_12.value)),
+
+    # Plushies and Figurines
+    ShopProduct.PIGNI_PLUSHIE: (
+        'Pigni Plushie', Has(FigurineItems.PIGNI_PLUSHIE.value)
+    ),
+    ShopProduct.NANOMITE_PLUSHIE: (
+        'Nanomite Plushie', Has(FigurineItems.NANOMITE_PLUSHIE.value)
+    ),
+    ShopProduct.MINSTAR_PLUSHIE: (
+        'Minstar Plushie', Has(FigurineItems.MINSTAR_PLUSHIE.value)
+    ),
+    ShopProduct.NOCTI_PLUSHIE: (
+        'Nocti Plushie', Has(FigurineItems.NOCTI_PLUSHIE.value)
+    ),
+    ShopProduct.BURPIG_FIGURINE: (
+        'Burpig Figurine', Has(FigurineItems.BURPIG_FIGURINE.value)
+    ),
+    ShopProduct.DECIMITE_FIGURINE: (
+        'Decimite Figurine', Has(FigurineItems.DECIMITE_FIGURINE.value)
+    ),
+    ShopProduct.TRICKSTAR_FIGURINE: (
+        'Trickstar Figurine', Has(FigurineItems.TRICKSTAR_FIGURINE.value)
+    ),
+    ShopProduct.LUNIGHT_FIGURINE: (
+        'Lunight Figurine', Has(FigurineItems.LUNIGHT_FIGURINE.value)
+    ),
+    ShopProduct.INFERHOG_FIGURINE: (
+        'Inferhog Figurine', Has(FigurineItems.INFERHOG_FIGURINE.value)
+    ),
+    ShopProduct.MEGANITE_FIGURINE: (
+        'Meganite Figurine', Has(FigurineItems.MEGANITE_FIGURINE.value)
+    ),
+    ShopProduct.PRINCESTAR_FIGURINE: (
+        'Princestar Figurine', Has(FigurineItems.PRINCESTAR_FIGURINE.value)
+    ),
+    ShopProduct.VAMPICANT_FIGURINE: (
+        'Vampicant Figurine', Has(FigurineItems.VAMPICANT_FIGURINE.value)
+    ),
+    ShopProduct.BLAZOAR_PLUSHIE: (
+        'Blazoar Plushie', Has(FigurineItems.BLAZOAR_PLUSHIE.value)
+    ),
+    ShopProduct.GIGANITE_STATUE: (
+        'Giganite Statue', Has(FigurineItems.GIGANITE_STATUE.value)
+    ),
+    ShopProduct.KINGSTAR_PLUSHIE: (
+        'Kingstar Plushie', Has(FigurineItems.KINGSTAR_PLUSHIE.value)
+    ),
+    ShopProduct.DRACUNIX_FIGURINE: (
+        'Dracunix Figurine', Has(FigurineItems.DRACUNIX_FIGURINE.value)
+    ),
+    ShopProduct.BONFIOX_PLUSHIE: (
+        'Bonfiox Plushie', Has(FigurineItems.BONFIOX_PLUSHIE.value)
+    ),
+    ShopProduct.DRILCEROS_ACTION_FIGURE: (
+        'Drilceros Action Figure', Has(FigurineItems.DRILCEROS_ACTION_FIGURE.value)
+    ),
+    ShopProduct.TOON_Z_PLUSHIE: (
+        'ToonZ Plushie', Has(FigurineItems.TOONZ_PLUSHIE.value)
+    ),
+
+    # Tabletop Products
+    ShopProduct.PENNY_SLEEVES: (
+        'Penny Sleeves', Has(TableTopItems.PENNY_SLEEVES.value)
+    ),
+    ShopProduct.TOWER_DECKBOX: (
+        'Tower Deckbox', Has(TableTopItems.TOWER_DECKBOX.value)
+    ),
+    ShopProduct.MAGNETIC_HOLDER: (
+        'Magnetic Holder', Has(TableTopItems.MAGNETIC_HOLDER.value)
+    ),
+    ShopProduct.TOPLOADER: (
+        'Toploader', Has(TableTopItems.TOPLOADER.value)
+    ),
+    ShopProduct.CARD_PRESERVER: (
+        'Card Preserver', Has(TableTopItems.CARD_PRESERVER.value)
+    ),
+    ShopProduct.PLAYMAT_GRAY: (
+        'Playmat Gray', Has(TableTopItems.PLAYMAT_GRAY.value)
+    ),
+    ShopProduct.PLAYMAT_GREEN: (
+        'Playmat Green', Has(TableTopItems.PLAYMAT_GREEN.value)
+    ),
+    ShopProduct.PLAYMAT_PURPLE: (
+        'Playmat Purple', Has(TableTopItems.PLAYMAT_PURPLE.value)
+    ),
+    ShopProduct.PLAYMAT_YELLOW: (
+        'Playmat Yellow', Has(TableTopItems.PLAYMAT_YELLOW.value)
+    ),
+    ShopProduct.POCKET_PAGES: (
+        'Pocket Pages', Has(TableTopItems.POCKET_PAGES.value)
+    ),
+    ShopProduct.CARD_HOLDER: (
+        'Card Holder', Has(TableTopItems.CARD_HOLDER.value)
+    ),
+    ShopProduct.COLLECTORS_ALBUM: (
+        'Collectors Album', Has(TableTopItems.COLLECTORS_ALBUM.value)
+    ),
+    ShopProduct.SYSTEM_GATE_1: (
+        'System Gate #1', Has(TableTopItems.SYSTEM_GATE_1.value)
+    ),
+    ShopProduct.SYSTEM_GATE_2: (
+        'System Gate #2', Has(TableTopItems.SYSTEM_GATE_2.value)
+    ),
+    ShopProduct.MAFIA_WORKS: (
+        'Mafia Works', Has(TableTopItems.MAFIA_WORKS.value)
+    ),
+    ShopProduct.NECROMONSTERS: (
+        'Necromonsters', Has(TableTopItems.NECROMONSTERS.value)
+    ),
+    ShopProduct.CLAIM: (
+        'Claim!', Has(TableTopItems.CLAIM.value)
+    ),
 }
+
 
 SHOP_PRODUCTS: dict[Shop, tuple[ShopProduct, ...]] = {
     Shop.BOOSTER_PACK_SHOP: (
@@ -361,8 +614,7 @@ SHOP_PRODUCTS: dict[Shop, tuple[ShopProduct, ...]] = {
 }
 
 
-def generate_license_locations(
-    region, product: ShopProduct, check_count: int, starting_checks: int = 0,
+def generate_license_locations(product: ShopProduct, check_count: int, starting_checks: int = 0,
     starting_products: frozenset[ShopProduct] = frozenset(),
 ) -> list[GeneratedLocationData]:
     if check_count < 0 or starting_checks < 0 or check_count + starting_checks > 999:
@@ -371,8 +623,8 @@ def generate_license_locations(
     count = check_count + (starting_checks if product in starting_products else 0)
     for n in range(1, count + 1):
         results.append(GeneratedLocationData(
-            name=f"Sell {n} {'Box' if n == 1 else 'Boxes'} of {PRODUCT_NAMES[product]}",
+            name=f"Sell {n} {'Box' if n == 1 else 'Boxes'} of {PRODUCT_DATA[product]}",
             location_id=(LOCATIONS_SELL_OFFSET + (product.value * 1000) + n),
-            region=region,
+            region=Regions.PRODUCT_SELLING,
             ))
     return results
