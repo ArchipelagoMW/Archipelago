@@ -115,7 +115,6 @@ class MoneyLogic(BaseLogic):
             money_rule = self.logic.money.can_spend(source.price) if source.price is not None else true_
         else:
             money_rule = self.logic.money.can_trade_at(source.shop_region, source.currency, source.price) if source.price is not None else true_
-
         item_rules = []
         if source.items_price is not None:
             for price, item in source.items_price:

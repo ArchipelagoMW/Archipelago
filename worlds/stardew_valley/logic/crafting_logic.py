@@ -77,7 +77,7 @@ class CraftingLogic(BaseLogic):
 
     @cache_self1
     def can_learn_recipe_source(self, source: Source) -> StardewRule:
-        return self.logic.source.has_access_to(source)
+        return self.logic.source.has_access_to(source) & self.logic.requirement.meet_all_requirements(source.other_requirements)
 
     @cache_self1
     def received_recipe(self, item_name: str):
