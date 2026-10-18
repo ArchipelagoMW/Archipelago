@@ -1441,7 +1441,10 @@ class HasAllCounts(Rule[TWorld], game="Archipelago"):
             if isinstance(other_rule, HasAllCounts.Resolved):
                 items = dict(self.item_counts)
                 for item, count in other_rule.item_counts:
-                    items[item] = max(items[item], count)
+                    if item in items:
+                        items[item] = max(items[item], count)
+                    else:
+                        items[item] = count
                 return [HasAllCounts(items).resolve(world)]
 
             return NotImplemented
@@ -1608,7 +1611,10 @@ class HasAnyCount(Rule[TWorld], game="Archipelago"):
             if isinstance(other_rule, HasAnyCount.Resolved):
                 items = dict(self.item_counts)
                 for item, count in other_rule.item_counts:
-                    items[item] = min(items[item], count)
+                    if item in items:
+                        items[item] = min(items[item], count)
+                    else:
+                        items[item] = count
                 return [HasAnyCount(items).resolve(world)]
 
             return NotImplemented

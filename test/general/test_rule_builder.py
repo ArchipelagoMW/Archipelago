@@ -272,12 +272,12 @@ class CachedRuleBuilderTestCase(RuleBuilderTestCase):
             HasAny.Resolved(("A", "B", "C", "D", "E"), player=1),
         ),
         (
-            And(HasAllCounts({"A": 1, "B": 2}), HasAllCounts({"A": 2, "B": 2})),
-            HasAllCounts.Resolved((("A", 2), ("B", 2)), player=1),
+            And(HasAllCounts({"A": 1, "B": 2, "C": 1}), HasAllCounts({"A": 2, "B": 2, "D": 1})),
+            HasAllCounts.Resolved((("A", 2), ("B", 2), ("C", 1), ("D", 1)), player=1),
         ),
         (
-            Or(HasAnyCount({"A": 1, "B": 2}), HasAnyCount({"A": 2, "B": 2})),
-            HasAnyCount.Resolved((("A", 1), ("B", 2)), player=1),
+            Or(HasAnyCount({"A": 1, "B": 2, "C": 1}), HasAnyCount({"A": 2, "B": 2, "D": 1})),
+            HasAnyCount.Resolved((("A", 1), ("B", 2), ("C", 1), ("D", 1)), player=1),
         ),
         (
             AtLeast(0, Has("A")),
