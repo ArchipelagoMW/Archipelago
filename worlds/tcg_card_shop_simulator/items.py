@@ -31,10 +31,9 @@ def create_single_item(world: "TCGSimulatorWorld", item_type: ItemTypeEnum):
     world.itempool.append(world.create_item(item_type.value))
 
 def create_filler_item(world: "TCGSimulatorWorld", item_value: str):
-    if len(world.filler_items) != world.sanity_fill_locations:
-        world.filler_items.append(world.create_item(item_value))
-    else:
-        world.itempool.append(world.create_item(item_value))
+    world.filler_items.append(
+        world.create_item(item_value)
+    )
 
 
 def generate_ghost_card_items(world: "TCGSimulatorWorld", locs_available):
@@ -93,7 +92,13 @@ def create_items(world: TCGSimulatorWorld):
     if world.options.goal.value == world.options.goal.option_grade_ghost_cards:
         ghost_card_amounts = generate_ghost_card_items(world, _remaining)
 
-    if _remaining < 100:
+    minimum_ghost_slots = (
+        (world.options.ghost_goal_amount.value + 4) // 5
+        if world.options.goal.value == world.options.goal.option_grade_ghost_cards
+        else 0
+    )
+
+    if _remaining-(minimum_ghost_slots+15) < 100:
         for item_data in minimal_diy_items:
             create_item(world, item_data)
 

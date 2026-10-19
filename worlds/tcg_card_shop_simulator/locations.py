@@ -138,9 +138,8 @@ def create_regions(world: "TCGSimulatorWorld"):
         starting_license_items.append(tabletop_items.pop())
 
         for pack_type in pack_types:
-            for pack_pair in pack_types:
-                if any(item in starting_license_items for item in pack_pair):
-                    continue
+            if any(item in starting_license_items for item in pack_type):
+                continue
 
             available = [
                 item
@@ -164,10 +163,9 @@ def create_regions(world: "TCGSimulatorWorld"):
         if world.options.goal.value == world.options.goal.option_collection_builder:
             booster_items_to_skip = 8
             for pack_type in pack_types:
-                for pack_pair in pack_types:
-                    if any(item in starting_license_items for item in pack_pair):
-                        booster_items_to_skip -= 1
-                        continue
+                if any(item in starting_license_items for item in pack_type):
+                    booster_items_to_skip -= 1
+                    continue
 
                 available = [
                     item
