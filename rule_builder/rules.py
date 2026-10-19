@@ -1094,12 +1094,12 @@ class HasAll(Rule[TWorld], game="Archipelago"):
                 return result
 
             if isinstance(other_rule, Has.Resolved):
-                if other_rule.item_name in self.item_names:
-                    return [self]
                 if other_rule.count > 1:
                     items = dict.fromkeys(self.item_names, 1)
                     items[other_rule.item_name] = other_rule.count
                     return [HasAllCounts(items).resolve(world)]
+                if other_rule.item_name in self.item_names:
+                    return [self]
                 return [HasAll(*self.item_names, other_rule.item_name).resolve(world)]
 
             if isinstance(other_rule, HasAll.Resolved):
@@ -1254,7 +1254,7 @@ class HasAny(Rule[TWorld], game="Archipelago"):
                 if other_rule.count > 1:
                     items = dict.fromkeys(self.item_names, 1)
                     items[other_rule.item_name] = other_rule.count
-                    return [HasAllCounts(items).resolve(world)]
+                    return [HasAnyCount(items).resolve(world)]
                 return [HasAny(*self.item_names, other_rule.item_name).resolve(world)]
 
             if isinstance(other_rule, HasAny.Resolved):
@@ -1435,7 +1435,7 @@ class HasAllCounts(Rule[TWorld], game="Archipelago"):
                         items[item_name] = 1
                         changed = True
                 if not changed:
-                    return [other_rule]
+                    return [self]
                 return [HasAllCounts(items).resolve(world)]
 
             if isinstance(other_rule, HasAllCounts.Resolved):
