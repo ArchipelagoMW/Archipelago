@@ -787,6 +787,9 @@ slot_data_options: List[str] = [
     "DWEnableBonus",
     "DWAutoCompleteBonuses",
     "DWTimePieceRequirement",
+    "DWExcludeAnnoyingContracts",
+    "DWExcludeAnnoyingBonuses",
+    "DWExcludeCandles",
 
     "EnableDLC2",
     "MetroMinPonCost",

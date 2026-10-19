@@ -174,7 +174,7 @@ def create_dw_regions(world: "HatInTimeWorld"):
         dw_shuffle: List[str] = []
 
         # Already have dw_shuffle built if UT generation
-        if getattr(world.multiworld, "generation_is_fake",False):
+        if world.fake_gen:
             dw_shuffle = world.dw_shuffle
         else:
             # Connect Death Wishes randomly to one another in a linear sequence

@@ -54,8 +54,9 @@ class HatInTimeWorld(World):
     item_name_groups = relic_groups
     web = AWebInTime()
 
-    # enable yamlless UT generation
+    # UT integration
     ut_can_gen_without_yaml = True
+    glitches_item_name = "Level Up"
 
     def __init__(self, multiworld: "MultiWorld", player: int):
         super().__init__(multiworld, player)
@@ -80,6 +81,9 @@ class HatInTimeWorld(World):
         self.dw_shuffle: List[str] = []
         self.nyakuza_thug_items: Dict[str, int] = {}
         self.badge_seller_count: int = 0
+        
+        # UT generation
+        self.fake_gen = getattr(self.multiworld, "generation_is_fake",False)
 
     def get_filler_item_name(self) -> str:
         return self.random.choices(list(junk_weights.keys()), weights=junk_weights.values(), k=1)[0]
@@ -157,10 +161,14 @@ class HatInTimeWorld(World):
                     else:
                         # No more dw in slot data
                         break
+            
+            # TODO: Remove
+            # print("Options:")
+            # print(vars(self.options))
 
         # TODO: Verify if this is actually causing issues one way or the other, decide how I want to leave it (doing this seems to have changed nothing in the fuzzer)
         # Options being passed should already be adjusted properly
-        if not getattr(self.multiworld, "generation_is_fake",False):
+        if not self.fake_gen:
             adjust_options(self)
 
         if self.options.StartWithCompassBadge:
@@ -218,7 +226,7 @@ class HatInTimeWorld(World):
 
     def create_items(self):
         # Don't randomize hat costs and craft order if UT generation
-        if self.has_yarn() and not getattr(self.multiworld, "generation_is_fake",False):
+        if self.has_yarn() and not self.fake_gen:
             calculate_yarn_costs(self)
 
             if self.options.RandomizeHatOrder:
@@ -468,17 +476,24 @@ class HatInTimeWorld(World):
 
     @staticmethod
     def interpret_slot_data(slot_data: dict[str, Any]) -> dict[str, Any]:
-        # Trigger a regen in UT instead of attempting tracker gen with a likely randomized yaml
+        # Trigger a regen in UT instead of attempting tracker gen with local yaml
         return slot_data
 
-        # TODO: Add UT defered entrances logic for acts locked behind other acts - looks like most of the logic is in Rules act_connections already? Would need to tie the deferral to those act completions I guess.
+        # TODO: Add UT defered entrances logic. Looks like most of the act logic is in Rules act_connections already? Would need to tie the deferral to those act completions I guess.
+        # Likely need to do time rift deferral as well, since those are tied to both act completion and location availability.
+        # Would need to potentially look at the deferred logic for deathwish too... is there anything else?
 
         # TODO: Add "Glitched" logic
 
         # TODO: Add Custom Sorting? Could group region checks together. (I likely won't do this)
 
-        # TODO: Add UT map tracker support
+        # TODO: Add UT map tracker support (integrate with existing poptracker)
 
         # TODO: Add any Logic explanation overrides desired (I likely won't do this)
 
-        # TODO: Consider optimizations, make sure changes are clean and meet AP style standards
+        # TODO: Consider optimizations, cleaner code, make sure changes are clean and meet AP style standards
+        
+        # TODO: Add hint colors to AHIT client UT integration? Is that already there by default?
+        
+        # TODO: refactor to Rule Builder to greatly improve/streamline glitch logic. 
+        # Would need core PR 6401 to mostly follow existing logic using add_rule, would allow for an easier but less clean/ideal refactor

@@ -480,8 +480,8 @@ def create_tasksanity_locations(world: "HatInTimeWorld"):
 def randomize_act_entrances(world: "HatInTimeWorld"):
     rift_dict: Dict[str, Region] = {}
 
-    # Don't randomize if UT generation
-    if getattr(world.multiworld, "generation_is_fake",False):
+    # Don't randomize if UT generation, but still need to connect the acts
+    if world.fake_gen:
         for key in world.act_connections:
             for ent in chapter_act_info:
                 if key == chapter_act_info[ent]:
@@ -893,7 +893,7 @@ def create_badge_seller(world: "HatInTimeWorld") -> Region:
     max_items = world.badge_seller_count
 
     # don't randomize if UT generation
-    if world.options.BadgeSellerMaxItems > 0 and not getattr(world.multiworld, "generation_is_fake",False):
+    if world.options.BadgeSellerMaxItems > 0 and not world.fake_gen:
         max_items = world.random.randint(world.options.BadgeSellerMinItems.value,
                                          world.options.BadgeSellerMaxItems.value)
 

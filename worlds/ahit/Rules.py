@@ -34,6 +34,14 @@ act_connections = {
 }
 
 
+# TODO: find a better way to do this
+def glitch_logic(state: CollectionState, world: "HatInTimeWorld"):
+    # if world.fake_gen:
+    return state.has("Level Up", world.player)
+    # else:
+        # return False
+
+
 def can_use_hat(state: CollectionState, world: "HatInTimeWorld", hat: HatType) -> bool:
     if world.options.HatItems:
         return state.has(hat_type_to_item[hat], world.player)
@@ -129,7 +137,7 @@ def can_clear_metro(state: CollectionState, world: "HatInTimeWorld") -> bool:
 
 def set_rules(world: "HatInTimeWorld"):
     # Don't randomize chapter costs when UT generation
-    if not getattr(world.multiworld, "generation_is_fake",False):
+    if not world.fake_gen:
         # First, chapter access
         starting_chapter = ChapterIndex(world.options.StartingChapter)
         world.chapter_timepiece_costs[starting_chapter] = 0
@@ -372,6 +380,20 @@ def set_specific_rules(world: "HatInTimeWorld"):
 
     if difficulty >= Difficulty.EXPERT:
         set_expert_rules(world)
+        
+    # UT Glitched logic
+    if world.fake_gen:
+        glitch_difficulty = difficulty+1
+        
+        if glitch_difficulty == Difficulty.MODERATE:
+            set_glitched_moderate_rules(world)
+
+        # if glitch_difficulty == Difficulty.HARD:
+            # set_hard_rules(world)
+
+        # if glitch_difficulty == Difficulty.EXPERT:
+            # set_expert_rules(world)
+    
 
 
 def set_moderate_rules(world: "HatInTimeWorld"):
@@ -469,6 +491,118 @@ def set_moderate_rules(world: "HatInTimeWorld"):
         if not world.options.NoTicketSkips:
             set_rule(world.multiworld.get_entrance("-> Pink Paw Station", world.player), lambda state: True)
             set_rule(world.multiworld.get_entrance("-> Bluefin Tunnel", world.player), lambda state: True)
+
+
+def set_glitched_moderate_rules(world: "HatInTimeWorld"):
+    # Moderate: Gallery without Brewing Hat
+    location = world.multiworld.get_location("Act Completion (Time Rift - Gallery)", world.player)
+    add_rule(location, lambda state: glitch_logic(state, world), "or")
+
+    # Moderate: Above Boats via Ice Hat Sliding
+    location = world.multiworld.get_location("Mafia Town - Above Boats", world.player)
+    add_rule(location, lambda state: can_use_hat(state, world, HatType.ICE) and glitch_logic(state, world), "or")
+
+    # Moderate: Clock Tower Chest + Ruined Tower with nothing
+    location = world.multiworld.get_location("Mafia Town - Clock Tower Chest", world.player)
+    add_rule(location, lambda state: glitch_logic(state, world), "or")
+    location = world.multiworld.get_location("Mafia Town - Top of Ruined Tower", world.player)
+    add_rule(location, lambda state: glitch_logic(state, world), "or")
+
+    # Moderate: enter and clear The Subcon Well without Hookshot and without hitting the bell
+    for loc in world.multiworld.get_region("The Subcon Well", world.player).locations:
+        add_rule(loc, lambda state: has_paintings(state, world, 1) and glitch_logic(state, world), "or")
+
+    # Moderate: Vanessa Manor with nothing
+    for loc in world.multiworld.get_region("Queen Vanessa's Manor", world.player).locations:
+        add_rule(loc, lambda state: has_paintings(state, world, 1) and glitch_logic(state, world), "or")
+
+    add_rule(world.multiworld.get_location("Subcon Forest - Manor Rooftop", world.player),
+             lambda state: has_paintings(state, world, 1) and glitch_logic(state, world), "or")
+
+    # Moderate: Village Time Rift with nothing IF umbrella logic is off
+    if not world.options.UmbrellaLogic:
+        location = world.multiworld.get_location("Act Completion (Time Rift - Village)", world.player)
+        add_rule(location, lambda state: glitch_logic(state, world), "or")
+
+    # Moderate: get to Birdhouse/Yellow Band Hills without Brewing Hat
+    add_rule(world.multiworld.get_entrance("-> The Birdhouse", world.player),
+             lambda state: can_use_hookshot(state, world) and glitch_logic(state, world), "or")
+    add_rule(world.multiworld.get_location("Alpine Skyline - Yellow Band Hills", world.player),
+             lambda state: can_use_hookshot(state, world) and glitch_logic(state, world), "or")
+
+    # Moderate: The Birdhouse - Dweller Platforms Relic with only Birdhouse access
+    add_rule(world.multiworld.get_location("Alpine Skyline - The Birdhouse: Dweller Platforms Relic", world.player),
+             lambda state: glitch_logic(state, world), "or")
+
+    # Moderate: Twilight Path without Dweller Mask
+    location = world.multiworld.get_location("Alpine Skyline - The Twilight Path", world.player)
+    add_rule(location, lambda state: glitch_logic(state, world), "or")
+
+    # Moderate: Mystifying Time Mesa time trial without hats
+    add_rule(world.multiworld.get_location("Alpine Skyline - Mystifying Time Mesa: Zipline", world.player),
+             lambda state: glitch_logic(state, world), "or")
+
+    # Moderate: Goat Refinery from TIHS with Sprint only
+    add_rule(world.multiworld.get_location("Alpine Skyline - Goat Refinery", world.player),
+             lambda state: state.has("TIHS Access", world.player)
+             and can_use_hat(state, world, HatType.SPRINT) and glitch_logic(state, world), "or")
+
+    # Moderate: Finale Telescope with only Ice Hat
+    add_rule(world.multiworld.get_entrance("Telescope -> Time's End", world.player),
+             lambda state: state.has("Time Piece", world.player, world.chapter_timepiece_costs[ChapterIndex.FINALE])
+             and can_use_hat(state, world, HatType.ICE) and glitch_logic(state, world), "or")
+
+    # Moderate: Finale without Hookshot
+    add_rule(world.multiworld.get_location("Act Completion (The Finale)", world.player),
+             lambda state: can_use_hat(state, world, HatType.DWELLER) and glitch_logic(state, world), "or")
+
+    if world.is_dlc1():
+        # Moderate: clear Rock the Boat without Ice Hat
+        location = world.multiworld.get_location("Rock the Boat - Post Captain Rescue", world.player)
+        add_rule(location, lambda state: glitch_logic(state, world), "or")
+        location = world.multiworld.get_location("Act Completion (Rock the Boat)", world.player)
+        add_rule(location, lambda state: glitch_logic(state, world), "or")
+
+        # Moderate: clear Deep Sea without Ice Hat
+        add_rule(world.multiworld.get_location("Act Completion (Time Rift - Deep Sea)", world.player),
+                 lambda state: can_use_hookshot(state, world) and can_use_hat(state, world, HatType.DWELLER) 
+                 and glitch_logic(state, world), "or")
+
+    # There is a glitched fall damage volume near the Yellow Overpass time piece that warps the player to Pink Paw.
+    # Yellow Overpass time piece can also be reached without Hookshot quite easily.
+    if world.is_dlc2():
+        # No Hookshot
+        add_rule(world.multiworld.get_location("Act Completion (Yellow Overpass Station)", world.player),
+                 lambda state: glitch_logic(state, world), "or")
+
+        # No Dweller, Hookshot, or Time Stop for these
+        location = world.multiworld.get_location("Pink Paw Station - Cat Vacuum", world.player)
+        add_rule(location, lambda state: glitch_logic(state, world), "or")
+        location = world.multiworld.get_location("Pink Paw Station - Behind Fan", world.player)
+        add_rule(location, lambda state: glitch_logic(state, world), "or")
+        location = world.multiworld.get_location("Pink Paw Station - Pink Ticket Booth", world.player)
+        add_rule(location, lambda state: glitch_logic(state, world), "or")
+        location = world.multiworld.get_location("Act Completion (Pink Paw Station)", world.player)
+        add_rule(location, lambda state: glitch_logic(state, world), "or")
+        for key in shop_locations.keys():
+            if "Pink Paw Station Thug" in key and is_location_valid(world, key):
+                add_rule(world.multiworld.get_location(key, world.player), lambda state: glitch_logic(state, world), "or")
+
+        # Moderate: clear Rush Hour without Hookshot or Dweller Mask
+        add_rule(world.multiworld.get_location("Act Completion (Rush Hour)", world.player),
+                 lambda state: state.has("Metro Ticket - Pink", world.player)
+                 and state.has("Metro Ticket - Yellow", world.player)
+                 and state.has("Metro Ticket - Blue", world.player)
+                 and can_use_hat(state, world, HatType.ICE)
+                 and can_use_hat(state, world, HatType.BREWING)
+                 and glitch_logic(state, world), "or")
+
+        # Moderate: Bluefin Tunnel + Pink Paw Station without tickets
+        if not world.options.NoTicketSkips:
+            location = world.multiworld.get_entrance("-> Pink Paw Station", world.player)
+            add_rule(location, lambda state: glitch_logic(state, world), "or")
+            location = world.multiworld.get_entrance("-> Bluefin Tunnel", world.player)
+            add_rule(location, lambda state: glitch_logic(state, world), "or")
 
 
 def set_hard_rules(world: "HatInTimeWorld"):
