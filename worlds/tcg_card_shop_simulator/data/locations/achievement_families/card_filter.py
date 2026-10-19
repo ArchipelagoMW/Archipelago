@@ -15,7 +15,7 @@ from ... import RegionTypeEnum
 from ...helpers.card_types import (
     Border, CardAction, CardSpecies, Difficulty, Expansion, Foil, Rarity, SPECIES_NAMES,
 )
-from ...regions.regions import Regions
+from ...regions.regions import GenericRegions
 
 CARD_FILTER_FIELD_OFFSETS: dict[str, tuple[int, int]] = {
     "threshold": (0, 12),
@@ -161,7 +161,7 @@ OPEN_TEMPLATES: dict[CardAchievementFamily, tuple[CardTemplate, ...]] = {
             action=CardAction.OPEN,
             tiers=(Tier(5, Difficulty.EASY), Tier(15, Difficulty.MEDIUM),
                    Tier(30, Difficulty.HARD), Tier(50, Difficulty.IMPOSSIBLE)),
-            region=Regions.GENERIC_OPEN_PACKS
+            region=GenericRegions.GENERIC_OPEN_PACKS
         ),
     ),
     CardAchievementFamily.FOIL: (),
@@ -183,7 +183,7 @@ SELL_TEMPLATES: dict[CardAchievementFamily, tuple[CardTemplate, ...]] = {
             action=CardAction.SELL,
             tiers=(Tier(3, Difficulty.EASY), Tier(10, Difficulty.MEDIUM),
                    Tier(25, Difficulty.HARD), Tier(50, Difficulty.IMPOSSIBLE)),
-            region=Regions.GENERIC_SELL_CARDS
+            region=GenericRegions.GENERIC_SELL_CARDS
         ),
     ),
     CardAchievementFamily.FOIL: (),
@@ -205,7 +205,7 @@ GRADE_TEMPLATES: dict[CardAchievementFamily, tuple[CardTemplate, ...]] = {
             action=CardAction.GRADE,
             tiers=(Tier(1, Difficulty.EASY), Tier(3, Difficulty.MEDIUM),
                    Tier(6, Difficulty.HARD), Tier(12, Difficulty.IMPOSSIBLE)),
-            region=Regions.GENERIC_GRADE_CARDS
+            region=GenericRegions.GENERIC_GRADE_CARDS
         ),
     ),
     CardAchievementFamily.FOIL: (),

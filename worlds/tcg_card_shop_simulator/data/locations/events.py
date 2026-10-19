@@ -7,7 +7,7 @@ from typing import TYPE_CHECKING
 from BaseClasses import CollectionRule
 from rule_builder.rules import Rule, Has, True_
 from .. import GeneratedLocationData
-from ..regions.regions import Regions
+from ..regions.regions import GenericRegions
 from ... import Events
 from ...constants import LOCATIONS_EVENTS_OFFSET
 
@@ -56,7 +56,7 @@ def generate_event_locations(formats: list[EventFormat], games_per_format: int =
             name=(f"Play {n} Event Games" if tableFormat == EventFormat.NO_FORMAT
                   else f"Play {n} {FORMAT_NAMES[tableFormat][0]} Format Games"),
             location_id=(LOCATIONS_EVENTS_OFFSET + (tableFormat.value * 1000) + n),
-            region=Regions.EVENTS,
+            region=GenericRegions.EVENTS,
             rule=FORMAT_NAMES[tableFormat][1]
         )
         for tableFormat in formats

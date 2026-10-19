@@ -1,7 +1,6 @@
 from .levels import generate_level_locations
 from .selling import ShopProduct, generate_license_locations
 from .. import LocationTypeEnum, GeneratedLocationData
-from ..helpers.card_types import Difficulty
 from .achievement_families import CardAchievementFamily
 from .achievements import generate_all_achievement_locations
 from .cards import generate_card_sanity_locations

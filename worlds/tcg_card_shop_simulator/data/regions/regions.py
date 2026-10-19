@@ -1,14 +1,20 @@
 from .. import RegionTypeEnum
 from ..helpers.card_types import Expansion, Rarity
 
+
 class DefaultRegions(RegionTypeEnum):
     MENU = "Menu"
 
-class Regions(RegionTypeEnum):
-
+class GenericRegions(RegionTypeEnum):
     EVENTS = "Play Table Events"
 
     PRODUCT_SELLING = "Products"
+
+    GENERIC_OPEN_PACKS = "Open Cards"
+    GENERIC_SELL_CARDS = "Sell Cards"
+    GENERIC_GRADE_CARDS = "Grade Cards"
+
+class LevelRegions(RegionTypeEnum):
 
     LEVELS_1_TO_4 = "Levels 1-4"
     LEVELS_5_TO_9 = "Levels 5-9"
@@ -32,6 +38,7 @@ class Regions(RegionTypeEnum):
     LEVELS_95_TO_99 = "Levels 95-99"
     LEVEL_100 = "Level 100"
 
+class PackRegions(RegionTypeEnum):
     BASIC_PACKS = "Basic Card Packs"
     BASIC_PACKS_SELL = "Sell Basic Card Packs"
     BASIC_PACKS_GRADE = "Grade Basic Card Packs"
@@ -64,65 +71,67 @@ class Regions(RegionTypeEnum):
     DESTINY_LEGENDARY_PACKS_SELL = "Sell Legendary Destiny Cards"
     DESTINY_LEGENDARY_PACKS_GRADE = "Grade Legendary Destiny Cards"
 
-    GENERIC_OPEN_PACKS = "Legendary Destiny Card Packs"
-    GENERIC_SELL_CARDS= "Sell Legendary Destiny Cards"
-    GENERIC_GRADE_CARDS = "Grade Legendary Destiny Cards"
-
 
 def get_level_region(level: int) -> RegionTypeEnum:
     match level:
         case int() if level < 5:
-            return Regions.LEVELS_1_TO_4
+            return LevelRegions.LEVELS_1_TO_4
         case int() if level < 10:
-            return Regions.LEVELS_5_TO_9
+            return LevelRegions.LEVELS_5_TO_9
         case int() if level < 15:
-            return Regions.LEVELS_10_TO_14
+            return LevelRegions.LEVELS_10_TO_14
         case int() if level < 20:
-            return Regions.LEVELS_15_TO_19
+            return LevelRegions.LEVELS_15_TO_19
         case int() if level < 25:
-            return Regions.LEVELS_20_TO_24
+            return LevelRegions.LEVELS_20_TO_24
         case int() if level < 30:
-            return Regions.LEVELS_25_TO_29
+            return LevelRegions.LEVELS_25_TO_29
         case int() if level < 35:
-            return Regions.LEVELS_30_TO_34
+            return LevelRegions.LEVELS_30_TO_34
         case int() if level < 40:
-            return Regions.LEVELS_35_TO_39
+            return LevelRegions.LEVELS_35_TO_39
         case int() if level < 45:
-            return Regions.LEVELS_40_TO_44
+            return LevelRegions.LEVELS_40_TO_44
         case int() if level < 50:
-            return Regions.LEVELS_45_TO_49
+            return LevelRegions.LEVELS_45_TO_49
         case int() if level < 55:
-            return Regions.LEVELS_50_TO_54
+            return LevelRegions.LEVELS_50_TO_54
         case int() if level < 60:
-            return Regions.LEVELS_55_TO_59
+            return LevelRegions.LEVELS_55_TO_59
         case int() if level < 65:
-            return Regions.LEVELS_60_TO_64
+            return LevelRegions.LEVELS_60_TO_64
         case int() if level < 70:
-            return Regions.LEVELS_65_TO_69
+            return LevelRegions.LEVELS_65_TO_69
         case int() if level < 75:
-            return Regions.LEVELS_70_TO_74
+            return LevelRegions.LEVELS_70_TO_74
         case int() if level < 80:
-            return Regions.LEVELS_75_TO_79
+            return LevelRegions.LEVELS_75_TO_79
         case int() if level < 85:
-            return Regions.LEVELS_80_TO_84
+            return LevelRegions.LEVELS_80_TO_84
         case int() if level < 90:
-            return Regions.LEVELS_85_TO_89
+            return LevelRegions.LEVELS_85_TO_89
         case int() if level < 95:
-            return Regions.LEVELS_90_TO_94
+            return LevelRegions.LEVELS_90_TO_94
         case int() if level >= 100:
-            return Regions.LEVEL_100
-    return Regions.LEVELS_1_TO_4
+            return LevelRegions.LEVEL_100
+    return LevelRegions.LEVELS_1_TO_4
+
+REGIONS: list[RegionTypeEnum] = [
+    *GenericRegions,
+    *LevelRegions,
+    *PackRegions
+]
 
 region_by_pack: dict[tuple[Expansion, Rarity], RegionTypeEnum] = {
     # Tetramon
-    (Expansion.TETRAMON, Rarity.COMMON): Regions.BASIC_PACKS,
-    (Expansion.TETRAMON, Rarity.RARE): Regions.RARE_PACKS,
-    (Expansion.TETRAMON, Rarity.EPIC): Regions.EPIC_PACKS,
-    (Expansion.TETRAMON, Rarity.LEGENDARY): Regions.LEGENDARY_PACKS,
+    (Expansion.TETRAMON, Rarity.COMMON): PackRegions.BASIC_PACKS,
+    (Expansion.TETRAMON, Rarity.RARE): PackRegions.RARE_PACKS,
+    (Expansion.TETRAMON, Rarity.EPIC): PackRegions.EPIC_PACKS,
+    (Expansion.TETRAMON, Rarity.LEGENDARY): PackRegions.LEGENDARY_PACKS,
 
     # Destiny
-    (Expansion.DESTINY, Rarity.COMMON): Regions.DESTINY_BASIC_PACKS,
-    (Expansion.DESTINY, Rarity.RARE): Regions.DESTINY_RARE_PACKS,
-    (Expansion.DESTINY, Rarity.EPIC): Regions.DESTINY_EPIC_PACKS,
-    (Expansion.DESTINY, Rarity.LEGENDARY): Regions.DESTINY_LEGENDARY_PACKS,
+    (Expansion.DESTINY, Rarity.COMMON): PackRegions.DESTINY_BASIC_PACKS,
+    (Expansion.DESTINY, Rarity.RARE): PackRegions.DESTINY_RARE_PACKS,
+    (Expansion.DESTINY, Rarity.EPIC): PackRegions.DESTINY_EPIC_PACKS,
+    (Expansion.DESTINY, Rarity.LEGENDARY): PackRegions.DESTINY_LEGENDARY_PACKS,
 }

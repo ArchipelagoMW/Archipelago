@@ -6,7 +6,7 @@ from BaseClasses import CollectionState
 from rule_builder.rules import Rule, Has
 from ..items import BoosterPackItems, AccessoriesItems, FigurineItems
 from ..items.shop_licenses import ProgressiveLicenses
-from ... import TCG_CARD_SHOP_SIM_NAME, get_total_licenses, STARTING_LICENSES_COUNT
+from ... import TCG_CARD_SHOP_SIM_NAME, get_total_licenses, STARTING_LICENSES_COUNT, TableTopItems
 from ...world_base import TCGSimulatorBase
 
 if TYPE_CHECKING:
@@ -82,23 +82,18 @@ class HasLicensesForLevel(Rule[TCGSimulatorBase], game=TCG_CARD_SHOP_SIM_NAME):
             amount = STARTING_LICENSES_COUNT + (additional_licenses * current_step) // total_steps
 
             total = 0
-            total += sum(
-                state.has(itemEnum.value, self.player)
-                for itemEnum in FigurineItems
+            total = sum(
+                state.has(item.value, self.player)
+                for item_enum in (
+                    BoosterPackItems,
+                    AccessoriesItems,
+                    FigurineItems,
+                    TableTopItems,
+                    ProgressiveLicenses,
+                )
+                for item in item_enum
             )
-            total += sum(
-                state.has(itemEnum.value, self.player)
-                for itemEnum in AccessoriesItems
-            )
-            total += sum(
-                state.has(itemEnum.value, self.player)
-                for itemEnum in BoosterPackItems
-            )
-            total += sum(
-                state.has(itemEnum.value, self.player)
-                for itemEnum in ProgressiveLicenses
-            )
-            return total >= amount
+            return total >= amount or self.total_licenses <= amount
 
         @override
         def item_dependencies(self) -> dict[str, set[int]]:
@@ -106,6 +101,7 @@ class HasLicensesForLevel(Rule[TCGSimulatorBase], game=TCG_CARD_SHOP_SIM_NAME):
                 **{item.value: {id(self)} for item in FigurineItems},
                 **{item.value: {id(self)} for item in AccessoriesItems},
                 **{item.value: {id(self)} for item in BoosterPackItems},
+                **{item.value: {id(self)} for item in TableTopItems},
                 **{item.value: {id(self)} for item in ProgressiveLicenses}
             }
 

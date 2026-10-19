@@ -30,8 +30,8 @@ def create_item(world: "TCGSimulatorWorld", item: ItemData):
 def create_single_item(world: "TCGSimulatorWorld", item_type: ItemTypeEnum):
     world.itempool.append(world.create_item(item_type.value))
 
-def create_item_unchecked(world: "TCGSimulatorWorld", item_value: str):
-    world.itempool.append(world.create_item(item_value))
+def create_filler_item(world: "TCGSimulatorWorld", item_value: str):
+    world.filler_items.append(world.create_item(item_value))
 
 
 def generate_ghost_card_items(world: "TCGSimulatorWorld", locs_available):
@@ -156,7 +156,7 @@ def create_items(world: TCGSimulatorWorld):
             k=junk_count
         )
         for junk_name in junk:
-            create_item_unchecked(world, junk_name)
+            create_filler_item(world, junk_name)
 
     if trap_count > 0:
         traps: list[str] = world.random.choices(
@@ -165,10 +165,10 @@ def create_items(world: TCGSimulatorWorld):
             k=trap_count
         )
         for trap_name in traps:
-            create_item_unchecked(world, trap_name)
+            create_filler_item(world, trap_name)
 
-
-    world.multiworld.itempool += world.itempool
+    all_items = world.filler_items + world.itempool
+    world.multiworld.itempool += all_items
 
     return starting_items, ghost_card_amounts
 

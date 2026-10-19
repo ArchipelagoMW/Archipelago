@@ -17,19 +17,17 @@ class MaxLevel(Range):
     range_end = 100
     default = 20
 
-class LicensesPerLevelCap(Range):
+class TotalProductLicenses(Range):
     """
-    Number of licenses you need to remove a level cap.
+    How many product items are there for checks? This includes the 4 starting items
 
-    This and your max level determine how many licenses are in the world
-
-    **WARNING** this value will be lowered if there are not enough licenses to fill all levels
+    Level caps are based on this value spread across your max level.
     """
 
-    display_name = "Licenses Per 5 Levels"
-    range_start = 4
-    range_end = 14
-    default = 6
+    display_name = "Product Licenses"
+    range_start = 12
+    range_end = 106
+    default = 20
 
 
 class Goal(Choice):
@@ -106,6 +104,12 @@ class SellCheckAmount(Range):
     range_start = 2
     range_end = 100
     default = 2
+
+class BulkBoxChecks(Toggle):
+    """
+    Selling bulk boxes from the workbench can grant checks.
+    """
+    display_name = "Enable Bulk Box Checks"
 
 class CardSanity(Choice):
     """
@@ -279,6 +283,7 @@ tcg_cardshop_simulator_option_groups= [
         StartWithWorker,
         AutoRenovate,
         SellCheckAmount,
+        BulkBoxChecks,
         PlayTableChecks,
         NoFormats,
         # DecoShop,
@@ -314,6 +319,7 @@ class TCGSimulatorOptions(PerGameCommonOptions):
     start_with_worker: StartWithWorker
     auto_renovate: AutoRenovate
     sell_check_amount: SellCheckAmount
+    bulk_box: BulkBoxChecks
     play_table_checks: PlayTableChecks
     no_formats: NoFormats
     checks_opening_difficulty: CardOpeningCheckDifficulty

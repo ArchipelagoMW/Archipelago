@@ -1,11 +1,12 @@
 import math
+from logging import warning
 from typing import ClassVar, Union, Set, Any, Dict, Optional
 
 import settings
 from Options import OptionError
 from Utils import visualize_regions
 from worlds.AutoWorld import WebWorld, World
-from BaseClasses import Tutorial
+from BaseClasses import Tutorial, MultiWorld
 from .constants import TCG_CARD_SHOP_SIM_NAME, STARTING_LICENSES_COUNT
 from .data.items import all_items, BoosterPackItems, AccessoriesItems, FigurineItems, TableTopItems, Events, Workers
 from .data.items.shop_licenses import get_total_licenses, ITEM_BY_ID
@@ -89,6 +90,11 @@ class TCGSimulatorWorld(TCGSimulatorBase):
 
     def __init__(self, multiworld, player):
         self.itempool = []
+        self.sanity_fill_locations: list[Location] = []
+        self.backup_sanity_fill_locations: list[Location] = []
+        self.filler_items = []
+        self.created_region_types: set[RegionTypeEnum] = set()
+
         self.starting_items: list[Item] = []
 
         self.ghost_item_counts = 0
@@ -102,15 +108,10 @@ class TCGSimulatorWorld(TCGSimulatorBase):
 
     def generate_early(self) -> None:
 
-
-
-        if self.options.goal.value == 1 and self.options.max_level.value < 20:
-            self.options.max_level.value = 20
-
         if self.settings.impose_goal_limits and self.options.max_level.value > 60:
             self.options.max_level.value = 60
 
-        if self.options.goal.value == 1 and self.settings.impose_goal_limits and self.options.collection_goal_percentage.value > 60:
+        if self.options.goal.value == self.options.goal.option_collection_builder and self.settings.impose_goal_limits and self.options.collection_goal_percentage.value > 60:
             self.options.collection_goal_percentage.value = 60
 
         if self.settings.limit_impossible_checks:
@@ -128,7 +129,7 @@ class TCGSimulatorWorld(TCGSimulatorBase):
             raise OptionError("All Filler Weights are Zero")
 
         if self.options.trap_fill.value != 0 and 0 == sum(self.options.trap_weights.value.values()):
-            raise OptionError("Trap Fill is On and All Trap Weights are Zero")
+            raise OptionError("Trap Fill is ON and All Trap Weights are Zero")
 
         self.options.max_level.value = math.ceil(self.options.max_level.value / 5) * 5
 
@@ -145,6 +146,58 @@ class TCGSimulatorWorld(TCGSimulatorBase):
                       and isinstance(self.multiworld.re_gen_passthrough, dict)
                       and self.game in self.multiworld.re_gen_passthrough)
         self.handle_ut_yamless(None)
+
+    @classmethod
+    def stage_pre_fill(cls, multiworld: MultiWorld) -> None:
+        tcg_fill_worlds: list[TCGSimulatorWorld] = [world for world in multiworld.get_game_worlds(TCG_CARD_SHOP_SIM_NAME)
+                                               if world.options.card_sanity.value > 0]
+        if not (tcg_fill_worlds and multiworld.players > 1):
+            return
+
+        junk_fill: list[Item] = []
+        card_sanity_locations: list[Location] = []
+        card_sanity_backup_locations: list[Location] = []
+
+        for world in tcg_fill_worlds:
+            if world.options.card_sanity:
+                junk_fill.extend(world.filler_items)
+                card_sanity_locations.extend(world.sanity_fill_locations)
+                card_sanity_backup_locations.extend(world.backup_sanity_fill_locations)
+
+        multiworld.random.shuffle(junk_fill)
+        multiworld.random.shuffle(card_sanity_locations)
+        multiworld.random.shuffle(card_sanity_backup_locations)
+
+        out_of_spec_worlds = set()
+
+        for filler_item in junk_fill:
+            loc_to_fill = card_sanity_locations.pop()
+            try:
+                loc_to_fill.place_locked_item(filler_item)
+            except Exception:
+                out_of_spec_worlds.add(multiworld.worlds[loc_to_fill.item.player].game)
+                for loc in card_sanity_backup_locations:
+                    if not loc.item:
+                        loc.place_locked_item(filler_item)
+                        break
+                    else:
+                        out_of_spec_worlds.add(multiworld.worlds[loc_to_fill.item.player].game)
+                else:
+                    raise Exception("TCG CARD SHOP SIMULATOR: Could not fulfill local_filler option. This issue is caused by another "
+                                    "world filling TCG CARD SHOP SIMULATOR locations during pre_fill.\n"
+                                    "Archipelago does not allow us to place items into the item pool after "
+                                    "create_items, so we cannot recover from this issue.\n"
+                                    f"This is likely caused by the following world(s): {out_of_spec_worlds}.\n"
+                                    f"Please let the world dev(s) for the listed world(s) know that there is an "
+                                    f"issue there.\n"
+                                    "As a workaround, you can try setting the SANITY FILL PERCENTAGE option lower for "
+                                    "TCG CARD SHOP SIMULATOR slots with CARD SANITY enabled. You may be able to "
+                                    "try generating again, as it may not happen every generation.")
+        if out_of_spec_worlds:
+            warning("TCG CARD SHOP SIMULATOR: At least one other world has filled TCG CARD SHOP SIMULATOR locations during pre_fill. This may "
+                    "cause issues for games that rely on placing items in their own world during pre_fill.\n"
+                    f"This is likely being caused by the following world(s): {out_of_spec_worlds}.\n"
+                    "Please let the world dev(s) for the listed world(s) know that there is an issue there.")
 
     def create_regions(self):
         licenses, starting_licenses = locations.create_regions(self)
@@ -196,7 +249,6 @@ class TCGSimulatorWorld(TCGSimulatorBase):
 
             "MaxLevel": self.options.max_level.value,
             "LicensesPerCap": self.options.licenses_per_cap.value,
-            "RequiredLicenses": self.required_licenses,
             "Goal": self.options.goal.value,
             "CollectionGoalPercent": self.options.collection_goal_percentage.value,
             "GhostGoalAmount": self.options.ghost_goal_amount.value,

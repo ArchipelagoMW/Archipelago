@@ -7,7 +7,7 @@ from BaseClasses import CollectionRule
 from rule_builder.rules import Rule, Has, AtLeast
 from .. import GeneratedLocationData
 from ..items import DIYItems, BoosterPackItems, TableTopItems, FigurineItems, AccessoriesItems
-from ..regions.regions import Regions
+from ..regions.regions import GenericRegions
 from ..rules.state_rules import accessToTetramonBasePacks, accessToTetramonDestinyPacks
 from ...constants import LOCATIONS_SELL_OFFSET
 
@@ -135,6 +135,7 @@ class ShopProduct(IntEnum):
     CLAIM = 85
     EVO_BLAZOAR = 125
     EVO_STARFISH = 126
+    ASCENSION_PACK = 129
 
 
 PRODUCT_DATA: dict[ShopProduct, tuple[str, CollectionRule | Rule[TCGSimulatorBase]]] = {
@@ -248,6 +249,9 @@ PRODUCT_DATA: dict[ShopProduct, tuple[str, CollectionRule | Rule[TCGSimulatorBas
     ),
     ShopProduct.WIND_DESTINY_DECK: (
         'Wind Destiny Deck', Has(BoosterPackItems.WIND_DESTINY_DECK.value)
+    ),
+    ShopProduct.ASCENSION_PACK: (
+        'Ascension Card Pack', Has(BoosterPackItems.PROGRESSIVE_ASCENSION_PACK.value)
     ),
 
     # Accessories
@@ -528,6 +532,7 @@ SHOP_PRODUCTS: dict[Shop, tuple[ShopProduct, ...]] = {
         ShopProduct.EARTH_DESTINY_DECK,
         ShopProduct.WATER_DESTINY_DECK,
         ShopProduct.WIND_DESTINY_DECK,
+        ShopProduct.ASCENSION_PACK
     ),
     Shop.ACCESSORIES_SHOP: (
         ShopProduct.CLEANSER,
@@ -599,6 +604,8 @@ SHOP_PRODUCTS: dict[Shop, tuple[ShopProduct, ...]] = {
         ShopProduct.BONFIOX_PLUSHIE,
         ShopProduct.DRILCEROS_ACTION_FIGURE,
         ShopProduct.TOON_Z_PLUSHIE,
+        ShopProduct.EVO_STARFISH,
+        ShopProduct.EVO_BLAZOAR
     ),
     Shop.TABLETOP_SHOP: (
         ShopProduct.PENNY_SLEEVES,
@@ -637,6 +644,6 @@ def generate_license_locations(product: ShopProduct, check_count: int, starting_
         results.append(GeneratedLocationData(
             name=f"Sell {n} {'Box' if n == 1 else 'Boxes'} of {PRODUCT_DATA[product]}",
             location_id=(LOCATIONS_SELL_OFFSET + (product.value * 1000) + n),
-            region=Regions.PRODUCT_SELLING,
+            region=GenericRegions.PRODUCT_SELLING,
             ))
     return results
