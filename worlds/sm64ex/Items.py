@@ -3,6 +3,7 @@ from typing import NamedTuple
 from BaseClasses import Item, ItemClassification
 
 sm64ex_base_id: int = 3626000
+ut_glitch_item_name = "ut_glitch"
 
 class SM64Item(Item):
     game: str = "Super Mario 64"
@@ -20,6 +21,7 @@ generic_item_data_table: dict[str, SM64ItemData] = {
     "Metal Cap": SM64ItemData(sm64ex_base_id + 182),
     "Vanish Cap": SM64ItemData(sm64ex_base_id + 183),
     "1Up Mushroom": SM64ItemData(sm64ex_base_id + 184, ItemClassification.filler),
+    ut_glitch_item_name: SM64ItemData(),
 }
 
 action_item_data_table: dict[str, SM64ItemData] = {
