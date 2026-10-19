@@ -160,11 +160,12 @@ OPEN_TEMPLATES: dict[CardAchievementFamily, tuple[CardTemplate, ...]] = {
         CardTemplate(
             action=CardAction.OPEN,
             tiers=(Tier(5, Difficulty.EASY), Tier(15, Difficulty.MEDIUM),
-                   Tier(30, Difficulty.HARD), Tier(50, Difficulty.IMPOSSIBLE)),
+                   Tier(30, Difficulty.HARD), Tier(100, Difficulty.IMPOSSIBLE)),
             region=GenericRegions.GENERIC_OPEN_PACKS
         ),
     ),
-    CardAchievementFamily.FOIL: (),
+    CardAchievementFamily.FOIL: (
+    ),
     CardAchievementFamily.RARITY: (),
     CardAchievementFamily.EXPANSION: (),
     CardAchievementFamily.BORDER: (),

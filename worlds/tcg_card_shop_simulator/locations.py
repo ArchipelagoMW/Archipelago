@@ -10,29 +10,29 @@ from .data.locations import CardAchievementFamily, generate_level_locations, gen
     generate_event_locations, EventFormat, generate_license_locations, ShopProduct
 from .data.locations.achievements import generate_open_achievement_locations, generate_sell_achievement_locations, \
     generate_grade_achievement_locations
-from .data.locations.selling import SHOP_PRODUCTS, Shop
 from .data.regions.entrances import Entrances, LevelEntrances, PackEntrances, pack_regions
-from .data.regions.regions import DefaultRegions, get_level_region, LevelRegions, GenericRegions, PackRegions
-from .data.items.shop_licenses import BoosterPackItems, AccessoriesItems, FigurineItems, TableTopItems
+from .data.regions.regions import DefaultRegions, get_level_region, LevelRegions, GenericRegions
+from .data.items.shop_licenses import BoosterPackItems, AccessoriesItems, FigurineItems, TableTopItems, \
+    TETRAMON_BASE_PACK_ITEMS, TETRAMON_DESTINY_PACK_ITEMS
 
 if TYPE_CHECKING:
     from . import TCGSimulatorWorld
 
 
-def create_location(world, data: GeneratedLocationData):
-    region = world.get_region(data.region.value)
-    location = Location(world.player, data.name, data.location_id, region)
-    location.progress_type = data.progress_type
-    # location.item_rule = data.item_rule
-    region.locations.append(location)
-    world.set_rule(location, data.rule)
-
-    #check if location should be filled with junk from any TCG in multiworld
-    if data.location_id & (1 << 51):
-        if data.progress_type == LocationProgressType.EXCLUDED:
-            world.sanity_fill_locations.append(location)
-        else:
-            world.backup_sanity_fill_locations.append(location)
+# def create_location(world, data: GeneratedLocationData):
+#     region = world.get_region(data.region.value)
+#     location = Location(world.player, data.name, data.location_id, region)
+#     location.progress_type = data.progress_type
+#     # location.item_rule = data.item_rule
+#     region.locations.append(location)
+#     world.set_rule(location, data.rule)
+#
+#     #check if location should be filled with junk from any TCG in multiworld
+#     if data.location_id & (1 << 51):
+#         if data.progress_type == LocationProgressType.EXCLUDED:
+#             world.sanity_fill_locations.append(location)
+#         else:
+#             world.backup_sanity_fill_locations.append(location)
 
 def create_region(world: "TCGSimulatorWorld", region_type: RegionTypeEnum, locations_by_region: dict[RegionTypeEnum, list[GeneratedLocationData]] | None = None):
     region = Region(region_type.value, world.player, world.multiworld)
@@ -48,6 +48,11 @@ def create_region(world: "TCGSimulatorWorld", region_type: RegionTypeEnum, locat
         region.locations.append(location)
         world.set_rule(location, data.rule)
 
+        if data.location_id & (1 << 51):
+            if data.progress_type == LocationProgressType.EXCLUDED:
+                world.sanity_fill_locations.append(location)
+            else:
+                world.backup_sanity_fill_locations.append(location)
     return region
 
 def create_regions(world: "TCGSimulatorWorld"):
@@ -111,11 +116,9 @@ def create_regions(world: "TCGSimulatorWorld"):
     for shop in shops:
         world.random.shuffle(shop)
 
-    for shop in shops:
-        starting_license_items.append(shop.pop())
-
     #always have 4 starting items
     remaining = world.total_licenses - 4
+    booster_items_to_skip = 0
 
     pack_types = [
         required_items
@@ -133,6 +136,22 @@ def create_regions(world: "TCGSimulatorWorld"):
         starting_license_items.append(AccessoriesItems.PROGRESSIVE_CLEANSER)
         starting_license_items.append(figurine_items.pop())
         starting_license_items.append(tabletop_items.pop())
+
+        for pack_type in pack_types:
+            for pack_pair in pack_types:
+                if any(item in starting_license_items for item in pack_pair):
+                    continue
+
+            available = [
+                item
+                for item in pack_type
+                if item in booster_pack_items
+            ]
+            chosen = world.random.choice(available)
+
+            booster_pack_items.remove(chosen)
+            license_items.append(chosen)
+            remaining -= 1
     else:
         for shop in shops:
             starting_license_items.append(shop.pop())
@@ -143,26 +162,39 @@ def create_regions(world: "TCGSimulatorWorld"):
             remaining -= 1
 
         if world.options.goal.value == world.options.goal.option_collection_builder:
+            booster_items_to_skip = 8
             for pack_type in pack_types:
-                if pack_type in starting_license_items:
-                    continue
+                for pack_pair in pack_types:
+                    if any(item in starting_license_items for item in pack_pair):
+                        booster_items_to_skip -= 1
+                        continue
 
-                chosen = world.random.choice(pack_type)
+                available = [
+                    item
+                    for item in pack_type
+                    if item in booster_pack_items
+                ]
+
+                chosen = world.random.choice(available)
 
                 booster_pack_items.remove(chosen)
                 license_items.append(chosen)
                 remaining -= 1
+
 
     if remaining < 0:
         raise OptionError(
             "Not enough licenses available for the selected goal."
         )
 
-
     while remaining > 0:
         for shop in shops:
+
             if remaining == 0:
                 break
+            if shop == booster_pack_items and booster_items_to_skip > 0:
+                booster_items_to_skip -=1
+                continue
 
             if not shop:
                 continue
@@ -175,23 +207,40 @@ def create_regions(world: "TCGSimulatorWorld"):
 
     if world.is_ut:
         license_items = world.license_items
+        starting_license_items = world.starting_license_items
 
     for item in license_items:
         for _location in generate_license_locations(ShopProduct(item.item_id-ITEMS_LICENSE_OFFSET), world.options.sell_check_amount.value):
             locations_by_region[_location.region].append(_location)
+    for item in starting_license_items:
+        for _location in generate_license_locations(ShopProduct(item.item_id-ITEMS_LICENSE_OFFSET), world.options.sell_check_amount.value):
+            locations_by_region[_location.region].append(_location)
+
+    available_licenses = set(license_items) | set(starting_license_items)
 
     if world.options.bulk_box.value:
-        for product in SHOP_PRODUCTS[Shop.WORKBENCH]:
-            for _location in generate_license_locations(product, world.options.sell_check_amount.value):
+        if available_licenses & TETRAMON_BASE_PACK_ITEMS:
+            for _location in generate_license_locations(ShopProduct.BULKBOX_TETRAMON, world.options.sell_check_amount.value):
+                locations_by_region[_location.region].append(_location)
+        if available_licenses & TETRAMON_DESTINY_PACK_ITEMS:
+            for _location in generate_license_locations(ShopProduct.BULKBOX_DESTINY, world.options.sell_check_amount.value):
                 locations_by_region[_location.region].append(_location)
 
     for region in GenericRegions:
         create_region(world, region, locations_by_region)
 
-    for level in range(0, world.options.max_level.value+1, 5):
-        create_region(world, get_level_region(level), locations_by_region)
+    create_region(
+        world,
+        LevelRegions.LEVELS_1_TO_4,
+        locations_by_region,
+    )
 
-    available_licenses = set(license_items) | set(starting_license_items)
+    for level in range(5, world.options.max_level.value + 1, 5):
+        create_region(
+            world,
+            get_level_region(level),
+            locations_by_region,
+        )
 
     for open_region, (required_items, sell_region, grade_region) in pack_regions.items():
         if not any(item in available_licenses for item in required_items):

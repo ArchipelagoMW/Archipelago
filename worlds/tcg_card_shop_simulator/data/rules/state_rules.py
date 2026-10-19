@@ -81,7 +81,6 @@ class HasLicensesForLevel(Rule[TCGSimulatorBase], game=TCG_CARD_SHOP_SIM_NAME):
 
             amount = STARTING_LICENSES_COUNT + (additional_licenses * current_step) // total_steps
 
-            total = 0
             total = sum(
                 state.has(item.value, self.player)
                 for item_enum in (
@@ -93,7 +92,7 @@ class HasLicensesForLevel(Rule[TCGSimulatorBase], game=TCG_CARD_SHOP_SIM_NAME):
                 )
                 for item in item_enum
             )
-            return total >= amount or self.total_licenses <= amount
+            return total >= amount or self.total_licenses < amount
 
         @override
         def item_dependencies(self) -> dict[str, set[int]]:

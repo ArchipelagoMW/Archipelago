@@ -641,9 +641,11 @@ def generate_license_locations(product: ShopProduct, check_count: int, starting_
     results = []
     count = check_count + (starting_checks if product in starting_products else 0)
     for n in range(1, count + 1):
+        product_name, product_rule = PRODUCT_DATA[product]
         results.append(GeneratedLocationData(
-            name=f"Sell {n} {'Box' if n == 1 else 'Boxes'} of {PRODUCT_DATA[product]}",
+            name=f"Sell {n} {'Box' if n == 1 else 'Boxes'} of {product_name}",
             location_id=(LOCATIONS_SELL_OFFSET + (product.value * 1000) + n),
             region=GenericRegions.PRODUCT_SELLING,
+            rule=product_rule
             ))
     return results

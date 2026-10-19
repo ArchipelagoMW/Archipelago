@@ -31,7 +31,10 @@ def create_single_item(world: "TCGSimulatorWorld", item_type: ItemTypeEnum):
     world.itempool.append(world.create_item(item_type.value))
 
 def create_filler_item(world: "TCGSimulatorWorld", item_value: str):
-    world.filler_items.append(world.create_item(item_value))
+    if len(world.filler_items) != world.sanity_fill_locations:
+        world.filler_items.append(world.create_item(item_value))
+    else:
+        world.itempool.append(world.create_item(item_value))
 
 
 def generate_ghost_card_items(world: "TCGSimulatorWorld", locs_available):
@@ -72,7 +75,7 @@ def create_items(world: TCGSimulatorWorld):
     starting_items.append(world.create_item(Events.STANDARD.value))
 
     if world.options.start_with_worker.value != 0:
-        starting_items.append(world.create_item(WORKERS_ITEM_BY_ID(ITEMS_WORKER_OFFSET + world.options.start_with_worker.value)))
+        starting_items.append(world.create_item(WORKERS_ITEM_BY_ID[ITEMS_WORKER_OFFSET + world.options.start_with_worker.value].value))
 
     for item_data in get_shop_items(world.license_items):
         create_item(world, item_data)
@@ -103,9 +106,9 @@ def create_items(world: TCGSimulatorWorld):
         excluded_items: set[str] = set()
 
         if world.options.start_with_worker.value != 0:
-            starting_worker = WORKERS_ITEM_BY_ID(
+            starting_worker = WORKERS_ITEM_BY_ID[
                 ITEMS_WORKER_OFFSET + world.options.start_with_worker.value
-            )
+            ].value
             excluded_items.add(starting_worker)
 
         optional_items: list[ItemData] = [
@@ -167,8 +170,26 @@ def create_items(world: TCGSimulatorWorld):
         for trap_name in traps:
             create_filler_item(world, trap_name)
 
-    all_items = world.filler_items + world.itempool
-    world.multiworld.itempool += all_items
+    if world.multiworld.players > 1 and world.options.card_sanity.value > 0:
+        capacity = (
+                len(world.sanity_fill_locations)
+                + len(world.backup_sanity_fill_locations)
+        )
+
+        world.random.shuffle(world.filler_items)
+
+        reserved_count = min(len(world.filler_items), capacity)
+
+        reserved_fillers = world.filler_items[:reserved_count]
+        normal_fillers = world.filler_items[reserved_count:]
+
+        world.filler_items = reserved_fillers
+    else:
+        normal_fillers = world.filler_items
+        world.filler_items = []
+
+    world.multiworld.itempool.extend(world.itempool)
+    world.multiworld.itempool.extend(normal_fillers)
 
     return starting_items, ghost_card_amounts
 

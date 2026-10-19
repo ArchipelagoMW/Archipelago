@@ -133,7 +133,7 @@ class CardSanityCheckPercentage(Range):
 
     This can be limited by Host Yaml
     """
-    display_name = "Sell Check Amount"
+    display_name = "Non-Filler Card Sanity Percentage"
     range_start = 4
     range_end = 100
     default = 4
@@ -274,7 +274,7 @@ class TrapWeights(OptionCounter):
 tcg_cardshop_simulator_option_groups= [
     OptionGroup("Goal Options", [
         MaxLevel,
-        LicensesPerLevelCap,
+        TotalProductLicenses,
         Goal,
         CollectionGoalPercentage,
         GhostGoalAmount,
@@ -312,7 +312,7 @@ tcg_cardshop_simulator_option_groups= [
 @dataclass
 class TCGSimulatorOptions(PerGameCommonOptions):
     max_level: MaxLevel
-    licenses_per_cap: LicensesPerLevelCap
+    product_licenses: TotalProductLicenses
     goal: Goal
     collection_goal_percentage: CollectionGoalPercentage
     ghost_goal_amount: GhostGoalAmount

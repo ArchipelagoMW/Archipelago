@@ -1,4 +1,6 @@
+import json
 import math
+from importlib.resources import files
 from logging import warning
 from typing import ClassVar, Union, Set, Any, Dict, Optional
 
@@ -46,9 +48,13 @@ class TCGSimulatorSettings(settings.Group):
 
 
 
-
+def load_manifest():
+    return json.loads(
+        files(__package__).joinpath("archipelago.json").read_text("utf-8")
+    )
 
 class TCGSimulatorWorld(TCGSimulatorBase):
+    manifest = load_manifest()
 
     game = TCG_CARD_SHOP_SIM_NAME
     web = TCGSimulatorWeb()
@@ -116,11 +122,11 @@ class TCGSimulatorWorld(TCGSimulatorBase):
 
         if self.settings.limit_impossible_checks:
             if self.options.checks_opening_difficulty.value > 3:
-                self.options.checks_opening_difficulty = CardOpeningCheckDifficulty.option_hard
+                self.options.checks_opening_difficulty.value = CardOpeningCheckDifficulty.option_hard
             if self.options.checks_selling_difficulty.value > 3:
-                self.options.checks_selling_difficulty_difficulty = CardSellingCheckDifficulty.option_hard
+                self.options.checks_selling_difficulty.value = CardSellingCheckDifficulty.option_hard
             if self.options.checks_grading_difficulty.value > 3:
-                self.options.checks_grading_difficulty = CardGradingCheckDifficulty.option_hard
+                self.options.checks_grading_difficulty.value = CardGradingCheckDifficulty.option_hard
 
         if self.options.card_sanity.value > 0 and not self.settings.allow_card_sanity:
             self.options.card_sanity.value = 0
@@ -133,11 +139,9 @@ class TCGSimulatorWorld(TCGSimulatorBase):
 
         self.options.max_level.value = math.ceil(self.options.max_level.value / 5) * 5
 
-        total_steps = self.options.max_level.value // 5
-
         available_licenses = min(
             get_total_licenses(),
-            STARTING_LICENSES_COUNT + total_steps * self.options.licenses_per_cap.value
+            self.options.product_licenses.value
         )
 
         self.total_licenses = available_licenses
@@ -147,57 +151,59 @@ class TCGSimulatorWorld(TCGSimulatorBase):
                       and self.game in self.multiworld.re_gen_passthrough)
         self.handle_ut_yamless(None)
 
-    @classmethod
-    def stage_pre_fill(cls, multiworld: MultiWorld) -> None:
-        tcg_fill_worlds: list[TCGSimulatorWorld] = [world for world in multiworld.get_game_worlds(TCG_CARD_SHOP_SIM_NAME)
-                                               if world.options.card_sanity.value > 0]
-        if not (tcg_fill_worlds and multiworld.players > 1):
+    def pre_fill(self) -> None:
+        if not self.filler_items or self.multiworld.players <= 1:
             return
 
-        junk_fill: list[Item] = []
-        card_sanity_locations: list[Location] = []
-        card_sanity_backup_locations: list[Location] = []
+        primary = [
+            loc
+            for loc in self.sanity_fill_locations
+            if loc.item is None
+        ]
 
-        for world in tcg_fill_worlds:
-            if world.options.card_sanity:
-                junk_fill.extend(world.filler_items)
-                card_sanity_locations.extend(world.sanity_fill_locations)
-                card_sanity_backup_locations.extend(world.backup_sanity_fill_locations)
+        backup = [
+            loc
+            for loc in self.backup_sanity_fill_locations
+            if loc.item is None
+        ]
 
-        multiworld.random.shuffle(junk_fill)
-        multiworld.random.shuffle(card_sanity_locations)
-        multiworld.random.shuffle(card_sanity_backup_locations)
+        self.random.shuffle(primary)
+        self.random.shuffle(backup)
 
-        out_of_spec_worlds = set()
+        if len(primary) + len(backup) < len(self.filler_items):
+            raise OptionError(
+                f"Insufficient card-sanity locations: "
+                f"{len(self.filler_items)} reserved items, "
+                f"{len(primary) + len(backup)} eligible locations."
+            )
 
-        for filler_item in junk_fill:
-            loc_to_fill = card_sanity_locations.pop()
-            try:
-                loc_to_fill.place_locked_item(filler_item)
-            except Exception:
-                out_of_spec_worlds.add(multiworld.worlds[loc_to_fill.item.player].game)
-                for loc in card_sanity_backup_locations:
-                    if not loc.item:
-                        loc.place_locked_item(filler_item)
-                        break
-                    else:
-                        out_of_spec_worlds.add(multiworld.worlds[loc_to_fill.item.player].game)
-                else:
-                    raise Exception("TCG CARD SHOP SIMULATOR: Could not fulfill local_filler option. This issue is caused by another "
-                                    "world filling TCG CARD SHOP SIMULATOR locations during pre_fill.\n"
-                                    "Archipelago does not allow us to place items into the item pool after "
-                                    "create_items, so we cannot recover from this issue.\n"
-                                    f"This is likely caused by the following world(s): {out_of_spec_worlds}.\n"
-                                    f"Please let the world dev(s) for the listed world(s) know that there is an "
-                                    f"issue there.\n"
-                                    "As a workaround, you can try setting the SANITY FILL PERCENTAGE option lower for "
-                                    "TCG CARD SHOP SIMULATOR slots with CARD SANITY enabled. You may be able to "
-                                    "try generating again, as it may not happen every generation.")
-        if out_of_spec_worlds:
-            warning("TCG CARD SHOP SIMULATOR: At least one other world has filled TCG CARD SHOP SIMULATOR locations during pre_fill. This may "
-                    "cause issues for games that rely on placing items in their own world during pre_fill.\n"
-                    f"This is likely being caused by the following world(s): {out_of_spec_worlds}.\n"
-                    "Please let the world dev(s) for the listed world(s) know that there is an issue there.")
+        self.fill_locations = primary
+        self.backup_locations = backup
+
+    @classmethod
+    def stage_pre_fill(cls, multiworld: MultiWorld) -> None:
+        for world in multiworld.get_game_worlds(TCG_CARD_SHOP_SIM_NAME):
+            if not world.filler_items or multiworld.players <= 1:
+                continue
+
+            for item in world.filler_items:
+                location = next(
+                    (
+                        loc
+                        for loc in world.fill_locations
+                                   + world.backup_locations
+                        if loc.item is None
+                    ),
+                    None,
+                )
+
+                if location is None:
+                    raise OptionError(
+                        f"No available card-sanity location "
+                        f"for {world.player_name}."
+                    )
+
+                location.place_locked_item(item)
 
     def create_regions(self):
         licenses, starting_licenses = locations.create_regions(self)
@@ -242,13 +248,15 @@ class TCGSimulatorWorld(TCGSimulatorBase):
     def fill_slot_data(self) -> id:
         #print("Filling Slot Data")
         return {
-            "ModVersion": "1.1.0",
+            "ModVersion": self.manifest["mod_version"],
 
             "license_checks": [item.item_id for item in self.license_items],
+            "starting_checks": [item.item_id for item in self.starting_license_items],
             "GhostCounts": self.ghost_item_counts,
 
+            "total_licenses": self.total_licenses,
             "MaxLevel": self.options.max_level.value,
-            "LicensesPerCap": self.options.licenses_per_cap.value,
+            "TotalProductLicenses": self.options.product_licenses.value,
             "Goal": self.options.goal.value,
             "CollectionGoalPercent": self.options.collection_goal_percentage.value,
             "GhostGoalAmount": self.options.ghost_goal_amount.value,
@@ -262,6 +270,9 @@ class TCGSimulatorWorld(TCGSimulatorBase):
             "StartingEmployeeIndex": self.options.start_with_worker.value - 1,
 
             "CardSanity": self.options.card_sanity.value,
+            "CardSanityPercentage": self.options.card_sanity_percentage.value,
+            "BulkBoxChecks": self.options.bulk_box.value,
+            "StartingWorker": self.options.start_with_worker.value,
 
             "TrapFill": self.options.trap_fill.value,
             "Deathlink": self.options.deathlink.value,
@@ -276,14 +287,14 @@ class TCGSimulatorWorld(TCGSimulatorBase):
         if not slot_data:
             return None
 
-        # fill in options
-        self.starting_item_ids = [int(x) for x in slot_data["StartingIds"]]
-
         self.license_items = [ITEM_BY_ID[item_id] for item_id in slot_data["license_checks"]]
+        self.starting_license_items = [ITEM_BY_ID[item_id] for item_id in slot_data["starting_checks"]]
         self.ghost_item_counts = slot_data["GhostCounts"]
 
+        self.total_licenses = slot_data["total_licenses"]
+
         self.options.max_level.value = slot_data["MaxLevel"]
-        self.options.licenses_per_cap.value = slot_data["LicensesPerRegion"]
+        self.options.product_licenses.value = slot_data["TotalProductLicenses"]
         self.options.goal.value = slot_data["Goal"]
         self.options.collection_goal_percentage.value = slot_data["CollectionGoalPercent"]
         self.options.ghost_goal_amount.value = slot_data["GhostGoalAmount"]
@@ -299,5 +310,11 @@ class TCGSimulatorWorld(TCGSimulatorBase):
         self.options.no_formats.value = slot_data["NoFormat"]
 
         self.options.trap_fill.value = slot_data["TrapFill"]
+
+        self.options.card_sanity_percentage.value = slot_data["CardSanityPercentage"]
+
+        self.options.bulk_box.value = slot_data["BulkBoxChecks"]
+
+        self.options.start_with_worker.value = slot_data["StartingWorker"]
 
         return slot_data

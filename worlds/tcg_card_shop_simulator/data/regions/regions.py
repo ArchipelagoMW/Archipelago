@@ -112,6 +112,8 @@ def get_level_region(level: int) -> RegionTypeEnum:
             return LevelRegions.LEVELS_85_TO_89
         case int() if level < 95:
             return LevelRegions.LEVELS_90_TO_94
+        case int() if level < 100:
+            return LevelRegions.LEVELS_95_TO_99
         case int() if level >= 100:
             return LevelRegions.LEVEL_100
     return LevelRegions.LEVELS_1_TO_4
