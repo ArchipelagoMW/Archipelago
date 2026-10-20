@@ -586,7 +586,7 @@ def set_rules(world: "PokemonEmeraldWorld") -> None:
     entrance_rules["REGION_SKY_PILLAR_4F/MAIN -> REGION_SKY_PILLAR_4F/ABOVE_3F_TOP_CENTER"] = Has("Mach Bike")
 
     # Route 134
-    location_rules["EVENT_UNDO_REGI_SEAL"] = HasAll("CATCH_SPECIES_WAILORD", "CATCH_SPECIES_RELICANTH")
+    location_rules["EVENT_UNDO_REGI_SEAL"] = HasAll("REGI_WALL_SPECIES_WAILORD", "REGI_WALL_SPECIES_RELICANTH")
 
     entrance_rules["REGION_ROUTE134/MAIN -> REGION_UNDERWATER_ROUTE134/MAIN"] = hm_rules["HM08 Dive"]
     entrance_rules["REGION_SEALED_CHAMBER_OUTER_ROOM/MAIN -> REGION_SEALED_CHAMBER_OUTER_ROOM/CRUMBLED_WALL"] = Has("EVENT_MOVE_TUTOR_DIG")
@@ -637,7 +637,7 @@ def set_rules(world: "PokemonEmeraldWorld") -> None:
             if species.species_id in world.blacklisted_wilds or species.species_id not in world.allowed_dexsanity_species:
                 continue
 
-            location_rules[f"Pokedex - {species.label}"] = Has(f"CATCH_{species.name}")
+            location_rules[f"Pokedex - {species.label}"] = Has(f"DEXSANITY_{species.name}")
 
         # Legendary hunt prevents Latios from being a wild spawn so the roamer
         # can be tracked, and also guarantees that the roamer is a Latios.
