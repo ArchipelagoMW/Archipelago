@@ -74,13 +74,6 @@ class FactorioModFile(worlds.Files.APPlayerContainer):
 
     def write_contents(self, opened_zipfile: zipfile.ZipFile):
         # directory containing Factorio mod has to come first, or Factorio won't recognize this file as a mod.
-        mod_dir = self.path[:-4]  # cut off .zip
-        for root, dirs, files in os.walk(mod_dir):
-            for file in files:
-                filename = os.path.join(root, file)
-                opened_zipfile.write(filename,
-                                     os.path.relpath(filename,
-                                                     os.path.join(mod_dir, '..')))
         for task in self.writing_tasks:
             target, content = task()
             opened_zipfile.writestr(target, content)
