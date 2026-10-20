@@ -376,7 +376,7 @@ pelican_town = ContentPack(
         ),
         Book.monster_compendium: (
             Tag(ItemTag.BOOK, ItemTag.BOOK_POWER),
-            CustomRuleSource(create_rule=lambda logic: logic.monster.can_kill_many(Generic.any)),
+            CustomRuleSource(create_rule=lambda logic: logic.monster.can_kill_many(Generic.any) & logic.region.can_reach(Region.mines_floor_45)),
             ShopSource(price=20000, shop_region=LogicRegion.bookseller_rare),),
         Book.ol_slitherlegs: (
             Tag(ItemTag.BOOK, ItemTag.BOOK_POWER),
