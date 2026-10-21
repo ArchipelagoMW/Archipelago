@@ -665,9 +665,9 @@ class World(metaclass=AutoWorldRegister):
                 return
             if isinstance(old_rule, Rule.Resolved):
                 if combine == "and":
-                    self.set_rule(spot, And.from_resolved(self, iter((old_rule, rule.resolve(self)))))
+                    self.set_rule(spot, And.from_resolved(self, [old_rule, rule.resolve(self)]))
                 else:
-                    self.set_rule(spot, Or.from_resolved(self, iter((old_rule, rule.resolve(self)))))
+                    self.set_rule(spot, Or.from_resolved(self, [old_rule, rule.resolve(self)]))
             else:
                 raise ValueError("Cannot combine lambda rules with Rule Builder rules")
         else:
