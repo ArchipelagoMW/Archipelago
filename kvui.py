@@ -36,6 +36,13 @@ Config.set("input", "mouse", "mouse,disable_multitouch")
 Config.set("kivy", "exit_on_escape", "0")
 Config.set("graphics", "multisamples", "0")  # multisamples crash old intel drivers
 
+# Workaround for gtk being selected before sdl2 and not functioning
+from kivy import kivy_options
+kivy_options = {
+  op: value if value != "clipboard" else tuple(clip for clip in kivy_options["clipboard"] if clip != "gtk3")
+  for op, value in kivy_options.items()
+}
+
 # Workaround for Kivy issue #9226.
 # caused by kivy by default using probesysfs,
 # which assumes all multi touch deviecs are touch screens. 
