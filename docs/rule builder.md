@@ -75,6 +75,17 @@ When assigning the rule you must use the `set_rule` helper to correctly resolve 
 self.set_rule(location_or_entrance, rule)
 ```
 
+When modifying an existing rule with additional clauses you muse use the `add_rule` helper to correctly resolve and
+register the changes to the rule. By default it will combine the previous rule and the new rule with an `And`, but you
+can specify to use an `Or` instead.
+
+```python
+self.add_rule(location_or_entrance, extra_rule)
+self.add_rule(location_or_entrance, extra_rule, combine="or")
+```
+
+Rule Builder rules cannot be combined with lambda rules, except for the always true rule that is assigned by default.
+
 There is also a `create_entrance` helper that will resolve the rule, check if it's `False`, and if not create the
 entrance and set the rule. This allows you to skip creating entrances that will never be valid. You can also specify
 `force_creation=True` if you would like to create the entrance even if the rule is `False`.
