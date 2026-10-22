@@ -12,6 +12,8 @@ if TYPE_CHECKING:
 nes_logger = logging.getLogger("NES")
 logger = logging.getLogger("Client")
 
+MM2_GAME_STATE = 0x29
+MM2_CURRENT_STAGE = 0x2A
 MM2_ROBOT_MASTERS_UNLOCKED = 0x8A
 MM2_ROBOT_MASTERS_DEFEATED = 0x8B
 MM2_ITEMS_ACQUIRED = 0x8C
@@ -201,9 +203,6 @@ class MegaMan2Client(BizHawkClient):
     system = "NES"
     patch_suffix = ".apmm2"
     item_queue: List[NetworkItem] = []
-    pending_death_link: bool = False
-    # default to true, as we don't want to send a deathlink until Mega Man's HP is initialized once
-    sending_death_link: bool = True
     death_link: bool = False
     energy_link: bool = False
     rom: Optional[bytes] = None
@@ -274,12 +273,7 @@ class MegaMan2Client(BizHawkClient):
             ctx.auth = b64encode(self.rom).decode()
 
     def on_package(self, ctx: "BizHawkClientContext", cmd: str, args: Dict[str, Any]) -> None:
-        if cmd == "Bounced":
-            if "tags" in args:
-                assert ctx.slot is not None
-                if "DeathLink" in args["tags"] and args["data"]["source"] != ctx.slot_info[ctx.slot].name:
-                    self.on_deathlink(ctx)
-        elif cmd == "Retrieved":
+        if cmd == "Retrieved":
             if f"MM2_LAST_WILY_{ctx.team}_{ctx.slot}" in args["keys"]:
                 self.last_wily = args["keys"][f"MM2_LAST_WILY_{ctx.team}_{ctx.slot}"]
         elif cmd == "Connected":
@@ -288,14 +282,12 @@ class MegaMan2Client(BizHawkClient):
                 if ctx.ui:
                     ctx.ui.enable_energy_link()
 
-    async def send_deathlink(self, ctx: "BizHawkClientContext") -> None:
-        self.sending_death_link = True
+    async def deathlink_kill_player(self, ctx: "BizHawkClientContext") -> None:
+        from worlds._bizhawk import write
+        from worlds._bizhawk.context import DeathState
+        await write(ctx.bizhawk_ctx, [(MM2_DEATHLINK, bytes([0x01]), "RAM")])
+        ctx.death_state = DeathState.dead
         ctx.last_death_link = time.time()
-        await ctx.send_death("Mega Man was defeated.")
-
-    def on_deathlink(self, ctx: "BizHawkClientContext") -> None:
-        ctx.last_death_link = time.time()
-        self.pending_death_link = True
 
     async def game_watcher(self, ctx: "BizHawkClientContext") -> None:
         from worlds._bizhawk import read, write
@@ -311,7 +303,7 @@ class MegaMan2Client(BizHawkClient):
             weapons_unlocked, items_unlocked, items_received, \
             completed_stages, consumable_checks, \
             e_tanks, lives, weapon_energy, health, difficulty, death_link_status, \
-            energy_link_packet, last_wily = await read(ctx.bizhawk_ctx, [
+            energy_link_packet, last_wily, game_state = await read(ctx.bizhawk_ctx, [
                 (MM2_ROBOT_MASTERS_UNLOCKED, 1, "RAM"),
                 (MM2_ROBOT_MASTERS_DEFEATED, 1, "RAM"),
                 (MM2_ITEMS_ACQUIRED, 1, "RAM"),
@@ -328,6 +320,7 @@ class MegaMan2Client(BizHawkClient):
                 (MM2_DEATHLINK, 1, "RAM"),
                 (MM2_ENERGYLINK, 1, "RAM"),
                 (MM2_LAST_WILY, 1, "RAM"),
+                (MM2_GAME_STATE, 1, "RAM"),
             ])
 
         if difficulty[0] not in (0, 1):
@@ -344,15 +337,9 @@ class MegaMan2Client(BizHawkClient):
         # deathlink
         if self.death_link:
             await ctx.update_death_link(self.death_link)
-        if self.pending_death_link:
-            writes.append((MM2_DEATHLINK, bytes([0x01]), "RAM"))
-            self.pending_death_link = False
-            self.sending_death_link = True
-        if "DeathLink" in ctx.tags and ctx.last_death_link + 1 < time.time():
-            if health[0] == 0x00 and not self.sending_death_link:
-                await self.send_deathlink(ctx)
-            elif health[0] != 0x00 and not death_link_status[0]:
-                self.sending_death_link = False
+        if "DeathLink" in ctx.tags and ctx.last_death_link + 1 < time.time() and game_state[0] == 0xE:
+            currently_dead = health[0] == 0x00
+            await ctx.handle_deathlink_state(currently_dead, "Mega Man was defeated.")
 
         if self.last_wily != last_wily[0]:
             if self.last_wily is None:
