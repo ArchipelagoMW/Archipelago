@@ -6,10 +6,10 @@ from typing import TypeVar
 
 from BaseClasses import Item, ItemClassification, Location, MultiWorld, Region, Tutorial
 from Options import OptionGroup
-from rule_builder.rules import And, CanReachRegion, Has, Or, Rule, True_
+from rule_builder.rules import And, AtLeast, CanReachRegion, Has, Or, Rule, True_
 from worlds.AutoWorld import WebWorld, World
 
-from .custom_rules import AnyTwo, HasRatCount
+from .custom_rules import HasRatCount
 from .definitions_types import (
     Aura,
     AutopelagoAllRequirement,
@@ -75,7 +75,7 @@ def _to_rule(req: AutopelagoGameRequirement) -> Rule:
         return Or(*(_to_rule(sub_req) for sub_req in req["any"]))
     if "any_two" in req:
         req: AutopelagoAnyTwoRequirement
-        return AnyTwo(*(_to_rule(sub_req) for sub_req in req["any_two"]))
+        return AtLeast(2, *(_to_rule(sub_req) for sub_req in req["any_two"]))
     if "item" in req:
         req: AutopelagoItemRequirement
         return Has(item_key_to_name[req["item"]])

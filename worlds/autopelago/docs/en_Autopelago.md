@@ -15,8 +15,8 @@ any other reason why you might want to fill more slots.
 The "player" is represented by a rat that moves around the map from location to location, trying to complete the task at
 that location. When it succeeds, it sends out the check and moves onto the next one.
 
-Most locations are "fillers" to bulk out the map without any special rules by themselves, but then several locations are
-"landmarks" that can only be completed if the rat has collected certain items.
+While most locations are "fillers" to bulk out the map without any special rules by themselves, there are scattered
+"landmark" locations that can only be completed if the rat has collected certain items.
 
 ## What do items do?
 

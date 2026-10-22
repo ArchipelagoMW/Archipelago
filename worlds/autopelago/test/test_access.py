@@ -37,9 +37,10 @@ class AccessTest(WorldTestBase):
     def assert_and_collect_access_dependency_from_here(self, location: str, *possible_items: str | list[str],
                                                        **kwargs: Unpack[CollectKwargs]):
         for original_item_list in possible_items:
-            item_list = (original_item_list,) if original_item_list is str else original_item_list
+            item_list = (original_item_list,) if isinstance(original_item_list, str) else original_item_list
+            self.collect_by_name(item_list[:-1])
             self.assertFalse(self.can_reach_location(location))
-            self.collect_by_name(item_list)
+            self.collect_by_name(item_list[-1])
             self.assertTrue(self.can_reach_location(location))
             self.remove_by_name(item_list)
         if ("collect" not in kwargs) or kwargs["collect"]:

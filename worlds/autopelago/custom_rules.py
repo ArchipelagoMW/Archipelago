@@ -7,7 +7,7 @@ from typing_extensions import override
 from BaseClasses import CollectionState
 from NetUtils import JSONMessagePart
 from rule_builder.options import OptionFilter
-from rule_builder.rules import False_, NestedRule, Or, Rule, True_, TWorld
+from rule_builder.rules import Rule, True_, TWorld
 from worlds.AutoWorld import World
 
 from .items import item_name_to_rat_count
@@ -116,74 +116,3 @@ class HasRatCount(Rule[TWorld], game=GAME_NAME):
         @override
         def __str__(self) -> str:
             return f"Has {self.rat_count} rats"
-
-
-# apparently, someone else had the same idea. replace usage of this once it's done:
-# https://github.com/ArchipelagoMW/Archipelago/pull/6085
-@dataclasses.dataclass(init=False)
-class AnyTwo(NestedRule[TWorld], game=GAME_NAME):
-    """A rule that only returns true when any two child rules evaluate as true"""
-
-    @override
-    def _instantiate(self, world: TWorld) -> Rule.Resolved:
-        sometimes_true_children: list[Rule.Resolved] = []
-        always_true_children_count = 0
-        for child in self.children:
-            resolved = child.resolve(world)
-            if resolved.always_true:
-                always_true_children_count += 1
-            elif resolved.always_false:
-                continue
-            else:
-                sometimes_true_children.append(resolved)
-
-        if always_true_children_count > 1:
-            # at least 2 children will always evaluate to true, so we can short-circuit
-            return True_().resolve(world)
-
-        if len(sometimes_true_children) + always_true_children_count < 2:
-            # it's impossible for enough children to evaluate to true, so we can short-circuit
-            return False_().resolve(world)
-
-        if always_true_children_count == 1:
-            # one child will always evaluate to true, so we can reuse logic from the more common Or rule
-            return Or(*sometimes_true_children).resolve(world)
-
-        # we've handled the cases that degenerate to the simpler cases from the base library
-        return AnyTwo.Resolved(
-            tuple(sometimes_true_children),
-            player=world.player,
-            caching_enabled=getattr(world, "rule_caching_enabled", False),
-        )
-
-    class Resolved(NestedRule.Resolved):
-        @override
-        def _evaluate(self, state: CollectionState) -> bool:
-            one_success_already = False
-            for rule in self.children:
-                if not rule(state):
-                    continue
-                if one_success_already:
-                    return True
-                one_success_already = True
-            return False
-
-        @override
-        def explain_json(self, state: CollectionState | None = None) -> list[JSONMessagePart]:
-            messages: list[JSONMessagePart] = [{"type": "text", "text": "any two of ("}]
-            for i, child in enumerate(self.children):
-                if i > 0:
-                    messages.append({"type": "text", "text": ", "})
-                messages.extend(child.explain_json(state))
-            messages.append({"type": "text", "text": ")"})
-            return messages
-
-        @override
-        def explain_str(self, state: CollectionState | None = None) -> str:
-            clauses = ", ".join([c.explain_str(state) for c in self.children])
-            return f"any two of ({clauses})"
-
-        @override
-        def __str__(self) -> str:
-            clauses = ", ".join([str(c) for c in self.children])
-            return f"any two of ({clauses})"
