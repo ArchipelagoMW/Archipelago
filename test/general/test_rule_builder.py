@@ -1609,7 +1609,5 @@ class TestAddRule(RuleBuilderTestCase):
         initial_rule, combined_rule, operator, expected = self.rules
         if initial_rule is not None:
             self.world.set_rule(self.location, initial_rule)
-        else:
-            self.world.set_rule(self.location, DEFAULT_COLLECTION_RULE)
         self.world.add_rule(self.location, combined_rule, operator)
         self.assertEqual(self.location.access_rule, expected if expected is not None else DEFAULT_COLLECTION_RULE)

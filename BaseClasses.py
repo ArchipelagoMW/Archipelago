@@ -1180,7 +1180,7 @@ class CollectionState():
 
 
 CollectionRule = Callable[[CollectionState], bool]
-DEFAULT_COLLECTION_RULE: CollectionRule = staticmethod(lambda state: True)
+DEFAULT_COLLECTION_RULE: CollectionRule = lambda state: True  # noqa: E731
 
 
 class EntranceType(IntEnum):
@@ -1189,7 +1189,7 @@ class EntranceType(IntEnum):
 
 
 class Entrance:
-    access_rule: CollectionRule = DEFAULT_COLLECTION_RULE
+    access_rule: CollectionRule = staticmethod(DEFAULT_COLLECTION_RULE)
     hide_path: bool = False
     player: int
     name: str
