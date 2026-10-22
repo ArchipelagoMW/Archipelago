@@ -1563,16 +1563,16 @@ class TestFieldResolvers(RuleBuilderTestCase):
             HasAny.Resolved(("A", "B"), player=1),
         ),
         (
-            DEFAULT_COLLECTION_RULE,
+            None,
             Has("B"),
             "and",
             Has.Resolved("B", player=1),
         ),
         (
-            DEFAULT_COLLECTION_RULE,
+            None,
             Has("B"),
             "or",
-            DEFAULT_COLLECTION_RULE,
+            None,
         ),
         (
             True_(),
@@ -1589,7 +1589,7 @@ class TestFieldResolvers(RuleBuilderTestCase):
     )
 )
 class TestAddRule(RuleBuilderTestCase):
-    rules: ClassVar[tuple[CollectionRule | Rule[Any], Rule[Any], Literal["and", "or"], Rule.Resolved]]
+    rules: ClassVar[tuple[CollectionRule | Rule[Any] | None, Rule[Any], Literal["and", "or"], Rule.Resolved | None]]
     world: World  # pyright: ignore[reportUninitializedInstanceVariable]
     location: RuleBuilderLocation  # pyright: ignore[reportUninitializedInstanceVariable]
     player: int = 1
@@ -1607,6 +1607,9 @@ class TestAddRule(RuleBuilderTestCase):
 
     def test_add_rule(self) -> None:
         initial_rule, combined_rule, operator, expected = self.rules
-        self.world.set_rule(self.location, initial_rule)
+        if initial_rule is not None:
+            self.world.set_rule(self.location, initial_rule)
+        else:
+            self.world.set_rule(self.location, DEFAULT_COLLECTION_RULE)
         self.world.add_rule(self.location, combined_rule, operator)
-        self.assertEqual(self.location.access_rule, expected)
+        self.assertEqual(self.location.access_rule, expected if expected is not None else DEFAULT_COLLECTION_RULE)
