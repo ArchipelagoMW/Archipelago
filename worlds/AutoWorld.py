@@ -643,8 +643,9 @@ class World(metaclass=AutoWorldRegister):
 
     def set_rule(self, spot: Location | Entrance, rule: CollectionRule | Rule[Any]) -> None:
         """Sets an access rule for a location or entrance"""
-        if isinstance(rule, Rule):
-            rule = rule.resolve(self)
+        if isinstance(rule, (Rule, Rule.Resolved)):
+            if isinstance(rule, Rule):
+                rule = rule.resolve(self)
             self.register_rule_dependencies(rule)
             if isinstance(spot, Entrance):
                 self._register_rule_indirects(rule, spot)
@@ -657,17 +658,19 @@ class World(metaclass=AutoWorldRegister):
         combine: Literal["and", "or"] = "and",
     ) -> None:
         """Combines the given rule with an existing access rule for a location or entrance"""
+        from rule_builder.rules import And, Or
+
         old_rule = spot.access_rule
-        if isinstance(rule, Rule):
+        if isinstance(rule, (Rule, Rule.Resolved)):
             if old_rule is DEFAULT_COLLECTION_RULE:
                 if combine == "and":
                     self.set_rule(spot, rule)
                 return
             if isinstance(old_rule, Rule.Resolved):
                 if combine == "and":
-                    self.set_rule(spot, rule & old_rule)
+                    self.set_rule(spot, And(rule, old_rule))
                 else:
-                    self.set_rule(spot, rule | old_rule)
+                    self.set_rule(spot, Or(rule, old_rule))
             else:
                 raise ValueError("Cannot combine lambda rules with Rule Builder")
         else:
@@ -683,8 +686,9 @@ class World(metaclass=AutoWorldRegister):
 
     def set_completion_rule(self, rule: CollectionRule | Rule[Any]) -> None:
         """Set the completion rule for this world"""
-        if isinstance(rule, Rule):
-            rule = rule.resolve(self)
+        if isinstance(rule, (Rule, Rule.Resolved)):
+            if isinstance(rule, Rule):
+                rule = rule.resolve(self)
             self.register_rule_dependencies(rule)
         self.multiworld.completion_condition[self.player] = rule
 
@@ -698,8 +702,9 @@ class World(metaclass=AutoWorldRegister):
     ) -> Entrance | None:
         """Try to create an entrance between regions with the given rule,
         skipping it if the rule resolves to False (unless force_creation is True)"""
-        if rule is not None and isinstance(rule, Rule):
-            rule = rule.resolve(self)
+        if rule is not None and isinstance(rule, (Rule, Rule.Resolved)):
+            if isinstance(rule, Rule):
+                rule = rule.resolve(self)
             if rule.always_false and not force_creation:
                 return None
             self.register_rule_dependencies(rule)

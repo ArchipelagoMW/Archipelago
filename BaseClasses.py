@@ -1488,7 +1488,7 @@ class Location:
     show_in_spoiler: bool = True
     progress_type: LocationProgressType = LocationProgressType.DEFAULT
     always_allow: Callable[[CollectionState, Item], bool] = staticmethod(lambda state, item: False)
-    access_rule: CollectionRule = DEFAULT_COLLECTION_RULE
+    access_rule: CollectionRule = staticmethod(DEFAULT_COLLECTION_RULE)
     item_rule: Callable[[Item], bool] = staticmethod(lambda item: True)
     item: Optional[Item] = None
 
