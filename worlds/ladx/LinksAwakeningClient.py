@@ -30,7 +30,9 @@ from .TrackerConsts import storage_key
 from .ItemTracker import ItemTracker
 from .LADXR.checkMetadata import checkMetadataTable
 from .Locations import get_locations_to_id, meta_to_name
-from .Tracker import LocationTracker, MagpieBridge, Check
+from .Tracker import LocationTracker, MagpieBridge, Check
+
+
 class GameboyException(Exception):
     pass
 
@@ -749,8 +751,7 @@ def run_game(romfile: str) -> None:
     auto_start = LinksAwakeningWorld.settings.rom_start
 
     if auto_start is True:
-        import webbrowser
-        webbrowser.open(romfile)
+        Utils.open_file(romfile)
     elif isinstance(auto_start, str):
         args = shlex.split(auto_start)
         # Specify full path to ROM as we are going to cd in popen
