@@ -5,10 +5,10 @@ class TestDungeons(TestInvertedOWG):
 
     def testFirstDungeonChests(self):
         self.run_location_tests([
-            ["Hyrule Castle - Map Chest", False, []],
-            ["Hyrule Castle - Map Chest", True, ['Beat Agahnim 1']],
-            ["Hyrule Castle - Map Chest", True, ['Moon Pearl', 'Pegasus Boots']],
-            ["Hyrule Castle - Map Chest", True, ['Magic Mirror', 'Pegasus Boots']],
+            ["Hyrule Castle - First Basement Chest", False, []],
+            ["Hyrule Castle - First Basement Chest", True, ['Beat Agahnim 1']],
+            ["Hyrule Castle - First Basement Chest", True, ['Moon Pearl', 'Pegasus Boots']],
+            ["Hyrule Castle - First Basement Chest", True, ['Magic Mirror', 'Pegasus Boots']],
 
             ["Sanctuary", False, []],
             ["Sanctuary", False, ['Beat Agahnim 1']],
@@ -23,14 +23,14 @@ class TestDungeons(TestInvertedOWG):
             ["Sewers - Secret Room - Left", True, ['Magic Mirror', 'Pegasus Boots', 'Lamp', 'Small Key (Hyrule Castle)', 'Small Key (Hyrule Castle)', 'Small Key (Hyrule Castle)', 'Small Key (Hyrule Castle)']],
             ["Sewers - Secret Room - Left", True, ['Bomb Upgrade (+5)', 'Beat Agahnim 1', 'Lamp', 'Small Key (Hyrule Castle)', 'Small Key (Hyrule Castle)', 'Small Key (Hyrule Castle)', 'Small Key (Hyrule Castle)']],
 
-            ["Eastern Palace - Compass Chest", False, []],
-            ["Eastern Palace - Compass Chest", True, ['Moon Pearl', 'Pegasus Boots']],
-            ["Eastern Palace - Compass Chest", True, ['Magic Mirror', 'Pegasus Boots']],
-            ["Eastern Palace - Compass Chest", True, ['Beat Agahnim 1']],
+            ["Eastern Palace - Skeleton Ambush Chest", False, []],
+            ["Eastern Palace - Skeleton Ambush Chest", True, ['Moon Pearl', 'Pegasus Boots']],
+            ["Eastern Palace - Skeleton Ambush Chest", True, ['Magic Mirror', 'Pegasus Boots']],
+            ["Eastern Palace - Skeleton Ambush Chest", True, ['Beat Agahnim 1']],
 
-            ["Desert Palace - Map Chest", False, []],
-            ["Desert Palace - Map Chest", True, ['Moon Pearl', 'Pegasus Boots']],
-            ["Desert Palace - Map Chest", True, ['Book of Mudora', 'Magic Mirror', 'Pegasus Boots']],
+            ["Desert Palace - Wide Room Chest", False, []],
+            ["Desert Palace - Wide Room Chest", True, ['Moon Pearl', 'Pegasus Boots']],
+            ["Desert Palace - Wide Room Chest", True, ['Book of Mudora', 'Magic Mirror', 'Pegasus Boots']],
 
             ["Desert Palace - Boss", False, []],
             ["Desert Palace - Boss", False, [], ['Small Key (Desert Palace)']],
@@ -58,36 +58,36 @@ class TestDungeons(TestInvertedOWG):
             ["Swamp Palace - Entrance", True, ['Magic Mirror', 'Flippers', 'Pegasus Boots']],
             ["Swamp Palace - Entrance", True, ['Magic Mirror', 'Flippers', 'Beat Agahnim 1']],
 
-            ["Skull Woods - Compass Chest", True, []],
+            ["Skull Woods - Pit Trap Chest", True, []],
 
             ["Skull Woods - Big Chest", False, []],
             ["Skull Woods - Big Chest", False, [], ['Big Key (Skull Woods)']],
             ["Skull Woods - Big Chest", False, [], ['Bomb Upgrade (+5)', 'Bomb Upgrade (+10)', 'Bomb Upgrade (50)']],
             ["Skull Woods - Big Chest", True, ['Bomb Upgrade (+5)', 'Big Key (Skull Woods)']],
 
-            ["Skull Woods - Big Key Chest", True, []],
+            ["Skull Woods - Middle Section Chest", True, []],
 
             ["Skull Woods - Bridge Room", False, []],
             ["Skull Woods - Bridge Room", False, [], ['Fire Rod']],
             ["Skull Woods - Bridge Room", True, ['Fire Rod']],
 
-            ["Thieves' Town - Map Chest", True, []],
+            ["Thieves' Town - Entryway Floor Chest", True, []],
 
-            ["Ice Palace - Compass Chest", False, []],
-            ["Ice Palace - Compass Chest", False, [], ['Fire Rod', 'Bombos', 'Progressive Sword']],
+            ["Ice Palace - Pengator Chest", False, []],
+            ["Ice Palace - Pengator Chest", False, [], ['Fire Rod', 'Bombos', 'Progressive Sword']],
             # Qirn Jump
-            ["Ice Palace - Compass Chest", True, ['Fire Rod', 'Small Key (Ice Palace)']],
-            ["Ice Palace - Compass Chest", True, ['Bombos', 'Progressive Sword', 'Small Key (Ice Palace)']],
+            ["Ice Palace - Pengator Chest", True, ['Fire Rod', 'Small Key (Ice Palace)']],
+            ["Ice Palace - Pengator Chest", True, ['Bombos', 'Progressive Sword', 'Small Key (Ice Palace)']],
 
             ["Misery Mire - Bridge Chest", False, []],
             ["Misery Mire - Bridge Chest", False, [], ['Ether']],
             ["Misery Mire - Bridge Chest", False, [], ['Progressive Sword']],
             ["Misery Mire - Bridge Chest", True, ['Pegasus Boots', 'Ether', 'Progressive Sword']],
 
-            ["Turtle Rock - Compass Chest", False, []],
-            ["Turtle Rock - Compass Chest", False, [], ['Cane of Somaria']],
-            ["Turtle Rock - Compass Chest", True, ['Pegasus Boots', 'Magic Mirror', 'Moon Pearl', 'Cane of Somaria', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)']],
-            ["Turtle Rock - Compass Chest", True, ['Pegasus Boots', 'Quake', 'Progressive Sword', 'Cane of Somaria']],
+            ["Turtle Rock - Spiky Trap Room", False, []],
+            ["Turtle Rock - Spiky Trap Room", False, [], ['Cane of Somaria']],
+            ["Turtle Rock - Spiky Trap Room", True, ['Pegasus Boots', 'Magic Mirror', 'Moon Pearl', 'Cane of Somaria', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)']],
+            ["Turtle Rock - Spiky Trap Room", True, ['Pegasus Boots', 'Quake', 'Progressive Sword', 'Cane of Somaria']],
 
             ["Turtle Rock - Chain Chomps", False, []],
             ["Turtle Rock - Chain Chomps", False, ['Bomb Upgrade (+5)', 'Bomb Upgrade (+10)', 'Bomb Upgrade (50)', 'Hookshot', 'Progressive Sword', 'Progressive Bow', 'Blue Boomerang', 'Red Boomerang', 'Cane of Somaria', 'Fire Rod', 'Ice Rod']],

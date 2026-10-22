@@ -7,11 +7,11 @@ class TestThievesTown(TestDungeon):
         self.starting_regions = ['Thieves Town (Entrance)']
         self.run_tests([
 
-            ["Thieves' Town - Big Key Chest", True, []],
+            ["Thieves' Town - Entryway Alcove Chest", True, []],
 
-            ["Thieves' Town - Map Chest", True, []],
+            ["Thieves' Town - Entryway Floor Chest", True, []],
 
-            ["Thieves' Town - Compass Chest", True, []],
+            ["Thieves' Town - SE Ledge Chest", True, []],
 
             ["Thieves' Town - Ambush Chest", True, []],
 
