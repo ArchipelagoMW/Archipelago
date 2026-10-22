@@ -658,8 +658,6 @@ class World(metaclass=AutoWorldRegister):
         combine: Literal["and", "or"] = "and",
     ) -> None:
         """Combines the given rule with an existing access rule for a location or entrance"""
-        from rule_builder.rules import And, Or
-
         old_rule = spot.access_rule
         if isinstance(rule, (Rule, Rule.Resolved)):
             if old_rule is DEFAULT_COLLECTION_RULE:
@@ -668,9 +666,9 @@ class World(metaclass=AutoWorldRegister):
                 return
             if isinstance(old_rule, Rule.Resolved):
                 if combine == "and":
-                    self.set_rule(spot, And(rule, old_rule))
+                    self.set_rule(spot, rule & old_rule)
                 else:
-                    self.set_rule(spot, Or(rule, old_rule))
+                    self.set_rule(spot, rule | old_rule)
             else:
                 raise ValueError("Cannot combine lambda rules with Rule Builder")
         else:

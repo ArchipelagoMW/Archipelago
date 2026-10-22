@@ -330,6 +330,14 @@ class CachedRuleBuilderTestCase(RuleBuilderTestCase):
             Has("A") & Has.Resolved("B", player=1),
             HasAll.Resolved(("A", "B"), player=1),
         ),
+        (
+            Has.Resolved("A", player=1) & Has.Resolved("B", player=1),
+            HasAll.Resolved(("A", "B"), player=1),
+        ),
+        (
+            Has.Resolved("A", player=1) | Has.Resolved("B", player=1),
+            HasAny.Resolved(("A", "B"), player=1),
+        ),
     )
 )
 class TestSimplify(RuleBuilderTestCase):
