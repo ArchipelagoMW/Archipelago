@@ -100,7 +100,7 @@ from kivymd.uix.tooltip import MDTooltip, MDTooltipPlain
 
 fade_in_animation = Animation(opacity=0, duration=0) + Animation(opacity=1, duration=0.25)
 
-from NetUtils import JSONtoTextParser, JSONMessagePart, SlotType, HintStatus
+from NetUtils import JSONtoTextParser, JSONMessagePart, SlotType, HintStatus, get_item_classification_label
 from Utils import async_start, get_input_text_from_response
 
 if typing.TYPE_CHECKING:
@@ -1271,7 +1271,8 @@ class HintLog(MDRecycleView):
                 hint_status_node = f"[u]{hint_status_node}[/u]"
             data.append({
                 "receiving": {"text": self.parser.handle_node({"type": "player_id", "text": hint["receiving_player"]})},
-                "item": {"text": self.parser.handle_node({
+                "item": {"text": f"Hidden ({get_item_classification_label(hint['item_flags'])})"
+                         if hint.get("item_hidden") else self.parser.handle_node({
                     "type": "item_id",
                     "text": hint["item"],
                     "flags": hint["item_flags"],
@@ -1282,10 +1283,11 @@ class HintLog(MDRecycleView):
                     "type": "location_id",
                     "text": hint["location"],
                     "player": hint["finding_player"],
-                })},
+                }) if not hint.get("hidden") else "Hidden"},
                 "entrance": {"text": self.parser.handle_node({"type": "color" if hint["entrance"] else "text",
                                                               "color": "blue", "text": hint["entrance"]
-                                                              if hint["entrance"] else "Vanilla"})},
+                                                              if hint["entrance"] else "Vanilla"})
+                             if not hint.get("hidden") else "Hidden"},
                 "status": {
                     "text": hint_status_node,
                     "hint": hint,
