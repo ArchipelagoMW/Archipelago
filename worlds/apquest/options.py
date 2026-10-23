@@ -47,6 +47,7 @@ class ExtraStartingChest(Toggle):
     display_name = "Extra Starting Chest"
 
 
+# A Range is a numeric option with a min and max value. This will be represented by a slider on the website.
 class TrapChance(Range):
     """
     Percentage chance that any given Confetti Cannon will be replaced by a Math Trap.
@@ -68,7 +69,6 @@ class StartWithOneConfettiCannon(Toggle):
     display_name = "Start With One Confetti Cannon"
 
 
-# A Range is a numeric option with a min and max value. This will be represented by a slider on the website.
 class ConfettiExplosiveness(Range):
     """
     How much confetti each use of a confetti cannon will fire.
