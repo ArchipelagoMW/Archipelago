@@ -193,7 +193,7 @@ class APContainer:
 
 class APWorldContainer(APContainer):
     """A zipfile containing a world implementation."""
-    game: str | None = None
+    game: str | list[str] | None = None
     world_version: "Version | None" = None
     minimum_ap_version: "Version | None" = None
     maximum_ap_version: "Version | None" = None
