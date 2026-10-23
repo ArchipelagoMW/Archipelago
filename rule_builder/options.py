@@ -2,9 +2,7 @@ import dataclasses
 import importlib
 import operator
 from collections.abc import Callable, Iterable
-from typing import Any, Final, Literal, Self, cast
-
-from typing_extensions import override
+from typing import Any, Final, Literal, Self, cast, override
 
 from Options import CommonOptions, Option
 

@@ -186,10 +186,7 @@ def call_single(multiworld: "MultiWorld", method_name: str, player: int, *args: 
         ret = _timed_call(method, *args, multiworld=multiworld, player=player)
     except Exception as e:
         message = f"Exception in {method} for player {player}, named {multiworld.player_name[player]}."
-        if sys.version_info >= (3, 11, 0):
-            e.add_note(message)  # PEP 678
-        else:
-            logging.error(message)
+        e.add_note(message)
         raise e
     else:
         # Convenience for CachedRuleBuilderWorld users: Ensure that caching setup function is called
