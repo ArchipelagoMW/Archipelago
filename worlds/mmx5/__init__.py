@@ -1,0 +1,484 @@
+"""Archipelago world for Mega Man X5 (PS1, NTSC-U, SLUS-01334).
+
+Feature-complete: generation, reachability rules, disc patch (via Rom.py /
+disc.py) and the BizHawkClient are all wired. The RAM interface research notes
+(mmx5-ram-notes.md and friends) live in worlds/mmx5/docs/ on the author's
+fork: github.com/Shinnuu/Archipelago, branch mmx5-apworld.
+"""
+import logging
+import os
+from typing import Any, ClassVar
+
+import settings
+from BaseClasses import ItemClassification, Region, Tutorial
+from Options import OptionError
+from worlds.AutoWorld import WebWorld, World
+
+from . import names, pickups, reploids
+from .client import MMX5Client  # noqa: F401  (import registers the client)
+from .items import BASE_ID, MMX5Item, event_table, item_groups, item_table
+from .locations import MMX5Location, event_location_table, location_groups, location_table
+from .options import RANDOMIZED_OPTIONS, DNAPartsInPool, LaunchOdds, MMX5Options
+from .Rom import ACCEPTED_HASHES, MMX5ProcedurePatch, patch_rom
+
+
+class MMX5Settings(settings.Group):
+    class RomFile(settings.UserFilePath):
+        """File path of the Mega Man X5 (USA) disc image (raw 2352-byte .bin)."""
+        description = "Mega Man X5 (USA) disc image"
+        copy_to = "Megaman X5.bin"
+        # Both the Redump dump and the +1-trailing-zero-sector variant; they
+        # are byte-identical up to that pad, so patch offsets are unaffected.
+        md5s = sorted(ACCEPTED_HASHES)
+
+    rom_file: RomFile = RomFile(RomFile.copy_to)
+
+
+class MMX5Web(WebWorld):
+    theme = "grassFlowers"
+    bug_report_page = "https://github.com/Shinnuu/Archipelago/issues"
+    setup_en = Tutorial(
+        "Multiworld Setup Guide",
+        "A guide to playing Mega Man X5 with Archipelago.",
+        "English",
+        "setup_en.md",
+        "setup/en",
+        ["Shinnuu"],
+    )
+    tutorials = [setup_en]
+
+
+class MMX5World(World):
+    """
+    Mega Man X5 is the fifth entry in Capcom's Mega Man X series, released for the
+    PlayStation in 2000. Play as X or Zero, defeat eight Mavericks in any order,
+    and stop the colony drop before Sigma's plan comes to fruition.
+    """
+    game = "Mega Man X5"
+    web = MMX5Web()
+
+    options_dataclass = MMX5Options
+    options: MMX5Options
+
+    settings: ClassVar[MMX5Settings]
+    settings_key = "mmx5_options"
+
+    item_name_to_id = {name: data.code for name, data in item_table.items() if data.code is not None}
+    location_name_to_id = location_table
+    item_name_groups = item_groups
+    location_name_groups = location_groups
+
+    # The OLDEST client this world is known to work with - NOT the version it
+    # was developed against. The server refuses any client below this
+    # (MultiServer enforces it from the multidata), so an over-high value
+    # locks everyone out: v0.1.0 shipped (0, 6, 8) and no released client
+    # could connect, because 0.6.8 is an unreleased development version.
+    # 0.6.7 is verified: generation and live client play both confirmed.
+    # Lower it if an older client is actually tested, never to match a
+    # development checkout's version string.
+    required_client_version = (0, 6, 7)
+
+    # Which stage is open at the start under stage_unlocks. Chosen in
+    # generate_early so create_items and set_rules see the same answer.
+    starting_stage: str | None = None
+    # Which Part of each boss's Life+/Energy+ pair this seed uses.
+    chosen_parts: list[str] = []
+
+    # Item/location arithmetic, kept here so generate_early can check capacity
+    # before any of it is built. Every item needs a location; overshooting used
+    # to pass SILENTLY and lose items - parts + stage_unlocks + secret_armors
+    # generated "fine" with 53 items for 48 locations and simply dropped
+    # Ultimate Armor and a DNA Part. The check has to live in generate_early
+    # because Generate.py retries a world that raises later, so an error from
+    # create_items spins instead of surfacing.
+    BASE_ITEMS = 36
+    BASE_LOCATIONS = 45
+
+    def _capacity(self) -> tuple[int, int]:
+        items = self.BASE_ITEMS
+        locations = self.BASE_LOCATIONS
+        if self.options.dna_parts_in_pool == DNAPartsInPool.option_all:
+            items += len(names.DNA_PARTS)           # both halves of every pair
+        elif self.options.dna_parts_in_pool:
+            items += len(names.PART_PAIRS)          # one per Life+/Energy+ pair
+        if self.options.stage_unlocks:
+            items += len(names.STAGES) - 1          # one is precollected
+        if self.options.secret_armors_in_pool:
+            items += 2
+        if self.options.endgame_checks:
+            locations += len(names.ENDGAME_STAGES)
+        if self.options.rematch_checks:
+            locations += len(names.STAGES)
+        if self.options.reploid_checks:
+            locations += len(reploids.REPLOIDS)
+        if self.options.pickupsanity:
+            locations += len(pickups.PICKUPS)
+        return items, locations
+
+    def _roll_options(self) -> None:
+        """Pick the gameplay options for the player, then fix the two
+        combinations that are traps rather than interesting outcomes."""
+        for name in RANDOMIZED_OPTIONS:
+            option = getattr(self.options, name)
+            # Choice exposes its valid values; Toggle is just 0/1.
+            values = sorted(set(type(option).options.values())) \
+                if getattr(type(option), "options", None) else [0, 1]
+            option.value = self.random.choice(values)
+
+        # A `launch` goal with vanilla odds can be unwinnable - the goal needs
+        # a SUCCESSFUL launch, there are two attempts, and a full part set is
+        # still only 75%. Deliberate when a player asks for it (generate_early
+        # warns below); a coin flip handing it to them is just a broken seed.
+        if self.options.goal == "launch" and self.options.launch_odds == "vanilla":
+            self.options.launch_odds.value = LaunchOdds.option_deterministic
+
+        # Make room rather than refusing. The roll can ask for more items than
+        # the seed has locations; pickupsanity adds 32, which covers every
+        # combination (max is 61 items - all-16 parts + unlocks + armors -
+        # against 45 + 32, before endgame/rematch checks add any more).
+        items, locations = self._capacity()
+        if items > locations and not self.options.pickupsanity:
+            self.options.pickupsanity.value = 1
+            items, locations = self._capacity()
+
+        logging.info(
+            "Mega Man X5 (%s): randomize_options rolled %s",
+            self.player_name,
+            ", ".join(f"{n}={getattr(self.options, n).value}"
+                      for n in RANDOMIZED_OPTIONS))
+
+    def generate_early(self) -> None:
+        if self.options.randomize_options:
+            self._roll_options()
+
+        items, locations = self._capacity()
+        if items > locations:
+            raise OptionError(
+                f"Mega Man X5 ({self.player_name}): these options need "
+                f"{items} items but the seed only has {locations} locations, "
+                f"so {items - locations} would be silently dropped. Add "
+                f"locations with `pickupsanity` (+{len(pickups.PICKUPS)}), "
+                f"`endgame_checks` (+{len(names.ENDGAME_STAGES)}) or "
+                f"`rematch_checks` (+{len(names.STAGES)}) or "
+                f"`reploid_checks` (+{len(reploids.REPLOIDS)}), or turn off "
+                f"one of `dna_parts_in_pool` "
+                f"(+{len(names.DNA_PARTS) if self.options.dna_parts_in_pool == DNAPartsInPool.option_all else len(names.PART_PAIRS)}), "
+                f"`stage_unlocks` (+{len(names.STAGES) - 1}) or "
+                f"`secret_armors_in_pool` (+2).")
+
+        if self.options.stage_unlocks:
+            self.starting_stage = self.random.choice(names.STAGES)
+        if self.options.dna_parts_in_pool == DNAPartsInPool.option_all:
+            # Every Part, both halves of every pair - the one economy the
+            # base game never allows, bought with the extra location budget
+            # the option help text demands.
+            self.chosen_parts = list(names.DNA_PARTS)
+        elif self.options.dna_parts_in_pool:
+            # One per pair, mirroring vanilla's 8-of-16 economy. Picking any 8
+            # of the 16 instead would let a seed hold both halves of a boss's
+            # pair, which the base game never allows.
+            self.chosen_parts = [self.random.choice(pair)
+                                 for pair in names.PART_PAIRS.values()]
+
+        # vanilla launch odds + the launch goal is a genuine gamble with the
+        # whole run: that goal needs a SUCCESSFUL launch, there are only two
+        # attempts (Enigma, then Shuttle), and even a full part set tops out at
+        # 75%. Fail both and the colony falls with no third chance, so the goal
+        # can never complete. Allowed deliberately - but nobody should meet it
+        # as a surprise, so it is said out loud at generation.
+        if self.options.launch_odds == "vanilla" and self.options.goal == "launch":
+            logging.warning(
+                "Mega Man X5 (%s): launch_odds=vanilla with goal=launch. This "
+                "seed CAN become unwinnable - the goal needs a successful "
+                "launch, there are only two attempts, and a full set of parts "
+                "is still only 75%%. This combination was chosen on purpose; "
+                "use launch_odds=deterministic if that is not what you want.",
+                self.player_name)
+
+    def create_item(self, name: str) -> MMX5Item:
+        if name in item_table:
+            data = item_table[name]
+            classification = data.classification
+            # Launcher parts carry completion under the launch goal.
+            if name in (names.ENIGMA_PART, names.SHUTTLE_PART) \
+                    and self.options.goal == "launch":
+                classification = ItemClassification.progression
+            return MMX5Item(name, classification, data.code, self.player)
+        data = event_table[name]
+        return MMX5Item(name, data.classification, None, self.player)
+
+    def create_regions(self) -> None:
+        menu = Region("Menu", self.player, self.multiworld)
+        stage_select = Region("Stage Select", self.player, self.multiworld)
+        sigma_stages = Region("Sigma Stages", self.player, self.multiworld)
+        self.multiworld.regions += [menu, stage_select, sigma_stages]
+
+        # Intro stage is mandatory before the stage select in-game.
+        intro = Region("Intro Stage", self.player, self.multiworld)
+        self.multiworld.regions.append(intro)
+        intro.add_locations({names.INTRO_CLEAR: location_table[names.INTRO_CLEAR]}, MMX5Location)
+
+        menu.connect(intro)
+        intro.connect(stage_select)
+
+        for stage in names.STAGES:
+            region = Region(stage, self.player, self.multiworld)
+            self.multiworld.regions.append(region)
+            stage_locations = {
+                names.boss_location(stage): location_table[names.boss_location(stage)],
+                names.heart_location(stage): location_table[names.heart_location(stage)],
+                names.capsule_location(stage): location_table[names.capsule_location(stage)],
+            }
+            if stage in names.STAGE_TANK:
+                stage_locations[names.tank_location(stage)] = location_table[names.tank_location(stage)]
+            stage_locations[names.dna_location(stage)] = location_table[names.dna_location(stage)]
+            stage_locations[names.dna_part_location(stage)] = \
+                location_table[names.dna_part_location(stage)]
+            region.add_locations(stage_locations, MMX5Location)
+            # All 8 stages are open from the start in X5; stage_unlocks puts
+            # each entrance behind its Access Codes item (rule in set_rules).
+            stage_select.connect(region)
+
+        if self.options.pickupsanity:
+            # Maverick-stage pickups join their stage's region (same
+            # reachability as its other locations); Sigma / Zero Space
+            # pickups live in Sigma Stages, whose entrance already carries
+            # the all-8-weapons rule - deliberately stricter than the game
+            # opens the endgame, same reasoning as that entrance.
+            by_region: dict[str, dict[str, int]] = {}
+            for stage_id, _area, _idx, _iid, loc_name in pickups.PICKUPS:
+                region_name = ("Sigma Stages"
+                               if stage_id in pickups.ENDGAME_STAGE_IDS
+                               else pickups.STAGE_PREFIX[stage_id])
+                by_region.setdefault(region_name, {})[loc_name] = \
+                    location_table[loc_name]
+            for region_name, locs in by_region.items():
+                self.multiworld.get_region(region_name, self.player) \
+                    .add_locations(locs, MMX5Location)
+
+        if self.options.endgame_checks:
+            # Zero Space clears live in Sigma Stages, whose entrance already
+            # carries the all-8-weapons rule. They add locations without adding
+            # items, so they also hand the pool three filler slots back - the
+            # only option so far that widens capacity instead of consuming it.
+            sigma_stages.add_locations(
+                {names.endgame_clear_location(s): location_table[
+                    names.endgame_clear_location(s)]
+                 for s in names.ENDGAME_STAGES}, MMX5Location)
+
+        if self.options.rematch_checks:
+            # Rematches happen in Zero Space's Boss Rush, so they live in
+            # Sigma Stages and inherit the all-8-weapons entrance rule, same
+            # as the endgame clears. Like those, they add locations without
+            # adding items - more filler headroom for the pool.
+            sigma_stages.add_locations(
+                {names.rematch_location(s): location_table[
+                    names.rematch_location(s)]
+                 for s in names.STAGES}, MMX5Location)
+
+        if self.options.reploid_checks:
+            # Each Reploid joins its stage's region: same reachability as the
+            # stage's other locations (including the Access Codes entrance
+            # rule under stage_unlocks). No item rules - walking into them is
+            # execution, not inventory. Locations without items, like the
+            # rematches.
+            for region_name in reploids.REPLOID_STAGES:
+                self.multiworld.get_region(region_name, self.player) \
+                    .add_locations(
+                        {name: location_table[name]
+                         for stage, _i, _x, _y, name in reploids.REPLOIDS
+                         if stage == region_name}, MMX5Location)
+
+        victory = MMX5Location(self.player, names.VICTORY, None, sigma_stages)
+        victory.place_locked_item(self.create_item(names.VICTORY))
+        sigma_stages.locations.append(victory)
+        stage_select.connect(sigma_stages)
+
+    def create_items(self) -> None:
+        pool = []
+        for name, data in item_table.items():
+            pool += [self.create_item(name) for _ in range(data.count)]
+
+        # Secret armors: option-gated, so their table count is 0 and they are
+        # added here instead. They take filler slots rather than adding
+        # locations - the Zero Space capsule that vanilla-holds them is not a
+        # check (see the option text).
+        if self.options.secret_armors_in_pool:
+            pool.append(self.create_item(names.ULTIMATE_ARMOR))
+            pool.append(self.create_item(names.BLACK_ZERO))
+
+        # DNA Parts: one from each boss's Life+/Energy+ pair, chosen in
+        # generate_early. They take filler slots rather than adding locations -
+        # the "DNA Part" locations already exist and already check on the boss
+        # kill, which is the point: the check was always there, only the reward
+        # was static.
+        if self.options.dna_parts_in_pool:
+            pool += [self.create_item(p) for p in self.chosen_parts]
+
+        # Stage access: the starting stage's codes are precollected (the player
+        # holds them from frame one), the other seven are shuffled. Precollected
+        # deliberately rather than placed locally - the starting stage must be
+        # open before ANY location is reachable, so it cannot itself be a check.
+        if self.options.stage_unlocks:
+            for stage in names.STAGES:
+                item = self.create_item(names.access_item(stage))
+                if stage == self.starting_stage:
+                    self.multiworld.push_precollected(item)
+                else:
+                    pool.append(item)
+
+        # Top up with filler. The over-full direction is caught in
+        # generate_early - by here it is too late to report cleanly, because
+        # Generate.py RETRIES a failed world rather than surfacing the error.
+        unfilled = len(self.multiworld.get_unfilled_locations(self.player))
+        assert len(pool) <= unfilled, "pool overflow should have been caught in generate_early"
+        while len(pool) < unfilled:
+            pool.append(self.create_item(self.get_filler_item_name()))
+        self.multiworld.itempool += pool
+
+    def set_rules(self) -> None:
+        # Sigma stages open once all eight Maverick weapons are in hand.
+        # This is deliberately STRICTER than the game, which only requires the
+        # Eurasia colony situation to resolve (story chapter derives from
+        # popcount of 0x800D1C4C; the endgame opens after the Enigma/Shuttle
+        # sequence plays out either way). Stricter is safe - it only narrows
+        # placement, it can never strand progression - so it stays for v1.
+        #
+        # Note this rule is about WEAPONS (items, receivable from any world),
+        # while the all_mavericks goal is about KILLS (popcount of 0x1C4C, only
+        # ever set locally). They are not the same requirement and neither
+        # implies the other.
+        #
+        # That USED to add no logical constraint, because "every boss is
+        # reachable and killable with no items at all" - and that assumption
+        # died the day `stage_unlocks` shipped without anyone revisiting this
+        # rule. A tester's seed (2026-08-06, goal all_mavericks + stage_unlocks
+        # + pickupsanity) put Dark Dizzy's and Axle the Red's Access Codes in
+        # SIGMA'S STAGE. Reaching Sigma needs 8 kills; killing those two needs
+        # their codes; their codes are behind Sigma. Hard deadlock, and the
+        # playthrough happily "won" after entering four stages, because logic
+        # only ever checked the 8 weapon ITEMS.
+        #
+        # So with stages locked, the endgame additionally requires every
+        # Access Codes item. Applied for EVERY goal, not just all_mavericks:
+        # reaching the endgame in-game needs the colony to resolve, which needs
+        # story progress, which needs kills, which needs stage access - and the
+        # exact kill count the story wants is not something logic models. Being
+        # stricter than necessary only narrows placement; being looser strands
+        # seeds, which is what just happened.
+        endgame_needs = set(item_groups["Weapons"])
+        if self.options.stage_unlocks:
+            endgame_needs |= set(names.ACCESS_ITEMS)
+        self.multiworld.get_entrance("Stage Select -> Sigma Stages", self.player).access_rule = \
+            lambda state: state.has_all(endgame_needs, self.player)
+
+        # Stage access. Enforced in-game by the client zeroing the hub's
+        # slot -> stage-id table (0x800F5050), which makes confirming a locked
+        # icon a no-op; here it is only the logic half. Every location in a
+        # stage lives in that stage's region, so one entrance rule covers the
+        # boss, heart, capsule, tank, DNA and pickupsanity checks at once.
+        if self.options.stage_unlocks:
+            for stage in names.STAGES:
+                codes = names.access_item(stage)
+                self.multiworld.get_entrance(f"Stage Select -> {stage}",
+                                             self.player).access_rule = \
+                    lambda state, codes=codes: state.has(codes, self.player)
+
+        player = self.player
+        falcon = names.ARMOR_PARTS[0:4]
+        gaea = names.ARMOR_PARTS[4:8]
+
+        # Armor is usable only as a COMPLETE set, and in AP the parts are
+        # shuffled away from their vanilla capsules - so these must key on the
+        # part ITEMS, never on "reached the capsule that vanilla-holds them".
+        def has_falcon(state) -> bool:
+            return state.has_all(falcon, player)
+
+        def has_gaea(state) -> bool:
+            return state.has_all(gaea, player)
+
+        def needs(location: str, rule) -> None:
+            self.multiworld.get_location(location, player).access_rule = rule
+
+        # --- Armor capsules -------------------------------------------------
+        # Stage<->part mapping cross-validated at two points against live
+        # capsule-object id reads (Duff McWhalen = id 1 = Falcon Body,
+        # Dark Dizzy = id 4 = Gaea Head), which also confirms capsule id ==
+        # part index. NOTE no FALCON part requires Falcon Armor - the three
+        # that do are all GAEA parts, which is sequential, not circular.
+        needs(names.capsule_location(names.WHALE),
+              lambda state: state.has(names.GOO_SHAVER, player))
+        needs(names.capsule_location(names.FIREFLY),
+              lambda state: state.has(names.CSHOT, player))
+        needs(names.capsule_location(names.NECROBAT),
+              lambda state: state.has(names.F_LASER, player))
+        needs(names.capsule_location(names.PEGASUS), has_falcon)
+        needs(names.capsule_location(names.DINOREX), has_falcon)
+        needs(names.capsule_location(names.ROSERED), has_falcon)
+        # Falcon Leg (Grizzly Slash) and Falcon Head (Squid Adler) need no
+        # items - the latter is gated on collecting 8 energy balls during the
+        # jet-bike section, which is execution, not inventory.
+
+        # --- Heart tanks ----------------------------------------------------
+        for stage in (names.GRIZZLY, names.KRAKEN, names.FIREFLY, names.ROSERED):
+            needs(names.heart_location(stage), has_gaea)
+        needs(names.heart_location(names.WHALE), has_falcon)
+        # Dark Dizzy / The Skiver / Mattrex hearts need nothing.
+
+        # --- Sub / W / EX tanks ---------------------------------------------
+        # Stage assignment matches the client's TANK_RECORD_TO_STAGE, itself
+        # derived from the placement harvest - four more agreement points.
+        needs(names.tank_location(names.NECROBAT), has_falcon)
+        needs(names.tank_location(names.FIREFLY),
+              lambda state: state.has(names.GROUND_FIRE, player))
+        # Grizzly Slash sub-tank and The Skiver W-Tank need nothing.
+
+        # --- DNA rewards ----------------------------------------------------
+        # No access rule: the DNA choice is offered for beating the Maverick,
+        # and every stage is open from the start, so it is reachable exactly
+        # when the boss is. (These replaced 8 PHANTOM "Energy Up pickup"
+        # locations - Energy Ups are not stage items at all. See the
+        # reachability plan for the four lines of evidence.)
+
+        if self.options.goal == "launch":
+            # Victory = a successful launch, which the client only powers
+            # once ALL 8 parts are received (score stays 0 otherwise, and
+            # the game's own score<=0 gate fails the launch cleanly).
+            self.multiworld.completion_condition[self.player] = \
+                lambda state: state.has(names.ENIGMA_PART, self.player, 4) \
+                    and state.has(names.SHUTTLE_PART, self.player, 4)
+        else:
+            # sigma and all_mavericks both complete on the VICTORY event, which
+            # sits behind the all-8-weapons entrance rule above. all_mavericks
+            # needs no extra rule: every Maverick is reachable from the start
+            # and killable with no items, so "defeat all 8" is satisfiable
+            # wherever VICTORY is. The difference between the two goals is
+            # in-game timing, which logic does not model - the client holds the
+            # goal until the kill count reaches 8.
+            self.multiworld.completion_condition[self.player] = \
+                lambda state: state.has(names.VICTORY, self.player)
+
+    def get_filler_item_name(self) -> str:
+        return names.SMALL_ENERGY
+
+    def generate_output(self, output_directory: str) -> None:
+        patch = MMX5ProcedurePatch(player=self.player,
+                                   player_name=self.multiworld.player_name[self.player])
+        patch_rom(self, patch)
+        patch.write(os.path.join(
+            output_directory,
+            f"{self.multiworld.get_out_file_name_base(self.player)}{patch.patch_file_ending}"))
+
+    def fill_slot_data(self) -> dict[str, Any]:
+        return {
+            "goal": self.options.goal.value,
+            "boss_difficulty": self.options.boss_difficulty.value,
+            "launch_odds": self.options.launch_odds.value,
+            "pickupsanity": self.options.pickupsanity.value,
+            "boss_hp_randomization": self.options.boss_hp_randomization.value,
+            "stage_unlocks": self.options.stage_unlocks.value,
+            "endgame_checks": self.options.endgame_checks.value,
+            "rematch_checks": self.options.rematch_checks.value,
+            "reploid_checks": self.options.reploid_checks.value,
+            "dna_parts_in_pool": self.options.dna_parts_in_pool.value,
+        }

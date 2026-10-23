@@ -1,0 +1,793 @@
+# Mega Man X5 apworld changelog
+
+## 0.5.4 — 2026-08-16
+
+**No re-patch needed** unless you turn on one of the two new options. Both are
+off by default, and the fixes below are all client-side, so the disc a 0.5.3
+seed produced is still correct.
+
+**Fixed: a Boss Rush rematch could be credited without fighting it.** A player
+game-overed out of the Duff McWhalen rematch, returned to the Sigma stage,
+picked up an item near the drop-down and was handed the McWhalen rematch
+check. The address the client watched for boss HP is not a boss-only address —
+it is the HP field of the game's first object slot, which holds the boss
+during a rematch and holds ordinary objects the rest of the time. An object
+appearing in that slot and then going away reproduces exactly the pattern the
+client reads as "the boss filled its health bar, then died".
+
+The client now cross-checks identity: the object in that slot must be carrying
+the attack data belonging to the boss whose code is loaded, so an ordinary
+object can no longer stand in for one. On a multiworld this was worse than a
+free check — it releases someone else's item — so it is worth re-checking your
+seed if you saw a rematch complete on its own.
+
+Client-side; no re-patch.
+
+**New: Weapon Damage.** Randomizes how much damage *your* weapons do — `weak`
+50-90% of normal, `regular` 80-130%, `strong` 120-200%, `chaotic` 25-250%.
+Every attack X and Zero have is rolled separately and then fixed for the seed,
+so part of the run is working out which of your weapons turned out to be the
+good one. A weapon rolls once and keeps its shape: the charged shot scales by
+the same amount as the uncharged one, so a charged shot never ends up weaker
+than the plain shot, and X's buster stays ordered across all its charge levels.
+Nothing rolls to zero, and attacks that deal no damage or are instant kills
+are left exactly as they are. Off by default. It stacks with
+Boss HP Randomization, and weak weapons against strong bosses is a long
+afternoon. **Changes the disc.**
+
+**New: Boss Damage.** The mirror of Weapon Damage — randomizes how hard the
+eight Mavericks hit *you*. Same scale (`weak` 50-90%, `regular` 80-130%,
+`strong` 120-200%, `chaotic` 25-250%), and each boss rolls once so its light
+pokes stay light next to its big attack; the whole fight gets more or less
+dangerous together. Attacks the Mavericks share with ordinary enemies are left
+alone, and so are instant kills — a crush is still a crush. Separate from Boss
+HP Randomization: that one changes how long a boss lasts, this changes how
+badly it hurts. Off by default. **Changes the disc.**
+
+**Life Energy you receive now actually heals you.** It never did. The client
+was writing received energy into what it took for the game's own refill
+queue; those two bytes are in fact the fill levels of **Sub-Tank 1 and
+Sub-Tank 2**. So the energy healed nothing at any HP — it poured into a
+sub-tank instead, and into the *wrong* one whenever you were playing Zero,
+and into a tank you might not even own, in which case it went nowhere at all.
+
+Energy now behaves exactly like a capsule you pick up off the floor: it heals
+you, and if you are already at full health it tops up a sub-tank you own — 2
+per item, up to the tank's normal maximum, first tank first. If you are at
+full health with no room in any tank it is spent, which is what the game does
+with a capsule in the same situation.
+
+**Overfilled sub-tanks are repaired.** The same bug could push a tank far past
+its normal maximum, so a single tank could hold nearly four times what the
+game allows. If you are carrying one of those it is clamped back to full the
+next time the client sees it, and you will get a note in the log. This is the
+sub-tank overcap a tester reported back on 0.5.0.
+
+Client-side only — no re-patch, and nothing about your seed changes.
+
+## 0.5.3 — 2026-08-11
+
+**You need to re-patch this time.** Exit Stage Anytime is on by default and
+changes the disc, so a fresh `.apmmx5` and a re-patch are required even if you
+change nothing else. Your save carries over. If you have lost your clean dump,
+MMX5-Unpatcher.exe on the release page will restore any patched disc.
+
+**New: Exit Stage Anytime** (on by default). The pause menu's "Exit Stage"
+normally only appears once you have already beaten that stage's boss, which
+is backwards for a randomizer — the run is full of trips into a stage for one
+check you can now reach, and entries into a stage you cannot finish yet.
+Without it, leaving means dying on purpose or clearing a stage you did not
+come for. The intro and Zero Space stay excluded, exactly as in the base game.
+
+**New: Water Stage Speed.** Duff McWhalen's forced-scrolling chase moves at a
+fixed pace you cannot outrun, which is a long wait every time you re-enter
+that stage for a check. Set it to 1.25x, 1.5x or about 1.9x. Off by default.
+
+**Capsules you have already checked now heal you instead of doing nothing.**
+Until now the randomizer could only decide this a whole stage at a time: every
+energy capsule in a stage stayed inert until *all* of that stage's checks were
+done, and only then did they start working again. That produced two separate
+complaints:
+
+- a capsule you had already collected stayed dead for the rest of the run,
+  which made revisits — and the Boss Rush especially — a slog;
+- in a multiworld, when another player finishes, the server marks the
+  locations holding *their* items as checked in your world too. Those capsules
+  were then eaten with no health and no check, and the client would announce
+  that a stage was fully collected while you were standing next to capsules
+  you had never touched.
+
+The disc now decides capsule by capsule: anything already checked — by you or
+by someone else's collect — behaves like a normal energy capsule again, while
+the ones still worth a check keep being checks. The misleading "every pickup
+check in this stage is collected" message is gone with the mechanism that
+needed it.
+
+## 0.5.2 — 2026-08-11
+
+**Client only — no disc change, no re-patch, saves carry over.**
+
+**Reploid rescues no longer vanish when you are near the life cap.** A tester
+found two Reploids in The Skiver's stage that gave no check — and made no
+rescue sound when touched. That is the game itself: the rescue routine adds a
+life, and if that would take you past 9 it clamps back to 9 and skips the
+sound, while still using the Reploid up for that visit. No life, no sound, no
+check, and re-entering the stage does the same thing again, so the check was
+effectively uncollectable.
+
+The client now keeps just enough room on your life counter as you approach a
+Reploid you still need, so the rescue always registers. Where several sit
+close together — Squid Adler's cluster of three, The Skiver's two pairs — it
+frees enough for all of them, because rescuing two in quick succession would
+otherwise put the second one right back at the cap. Rescuing returns the
+lives immediately, so unless you walk away without taking them you end up
+where you started.
+
+If you have Reploid checks that never fired on an earlier run, they are still
+there: re-enter the stage and rescue again.
+
+## 0.5.1 — 2026-08-10
+
+**Fixes a crash.** Client only — no disc change, no re-patch, saves carry over.
+
+**Gaea Armor no longer crashes the game when you press L1/R1.** Gaea Armor
+cannot use special weapons — the game enforces that by clearing your equipped
+weapon list when a stage loads. Since 0.3.4 the client has been mirroring your
+received weapons into that list so a weapon that arrives mid-stage works
+immediately, and it was doing so under Gaea too, putting the game into a state
+it is never meant to reach; switching weapons from there crashed it. The
+mirror now leaves Gaea Armor alone. Your weapons are untouched and work
+normally again the moment you use any other armor.
+
+This affects any seed where you collect all four Gaea parts — it is not
+limited to `secret_armors_in_pool`. Reported by a tester on 0.4.1.
+
+## 0.5.0 — 2026-08-09
+
+Four bug fixes from a tester's completed run on 0.4.1.
+
+**Re-patch needed only if you use `pickupsanity`** — that option's disc edit
+changed. Every other seed produces a byte-identical disc to 0.4.1, and your
+save carries over either way.
+
+**Enemy health drops work again under `pickupsanity`.** Health and weapon
+energy dropped by enemies did nothing for most of a stage, and mysteriously
+started working once you had collected every pickup in it. The randomizer
+hooks item collection by item TYPE, and an enemy's health drop is the same
+type as a placed capsule, so the hook was swallowing both — it only got out
+of the way once a stage had no checks left to record. It now tells the two
+apart (a placed pickup is spawned from a record in the stage's layout; a drop
+is not) and hands anything an enemy dropped straight back to the game. Note
+this is why `pickupsanity` felt so much harsher than intended: for most of
+every stage you were playing with enemy healing switched off.
+
+**Rematch checks no longer credit the wrong boss.** Two testers' Boss Rush
+runs handed out Squid Adler's and The Skiver's rematch checks for fights that
+never happened, and then gave nothing when those bosses were actually beaten.
+The client identified a rematch by a 16-byte fingerprint of the boss's code,
+and those two values turned out not to be unique to their bosses at all — The
+Skiver's is an ordinary function ending followed by the next function's
+beginning, which occurs 40 times on the disc and sits permanently in memory.
+Fights are now identified by a 256-byte window, checked to occur exactly once
+on the entire disc for all eight bosses, and a kill only counts if the client
+watched that boss's health bar fill first. Standing in a corridor next to a
+module left over from the last fight can no longer look like a victory.
+
+**Boss health bars stop breaking on low rolls.** With `boss_hp_randomization`
+on, a boss rolled below 32 HP drew a corrupt health bar: the game builds the
+bar out of pre-rendered pieces that only reach down to 32, and below that it
+indexes off the front of the artwork. Rolls now stop at 32 — and never above
+the HP the boss would have had anyway, so `weak` cannot accidentally make a
+low-HP boss tougher.
+
+**Zero Space is no longer touched by boss HP randomization.** The Boss Rush
+rematches do not read their HP from the byte this option changes — they run at
+their own HP while that byte says something else entirely — so randomizing it
+never altered those fights, it only made their health bars disagree with their
+actual health (a tester saw this on three rematches). Sigma shares that stage
+and so keeps his normal HP too.
+
+Also: the client now says so at the normal log level when it sees a pickup
+record it cannot place, instead of hiding it behind debug logging.
+
+## 0.4.1 — 2026-08-09
+
+Patching quality-of-life, from a tester's report that failed re-patches sent
+him deleting every X5 file he had. **No disc change.**
+
+**MMX5-Unpatcher.** A standalone tool (an .exe on the release page — not
+part of Archipelago, no install needed) that restores any AP-patched X5
+disc to a byte-verified clean dump, for anyone who lost track of their
+original. Drag a patched .bin onto it, or run it for a file picker. Every
+edit the patcher can make is at a known site, so it writes the recorded
+vanilla bytes back, regenerates the sector parity, and md5-verifies the
+result before writing anything (a wrong input fails loudly; your file is
+never overwritten — the restored copy lands next to it).
+
+**The patcher now tells you when it was handed an already-patched disc** —
+the single most common cause of "recent patches don't work" — instead of a
+bare hash-mismatch error, and points at the setting to fix and at the
+MMX5-Unpatcher.
+
+**Setup guide: re-patching explained.** New troubleshooting entries cover
+the already-patched trap and a fact worth knowing: the disc only changes
+with `pickupsanity`, `text_skip` and `launch_odds` — same values, same disc,
+so most new seeds don't need a re-patch at all (and reusing a disc keeps its
+memory card, since BizHawk keys saves to the disc filename).
+
+## 0.4.0 — 2026-08-08
+
+Three new options, all funded by one evening of live measurement (research
+notes: the 2026-08-08 session). **Client only — no disc change.**
+
+**Boss Rush rematch checks (`rematch_checks`).** Defeating a Maverick's
+rematch in Zero Space sends a check — eight new locations, and the
+most-requested thing testers have asked for: the rush finally rewards
+something. Nothing is ever lost there: a cleared teleporter stays closed for
+that visit, but leaving the stage and re-entering resets all eight, so a
+missed or lost fight can always be redone. Detection is client-side — the
+rematch runs in the game's standard boss-HP slot, and the fight is identified
+by a fingerprint of the boss module the portal streams into RAM (the
+sub-stage byte turned out to be a route-dependent room counter, measured
+reading DIFFERENT values for the same rematch in different sessions).
+Off by default for its first release: three of the eight fingerprints are
+live-verified so far, and an unrecognized fight deliberately sends nothing
+rather than guessing.
+
+**All 16 DNA Parts (`dna_parts_in_pool: all`).** The option is now a choice:
+`vanilla_pairs` (the previous behavior — one Part from each boss's
+Life+/Energy+ pair, `true` still means this) or `all`, which shuffles every
+one of the 16 Parts into the pool — both halves of every pair, an economy the
+base game never allows. `all` adds 16 items, so the seed must have the
+location budget for it: `rematch_checks` and/or `pickupsanity` make room, and
+generation refuses loudly (rather than dropping items silently) if it
+doesn't fit.
+
+**Reploid rescue checks (`reploid_checks`).** Rescuing an injured Reploid
+sends a check — 14 locations (Squid Adler 6, Izzy Glow 3, The Skiver 5).
+Which records are real Reploids was pinned down live: of the 33 Reploid-type
+placement records on the disc, the rescueable ones are exactly the `gate 4,
+id 0x00` records — proven by four on-screen rescues across two stages, a
+phantom record caught not-existing 95px from a real rescue, and a prediction
+the data made against the player's own memory (Izzy has a third Reploid
+nobody remembered; the record said where; it was there). Reploids respawn on
+every stage re-entry, so nothing is permanently missable — the one quirk is
+that a rescue at the 9-life cap can't be detected (re-enter under 9 and
+rescue again). Izzy's and The Skiver's are sighted on-screen; Squid Adler's
+six ship from disc data with the same signature (bike stage — deliberate
+call to ship and fix if one misbehaves, rather than withhold the stage).
+
+## 0.3.4 — 2026-08-08
+
+Quality-of-life, all from one tester's completed solo run (`stage_unlocks` +
+`dna_parts_in_pool` + `pickupsanity`, every check fired correctly). **Client
+only — no disc change, so your existing patched disc and your save carry
+straight over.**
+
+**Weapons now work the moment they arrive.** Previously a weapon received
+mid-stage did nothing until you left and re-entered, which read exactly like a
+lost item. Grants are written to your save struct, and that is what the game
+reads when a stage *loads* — the pause menu and the fire button consult a
+separate live copy that nothing was updating. The client now mirrors granted
+weapons into it during play.
+
+Armor is still the exception, and that one is the game's design rather than a
+delay in delivery: X5 decides which armor X wears while the stage is loading,
+so armor parts and the secret armors take effect at your next stage entry.
+**Ultimate Armor in particular needs one armorless stage entry to appear** —
+jumping into a cleared stage and leaving again is enough. That has caught
+several people out and is now written down in the setup guide instead of
+living only in a YAML tooltip.
+
+**Cleared stages get their capsules back (`pickupsanity`).** A randomized
+capsule sends its check instead of restoring energy, and it used to keep doing
+that for the rest of the run — so revisiting a stage you had already emptied,
+the Boss Rush above all, meant walking past capsules that did nothing at all.
+Now, once **every** pickup check in a stage has been confirmed by the server,
+that stage's capsules restore energy normally again. A stage with any check
+still outstanding keeps recording, and the first collection still never heals
+you: that energy is in the item pool as filler, which has not changed.
+
+Stages that hold no pickup locations at all — Squid Adler, and the intro,
+whose single capsule is deliberately never a location — now behave like
+vanilla too. Suppressing those was never intended.
+
+Also in this release:
+
+* The pickupsanity presence probe now reads the **stub's own bytes** rather
+  than the dispatch table entry. The client rewrites that table at runtime for
+  the change above, and reading its own override back would have switched
+  pickupsanity check detection off for the rest of the session on the next
+  stage exit.
+* The setup guide's "received items appear at the next stage load" and
+  "Small Energy does nothing" notes were both stale; they now describe what
+  the client actually does.
+
+## 0.3.3 — 2026-08-06
+
+**`stage_unlocks` could generate an unbeatable seed. Regenerate any seed you
+have not finished that uses it.** A client update cannot rescue an affected
+seed — the item placement itself is wrong.
+
+A tester's seed put **Dark Dizzy's and Axle the Red's Access Codes inside
+Sigma's stage**. To kill those two Mavericks you need their codes; to reach
+Sigma's stage you need every Maverick dead. There is no way out of that, and
+generation did not notice: the spoiler's own playthrough "completed" the seed
+after entering four stages.
+
+The cause was a stale assumption. Reaching the endgame required the 8 weapon
+items, and that rule was written when every boss could be reached with no items
+at all — so weapons were a fine stand-in for progress. Locking the stages broke
+that, and the rule was never revisited when `stage_unlocks` shipped.
+
+**Now the endgame also requires every Access Codes item**, for every goal. Being
+stricter than the game only limits where items can go; being looser stranded a
+seed.
+
+How to tell if a seed you already have is affected: open its spoiler log and
+look at what is placed on the `Sigma - ...` and `Zero Space ... - ...`
+locations. If any of them holds an Access Codes item, that seed cannot be
+finished. Seeds without `stage_unlocks` were never at risk.
+
+## 0.3.2 — 2026-08-06
+
+**Second and larger pass at the phantom-check problem. Update over 0.3.1.**
+
+0.3.1 closed one route to "checks fire for things you never did". Reviewing it
+turned up two more, and a hole in the fix itself.
+
+**A save carrying progress this seed has never seen is now held.** This is the
+one most likely to have caused the original report. A memory card copied from
+another playthrough, hitting Continue on the wrong slot, or a savestate made
+before you first connected are all *genuinely loaded saves* — so nothing about
+"is this real data" catches them, and everything in them would be reported as
+your progress and sent to the multiworld.
+
+If you see **"this save has progress but has never been used with this seed"**,
+that is this. Start a new game on a fresh slot, or — if you really do mean to
+bring that save into this multiworld — the message gives you the exact one-line
+command to adopt it.
+
+A brand new save is adopted silently the first time it is seen, so a normal run
+never notices this. Having cleared the intro does not count as progress, so
+starting the game before you open the client is still fine.
+
+**The "is a save actually loaded" test is much stricter.** It now needs the game
+to be in gameplay, the previous poll to have been gameplay too, the relevant
+bytes to be identical across both, and a results screen is only believed after
+real gameplay has been seen. 0.3.1 required only the first of those, which was
+weaker than it looked: leftover RAM never changes, so a single poll landing in
+the right mode was enough.
+
+**An unpatched disc now really does hold everything.** In 0.3.1 the refusal sat
+after the code that grants DNA Parts, locks stages and rerolls boss HP, so an
+unpatched disc was still being written to. It now happens before anything
+touches the game, and an unpatched disc can no longer complete the goal either —
+finishing releases every remaining location, which is the same damage as the
+phantom checks.
+
+**Nothing here costs a correctly patched disc anything.** Real progress reports
+exactly as before.
+
+Honest limitation: the original report was never traced, because the client log
+that would have named the mechanism was not collected. These are three closed
+routes to the same symptom, not a confirmed diagnosis. If phantom checks ever
+happen to you, the log in `Archipelago/logs/` is what identifies it.
+
+## 0.3.1 — 2026-08-06
+
+**Fixes a bug that could corrupt a multiworld for everyone in it. Update before
+you play, and check your disc is actually patched.**
+
+**If you play on a disc you never patched, the client used to mark every boss
+defeated as soon as the weapons arrived.** It wrote the weapons you received
+into the same byte the game uses to record boss kills — which is also the byte
+the client reads to decide what you have beaten. So each weapon sent to you
+completed that boss's three checks (Boss Defeated, DNA Reward, DNA Part)
+without you fighting anything. Eight weapons meant 24 false checks, and in a
+multiworld those checks released items to everybody else.
+
+Found on 2026-08-06 while investigating a tester report of exactly this
+symptom. **Whether it caused that particular incident is not established** —
+they believe their disc was patched, and the same symptom is reachable
+another way (see below). This bug is real and reproducible on its own terms:
+8 weapons received, zero bosses beaten, 24 checks sent.
+
+**Still open, and not fixed here:** the only test for "is a save actually
+loaded" is that max HP reads between 0x10 and 0x40. RAM left over from a
+previous game satisfies that — and RAM survives a soft reset — so stale
+progress can still be read as real. If you hit this on a patched disc,
+please send the client log from `Archipelago/logs/`; that is the thing that
+will identify it.
+
+**An unpatched disc now holds all checks and items and tells you why**, instead
+of playing on and quietly breaking things. If you see that message: open your
+`.apmmx5` with the Archipelago Launcher and load the `.cue` it produces.
+
+This also covers a save already spoiled by an earlier session — the old bug
+leaves those bits in your save file, and they would otherwise fire again the
+next time you connected.
+
+Nothing changes for a correctly patched disc. Real boss kills still send their
+checks exactly as before.
+
+Why it lasted this long: the "unpatched disc" mode predates the disc patch
+entirely and the code called it interim. Nothing removed it once the patch
+became the only supported route — and no test could reach it, because the test
+harness always pretended the disc was patched. Both are fixed.
+
+## 0.3.0 — 2026-08-06
+
+Seven new options, every one exercised in a live game before release.
+**One default changed: `endgame_checks` is ON**, so a seed generated
+without touching it now has 48 locations instead of 45.
+
+`pickupsanity` changes the disc; nothing else new here does, so the rest
+work on a disc you have already patched.
+
+**New option: `randomize_options`** (off by default) — let the seed pick your
+gameplay options for you. It rolls `goal`, `boss_difficulty`, `launch_odds`,
+`text_skip`, `pickupsanity`, `boss_hp_randomization`, `secret_armors_in_pool`,
+`stage_unlocks` and `dna_parts_in_pool`, ignoring whatever you wrote for those.
+`endgame_checks` is left alone, since it only ever adds checks.
+
+Two results are corrected after the roll, because they are traps rather than
+interesting outcomes:
+
+- **The `launch` goal with vanilla odds can be unwinnable** — that goal needs a
+  successful launch, you get two attempts, and a full part set is still only
+  75%. Choosing it deliberately is your call; having a coin flip hand it to you
+  is just a broken seed, so the odds are forced back to deterministic.
+- **If the roll asks for more items than the seed has locations**,
+  `pickupsanity` is switched on to make room rather than refusing to generate.
+
+What you got is written to the spoiler log. Note the roll can enable options
+that change the disc (`pickupsanity`, `text_skip`, `launch_odds`), so patch
+from the generated file rather than reusing an old disc.
+
+**New option: `dna_parts_in_pool`** (off by default) — the equippable DNA Parts
+become multiworld items.
+
+Mega Man X5 has 16 Parts but a playthrough only ever yields 8: each Maverick
+offers two, and Alia's Life+ / Energy+ prompt makes you give up the other
+permanently. With this on, the seed picks one Part from each pair and shuffles
+those 8, so which Part you end up with no longer depends on which prompt you
+answered. The Parts the game would have handed you are suppressed — Parts
+arrive only from the multiworld. The "DNA Part" locations are unchanged and
+still check on the boss kill; that check was always there, only its reward was
+static.
+
+Six Parts do nothing for the wrong character (Burst Shots, Ultimate Buster and
+Quick Charge are X's; Z-Saber Plus, Z-Saber Extend and Shot Eraser are Zero's),
+so none is ever required for anything.
+
+**Client-side only — no disc change.**
+
+**Generation now refuses option sets that do not fit.** Every item needs a
+location, and the world had no check on that: `dna_parts_in_pool` +
+`stage_unlocks` + `secret_armors_in_pool` produced 53 items for 48 locations,
+generated without complaint, and silently dropped Ultimate Armor and a DNA
+Part. That combination now fails at generation with a message naming the fix
+(usually `pickupsanity`, which adds 32 locations). If you hit it, nothing was
+wrong with your seed before — it was quietly losing items.
+
+Live-tested 2026-08-06: with all 16 Parts force-granted by a research
+script, the client cleared them continuously (that is the suppression,
+visible in its log), and `Hyper Dash` sent from the multiworld appeared on
+the Parts screen as the only Part held.
+
+Implementation note: Parts live in bits 2..17 of the u32 `0x800D1C84`. The
+name-to-bit map was read out of the game itself, by forcing every bit on and
+reading the Parts screen, because X5 stores UI text as font-tile indices and
+web sources return Mega Man X6 Part facts for X5 queries constantly. Full table
+in `mmx5-ghidra-findings.md` §9.15 — the research notes on the author's fork
+(github.com/Shinnuu/Archipelago, branch `mmx5-apworld`). One write does both
+halves of the feature each cycle: OR in what the player received, clear what
+the game granted.
+
+**New option: `endgame_checks` (ON by default)** — clearing a Zero Space stage
+now sends a check. Three locations: Zero Space 1, Zero Space 2 and the X vs
+Zero fight. Sigma is not one, because beating him is the goal.
+
+**This changes the default seed**, which went from 45 locations to 48. Until
+now every check in a normal seed sat in the eight Maverick stages, so the whole
+last stretch of a run was pure travel with nothing to find.
+
+**Client-side only — no disc change.** Detection rides the story ACT byte
+(`0x800D1C79`), which the hub's stage-select confirm handler already uses to
+pick the endgame destination — so ACT doubles as the endgame progress counter.
+Confirmed live 2026-08-06, one step per clear: `5 -> 6`, `6 -> 7`, `7 -> 8`.
+
+It is also the first option that gives the item pool *more* room rather than
+less: three locations and no new items, so filler goes from 9 to 12.
+
+Implementation note: the client latches the highest ACT it has seen rather than
+reading it live, because two other things write that byte — the `all_mavericks`
+goal pushes it back below 5 to hold the endgame shut, and training mode parks
+`0x0A` in it, which is above all three thresholds and would otherwise fire
+every check at once.
+
+**New option: `stage_unlocks`** (off by default) — the eight Maverick stages
+become progression. Exactly one is open at the start (the seed decides which)
+and each of the other seven needs its own "&lt;Boss&gt; Access Codes" item,
+shuffled into the multiworld like anything else.
+
+A locked stage still shows on the stage-select screen and the cursor still
+moves onto it; pressing confirm just does nothing until its codes arrive. The
+countdown, the Enigma/Shuttle/Zero Space entry and the whole endgame are
+untouched.
+
+**Client-side only — no disc change**, so it works on any already-patched disc.
+
+Implementation note: the hub turns a cursor slot into a stage id through an
+8-byte table at `0x800F5050` and then refuses to act on a zero
+(`beqz` at `0x800EFCA4`), so the entire in-game half is writing 0 over the
+slots you have not unlocked. That handler is the table's only reader in the
+whole hub module, so nothing else on the screen changes. The table is overlay
+data reloaded from disc on every hub entry, so the client re-asserts it each
+cycle and verifies an instruction anchor first — it never writes into whatever
+module occupies that address during a stage. One more wrinkle worth knowing:
+the store at `0x800EFC98` lands *before* the game's own zero test, so a blocked
+confirm parks 0 in `0x800D1C0C`; the client puts the hub's id back, since an
+in-hub save would otherwise commit that 0 to the memory card.
+
+Live-tested 2026-08-06: on a seed starting with Grizzly Slash, that stage
+entered normally and the other seven did nothing on confirm; sending Duff
+McWhalen Access Codes opened that stage immediately, without leaving the stage
+select.
+
+**New option: `secret_armors_in_pool`** (off by default) — puts Ultimate Armor
+and Black Zero into the item pool. In the base game both come from one hidden
+capsule in Zero Space, so you only ever see them at the very end; shuffled into
+the multiworld they can turn up at any point.
+
+Client-side only, **no disc change**. Each armor only does anything for its own
+character (Ultimate is X's, Black Zero is Zero's), so neither is ever required
+for anything — on a seed played as one character the other is dead weight. The
+Zero Space capsule still works normally, though receiving an armor makes it
+vanish, since the game hides a capsule whose armor you already hold.
+
+Both live-tested 2026-08-06, and they arrive on different schedules. **Ultimate
+Armor shows up at your next stage entry**, not in the stage you are standing in
+when it arrives — the game decides which armor X wears as the stage loads.
+**Black Zero applies immediately**: Zero turns black on the spot.
+
+This also settles an open question from the build: `0x800D1C4B` alone is enough
+for Ultimate, and the `0x800D1C4A & 8` bit the Zero Space capsule's despawn
+ladder reads is not a second "has Ultimate" flag.
+
+One fix came out of watching it in play: the game writes `0x800D1C4B` itself
+(it moved from 1 to 2 at a results screen, with Ultimate still selectable), so
+the client now only sets that byte when it reads zero. Before, every later
+item you received would have rewritten it, which could have reset your armor
+choice.
+
+**New option: `boss_hp_randomization`** (off by default) — randomizes how much
+HP bosses have: `weak` 40-80%, `regular` 70-130%, `strong` 120-200%, `chaotic`
+25-250%. The roll SCALES what the game would normally give, so Boss Level still
+matters and a tough setting on `intense` boss difficulty compounds. Affects
+every boss (Mavericks, mid-bosses, Dynamo, Sigma, the Zero duel).
+
+**Client-side only — no disc change**, so it works on any already-patched disc.
+Rolls are deterministic per seed, stage and situation, so dying and retrying
+gives you the identical fight. Bosses met during the same visit to a stage
+share that stage's roll, and the game caps HP at 127, so very high rolls on a
+late-game boss can hit that ceiling.
+
+Live-tested 2026-08-05: Grizzly Slash rolled 70 -> 75 and spawned with exactly
+75 HP.
+
+Implementation note for future work: the lever is `0x800D1CA2`, proven live to
+be boss max HP. It is also the Boss-Level accumulator (`0x1CA2 += level_raw` at
+each stage start), so the client restores the vanilla value on leaving a stage
+— without that the multiplier compounds and pins every boss to 127 within a few
+stages. It also refuses a zero baseline: the stage id flips during a stage load
+before that byte is recomputed, and 0 is the instant-death value.
+
+**New option: `pickupsanity`** (off by default) — the 32 freestanding Life
+Energy, Weapon Energy and 1-UP capsules become checks, including the ones in
+Zero Space and Sigma's stage. **Changes the disc when on** (a per-seed patch:
+its own record stub and mailbox ring, plus dispatch redirects for the seven
+consumable kinds); seeds without the option produce a disc byte-identical to
+0.2.0. Enemy drops are untouched. The intro capsule is deliberately not a
+location — the intro cannot be revisited, so it would be permanently missable.
+
+The full pickup inventory was extracted statically from the disc and is
+fully provenance-tracked (`mmx5-ghidra-findings.md` §9.13, in the research
+notes on the author's fork (github.com/Shinnuu/Archipelago, branch
+mmx5-apworld)).
+Consumables are identified by their placement-record address (their id byte
+is a type, not an identity — three Izzy Glow capsules share one id), which
+the game's own spawner stores in the item object and the new stub reports.
+
+Received **Small Energy** filler now heals 4 HP through the engine's own
+queued-refill counter (the sub-tank drain path) instead of doing nothing.
+
+**Live-tested 2026-08-05** (first pickupsanity seed, BizHawk + real server):
+capsule check sent and confirmed, vanilla effect suppressed, savestate
+re-loot produced no duplicate check, and an old-ring Sub-Tank check fired
+cleanly on the same disc — the two rings coexist as designed. Later the same
+session: **Zero Space 1's 1-UP check fired live** (stage id 0x10 — the
+non-contiguous endgame id path), validating the statically-derived endgame
+list attributions in the running game. Still untested: receiving a pickup
+check's item from another world's slot.
+
+Design decision (Ivor, 2026-08-05): checked capsules stay inert for the
+whole seed — no vanilla-healing revival. Considered and declined: reverting
+a capsule kind to vanilla healing once all its checks are collected (only
+per-KIND would be possible anyway — all capsules of a type share one
+dispatch entry, so per-capsule restoration cannot be built on this hook).
+
+## 0.2.0 — 2026-08-04
+
+Three new options and a new default goal. **`text_skip` and `launch_odds`
+change the disc, so re-patch if you use either.** The new goal does not — it is
+entirely client-side and works on the disc you already have.
+
+**New goal: `all_mavericks` — defeat all 8 Mavericks, then Sigma. This is now
+the default.** Seeds generated without an explicit `goal:` line change
+behaviour. This goal makes **no disc changes**, so it works on a disc you have
+already patched.
+
+Mega Man X5 does not normally require the full set — it opens the endgame as
+soon as the Eurasia colony situation resolves, which can happen well before
+the eighth Maverick. That matters here because Sigma does not respawn: reach
+him early, beat him, and the goal can never complete.
+
+So the client now holds the endgame shut until all 8 Mavericks are down, and
+opens it on the eighth kill. It also refuses to power a launch before the full
+set is down, since a successful launch resolves the colony by itself. If an
+ending is somehow reached early anyway, the client says so in the log rather
+than failing silently.
+
+`sigma` is unchanged and still available for anyone who prefers vanilla's
+timing.
+
+**New option: `launch_odds`.** By default a launch succeeds exactly when you
+hold all 8 Enigma and Shuttle Parts. Set this to `vanilla` and the original
+game's gamble comes back — more parts means better odds, never certainty:
+
+- Enigma: 6.25% with no parts, 12.5% with any (extra Enigma parts do nothing
+  in the original game either)
+- Shuttle: 12.5% / 37.5% / 75% for 0, 1–2, and 3–4 parts
+
+**Under the `launch` goal this can make a seed unwinnable**, and that is
+deliberate rather than an oversight: the goal needs a *successful* launch, you
+only get two attempts, and even a full set of parts tops out at 75%. Fail both
+and the colony falls with no third chance. Generation warns loudly when you
+pick this combination. Under `all_mavericks`, no launch can succeed before all
+8 Mavericks are down whatever this is set to, since an early success would open
+the endgame ahead of the goal.
+
+**New option: `text_skip`.** Mega Man X5 types dialogue out one character every
+5 frames and then waits for a button on every box — a single line can run past
+200 characters, about 20 seconds of typing before you can even press advance.
+Turn this on and boxes appear instantly and advance themselves, so cutscenes
+and Alia's in-stage calls play through with no input.
+
+Choices are not skipped. Alia's Life Up / Energy Up prompt still stops and
+waits for you to pick, and the Enigma/Shuttle launch decision is a stage-select
+menu this never touches — so nothing that affects your run gets answered for
+you. Off by default, since at this speed the story is unreadable.
+
+## 0.1.3 — 2026-08-03
+
+**Tank locations could become permanently uncollectable, which could make a
+seed unwinnable.** This is the most serious bug found so far. Re-patch your
+disc with this version.
+
+Mega Man X5 deletes any pickup you already own — one frame after it spawns.
+The client granted tanks by setting exactly those ownership bits, because that
+is what makes a tank appear in the pause menu. So a Sub-Tank, W-Tank or
+EX-Tank arriving from the multiworld destroyed the vanilla pickup that *is*
+that location's check, and the location could never be collected again. With
+progression items able to land there, a seed could be stranded.
+
+Measured live in Grizzly Slash, one pass, three items: a consumable's object
+lived 251 frames, an un-owned Heart Tank 47, and an **owned Sub-Tank exactly
+2** — constructed and then destroyed on the next frame. Heart Tanks were never
+affected, because the client grants those by raising max HP instead of setting
+the heart bits.
+
+Two fixes, and the client picks the right one automatically:
+
+- **Disc patch (rev 12):** the item's already-owned test in the init handler
+  now ignores tanks, so their pickups always appear. Hearts, EX items and
+  consumables keep their vanilla behaviour.
+- **Client fallback for older discs:** if the disc predates the fix, the
+  client holds back that one tank bit while you are in the stage that owns an
+  unchecked tank location, so the pickup survives. You get the tank as soon as
+  the check is collected or you leave. It detects the patched disc and does
+  nothing there, so re-patching removes the trade-off entirely.
+
+**Squid Adler's armor capsule could become uncollectable** — the same trap in
+another form. That capsule is gated on collecting energy balls in the jet-bike
+section, and owning the part it grants (Falcon Head) makes those balls stop
+appearing. Anyone who received Falcon Head from the multiworld before visiting
+the stage could never open the capsule. The client now withholds that one part
+while you are in that stage with the capsule unchecked, and returns it the
+moment you collect the check or leave. **This costs you nothing in play**:
+verified live with a complete Falcon set, X still wears the armor in that
+stage and the energy balls are present at the same time. The game decides
+which armor to equip when the stage loads and the balls consult ownership
+during play, so withholding only during play lands neatly between the two.
+A disc-level fix would remove
+the withhold entirely and is the intended follow-up; the gate is evaluated per
+ball as you ride, not at stage load, so it has to be found in stage overlay
+code with a debugger BizHawk cannot provide.
+
+**The launch goal could complete without the parts.** Vanilla launches the
+shuttle by itself once all eight Mavericks are down, and the client fired the
+goal on that success flag alone — one tester finished holding 3 of 8 parts.
+The world's own logic always required all 8, so the client was disagreeing
+with itself. It now needs a successful launch *and* the full set, and says so
+in the log when the story's own launch goes off early.
+
+Also: the `boss_difficulty` option is now properly documented — what relaxed /
+standard / intense actually mean, and why fewer countdown hours means harder
+bosses. The Enigma/Shuttle parts screen showing more parts than you have
+received is a known cosmetic issue, now documented rather than surprising.
+
+## 0.1.2 — 2026-08-03
+
+**Training mode no longer sends checks.** 0.1.1 claimed to have fixed the
+phantom "Intro Stage - Clear"; it did not, and this release corrects both the
+bug and that claim.
+
+A live capture settled it: selecting Training writes story ACT `0x0A` **and**
+max HP `0x20` into the ordinary save struct in the same frame. 0.1.1 only
+required the save to look resident, which training satisfies — so the phantom
+check still went out. The client now recognises the training pseudo-save
+(ACT `0x0A` with no boss kills recorded) and suspends **all** checks, item
+grants and launch pinning until you leave it.
+
+Scope, from the same capture: the training boss kill sets no progress bits at
+all, so only the intro location was ever affected — no boss, DNA or Heart Tank
+check could fire from training. Everything is torn down when you exit, so no
+residue carries into a real session.
+
+0.1.1's gating fix is still correct and still needed; it addressed a different
+failure (reading the save area before any save is resident, e.g. at boot).
+
+## 0.1.1 — 2026-08-03
+
+Fixes for everything the first testers hit. v0.1.0 could not be used without
+hand-editing the apworld; replace it.
+
+- **The world now loads.** v0.1.0 declared `minimum_ap_version: 0.6.8`, but
+  0.6.8 is an unreleased development version, so Archipelago rejected the
+  world outright and it never appeared in the game list. The floor is 0.6.7,
+  the newest release, verified by generating on it.
+- **Seeds now accept released clients.** `required_client_version` was also
+  0.6.8; the server enforces that value and would have refused every existing
+  client. It is 0.6.7 — the oldest version actually tested.
+- **`.apmmx5` is registered with the Launcher.** The client never declared
+  `patch_suffix`, so Open Patch did not list the extension and "open with →
+  Archipelago Launcher" could not route the file, leaving players unable to
+  patch their disc.
+- **No more phantom checks from stale memory.** Check detection read the save
+  struct even before a save was resident, so leftover bytes from a previous
+  session could complete locations — one tester received a spurious "Intro
+  Stage - Clear", which then swallowed the real one. Save-derived checks now
+  require a resident save; the mailbox ring is unaffected.
+- Client logging is much quieter: repeated disc-mode, save-gate and grant
+  diagnostics moved to debug level.
+- Setup guide documents that received items apply at the next stage load.
+
+## 0.1.0 — 2026-08-02
+
+First distributable release.
+
+- 45 locations (intro clear; per Maverick stage: boss, Heart Tank, armor
+  capsule, DNA Reward, DNA Part; four tank pickups), 36 real items + filler.
+- Goals: `sigma` (defeat Sigma) and `launch` (collect all 8 Enigma/Shuttle
+  Parts and complete a successful launch).
+- `boss_difficulty` option (relaxed / standard / intense) pinning the frozen
+  countdown's Boss Level base.
+- Disc patch (v11) applied client-side from a ~445-byte `.apmmx5`:
+  vanilla-grant suppression with mailbox pickup records, always-spawning
+  randomized capsules, per-sector EDC/ECC regeneration. Accepts the Redump
+  dump and its one-extra-trailing-sector variant.
+- BizHawkClient: save-struct check detection, idempotent item grants persisted
+  in spare save bytes, wrong-save seed stamp, launch scoring, Sigma ending
+  detection. Requires BizHawk 2.7+ (tested on 2.10).
