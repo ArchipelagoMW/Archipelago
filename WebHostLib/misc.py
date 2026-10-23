@@ -13,7 +13,7 @@ from werkzeug.utils import secure_filename
 from worlds.AutoWorld import AutoWorldRegister, World
 from . import app, cache
 from .markdown import render_markdown
-from .models import Seed, Room, Command, UUID, uuid4
+from .models import Seed, Slot, Room, Command, UUID, uuid4
 from Utils import title_sorted, utcnow
 
 class WebWorldTheme(StrEnum):
@@ -43,6 +43,19 @@ def get_visible_worlds() -> dict[str, type(World)]:
         if not world.hidden:
             worlds[game] = world
     return worlds
+
+def get_slot_download(room: Room, slot: Slot) -> str | None:
+    if slot.data and slot.game in ("VVVVVV", "Super Mario 64", "Factorio") and len(room.seed.slots) == 1:
+        return {
+            "slot": slot.player_id,
+            "download": url_for("download_slot_file", room_id=room.id, player_id=slot.player_id)
+        }
+    elif slot.data:
+        return {
+            "slot": slot.player_id,
+            "download": url_for("download_patch", patch_id=slot.id, room_id=room.id)
+        }
+    return None
 
 
 @app.errorhandler(404)
@@ -267,7 +280,12 @@ def host_room(room: UUID):
         except FileNotFoundError:
             return "", 0
 
-    return render_template("hostRoom.html", room=room, should_refresh=should_refresh, get_log=get_log)
+    # get all slot download links (as a map)
+    slot_downloads = {}
+    for slot in room.seed.slots:
+        slot_downloads[slot.player_id] = get_slot_download(room, slot)
+
+    return render_template("hostRoom.html", room=room, should_refresh=should_refresh, get_log=get_log, slot_downloads=slot_downloads)
 
 
 @app.route('/favicon.ico')
