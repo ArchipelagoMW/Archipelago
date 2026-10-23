@@ -3,39 +3,37 @@
 ## Required Software
 
 - [DOOM 1993 (e.g. Steam version)](https://store.steampowered.com/app/2280/DOOM__DOOM_II/)
-- [Archipelago Crispy DOOM](https://github.com/Daivuk/apdoom/releases)
+- [Archipelago Doom 2.0](https://github.com/ArchipelagoDoom/APDoom/releases)
 
-## Optional Software
+## Installing Archipelago Doom
 
-- [ArchipelagoTextClient](https://github.com/ArchipelagoMW/Archipelago/releases)
-- [PopTracker](https://github.com/black-sliver/PopTracker/)
-  - [OZone's APDoom tracker pack](https://github.com/Ozone31/doom-ap-tracker/releases)
+1. Download [Archipelago Doom 2.0](https://github.com/ArchipelagoDoom/APDoom/releases). On Windows, you will need to extract the zip file somewhere.
+2. If you have the Steam version of DOOM + DOOM II installed, Archipelago Doom can likely detect it and use the game files from it without needing any further work.
+   If this is not the case, however, copy `DOOM.WAD` from your game's installation directory into the same folder you extracted or installed Archipelago Doom into.
 
-## Installing AP Doom
-1. Download [APDOOM.zip](https://github.com/Daivuk/apdoom/releases) and extract it.
-2. Copy `DOOM.WAD` from your game's installation directory into the newly extracted folder.
-   You can find the folder in steam by finding the game in your library,
-   right-clicking it and choosing **Manage -> Browse Local Files**. The WAD file is in the `/base/` folder.
+For the Steam version of DOOM + DOOM II, you can find the game files by finding the game in your Steam library, right-clicking it and choosing **Manage -> Browse Local Files**. The WAD file you need is in the `/base/` folder.
 
 ## Joining a MultiWorld Game (via Launcher)
 
-1. Launch apdoom-launcher.exe
-2. Select `Ultimate DOOM` from the drop-down
-3. Enter the Archipelago server address, slot name, and password (if you have one)
-4. Press "Launch DOOM"
-5. Enjoy!
+1. Launch the Archipelago Doom launcher. (`apdoom-launcher.exe` on Windows)
+2. Select "Connect to Game".
+3. Choose "Select Game..." and then choose "DOOM (1993)".
+4. Enter the Archipelago server address, slot name, and (if you have one) password.
+5. Select "Connect to Server" and wait for the game to start.
+6. Enjoy!
 
-To continue a game, follow the same connection steps.
-Connecting with a different seed won't erase your progress in other seeds.
+The launcher keeps track of the previous games you've played; you can continue a game at any time by selecting "Load Previous Game".
 
 ## Joining a MultiWorld Game (via command line)
 
-1. In your command line, navigate to the directory where APDOOM is installed.
-2. Run `crispy-apdoom -game doom -apserver <server> -applayer <slot name>`, where:
+1. In your command line, navigate to the directory where Archipelago Doom is installed.
+2. Run `apdoom-launcher.exe -game doom -apserver <server> -applayer <slot name>`, where:
     - `<server>` is the Archipelago server address, e.g. "`archipelago.gg:38281`"
     - `<slot name>` is your slot name; if it contains spaces, surround it with double quotes
     - If the server has a password, add `-password`, followed by the server password
 3. Enjoy!
+
+To continue a game, reconnect with the same command; Archipelago Doom will automatically load the proper save file.
 
 Optionally, you can override some randomization settings from the command line:
 - `-apmonsterrando 0` will disable monster rando.
@@ -49,26 +47,21 @@ Optionally, you can override some randomization settings from the command line:
 ## Archipelago Text Client
 
 We recommend having Archipelago's Text Client open on the side to keep track of what items you receive and send.
-APDOOM has in-game messages,
-but they disappear quickly and there's no reasonable way to check your message history in-game.
+Archipelago Doom has in-game messages, but they disappear quickly and there's no reasonable way to check your message history in-game.
 
 ### Hinting
 
-To hint from in-game, use the chat (Default key: 'T'). Hinting from DOOM can be difficult because names are rather long and contain special characters. For example:
-```
-!hint Toxin Refinery (E1M3) - Computer area map
-```
-The game has a hint helper implemented, where you can simply type this:
-```
-!hint e1m3 map
-```
-For this to work, include the map short name (`E1M1`), followed by one of the keywords: `map`, `blue`, `yellow`, `red`.
+To hint from in-game, use the in-game chat (Default key: 'T').
+
+As many item names can be long, the following short item name groups are available to use on all clients:
+
+- `!hint E1M3`: will hint the level unlock item for that level (`Toxin Refinery (E1M3)`).
+- `!hint E1M3 Map`: will hint the Computer area map item that corresponds to that level (`Toxin Refinery (E1M3) - Computer area map`).
+- `!hint E1M3 Blue` (or `Yellow`, `Red`): will hint the corresponding key for that level, if it exists (`Toxin Refinery (E1M3) - Blue keycard`).
+- `!hint E1M3 Keys`: will hint all keys for that level simultaneously.
 
 ## Auto-Tracking
 
-APDOOM has a functional map tracker integrated into the level select screen.
+Archipelago Doom has a functional map tracker integrated into the level select screen.
 It tells you which levels you have unlocked, which keys you have for each level, which levels have been completed,
 and how many of the checks you have completed in each level.
-
-For better tracking, try OZone's poptracker package: https://github.com/Ozone31/doom-ap-tracker/releases .
-Requires [PopTracker](https://github.com/black-sliver/PopTracker/).
