@@ -2648,4 +2648,22 @@ def set_rules(multiworld: MultiWorld, options: NO100FOptions, player: int):
 
     if options.creepy_early.value:
         add_rule(multiworld.get_entrance(ConnectionNames.f003_p001, player), lambda state: state.has(ItemNames.ProgressiveJump, player, 1))
+    # Register region dependencies used by entrance access rules so indirect
+    # reachability is recalculated when those regions become reachable.
+    for region_name, entrance_name in (
+        (RegionNames.e003, ConnectionNames.e004_sn),
+        (RegionNames.l018, ConnectionNames.l015_l019),
+        (RegionNames.o005, ConnectionNames.o006_sn),
+        (RegionNames.o005, ConnectionNames.o006_o005),
+        (RegionNames.o005, ConnectionNames.o006_o008),
+        (RegionNames.e004, ConnectionNames.e004_e005),
+        (RegionNames.e006, ConnectionNames.e006_e005),
+        (RegionNames.e003, ConnectionNames.e003_c005),
+        (RegionNames.c005, ConnectionNames.e003_c005),
+        (RegionNames.e002, ConnectionNames.e002_e003),
+    ):
+        multiworld.register_indirect_condition(
+            multiworld.get_region(region_name, player),
+            multiworld.get_entrance(entrance_name, player),
+        )
     multiworld.completion_condition[player] = lambda state: state.has("Victory", player)
