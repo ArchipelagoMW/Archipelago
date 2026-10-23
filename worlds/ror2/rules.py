@@ -3,7 +3,8 @@ from BaseClasses import MultiWorld
 from .locations import get_locations
 from .ror2environments import environment_vanilla_orderedstages_table, environment_sotv_orderedstages_table, \
     environment_sost_orderedstages_table, environment_vanilla_variant_orderedstages_table, \
-    environment_sots_variants_orderedstages_table
+    environment_sots_variants_orderedstages_table, environment_ac_orderedstages_table
+from .locations import environments_without_newt_altars
 from typing import Set, TYPE_CHECKING
 
 if TYPE_CHECKING:
@@ -57,7 +58,7 @@ def explore_environment_location_rules(table, multiworld, player, chests, shrine
                 has_location_access_rule(multiworld, environment_name, player, chest, "Chest")
             for shrine in range(1, shrines + 1):
                 has_location_access_rule(multiworld, environment_name, player, shrine, "Shrine")
-            if newts > 0:
+            if newts > 0 and environment_name not in environments_without_newt_altars:
                 for newt in range(1, newts + 1):
                     has_location_access_rule(multiworld, environment_name, player, newt, "Newt Altar")
             if i > 0:
@@ -82,6 +83,7 @@ def set_rules(ror2_world: "RiskOfRainWorld") -> None:
                 altars=ror2_options.altars_per_stage.value,
                 dlc_sotv=bool(ror2_options.dlc_sotv.value),
                 dlc_sots=bool(ror2_options.dlc_sots.value),
+                dlc_alloyed=bool(ror2_options.dlc_alloyed.value),
                 stage_variants=bool(ror2_options.stage_variants)
             )
         )
@@ -141,6 +143,10 @@ def set_rules(ror2_world: "RiskOfRainWorld") -> None:
         if ror2_options.dlc_sots and ror2_options.stage_variants:
             explore_environment_location_rules(environment_sots_variants_orderedstages_table, multiworld, player, chests, shrines,
                                                newts, scavengers, scanners)
+        # AC (Alloyed Collective) stages
+        if ror2_options.dlc_alloyed:
+            explore_environment_location_rules(environment_ac_orderedstages_table, multiworld, player, chests, shrines,
+                                               newts, scavengers, scanners)
 
         has_entrance_access_rule(multiworld, "Hidden Realm: A Moment, Fractured", "Hidden Realm: A Moment, Whole",
                                  player)
@@ -156,6 +162,11 @@ def set_rules(ror2_world: "RiskOfRainWorld") -> None:
                 has_all_items(multiworld, {"Stage 5", "The Planetarium"}, "Commencement", player)
         if ror2_options.dlc_sots:
             has_entrance_access_rule(multiworld, "Stage 5", "Prime Meridian", player)
+        if ror2_options.dlc_alloyed:
+            has_entrance_access_rule(multiworld, "Iron Alluvium", "Conduit Canyon", player)
+            has_entrance_access_rule(multiworld, "Conduit Canyon", "Solutional Haunt", player)
+            has_entrance_access_rule(multiworld, "Solutional Haunt", "Computational Exchange", player)
+            has_entrance_access_rule(multiworld, "Computational Exchange", "Neural Sanctum", player)
 
     # Win Condition
     multiworld.completion_condition[player] = lambda state: state.has("Victory", player)
