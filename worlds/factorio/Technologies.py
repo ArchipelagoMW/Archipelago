@@ -88,31 +88,8 @@ class Technology(FactorioElement):  # maybe make subclass of Location?
     def has_modifier(self) -> bool:
         return bool(self.modifiers)
 
-    def get_custom(self, world, allowed_packs: Set[str], player: int) -> CustomTechnology:
-        return CustomTechnology(self, world, allowed_packs, player)
-
     def useful(self) -> bool:
         return self.has_modifier or self.unlocks
-
-
-class CustomTechnology(Technology):
-    """A particularly configured Technology for a world."""
-    ingredients: Set[str]
-
-    def __init__(self, origin: Technology, world, allowed_packs: Set[str], player: int):
-        ingredients = allowed_packs
-        self.player = player
-        if origin.name not in world.special_nodes:
-            ingredients = set(world.random.sample(list(ingredients), world.random.randint(1, len(ingredients))))
-        self.ingredients = ingredients
-        super(CustomTechnology, self).__init__(origin.name, origin.factorio_id)
-
-    def get_prior_technologies(self) -> Set[Technology]:
-        """Get Technologies that have to precede this one to resolve tree connections."""
-        technologies = set()
-        for ingredient in self.ingredients:
-            technologies |= required_technologies[ingredient]  # technologies that unlock the recipes
-        return technologies
 
 
 class Recipe(FactorioElement):
