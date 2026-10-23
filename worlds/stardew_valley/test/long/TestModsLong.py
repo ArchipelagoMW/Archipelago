@@ -4,12 +4,12 @@ from typing import ClassVar
 
 from BaseClasses import get_seed
 from test.param import classvar_matrix
-from ..assertion import WorldAssertMixin, ModAssertMixin
-from ..bases import skip_long_tests, SVTestCase, solo_multiworld
-from ..options.option_names import all_option_choices
+
 from ... import options
 from ...mods.mod_data import ModNames, mod_combination_is_valid
-from ...options.options import all_mods
+from ..assertion import ModAssertMixin, WorldAssertMixin
+from ..bases import SVTestCase, skip_long_tests, solo_multiworld
+from ..options.option_names import all_option_choices
 
 
 @unittest.skip
@@ -31,7 +31,7 @@ if skip_long_tests():
     raise unittest.SkipTest("Long tests disabled")
 
 
-@classvar_matrix(mod_pair=combinations(sorted(all_mods), 2))
+@classvar_matrix(mod_pair=combinations(sorted(ModNames.enabled_mods()), 2))
 class TestGenerateModsPairs(WorldAssertMixin, ModAssertMixin, SVTestCase):
     mod_pair: ClassVar[tuple[str, str]]
 
@@ -48,7 +48,7 @@ class TestGenerateModsPairs(WorldAssertMixin, ModAssertMixin, SVTestCase):
             self.assert_stray_mod_items(list(self.mod_pair), multiworld)
 
 
-@classvar_matrix(mod=all_mods, option_and_choice=all_option_choices)
+@classvar_matrix(mod=ModNames.enabled_mods(), option_and_choice=all_option_choices)
 class TestGenerateModAndOptionChoice(WorldAssertMixin, ModAssertMixin, SVTestCase):
     mod: ClassVar[str]
     option_and_choice: ClassVar[tuple[str, str]]
@@ -80,7 +80,7 @@ class TestGenerateAllGoalAndAllOptionWithAllModsWithoutQuest(WorldAssertMixin, M
             options.Goal.internal_name: self.goal,
             option: choice,
             options.QuestLocations.internal_name: -1,
-            options.Mods.internal_name: frozenset(options.all_mods_except_invalid_combinations),
+            options.Mods.internal_name: frozenset(ModNames.enabled_mods_except_invalid_combinations()),
         }
 
         with solo_multiworld(world_options, world_caching=False) as (multiworld, _):

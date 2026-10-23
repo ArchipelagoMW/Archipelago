@@ -1,19 +1,17 @@
-from worlds.stardew_valley import BackpackProgression, ToolProgression, SeasonRandomization
-from worlds.stardew_valley.mods.mod_data import ModNames
-from worlds.stardew_valley.options import BackpackSize, Mods, QuestLocations, SkillProgression, Secretsanity, Museumsanity, Booksanity, Hatsanity, Cropsanity, \
-    StartWithout
-from worlds.stardew_valley.strings.ap_names.ap_option_names import SecretsanityOptionName, StartWithoutOptionName
-from worlds.stardew_valley.test.bases import SVTestBase
+from .. import options
+from ..mods.mod_data import ModNames
+from ..strings.ap_names.ap_option_names import SecretsanityOptionName, StartWithoutOptionName
+from .bases import SVTestBase
 
 
 class TestAvailableBackpacksSize1(SVTestBase):
-    options = {
-        SeasonRandomization: SeasonRandomization.option_disabled,
-        Cropsanity: Cropsanity.option_disabled,
-        BackpackProgression: BackpackProgression.option_progressive,
-        BackpackSize: 1,
-        StartWithout: frozenset({StartWithoutOptionName.backpack}),
-        Mods: frozenset({ModNames.big_backpack}),
+    options = {  # noqa: RUF012
+        options.SeasonRandomization: options.SeasonRandomization.option_disabled,
+        options.Cropsanity: options.Cropsanity.option_disabled,
+        options.BackpackProgression: options.BackpackProgression.option_progressive,
+        options.BackpackSize: 1,
+        options.StartWithout: frozenset({StartWithoutOptionName.backpack}),
+        options.Mods: frozenset({ModNames.big_backpack}),
     }
 
     def test_can_purchase_correct_number_of_backpacks(self):
@@ -41,13 +39,13 @@ class TestAvailableBackpacksSize1(SVTestBase):
 
 
 class TestAvailableBackpacksSize4(SVTestBase):
-    options = {
-        SeasonRandomization: SeasonRandomization.option_disabled,
-        Cropsanity: Cropsanity.option_disabled,
-        BackpackProgression: BackpackProgression.option_progressive,
-        BackpackSize: 4,
-        StartWithout: frozenset({StartWithoutOptionName.backpack}),
-        Mods: frozenset({ModNames.big_backpack}),
+    options = {  # noqa: RUF012
+        options.SeasonRandomization: options.SeasonRandomization.option_disabled,
+        options.Cropsanity: options.Cropsanity.option_disabled,
+        options.BackpackProgression: options.BackpackProgression.option_progressive,
+        options.BackpackSize: 4,
+        options.StartWithout: frozenset({StartWithoutOptionName.backpack}),
+        options.Mods: frozenset({ModNames.big_backpack}),
     }
 
     def test_can_purchase_correct_number_of_backpacks(self):
@@ -76,9 +74,9 @@ class TestAvailableBackpacksSize4(SVTestBase):
 
 
 class TestBeachBridgeWithStartingToolsRequiresNothing(SVTestBase):
-    options = {
-        ToolProgression: ToolProgression.option_progressive,
-        StartWithout: StartWithout.preset_none,
+    options = {  # noqa: RUF012
+        options.ToolProgression: options.ToolProgression.option_progressive,
+        options.StartWithout: options.StartWithout.preset_none,
     }
 
     def test_beach_bridge_requires_axe(self):
@@ -87,9 +85,9 @@ class TestBeachBridgeWithStartingToolsRequiresNothing(SVTestBase):
 
 
 class TestBeachBridgeWithoutStartingToolsRequiresAxe(SVTestBase):
-    options = {
-        ToolProgression: ToolProgression.option_progressive,
-        StartWithout: frozenset({StartWithoutOptionName.tools}),
+    options = {  # noqa: RUF012
+        options.ToolProgression: options.ToolProgression.option_progressive,
+        options.StartWithout: frozenset({StartWithoutOptionName.tools}),
     }
 
     def test_beach_bridge_requires_axe(self):
@@ -100,9 +98,9 @@ class TestBeachBridgeWithoutStartingToolsRequiresAxe(SVTestBase):
 
 
 class TestGrimReaperWithStartingToolsRequiresQuarryAndWeapon(SVTestBase):
-    options = {
-        ToolProgression: ToolProgression.option_progressive,
-        StartWithout: StartWithout.preset_none,
+    options = {  # noqa: RUF012
+        options.ToolProgression: options.ToolProgression.option_progressive,
+        options.StartWithout: options.StartWithout.preset_none,
     }
 
     def test_grim_reaper_requires_two_weapons(self):
@@ -118,9 +116,9 @@ class TestGrimReaperWithStartingToolsRequiresQuarryAndWeapon(SVTestBase):
 
 
 class TestGrimRepairWithoutStartingToolsRequiresQuarryAndPickaxeAndWeapon(SVTestBase):
-    options = {
-        ToolProgression: ToolProgression.option_progressive,
-        StartWithout: frozenset({StartWithoutOptionName.tools}),
+    options = {  # noqa: RUF012
+        options.ToolProgression: options.ToolProgression.option_progressive,
+        options.StartWithout: frozenset({StartWithoutOptionName.tools}),
     }
 
     def test_grim_reaper_requires_weapon_and_pickaxe(self):
@@ -138,47 +136,71 @@ class TestGrimRepairWithoutStartingToolsRequiresQuarryAndPickaxeAndWeapon(SVTest
 
 
 class TestGatheringQuestsWithStartingToolsRequiresMinesAccess(SVTestBase):
-    options = {
-        ToolProgression: ToolProgression.option_progressive,
-        StartWithout: frozenset({StartWithoutOptionName.landslide}),
-        QuestLocations: 7,
+    options = {  # noqa: RUF012
+        options.ToolProgression: options.ToolProgression.option_progressive,
+        options.StartWithout: frozenset({StartWithoutOptionName.landslide}),
+        options.QuestLocations: 56,
     }
 
     def test_gathering_quest_requires_landslide(self):
-        gathering_location = "Help Wanted: Gathering 1"
+        gathering_location = "Help Wanted: Gathering Copper Ore"
+        self.assert_cannot_reach_location(gathering_location)
+        self.collect("Progressive Weapon")
         self.assert_cannot_reach_location(gathering_location)
         self.collect("Landslide Removed")
         self.assert_can_reach_location(gathering_location)
 
 
 class TestGatheringQuestsWithoutStartingToolsRequiresMinesAndAxeAndPickaxe(SVTestBase):
-    options = {
-        ToolProgression: ToolProgression.option_progressive,
-        StartWithout: frozenset({StartWithoutOptionName.tools, StartWithoutOptionName.landslide}),
-        QuestLocations: 7,
+    options = {  # noqa: RUF012
+        options.ToolProgression: options.ToolProgression.option_progressive,
+        options.StartWithout: frozenset({StartWithoutOptionName.tools, StartWithoutOptionName.landslide}),
+        options.QuestLocations: 56,
     }
 
-    def test_gathering_quest_requires_landslide_axe_and_pickaxe(self):
-        gathering_location = "Help Wanted: Gathering 1"
+    def test_gathering_copper_requires_landslide_pickaxe_and_no_axe(self):
+        gathering_location = "Help Wanted: Gathering Copper Ore"
+        pickaxe = self.create_item("Progressive Pickaxe")
         axe = self.create_item("Progressive Axe")
+        landslide = self.create_item("Landslide Removed")
         self.assert_cannot_reach_location(gathering_location)
-        self.collect("Landslide Removed")
+        self.collect("Progressive Weapon")
         self.assert_cannot_reach_location(gathering_location)
         self.collect(axe)
         self.assert_cannot_reach_location(gathering_location)
-        self.collect("Progressive Pickaxe")
+        self.collect(landslide)
+        self.assert_cannot_reach_location(gathering_location)
+        self.collect(pickaxe)
+        self.assert_can_reach_location(gathering_location)
+        self.remove(axe)
+        self.assert_can_reach_location(gathering_location)
+        self.remove(landslide)
+        self.assert_cannot_reach_location(gathering_location)
+        self.remove(pickaxe)
+        self.assert_cannot_reach_location(gathering_location)
+
+    def test_gathering_wood_requires_axe_and_no_landslide(self):
+        gathering_location = "Help Wanted: Gathering Wood"
+        axe = self.create_item("Progressive Axe")
+        landslide = self.create_item("Landslide Removed")
+        self.assert_cannot_reach_location(gathering_location)
+        self.collect(landslide)
+        self.assert_cannot_reach_location(gathering_location)
+        self.collect(axe)
+        self.assert_can_reach_location(gathering_location)
+        self.remove(landslide)
         self.assert_can_reach_location(gathering_location)
         self.remove(axe)
         self.assert_cannot_reach_location(gathering_location)
 
 
 class TestPrizeTicketAndHelpWanted(SVTestBase):
-    options = {
-        ToolProgression: ToolProgression.option_progressive,
-        StartWithout: frozenset({StartWithoutOptionName.tools, StartWithoutOptionName.landslide}),
-        QuestLocations: 7,
-        Booksanity: Booksanity.option_all,
-        Hatsanity: Hatsanity.preset_all,
+    options = {  # noqa: RUF012
+        options.ToolProgression: options.ToolProgression.option_progressive,
+        options.StartWithout: frozenset({StartWithoutOptionName.tools, StartWithoutOptionName.landslide}),
+        options.QuestLocations: 7,
+        options.Booksanity: options.Booksanity.option_all,
+        options.Hatsanity: options.Hatsanity.preset_all,
     }
 
     def test_prize_tickets_requires_all_help_wanteds_help_wanted(self):
@@ -202,11 +224,13 @@ class TestPrizeTicketAndHelpWanted(SVTestBase):
 
 
 class TestSecretFishingRequiresFishingLevelsForDistance(SVTestBase):
-    options = {
-        SkillProgression: SkillProgression.option_progressive_with_masteries,
-        ToolProgression: ToolProgression.option_progressive,
-        StartWithout: frozenset({StartWithoutOptionName.tools}),
-        Secretsanity: frozenset([SecretsanityOptionName.fishing]),
+    options = {  # noqa: RUF012
+        options.SkillProgression: options.SkillProgression.option_progressive_with_masteries,
+        options.ToolProgression: options.ToolProgression.option_progressive,
+        options.StartWithout: frozenset({StartWithoutOptionName.tools}),
+        options.Secretsanity: frozenset([SecretsanityOptionName.fishing]),
+        options.ExcludeGingerIsland: options.ExcludeGingerIsland.option_false,
+        options.SpecialOrderLocations: options.SpecialOrderLocations.option_board_qi_short,
     }
 
     def test_pyramid_decal_requires_level_1(self):
@@ -273,10 +297,10 @@ class TestSecretFishingRequiresFishingLevelsForDistance(SVTestBase):
 
 
 class TestArtifactSpotDonationsRequireHoe(SVTestBase):
-    options = {
-        ToolProgression: ToolProgression.option_progressive,
-        StartWithout: frozenset({StartWithoutOptionName.tools}),
-        Museumsanity: Museumsanity.option_all,
+    options = {  # noqa: RUF012
+        options.ToolProgression: options.ToolProgression.option_progressive,
+        options.StartWithout: frozenset({StartWithoutOptionName.tools}),
+        options.Museumsanity: options.Museumsanity.option_all,
     }
 
     def test_artifact_spot_requires_hoe(self):

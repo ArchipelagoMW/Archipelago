@@ -1,20 +1,102 @@
-import sys
 import typing
 from dataclasses import dataclass
-from typing import Protocol, ClassVar
+from enum import StrEnum
 
-from Options import Range, NamedRange, Toggle, Choice, OptionSet, PerGameCommonOptions, DeathLink, OptionList, \
-    Visibility, Removed, OptionCounter
-from .jojapocalypse_options import Jojapocalypse, JojaStartPrice, JojaEndPrice, JojaPricingPattern, JojaPurchasesForMembership, JojaAreYouSure
-from ..mods.mod_data import ModNames, invalid_mod_combinations
-from ..strings.ap_names.ap_option_names import BuffOptionName, WalnutsanityOptionName, SecretsanityOptionName, EatsanityOptionName, ChefsanityOptionName, \
-    StartWithoutOptionName, HatsanityOptionName, AllowedFillerOptionName, CustomLogicOptionName
-from ..strings.bundle_names import all_cc_bundle_names, MemeBundleName
+from Options import (
+    Choice,
+    DeathLink,
+    FreezeValidKeys,
+    NamedRange,
+    OptionCounter,
+    OptionList,
+    OptionSet,
+    PerGameCommonOptions,
+    PlandoConnections,
+    Range,
+    Removed,
+    Toggle,
+    Visibility,
+)
+
+from ..data.regions import randomizable_entrances, randomizable_exits
+from ..mods.mod_data import ModNames
+from ..strings.ap_names.ap_option_names import (
+    AllowedFillerOptionName,
+    BuffOptionName,
+    ChefsanityOptionName,
+    CustomLogicOptionName,
+    DataRandomizationOptionName,
+    EatsanityOptionName,
+    EntranceRandomizationBehaviorOptionName,
+    HatsanityOptionName,
+    SecretsanityOptionName,
+    StartWithoutOptionName,
+    WalnutsanityOptionName,
+)
+from ..strings.bundle_names import MemeBundleName, all_cc_bundle_names
 from ..strings.trap_names import all_traps
+from .jojapocalypse_options import (
+    JojaAreYouSure,
+    JojaEndPrice,
+    Jojapocalypse,
+    JojaPricingPattern,
+    JojaPurchasesForMembership,
+    JojaStartPrice,
+)
 
 
-class StardewValleyOption(Protocol):
-    internal_name: ClassVar[str]
+class StardewValleyOption(typing.Protocol):
+    internal_name: typing.ClassVar[str]
+
+
+EnumT = typing.TypeVar("EnumT", bound=StrEnum)
+
+
+class StrEnumToValidKeys(FreezeValidKeys):
+    def __new__(mcs, name: str, bases: tuple[type, ...], attrs: dict[str, typing.Any]):
+        if bases[0] is OptionSet:
+            return super().__new__(mcs, name, bases, attrs)
+
+        # Retrieve the generic type
+        enum_type: type[StrEnum] = next(iter(typing.get_args(attrs["__orig_bases__"][0])))
+        attrs["_enum_type"] = enum_type
+
+        if "valid_keys" not in attrs:
+            attrs["valid_keys"] = enum_type
+        attrs["valid_keys"] = frozenset(key.value for key in attrs["valid_keys"])
+
+        if attrs.get("default"):
+            attrs["default"] = frozenset(key.value for key in attrs["default"])
+
+        for preset_name, preset_value in attrs.items():
+            if not preset_name.startswith("preset"):
+                continue
+
+            attrs[preset_name] = frozenset(key.value for key in preset_value)
+
+        return super().__new__(mcs, name, bases, attrs)
+
+
+class OptionEnumSet(OptionSet, typing.Generic[EnumT], metaclass=StrEnumToValidKeys):
+    """Wrapper over OptionSet to support StrEnum as values."""
+
+    _enum_type: type[EnumT]
+
+    value: set[EnumT]
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.value = {self._enum_type(v) for v in self.value}
+
+    # Restricted pickle in web host does not like it when we try to use StrEnum defined in another module. So we pass it as a str instead.
+    def __getstate__(self):
+        state = super().__getstate__()
+        state["value"] = state["value"].__class__(key.value for key in state["value"])
+        return state
+
+    def __setstate__(self, state):
+        getattr(super(), "__setstate__", self.__dict__.update)(state)
+        self.value = {self._enum_type(v) for v in state["value"]}
 
 
 class Goal(Choice):
@@ -35,8 +117,8 @@ class Goal(Choice):
     Mystery of the Stardrops: Find every stardrop
     Mad Hatter: Complete all your hatsanity locations. If hatsanity is disabled, will enable it on "Easy+Tailoring"
     Ultimate Foodie: Eat all items in the game. Adapts to Eatsanity
-    Allsanity: Complete every check in your slot
-    Perfection: Attain Perfection
+    Allsanity: Complete every check in your slot - This goal can be blocked by the host
+    Perfection: Attain Perfection - This goal can be blocked by the host
     """
     internal_name = "goal"
     display_name = "Goal"
@@ -74,7 +156,7 @@ class Goal(Choice):
 
 
 class FarmType(Choice):
-    """What farm to play on?
+    """Farm to play on.
     Custom farms are not supported"""
     internal_name = "farm_type"
     display_name = "Farm Type"
@@ -109,7 +191,8 @@ class StartingMoney(NamedRange):
 
 
 class ProfitMargin(NamedRange):
-    """Multiplier over all gold earned in-game by the player."""
+    """Multiplier over all gold earned in-game by the player.
+    This does not affect shop prices, so some items may become ridiculously profitable or unprofitable."""
     internal_name = "profit_margin"
     display_name = "Profit Margin"
     range_start = 25
@@ -134,7 +217,9 @@ class BundleRandomization(Choice):
     Remixed: Picks bundles at random from thematic, vanilla remixed and new custom ones.
     Remixed Anywhere: Remixed, but bundles are not locked to specific rooms.
     Shuffled: Every bundle will require random items and follow no particular structure.
-    Meme: A set of entirely custom bundles are generated purely based on jokes, references, and trolling. Funny but not balanced at all. Not for the faint of heart."""
+    Meme: A set of entirely custom bundles are generated purely based on jokes, references, and trolling. Funny but not balanced at all. Not for the faint of heart.
+    Meme Easy: Meme bundles, but the ones that are particularly difficult are not included
+    """
     internal_name = "bundle_randomization"
     display_name = "Bundle Randomization"
     option_vanilla = 0
@@ -143,7 +228,11 @@ class BundleRandomization(Choice):
     option_remixed_anywhere = 5
     option_shuffled = 6
     option_meme = 10
+    option_meme_easy = 11
     default = option_remixed
+
+    def is_meme(self) -> bool:
+        return self.value == self.option_meme or self.value == self.option_meme_easy
 
 
 class BundlePrice(Choice):
@@ -154,7 +243,7 @@ class BundlePrice(Choice):
     Normal: Every bundle will require the vanilla number of items
     Expensive: Every bundle will require 1 extra item
     Very Expensive: Every bundle will require 2 extra items
-    Maximum: Every bundle will require many extra items"""
+    Maximum: Every bundle will require many extra items - This option can be blocked by the host"""
     internal_name = "bundle_price"
     display_name = "Bundle Price"
     default = 0
@@ -197,14 +286,9 @@ class EntranceRandomization(Choice):
     Pelican Town: Only doors in the main town area are randomized with each other
     Non Progression: Only entrances that are always available are randomized with each other
     Buildings: All entrances that allow you to enter a building are randomized with each other
-    Buildings Without House: Buildings, but excluding the farmhouse
-    Chaos: Same as "Buildings", but the entrances get reshuffled every single day!
+    Overworld: Buildings and all normal overworld map transitions like from the farm to the forest - This option can be blocked by the host
+    Everywhere: Overworld as well as the special transitions like the minecarts, the bus and warps - This option can be blocked by the host
     """
-    # Everything: All buildings and areas are randomized with each other
-    # Chaos, same as everything: but the buildings are shuffled again every in-game day. You can't learn it!
-    # Buildings One-way: Entrance pairs are disconnected, they aren't two-way!
-    # Everything One-way: Entrance pairs are disconnected, and every entrance is in the shuffle
-    # Chaos One-way: Entrance pairs are disconnected, and they change every day!
 
     internal_name = "entrance_randomization"
     display_name = "Entrance Randomization"
@@ -212,13 +296,57 @@ class EntranceRandomization(Choice):
     option_disabled = 0
     option_pelican_town = 1
     option_non_progression = 2
-    option_buildings_without_house = 3
-    option_buildings = 4
-    # option_everything = 10
-    option_chaos = 12
-    # option_buildings_one_way = 6
-    # option_everything_one_way = 7
-    # option_chaos_one_way = 8
+    option_buildings = 3
+    option_overworld = 4
+    option_everywhere = 5
+
+    def randomized_fast_travel_warps(self) -> bool:
+        return self.value >= self.option_everywhere
+
+
+class EntranceRandomizationBehavior(OptionEnumSet[EntranceRandomizationBehaviorOptionName]):
+    """Modifications to how ER will behave within the randomized locations.
+    - Chaos: all Enabled entrances are reshuffled every day! - This option is blocked by the website, and by the host unless changed
+    - Decoupled: Going into an entrance and going back might bring you somewhere different - This option is blocked by the website, and by the host unless changed
+    - Shuffle Farmhouse: shuffles the farmhouse exit to some outside entrance
+    - Shuffle Farmhouse Anywhere: Like Shuffle Farmhouse but the farmhouse could end up inside and in any direction
+    - Same Direction: Makes entrances you go in towards the top link up with entrances you go in downward etc. - This option can cause generation failures
+    - Same Type: Makes Entrances that go from for example inside to inside mix with other entrances that go inside to inside - This option can cause generation failures
+    """
+    internal_name = "entrance_randomization_behavior"
+    display_name = "Entrance Randomizer Behavior"
+    default = frozenset({EntranceRandomizationBehaviorOptionName.same_type})
+
+    preset_easy = frozenset({EntranceRandomizationBehaviorOptionName.same_type})
+    preset_normal = frozenset({EntranceRandomizationBehaviorOptionName.same_type, EntranceRandomizationBehaviorOptionName.shuffle_farmhouse})
+    preset_hard = frozenset({EntranceRandomizationBehaviorOptionName.shuffle_farmhouse_anywhere})
+
+    def is_chaos(self) -> bool:
+        return EntranceRandomizationBehaviorOptionName.chaos in self.value
+
+
+class EntrancePlando(PlandoConnections):
+    """Set where specific Entrances go instead of being randomized.
+    Should have entries of the format
+    - entrance: "Farm to Bus Stop"
+      exit: "Forest to Town"
+      direction: "both"
+      percentage: 100
+    which will make leaving the farm from the right send you to the town from the left bottom.
+    Note that this even works for entrances that are not randomized by Entrance Randomization. In the example
+    'Town to Forest' would also get randomized even if it wasn't before to negate failures. Creating connections that
+    do not match your other entrance rando options might work but could create errors later on when trying to connect
+    the other entrances. Use at your own risk.
+    Note: The _exit_ direction only works for two-way connections (yes Forest to Farm, no Use Beach Totem)
+    """
+    internal_name = "entrance_plando"
+    display_name = "Entrance Plando"
+    preset_none = ()
+
+    entrances = randomizable_entrances
+    exits = randomizable_exits
+
+    visibility = Visibility.all & ~Visibility.simple_ui
 
 
 class StartWithout(OptionSet):
@@ -226,16 +354,19 @@ class StartWithout(OptionSet):
     If the relevant item is not randomized, this option will do nothing.
     Tools: Start without an Axe, Pickaxe, Hoe, Watering can and Scythe
     Backpack: Start with 4 backpack slots, instead of 12, if your backpack size allows it
-    Landslide: Start without the landslide that leads to the mines
+    Landslide: Start without the ability to remove the landslide that leads to the mines. You must find "Landslide Removed" to unlock this path.
     Community Center: Start without the key to the Community Center, and the Forest Magic to allow reading the bundles
     Buildings: Start without the Shipping Bin and Pet Bowl
+    House: Start without your farmhouse. You will spawn on the farm instead
+    Villagers: Pelican Town will start as a Ghost Town, without any villagers in it.
     """
     internal_name = "start_without"
     display_name = "Start Without"
     valid_keys = frozenset({
         StartWithoutOptionName.tools, StartWithoutOptionName.backpack,
         StartWithoutOptionName.landslide, StartWithoutOptionName.community_center,
-        StartWithoutOptionName.buildings,
+        StartWithoutOptionName.buildings, StartWithoutOptionName.house,
+        StartWithoutOptionName.villagers,
     })
     preset_none = frozenset()
     preset_easy = frozenset({StartWithoutOptionName.landslide, StartWithoutOptionName.community_center})
@@ -400,22 +531,36 @@ class FestivalLocations(Choice):
     option_hard = 2
 
 
-class ArcadeMachineLocations(Choice):
-    """Shuffle the arcade machines?
-    Disabled: The arcade machines are not included.
-    Victories: Each Arcade Machine will contain one check on victory
-    Victories Easy: Same as Victories, but both games are made considerably easier.
-    Full Shuffling: The arcade machines will contain multiple checks each, and different buffs that make the game
-        easier are in the item pool. Junimo Kart has one check at the end of each level.
-        Journey of the Prairie King has one check after each boss, plus one check for each vendor equipment.
+class JourneyOfThePrairieKing(Choice):
+    """Shuffle Journey of the Prairie King?
+    Disabled: JotPK is not included.
+    Victory: JotPK will contain one location on victory
+    Victory Easy: Same as Victory, but with double drop rate and start with one of each upgrade
+    Full Shuffle: JotPK will contain multiple locations. One for beating each boss, plus one for purchasing each upgrade. You will receive the upgrades as items.
     """
-    internal_name = "arcade_machine_locations"
-    display_name = "Arcade Machine Locations"
+    internal_name = "journey_of_the_prairie_king"
+    display_name = "Journey Of The Prairie King"
     default = 3
     option_disabled = 0
-    option_victories = 1
-    option_victories_easy = 2
-    option_full_shuffling = 3
+    option_victory = 1
+    option_victory_easy = 2
+    option_full_shuffle = 3
+
+
+class JunimoKart(Choice):
+    """Shuffle Junimo Kart?
+    Disabled: Junimo Kart is not included.
+    Victory: Junimo Kart will contain one location on victory
+    Victory Easy: Same as Victory, but you have 8 Extra lives on every level
+    Full Shuffle: Junimo Kart will contain a location for beating each level. You will receive extra lives as items.
+    """
+    internal_name = "junimo_kart"
+    display_name = "Junimo Kart"
+    default = 0
+    option_disabled = 0
+    option_victory = 1
+    option_victory_easy = 2
+    option_full_shuffle = 3
 
 
 class SpecialOrderLocations(Choice):
@@ -449,22 +594,20 @@ class QuestLocations(NamedRange):
     """Include location checks for quests
     None: No quests are checks
     Story: Only story quests are checks
-    Number: Story quests and help wanted quests are checks up to the specified amount. Multiple of 7 recommended
-    Out of every 7 help wanted quests, 4 will be item deliveries, and then 1 of each for: Fishing, Gathering and Slaying Monsters.
-    Extra Help wanted quests might be added if current settings don't have enough locations"""
+    Number: Story quests and help wanted quests are checks up to the specified amount.
+    Random Help Wanted Quests will be picked from the pool of 56 available ones"""
     internal_name = "quest_locations"
-    default = 7
+    default = 8
     range_start = 0
     range_end = 56
-    # step = 7
     display_name = "Quest Locations"
 
     special_range_names = {
         "none": -1,
-        "story": 0,
-        "minimum": 7,
-        "normal": 14,
-        "lots": 28,
+        "story_only": 0,
+        "few": 8,
+        "medium": 16,
+        "lots": 24,
         "maximum": 56,
     }
 
@@ -547,7 +690,7 @@ class Shipsanity(Choice):
     Fish: Every fish being shipped is a check
     Full Shipment: Every item in the Collections page is a check
     Full Shipment With Fish: Every item in the Collections page and every fish is a check
-    Everything: Every item in the game that can be shipped is a check
+    Everything: Every item in the game that can be shipped is a check - This option can be blocked by the host
     """
     internal_name = "shipsanity"
     display_name = "Shipsanity"
@@ -743,7 +886,7 @@ class Moviesanity(Choice):
 class Secretsanity(OptionSet):
     """Add checks for the various secrets and easter eggs present in Stardew Valley. Some of them can be very obscure. If you enable this setting, you should expect to need the wiki a lot.
     Easy: Secrets that can be obtained quickly and easily, if you know what to do
-    Difficult: Includes secrets that require a lot of grinding or a lot of luck. Not for the faint of heart. Enabling this will also modify some secrets from the other categories to require their harder variation, if there is one.
+    Difficult: Includes secrets that require a lot of grinding or a lot of luck. Not for the faint of heart. Enabling this will also modify some secrets from the other categories to require their harder variation, if there is one. - This option can be blocked by the host
     Fishing: Various special items and furniture that can be fished up in specific places
     Secret Notes: Complete tasks described in the various secret notes, when applicable
     """
@@ -775,8 +918,8 @@ class Hatsanity(OptionSet):
     Medium: Locations for wearing the hats that are obtainable through a task that requires a bit of effort
     Difficult: Locations for wearing hats that are difficult to obtain
     RNG: Locations for wearing hats that are extremely rng-dependent to obtain. Generally an unpleasant grind.
-    Near Perfection: Locations for wearing hats that are late game and generally obtained by doing the equivalent of a perfection task
-    Post Perfection: Locations for wearing all hats, including the hyper-late game ones that require more work than perfection itself
+    Near Perfection: Locations for wearing hats that are late game and generally obtained by doing the equivalent of a perfection task - This option can be blocked by the host
+    Post Perfection: Locations for wearing all hats, including the hyper-late game ones that require more work than perfection itself - This option can be blocked by the host
     """
     internal_name = "hatsanity"
     display_name = "Hatsanity"
@@ -874,8 +1017,10 @@ class TrapDifficulty(Choice):
     """When rolling filler items, including resource packs, the game can also roll trap items.
     Trap items are negative items that cause problems or annoyances for the player.
     This setting is for choosing how punishing traps will be.
-    Lower difficulties will be on the funny annoyance side, higher difficulty will be on the extreme problems side.
-    Only play Nightmare at your own risk.
+    Lower difficulties will be funny annoyances, higher difficulties will be big problems.
+    Hell and Nightmare can be blocked by the host
+    If you pick Nightmare... good luck.
+    If you pick Eldritch... you will be missed - This option is blocked by the website, and by the host unless changed
     """
     internal_name = "trap_difficulty"
     display_name = "Trap Difficulty"
@@ -886,6 +1031,7 @@ class TrapDifficulty(Choice):
     option_hard = 3
     option_hell = 4
     option_nightmare = 5
+    option_eldritch = 6
 
     def include_traps(self) -> bool:
         return self.value > 0
@@ -913,8 +1059,71 @@ class TrapDistribution(OptionCounter):
     }
 
 
+class DataRandomizationBehavior(Choice):
+    """
+        If any Data Randomization toggles are on, this decides how the data is randomized. Not all toggles can handle all behaviors, when not applicable, the closest lower behavior is chosen.
+        Off: No Data Randomization occurs
+        Shuffled: All values are maintained, but shuffled between entries.
+        Weighted Randomized: All entries are given a random value from the original pool, weighted from their original distribution, with repeat draws
+        Randomized: All entries are given a random value from the original pool with no regard for the original frequency, with repeat draws. Can be imbalanced - This option is blocked by the website, and by the host unless changed
+        Normal Randomized: All entries are given a random value picked from a Log-Transformed Normal Distribution generated from the original values. Can be imbalanced - This option is blocked by the website, and by the host unless changed
+        Range Randomized: All entries are given a random value between the original minimum and original maximum, with no regard for what values originally existed. Very imbalanced - This option is blocked by the website, and by the host unless changed
+    """
+    internal_name = "data_randomization_behavior"
+    display_name = "Data Randomization Behavior"
+    default = 1
+    option_off = 0
+    option_shuffled = 1
+    option_weighted_randomized = 2
+    option_randomized = 3
+    option_normal_randomized = 4
+    option_range_randomized = 5
+    # option_wild = 6 # Wild: All entries are given a random value, with no regard for the original entries at all.
+
+
+class DataRandomization(OptionSet):
+    """
+    Enable randomization for various internal game data values. This can invalidate pre-existing game knowledge from you, or the internet - This option can be blocked by the host
+    Cohesive randomization might automatically bring in more aspects if necessary for technical reasons
+    Fish Cohesive: The aspects of fish that you randomize will be kept together, so every aspect of a given fish will come from the same random other fish
+    Fish Difficulty: Difficulty of fish
+    Fish Season: Which seasons fish can be caught in
+    Fish Location: Which body of water fish can be caught in
+    Fish Weather: Which weather fish can be caught in
+    Fish Catch Method: Whether fish are caught using fishing rods or crab pots. Only works if you also randomized their locations.
+    Fish Sell Price: Sell price of all fish
+    Crop Sell Price: Sell price of all crops and forage
+    Growth Time: Time to grow crops from planting to first harvest
+    Growth Season: Which seasons various seeds can grow in
+    Which Crop From Which Seed: Which crop come from which seeds. Only "Shuffled" behavior
+    Festival Season: Which seasons festivals occur in
+    Festival Date: Which day of the month festivals occur in
+    Shop Currencies: Which currencies are used to trade for various shop items
+    Shop Prices: The price of items (in their currencies) in shops
+    Shop Prices Across Vendors: Shuffle the prices across vendors instead of in separate pools. Very Difficult.
+    Shop Extra Materials: The extra materials or barter items requested for shop purchases
+    Villager Birthdays: The birthday date of villagers
+    """
+    internal_name = "data_randomization"
+    display_name = "Data Randomization"
+    valid_keys = frozenset({
+        DataRandomizationOptionName.fish_cohesive,
+        DataRandomizationOptionName.fish_difficulty, DataRandomizationOptionName.fish_season, DataRandomizationOptionName.fish_location,
+        DataRandomizationOptionName.fish_weather, DataRandomizationOptionName.fish_catch_method, DataRandomizationOptionName.fish_sell_price,
+        DataRandomizationOptionName.crop_sell_price, DataRandomizationOptionName.growth_time, DataRandomizationOptionName.growth_season,
+        DataRandomizationOptionName.crop_which_seed,
+        DataRandomizationOptionName.festival_season, DataRandomizationOptionName.festival_date,
+        DataRandomizationOptionName.shop_prices, DataRandomizationOptionName.shop_prices_across_vendors, DataRandomizationOptionName.shop_currencies,
+        DataRandomizationOptionName.shop_extra_materials,
+        DataRandomizationOptionName.villager_birthday,
+    })
+    preset_none = frozenset()
+    preset_all = valid_keys
+    default = frozenset(preset_none)
+
+
 class CustomLogic(OptionSet):
-    """Enable various customizations to the logic of the generator.
+    """Enable various customizations to the logic of the generator - This option can be blocked by the host
     Some flags are inherently incompatible with each other, the harder flag takes priority.
     Some of these toggles can, if the player is not careful, force them to reset days.
     Chair Skips: Chair skips are considered in-logic
@@ -937,9 +1146,13 @@ class CustomLogic(OptionSet):
     Bomb Hoeing: Hoeing ground is in logic without a hoe
     Rain Watering: Watering crops is in logic without a watering can
     Critical Free Samples: Free samples of items are considered in logic without a renewable source
+    Normally FIBS is logically required to catch fish if you used DR fish seasons or locations, or weather if the fish ends up with a specific weather.
+    FIBS Only For Hard To Find: This toggle makes it only required for fish that are in less than 4 seasons and less than 3 regions.
+    No FIBS: FIBS is not required in logic for any fish
     """
     internal_name = "custom_logic"
     display_name = "Custom Logic"
+    visibility = Visibility.all & ~Visibility.simple_ui
     valid_keys = frozenset({
         CustomLogicOptionName.chair_skips,
         CustomLogicOptionName.easy_fishing, CustomLogicOptionName.hard_fishing, CustomLogicOptionName.extreme_fishing,
@@ -950,6 +1163,7 @@ class CustomLogic(OptionSet):
         CustomLogicOptionName.easy_money, CustomLogicOptionName.hard_money, CustomLogicOptionName.extreme_money, CustomLogicOptionName.nightmare_money,
         CustomLogicOptionName.bomb_hoeing, CustomLogicOptionName.rain_watering,
         CustomLogicOptionName.critical_free_samples,
+        CustomLogicOptionName.fibs_only_for_hard_to_find, CustomLogicOptionName.no_fibs,
     })
     preset_none = frozenset()
     preset_all = valid_keys
@@ -1054,46 +1268,11 @@ class Gifting(Toggle):
     default = 1
 
 
-all_mods = {ModNames.deepwoods, ModNames.tractor, ModNames.big_backpack,
-            ModNames.luck_skill, ModNames.magic, ModNames.socializing_skill, ModNames.archaeology,
-            ModNames.cooking_skill, ModNames.binning_skill, ModNames.juna,
-            ModNames.jasper, ModNames.alec, ModNames.yoba, ModNames.eugene,
-            ModNames.wellwick, ModNames.ginger, ModNames.shiko, ModNames.delores,
-            ModNames.ayeisha, ModNames.riley, ModNames.skull_cavern_elevator, ModNames.sve, ModNames.distant_lands,
-            ModNames.alecto, ModNames.lacey, ModNames.boarding_house}
-
-# These mods have been disabled because either they are not updated for the current supported version of Stardew Valley,
-# or we didn't find the time to validate that they work or fix compatibility issues if they do.
-# Once a mod is validated to be functional, it can simply be removed from this list
-# SVE specifically is disabled because their main version is significantly ahead of ours, with breaking changes, and nobody is maintaining our integration.
-disabled_mods = {ModNames.deepwoods, ModNames.magic,
-                 ModNames.cooking_skill,
-                 ModNames.yoba, ModNames.eugene,
-                 ModNames.wellwick, ModNames.shiko, ModNames.delores, ModNames.riley,
-                 ModNames.boarding_house, ModNames.sve}
-
-enabled_mods = all_mods.difference(disabled_mods)
-all_mods_except_invalid_combinations = set(all_mods)
-for mod_combination in invalid_mod_combinations:
-    priority_mod = mod_combination[0]
-    if priority_mod not in all_mods_except_invalid_combinations:
-        continue
-    for mod in mod_combination:
-        if mod == priority_mod:
-            continue
-        all_mods_except_invalid_combinations.remove(mod)
-enabled_mods_except_invalid_combinations = all_mods_except_invalid_combinations.difference(disabled_mods)
-
-
-class Mods(OptionSet):
+class Mods(OptionEnumSet[ModNames]):
     """List of mods that will be included in the shuffling."""
     internal_name = "mods"
     display_name = "Mods"
-    valid_keys = enabled_mods
-    # In tests, we keep even the disabled mods active, because we expect some of them to eventually get updated for SV 1.6
-    # In that case, we want to maintain content and logic for them, and therefore keep testing them
-    if 'unittest' in sys.modules.keys() or 'pytest' in sys.modules.keys():
-        valid_keys = all_mods
+    valid_keys = ModNames.enabled_mods()
 
 
 class BundlePlando(Removed):
@@ -1107,6 +1286,20 @@ class BundlePlando(Removed):
     def __init__(self, value: str):
         if value:
             raise Exception("Option bunde_plando was replaced by bundle_whitelist and bundle_blacklist, please update your options file")
+        super().__init__(value)
+
+
+class ArcadeMachineLocations(Removed):
+    """Deprecated setting, replaced by JourneyOfThePrairieKing and JunimoKart
+    """
+    internal_name = "arcade_machine_locations"
+    display_name = "Arcade Machine Locations"
+    default = ""
+    visibility = Visibility.none
+
+    def __init__(self, value: str):
+        if value:
+            raise Exception("Option arcade_machine_locations was replaced by journey_of_the_prairie_king and junimo_kart, please update your options file")
         super().__init__(value)
 
 
@@ -1184,6 +1377,8 @@ class StardewValleyOptions(PerGameCommonOptions):
     bundle_price: BundlePrice
     bundle_per_room: BundlePerRoom
     entrance_randomization: EntranceRandomization
+    entrance_randomization_behavior: EntranceRandomizationBehavior
+    entrance_plando: EntrancePlando
     start_without: StartWithout
     season_randomization: SeasonRandomization
     cropsanity: Cropsanity
@@ -1194,7 +1389,8 @@ class StardewValleyOptions(PerGameCommonOptions):
     building_progression: BuildingProgression
     festival_locations: FestivalLocations
     elevator_progression: ElevatorProgression
-    arcade_machine_locations: ArcadeMachineLocations
+    journey_of_the_prairie_king: JourneyOfThePrairieKing
+    junimo_kart: JunimoKart
     special_order_locations: SpecialOrderLocations
     quest_locations: QuestLocations
     fishsanity: Fishsanity
@@ -1224,6 +1420,8 @@ class StardewValleyOptions(PerGameCommonOptions):
     enabled_filler_buffs: EnabledFillerBuffs
     trap_difficulty: TrapDifficulty
     trap_distribution: TrapDistribution
+    data_randomization_behavior: DataRandomizationBehavior
+    data_randomization: DataRandomization
     custom_logic: CustomLogic
     multiple_day_sleep_enabled: MultipleDaySleepEnabled
     multiple_day_sleep_cost: MultipleDaySleepCost
@@ -1245,3 +1443,4 @@ class StardewValleyOptions(PerGameCommonOptions):
     # removed:
     trap_items: TrapItems
     bundle_plando: BundlePlando
+    arcade_machine_locations: ArcadeMachineLocations

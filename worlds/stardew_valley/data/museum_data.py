@@ -121,7 +121,7 @@ class Artifact:
                                 geodes=(Geode.artifact_trove, WaterChest.fishing_chest))
     chicken_statue = create_artifact("Chicken Statue", 13.5, Region.farm,
                                      geodes=(Geode.artifact_trove, WaterChest.fishing_chest))
-    ancient_seed = create_artifact("Ancient Seed", 8.4, (Region.forest, Region.mountain),
+    ancient_seed = create_artifact("Ancient Seed", 8.4, (Region.forest, Region.mountain, Region.mines_floor_15, Region.mines_floor_25),
                                    geodes=(Geode.artifact_trove, WaterChest.fishing_chest),
                                    monsters=unlikely)
     prehistoric_tool = create_artifact("Prehistoric Tool", 11.1, (Region.mountain, Region.forest, Region.bus_stop),

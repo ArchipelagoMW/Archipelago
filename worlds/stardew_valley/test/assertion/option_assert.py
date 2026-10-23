@@ -1,10 +1,11 @@
 from unittest import TestCase
 
 from BaseClasses import MultiWorld
-from .world_assert import get_all_item_names, get_all_location_names
-from ... import StardewValleyWorld, options, item_table, Group, location_table
+
+from ... import Group, StardewValleyWorld, item_table, location_table, options
 from ...locations import LocationTags
 from ...strings.ap_names.transport_names import Transportation
+from .world_assert import get_all_item_names, get_all_location_names
 
 
 def get_stardew_world(multiworld: MultiWorld) -> StardewValleyWorld:
@@ -62,12 +63,15 @@ class OptionAssertMixin(TestCase):
 
         all_item_names = set(get_all_item_names(multiworld))
         all_location_names = set(get_all_location_names(multiworld))
-        all_cropsanity_item_names = {item_name for item_name in all_item_names if Group.CROPSANITY in item_table[item_name].groups}
-        all_cropsanity_location_names = {location_name
-                                         for location_name in all_location_names
-                                         if LocationTags.CROPSANITY in location_table[location_name].tags
-                                         # Qi Beans do not have an item
-                                         and location_name != "Harvest Qi Fruit"}
+        all_cropsanity_item_names = {item_name for item_name in all_item_names if Group.CROPSANITY in item_table[item_name].groups and len(item_table[item_name].content_packs) == 0}
+        all_cropsanity_location_names = {
+            location_name
+            for location_name in all_location_names
+            if LocationTags.CROPSANITY in location_table[location_name].tags
+            # Qi Beans do not have an item
+            and location_name != "Harvest Qi Fruit"
+            and len(location_table[location_name].content_packs) == 0
+        }
         self.assertEqual(len(all_cropsanity_item_names) + 1, len(all_cropsanity_location_names))
 
     def assert_all_rarecrows_exist(self, multiworld: MultiWorld):

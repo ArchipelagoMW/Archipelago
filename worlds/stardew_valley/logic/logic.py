@@ -32,6 +32,7 @@ from .money_logic import MoneyLogicMixin
 from .monster_logic import MonsterLogicMixin
 from .movie_logic import MovieLogicMixin
 from .museum_logic import MuseumLogicMixin
+from .pants_logic import PantsLogicMixin
 from .pet_logic import PetLogicMixin
 from .quality_logic import QualityLogicMixin
 from .quest_logic import QuestLogicMixin
@@ -54,12 +55,10 @@ from .wallet_logic import WalletLogicMixin
 from .walnut_logic import WalnutLogicMixin
 from ..content.game_content import StardewContent
 from ..content.vanilla.ginger_island import ginger_island_content_pack
-from ..data.craftable_data import all_crafting_recipes
 from ..data.museum_data import all_museum_items
-from ..data.recipe_data import all_cooking_recipes
 from ..mods.logic.magic_logic import MagicLogicMixin
 from ..mods.logic.mod_logic import ModLogicMixin
-from ..options import StardewValleyOptions, BundleRandomization, IncludeEndgameLocations
+from ..options import StardewValleyOptions, IncludeEndgameLocations
 from ..stardew_rule import False_, StardewRule, Or, Reach
 from ..strings.animal_names import Animal
 from ..strings.animal_product_names import AnimalProduct
@@ -68,16 +67,15 @@ from ..strings.artisan_good_names import ArtisanGood
 from ..strings.boot_names import tier_by_boots
 from ..strings.building_names import Building
 from ..strings.catalogue_names import items_by_catalogue
-from ..strings.craftable_names import Consumable, Ring, Fishing, Lighting, WildSeeds, Furniture
-from ..strings.crop_names import Fruit, Vegetable
+from ..strings.craftable_names import Consumable, Ring, Fishing, Lighting
+from ..strings.crop_names import Vegetable
 from ..strings.currency_names import Currency
 from ..strings.decoration_names import Decoration
-from ..strings.fertilizer_names import Fertilizer, SpeedGro, RetainingSoil
+from ..strings.fertilizer_names import Fertilizer
 from ..strings.fish_names import Fish, Trash, WaterItem, WaterChest
 from ..strings.flower_names import Flower
-from ..strings.food_names import Meal, Beverage
+from ..strings.food_names import Beverage
 from ..strings.forageable_names import Forageable
-from ..strings.generic_names import Generic
 from ..strings.geode_names import Geode
 from ..strings.gift_names import Gift
 from ..strings.ingredient_names import Ingredient
@@ -92,7 +90,7 @@ from ..strings.seed_names import Seed, TreeSeed
 from ..strings.skill_names import Skill
 from ..strings.special_item_names import SpecialItem
 from ..strings.tool_names import Tool, ToolMaterial, FishingRod
-from ..strings.villager_names import NPC
+from ..strings.weapon_names import Weapon
 
 logger = logging.getLogger(__name__)
 
@@ -104,7 +102,7 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, Travelin
                    SkillLogicMixin, FarmingLogicMixin, BundleLogicMixin, FishingLogicMixin, MineLogicMixin, CookingLogicMixin, AbilityLogicMixin,
                    SpecialOrderLogicMixin, QuestLogicMixin, CraftingLogicMixin, ModLogicMixin, HarvestingLogicMixin, SourceLogicMixin,
                    RequirementLogicMixin, BookLogicMixin, GrindLogicMixin, FestivalLogicMixin, WalnutLogicMixin, GoalLogicMixin, SpecialItemsLogicMixin,
-                   MovieLogicMixin, MemeItemsLogicMixin, HatLogicMixin, ShirtLogicMixin, TailoringLogicMixin, FishPondLogicMixin):
+                   MovieLogicMixin, MemeItemsLogicMixin, HatLogicMixin, ShirtLogicMixin, PantsLogicMixin, TailoringLogicMixin, FishPondLogicMixin):
     player: int
     options: StardewValleyOptions
     content: StardewContent
@@ -117,36 +115,24 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, Travelin
         self.registry.fish_rules.update({fish.name: self.fishing.can_catch_fish(fish) for fish in content.fishes.values()})
         self.registry.museum_rules.update({donation.item_name: self.museum.can_find_museum_item(donation) for donation in all_museum_items})
 
-        for recipe in all_cooking_recipes:
-            if recipe.content_pack and not self.content.is_enabled(recipe.content_pack):
-                continue
-
+        for recipe in self.content.cooking_recipes.values():
             can_cook_rule = self.cooking.can_cook(recipe)
-            if recipe.meal in self.registry.cooking_rules:
-                can_cook_rule = can_cook_rule | self.registry.cooking_rules[recipe.meal]
-            self.registry.cooking_rules[recipe.meal] = can_cook_rule
+            if recipe.name in self.registry.cooking_rules:
+                can_cook_rule = can_cook_rule | self.registry.cooking_rules[recipe.name]
+            self.registry.cooking_rules[recipe.name] = can_cook_rule
 
-        for recipe in all_crafting_recipes:
-            if recipe.content_pack is not None and not self.content.are_all_enabled(recipe.content_pack):
-                continue
+        for recipe in self.content.crafting_recipes.values():
             can_craft_rule = self.crafting.can_craft(recipe)
-            if recipe.item in self.registry.crafting_rules:
-                can_craft_rule = can_craft_rule | self.registry.crafting_rules[recipe.item]
-            self.registry.crafting_rules[recipe.item] = can_craft_rule
-
-        self.registry.crop_rules.update({
-            Fruit.ancient_fruit: (self.received("Ancient Seeds") | self.received("Ancient Seeds Recipe")) &
-                                 self.region.can_reach(Region.greenhouse) & self.has(Machine.seed_maker),
-        })
+            if recipe.name in self.registry.crafting_rules:
+                can_craft_rule = can_craft_rule | self.registry.crafting_rules[recipe.name]
+            self.registry.crafting_rules[recipe.name] = can_craft_rule
 
         # @formatter:off
         self.registry.item_rules.update({
-            "Energy Tonic": self.money.can_spend_at(Region.hospital, 1000),
             WaterChest.fishing_chest: self.fishing.can_fish_chests,
             WaterChest.golden_fishing_chest: self.fishing.can_fish_chests & self.skill.has_mastery(Skill.fishing),
             WaterChest.treasure: self.fishing.can_fish_chests,
             Ring.hot_java_ring: self.region.can_reach(Region.volcano_floor_10),
-            "Galaxy Soul": self.money.can_trade_at(Region.qi_walnut_room, Currency.qi_gem, 40),
             "JotPK Big Buff": self.arcade.has_jotpk_power_level(7),
             "JotPK Max Buff": self.arcade.has_jotpk_power_level(9),
             "JotPK Medium Buff": self.arcade.has_jotpk_power_level(4),
@@ -156,7 +142,6 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, Travelin
             "Junimo Kart Medium Buff": self.arcade.has_junimo_kart_power_level(4),
             "Junimo Kart Small Buff": self.arcade.has_junimo_kart_power_level(2),
             "Magic Rock Candy": self.region.can_reach(Region.desert) & self.has("Prismatic Shard"),
-            "Muscle Remedy": self.money.can_spend_at(Region.hospital, 1000),
             "Stardrop": self.received("Stardrop"),
             "Iridium Snake Milk": self.quest.can_drink_snake_milk(),
             # self.has(Ingredient.vinegar)),
@@ -193,8 +178,6 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, Travelin
             AnimalProduct.duck_egg_starter: self.logic.false_,  # It could be purchased at the Feast of the Winter Star, but it's random every year, so not considering it yet...
             AnimalProduct.dinosaur_egg_starter: self.logic.false_,  # Dinosaur eggs are also part of the museum rules, and I don't want to touch them yet.
             AnimalProduct.egg_starter: self.logic.false_,  # It could be purchased at the Desert Festival, but festival logic is quite a mess, so not considering it yet...
-            AnimalProduct.golden_egg_starter: self.received(AnimalProduct.golden_egg) & (self.money.can_spend_at(Region.ranch, 100000) | self.money.can_trade_at(Region.qi_walnut_room, Currency.qi_gem, 100)),
-            AnimalProduct.void_egg_starter: self.money.can_spend_at(Region.sewer, 5000),
             ArtisanGood.aged_roe: self.artisan.can_preserves_jar(AnimalProduct.roe),
             ArtisanGood.battery_pack: (self.has(Machine.lightning_rod) & self.season.has_any_not_winter()) | self.has(Machine.solar_panel),
             ArtisanGood.cheese: (self.has(AnimalProduct.cow_milk) & self.has(Machine.cheese_press)) | (self.region.can_reach(Region.desert) & self.artisan.can_replicate_gem(Mineral.emerald)),
@@ -202,7 +185,7 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, Travelin
             ArtisanGood.dinosaur_mayonnaise: self.artisan.can_mayonnaise(AnimalProduct.dinosaur_egg),
             ArtisanGood.duck_mayonnaise: self.artisan.can_mayonnaise(AnimalProduct.duck_egg),
             ArtisanGood.goat_cheese: self.has(AnimalProduct.goat_milk) & self.has(Machine.cheese_press),
-            ArtisanGood.honey: self.money.can_spend_at(Region.oasis, 200) | (self.has(Machine.bee_house) & self.season.has_any_not_winter()),
+            ArtisanGood.honey: self.has(Machine.bee_house) & self.season.has_any_not_winter(),
             ArtisanGood.maple_syrup: self.has(Machine.tapper),
             ArtisanGood.mayonnaise: self.artisan.can_mayonnaise(AnimalProduct.chicken_egg),
             ArtisanGood.mystic_syrup: self.has(Machine.tapper) & self.has(TreeSeed.mystic),
@@ -213,9 +196,7 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, Travelin
             ArtisanGood.stardrop_tea: self.has(WaterChest.golden_fishing_chest),
             ArtisanGood.truffle_oil: self.has(AnimalProduct.truffle) & self.has(Machine.oil_maker),
             ArtisanGood.void_mayonnaise: self.artisan.can_mayonnaise(AnimalProduct.void_egg),
-            Beverage.pina_colada: self.money.can_spend_at(Region.island_resort, 600),
             Beverage.triple_shot_espresso: self.has("Hot Java Ring"),
-            Consumable.butterfly_powder: self.money.can_spend_at(Region.sewer, 20000),
             Consumable.fireworks_red: self.region.can_reach(Region.casino),
             Consumable.fireworks_purple: self.region.can_reach(Region.casino),
             Consumable.fireworks_green: self.region.can_reach(Region.casino),
@@ -226,21 +207,17 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, Travelin
             Currency.golden_tag: self.region.can_reach(LogicRegion.trout_derby),
             Currency.prize_ticket: self.time.has_lived_months(2),  # Time to do a few help wanted quests
             Decoration.rotten_plant: self.has(Lighting.jack_o_lantern) & self.season.has(Season.winter),
-            Fertilizer.basic: self.money.can_spend_at(Region.pierre_store, 100),
-            Fertilizer.quality: self.time.has_year_two & self.money.can_spend_at(Region.pierre_store, 150),
             Fertilizer.tree: self.skill.has_level(Skill.foraging, 7) & self.has(Material.fiber) & self.has(Material.stone),
             Fish.any: self.logic.or_(*(self.fishing.can_catch_fish(fish) for fish in content.fishes.values())),
             Fish.crab: self.fishing.can_crab_pot_at(Region.beach),
             Fish.crayfish: self.fishing.can_crab_pot_at(Region.town),
             Fish.lobster: self.fishing.can_crab_pot_at(Region.beach),
-            Fish.mussel: self.tool.can_forage(Generic.any, Region.beach) or self.has(Fish.mussel_node),
+            Fish.mussel: self.has(Fish.mussel_node),
             Fish.mussel_node: self.region.can_reach(Region.island_west),
-            Fish.oyster: self.tool.can_forage(Generic.any, Region.beach),
             Fish.periwinkle: self.fishing.can_crab_pot_at(Region.town),
             Fish.shrimp: self.fishing.can_crab_pot_at(Region.beach),
             Fish.snail: self.fishing.can_crab_pot_at(Region.town),
             Fishing.curiosity_lure: self.monster.can_kill(self.monster.all_monsters_by_name[Monster.mummy]),
-            Fishing.lead_bobber: self.skill.has_level(Skill.fishing, 6) & self.money.can_spend_at(Region.fish_shop, 200),
             Fishing.golden_bobber: self.region.can_reach(LogicRegion.desert_festival) & self.fishing.can_fish_chests,
             Forageable.hay: self.building.has_building(Building.silo) & self.tool.has_scythe(), #
             Forageable.journal_scrap: self.region.can_reach_all(Region.island_west, Region.island_north, Region.island_south, Region.volcano_floor_10) & (self.ability.can_chop_trees() | self.mine.can_mine_in_the_mines_floor_1_40()),#
@@ -255,38 +232,30 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, Travelin
             Fossil.mummified_frog: self.region.can_reach(Region.island_east) & self.tool.has_scythe(),
             Fossil.snake_skull: self.region.can_reach(Region.dig_site) & self.tool.has_tool(Tool.hoe),
             Fossil.snake_vertebrae: self.region.can_reach(Region.island_west) & self.tool.has_tool(Tool.hoe),
-            Furniture.exotic_double_bed: self.money.can_trade_at(Region.qi_walnut_room, Currency.qi_gem, 50),
             Geode.artifact_trove: self.has(Geode.omni) & self.region.can_reach(Region.desert),
             Geode.frozen: self.mine.can_mine_in_the_mines_floor_41_80(),
             Geode.geode: self.mine.can_mine_in_the_mines_floor_1_40(),
-            Geode.golden_coconut: self.region.can_reach(Region.island_north),
+            Geode.golden_coconut: self.region.can_reach(Region.island_north) & self.skill.has_level(Skill.foraging, 1),
             Geode.magma: self.mine.can_mine_in_the_mines_floor_81_120(),  # Could add self.fish_pond.can_get_fish_pond_reward(Fish.lava_eel, 9, Geode.magma) but it makes a logic loop
-            Geode.omni: self.count(2, *(self.mine.can_mine_in_the_mines_floor_81_120(), self.region.can_reach_all((Region.desert, Region.oasis, Region.sewer)), self.tool.has_pan(ToolMaterial.iron), (self.region.can_reach_all((Region.island_west, Region.island_north,)) & self.has(Consumable.treasure_totem)))),  # Could add self.fish_pond.can_get_fish_pond_reward(Fish.octopus, 9, Geode.omni) but it makes a logic loop
-            Gift.bouquet: self.relationship.has_hearts_with_any_bachelor(8) & self.money.can_spend_at(Region.pierre_store, 100),
+            Geode.omni: self.count(2, *(self.region.can_reach_all(Region.oasis_shop, Region.sewer_shop), self.region.can_reach(Region.mines_floor_100), self.region.can_reach(Region.skull_cavern_25), self.region.can_reach(Region.volcano_floor_5), (self.region.can_reach_all(Region.island_west, Region.island_north,) & self.has(Consumable.treasure_totem)))),  # Could add self.fish_pond.can_get_fish_pond_reward(Fish.octopus, 9, Geode.omni) but it makes a logic loop. Same for self.tool.has_pan(ToolMaterial.iron)
             Gift.golden_pumpkin: self.festival.has_golden_pumpkin(),
             Gift.mermaid_pendant: self.region.can_reach(Region.tide_pools) & self.relationship.has_hearts_with_any_bachelor(10) & self.building.has_building(Building.kitchen) & (self.has(Consumable.rain_totem) | self.season.has_any_not_winter()),
-            Gift.movie_ticket: self.money.can_spend_at(Region.movie_ticket_stand, 1000),
             Gift.pearl: self.fish_pond.can_get_fish_pond_reward(Fish.blobfish, 9, Gift.pearl) | self.action.can_open_geode(Geode.artifact_trove),
-            Gift.tea_set: self.season.has(Season.winter) & self.time.has_lived_max_months,
-            Gift.void_ghost_pendant: self.money.can_trade_at(Region.desert, Loot.void_essence, 200) & self.relationship.has_hearts(NPC.krobus, 10),
             Gift.wilted_bouquet: self.has(Machine.furnace) & self.has(Gift.bouquet) & self.has(Material.coal),
-            Ingredient.oil: self.money.can_spend_at(Region.pierre_store, 200) | (self.has(Machine.oil_maker) & (self.has(Vegetable.corn) | self.has(Flower.sunflower) | self.has(Seed.sunflower))),
-            Ingredient.qi_seasoning: self.money.can_trade_at(Region.qi_walnut_room, Currency.qi_gem, 10),
-            Ingredient.rice: self.money.can_spend_at(Region.pierre_store, 200) | (self.building.has_building(Building.mill) & self.has(Vegetable.unmilled_rice)),
-            Ingredient.sugar: self.money.can_spend_at(Region.pierre_store, 100) | (self.building.has_building(Building.mill) & self.has(Vegetable.beet)),
-            Ingredient.vinegar: self.money.can_spend_at(Region.pierre_store, 200) | self.artisan.can_keg(Ingredient.rice),
-            Ingredient.wheat_flour: self.money.can_spend_at(Region.pierre_store, 100) | (self.building.has_building(Building.mill) & self.has(Vegetable.wheat)),
+            Ingredient.oil: self.has(Machine.oil_maker) & (self.has(Vegetable.corn) | self.has(Flower.sunflower) | self.has(Seed.sunflower)),
+            Ingredient.rice: self.building.has_building(Building.mill) & self.has(Vegetable.unmilled_rice),
+            Ingredient.sugar: self.building.has_building(Building.mill) & self.has(Vegetable.beet),
+            Ingredient.vinegar: self.artisan.can_keg(Ingredient.rice),
+            Ingredient.wheat_flour: self.building.has_building(Building.mill) & self.has(Vegetable.wheat),
             Loot.bat_wing: self.mine.can_mine_in_the_mines_floor_41_80() | self.mine.can_mine_in_the_skull_cavern(),
             Loot.bug_meat: self.mine.can_mine_in_the_mines_floor_1_40(),
             Loot.slime: self.mine.can_mine_in_the_mines_floor_1_40(),
             Loot.solar_essence: self.mine.can_mine_in_the_mines_floor_41_80() | self.mine.can_mine_in_the_skull_cavern(),
             Loot.void_essence: self.mine.can_mine_in_the_mines_floor_81_120() | self.mine.can_mine_in_the_skull_cavern(),
             Machine.coffee_maker: self.received(Machine.coffee_maker),
-            Machine.crab_pot: self.skill.has_level(Skill.fishing, 3) & self.money.can_spend_at(Region.fish_shop, 1500),
-            Machine.enricher: self.money.can_trade_at(Region.qi_walnut_room, Currency.qi_gem, 20),
-            Machine.pressure_nozzle: self.money.can_trade_at(Region.qi_walnut_room, Currency.qi_gem, 20),
             Machine.sewing_machine: (self.region.can_reach(Region.haley_house) & self.has(ArtisanGood.cloth)) | (self.received(Machine.sewing_machine) & self.region.can_reach(Region.secret_woods)),
             Machine.statue_endless_fortune: self.has_statue_of_endless_fortune(),
+            Machine.solar_panel: self.false_,
             Material.cinder_shard: self.region.can_reach(Region.volcano_floor_5),
             Material.clay: self.region.can_reach_any(Region.farm, Region.beach, Region.quarry) & self.tool.has_tool(Tool.hoe),
             Material.coal: self.mine.can_mine_in_the_mines_floor_41_80() | self.tool.has_pan(),
@@ -296,7 +265,6 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, Travelin
             Material.sap: self.ability.can_chop_trees(),
             Material.stone: self.ability.can_mine_stone(),
             Material.wood: self.ability.can_chop_trees(),
-            Meal.ice_cream: (self.season.has(Season.summer) & self.money.can_spend_at(Region.town, 250)) | self.money.can_spend_at(Region.oasis, 240),
             MetalBar.copper: self.can_smelt(Ore.copper),
             MetalBar.gold: self.can_smelt(Ore.gold),
             MetalBar.iridium: self.can_smelt(Ore.iridium),
@@ -309,51 +277,46 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, Travelin
             Ore.iridium: self.ability.can_mine_perfectly_in_the_skull_cavern() | (self.mine.can_mine_in_the_skull_cavern() & self.tool.has_pan(ToolMaterial.gold)),  # Could add self.fish_pond.can_get_fish_pond_reward(Fish.super_cucumber, 9, Ore.iridium) but it makes a logic loop
             Ore.iron: self.mine.can_mine_in_the_mines_floor_41_80() | self.mine.can_mine_in_the_skull_cavern() | self.tool.has_pan(ToolMaterial.iron),
             Ore.radioactive: self.special_order.can_get_radioactive_ore(),
-            RetainingSoil.basic: self.money.can_spend_at(Region.pierre_store, 100),
-            RetainingSoil.quality: self.time.has_year_two & self.money.can_spend_at(Region.pierre_store, 150),
             SpecialItem.lucky_purple_shorts: self.special_items.has_purple_shorts(),
             SpecialItem.trimmed_purple_shorts: self.has(SpecialItem.lucky_purple_shorts) & self.has(MetalBar.gold) & self.has(Machine.sewing_machine),
             SpecialItem.far_away_stone: self.special_items.has_far_away_stone(),
             SpecialItem.solid_gold_lewis: self.special_items.has_solid_gold_lewis(),
             SpecialItem.advanced_tv_remote: self.special_items.has_advanced_tv_remote(),
-            SpeedGro.basic: self.money.can_spend_at(Region.pierre_store, 100),
-            SpeedGro.deluxe: self.time.has_year_two & self.money.can_spend_at(Region.pierre_store, 150),
+            SpecialItem.prismatic_jelly: self.special_items.has_prismatic_jelly(),
+            SpecialItem.ectoplasm: self.special_items.has_ectoplasm(),
             Trash.broken_cd: self.fishing.can_crab_pot_anywhere,
             Trash.broken_glasses: self.fishing.can_crab_pot_anywhere,
             Trash.driftwood: self.fishing.can_crab_pot_anywhere,
-            Trash.joja_cola: self.money.can_spend_at(Region.saloon, 75),
             Trash.soggy_newspaper: self.fishing.can_crab_pot_anywhere,
             Trash.trash: self.fishing.can_crab_pot_anywhere,
             TreeSeed.acorn: self.skill.has_level(Skill.foraging, 1) & self.ability.can_chop_trees(),
             TreeSeed.mahogany: self.region.can_reach(Region.secret_woods) & self.tool.has_tool(Tool.axe, ToolMaterial.iron) & self.skill.has_level(Skill.foraging, 1),
             TreeSeed.maple: self.skill.has_level(Skill.foraging, 1) & self.ability.can_chop_trees(),
-            TreeSeed.mushroom: self.money.can_trade_at(Region.qi_walnut_room, Currency.qi_gem, 5),
             TreeSeed.pine: self.skill.has_level(Skill.foraging, 1) & self.ability.can_chop_trees(),
             TreeSeed.mossy: self.ability.can_chop_trees() & self.season.has(Season.summer),
-            Fish.clam: self.tool.can_forage(Generic.any, Region.beach),
-            Fish.cockle: self.tool.can_forage(Generic.any, Region.beach),
             WaterItem.green_algae: self.fishing.can_fish_in_freshwater(),
             WaterItem.cave_jelly: self.fishing.can_fish_at(Region.mines_floor_100) & self.tool.has_fishing_rod(FishingRod.bamboo),
             WaterItem.river_jelly: self.fishing.can_fish_at(Region.town) & self.tool.has_fishing_rod(FishingRod.bamboo),
             WaterItem.sea_jelly: self.fishing.can_fish_at(Region.beach) & self.tool.has_fishing_rod(FishingRod.bamboo),
             WaterItem.seaweed: self.fishing.can_fish_at(Region.tide_pools),
             WaterItem.white_algae: self.fishing.can_fish_at(Region.mines_floor_20) & self.tool.has_fishing_rod(FishingRod.bamboo),
-            WildSeeds.grass_starter: self.money.can_spend_at(Region.pierre_store, 100),
+            Weapon.slingshot: self.combat.has_slingshot,
+            Weapon.master_slingshot: self.combat.has_master_slingshot,
+
         })
         # @formatter:on
 
         content_rules = {
             item_name: self.source.has_access_to_item(game_item)
-            for item_name, game_item in self.content.game_items.items()
+            for item_name, game_item in self.content.game_items.items() if game_item.sources
         }
 
         for item in set(content_rules.keys()).intersection(self.registry.item_rules.keys()):
-            logger.warning(f"Rule for {item} already exists in the registry, overwriting it.")
+            content_rules[item] = content_rules[item] | self.registry.item_rules[item]
 
         self.registry.item_rules.update(content_rules)
         self.registry.item_rules.update(self.registry.fish_rules)
         self.registry.item_rules.update(self.registry.museum_rules)
-        self.registry.item_rules.update(self.registry.crop_rules)
         self.artisan.initialize_rules()
         self.registry.item_rules.update(self.registry.artisan_good_rules)
 
@@ -372,7 +335,7 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, Travelin
             obtention_rule = self.registry.item_rules[recipe] if recipe in self.registry.item_rules else False_()
             self.registry.item_rules[recipe] = obtention_rule | crafting_rule
 
-        if self.options.bundle_randomization == BundleRandomization.option_meme:
+        if self.options.bundle_randomization.is_meme():
             self.meme.initialize_rules()
             self.registry.item_rules.update(self.registry.meme_item_rules)
 
@@ -385,7 +348,9 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, Travelin
         self.special_order.update_rules(self.mod.special_order.get_modded_special_orders_rules())
 
         self.shirt.initialize_rules()
+        self.pants.initialize_rules()
         self.registry.item_rules.update(self.registry.shirt_rules)
+        self.registry.item_rules.update(self.registry.pants_rules)
 
         for catalogue in items_by_catalogue:
             for item in items_by_catalogue[catalogue]:

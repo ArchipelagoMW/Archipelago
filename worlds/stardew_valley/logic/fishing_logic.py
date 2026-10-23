@@ -3,18 +3,21 @@ from functools import cached_property
 from Utils import cache_self1
 from .base_logic import BaseLogicMixin, BaseLogic
 from ..content.vanilla.qi_board import qi_board_content_pack
-from ..data import fish_data
-from ..data.fish_data import FishItem
+from ..data.fish_data import FishItem, weather_any
+from ..options.options import DataRandomizationBehavior
 from ..stardew_rule import StardewRule, True_
-from ..strings.ap_names.ap_option_names import CustomLogicOptionName
+from ..strings.ap_names.ap_option_names import CustomLogicOptionName, DataRandomizationOptionName
 from ..strings.ap_names.mods.mod_items import SVEQuestItem
-from ..strings.craftable_names import Fishing
+from ..strings.craftable_names import Fishing, Consumable
 from ..strings.fish_names import SVEFish
 from ..strings.machine_names import Machine
 from ..strings.quality_names import FishQuality
-from ..strings.region_names import Region
+from ..strings.region_names import Region, LogicRegion
+from ..strings.season_names import Season
 from ..strings.skill_names import Skill
 from ..strings.tool_names import FishingRod
+from ..strings.tv_channel_names import Channel
+from ..strings.weather_names import Weather
 
 
 class FishingLogicMixin(BaseLogicMixin):
@@ -87,24 +90,62 @@ class FishingLogic(BaseLogic):
         return self.logic.tool.has_fishing_rod(fishing_rod_required) & skill_rule
 
     @cache_self1
-    def can_catch_fish(self, fish: FishItem) -> StardewRule:
+    def can_catch_fish(self, fish: FishItem | str) -> StardewRule:
+        if isinstance(fish, str):
+            fish = self.content.fishes[fish]
         quest_rule = True_()
         if fish.extended_family:
             quest_rule = self.logic.fishing.can_start_extended_family_quest()
         region_rule = self.logic.region.can_reach_any(*fish.locations)
         season_rule = self.logic.season.has_any(fish.seasons)
+        find_rule = self.logic.true_
 
-        if fish.difficulty == -1:
+        if fish.is_crab_pot():
             difficulty_rule = self.logic.fishing.can_crab_pot
         else:
             difficulty_rule = self.logic.fishing.can_fish(120 if fish.legendary else fish.difficulty, fish.minimum_level)
+            find_rule = self.logic.fishing.can_find_where_to_catch(fish)
 
         if fish.name == SVEFish.kittyfish:
             item_rule = self.logic.received(SVEQuestItem.kittyfish_spell)
         else:
-            item_rule = True_()
+            item_rule = self.logic.true_
+        if LogicRegion.night_market in fish.locations:
+            region_rules = []
+            for loc in fish.locations:
+                if loc == LogicRegion.night_market:
+                    region_rules.append(self.logic.region.can_reach(loc) & self.logic.season.has(Season.winter))
+                else:
+                    region_rules.append(self.logic.region.can_reach(loc) & self.logic.season.has_any(fish.seasons))
+            region_rule = self.logic.or_(*region_rules)
+            season_rule = self.logic.true_
+        if fish.weather == (Weather.rain,) and Season.winter in fish.seasons:
+            has_rainy_winter = self.logic.season.has(Season.winter) & self.logic.has(Consumable.rain_totem)
+            other_seasons = [season for season in fish.seasons if season != Season.winter]
+            has_rainy_other = self.logic.false_ if len(other_seasons) <= 0 else self.logic.season.has_any(other_seasons)
+            season_rule = has_rainy_other | has_rainy_winter
 
-        return quest_rule & region_rule & season_rule & difficulty_rule & item_rule
+        return quest_rule & region_rule & season_rule & difficulty_rule & find_rule & item_rule
+
+    @cache_self1
+    def can_find_where_to_catch(self, fish: FishItem | str) -> StardewRule:
+        if self.options.data_randomization_behavior == DataRandomizationBehavior.option_off:
+            return self.logic.true_
+        if CustomLogicOptionName.no_fibs in self.options.custom_logic:
+            return self.logic.true_
+
+        if isinstance(fish, str):
+            fish = self.content.fishes[fish]
+
+        if DataRandomizationOptionName.fish_location not in self.options.data_randomization and DataRandomizationOptionName.fish_season not in self.options.data_randomization:
+            if DataRandomizationOptionName.fish_weather not in self.options.data_randomization or fish.weather == weather_any:
+                return self.logic.true_
+
+        if CustomLogicOptionName.fibs_only_for_hard_to_find in self.options.custom_logic:
+            if len(fish.seasons) >= 4 or len(fish.locations) >= 3:
+                return self.logic.true_
+
+        return self.logic.received(Channel.fibs)
 
     def can_catch_fish_for_fishsanity(self, fish: FishItem) -> StardewRule:
         """ Rule could be different from the basic `can_catch_fish`. Imagine a fishsanity setting where you need to catch every fish with gold quality.
@@ -113,12 +154,11 @@ class FishingLogic(BaseLogic):
 
     def can_start_extended_family_quest(self) -> StardewRule:
         if self.content.is_enabled(qi_board_content_pack):
-            return (self.logic.region.can_reach(Region.qi_walnut_room) &
-                    self.logic.and_(*(self.logic.fishing.can_catch_fish(fish) for fish in fish_data.vanilla_legendary_fish)))
+            return self.logic.region.can_reach(Region.qi_walnut_room)
 
         return self.logic.false_
 
-    def can_catch_quality_fish(self, fish_quality: str) -> StardewRule:
+    def can_catch_quality_fish_rod(self, fish_quality: str) -> StardewRule:
         if fish_quality == FishQuality.basic:
             return self.logic.true_
         if fish_quality == FishQuality.silver:
@@ -127,6 +167,16 @@ class FishingLogic(BaseLogic):
             return self.logic.skill.has_level(Skill.fishing, 4) & self.can_use_tackle(Fishing.quality_bobber)
         if fish_quality == FishQuality.iridium:
             return self.logic.skill.has_level(Skill.fishing, 10) & self.can_use_tackle(Fishing.quality_bobber)
+
+        raise ValueError(f"Quality {fish_quality} is unknown.")
+
+    def can_catch_quality_fish_crab_pot(self, fish_quality: str) -> StardewRule:
+        if fish_quality == FishQuality.basic:
+            return self.logic.true_
+        if fish_quality == FishQuality.silver:
+            return self.logic.has(Fishing.deluxe_bait)
+        if fish_quality == FishQuality.gold or fish_quality == FishQuality.iridium:
+            return self.logic.false_
 
         raise ValueError(f"Quality {fish_quality} is unknown.")
 

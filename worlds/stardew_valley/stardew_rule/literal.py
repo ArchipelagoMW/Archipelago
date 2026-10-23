@@ -50,7 +50,28 @@ class False_(LiteralStardewRule):  # noqa
         return self
 
 
+class Undiscovered_(LiteralStardewRule):
+    value = False
+
+    def __new__(cls, _cache=[]):  # noqa
+        # Only one single instance will be ever created.
+        if not _cache:
+            _cache.append(super(Undiscovered_, cls).__new__(cls))
+        return _cache[0]
+
+    def __or__(self, other) -> StardewRule:
+        return other
+
+    def __and__(self, other) -> StardewRule:
+        return self
+
+    def __repr__(self):
+        return str("Undiscovered")
+
+
 false_ = False_()
 true_ = True_()
+undiscovered_ = Undiscovered_()
 assert false_
 assert true_
+assert undiscovered_

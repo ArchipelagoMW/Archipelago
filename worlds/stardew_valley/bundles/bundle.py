@@ -48,10 +48,15 @@ class BundleTemplate:
         return BundleTemplate(template.room, template.name, items, template.number_possible_items,
                               template.number_required_items)
 
+    def get_filtered_items(self, content: StardewContent, options: StardewValleyOptions, items: List[BundleItem] = None):
+        if items is None:
+            items = self.items
+        return [item for item in items if item.can_appear(content, options)]
+
     def create_bundle(self, random: Random, content: StardewContent, options: StardewValleyOptions) -> Bundle:
         try:
             number_required, price_multiplier = get_bundle_final_prices(options.bundle_price, self.number_required_items, False)
-            filtered_items = [item for item in self.items if item.can_appear(content, options)]
+            filtered_items = self.get_filtered_items(content, options)
             number_items = len(filtered_items)
             number_chosen_items = self.number_possible_items
             if number_chosen_items < number_required:
@@ -66,13 +71,18 @@ class BundleTemplate:
         except Exception as e:
             raise Exception(f"Failed at creating bundle '{self.name}'. Error: {e}")
 
+    def has_enough_valid_items_to_appear(self, content: StardewContent, options: StardewValleyOptions):
+        filtered_items = self.get_filtered_items(content, options)
+        return len(filtered_items) >= self.number_required_items or len(filtered_items) == len(self.items)
 
-    def can_appear(self, options: StardewValleyOptions) -> bool:
+    def can_appear(self, content: StardewContent, options: StardewValleyOptions) -> bool:
         if self.name == MemeBundleName.trap and options.trap_items.value == TrapDifficulty.option_no_traps:
             return False
         if self.name == MemeBundleName.hibernation and options.multiple_day_sleep_enabled == MultipleDaySleepEnabled.option_false:
             return False
         if self.name == MemeBundleName.cooperation and options.gifting == Gifting.option_false:
+            return False
+        if not self.has_enough_valid_items_to_appear(content, options):
             return False
         return True
 
@@ -160,9 +170,7 @@ class CurrencyBundleTemplate(BundleTemplate):
         currency_amount = max(1, int(self.item.amount * price_multiplier))
         return currency_amount
 
-    def can_appear(self, options: StardewValleyOptions) -> bool:
-        if not super().can_appear(options):
-            return False
+    def can_appear(self, content: StardewContent, options: StardewValleyOptions) -> bool:
         if options.exclude_ginger_island == ExcludeGingerIsland.option_true:
             if self.item.item_name == Currency.qi_gem or self.item.item_name == Currency.golden_walnut or self.item.item_name == Currency.cinder_shard:
                 return False
@@ -175,6 +183,8 @@ class CurrencyBundleTemplate(BundleTemplate):
         if options.death_link != DeathLink.option_true:
             if self.item.item_name == MemeCurrency.deathlinks:
                 return False
+        if not super().can_appear(content, options):
+            return False
         return True
 
 
@@ -212,17 +222,21 @@ class MoneyBundleTemplate(CurrencyBundleTemplate):
 
 
 class IslandBundleTemplate(BundleTemplate):
-    def can_appear(self, options: StardewValleyOptions) -> bool:
-        if not super().can_appear(options):
+    def can_appear(self, content: StardewContent, options: StardewValleyOptions) -> bool:
+        if options.exclude_ginger_island == ExcludeGingerIsland.option_true:
             return False
-        return options.exclude_ginger_island == ExcludeGingerIsland.option_false
+        if not super().can_appear(content, options):
+            return False
+        return True
 
 
 class FestivalBundleTemplate(BundleTemplate):
-    def can_appear(self, options: StardewValleyOptions) -> bool:
-        if not super().can_appear(options):
+    def can_appear(self, content: StardewContent, options: StardewValleyOptions) -> bool:
+        if options.festival_locations == FestivalLocations.option_disabled:
             return False
-        return options.festival_locations != FestivalLocations.option_disabled
+        if not super().can_appear(content, options):
+            return False
+        return True
 
 
 class DeepBundleTemplate(BundleTemplate):
@@ -248,11 +262,22 @@ class DeepBundleTemplate(BundleTemplate):
 
         chosen_items = []
         for category in chosen_categories:
-            filtered_items = [item for item in category if item.can_appear(content, options)]
+            filtered_items = self.get_filtered_items(content, options, category)
             chosen_items.append(random.choice(filtered_items))
 
         chosen_items = [item.as_amount(max(1, math.floor(item.amount * price_multiplier))) for item in chosen_items]
         return Bundle(self.room, self.name, chosen_items, number_required)
+
+    def has_enough_valid_items_to_appear(self, content: StardewContent, options: StardewValleyOptions):
+        num_valid_categories = 0
+        for category in self.categories:
+            filtered_items = self.get_filtered_items(content, options, category)
+            if len(filtered_items) > 0:
+                num_valid_categories += 1
+        if num_valid_categories < self.number_required_items and num_valid_categories < len(self.categories):
+            return False
+        return True
+
 
 
 class FixedPriceDeepBundleTemplate(DeepBundleTemplate):

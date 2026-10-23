@@ -89,6 +89,8 @@ class Group(enum.Enum):
     ENDGAME_LOCATION_ITEMS = enum.auto()
     REQUIRES_FRIENDSANITY_MARRIAGE = enum.auto()
     BOOKSELLER = enum.auto()
+    VILLAGER = enum.auto()
+    VILLAGER_ALWAYS = enum.auto()
 
     # Types of filler
     FILLER_FARMING = enum.auto()

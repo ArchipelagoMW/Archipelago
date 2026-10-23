@@ -1,17 +1,18 @@
-from ..bases import SVTestBase
-from ...options import ExcludeGingerIsland, Booksanity, Shipsanity, Mods, all_mods_except_invalid_combinations
+from ...mods.mod_data import ModNames
+from ...options import Booksanity, ExcludeGingerIsland, Mods, Shipsanity
 from ...strings.ap_names.mods.mod_items import ModBooks
+from ..bases import SVTestBase
 
 ModSkillBooks = [ModBooks.digging_like_worms]
 ModPowerBooks = []
 
 
 class TestModBooksanityNone(SVTestBase):
-    options = {
+    options = {  # noqa: RUF012
         ExcludeGingerIsland: ExcludeGingerIsland.option_false,
         Shipsanity: Shipsanity.option_everything,
         Booksanity: Booksanity.option_none,
-        Mods.internal_name: frozenset(all_mods_except_invalid_combinations),
+        Mods.internal_name: frozenset(ModNames.enabled_mods_except_invalid_combinations()),
     }
 
     def test_no_mod_power_books_locations(self):
@@ -48,11 +49,11 @@ class TestModBooksanityNone(SVTestBase):
 
 
 class TestModBooksanityPowers(SVTestBase):
-    options = {
+    options = {  # noqa: RUF012
         ExcludeGingerIsland: ExcludeGingerIsland.option_false,
         Shipsanity: Shipsanity.option_everything,
         Booksanity: Booksanity.option_power,
-        Mods.internal_name: frozenset(all_mods_except_invalid_combinations),
+        Mods.internal_name: frozenset(ModNames.enabled_mods_except_invalid_combinations()),
     }
 
     def test_all_modp_ower_books_locations(self):
@@ -89,11 +90,11 @@ class TestModBooksanityPowers(SVTestBase):
 
 
 class TestBooksanityPowersAndSkills(SVTestBase):
-    options = {
+    options = {  # noqa: RUF012
         ExcludeGingerIsland: ExcludeGingerIsland.option_false,
         Shipsanity: Shipsanity.option_everything,
         Booksanity: Booksanity.option_power_skill,
-        Mods.internal_name: frozenset(all_mods_except_invalid_combinations),
+        Mods.internal_name: frozenset(ModNames.enabled_mods_except_invalid_combinations()),
     }
 
     def test_all_mod_power_books_locations(self):
@@ -130,17 +131,18 @@ class TestBooksanityPowersAndSkills(SVTestBase):
 
 
 class TestBooksanityAll(SVTestBase):
-    options = {
+    options = {  # noqa: RUF012
         ExcludeGingerIsland: ExcludeGingerIsland.option_false,
         Shipsanity: Shipsanity.option_everything,
         Booksanity: Booksanity.option_all,
-        Mods.internal_name: frozenset(all_mods_except_invalid_combinations),
+        Mods.internal_name: frozenset(ModNames.enabled_mods_except_invalid_combinations()),
     }
 
     def test_digging_like_worms_require_2_levels(self):
         read_location = self.world.get_location("Read Digging Like Worms")
         ship_location = self.world.get_location("Shipsanity: Digging Like Worms")
         self.collect("Shipping Bin")
+        self.collect("Progressive Hoe")
         self.collect_months(2)
 
         self.assert_cannot_reach_location(read_location)
