@@ -42,7 +42,7 @@ def set_rules(world: "GauntletLegendsWorld"):
                             add_rule(
                                 world.get_location(location.name),
                                 lambda state, expected_count_=expected_count: state.has("progression", world.player,
-                                                                                        expected_count)
+                                                                                        expected_count_)
                             )
 
 
