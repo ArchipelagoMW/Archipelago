@@ -59,16 +59,16 @@ class MeritousWorld(World):
         self.death_link = False
 
     @staticmethod
-    def _is_progression(name):
+    def _is_progression(name, number=0):
         return "PSI Key" in name or name in [
             "Cursed Seal", "Agate Knife", "Dodge Enhancer",
             "Shield Boost", "Metabolism", "Circuit Booster"
-        ]
+        ] or ("upgrade" in name and number < 19)
 
-    def create_item(self, name: str) -> Item:
-
+    def create_item(self, name: str, number=0) -> Item:
         return MeritousItem(name, self._is_progression(
-            name), item_table[name], self.player)
+            name, number), item_table[name], self.player)
+
 
     def create_event(self, event: str):
         event = MeritousItem(event, True, None, self.player)
@@ -76,7 +76,7 @@ class MeritousWorld(World):
         return event
 
     def _create_item_in_quantities(self, name: str, qty: int) -> [Item]:
-        return [self.create_item(name) for _ in range(0, qty)]
+        return [self.create_item(name, i) for i in range(0, qty)]
 
     def _make_crystals(self, qty: int) -> [MeritousItem]:
         crystal_pool = []
@@ -89,11 +89,11 @@ class MeritousWorld(World):
     def get_filler_item_name(self) -> str:
         rand_crystals = self.multiworld.random.randrange(0, 32)
         if rand_crystals < 16:
-            return "Crystals x500"
+            return "Small Crystal Cache"
         elif rand_crystals < 28:
-            return "Crystals x1000"
+            return "Medium Crystal Cache"
         else:
-            return "Crystals x2000"
+            return "Large Crystal Cache"
 
     def generate_early(self):
         self.goal = self.options.goal.value
@@ -135,7 +135,7 @@ class MeritousWorld(World):
         self.multiworld.itempool += item_pool
 
     def set_rules(self):
-        set_rules(self.multiworld, self.player)
+        set_rules(self.multiworld, self.player, self.include_evolution_traps)
         if self.goal == 0:
             self.multiworld.completion_condition[self.player] = lambda state: state.has_any(
                 ["Victory", "Full Victory"], self.player)
