@@ -8,7 +8,14 @@ from copy import deepcopy
 from typing import List, Any, Iterable
 from NetUtils import decode, encode, JSONtoTextParser, JSONMessagePart, NetworkItem, NetworkPlayer
 from MultiServer import Endpoint
-from CommonClient import CommonContext, gui_enabled, ClientCommandProcessor, logger, get_base_parser
+
+# UT integration
+tracker_loaded = False
+try:
+    from worlds.tracker.TrackerClient import TrackerGameContext as CommonContext, gui_enabled, ClientCommandProcessor, logger, get_base_parser
+    tracker_loaded = True
+except ModuleNotFoundError:
+    from CommonClient import CommonContext, gui_enabled, ClientCommandProcessor, logger, get_base_parser
 
 DEBUG = False
 
@@ -26,6 +33,7 @@ class AHITCommandProcessor(ClientCommandProcessor):
 
 
 class AHITContext(CommonContext):
+    tags = {"AP"} # remove tracker tag if UT loaded
     command_processor = AHITCommandProcessor
     game = "A Hat in Time"
 
@@ -102,6 +110,11 @@ class AHITContext(CommonContext):
         self.server_msgs.append(encode([{"cmd": "ReceivedItems", "index": 0, "items": self.full_inventory}]))
 
     def on_package(self, cmd: str, args: dict):
+        # TODO: see how this interacts or nullifies the optimization logic below. Can maybe modify to only keep slot info, and anything else, for itself instead of wiping it all? How does this affect the game itself?
+        # Should probably talk to CookieCat about how to handle this.
+        # UT integration
+        super().on_package(cmd, args)
+
         if cmd == "Connected":
             json = args
             # This data is not needed and causes the game to freeze for long periods of time in large asyncs.
@@ -149,17 +162,11 @@ class AHITContext(CommonContext):
             if cmd != "PrintJSON":
                 self.server_msgs.append(encode([args]))
 
-    def run_gui(self):
-        from kvui import GameManager
-
-        class AHITManager(GameManager):
-            logging_pairs = [
-                ("Client", "Archipelago")
-            ]
-            base_title = "Archipelago A Hat in Time Client"
-
-        self.ui = AHITManager(self)
-        self.ui_task = asyncio.create_task(self.ui.async_run(), name="UI")
+    def make_gui(self):
+        ui = super().make_gui()
+        ui.base_title = "Archipelago A Hat in Time Client"
+        ui.logging_pairs = [("Client", "Archipelago")]
+        return ui
 
 
 async def proxy(websocket, path: str = "/", ctx: AHITContext = None):
@@ -254,6 +261,8 @@ def launch(*launch_args: str):
                                      host="localhost", port=11311, ping_timeout=999999, ping_interval=999999)
         ctx.proxy_task = asyncio.create_task(proxy_loop(ctx), name="ProxyLoop")
 
+        if tracker_loaded:
+            ctx.run_generator()
         if gui_enabled:
             ctx.run_gui()
         ctx.run_cli()
