@@ -14,6 +14,7 @@ goal_area_option_to_name: dict[int, str] = {
     6: "10a",
     7: "10b",
     8: "10c",
+    9: "poetry",
 }
 
 
@@ -27,6 +28,7 @@ goal_area_option_to_display_name: dict[int, str] = {
     6: "Farewell",
     7: "Farewell",
     8: "Farewell",
+    9: "Poetry Slam",
 }
 
 goal_area_to_location_name: dict[str, str] = {
@@ -39,6 +41,34 @@ goal_area_to_location_name: dict[str, str] = {
     "10a": "Farewell - Crystal Heart?",
     "10b": "Farewell - Level Clear",
     "10c": "Farewell - Golden Strawberry",
+    "poetry": "Poetry Slam",
+}
+
+goal_area_to_option_name: dict[str, str] = {
+    "7a": "the_summit_a",
+    "7b": "the_summit_b",
+    "7c": "the_summit_c",
+    "9a": "core_a",
+    "9b": "core_b",
+    "9c": "core_c",
+    "10a": "empty_space",
+    "10b": "farewell",
+    "10c": "farewell_golden",
+    "poetry": "poetry_slam",
+}
+
+level_id_to_name: dict[str, str] = {
+    "0": "Prologue",
+    "1": "Forsaken City",
+    "2": "Old Site",
+    "3": "Celestial Resort",
+    "4": "Golden Ridge",
+    "5": "Mirror Temple",
+    "6": "Reflection",
+    "7": "The Summit",
+    "8": "Epilogue",
+    "9": "Core",
+    "10": "Farewell",
 }
 
 
@@ -55,6 +85,7 @@ class LocationType(IntEnum):
     clutter = 9
     gem = 10
     car = 11
+    breaker = 12
 
 class DoorDirection(IntEnum):
     up = 0
@@ -105,11 +136,15 @@ class RegionConnection:
     destination_name: str
     destination: PreRegion
     possible_access: list[list[str]]
+    possible_access_vanilla: list[list[str]]
+    possible_access_assist: list[list[str]]
 
-    def __init__(self, source_name: str, destination_name: str, possible_access: list[list[str]] = []):
+    def __init__(self, source_name: str, destination_name: str, possible_access: list[list[str]] = [], possible_access_vanilla: list[list[str]] = [], possible_access_assist: list[list[str]] = []):
         self.source_name = source_name
         self.destination_name = destination_name
         self.possible_access = possible_access.copy()
+        self.possible_access_vanilla = possible_access_vanilla.copy()
+        self.possible_access_assist = possible_access_assist.copy()
 
 
 class LevelLocation:
@@ -119,13 +154,17 @@ class LevelLocation:
     region: PreRegion
     loc_type: LocationType
     possible_access: list[list[str]]
+    possible_access_vanilla: list[list[str]]
+    possible_access_assist: list[list[str]]
 
-    def __init__(self, name: str, display_name: str, region_name: str, loc_type: LocationType, possible_access: list[list[str]] = []):
+    def __init__(self, name: str, display_name: str, region_name: str, loc_type: LocationType, possible_access: list[list[str]] = [], possible_access_vanilla: list[list[str]] = [], possible_access_assist: list[list[str]] = []):
         self.name = name
         self.display_name = display_name
         self.region_name = region_name
         self.loc_type = loc_type
         self.possible_access = possible_access.copy()
+        self.possible_access_vanilla = possible_access_vanilla.copy()
+        self.possible_access_assist = possible_access_assist.copy()
 
 class Room:
     level_name: str
@@ -182,12 +221,14 @@ class Level:
     display_name: str
     rooms: list[Room]
     room_connections: list[RoomConnection]
+    items: list[str]
 
-    def __init__(self, name: str, display_name: str, rooms: list[Room], room_connections: list[RoomConnection]):
+    def __init__(self, name: str, display_name: str, rooms: list[Room], room_connections: list[RoomConnection], items: set[str]):
         self.name = name
         self.display_name = display_name
         self.rooms = rooms.copy()
         self.room_connections = room_connections.copy()
+        self.items = items.copy()
 
 
 def load_logic_data() -> dict[str, Level]:
