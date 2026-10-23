@@ -308,7 +308,7 @@ class BlasphemousWorld(World):
             "StartingLocation": self.options.starting_location.value,
             "VersionCreated": "AP",
             
-            "UnlockTeleportation": bool(self.options.prie_dieu_warp.value),
+            "UnlockTeleportation": True,
             "AllowHints": bool(self.options.corpse_hints.value),
             "AllowPenitence": bool(self.options.penitence.value),
             
@@ -318,7 +318,7 @@ class BlasphemousWorld(World):
             "ShuffleDash": bool(self.options.dash_shuffle.value),
             "ShuffleWallClimb": bool(self.options.wall_climb_shuffle.value),
             
-            "ShuffleSwordSkills": bool(self.options.wall_climb_shuffle.value),
+            "ShuffleSwordSkills": bool(self.options.skill_randomizer.value),
             "ShuffleThorns": thorns,
             "JunkLongQuests": bool(self.options.skip_long_quests.value),
             "StartWithWheel": bool(self.options.start_wheel.value),
