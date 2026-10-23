@@ -1,0 +1,77 @@
+[
+  {
+    "name": "Ninja Village",
+    "sections": [
+      {
+        "name": "Ninja Village - Astral Seed"
+      },
+      {
+        "name": "Ninja Village - Candle"
+      },
+      {
+        "name": "Ninja Village Seal - Tree House"
+      }
+    ],
+    "map_locations": [
+      {
+        "map": "Overworld",
+        "x": 144,
+        "y": 340,
+        "size": 30
+      }
+    ]
+  },
+  {
+    "name": "Ninja Village - Key locations",
+    "children": [
+      {
+        "sections": [
+          {
+            "name": "Ninja Village - Astral Seed"
+          }
+        ],
+        "map_locations": [
+          {
+            "map": "Ninja Village",
+            "x": 519,
+            "y": 85
+          }
+        ]
+      },
+      {
+        "sections": [
+          {
+            "name": "Ninja Village - Candle"
+          }
+        ],
+        "map_locations": [
+          {
+            "map": "Ninja Village",
+            "x": 518,
+            "y": 344
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Ninja Village - Power Seals",
+    "children": [
+      {
+        "name": "Ninja Village Seal",
+        "sections": [
+          {
+            "name": "Ninja Village Seal - Tree House"
+          }
+        ],
+        "map_locations": [
+          {
+            "map": "Ninja Village",
+            "x": 165,
+            "y": 155
+          }
+        ]
+      }
+    ]
+  }
+]
