@@ -2587,6 +2587,8 @@ def set_rules(multiworld: MultiWorld, options: NO100FOptions, player: int):
         add_rule(multiworld.get_entrance(ConnectionNames.p005_p004, player), lambda state: state.has(ItemNames.HelmetPower, player, 1) and state.has(ItemNames.PlungerPower, player, 1))
         add_rule(multiworld.get_entrance(ConnectionNames.p005_b001, player), lambda state: state.has(ItemNames.ProgressiveJump, player, 2))
         add_rule(multiworld.get_entrance(ConnectionNames.p002_s001, player), lambda state: state.has(ItemNames.SoapPower, player, 1) and state.has(ItemNames.ProgressiveJump, player, 2) and state.has(ItemNames.HelmetPower, player, 1) and state.has(ItemNames.PoundPower, player, 1)),
+        add_rule(multiworld.get_entrance(ConnectionNames.o006_o005, player), lambda state: state.can_reach(RegionNames.o005, "Region", player) and state.has(ItemNames.HelmetPower,player,1) and state.has(ItemNames.ProgressiveJump, player, 1))
+        add_rule(multiworld.get_entrance(ConnectionNames.o006_o008, player), lambda state: state.can_reach(RegionNames.o005, "Region", player) and state.has(ItemNames.HelmetPower,player,1) and state.has(ItemNames.ProgressiveJump, player, 1))
 
     if ItemNames.Warps not in allowed_loc_types:
         # Warps, but not accessible logically
