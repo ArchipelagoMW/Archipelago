@@ -18,7 +18,7 @@ Many baseline changes are made to the game, including:
 
 * Bag item space increased to 128 slots (up from 20).
 * PC item storage increased to 64 slots (up from 50).
-* You can hold B to run (or bike extra fast!).
+* You can hold B to run (or bike extra fast!). If Auto-Run is enabled, you instead hold B to move at normal speed.
 * You can hold select while talking to a trainer to re-battle them.
 * You can select "Pallet Warp" below the "Continue" option to warp to Pallet Town as you load your save.
 * Mew can be encountered at the S.S. Anne dock truck. This can be randomized depending on your options.
@@ -28,21 +28,29 @@ City. You also cannot Surf onto the water from the end of Seafoam Islands going 
 the boulders.
 * After obtaining one of the fossil item checks in Mt Moon, the remaining item can be received from the Cinnabar Lab
 fossil scientist. This may require reviving a number of fossils, depending on your options.
+* After turning in a fossil, you can buy more of that fossil from the left-side PC in the Cinnabar Lab Fossil Room.
+* In-game trades are repeatable.
+* The Pokémon for sale in the Route 4 Pokémon Center can be purchased repeatedly.
+* The second Fighting Dojo reward Pokémon can be be obtained if you've defeated Sabrina.
 * Obedience depends on the total number of badges you have obtained instead of depending on specific badges.
 * Pokémon that evolve by trading can also evolve by reaching level 35.
 * Evolution stones are reusable key items.
-* Much of the dialogue throughout the game has been removed or shortened.
-* The Pokédex shows which HMs can be learned by any Pokémon registered as seen.
+* Rods always get a bite, as long as you've obtained your starter Pokémon.
 * HM moves can be overwritten if you have the HM for it in your bag.
 * The NPC on the left behind the Celadon Game Corner counter will sell 1500 coins at once instead of giving information
 about the Prize Corner.
 * A woman in Oak's Lab can send you back in time to replay the first rival battle, in case you have no other reachable
 and repeatable source of money.
 * You can disable and re-enable experience gains by talking to an aide in Oak's Lab.
-* You can reset static encounters (Poké Flute encounter, legendaries, and the trap Poké Ball battles in Power Plant)
+* You can reset static encounters (Poké Flute encounters, legendaries, and the trap Poké Ball battles in Power Plant)
 for any Pokémon you have defeated but not caught, by talking to an aide in Oak's Lab.
+* Much of the dialogue throughout the game has been removed or shortened.
+* When catching a Pokémon and sending it to a box, the amount of box storage used up is displayed.
+* The Pokédex shows which HMs can be learned by any Pokémon registered as seen.
 * Dungeons normally hidden on the Town Map are now present, and the "Sea Cottage" has been removed. This is to allow
 Simple Door Shuffle to update the locations of all of the dungeons on the Town Map.
+* The Cinnabar Shore glitch has been patched out, because changes to the base ROM caused Missingno. encounters to lead
+to crashes.
 
 ## What items and locations get shuffled?
 
