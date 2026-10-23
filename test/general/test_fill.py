@@ -880,3 +880,32 @@ class TestBalanceMultiworldProgression(unittest.TestCase):
 
         self.assertRegionContains(
             self.player1.regions[2], self.player2.prog_items[0])
+
+    def test_does_not_displace_non_progression_skip_balancing(self) -> None:
+        """Non-progression skip-balancing items cannot be swapped into later spheres."""
+        self.multiworld.worlds[self.player1.id].options.progression_balancing.value = 50
+        self.multiworld.worlds[self.player2.id].options.progression_balancing.value = 50
+
+        protected_items = {
+            location.item
+            for location in self.player1.regions[1].locations
+            if location.item and not location.advancement
+        }
+        for item in protected_items:
+            item.classification |= ItemClassification.skip_balancing
+
+        balance_multiworld_progression(self.multiworld)
+
+        self.assertTrue(protected_items)
+        self.assertTrue(all(item.location.parent_region is self.player1.regions[1] for item in protected_items))
+        self.assertRegionContains(self.player1.regions[2], self.player2.prog_items[0])
+
+    def test_location_can_collapse_progression_balancing_sphere(self) -> None:
+        """Progression at a non-boundary location expands the current balancing sphere."""
+        self.multiworld.worlds[self.player1.id].options.progression_balancing.value = 50
+        self.multiworld.worlds[self.player2.id].options.progression_balancing.value = 50
+        self.player1.prog_items[0].location.progression_balancing_sphere = False
+
+        balance_multiworld_progression(self.multiworld)
+
+        self.assertRegionContains(self.player1.regions[2], self.player2.prog_items[0])
