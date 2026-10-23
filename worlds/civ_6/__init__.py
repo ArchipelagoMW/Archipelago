@@ -136,7 +136,7 @@ class CivVIWorld(World):
             era_index = eras_list.index(era.value)
             self.era_required_progressive_era_counts[era] = (
                 0
-                if era in {EraType.ERA_FUTURE, EraType.ERA_INFORMATION}
+                if era in {EraType.ERA_FUTURE}
                 else era_index + 1
             )
 
