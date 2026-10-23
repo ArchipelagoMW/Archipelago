@@ -1,4 +1,5 @@
 from BaseClasses import ItemClassification
+
 from . import MessengerTestBase
 
 
@@ -6,6 +7,7 @@ class HardLogicTest(MessengerTestBase):
     options = {
         "logic_level": "hard",
         "shuffle_shards": "true",
+        "shuffle_skylands_generators": "true",
     }
 
     def test_vertical(self) -> None:
@@ -64,7 +66,9 @@ class HardLogicTest(MessengerTestBase):
             with self.subTest("can't reach location with nothing", location=loc):
                 self.assertFalse(self.can_reach_location(loc))
 
-        items = self.get_items_by_name(["Windmill Shuriken", "Lightfoot Tabi", "Magic Firefly"])
+        items = self.get_items_by_name(
+            ["Windmill Shuriken", "Lightfoot Tabi", "Magic Firefly"] + ["Progressive Generator Shutdown"] * 4
+        )
         self.collect(items)
         for loc in windmill_locs:
             with self.subTest("can reach with Windmill", location=loc):

@@ -2,7 +2,7 @@ from functools import cached_property
 from typing import TYPE_CHECKING
 
 from BaseClasses import CollectionState, Item, ItemClassification, Location, Region
-from .regions import LOCATIONS, MEGA_SHARDS
+from .regions import LOCATIONS, MEGA_SHARDS, SKYLANDS_GENERATORS
 from .shop import FIGURINES, SHOP_ITEMS
 
 if TYPE_CHECKING:
@@ -35,6 +35,10 @@ class MessengerRegion(Region):
 
         if world.options.shuffle_shards and name in MEGA_SHARDS:
             locations += MEGA_SHARDS[name]
+
+        if world.options.shuffle_skylands_generators and name in SKYLANDS_GENERATORS:
+            locations += SKYLANDS_GENERATORS[name]
+
         loc_dict = {loc: world.location_name_to_id.get(loc, None) for loc in locations}
         self.add_locations(loc_dict, MessengerLocation)
 
