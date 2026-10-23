@@ -35,6 +35,8 @@ from kivy.config import Config
 Config.set("input", "mouse", "mouse,disable_multitouch")
 Config.set("kivy", "exit_on_escape", "0")
 Config.set("graphics", "multisamples", "0")  # multisamples crash old intel drivers
+# kvui_flip_sync start on, set to 0 if it isn't needed and it won't run again
+Config.setdefault("graphics", "sync_after_flip", "1")
 
 # Workaround for Kivy issue #9226.
 # caused by kivy by default using probesysfs,
@@ -56,6 +58,13 @@ for classobj in SoundLoader._classes:
     # The least invasive way to force a SoundLoader class to load its audio engine seems to be calling
     # .extensions(), which e.g. in audio_sdl2.pyx then calls a function called "mix_init()"
     classobj.extensions()
+
+from kvui_flip_sync import install_flip_sync
+
+default_flip_vsync = install_flip_sync()
+
+# kvui_flip_sync - grabs any opengl
+Config.set("graphics", "sync_after_flip", "0" if not default_flip_vsync else "1")
 
 from kivymd.uix.divider import MDDivider
 from kivy.core.window import Window
