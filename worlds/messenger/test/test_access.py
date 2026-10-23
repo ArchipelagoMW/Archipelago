@@ -1,6 +1,4 @@
-import typing
-
-from ..constants import NOTES, PHOBEKINS
+from ..constants import NOTES
 from . import MessengerTestBase
 
 
