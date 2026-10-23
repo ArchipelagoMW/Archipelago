@@ -8,6 +8,19 @@ from typing import TYPE_CHECKING, Optional
 
 from Utils import pc_to_snes, snes_to_pc
 from .enemizer_data.base_patch_data import ENEMIZER_BASE_PATCHES
+from .enemizer_data.enemy_combat_data import (
+    DAMAGE_SOURCE_TABLE_ADDRESS,
+    ENEMY_HEALTH_RANGE_BY_KEY,
+    ENEMY_HP_TABLE_ADDRESS,
+    EnemyCombatModel,
+    EXCLUDED_ENEMY_TABLE_SPRITE_IDS,
+    SPRITE_DAMAGE_SUBCLASS_TABLE_SNES_ADDRESS,
+    THIEF_DEFAULT_HP,
+    THIEF_SPRITE_ID,
+    VANILLA_COMBAT_MODEL,
+    build_damage_source_table_bytes,
+    build_packed_sprite_damage_subclass_table,
+)
 from .enemizer_data.symbols import ENEMIZER_SYMBOLS
 
 if TYPE_CHECKING:
@@ -146,15 +159,12 @@ TRINEXX_SHELL_OBJECT_ID = 0xFF2
 KHOLDSTARE_SHELL_OBJECT_ID = 0xF95
 TRINEXX_VANILLA_ROOM_ID = 164
 KHOLDSTARE_VANILLA_ROOM_ID = 222
-ENEMY_HP_TABLE_ADDRESS = 0x6B173
 ENEMY_DAMAGE_TABLE_ADDRESS = 0x6B266
 HIDDEN_ENEMY_CHANCE_POOL_ADDRESS = 0xD7BBB
 DAMAGE_GROUP_TABLE_ADDRESS = 0x3742D
 RETRO_ARROW_REPLACEMENT_CHECK_ADDRESS = 0x301FC
 RETRO_RUPEE_REPLACEMENT_SPRITE_ID = 0xDA
 ARROW_REFILL_5_SPRITE_ID = 0xE1
-THIEF_SPRITE_ID = 0xC4
-THIEF_DEFAULT_HP = 4
 VANILLA_HIDDEN_ENEMY_CHANCE_POOL = (
     0x01, 0x01, 0x01, 0x01, 0x0F, 0x01, 0x01, 0x12,
     0x10, 0x01, 0x01, 0x01, 0x11, 0x01, 0x01, 0x03,
@@ -163,16 +173,6 @@ RANDOMIZED_HIDDEN_ENEMY_CHANCE_POOL = (
     0x01, 0x0F, 0x0F, 0x0F, 0x0F, 0x0F, 0x0F, 0x12,
     0x0F, 0x01, 0x0F, 0x0F, 0x11, 0x0F, 0x0F, 0x03,
 )
-EXCLUDED_ENEMY_TABLE_SPRITE_IDS = frozenset({
-    0x09, 0x53, 0x54, 0x70, 0x7A, 0x7B, 0x88, 0x89, 0x8C, 0x8D, 0x92,
-    0xA2, 0xA3, 0xA4, 0xBD, 0xBE, 0xBF, 0xCB, 0xCC, 0xCD, 0xCE, 0xD6, 0xD7,
-})
-ENEMY_HEALTH_RANGE_BY_KEY = {
-    "easy": (1, 4),
-    "normal": (2, 15),
-    "hard": (2, 25),
-    "expert": (4, 50),
-}
 
 _ENEMIZER_SYMBOLS: Optional[dict[str, int]] = None
 
@@ -225,12 +225,25 @@ BOSS_GFX_TABLE = {
 TRINEXX_ICE_FLOOR_ROUTINE_ADDRESS = 0x04B37E
 TRINEXX_ICE_PROJECTILE_TILE_ADDRESS = 0xE7A5
 TILE_TRAP_FLOOR_TILE_ADDRESS = 0xF3BED
+SPRITE_DAMAGE_SUBCLASS_TABLE_ADDRESS = snes_to_pc(SPRITE_DAMAGE_SUBCLASS_TABLE_SNES_ADDRESS)
 
 
 def apply_enemizer_base_patch(rom: "LocalRom") -> None:
     for address, patch_data in _load_enemizer_base_patches():
         rom.write_bytes(address, patch_data)
     _apply_trinexx_room_fixes(rom)
+
+
+def apply_enemy_combat_data(
+    rom: "LocalRom",
+    combat_model: EnemyCombatModel = VANILLA_COMBAT_MODEL,
+) -> None:
+    rom.write_bytes(DAMAGE_SOURCE_TABLE_ADDRESS, build_damage_source_table_bytes(combat_model.damage_sources))
+    rom.write_bytes(
+        SPRITE_DAMAGE_SUBCLASS_TABLE_ADDRESS,
+        build_packed_sprite_damage_subclass_table(combat_model.sprite_damage_subclasses),
+    )
+
 
 def patch_bosses(world: "ALTTPWorld", rom: "LocalRom") -> None:
     dungeon_header_base = _get_enemizer_symbol("room_header_table")
