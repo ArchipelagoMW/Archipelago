@@ -1,10 +1,19 @@
 import unittest
 from dataclasses import dataclass, fields
-from typing import Any, ClassVar, cast
+from typing import Any, ClassVar, Literal, cast
 
 from typing_extensions import override
 
-from BaseClasses import CollectionState, Item, ItemClassification, Location, MultiWorld, Region
+from BaseClasses import (
+    DEFAULT_COLLECTION_RULE,
+    CollectionRule,
+    CollectionState,
+    Item,
+    ItemClassification,
+    Location,
+    MultiWorld,
+    Region,
+)
 from NetUtils import JSONMessagePart
 from Options import Choice, FreeText, Option, OptionSet, PerGameCommonOptions, Range, Toggle
 from rule_builder.cached_world import CachedRuleBuilderWorld
@@ -161,15 +170,15 @@ class CachedRuleBuilderTestCase(RuleBuilderTestCase):
     rules=(
         (
             And(),
-            True_.Resolved(player=1)
+            True_.Resolved(player=1),
         ),
         (
             Or(),
-            False_.Resolved(player=1)
+            False_.Resolved(player=1),
         ),
         (
             Has("A", 0),
-            True_.Resolved(player=1)
+            True_.Resolved(player=1),
         ),
         (
             And(Has("A", 1), Has("A", 2)),
@@ -296,6 +305,38 @@ class CachedRuleBuilderTestCase(RuleBuilderTestCase):
             # This test will fail when And(Rule, Rule) will be optimized to Rule
             AtLeast(2, Rule(), Rule()),
             And.Resolved((Rule.Resolved(player=1), Rule.Resolved(player=1)), player=1),
+        ),
+        (
+            # Test lazy simplification of Or
+            Or(True_(), Has("A", FromWorldAttr("does_not_exist"))),
+            True_.Resolved(player=1),
+        ),
+        (
+            # Test lazy simplification of And
+            And(False_(), Has("A", FromWorldAttr("does_not_exist"))),
+            False_.Resolved(player=1),
+        ),
+        (
+            # Test lazy simplification of AtLeast (True)
+            AtLeast(2, True_(), True_(), Has("A", FromWorldAttr("does_not_exist"))),
+            True_.Resolved(player=1),
+        ),
+        (
+            # Test lazy simplification of AtLeast (False)
+            AtLeast(2, False_(), False_(), Has("A", FromWorldAttr("does_not_exist"))),
+            False_.Resolved(player=1),
+        ),
+        (
+            Has("A") & Has.Resolved("B", player=1),
+            HasAll.Resolved(("A", "B"), player=1),
+        ),
+        (
+            Has.Resolved("A", player=1) & Has.Resolved("B", player=1),
+            HasAll.Resolved(("A", "B"), player=1),
+        ),
+        (
+            Has.Resolved("A", player=1) | Has.Resolved("B", player=1),
+            HasAny.Resolved(("A", "B"), player=1),
         ),
     )
 )
@@ -1505,7 +1546,7 @@ class TestExplain(RuleBuilderTestCase):
 class TestFieldResolvers(RuleBuilderTestCase):
     rules: ClassVar[tuple[Rule[Any], Rule.Resolved]]
 
-    def test_simplify(self) -> None:
+    def test_field_resolvers(self) -> None:
         multiworld = setup_solo_multiworld(self.world_cls, steps=("generate_early",), seed=0)
         world = multiworld.worlds[1]
         world.pre_calculated = 3  # pyright: ignore[reportAttributeAccessIssue]
@@ -1513,3 +1554,68 @@ class TestFieldResolvers(RuleBuilderTestCase):
         rule, expected = self.rules
         resolved_rule = rule.resolve(world)
         self.assertEqual(resolved_rule, expected, f"\n{resolved_rule}\n{expected}")
+
+
+@classvar_matrix(
+    rules=(
+        (
+            Has("A"),
+            Has("B"),
+            "and",
+            HasAll.Resolved(("A", "B"), player=1),
+        ),
+        (
+            Has("A"),
+            Has("B"),
+            "or",
+            HasAny.Resolved(("A", "B"), player=1),
+        ),
+        (
+            None,
+            Has("B"),
+            "and",
+            Has.Resolved("B", player=1),
+        ),
+        (
+            None,
+            Has("B"),
+            "or",
+            None,
+        ),
+        (
+            True_(),
+            Has("B"),
+            "and",
+            Has.Resolved("B", player=1),
+        ),
+        (
+            True_(),
+            Has("B"),
+            "or",
+            True_.Resolved(player=1),
+        ),
+    )
+)
+class TestAddRule(RuleBuilderTestCase):
+    rules: ClassVar[tuple[CollectionRule | Rule[Any] | None, Rule[Any], Literal["and", "or"], Rule.Resolved | None]]
+    world: World  # pyright: ignore[reportUninitializedInstanceVariable]
+    location: RuleBuilderLocation  # pyright: ignore[reportUninitializedInstanceVariable]
+    player: int = 1
+
+    @override
+    def setUp(self) -> None:
+        super().setUp()
+
+        multiworld = setup_solo_multiworld(self.world_cls, steps=("generate_early",), seed=0)
+        world = multiworld.worlds[1]
+        self.world = world
+        region = Region("Region 1", world.player, multiworld)
+        self.location = RuleBuilderLocation(world.player, "Location 1", 1, region)
+        region.locations.append(self.location)
+
+    def test_add_rule(self) -> None:
+        initial_rule, combined_rule, operator, expected = self.rules
+        if initial_rule is not None:
+            self.world.set_rule(self.location, initial_rule)
+        self.world.add_rule(self.location, combined_rule, operator)
+        self.assertEqual(self.location.access_rule, expected if expected is not None else DEFAULT_COLLECTION_RULE)
