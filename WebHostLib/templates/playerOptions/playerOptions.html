@@ -49,9 +49,10 @@
             <div id="meta-options">
                 <div>
                     <label for="player-name">
-                        Player Name: <span class="interactive" data-tooltip="This is the name you use to connect with your game. This is also known as your 'slot name'.">(?)</span>
+                        Player Name: <span class="interactive" data-tooltip="This is the name you use to connect with your game, also known as your 'slot name'. It has a maximum of 16 characters.">(?)</span>
                     </label>
                     <input id="player-name" placeholder="Player" name="name" maxlength="16" />
+                    <div id="name-warning" hidden>Warning: The player name has a max length of 16 characters.</div>
                 </div>
                 <div class="js-required">
                     <label for="game-options-preset">
