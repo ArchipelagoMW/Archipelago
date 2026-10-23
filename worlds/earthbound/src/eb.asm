@@ -331,6 +331,9 @@ JML GetRemoteMoney
 ORG $C2A03F
 JML ClearStatusVars
 
+ORG $C2038B
+JML ClearBG3Fix
+
 ;new jmls
 
 
@@ -7705,7 +7708,7 @@ ORG $C9782C
 db $08, $bc, $ee, $ee, $ff, $50, $99, $a3, $50, $0a, $3b, $78, $c9
 
 ORG $C97997
-db $08, $bc, $ee, $ee, $ff, $0a, $a3, $79, $c9, $c9
+db $08, $bc, $ee, $ee, $ff, $50, $83, $a4, $91, $a4
 
 
 ;;;;;;;;;;;;;;;
@@ -9130,6 +9133,14 @@ dl TwosonCopBossText
 ORG $EEBDA4
 db $0A
 dl SetupNessForMagicantBoost
+
+ORG $C7AB46
+db $0A
+dl MusicFade_NoSub ; Photo man, preventss script overflow
+
+ORG $C6EA42
+db $0A
+dl Monotoli_SetFoursideFlags
 
 
 ;New data table go here
@@ -11845,6 +11856,9 @@ LDX #$0000
 SEP #$20
 CMP $3280,X
 REP #$20
+;BUG REPORT! We're not checking for more than one of an item here
+
+
 BEQ .TossDuplicateItemNoPull
 INX
 CPX #$0045
@@ -12746,6 +12760,19 @@ LoadPartyMemberDirectionsFixed:
     lda #$0000
     jml $C17F0F
 
+ClearBG3Fix:  ; Bg3 can update multiple times per frame, which causes flickering with text. Make it Don't Do that:tm:
+    LDA $00AB
+    BEQ .label
+    RTL
+.label:
+    REP #$31
+    PHD
+    TDC
+    ADC #$FFEE
+    TCD
+    INC $00AB
+    JML $C20393
+
 
 
 ;new code go here
@@ -13238,7 +13265,7 @@ db $08
 dd .BoughtSpecialItemGiveToPlayer
 ;Set flag here!!!!
 db $0A
-dl $C50198
+dl $C51568
 db $02
 .NormalItem:
 db $1B, $01
@@ -18394,8 +18421,26 @@ db $70
 db $0A
 dl $EEBDA8
 
-;ORG $C7617D
-;dd DisplayAndGetMoney
+MusicFade_NoSub:
+db $1F, $07, $02
+db $10, $1E
+db $1F, $01, $00
+db $0A
+dl $C7AB4B
+
+Monotoli_SetFoursideFlags:  ; Set various post-Fourside flags after the monotoli event
+db $70, $7C, $17, $37, $50
+db $04, $8F, $00  ; General post-fourside flag
+db $04, $65, $01  ; Delete Sentry robots
+db $04, $66, $01  ; Delete Sentry robots
+db $04, $67, $01  ; Delete Sentry robots
+db $04, $68, $01  ; Delete Sentry robots
+db $04, $69, $01  ; Delete Sentry robots
+db $04, $8F, $00  ; Remove Pokey from Monotoli building
+db $0A
+dl $C6EA47
+
+
 
 ;ORG $C62B87
 ;db $0a, $28, $ca, $ee ; Test, delete later
