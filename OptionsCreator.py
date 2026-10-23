@@ -52,12 +52,9 @@ def filter_tooltip(tooltip):
 
 
 def option_can_be_randomized(option: typing.Type[Option]):
-    # most options can be randomized, so we should just check for those that cannot
-    if not option.supports_weighting:
-        return False
-    elif issubclass(option, FreeText) and not issubclass(option, TextChoice):
-        return False
-    return True
+    # same rule as the WebHost's randomize button: these types all accept "random" in from_any. supports_weighting
+    # doesn't tell, as some options turn it off to read their own weights and still accept "random".
+    return issubclass(option, (Toggle, Choice, Range))
 
 
 def check_random(value: typing.Any):
