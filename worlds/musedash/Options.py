@@ -9,7 +9,12 @@ class DLCMusicPacks(OptionSet):
     """
     Choose which DLC Packs will be included in the pool of chooseable songs.
 
-    Note: The [Just As Planned] DLC contains all [Muse Plus] songs.
+    Muse Plus corresponds to the all non-time-limited song packs gained from [Muse Plus] dlc.
+
+    All other dlc packs are time-limited, and you may not have access to them. Please Check in game first before
+    applying these settings.
+
+    If you have the discontinued [Just As Planned] dlc, you can safely check all dlcs.
     """
     display_name = "DLC Packs"
     valid_keys = [dlc for dlc in MuseDashCollections.DLC]
