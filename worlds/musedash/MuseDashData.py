@@ -755,4 +755,10 @@ SONG_DATA: Dict[str, SongData] = {
     "$trange Attraktor": SongData(2900879, "102-3", "Slumbering Golden Mark", True, 5, 7, 10),
     "Euphoria Laur": SongData(2900880, "102-4", "Slumbering Golden Mark", False, 5, 7, 9),
     "Kirameku Metamorphose": SongData(2900881, "102-5", "Slumbering Golden Mark", True, 3, 6, 9),
+    "Touchable Touchable": SongData(2900882, "103-0", "Happy Otaku Pack Vol.21", False, 3, 5, 8),
+    "Aimai Cyborg": SongData(2900883, "103-1", "Happy Otaku Pack Vol.21", True, 3, 6, 9),
+    "Popcorn": SongData(2900884, "103-2", "Happy Otaku Pack Vol.21", True, 4, 6, 9),
+    "Waraenai": SongData(2900885, "103-3", "Happy Otaku Pack Vol.21", False, 2, 5, 8),
+    "YOU MAKE ME DASH!!": SongData(2900886, "103-4", "Happy Otaku Pack Vol.21", True, 4, 7, 9),
+    "Ambivalence Emotion": SongData(2900887, "103-5", "Happy Otaku Pack Vol.21", False, 5, 8, 11),
 }
