@@ -85,7 +85,7 @@ def get_locations(chests: int, shrines: int, scavengers: int, scanners: int, alt
             shrines=shrines,
             scavengers=scavengers,
             scanners=scanners,
-            altars = altars if environment_name not in environments_without_newt_altars else 0,
+            altars=altars if environment_name not in environments_without_newt_altars else 0,
             environment_name=environment_name,
             environment_index=environment_index),
         )
