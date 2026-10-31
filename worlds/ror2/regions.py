@@ -1,7 +1,9 @@
-from typing import Dict, List, NamedTuple, Optional, TYPE_CHECKING
+from typing import TYPE_CHECKING, Dict, List, NamedTuple, Optional
 
-from BaseClasses import Region, Entrance, MultiWorld
-from .locations import location_table, RiskOfRainLocation, get_classic_item_pickups
+from BaseClasses import Entrance, MultiWorld, Region
+
+from .locations import RiskOfRainLocation, get_classic_item_pickups, location_table
+from .ror2environments import environments_without_newt_altars
 
 if TYPE_CHECKING:
     from . import RiskOfRainWorld
@@ -141,8 +143,8 @@ def create_explore_regions(ror2_world: "RiskOfRainWorld") -> None:
         if scanners > 0:
             for i in range(0, scanners):
                 all_location_regions[key].locations.append(f"{key}: Radio Scanner {i + 1}")
-        # Newt Altars (Conduit Canyon has no Newt Altars)
-        if newt > 0 and key != "Conduit Canyon":
+        # Newt Altars exclude stages that don't have newt altars (like Conduit Canyon)
+        if newt > 0 and key not in environments_without_newt_altars:
             for i in range(0, newt):
                 all_location_regions[key].locations.append(f"{key}: Newt Altar {i + 1}")
     regions_pool: Dict = {**all_location_regions, **other_regions}

@@ -9,6 +9,7 @@ from .ror2environments import (
     environment_sotv_orderedstages_table,
     environment_vanilla_orderedstages_table,
     environment_vanilla_variant_orderedstages_table,
+    environments_without_newt_altars,
 )
 from typing import Set, TYPE_CHECKING
 
@@ -66,7 +67,7 @@ def explore_environment_location_rules(table, multiworld, player, chests, shrine
                 has_location_access_rule(multiworld, environment_name, player, chest, "Chest")
             for shrine in range(1, shrines + 1):
                 has_location_access_rule(multiworld, environment_name, player, shrine, "Shrine")
-            if newts > 0 and environment_name != "Conduit Canyon":  # Conduit Canyon has no Newt Altars
+            if newts > 0 and environment_name not in environments_without_newt_altars:
                 for newt in range(1, newts + 1):
                     has_location_access_rule(multiworld, environment_name, player, newt, "Newt Altar")
             if i > 0:

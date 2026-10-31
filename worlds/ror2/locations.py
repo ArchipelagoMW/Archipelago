@@ -5,7 +5,8 @@ from .options import TotalLocations, ChestsPerEnvironment, ShrinesPerEnvironment
 from .ror2environments import compress_dict_list_horizontal, environment_vanilla_orderedstages_table, \
     environment_sotv_orderedstages_table, environment_sost_orderedstages_table, \
     environment_sots_variants_orderedstages_table, environment_vanilla_variant_orderedstages_table, \
-    environment_alloyed_orderedstages_table, environment_alloyed_variants_orderedstages_table
+    environment_alloyed_orderedstages_table, environment_alloyed_variants_orderedstages_table, \
+    environments_without_newt_altars
 
 
 class RiskOfRainLocation(Location):
@@ -84,7 +85,7 @@ def get_locations(chests: int, shrines: int, scavengers: int, scanners: int, alt
             shrines=shrines,
             scavengers=scavengers,
             scanners=scanners,
-            altars= 0 if environment_name == "Conduit Canyon" else altars, # Conduit doesn't have any Newt Altars
+            altars = altars if environment_name not in environments_without_newt_altars else 0,
             environment_name=environment_name,
             environment_index=environment_index),
         )

@@ -107,6 +107,10 @@ environment_alloyed_special_table: Dict[str, int] = {
     "Neural Sanctum":                          56,  # solusweb
 }
 
+environments_without_newt_altars: set[str] = {
+    "Conduit Canyon"
+}
+
 
 X = TypeVar("X")
 Y = TypeVar("Y")
