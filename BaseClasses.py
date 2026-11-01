@@ -727,8 +727,21 @@ class CollectionState():
     """Internal cache for Advancement Locations already checked by this CollectionState. Not for use in logic."""
     stale: Dict[int, bool]
     allow_partial_entrances: bool
-    additional_init_functions: List[Callable[[CollectionState, MultiWorld], None]] = []
-    additional_copy_functions: List[Callable[[CollectionState, CollectionState], CollectionState]] = []
+    additional_init_functions: ClassVar[list[Callable[[CollectionState, MultiWorld], None]]] = []
+    additional_copy_functions: ClassVar[list[Callable[[CollectionState, CollectionState], CollectionState]]] = []
+    __slots__=[
+        "__dict__",
+        "advancements",
+        "allow_partial_entrances",
+        "blocked_connections",
+        "locations_checked",
+        "multiworld",
+        "path",
+        "prog_items",
+        "reachable_regions",
+        "rule_builder_cache",
+        "stale"
+    ]
 
     def __init__(self, parent: MultiWorld, allow_partial_entrances: bool = False):
         assert parent.worlds, "CollectionState created without worlds initialized in parent"
@@ -1182,7 +1195,8 @@ class CollectionState():
 
 CollectionRule = Callable[[CollectionState], bool]
 DEFAULT_COLLECTION_RULE: CollectionRule = staticmethod(lambda state: True)
-
+DEFAULT_ALWAYS_ALLOW_RULE: Callable[[CollectionState, Item], bool] = staticmethod(lambda state,item:False)
+DEFAULT_ITEM_RULE: Callable[[Item],bool] = staticmethod(lambda item: True)
 
 class EntranceType(IntEnum):
     ONE_WAY = 1
@@ -1190,17 +1204,33 @@ class EntranceType(IntEnum):
 
 
 class Entrance:
-    access_rule: CollectionRule = DEFAULT_COLLECTION_RULE
-    hide_path: bool = False
+    access_rule: CollectionRule
+    hide_path: bool
     player: int
     name: str
-    parent_region: Optional[Region]
-    connected_region: Optional[Region] = None
+    parent_region: Region | None
+    connected_region: Region | None
     randomization_group: int
     randomization_type: EntranceType
+    __slots__ = [
+        "access_rule",
+        "connected_region",
+        "hide_path",
+        "name",
+        "parent_region",
+        "player",
+        "randomization_group",
+        "randomization_type"
+    ]
 
     def __init__(self, player: int, name: str = "", parent: Optional[Region] = None,
                  randomization_group: int = 0, randomization_type: EntranceType = EntranceType.ONE_WAY) -> None:
+        if getattr(self,"access_rule",None) is None:
+            # ladx defines a subclass with a method impl,
+            # dont overwrite it
+            self.access_rule = DEFAULT_COLLECTION_RULE
+        self.connected_region=None
+        self.hide_path = False
         self.name = name
         self.parent_region = parent
         self.player = player
@@ -1485,19 +1515,44 @@ class Location:
     name: str
     address: Optional[int]
     parent_region: Optional[Region]
-    locked: bool = False
-    show_in_spoiler: bool = True
-    progress_type: LocationProgressType = LocationProgressType.DEFAULT
-    always_allow: Callable[[CollectionState, Item], bool] = staticmethod(lambda state, item: False)
-    access_rule: CollectionRule = DEFAULT_COLLECTION_RULE
-    item_rule: Callable[[Item], bool] = staticmethod(lambda item: True)
-    item: Optional[Item] = None
+    locked: bool
+    show_in_spoiler: bool
+    progress_type: LocationProgressType
+    always_allow: Callable[[CollectionState, Item], bool]
+    access_rule: CollectionRule
+    item_rule: Callable[[Item], bool]
+    item: Item | None
+    __slots__=[
+        "access_rule",
+        "address",
+        "always_allow",
+        "item",
+        "item_rule",
+        "locked",
+        "name",
+        "parent_region",
+        "player",
+        "progress_type",
+        "show_in_spoiler"
+    ]
 
     def __init__(self, player: int, name: str = '', address: Optional[int] = None, parent: Optional[Region] = None):
         self.player = player
         self.name = name
         self.address = address
         self.parent_region = parent
+        self.locked = False
+        self.show_in_spoiler = True
+        self.progress_type = LocationProgressType.DEFAULT
+        if getattr(self,"always_allow",None) is None:
+            self.always_allow  = DEFAULT_ALWAYS_ALLOW_RULE
+        if getattr(self,"access_rule",None) is None:
+            # messenger defines a subclass with a method impl,
+            # dont overwrite it
+            self.access_rule = DEFAULT_COLLECTION_RULE
+        if getattr(self,"item_rule",None) is None:
+            self.item_rule = DEFAULT_ITEM_RULE
+        self.item = None
 
     def can_fill(self, state: CollectionState, item: Item, check_access: bool = True) -> bool:
         return ((
