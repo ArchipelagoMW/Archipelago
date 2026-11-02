@@ -435,9 +435,6 @@ high_victory_checks_levels = [
         file_name="Giant_Issue.json",
         location_rules={
             "Giant Issue: My own Giant": lambda player: lambda state: state.has("Golem", player),
-            "Giant Issue: Triple Kill": lambda player: lambda state: state.has_all(
-                                                                    ("Airstrike Event", "Bridges Event", "Golem"),
-                                                                    player),
             "Giant Issue: Low Turn Count": lambda player: lambda state: state.has_all(
                                                                     ("Airstrike Event", "Bridges Event", "Golem"),
                                                                     player),
