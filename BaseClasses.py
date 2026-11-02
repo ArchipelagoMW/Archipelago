@@ -1594,7 +1594,7 @@ class ItemClassification(IntFlag):
 
 class Item:
     game: str = "Generic"
-    __slots__ = ("name", "classification", "code", "player", "location")
+    __slots__ = ("name", "classification", "code", "player", "location", "_advancement")
     name: str
     classification: ItemClassification
     code: Optional[int]
@@ -1609,6 +1609,12 @@ class Item:
         self.code = code
         self.location = None
 
+    def __setattr__(self, name: str, value) -> None:
+        object.__setattr__(self, name, value)
+        if name == "classification":
+            # Cache whether the item is an advancement, since it gets checked frequently
+            object.__setattr__(self, "_advancement", ItemClassification.progression in value)
+
     @property
     def hint_text(self) -> str:
         return getattr(self, "_hint_text", self.name.replace("_", " ").replace("-", " "))
@@ -1619,7 +1625,7 @@ class Item:
 
     @property
     def advancement(self) -> bool:
-        return ItemClassification.progression in self.classification
+        return self._advancement
 
     @property
     def skip_in_prog_balancing(self) -> bool:
