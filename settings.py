@@ -702,7 +702,7 @@ class GeneratorOptions(Group):
     panic_method: PanicMethod = PanicMethod("swap")
     loglevel: str = "info"
     logtime: bool = False
-
+    spoiler_progress: bool = True
 
 class SNIOptions(Group):
     class SNIPath(LocalFolderPath):

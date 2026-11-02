@@ -1704,17 +1704,18 @@ class Spoiler:
             self.entrances[(entrance, direction, player)] = \
                 {"player": player, "entrance": entrance, "exit": exit_, "direction": direction}
 
-    def create_playthrough(self, create_paths: bool = True) -> None:
+    def create_playthrough(self, create_paths: bool = True, report_progress: bool = False) -> None:
         """Destructive to the multiworld while it is run, damage gets repaired afterwards."""
         from itertools import chain
         # get locations containing progress items
         multiworld = self.multiworld
+        log_func = logging.info if report_progress else logging.debug
         prog_locations = {location for location in multiworld.get_filled_locations() if location.item.advancement}
         state_cache: List[Optional[CollectionState]] = [None]
         collection_spheres: List[Set[Location]] = []
         state = CollectionState(multiworld)
         sphere_candidates = set(prog_locations)
-        logging.debug('Building up collection spheres.')
+        log_func('Building up collection spheres.')
         while sphere_candidates:
 
             # build up spheres of collection radius.
@@ -1729,11 +1730,11 @@ class Spoiler:
             collection_spheres.append(sphere)
             state_cache.append(state.copy())
 
-            logging.info('Calculated sphere %i, containing %i of %i progress items.', len(collection_spheres),
+            log_func('Calculated sphere %i, containing %i of %i progress items.', len(collection_spheres),
                           len(sphere),
                           len(prog_locations))
             if not sphere:
-                logging.debug('The following items could not be reached: %s', ['%s (Player %d) at %s (Player %d)' % (
+                log_func('The following items could not be reached: %s', ['%s (Player %d) at %s (Player %d)' % (
                     location.item.name, location.item.player, location.name, location.player) for location in
                                                                                sphere_candidates])
                 if not multiworld.has_beaten_game(state):
@@ -1748,7 +1749,7 @@ class Spoiler:
         # reducing each range of influence to the bare minimum required inside it
         required_locations = {location for sphere in collection_spheres for location in sphere}
         for num, sphere in reversed(tuple(enumerate(collection_spheres))):
-            logging.info('Processing sphere %i of %i, containing %i items', num+1, len(collection_spheres),len(sphere))
+            log_func('Processing sphere %i of %i, containing %i items', num+1, len(collection_spheres),len(sphere))
             to_delete: Set[Location] = set()
             starttime = time.monotonic_ns()
             for location in sphere:
@@ -1763,13 +1764,13 @@ class Spoiler:
                     required_locations.add(location)
 
             time_elapsed = int((time.monotonic_ns()-starttime)/1e6)/1e3
-            logging.info('Sphere %i of %i, culled %i items (%.3f s) (%.4f s/item)', num+1,len(collection_spheres),len(to_delete),time_elapsed, time_elapsed/len(sphere))
+            log_func('Sphere %i of %i, culled %i items (%.3f s) (%.4f s/item)', num+1,len(collection_spheres),len(to_delete),time_elapsed, time_elapsed/len(sphere))
             # cull entries in spheres for spoiler walkthrough at end
             sphere -= to_delete
 
         # second phase, sphere 0
         removed_precollected: List[Item] = []
-        logging.info('Processing precollected items (%i)',len(multiworld.precollected_items))
+        log_func('Processing precollected items (%i)',len(multiworld.precollected_items))
         starttime = time.monotonic_ns()
         for precollected_items in multiworld.precollected_items.values():
             # The list of items is mutated by removing one item at a time to determine if each item is required to beat
@@ -1785,7 +1786,7 @@ class Spoiler:
                     multiworld.push_precollected(item)
                 else:
                     removed_precollected.append(item)
-        logging.info('Precollected items: culled %i items (%.3f s)',len(removed_precollected),((time.monotonic_ns()-starttime)/1e6)/1e3)
+        log_func('Precollected items: culled %i items (%.3f s)',len(removed_precollected),((time.monotonic_ns()-starttime)/1e6)/1e3)
         # we are now down to just the required progress items in collection_spheres. Unfortunately
         # the previous pruning stage could potentially have made certain items dependant on others
         # in the same or later sphere (because the location had 2 ways to access but the item originally
@@ -1803,7 +1804,7 @@ class Spoiler:
 
             collection_spheres.append(sphere)
 
-            logging.info('Calculated final sphere %i, containing %i of %i progress items.', len(collection_spheres),
+            log_func('Calculated final sphere %i, containing %i of %i progress items.', len(collection_spheres),
                           len(sphere), len(required_locations))
 
             required_locations -= sphere
