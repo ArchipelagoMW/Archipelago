@@ -555,8 +555,10 @@ class MultiWorld():
     def has_beaten_game(self, state: CollectionState, player: Optional[int] = None) -> bool:
         if player:
             return self.completion_condition[player](state)
-        else:
-            return all((self.has_beaten_game(state, p) for p in range(1, self.players + 1)))
+        for p in range(1, self.players + 1):
+            if not self.completion_condition[p](state):
+                return False
+        return True
 
     def can_beat_game(self,
                       starting_state: Optional[CollectionState] = None,
