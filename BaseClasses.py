@@ -992,7 +992,7 @@ class CollectionState():
 
     # item name related
     def has(self, item: str, player: int, count: int = 1) -> bool:
-        return self.prog_items[player][item] >= count
+        return self.prog_items[player].get(item, 0) >= count
 
     # for loops are specifically used in all/any/count methods, instead of all()/any()/sum(), to avoid the overhead of
     # creating and iterating generator instances. In `return all(player_prog_items[item] for item in items)`, the
@@ -1030,7 +1030,7 @@ class CollectionState():
         return False
 
     def count(self, item: str, player: int) -> int:
-        return self.prog_items[player][item]
+        return self.prog_items[player].get(item, 0)
 
     def has_from_list(self, items: Iterable[str], player: int, count: int) -> bool:
         """Returns True if the state contains at least `count` items matching any of the item names from a list."""
