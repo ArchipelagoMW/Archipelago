@@ -729,19 +729,6 @@ class CollectionState():
     allow_partial_entrances: bool
     additional_init_functions: ClassVar[list[Callable[[CollectionState, MultiWorld], None]]] = []
     additional_copy_functions: ClassVar[list[Callable[[CollectionState, CollectionState], CollectionState]]] = []
-    __slots__=[
-        "__dict__",
-        "advancements",
-        "allow_partial_entrances",
-        "blocked_connections",
-        "locations_checked",
-        "multiworld",
-        "path",
-        "prog_items",
-        "reachable_regions",
-        "rule_builder_cache",
-        "stale"
-    ]
 
     def __init__(self, parent: MultiWorld, allow_partial_entrances: bool = False):
         assert parent.worlds, "CollectionState created without worlds initialized in parent"
