@@ -1632,12 +1632,25 @@ class ItemClassification(IntFlag):
         """As Network API flag int."""
         return int(self & 0b00111)
 
+class ItemMetaclass(type):
+    @staticmethod
+    def classification_get(ob:Item)->ItemClassification:
+        return ob._classification
+    @staticmethod
+    def classification_set(ob:Item,val:ItemClassification)->None:
+        ob._classification = val
+        ob._advancement = ItemClassification.progression in val
+    def __new__(mcs, name: str, bases: Tuple[type, ...], dct: Dict[str, Any]):
+        dct["classification"]=property(
+            fget=ItemMetaclass.classification_get
+            ,fset=ItemMetaclass.classification_set)
+        return super().__new__(mcs, name, bases, dct)
 
-class Item:
+class Item(metaclass=ItemMetaclass):
     game: str = "Generic"
-    __slots__ = ("name", "classification", "code", "player", "location")
+    __slots__ = ("name", "_classification", "_advancement","code", "player", "location",)
     name: str
-    classification: ItemClassification
+    classification: ItemClassification # created by metaclass
     code: Optional[int]
     """an item with code None is called an Event, and does not get written to multidata"""
     player: int
@@ -1645,7 +1658,8 @@ class Item:
 
     def __init__(self, name: str, classification: ItemClassification, code: Optional[int], player: int):
         self.name = name
-        self.classification = classification
+        self._classification = classification
+        self._advancement = ItemClassification.progression in self.classification
         self.player = player
         self.code = code
         self.location = None
@@ -1660,7 +1674,7 @@ class Item:
 
     @property
     def advancement(self) -> bool:
-        return ItemClassification.progression in self.classification
+        return self._advancement
 
     @property
     def skip_in_prog_balancing(self) -> bool:
