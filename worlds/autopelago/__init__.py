@@ -258,6 +258,8 @@ class AutopelagoWorld(World):
             for item_pool in item_pools.values():
                 new_item_pool: list[str] = []
                 for item_name in item_pool:
+                    if item_name in excluded_names:
+                        continue
                     if item_name in item_name_to_auras and "poison" in item_name_to_auras[item_name]:
                         poison_items_for_replacement.add(item_name)
                     else:
@@ -297,7 +299,7 @@ class AutopelagoWorld(World):
             # replace enough traps in the item pool to ensure that we hit the target.
             traps = item_names_by_item_type["trap"]
             replacement_count = ceil(self.options.death_item_percentage.value / 100 * len(traps))
-            replacements = list(self.random.choices(list(poison_items_for_replacement), k=replacement_count))
+            replacements = list(self.random.choices(sorted(poison_items_for_replacement), k=replacement_count))
             # replace them in reverse order: _sort_nonprogression_items_for_item_type ensured that
             # the most replaceable ones are at the end.
             for i in range(replacement_count):
@@ -447,5 +449,5 @@ class AutopelagoWorld(World):
 
     def _shuffled(self, to_shuffle: Iterable[T]) -> list[T]:
         to_shuffle_list = list(to_shuffle)
-        self.multiworld.random.shuffle(to_shuffle_list)
+        self.random.shuffle(to_shuffle_list)
         return to_shuffle_list

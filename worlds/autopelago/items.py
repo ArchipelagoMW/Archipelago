@@ -1,6 +1,5 @@
 import importlib.resources
 import pathlib
-import sys
 from typing import cast
 
 from BaseClasses import ItemClassification
@@ -113,7 +112,8 @@ for package_file_or_dir in importlib.resources.files(__name__).iterdir():
         continue
     for f in package_file_or_dir.iterdir():
         game_name = pathlib.Path(f.name).with_suffix("").stem
-        items_by_game[game_name] = _append_items(parse_yaml(f.open("r")))
+        with f.open("r") as opened:
+            items_by_game[game_name] = _append_items(parse_yaml(opened))
 
 item_name_groups: dict[str, set[str]] = {
     "Sewer Progression": set(),
