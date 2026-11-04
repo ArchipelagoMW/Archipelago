@@ -1,0 +1,712 @@
+body{
+  background: #1d9325;
+  background: -moz-radial-gradient(center, ellipse cover, #1d9325 0%, #17752d 57%, #013a01 100%);
+  background: -webkit-radial-gradient(center, ellipse cover, #1d9325 0%,#17752d 57%,#013a01 100%);
+  background: radial-gradient(ellipse at center, #1d9325 0%,#17752d 57%,#013a01 100%);
+  height:100vh;
+  margin:0;
+  font-size:1vw;
+  font-family:Josefin Sans,sans-serif;
+  overflow:hidden;
+  cursor:default;
+}
+
+#header{
+  position:absolute;
+  width:100%;
+  height:2.5em;
+  line-height:2.5em;
+  background:rgba(0,0,0,0.3);
+  border-bottom:1px solid rgba(255,255,255,0.2);
+  box-shadow:inset 0 -1em 2em rgba(0,0,0,0.2);
+  color:#eee;
+  overflow:hidden;
+  z-index:10001;
+}
+
+#main {
+  position: relative;
+  height: calc(100% - 2.5em);
+  top: 2.5em;
+}
+
+#gameinfo{
+  display:flex;
+  justify-content:center;
+  transition:margin-top 500ms;
+}
+
+body[expanded="true"] #gameinfo{
+  margin-top:-2.5em;
+}
+
+#settingsinfo {
+  display: flex;
+  width: 100%;
+  font-size: 130%;
+}
+
+.settingsitem {
+  flex-grow: 1;
+  flex-basis: 0;
+  text-align: center;
+  cursor: pointer;
+  overflow: hidden;
+}
+
+.settingsitem + .settingsitem {
+  border-left: 1px solid #338a28;
+}
+
+.settingsitem:after {
+  content: "";
+  display: block;
+  position: relative;
+  width: 130%;
+  margin-left: -15%;
+  height: 10px;
+  box-shadow: 0 0 2em 0.5em #3d9c4b;
+  bottom: -1em;
+  z-index:-1;
+  transition: bottom 300ms;
+}
+
+.settingsitem.selected:after{
+  bottom:0;
+}
+
+.settingsitem.hidden{
+  display:none;
+}
+
+.settingsitem.hidden.selected{
+  display:block;
+}
+
+#gameinfo > div{
+  flex-grow:1;
+  flex-shrink:0;
+  flex-basis:0;
+  padding:0 1em;
+}
+
+#gamename{
+  font-size:130%;
+  text-align:center;
+}
+
+#gamecontainer,.btn{
+  -webkit-user-select:none;
+  -moz-user-select:none;
+  -ms-user-select:none;
+}
+
+#gamecontainer{
+  min-height:100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/*body[expanded="true"] #gamecontainer {
+  -moz-filter: blur(5px);
+  -ms-filter: blur(5px);
+  filter: blur(5px);
+}*/
+
+#gamecontainer > div:first-of-type{
+  margin-top:3em;
+}
+
+#gamecontainer > div:last-of-type{
+  margin-bottom:3em;
+}
+
+.contentbar{
+  display:flex;
+  flex-grow:1;
+  flex-direction:row;
+  justify-content:center;
+  margin-top:2em;
+  min-height:10em;
+}
+
+.contentbar:first-of-type:not(.heapspace){
+  flex-grow:0;
+}
+
+.heapspace{
+  flex-grow:3;
+}
+
+.pile, .cardwrapper, .card, .invisible{
+  position:relative;
+  float:left;
+  width:7em;
+  height:10em;
+  border-radius:0.5em;
+  box-sizing:border-box;
+}
+
+.pile, .invisible, .contentbar > .cardwrapper{
+  margin-left:1em;
+}
+
+.invisible{
+  z-index: -10;
+}
+
+.cardwrapper{
+  display:inline-block;
+}
+
+.cardwrapper.base{
+  pointer-events:none;
+}
+
+.contentbar > .cardwrapper:not(.moving), .contentbar > .cardwrapper > .cardwrapper:not(.moving){
+  margin-top:0;
+}
+
+.card:hover,.packet:hover,.moving > .card,.hint{
+  box-shadow:0 0 1em #0af,0 0 1em #0af !important;
+}
+
+.pile .card + .card + .card{
+  box-shadow: none;
+}
+
+.card{
+  display:block;
+  position:absolute;
+  float: initial;
+  top:0;
+  overflow:hidden;
+  transition:background 200ms;
+}
+
+.card:not(.bottom){
+  background:white;
+  box-shadow:0 -0.5em 1em rgba(0,0,0,0.3);
+  border: 1px solid #ddd;
+}
+
+.card.bottom{
+  border:0.4em solid rgba(255,255,255,0.3);
+  pointer-events:none !important;
+}
+
+.rest .card.bottom{
+  border-color:rgba(0,0,0,0.3);
+}
+
+.card span{
+  display: block;
+  position: absolute;
+  font-size: 140%;
+  padding: 0 0.1em;
+  line-height: 1em;
+}
+
+.card span:nth-of-type(2){
+  transform: rotate(180deg);
+  bottom: 0;
+  right: 0;
+}
+
+.cardwrapper .cardwrapper .card:not(.hidden){
+  background: #ddd;
+}
+
+.cmovable .cardwrapper .card{
+  background:white !important;
+  pointer-events:auto;
+}
+
+.packets{
+  white-space:nowrap;
+}
+
+.packets div:nth-of-type(2){
+  margin:0;
+}
+
+.packets div:last-of-type{
+  pointer-events:auto;
+}
+
+.packet{
+  display: inline-block;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  margin-left: -5em;
+  border-radius: 0.5em;
+}
+
+.packet .card{
+  pointer-events:none !important;
+}
+
+.dump{
+  white-space: nowrap;
+}
+
+.dump .card{
+  display: inline-block;
+  position: relative;
+  margin-left: -7em;
+  pointer-events:none;
+  transition:margin-right 300ms;
+}
+
+.dump .card + .card + .card{
+  margin-left:-6.95em;
+}
+
+.dump[display*="2"] div:nth-last-of-type(2), .dump[display*="3"] div:nth-last-of-type(3), .dump[display*="4"] div:nth-last-of-type(4), .dump[display*="5"] div:nth-last-of-type(5){
+  margin-right: 1.5em;
+}
+
+.dump div:last-child{
+  pointer-events: auto;
+}
+
+.dump .card:first-of-type{
+  margin-left: 0;
+  margin-right: 0!important;
+}
+
+.card[data-suit="0"], .card[data-suit="2"]{
+  color:#c00;
+}
+
+.card[data-value*="1"] span{
+  font-size: 130%;
+  padding: 0.075em;
+}
+
+.card[data-value="11"] span{
+  padding:0 0.15em;
+}
+
+.card.dummy{
+  opacity:0;
+}
+
+.card *, .deck *, .notake{
+  pointer-events:none;
+}
+
+.contentbar > div:first-of-type{
+  margin-left:0;
+}
+
+.moving{
+  display:block !important;
+  position:fixed !important;
+  z-index:10000;
+  margin:0 !important;
+}
+
+/*.winning{
+  transition:transform 500ms, left 500ms, top 500ms, box-shadow 500ms;
+  pointer-events:none !important;
+}*/
+
+.card.winning{
+  box-shadow:0 0 1em rgba(0,0,0,0.3) !important;
+}
+
+.collapse .cardwrapper{
+  margin-top:0 !important;
+  transition:margin-top 400ms, left 400ms !important;
+}
+
+.collapse{
+  transition:top 400ms, left 400ms !important;
+}
+
+.sliding{
+  transition:top 150ms, left 150ms !important;
+}
+
+body.slideheap .cardwrapper{
+  transition:margin-top 200ms;
+}
+
+/*SVG stuff*/
+svg{
+  width:100%;
+  height:100%;
+}
+
+.card[data-suit="0"] svg, .card[data-suit="2"] svg{
+  fill:#c00;
+}
+
+.card[data-suit="3"] > svg path:first-of-type{
+  stroke-width: 0.5;
+  stroke: black;
+} 
+
+.card.hidden circle{
+  fill: none;
+  stroke: white;
+  stroke-width: 3;
+}
+
+.card.bottom path {
+  fill: none;
+  stroke: white;
+  stroke-width: 1.8;
+}
+
+.card.bottom svg {
+  opacity: 0.3;
+}
+
+.deck[redealable="true"] .noredealable, .deck[redealable="false"] .redealable {
+  display: none;
+}
+
+/*UI stuff*/
+
+#buttonwrapper{
+  position:absolute;
+  top:0;
+}
+
+.btn{
+  position:relative;
+  width:3em;
+  height:3em;
+  border-radius:50%;
+  margin:0.5em;
+  cursor:pointer;
+  transition:background 500ms;
+  background:rgba(0,0,0,0.6);
+  z-index: 20000;
+  transition:opacity 200ms;
+}
+
+.btn + .btn{
+  z-index:15000;
+}
+
+.btn span{
+  display:block;
+  color:white;
+  width:100%;
+  font-size:200%;
+  text-align:center;
+  line-height:1.5em;
+}
+
+.btn path{
+  stroke:white;
+  stroke-width:2;
+  transition:d 200ms;
+  fill:none;
+}
+
+.btn[data-title]:after {
+  content: attr(data-title);
+  display: inline-block;
+  position: absolute;
+  white-space: nowrap;
+  padding: 0.25em 0.5em;
+  border-radius: 0.25em;
+  background: rgba(0,0,0,0.6);
+  color: white;
+  height: 1em;
+  line-height: 1em;
+  top: 0.75em;
+  left: 3em;
+  opacity:0;
+  pointer-events:none;
+  transition:left 200ms, opacity 200ms;
+}
+
+.btn[data-title]:hover:after{
+  transition-delay:500ms;
+  left:3.5em;
+  opacity:1;
+}
+
+.btn[data-hints="0"]{
+  opacity:0.6;
+}
+
+#hintbutton[data-level="2"]{
+  display:none;
+}
+
+#hintbutton:not([data-hints="0"]):not([data-level="1"]):before {
+  content: attr(data-hints);
+  display: block;
+  position: absolute;
+  color: white;
+  text-align: center;
+  min-width: 0.6em;
+  height: 1.3em;
+  padding: 0 0.4em;
+  line-height: 1.3em;
+  background: #f14f4f;
+  border-radius: 1em;
+  left: 2.5em;
+  margin: -0.4em;
+  pointer-events: none;
+}
+
+body[expanded="true"] #actionbutton:after{
+  opacity:0 !important;
+  left:3em !important;
+}
+
+body[expanded="true"] #actionbutton path:nth-of-type(1){
+  d:path("M12 12 l16 16");
+}
+
+body[expanded="true"] #actionbutton path:nth-of-type(2){
+  d:path("M20 19 l0 0");
+}
+
+body[expanded="true"] #actionbutton path:nth-of-type(3){
+  d:path("M12 28 l16 -16");
+}
+
+body[expanded="true"] #actionbutton{
+  background:rgba(255,255,255,0.2);
+}
+
+#actionscreen{
+  position:absolute;
+  width:100%;
+  top:0;
+  height:0;
+  margin-top:1px;
+  background:rgba(0,0,0,0.8);
+  transition:height 500ms;
+  z-index:20000;
+  overflow:hidden;
+  white-space: nowrap;
+}
+
+body[expanded="true"] #actionscreen{
+  height:100%;
+}
+
+.actionwrapper {
+  display: inline-block;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  transition: margin-left 500ms;
+}
+
+.actionwrapper + .actionwrapper{
+  margin-left:-0.25em;
+}
+
+#showcase {
+  padding: 2em;
+  overflow: auto;
+}
+
+.showcaseitem{
+  position:relative;
+  float:left;
+  width: 24.5em;
+  height: 15.5em;
+  background: rgba(255,255,255,0.05);
+  cursor: pointer;
+  transition: background 100ms;
+  margin: 1em;
+  left: 8em;
+  border: 1px solid rgba(255,255,255,0.1);
+}
+
+.showcaseitem:hover{
+  background: rgba(255,255,255,0.2);
+}
+
+.solitairethumb{
+  position: relative;
+  background-image: url(https://picturelements.github.io/games/solitaire/solitaires.png);
+  background-size: 200% 600%;
+  width: 24em;
+  height: 12em;
+  top: 0.25em;
+  left: 0.25em;
+}
+
+.showcaseitem p{
+  color: white;
+  font-size: 130%;
+  position: relative;
+  text-align: center;
+  margin: 0.85em 0 0 0;
+}
+
+.textpage {
+  color: white;
+  margin: 5em 20%;
+  overflow: hidden;
+  white-space: normal;
+}
+
+.textpage h2 {
+  margin-bottom: -0.4em;
+  padding-bottom: 0.3em;
+  border-bottom: 1px dashed rgba(255,255,255,0.3);
+}
+
+.textpage p + h2{
+  margin-top:3em;
+}
+
+.textpage p {
+  font-size: 115%;
+}
+
+.textpage a {
+  text-decoration: none;
+  color: #5af;
+}
+
+#inputarea {
+  margin: 5em 20%;
+  font-size: 120%;
+}
+
+::-webkit-scrollbar {
+  width: 1em;
+  height: 1em;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #157b2c; 
+}
+/*Archipelago*/
+.pile.rest.locked{
+  opacity:0.45;
+}
+
+.locked > .card.bottom{
+  background:rgba(0,0,0,0.35);
+}
+
+.locked > .card.bottom:after{
+  content:"\1F512";
+  position:absolute;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:200%;
+}
+
+.cardwrapper.base.locked .card:not(.bottom){
+  filter:brightness(0.5) grayscale(0.6);
+}
+
+.btn.disabled{
+  opacity:0.35;
+}
+
+#appanel{
+  position:fixed;
+  right:0.5em;
+  bottom:0.5em;
+  width:230px;
+  padding:8px 10px;
+  border-radius:8px;
+  background:rgba(0,0,0,0.75);
+  border:1px solid rgba(255,255,255,0.2);
+  color:#eee;
+  font:13px Josefin Sans,sans-serif;
+  z-index:30000;
+}
+
+#appanel.collapsed > *:not(.aphead):not(.apstatus){
+  display:none !important;
+}
+
+#appanel .aphead{
+  font-size:15px;
+  cursor:pointer;
+  margin-bottom:4px;
+}
+
+#appanel .apstatus{
+  font-size:12px;
+  margin-bottom:6px;
+  opacity:0.85;
+}
+
+#appanel .apstatus.good{color:#7f7;}
+#appanel .apstatus.warn{color:#fd6;}
+#appanel .apstatus.bad{color:#f88;}
+
+#appanel input, #appanel select, #appanel button{
+  box-sizing:border-box;
+  width:100%;
+  margin:2px 0;
+  padding:4px 6px;
+  font:inherit;
+  border-radius:4px;
+  border:1px solid rgba(255,255,255,0.3);
+  background:rgba(255,255,255,0.1);
+  color:#fff;
+}
+
+#appanel select option{color:#000;}
+#appanel button{cursor:pointer;}
+#appanel button:hover{background:rgba(255,255,255,0.25);}
+#appanel .aprow{display:flex;gap:4px;}
+#appanel .aprow select{flex:1;}
+#appanel .aprow button{width:auto;}
+#appanel .approg{margin:4px 0;font-size:12px;}
+#appanel .apsmall{font-size:11px;opacity:0.7;}
+
+.apchip{
+  display:inline-block;
+  margin:2px 3px 2px 0;
+  padding:1px 7px;
+  border-radius:10px;
+  background:rgba(255,255,255,0.1);
+  opacity:0.45;
+}
+
+.apchip.on{
+  opacity:1;
+  background:rgba(80,200,100,0.35);
+}
+
+.apchip.suit{font-size:16px;}
+.apchip.suit.red{color:#f66;}
+
+#aptoasts{
+  position:fixed;
+  left:50%;
+  bottom:1.5em;
+  transform:translateX(-50%);
+  z-index:30001;
+  pointer-events:none;
+  text-align:center;
+}
+
+.aptoast{
+  margin-top:6px;
+  padding:6px 14px;
+  border-radius:6px;
+  background:rgba(0,0,0,0.8);
+  color:#fff;
+  font:14px Josefin Sans,sans-serif;
+  transition:opacity 600ms;
+}
+
+.aptoast.fade{opacity:0;}
