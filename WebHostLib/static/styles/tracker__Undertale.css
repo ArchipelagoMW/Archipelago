@@ -1,0 +1,222 @@
+@import url('https://fonts.googleapis.com/css2?family=Lexend+Deca:wght@100..900&display=swap');
+
+.tracker-container {
+    width: 500px;
+    box-sizing: border-box;
+    font-family: "Lexend Deca", Arial, Helvetica, sans-serif;
+    border: 2px solid black;
+    border-radius: 4px;
+    resize: both;
+
+    background-color: #000000;
+    color: white;
+}
+
+.hidden {
+    display: none !important;
+}
+
+/** Tracker Grid **/
+/* .grid {
+    background-color: black;
+    display: grid;
+    grid-template-columns: repeat(1fr, 5);
+    grid-template-rows: repeat(1fr, 3);
+    grid-column-gap: 5px;
+    grid-row-gap: 5px;
+    grid-template-areas:
+    'col1 col1 col1 col1 col1'
+    'col2 col3 col4 col5 col6'
+    'col2 col3 col4 col8 col7';
+} */
+
+/* .sub-grid {
+    display: grid;
+    grid-template-columns: repeat(1fr, 3);
+    grid-template-rows: repeat(1fr, 6);
+    grid-column-gap: 5px;
+    grid-row-gap: 5px;
+    grid-template-areas:
+    'sub-col1 sub-col4 sub-col4'
+    'sub-col2 sub-col4 sub-col4'
+    'sub-col3 sub-col5 sub-col5'
+    'sub-col3 sub-col5 sub-col5'
+    'sub-col3 sub-col6 sub-col6'
+    'sub-col3 sub-col6 sub-col6';
+} */
+
+/* [class^='col-'], [class^='sub-col-'] {
+    min-height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+} */
+
+/* .col-1 { grid-area: col1; }
+.col-2 { grid-area: col2; }
+.col-3 { grid-area: col3; }
+.col-4 { grid-area: col4; }
+.col-5 { grid-area: col5; }
+.col-6 { grid-area: col6; }
+.col-7 { grid-area: col7; }
+.col-8 { grid-area: col8; }
+.col-9 { grid-area: col9; }
+
+.sub-col-1 { grid-area: sub-col1; }
+.sub-col-2 { grid-area: sub-col2; }
+.sub-col-3 { grid-area: sub-col3; }
+.sub-col-4 { grid-area: sub-col4; }
+.sub-col-5 { grid-area: sub-col5; } */
+
+/* .grid::after {
+    content: "";
+    clear: both;
+    display: table;
+} */
+
+/** Inventory Grid ****************************************************************************************************/
+.inventory-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    padding: 1rem;
+    gap: 1rem;
+}
+
+.inventory-grid:nth-child(1) {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+}
+
+.inventory-grid:nth-child(2) .item div {
+    color: orange;
+    border: 3px solid orange;
+    width: 100px;
+    padding: 3px;
+    text-align: center;
+    vertical-align: middle;
+    font-weight: 600;
+}
+
+.sub-col-3 .inventory-grid, .sub-col-4 .inventory-grid, .sub-col-5 .inventory-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.inventory-grid .item {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    height: 48px;
+}
+
+.inventory-grid .dual-item {
+    display: flex;
+    justify-content: center;
+}
+
+.inventory-grid .missing {
+    /* Missing items will be in full grayscale to signify "uncollected". */
+    filter: grayscale(100%) contrast(75%) brightness(75%);
+}
+
+.inventory-grid .collected {
+    color: lightgreen;
+}
+
+.inventory-grid .item img,
+.inventory-grid .dual-item img {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    font-size: 0.8rem;
+    text-shadow: 0 1px 2px black;
+    font-weight: bold;
+    image-rendering: crisp-edges;
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+.inventory-grid .dual-item img {
+    height: 48px;
+    margin: 0 -4px;
+}
+
+.inventory-grid .dual-item img:first-child {
+    align-self: flex-end;
+}
+
+.inventory-grid .item .quantity {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    text-align: right;
+    font-weight: 600;
+    font-size: 1.75rem;
+    line-height: 1.75rem;
+    text-shadow:
+        -1px -1px 0 #000,
+         1px -1px 0 #000,
+        -1px 1px 0 #000,
+         1px 1px 0 #000;
+    user-select: none;
+}
+
+/** Regions List ******************************************************************************************************/
+.regions-list {
+    padding: 1rem;
+}
+
+.regions-list summary {
+    list-style: none;
+    display: flex;
+    gap: 0.5rem;
+    cursor: pointer;
+}
+
+.regions-list summary::before {
+    content: "⯈";
+    width: 1em;
+    flex-shrink: 0;
+}
+
+.regions-list details {
+    font-weight: 300;
+}
+
+.regions-list details[open] > summary::before {
+    content: "⯆";
+}
+
+.regions-list .region {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 20fr 8fr 2fr 2fr;
+    align-items: center;
+    gap: 4px;
+    text-align: center;
+    font-weight: 300;
+    box-sizing: border-box;
+}
+
+.regions-list .region :first-child {
+    text-align: left;
+    font-weight: 500;
+}
+
+.regions-list .region.region-header {
+    margin-left: 24px;
+    width: calc(100% - 24px);
+    padding: 2px;
+}
+
+.regions-list .location-rows {
+    border-top: 1px solid white;
+    display: grid;
+    grid-template-columns: auto 32px;
+    font-weight: 300;
+    padding: 2px 8px;
+    margin-top: 4px;
+    font-size: 0.8rem;
+}
+
+.regions-list .location-rows :nth-child(even) {
+    text-align: right;
+}
