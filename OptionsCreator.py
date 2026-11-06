@@ -30,7 +30,7 @@ import re
 from urllib.parse import urlparse
 from worlds.AutoWorld import AutoWorldRegister, World
 from Options import (Option, Toggle, TextChoice, Choice, FreeText, NamedRange, Range, OptionSet, OptionList,
-                     OptionCounter, Visibility)
+                     OptionCounter, Visibility, ItemLinks)
 
 
 def validate_url(x):
@@ -262,12 +262,17 @@ class OptionsCreator(ThemedApp):
     game_label: MDLabel
     current_game: str
     options: typing.Dict[str, typing.Any]
+    advanced_widgets: list[Widget]
+    advanced_toggle: ToggleButton
+    advanced_visible: bool
 
     def __init__(self):
         self.title = self.base_title + " " + Utils.__version__
         self.icon = r"data/icon.png"
         self.current_game = ""
         self.options = {}
+        self.advanced_widgets = []
+        self.advanced_visible = False
         super().__init__()
 
     @staticmethod
@@ -517,7 +522,10 @@ class OptionsCreator(ThemedApp):
         label_box.add_widget(label_anchor)
 
         option_base.add_widget(label_box)
-        if issubclass(option, NamedRange):
+        option_invalid = False
+        if issubclass(option, ItemLinks):
+            option_invalid = True
+        elif issubclass(option, NamedRange):
             option_base.add_widget(self.create_named_range(option, name))
         elif issubclass(option, Range):
             option_base.add_widget(self.create_range(option, name))
@@ -532,6 +540,9 @@ class OptionsCreator(ThemedApp):
         elif any(issubclass(option, cls) for cls in (OptionSet, OptionList, OptionCounter)):
             option_base.add_widget(self.create_option_set_list_counter(option, name, world))
         else:
+            option_invalid = True
+        
+        if option_invalid:
             option_base.add_widget(MDLabel(text="This option isn't supported by the option creator.\n"
                                                 "Please edit your yaml manually to set this option."))
 
@@ -565,6 +576,7 @@ class OptionsCreator(ThemedApp):
 
     def create_options_panel(self, world_button: WorldButton):
         self.option_layout.clear_widgets()
+        self.advanced_widgets.clear()
         self.options.clear()
         cls: typing.Type[World] = world_button.world_cls
 
@@ -607,10 +619,11 @@ class OptionsCreator(ThemedApp):
 
             for group, options in groups.items():
                 options = [(name, option) for name, option in options
-                           if name and option.visibility & Visibility.simple_ui]
+                           if name and option.visibility & (Visibility.simple_ui | Visibility.complex_ui)]
                 if not options:
                     continue  # Game Options can be empty if every other option is in another group
-                    # Can also have an option group of options that should not render on simple ui
+                    # Can also have an option group of options that should not render on simple or complex ui
+                advanced_group: bool = not any(option.visibility & Visibility.simple_ui for _, option in options)
                 group_item = MDExpansionPanel(size_hint_y=None)
                 group_header = MDExpansionPanelHeader(MDListItem(MDListItemSupportingText(text=group),
                                                                  TrailingPressedIconButton(icon="chevron-right",
@@ -624,17 +637,34 @@ class OptionsCreator(ThemedApp):
                                                                  self.tap_expansion_chevron(item, x)))
                 group_content = MDExpansionPanelContent(orientation="vertical", theme_bg_color="Custom",
                                                         md_bg_color=self.theme_cls.surfaceContainerLowestColor,
-                                                        padding=[dp(12), dp(100), dp(12), 0],
+                                                        padding=[dp(12), dp(12), dp(12), 0],
                                                         spacing=dp(3))
                 group_item.add_widget(group_header)
                 group_item.add_widget(group_content)
+
+                def fix_panel(instance, value, gc=group_content):
+                    if value:
+                        # yes, even if height is greater than minimum height.
+                        # height sometimes is greater than minimum when options have their visibility toggled,
+                        # which causes a ton of dead space at the bottom.
+                        # it is also sometimes less than the minimum, overlapping other parts of the UI.
+                        # the minimum height appears to always be the correctly calculated height needed.
+                        gc.height = gc.minimum_height
+
+                group_item.bind(is_open=fix_panel)
                 group_box = ScrollBox()
                 group_box.layout.orientation = "vertical"
                 group_box.layout.spacing = dp(3)
+                if advanced_group:
+                    self.advanced_widgets.append(group_item)
                 for name, option in options:
-                    group_content.add_widget(self.create_option(option, name, cls))
+                    widg = self.create_option(option, name, cls)
+                    group_content.add_widget(widg)
+                    if not (option.visibility & Visibility.simple_ui):
+                        self.advanced_widgets.append(widg)
                 expansion_box.layout.add_widget(group_item)
             self.option_layout.add_widget(expansion_box)
+        self.prepare_advanced()
         self.game_label.text = f"Game: {self.current_game}"
 
     @staticmethod
@@ -648,9 +678,29 @@ class OptionsCreator(ThemedApp):
                 chevron
             ) if not panel.is_open else panel.set_chevron_up(chevron)
 
+    def prepare_advanced(self):
+        for widg in self.advanced_widgets:
+            widg.saved_parent = widg.parent
+            widg.saved_index = widg.parent.children.index(widg)
+        if not self.advanced_visible:
+            self.update_advanced()
+
+    def update_advanced(self):
+        if self.advanced_visible:
+            for widg in self.advanced_widgets:
+                if not widg.parent:
+                    widg.saved_parent.add_widget(widg, index=widg.saved_index)
+        else:
+            for widg in self.advanced_widgets:
+                if widg.parent:
+                    widg.parent.remove_widget(widg)
+
+
     def build(self):
         self.set_colors()
         self.options = {}
+        from kivy.factory import Factory
+        Factory.register('AdvToggleButton', cls=ToggleButton)
         self.container = Builder.load_file(Utils.local_path("data/optionscreator.kv"))
         self.root = self.container
         self.main_layout = self.container.ids.main
@@ -685,6 +735,17 @@ class OptionsCreator(ThemedApp):
         self.game_label = self.container.ids.game
         self.name_input = self.container.ids.player_name
         self.option_layout = self.container.ids.options
+
+        def toggle_advanced(adv_btn: ToggleButton):
+            self.advanced_visible = not self.advanced_visible
+            if self.advanced_visible:
+                adv_btn.state = "down"
+            else:
+                adv_btn.state = "normal"
+            self.update_advanced()
+
+        self.advanced_toggle = self.container.ids.advanced_toggle
+        self.advanced_toggle.bind(on_release=toggle_advanced)
 
         def set_height(instance, value):
             instance.height = value[1]
