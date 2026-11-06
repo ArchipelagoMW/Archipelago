@@ -311,6 +311,8 @@ class TooltipLabel(HovererableLabel, MDTooltip):
             self._tooltip.text = text
         else:
             self._tooltip = ToolTip(text=text, pos_hint={})
+            # render the text now so the tooltip has its real size when it gets clamped into the window
+            self._tooltip.texture_update()
             self.display_tooltip()
 
     def on_mouse_pos(self, window, pos):
