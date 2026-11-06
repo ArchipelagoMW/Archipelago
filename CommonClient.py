@@ -67,6 +67,7 @@ class ClientCommandProcessor(CommandProcessor):
         self.ctx.exit_event.set()
         return True
 
+    @mark_raw
     def _cmd_connect(self, address: str = "") -> bool:
         """Connect to a MultiWorld Server"""
         if address:
@@ -98,6 +99,7 @@ class ClientCommandProcessor(CommandProcessor):
             self.ctx.on_print_json({"data": parts, "cmd": "PrintJSON"})
         return True
 
+    @mark_raw
     def _cmd_missing(self, filter_text = "") -> bool:
         """List all missing location checks, from your local game state.
         Can be given text, which will be used as filter."""
