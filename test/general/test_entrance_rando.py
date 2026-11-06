@@ -531,3 +531,34 @@ class TestRandomizeEntrances(unittest.TestCase):
 
         self.assertRaises(EntranceRandomizationError, randomize_entrances, multiworld.worlds[1], False,
                           directionally_matched_group_lookup)
+
+    def test_stale_region_access_after_sweep(self):
+        """tests that entrance randomization doesn't fail due to having stale region access after speculative sweep"""
+        multiworld = generate_test_multiworld()
+
+        menu = multiworld.get_region("Menu", 1)
+        r1 = Region("r1", 1, multiworld)
+        r2 = Region("r2", 1, multiworld)
+        r3 = Region("r3", 1, multiworld)
+        multiworld.regions.append(r1)
+        multiworld.regions.append(r2)
+        multiworld.regions.append(r3)
+
+        # place event in r2
+        location = generate_locations(1, 1, r2)[0]
+        prog_item = generate_items(1, 1, True)[0]
+        location.place_locked_item(prog_item)
+
+        # should be first connection made
+        generate_entrance_pair(menu, "_right", ERTestGroups.RIGHT)
+        generate_entrance_pair(r2, "_left", ERTestGroups.LEFT)
+        # r1 should be accessible after sweeping for the prog_item event in r2
+        menu.connect(r1, rule=lambda state: state.has(prog_item.name, 1))
+        # after r1 is reachable, should be second connection made
+        generate_entrance_pair(r1, "_bottom", ERTestGroups.BOTTOM)
+        generate_entrance_pair(r3, "_top", ERTestGroups.TOP)
+
+        result = randomize_entrances(multiworld.worlds[1], True, directionally_matched_group_lookup)
+        # should be fully connected
+        self.assertTrue(("Menu_right", "r2_left") in result.pairings
+                        and ("r1_bottom", "r3_top") in result.pairings)
