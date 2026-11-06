@@ -16,6 +16,7 @@ pyshortcuts==1.9.7
 pathspec==1.0.4
 kivymd @ git+https://github.com/kivymd/KivyMD@5ff9d0d
 kivymd>=2.0.1.dev0
+setuptools>=75,<81
 
 # Legacy world dependencies that custom worlds rely on
 Pymem==1.14.0
