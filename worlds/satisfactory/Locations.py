@@ -320,6 +320,7 @@ class Locations:
         location_table = self.get_base_location_table(self.max_tiers)
         location_table.extend(self.get_hub_locations(True, self.max_tiers))
         location_table.extend(self.get_hard_drive_locations(True, self.max_tiers, set()))
+        location_table.extend(self.get_ficsmas_locations(True))
         location_table.append(LocationData("Overworld", "UpperBound", 1338999))
 
         return {location.name: location.code for location in location_table}
@@ -336,6 +337,7 @@ class Locations:
         location_table.extend(self.get_hub_locations(False, max_tier_for_game))
         location_table.extend(self.get_hard_drive_locations(False, max_tier_for_game, self.critical_path.required_parts))
         location_table.extend(self.get_logical_event_locations(self.options.final_elevator_phase.value))
+        location_table.extend(self.get_ficsmas_locations("Erect a FICSMAS Tree" in self.options.goal_selection))
 
         return location_table
 
@@ -424,3 +426,23 @@ class Locations:
                         HardDrive(data, self.state_logic, location_id, tier, can_hold_progression))
 
         return hard_drive_locations
+    
+    def get_ficsmas_locations(self, is_ficsmas_enabled: bool) -> list[LocationData]:
+        if is_ficsmas_enabled:
+            return [
+                MamSlot("Ficsmas", "FICSMAS Tree Base", 1338800),
+                MamSlot("Ficsmas", "Candy Cane Basher", 1338801),
+                MamSlot("Ficsmas", "Candy Cane Decor", 1338802),
+                MamSlot("Ficsmas", "Giant FICSMAS Tree: Upgrade 1", 1338803),
+                MamSlot("Ficsmas", "A Friend", 1338804),
+                MamSlot("Ficsmas", "FICSMAS Gift Tree", 1338805),
+                MamSlot("Ficsmas", "Giant FICSMAS Tree: Upgrade 2", 1338806),
+                MamSlot("Ficsmas", "FICSMAS Lights", 1338807),
+                MamSlot("Ficsmas", "It's Snowing!", 1338808),
+                MamSlot("Ficsmas", "Giant FICSMAS Tree: Upgrade 3", 1338809),
+                MamSlot("Ficsmas", "FICSMAS Wreath", 1338810),
+                MamSlot("Ficsmas", "Snowfight!", 1338811),
+                MamSlot("Ficsmas", "Giant FICSMAS Tree: Upgrade 4", 1338812)
+            ]
+        else:
+            return []
