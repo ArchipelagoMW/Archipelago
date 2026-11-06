@@ -147,7 +147,7 @@ class AdventureContext(CommonContext):
         self.ui_task = asyncio.create_task(self.ui.async_run(), name="UI")
 
     async def get_freeincarnates_used(self):
-        if self.server and not self.server.socket.closed:
+        if self.server:
             await self.send_msgs([{"cmd": "SetNotify", "keys": [f"adventure_{self.auth}_freeincarnates_used"]}])
             await self.send_msgs([{"cmd": "Get", "keys": [f"adventure_{self.auth}_freeincarnates_used"]}])
 
@@ -162,7 +162,7 @@ class AdventureContext(CommonContext):
                                "operations": [{"operation": "add", "value": send_val}]}])
 
     async def used_freeincarnate(self) -> None:
-        if self.server and not self.server.socket.closed:
+        if self.server:
             await self.send_msgs([{"cmd": "Set", "key": f"adventure_{self.auth}_freeincarnates_used",
                                    "default": 0, "want_reply": True,
                                    "operations": [{"operation": "add", "value": 1}]}])
