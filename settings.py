@@ -572,6 +572,15 @@ class ServerOptions(Group):
         "goal" -> collect is allowed after goal completion
         """
 
+    class HintMode(str):
+        """
+        Hint modes
+        Controls whether item hints expose exact locations and location hints expose exact items.
+        "default" -> hints are shown in full
+        "own" -> conceal details for items placed in their owner's world unless rehinted and paid for again
+        "all" -> conceal details for all placements unless rehinted and paid for again
+        """
+
     class RemainingMode(str):
         """
         Remaining modes
@@ -625,6 +634,7 @@ class ServerOptions(Group):
     hint_cost: HintCost = HintCost(10)
     release_mode: ReleaseMode = ReleaseMode("auto")
     collect_mode: CollectMode = CollectMode("auto")
+    hint_mode: HintMode = HintMode("default")
     remaining_mode: RemainingMode = RemainingMode("goal")
     countdown_mode: CountdownMode = CountdownMode("auto")
     auto_shutdown: AutoShutdown = AutoShutdown(0)
