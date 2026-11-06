@@ -301,7 +301,7 @@ Sent by the client to initiate a connection to an Archipelago game session.
 | version        | [NetworkVersion](#NetworkVersion) | An object representing the Archipelago version this client supports.                         |
 | items_handling | int                               | Flags configuring which items should be sent by the server. Read below for individual flags. |
 | tags           | list\[str\]                       | Denotes special features or capabilities that the sender is capable of. [Tags](#Tags)        |
-| slot_data      | bool                              | If true, the Connect answer will contain slot_data                                           |
+| slot_data      | bool                              | If true, the Connect answer will contain slot_data. If omitted, the server assumes true for backwards compatibility with older clients. |
 
 #### items_handling flags
 | Value | Meaning |
