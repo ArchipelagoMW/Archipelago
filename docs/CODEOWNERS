@@ -47,6 +47,9 @@
 # ChecksFinder
 /worlds/checksfinder/ @SunCatMC
 
+# ChecksMate Chess
+/worlds/checksmate/ @chesslogic
+
 # Choo-Choo Charles
 /worlds/cccharles/ @Yaranorgoth
 
@@ -265,4 +268,3 @@
 
 # Apworld Dev Faq
 /docs/apworld_dev_faq.md @qwint @ScipioWright
-
