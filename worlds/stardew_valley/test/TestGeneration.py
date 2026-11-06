@@ -8,7 +8,7 @@ from ..items import Group, ItemData, item_data
 from ..locations import LocationTags
 from ..options import Friendsanity, SpecialOrderLocations, Shipsanity, Chefsanity, SeasonRandomization, Craftsanity, ExcludeGingerIsland, SkillProgression, \
     Booksanity, Walnutsanity, Secretsanity, Moviesanity
-from ..options.options import IncludeEndgameLocations, Eatsanity
+from ..options.options import IncludeEndgameLocations, Eatsanity, StartWithout, JourneyOfThePrairieKing, JunimoKart
 from ..strings.ap_names.transport_names import Transportation
 from ..strings.region_names import Region
 
@@ -32,6 +32,7 @@ def get_all_permanent_progression_items() -> List[ItemData]:
 
 class TestBaseItemGeneration(SVTestBase):
     options = {
+        StartWithout.internal_name: StartWithout.preset_all,
         SeasonRandomization.internal_name: SeasonRandomization.option_progressive,
         SkillProgression.internal_name: SkillProgression.option_progressive_with_masteries,
         ExcludeGingerIsland.internal_name: ExcludeGingerIsland.option_false,
@@ -42,6 +43,8 @@ class TestBaseItemGeneration(SVTestBase):
         Craftsanity.internal_name: Craftsanity.option_all,
         Booksanity.internal_name: Booksanity.option_all,
         Walnutsanity.internal_name: Walnutsanity.preset_all,
+        JourneyOfThePrairieKing.internal_name: JourneyOfThePrairieKing.option_full_shuffle,
+        JunimoKart.internal_name: JunimoKart.option_full_shuffle,
         Moviesanity.internal_name: Moviesanity.option_all_movies_and_all_loved_snacks,
         Eatsanity.internal_name: Eatsanity.preset_all,
         Secretsanity.internal_name: Secretsanity.preset_all,
@@ -83,12 +86,15 @@ class TestNoGingerIslandItemGeneration(SVTestBase):
     options = {
         SeasonRandomization.internal_name: SeasonRandomization.option_progressive,
         SkillProgression.internal_name: SkillProgression.option_progressive_with_masteries,
+        StartWithout.internal_name: StartWithout.preset_all,
         Friendsanity.internal_name: Friendsanity.option_all_with_marriage,
         Shipsanity.internal_name: Shipsanity.option_everything,
         Chefsanity.internal_name: Chefsanity.preset_all,
         Craftsanity.internal_name: Craftsanity.option_all,
         ExcludeGingerIsland.internal_name: ExcludeGingerIsland.option_true,
         Booksanity.internal_name: Booksanity.option_all,
+        JourneyOfThePrairieKing.internal_name: JourneyOfThePrairieKing.option_full_shuffle,
+        JunimoKart.internal_name: JunimoKart.option_full_shuffle,
         Moviesanity.internal_name: Moviesanity.option_all_movies_and_all_loved_snacks,
         Eatsanity.internal_name: Eatsanity.preset_all,
         Secretsanity.internal_name: Secretsanity.preset_all,

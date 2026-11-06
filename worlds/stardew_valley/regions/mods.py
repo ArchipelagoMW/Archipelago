@@ -1,6 +1,6 @@
 from collections.abc import Iterable
 
-from .model import ConnectionData, RegionData, ModRegionsData
+from ..data.regions import ConnectionData, ModRegionsData, RegionData
 from ..mods.region_data import region_data_by_content_pack, vanilla_connections_to_remove_by_content_pack
 
 

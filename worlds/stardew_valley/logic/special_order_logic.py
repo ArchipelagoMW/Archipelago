@@ -34,26 +34,26 @@ class SpecialOrderLogic(BaseLogic):
 
     def initialize_rules(self):
         self.update_rules({
-            SpecialOrder.cave_patrol: self.logic.relationship.can_meet(NPC.clint),
+            SpecialOrder.cave_patrol: self.logic.relationship.can_meet(NPC.clint) & self.logic.region.can_reach(Region.mines_floor_60),
             SpecialOrder.aquatic_overpopulation: self.logic.relationship.can_meet(NPC.demetrius) & self.logic.ability.can_fish_perfectly(),
             SpecialOrder.biome_balance: self.logic.relationship.can_meet(NPC.demetrius) & self.logic.ability.can_fish_perfectly(),
             SpecialOrder.rock_rejuivenation: (self.logic.relationship.has_hearts(NPC.emily, 4) &
                                               self.logic.has_all(Mineral.ruby, Mineral.topaz, Mineral.emerald, Mineral.jade, Mineral.amethyst,
                                                                  ArtisanGood.cloth)),
-            SpecialOrder.gifts_for_george: self.logic.season.has(Season.spring) & self.logic.has(Forageable.leek),
-            SpecialOrder.fragments_of_the_past: self.logic.monster.can_kill(Monster.skeleton),
-            SpecialOrder.gus_famous_omelet: self.logic.has(AnimalProduct.any_egg),
-            SpecialOrder.crop_order: self.logic.ability.can_farm_perfectly() & self.logic.shipping.can_use_shipping_bin,
-            SpecialOrder.community_cleanup: self.logic.fishing.can_crab_pot_anywhere,
-            SpecialOrder.the_strong_stuff: self.logic.has(ArtisanGood.specific_juice(Vegetable.potato)),
-            SpecialOrder.pierres_prime_produce: self.logic.ability.can_farm_perfectly(),
+            SpecialOrder.gifts_for_george: self.logic.season.has(Season.spring) & self.logic.has(Forageable.leek) & self.logic.region.can_reach(Region.alex_house),
+            SpecialOrder.fragments_of_the_past: self.logic.monster.can_kill(Monster.skeleton) & self.logic.region.can_reach(Region.museum),
+            SpecialOrder.gus_famous_omelet: self.logic.has(AnimalProduct.any_egg) & self.logic.region.can_reach(Region.saloon),
+            SpecialOrder.crop_order: self.logic.ability.can_farm_perfectly() & self.logic.shipping.can_use_any_shipping_bin,
+            SpecialOrder.community_cleanup: self.logic.fishing.can_crab_pot_anywhere & self.logic.region.can_reach(Region.railroad),
+            SpecialOrder.the_strong_stuff: self.logic.has(ArtisanGood.specific_juice(Vegetable.potato)) & self.logic.region.can_reach(Region.trailer),
+            SpecialOrder.pierres_prime_produce: self.logic.ability.can_farm_perfectly() & self.logic.region.can_reach(Region.pierre_house),
             SpecialOrder.robins_project: self.logic.relationship.can_meet(NPC.robin) & self.logic.ability.can_chop_perfectly() &
                                          self.logic.has(Material.hardwood),
             SpecialOrder.robins_resource_rush: self.logic.relationship.can_meet(NPC.robin) & self.logic.ability.can_chop_perfectly() &
                                                self.logic.has(Fertilizer.tree) & self.logic.ability.can_mine_perfectly(),
-            SpecialOrder.juicy_bugs_wanted: self.logic.has(Loot.bug_meat),
-            SpecialOrder.a_curious_substance: self.logic.region.can_reach_all(*(Region.wizard_tower, Region.mines_floor_55,)),
-            SpecialOrder.prismatic_jelly: self.logic.region.can_reach_all(*(Region.wizard_tower, Region.mines_floor_25,)),
+            SpecialOrder.juicy_bugs_wanted: self.logic.has(Loot.bug_meat) & self.logic.region.can_reach(Region.beach),
+            SpecialOrder.a_curious_substance: self.logic.region.can_reach_all(*(Region.wizard_tower, Region.mines_floor_55,)) & self.logic.relationship.exists(NPC.wizard),
+            SpecialOrder.prismatic_jelly: self.logic.region.can_reach_all(*(Region.wizard_tower, Region.mines_floor_25,)) & self.logic.relationship.exists(NPC.wizard),
 
         })
 
@@ -74,27 +74,28 @@ class SpecialOrderLogic(BaseLogic):
 
         if qi_board_content_pack.name in self.content.registered_packs:
             self.update_rules({
-                SpecialOrder.qis_crop: self.logic.ability.can_farm_perfectly() & self.logic.region.can_reach(Region.greenhouse) &
-                                       self.logic.region.can_reach(Region.island_west) & self.logic.skill.has_total_level(50) &
-                                       self.logic.has(Machine.seed_maker) & self.logic.shipping.can_use_shipping_bin,
+                SpecialOrder.qis_crop: self.logic.ability.can_farm_perfectly() & self.logic.skill.has_total_level(50) &
+                                       self.logic.region.can_reach(Region.greenhouse) & self.logic.has(Fruit.qi_fruit) &
+                                       self.logic.has(Machine.seed_maker) & self.logic.shipping.can_use_any_shipping_bin,
                 SpecialOrder.lets_play_a_game: self.logic.arcade.has_junimo_kart_max_level(),
                 SpecialOrder.four_precious_stones: self.logic.time.has_lived_max_months & self.logic.has("Prismatic Shard") &
                                                    self.logic.ability.can_mine_perfectly_in_the_skull_cavern(),
                 SpecialOrder.qis_hungry_challenge: self.logic.ability.can_mine_perfectly_in_the_skull_cavern(),
-                SpecialOrder.qis_cuisine: self.logic.cooking.can_cook() & self.logic.shipping.can_use_shipping_bin &
-                                          (self.logic.money.can_spend_at(Region.saloon, 205000) & self.logic.cooking.can_cook(Beverage.triple_shot_espresso)) &
-                                           (self.logic.money.can_spend_at(Region.pierre_store, 170000) & self.logic.cooking.can_cook(Meal.bread)),
+                SpecialOrder.qis_cuisine: self.logic.cooking.can_cook() & self.logic.shipping.can_use_any_shipping_bin &
+                                          (self.logic.money.can_spend_at(Region.saloon_shop, 205000) & self.logic.cooking.can_cook(Beverage.triple_shot_espresso)) &
+                                          (self.logic.money.can_spend_at(Region.pierre_shop, 170000) & self.logic.cooking.can_cook(Meal.bread)),
                 SpecialOrder.qis_kindness: self.logic.gifts.can_give_loved_gifts_to_everyone(),
-                SpecialOrder.extended_family: self.logic.ability.can_fish_perfectly() & self.logic.has(Fish.angler) & self.logic.has(Fish.glacierfish) &
-                                              self.logic.has(Fish.crimsonfish) & self.logic.has(Fish.mutant_carp) & self.logic.has(Fish.legend),
+                SpecialOrder.extended_family: self.logic.ability.can_fish_perfectly() & self.logic.fishing.can_catch_fish(Fish.ms_angler) &
+                                              self.logic.fishing.can_catch_fish(Fish.glacierfish_jr) & self.logic.fishing.can_catch_fish(Fish.son_of_crimsonfish) &
+                                              self.logic.fishing.can_catch_fish(Fish.radioactive_carp) & self.logic.fishing.can_catch_fish(Fish.legend_ii),
                 SpecialOrder.danger_in_the_deep: self.logic.ability.can_mine_perfectly() & self.logic.mine.has_mine_elevator_to_floor(120),
                 SpecialOrder.skull_cavern_invasion: self.logic.ability.can_mine_perfectly_in_the_skull_cavern(),
                 SpecialOrder.qis_prismatic_grange: self.logic.has(Loot.bug_meat) &  # 100 Bug Meat
-                                                   self.logic.money.can_spend_at(Region.saloon, 24000) &  # 100 Spaghetti
-                                                   self.logic.money.can_spend_at(Region.blacksmith, 15000) &  # 100 Copper Ore
-                                                   self.logic.money.can_spend_at(Region.ranch, 5000) &  # 100 Hay
-                                                   self.logic.money.can_spend_at(Region.saloon, 22000) &  # 100 Salads
-                                                   self.logic.money.can_spend_at(Region.saloon, 7500) &  # 100 Joja Cola
+                                                   self.logic.money.can_spend_at(Region.saloon_shop, 24000) &  # 100 Spaghetti
+                                                   self.logic.money.can_spend_at(Region.blacksmith_shop, 15000) &  # 100 Copper Ore
+                                                   self.logic.money.can_spend_at(Region.ranch_shop, 5000) &  # 100 Hay
+                                                   self.logic.money.can_spend_at(Region.saloon_shop, 22000) &  # 100 Salads
+                                                   self.logic.money.can_spend_at(Region.saloon_shop, 7500) &  # 100 Joja Cola
                                                    self.logic.money.can_spend(80000),  # I need this extra rule because money rules aren't additive...)
             })
 
@@ -111,5 +112,5 @@ class SpecialOrderLogic(BaseLogic):
         if not self.options.special_order_locations & SpecialOrderLocations.value_qi:
             return self.logic.false_
 
-        return self.logic.ability.can_mine_perfectly() & self.logic.region.can_reach(Region.qi_walnut_room) &\
-               self.logic.region.can_reach_all(*(Region.mines_floor_100, Region.skull_cavern_100))
+        return self.logic.ability.can_mine_perfectly() & self.logic.region.can_reach(Region.qi_walnut_room) & \
+            self.logic.region.can_reach_all(*(Region.mines_floor_100, Region.skull_cavern_100))

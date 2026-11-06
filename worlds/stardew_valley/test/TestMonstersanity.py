@@ -1,10 +1,11 @@
 import unittest
 from typing import ClassVar
 
-from .bases import SVTestBase
 from .. import options
 from ..locations import LocationTags, location_table
 from ..mods.mod_data import ModNames
+from .bases import SVTestBase
+from .options.utils import skip_if_mod_disabled
 
 
 class SVMonstersanityTestBase(SVTestBase):
@@ -12,7 +13,7 @@ class SVMonstersanityTestBase(SVTestBase):
     expected_progressive_specific_weapon: ClassVar[int] = 0
     expected_progressive_slingshot: ClassVar[int] = 0
     expected_progressive_footwear: ClassVar[int] = 0
-    expected_rings: ClassVar[list[str]] = []
+    expected_rings: ClassVar[tuple[str, ...]] = ()
 
     @classmethod
     def setUpClass(cls) -> None:
@@ -53,7 +54,7 @@ class SVMonstersanityTestBase(SVTestBase):
 
 
 class TestMonstersanityNone(SVMonstersanityTestBase):
-    options = {
+    options = {  # noqa: RUF012
         options.Monstersanity: options.Monstersanity.option_none,
         # Not really necessary, but it adds more locations, so we don't have to remove useful items.
         options.Fishsanity: options.Fishsanity.option_all,
@@ -68,8 +69,9 @@ class TestMonstersanityNone(SVMonstersanityTestBase):
         return False
 
 
+@skip_if_mod_disabled(ModNames.sve)
 class TestMonstersanityNoneWithSVE(SVMonstersanityTestBase):
-    options = {
+    options = {  # noqa: RUF012
         options.Monstersanity: options.Monstersanity.option_none,
         options.Mods: ModNames.sve,
     }
@@ -84,7 +86,7 @@ class TestMonstersanityNoneWithSVE(SVMonstersanityTestBase):
 
 
 class TestMonstersanityGoals(SVMonstersanityTestBase):
-    options = {
+    options = {  # noqa: RUF012
         options.Monstersanity: options.Monstersanity.option_goals,
     }
     expected_progressive_specific_weapon = 5
@@ -93,7 +95,7 @@ class TestMonstersanityGoals(SVMonstersanityTestBase):
 
 
 class TestMonstersanityOnePerCategory(SVMonstersanityTestBase):
-    options = {
+    options = {  # noqa: RUF012
         options.Monstersanity: options.Monstersanity.option_one_per_category,
     }
     expected_progressive_specific_weapon = 5
@@ -102,31 +104,31 @@ class TestMonstersanityOnePerCategory(SVMonstersanityTestBase):
 
 
 class TestMonstersanityProgressive(SVMonstersanityTestBase):
-    options = {
+    options = {  # noqa: RUF012
         options.Monstersanity: options.Monstersanity.option_progressive_goals,
     }
     expected_progressive_specific_weapon = 5
     expected_progressive_slingshot = 2
     expected_progressive_footwear = 4
-    expected_rings = ["Hot Java Ring", "Wedding Ring", "Slime Charmer Ring"]
-
+    expected_rings = ("Hot Java Ring", "Wedding Ring", "Slime Charmer Ring")
 
 class TestMonstersanitySplit(SVMonstersanityTestBase):
-    options = {
+    options = {  # noqa: RUF012
         options.Monstersanity: options.Monstersanity.option_split_goals,
     }
     expected_progressive_specific_weapon = 5
     expected_progressive_slingshot = 2
     expected_progressive_footwear = 4
-    expected_rings = ["Hot Java Ring", "Wedding Ring", "Slime Charmer Ring"]
+    expected_rings = ("Hot Java Ring", "Wedding Ring", "Slime Charmer Ring")
 
 
+@skip_if_mod_disabled(ModNames.sve)
 class TestMonstersanitySplitWithSVE(SVMonstersanityTestBase):
-    options = {
+    options = {  # noqa: RUF012
         options.Monstersanity: options.Monstersanity.option_split_goals,
         options.Mods: ModNames.sve,
     }
     expected_progressive_specific_weapon = 6
     expected_progressive_slingshot = 2
     expected_progressive_footwear = 4
-    expected_rings = ["Hot Java Ring", "Wedding Ring", "Slime Charmer Ring"]
+    expected_rings = ("Hot Java Ring", "Wedding Ring", "Slime Charmer Ring")

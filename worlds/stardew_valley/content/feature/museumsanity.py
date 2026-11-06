@@ -3,7 +3,7 @@ from dataclasses import dataclass
 from typing import ClassVar
 
 from .base import FeatureBase
-from ...data.requirement import MuseumCompletionRequirement
+from ...data.requirement import MuseumCompletionRequirement, MuseumArtifactsRequirement, MuseumMineralsRequirement
 
 
 @dataclass(frozen=True)
@@ -16,6 +16,14 @@ class MuseumsanityNone(MuseumsanityFeature):
 
     @staticmethod
     def _disable_museum_completion_requirement(requirement: MuseumCompletionRequirement) -> bool:
+        return True
+
+    @staticmethod
+    def _disable_museum_artifacts_requirement(requirement: MuseumArtifactsRequirement) -> bool:
+        return True
+
+    @staticmethod
+    def _disable_museum_minerals_requirement(requirement: MuseumMineralsRequirement) -> bool:
         return True
 
 

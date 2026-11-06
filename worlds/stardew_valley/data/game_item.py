@@ -1,8 +1,9 @@
 import enum
 from abc import ABC
+from collections.abc import Callable, Iterable, Mapping
 from dataclasses import dataclass, field
 from types import MappingProxyType
-from typing import Iterable, ClassVar, Mapping, Callable, TYPE_CHECKING
+from typing import TYPE_CHECKING, ClassVar
 
 from ..stardew_rule.protocol import StardewRule
 
@@ -82,6 +83,7 @@ class GameItem:
     name: str
     sources: list[Source] = field(default_factory=list)
     tags: set[ItemTag] = field(default_factory=set)
+    sell_price: int = -1
 
     def add_sources(self, sources: Iterable[Source]):
         self.sources.extend(source for source in sources if type(source) is not Tag)

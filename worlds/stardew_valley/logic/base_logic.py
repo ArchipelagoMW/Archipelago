@@ -18,7 +18,6 @@ class LogicRegistry:
         self.seed_rules: Dict[str, StardewRule] = {}
         self.cooking_rules: Dict[str, StardewRule] = {}
         self.crafting_rules: Dict[str, StardewRule] = {}
-        self.crop_rules: Dict[str, StardewRule] = {}
         self.artisan_good_rules: Dict[str, StardewRule] = {}
         self.fish_rules: Dict[str, StardewRule] = {}
         self.museum_rules: Dict[str, StardewRule] = {}
@@ -27,6 +26,7 @@ class LogicRegistry:
         self.special_order_rules: Dict[str, StardewRule] = {}
         self.meme_item_rules: Dict[str, StardewRule] = {}
         self.shirt_rules: Dict[str, StardewRule] = {}
+        self.pants_rules: Dict[str, StardewRule] = {}
 
         self.sve_location_rules: Dict[str, StardewRule] = {}
 

@@ -1,18 +1,20 @@
 from collections import deque
 from collections.abc import Collection
-from unittest.mock import patch, Mock
+from unittest.mock import Mock, patch
 
-from BaseClasses import get_seed, MultiWorld, Entrance
-from ..assertion import WorldAssertMixin
-from ..bases import SVTestCase, solo_multiworld, setup_solo_multiworld
-from ... import options
+from BaseClasses import Entrance, MultiWorld, Region, get_seed
+
+from Options import PlandoConnection
+
+from ... import EntranceRandomizationBehaviorOptionName, StartWithoutOptionName, options
+from ...data.regions import ConnectionData, RandomizationFlag, RegionData
 from ...mods.mod_data import ModNames
 from ...options import EntranceRandomization, ExcludeGingerIsland, SkillProgression
-from ...options.options import all_mods
-from ...regions.entrance_rando import create_entrance_rando_target, prepare_mod_data, connect_regions
-from ...regions.model import RegionData, ConnectionData, RandomizationFlag
+from ...regions.entrance_rando import PlandoDetails, connect_regions, create_entrance_rando_target, prepare_mod_data
 from ...strings.entrance_names import Entrance as EntranceName
 from ...strings.region_names import Region as RegionName
+from ..assertion import WorldAssertMixin
+from ..bases import SVTestBase, SVTestCase, setup_solo_multiworld, solo_multiworld
 
 
 class TestEntranceRando(SVTestCase):
@@ -27,34 +29,39 @@ class TestEntranceRando(SVTestCase):
             "randomized_connection": ConnectionData("randomized_connection", "Region2", flag=RandomizationFlag.PELICAN_TOWN),
             "not_randomized": ConnectionData("not_randomized", "Region2", flag=RandomizationFlag.BUILDINGS),
         }
-        regions_by_name = {
+        regions_by_name: dict[str, Region] = {
             "Region1": Mock(),
             "Region2": Mock(),
             "Region3": Mock(),
         }
-        player_randomization_flag = RandomizationFlag.BIT_PELICAN_TOWN
+        player_randomization_flag = RandomizationFlag.SET_PELICAN_TOWN
 
         with patch("worlds.stardew_valley.regions.entrance_rando.create_entrance_rando_target") as mock_create_entrance_rando_target:
-            connect_regions(region_data_by_name, connection_data_by_name, regions_by_name, player_randomization_flag)
+            connect_regions(region_data_by_name, connection_data_by_name, regions_by_name, player_randomization_flag, [], set(), Mock())
 
             expected_origin, expected_destination = regions_by_name["Region1"], regions_by_name["Region2"]
             expected_connection = connection_data_by_name["randomized_connection"]
-            mock_create_entrance_rando_target.assert_called_once_with(expected_origin, expected_destination, expected_connection)
+            mock_create_entrance_rando_target.assert_called_once_with(expected_origin, expected_destination, expected_connection, PlandoDetails.no_plando())
 
-    def test_when_create_entrance_rando_target_then_create_exit_and_er_target(self):
+    def test_when_create_entrance_rando_target_both_ways_exits_and_targets_are_correct(self):
         origin = Mock()
         destination = Mock()
         connection_data = ConnectionData("origin to destination", "destination")
+        connection_data_back = ConnectionData("destination to origin", "origin")
 
-        create_entrance_rando_target(origin, destination, connection_data)
+        create_entrance_rando_target(origin, destination, connection_data, PlandoDetails.no_plando())
+        create_entrance_rando_target(destination, origin, connection_data_back, PlandoDetails.no_plando())
 
         origin.create_exit.assert_called_once_with("origin to destination")
+        origin.create_er_target.assert_called_once_with("origin to destination")
+        destination.create_exit.assert_called_once_with("destination to origin")
         destination.create_er_target.assert_called_once_with("destination to origin")
 
     def test_when_prepare_mod_data_then_swapped_connections_contains_both_directions(self):
-        placements = Mock(pairings=[("A to B", "C to A"), ("C to D", "A to C")])
+        # all two-way warps are explicit to allow for detached.
+        placements = Mock(pairings=[("A to B", "C to A"), ("C to A", "A to B"), ("C to D", "A to C"), ("A to C", "C to D")])
 
-        swapped_connections = prepare_mod_data(placements)
+        swapped_connections = prepare_mod_data(placements, {})
 
         self.assertEqual({"A to B": "A to C", "C to A": "B to A", "C to D": "C to A", "A to C": "D to C"}, swapped_connections)
 
@@ -64,11 +71,25 @@ class TestCanGenerateEachModWithEntranceRandomizationBuildings(WorldAssertMixin,
     Mods that do not interact with entrances are skipped
     Not all ER settings are tested, because 'buildings' is, essentially, a superset of all others
     """
-    mods = all_mods.difference([
-        ModNames.ginger, ModNames.distant_lands, ModNames.skull_cavern_elevator, ModNames.wellwick, ModNames.magic,
-        ModNames.binning_skill, ModNames.big_backpack, ModNames.luck_skill, ModNames.tractor, ModNames.shiko, ModNames.archaeology,
-        ModNames.delores, ModNames.socializing_skill, ModNames.cooking_skill
-    ])
+
+    mods = ModNames.enabled_mods().difference(
+        [
+            ModNames.ginger,
+            ModNames.distant_lands,
+            ModNames.skull_cavern_elevator,
+            ModNames.wellwick,
+            ModNames.magic,
+            ModNames.binning_skill,
+            ModNames.big_backpack,
+            ModNames.luck_skill,
+            ModNames.tractor,
+            ModNames.shiko,
+            ModNames.archaeology,
+            ModNames.delores,
+            ModNames.socializing_skill,
+            ModNames.cooking_skill,
+        ]
+    )
 
     def test_given_mod_when_generate_then_basic_checks(self) -> None:
         world_options = {
@@ -105,7 +126,7 @@ class TestGingerIslandEntranceRando(SVTestCase):
 def explore_regions_up_to_blockers(blocked_entrances: Collection[str], multiworld: MultiWorld) -> set[str]:
     explored_regions: set[str] = set()
     regions_by_name = multiworld.regions.region_cache[1]
-    regions_to_explore = deque([regions_by_name["Menu"]])
+    regions_to_explore = deque([regions_by_name["Stardew Valley"]])
 
     while regions_to_explore:
         region = regions_to_explore.pop()
@@ -128,22 +149,44 @@ class TestEntranceRandoSpecificCases(SVTestCase):
     def test_pierre_can_be_randomized_in_the_desert(self):
         world_options = {
             options.EntranceRandomization: EntranceRandomization.option_buildings,
+            options.EntrancePlando: [PlandoConnection("Desert to Oasis", "Town to Pierre's General Store", "both", 100)],
             options.ExcludeGingerIsland: ExcludeGingerIsland.option_true,
         }
 
         multiworld = setup_solo_multiworld(world_options, _steps=["generate_early", "create_regions", "create_items", "set_rules"])
         world = multiworld.worlds[1]
-        world.random = Mock()
-
-        def sort_entrances_to_place_pierre_and_oasis_first(entrances: list[Entrance]) -> None:
-            # This completely on the fact that
-            #  1. GER calls `shuffle` on the list of entrances and exits;
-            #  2. Both Pierre's and Oasis are not dead end so they are randomized in the first batch of entrances.
-            # Might break if the implementation changes :)
-            entrances.sort(key=lambda x: 0 if "Desert to Oasis" in x.name or "Pierre's General Store to Town" in x.name else 1)
-
-        world.random.shuffle = sort_entrances_to_place_pierre_and_oasis_first
 
         world.connect_entrances()
 
         self.assertEqual("Desert", multiworld.get_region("Pierre's General Store", 1).entrances[0].parent_region.name)
+
+
+class TestCannotAccessForage(SVTestBase):
+    options = {  # noqa: RUF012
+        options.EntranceRandomization: options.EntranceRandomization.option_everywhere,
+        options.EntranceRandomizationBehavior: {EntranceRandomizationBehaviorOptionName.shuffle_farmhouse_anywhere},
+        options.Mods: frozenset(),
+        # This test will fail fill if someone attempts to run it, due to this locked down plando
+        options.EntrancePlando: [
+            PlandoConnection(EntranceName.farm_to_backwoods, EntranceName.town_to_saloon, "both", 100),
+            PlandoConnection(EntranceName.farm_to_bus_stop, EntranceName.town_to_haley_house, "both", 100),
+            PlandoConnection(EntranceName.farm_to_farmcave, EntranceName.town_to_museum, "both", 100),
+            PlandoConnection(EntranceName.farm_to_forest, EntranceName.town_to_blacksmith, "both", 100),
+            PlandoConnection(EntranceName.farm_to_farmhouse, EntranceName.enter_witch_swamp, "both", 100),
+        ],
+        options.Eatsanity: frozenset(options.Eatsanity.preset_all),
+        options.StartWithout: frozenset([StartWithoutOptionName.house]),
+        options.Secretsanity: frozenset(options.Secretsanity.preset_all),
+        options.FarmType: options.FarmType.default,
+        options.SeasonRandomization: options.SeasonRandomization.option_progressive,
+    }
+
+    def test_can_do_secrets(self):
+        sphere_1_locations = ["Secret: Enjoy your new life here", "Secret: Nice Try", "Secret: 'What'd you expect?'"]
+        for loc in sphere_1_locations:
+            self.assert_can_reach_location(loc)
+
+    def test_cannot_do_foraging(self):
+        later_sphere_locations = ["Forage Clam", "Forage Leek", "Eat Leek", "Forage Dandelion", "Eat Dandelion"]
+        for loc in later_sphere_locations:
+            self.assert_cannot_reach_location(loc)

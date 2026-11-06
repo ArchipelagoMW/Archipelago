@@ -1,6 +1,8 @@
 from ..bases import SVTestBase
-from ... import SeasonRandomization, StartWithoutOptionName
+from ... import SeasonRandomization, StartWithoutOptionName, EntranceRandomization
+from ...content.feature.building_progression import progressive_house
 from ...options import BuildingProgression, FarmType, ToolProgression, StartWithout
+from ...strings.region_names import Region
 
 
 class TestBuildingLogic(SVTestBase):
@@ -55,3 +57,51 @@ class TestBuildingLogic(SVTestBase):
 
         self.multiworld.state.collect(self.create_item("Progressive Shed"))
         self.assert_can_reach_location(location)
+
+
+class TestStartWithHouseLogic(SVTestBase):
+    options = {
+        StartWithout.internal_name: frozenset({}),
+        BuildingProgression.internal_name: BuildingProgression.option_progressive,
+        EntranceRandomization.internal_name: EntranceRandomization.option_disabled,
+    }
+
+    def test_coop_blueprint(self):
+        self.assert_can_reach_region(Region.farm_house)
+
+        self.assert_cannot_reach_region(Region.farm_house_kitchen)
+        self.collect(progressive_house)
+        self.assert_can_reach_region(Region.farm_house_kitchen)
+
+        self.assert_cannot_reach_region(Region.farm_house_crib)
+        self.collect(progressive_house)
+        self.assert_can_reach_region(Region.farm_house_crib)
+
+        self.assert_cannot_reach_region(Region.cellar)
+        self.collect(progressive_house)
+        self.assert_can_reach_region(Region.cellar)
+
+
+class TestStartWithoutHouseLogic(SVTestBase):
+    options = {
+        StartWithout.internal_name: frozenset({StartWithoutOptionName.house}),
+        BuildingProgression.internal_name: BuildingProgression.option_progressive,
+        EntranceRandomization.internal_name: EntranceRandomization.option_disabled,
+    }
+
+    def test_coop_blueprint(self):
+        self.assert_cannot_reach_region(Region.farm_house)
+        self.collect(progressive_house)
+        self.assert_can_reach_region(Region.farm_house)
+
+        self.assert_cannot_reach_region(Region.farm_house_kitchen)
+        self.collect(progressive_house)
+        self.assert_can_reach_region(Region.farm_house_kitchen)
+
+        self.assert_cannot_reach_region(Region.farm_house_crib)
+        self.collect(progressive_house)
+        self.assert_can_reach_region(Region.farm_house_crib)
+
+        self.assert_cannot_reach_region(Region.cellar)
+        self.collect(progressive_house)
+        self.assert_can_reach_region(Region.cellar)

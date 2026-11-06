@@ -1,12 +1,24 @@
 import unittest
-from typing import ClassVar, Set
+from typing import ClassVar
 
-from .assertion import WorldAssertMixin
-from .bases import SVTestBase
 from ..content.feature import fishsanity
 from ..mods.mod_data import ModNames
-from ..options import Fishsanity, ExcludeGingerIsland, Mods, SpecialOrderLocations, Goal, QuestLocations
-from ..strings.fish_names import Fish, SVEFish, DistantLandsFish
+from ..options import (
+    DataRandomization,
+    ExcludeGingerIsland,
+    Fishsanity,
+    Goal,
+    Mods,
+    QuestLocations,
+    SeasonRandomization,
+    SkillProgression,
+    SpecialOrderLocations,
+)
+from ..strings.fish_names import DistantLandsFish, Fish, SVEFish
+from ..strings.region_names import Region
+from .assertion import WorldAssertMixin
+from .bases import SVTestBase
+from .options.utils import skip_if_mod_disabled
 
 pelican_town_legendary_fishes = {Fish.angler, Fish.crimsonfish, Fish.glacierfish, Fish.legend, Fish.mutant_carp, }
 pelican_town_hard_special_fishes = {Fish.lava_eel, Fish.octopus, Fish.scorpion_carp, Fish.ice_pip, Fish.super_cucumber, }
@@ -57,7 +69,7 @@ def complete_options_with_default(options):
 
 
 class SVFishsanityTestBase(SVTestBase):
-    expected_fishes: ClassVar[Set[str]] = set()
+    expected_fishes: ClassVar[set[str]] = set()
 
     @classmethod
     def setUpClass(cls) -> None:
@@ -147,6 +159,7 @@ class TestFishsanityAll_ExcludeGingerIsland(SVFishsanityTestBase):
     )
 
 
+@skip_if_mod_disabled(ModNames.sve)
 class TestFishsanityAll_SVE(SVFishsanityTestBase):
     options = complete_options_with_default({
         Fishsanity: Fishsanity.option_all,
@@ -170,7 +183,7 @@ class TestFishsanityAll_SVE(SVFishsanityTestBase):
             sve_ginger_island_easy_fishes
     )
 
-
+@skip_if_mod_disabled(ModNames.sve)
 class TestFishsanityAll_ExcludeGingerIsland_SVE(SVFishsanityTestBase):
     options = complete_options_with_default({
         Fishsanity: Fishsanity.option_all,
@@ -191,6 +204,7 @@ class TestFishsanityAll_ExcludeGingerIsland_SVE(SVFishsanityTestBase):
     )
 
 
+@skip_if_mod_disabled(ModNames.distant_lands)
 class TestFishsanityAll_DistantLands(SVFishsanityTestBase):
     options = complete_options_with_default({
         Fishsanity: Fishsanity.option_all,
@@ -295,6 +309,7 @@ class TestFishsanityExcludeHardFishes_Vanilla(SVFishsanityTestBase):
     )
 
 
+@skip_if_mod_disabled(ModNames.sve)
 class TestFishsanityExcludeHardFishes_SVE(SVFishsanityTestBase):
     options = complete_options_with_default({
         Fishsanity: Fishsanity.option_exclude_hard_fish,
@@ -313,6 +328,7 @@ class TestFishsanityExcludeHardFishes_SVE(SVFishsanityTestBase):
     )
 
 
+@skip_if_mod_disabled(ModNames.distant_lands)
 class TestFishsanityExcludeHardFishes_DistantLands(SVFishsanityTestBase):
     options = complete_options_with_default({
         Fishsanity: Fishsanity.option_exclude_hard_fish,
@@ -353,6 +369,7 @@ class TestFishsanityOnlyEasyFishes_Vanilla(SVFishsanityTestBase):
     )
 
 
+@skip_if_mod_disabled(ModNames.sve)
 class TestFishsanityOnlyEasyFishes_SVE(SVFishsanityTestBase):
     options = complete_options_with_default({
         Fishsanity: Fishsanity.option_only_easy_fish,
@@ -366,6 +383,7 @@ class TestFishsanityOnlyEasyFishes_SVE(SVFishsanityTestBase):
     )
 
 
+@skip_if_mod_disabled(ModNames.distant_lands)
 class TestFishsanityOnlyEasyFishes_DistantLands(SVFishsanityTestBase):
     options = complete_options_with_default({
         Fishsanity: Fishsanity.option_only_easy_fish,
@@ -390,8 +408,9 @@ class TestFishsanityOnlyEasyFishes_QiBoard(SVFishsanityTestBase):
     )
 
 
+@skip_if_mod_disabled(ModNames.sve)
 class TestFishsanityMasterAnglerSVEWithoutQuests(WorldAssertMixin, SVTestBase):
-    options = {
+    options = {  # noqa: RUF012
         Fishsanity: Fishsanity.option_all,
         Goal: Goal.option_master_angler,
         QuestLocations: -1,
@@ -404,3 +423,20 @@ class TestFishsanityMasterAnglerSVEWithoutQuests(WorldAssertMixin, SVTestBase):
 
     def test_fill(self):
         self.assert_basic_checks(self.multiworld)
+
+
+class TestNeedCrabPotToCatchCrab(SVTestBase):
+    options = {  # noqa: RUF012
+        SeasonRandomization: SeasonRandomization.option_disabled,
+        Fishsanity: Fishsanity.option_all,
+        DataRandomization: frozenset({}),
+        SkillProgression: SkillProgression.option_progressive,
+    }
+
+    def test_require_crab_pot_for_crabs(self):
+        location_name = "Fishsanity: Crab"
+        self.assert_can_reach_region(Region.beach, self.multiworld.state)
+        self.assert_cannot_reach_location(location_name, self.multiworld.state)
+
+        self.collect("Fishing Level", 3)
+        self.assert_can_reach_location(location_name, self.multiworld.state)

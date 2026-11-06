@@ -2,11 +2,12 @@ from Options import Choice, Range, Toggle
 
 
 class Jojapocalypse(Choice):
-    """Joja Co opens a new Archipelago branch, selling you any and all location checks you might want or need, in exchange for money.
+    """Joja Co opens a new Archipelago branch, selling you any and all location checks you might want or need, in exchange for money
     But are you ready to pay the price...
     Disabled: Joja does not sell location checks
     Allowed: Joja sells location checks, that you can buy if you want
     Forced: The only way to obtain location checks is through Joja
+    This option is blocked by the website, and by the host unless changed
     """
     internal_name = "jojapocalypse"
     display_name = "Jojapocalypse"
