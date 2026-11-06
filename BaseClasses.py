@@ -726,8 +726,8 @@ class CollectionState():
     """Internal cache for Advancement Locations already checked by this CollectionState. Not for use in logic."""
     stale: Dict[int, bool]
     allow_partial_entrances: bool
-    additional_init_functions: List[Callable[[CollectionState, MultiWorld], None]] = []
-    additional_copy_functions: List[Callable[[CollectionState, CollectionState], CollectionState]] = []
+    additional_init_functions: ClassVar[list[Callable[[CollectionState, MultiWorld], None]]] = []
+    additional_copy_functions: ClassVar[list[Callable[[CollectionState, CollectionState], CollectionState]]] = []
 
     def __init__(self, parent: MultiWorld, allow_partial_entrances: bool = False):
         assert parent.worlds, "CollectionState created without worlds initialized in parent"
@@ -1181,7 +1181,8 @@ class CollectionState():
 
 CollectionRule = Callable[[CollectionState], bool]
 DEFAULT_COLLECTION_RULE: CollectionRule = staticmethod(lambda state: True)
-
+DEFAULT_ALWAYS_ALLOW_RULE: Callable[[CollectionState, Item], bool] = staticmethod(lambda state,item:False)
+DEFAULT_ITEM_RULE: Callable[[Item],bool] = staticmethod(lambda item: True)
 
 class EntranceType(IntEnum):
     ONE_WAY = 1
@@ -1193,8 +1194,8 @@ class Entrance:
     hide_path: bool = False
     player: int
     name: str
-    parent_region: Optional[Region]
-    connected_region: Optional[Region] = None
+    parent_region: Region | None
+    connected_region: Region | None = None
     randomization_group: int
     randomization_type: EntranceType
 
@@ -1487,10 +1488,10 @@ class Location:
     locked: bool = False
     show_in_spoiler: bool = True
     progress_type: LocationProgressType = LocationProgressType.DEFAULT
-    always_allow: Callable[[CollectionState, Item], bool] = staticmethod(lambda state, item: False)
+    always_allow: Callable[[CollectionState, Item], bool] = DEFAULT_ALWAYS_ALLOW_RULE
     access_rule: CollectionRule = DEFAULT_COLLECTION_RULE
-    item_rule: Callable[[Item], bool] = staticmethod(lambda item: True)
-    item: Optional[Item] = None
+    item_rule: Callable[[Item], bool] = DEFAULT_ITEM_RULE
+    item: Item | None = None
 
     def __init__(self, player: int, name: str = '', address: Optional[int] = None, parent: Optional[Region] = None):
         self.player = player
