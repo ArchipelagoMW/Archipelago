@@ -298,19 +298,22 @@ class MultiWorld():
 
         for group_id, group in self.groups.items():
             def find_common_pool(players: Set[int], shared_pool: Set[str]) -> Tuple[
-                Optional[Dict[int, Dict[str, int]]], Optional[Dict[str, int]]
+                Optional[Dict[int, Dict[str, int]]], Optional[Dict[str, List[int]]]
             ]:
-                classifications: Dict[str, int] = collections.defaultdict(int)
                 counters = {player: {name: 0 for name in shared_pool} for player in players}
+                player_classifications: Dict[int, Dict[str, List[int]]] = {
+                    player: {item: [] for item in shared_pool} for player in players
+                }
                 for item in self.itempool:
                     if item.player in counters and item.name in shared_pool:
                         counters[item.player][item.name] += 1
-                        classifications[item.name] |= item.classification
+                        player_classifications[item.player][item.name].append(item.classification)
 
                 for player in players.copy():
                     if all([counters[player][item] == 0 for item in shared_pool]):
                         players.remove(player)
-                        del (counters[player])
+                        del counters[player]
+                        del player_classifications[player]
 
                 if not players:
                     return None, None
@@ -322,7 +325,20 @@ class MultiWorld():
                             counters[player][item] = count
                     else:
                         for player in players:
-                            del (counters[player][item])
+                            del counters[player][item]
+
+                for player in players:
+                    for item_name in counters[player]:
+                        player_classifications[player][item_name].sort(
+                            key=lambda c: (bool(c & ItemClassification.progression), c), reverse=True)
+
+                classifications: Dict[str, List[int]] = {}
+                for item_name, item_count in next(iter(counters.values())).items():
+                    classifications[item_name] = [0] * item_count
+                    for player in players:
+                        for i, classification in enumerate(player_classifications[player][item_name][:item_count]):
+                            classifications[item_name][i] |= classification
+
                 return counters, classifications
 
             common_item_count, classifications = find_common_pool(group["players"], group["item_pool"])
@@ -331,10 +347,10 @@ class MultiWorld():
 
             new_itempool: List[Item] = []
             for item_name, item_count in next(iter(common_item_count.values())).items():
-                for _ in range(item_count):
+                for i in range(item_count):
                     new_item = group["world"].create_item(item_name)
                     # mangle together all original classification bits
-                    new_item.classification |= classifications[item_name]
+                    new_item.classification |= classifications[item_name][i]
                     new_itempool.append(new_item)
 
             region = Region(group["world"].origin_region_name, group_id, self, "ItemLink")
