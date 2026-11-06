@@ -412,9 +412,9 @@ Basic chat command which sends text to the server to be distributed to other cli
 Requests the data package from the server. Does not require client authentication.
 
 #### Arguments
-| Name  | Type | Notes                                                                                                                           |
-|-------| ----- |---------------------------------------------------------------------------------------------------------------------------------|
-| games | list\[str\]  | Optional. If specified, will only send back the specified data. Such as, \["Factorio"\] -> Datapackage with only Factorio data. |
+| Name  | Type        | Notes                                                                                                                                                         |
+|-------|-------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| games | list\[str\] | The server will send datapackage(s) for the specified game(s) requested in the supplied list. Such as, \["Factorio"\] -> Datapackage with only Factorio data. |
 
 ### Bounce
 Send this message to the server, tell it which clients should receive the message and the server will forward
