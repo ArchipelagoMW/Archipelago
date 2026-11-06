@@ -1486,6 +1486,8 @@ class Location:
     parent_region: Optional[Region]
     locked: bool = False
     show_in_spoiler: bool = True
+    progression_balancing_sphere: bool = True
+    """If false, progression at this location does not start a new sphere during progression balancing."""
     progress_type: LocationProgressType = LocationProgressType.DEFAULT
     always_allow: Callable[[CollectionState, Item], bool] = staticmethod(lambda state, item: False)
     access_rule: CollectionRule = DEFAULT_COLLECTION_RULE
@@ -1563,12 +1565,14 @@ class ItemClassification(IntFlag):
     """ Item that is detrimental in some way. """
 
     skip_balancing = 0b01000
-    """ should technically never occur on its own
-    Item that is logically relevant, but progression balancing should not touch.
+    """Item that progression balancing should not move.
 
     Possible reasons for why an item should not be pulled ahead by progression balancing:
     1. This item is quite insignificant, so pulling it earlier doesn't help (currency/etc.)
-    2. It is important for the player experience that this item is evenly distributed in the seed (e.g. goal items) """
+    2. It is important for the player experience that this item is evenly distributed in the seed (e.g. goal items)
+
+    Non-progression items can also use this flag to prevent them from being displaced into a later sphere by a
+    progression item. """
 
     deprioritized = 0b10000
     """ Should technically never occur on its own.
@@ -1621,7 +1625,7 @@ class Item:
 
     @property
     def skip_in_prog_balancing(self) -> bool:
-        return ItemClassification.progression_skip_balancing in self.classification
+        return ItemClassification.skip_balancing in self.classification
 
     @property
     def useful(self) -> bool:
