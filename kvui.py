@@ -5,6 +5,7 @@ import typing
 import re
 import io
 import pkgutil
+from abc import abstractmethod
 from collections import deque
 assert "kivy" not in sys.modules, "kvui should be imported before kivy for frozen compatibility"
 
@@ -100,7 +101,7 @@ from kivymd.uix.tooltip import MDTooltip, MDTooltipPlain
 
 fade_in_animation = Animation(opacity=0, duration=0) + Animation(opacity=1, duration=0.25)
 
-from NetUtils import JSONtoTextParser, JSONMessagePart, SlotType, HintStatus
+from NetUtils import JSONtoTextParser, JSONMessagePart, SlotType, HintStatus, colorize_input, get_dark_color
 from Utils import async_start, get_input_text_from_response
 
 if typing.TYPE_CHECKING:
@@ -713,18 +714,86 @@ def is_command_input(string: str) -> bool:
     return len(string) > 0 and string[0] in "/!"
 
 
-class CommandPromptTextInput(ResizableTextField):
+class MarkupTextField(ResizableTextField):
+    @abstractmethod
+    def markup_text(self, text) -> str:
+        raise NotImplementedError("MarkupTextField must specify markup_text")
+
+    # No good way to do this directly it seems, this is based on https://stackoverflow.com/a/66271726/13357878
+    def _create_line_label(self, text, hint=False):
+        from kivy.cache import Cache
+        from kivy.graphics.texture import Texture
+        Cache_get = Cache.get
+        Cache_append = Cache.append
+
+        # Create a label from a text, using line options
+        ntext = self.markup_text(text.replace(u'\n', u'').replace(u'\t', u' ' * self.tab_width))
+
+        if self.password and not hint:  # Don't replace hint_text with *
+            ntext = self.password_mask * len(ntext)
+
+        kw = self._get_line_options()
+        cid = '%s\0%s' % (ntext, str(kw))
+        texture = Cache_get('textinput.label', cid)
+
+        if texture is None:
+            # FIXME right now, we can't render very long line...
+            # if we move on "VBO" version as fallback, we won't need to
+            # do this. try to find the maximum text we can handle
+            label = None
+            label_len = len(ntext)
+            ld = None
+
+            # check for blank line
+            if not ntext:
+                texture = Texture.create(size=(1, 1))
+                Cache_append('textinput.label', cid, texture)
+                return texture
+
+            while True:
+                try:
+                    label = MarkupLabel(text=ntext[:label_len], **kw)
+                    label.refresh()
+                    if ld is not None and ld > 2:
+                        ld //= 2
+                        label_len += ld
+                    else:
+                        break
+
+                except:
+                    # exception happen when we tried to render the text
+                    # reduce it...
+                    if ld is None:
+                        ld = len(ntext)
+                    ld //= 2
+                    if ld < 2 and label_len:
+                        label_len -= 1
+                    label_len -= ld
+                    continue
+
+            # ok, we found it.
+            texture = label.texture
+            Cache_append('textinput.label', cid, texture)
+        return texture
+
+
+class CommandPromptTextInput(MarkupTextField):
     MAXIMUM_HISTORY_MESSAGES = 50
 
     def __init__(self, **kwargs) -> None:
         super().__init__(**kwargs)
         self._command_history_index = -1
         self._command_history: typing.Deque[str] = deque(maxlen=CommandPromptTextInput.MAXIMUM_HISTORY_MESSAGES)
+        self._parser = KivyJSONtoTextParser(None)
 
     def update_history(self, new_entry: str) -> None:
         self._command_history_index = -1
         if is_command_input(new_entry):
             self._command_history.appendleft(new_entry)
+
+    def markup_text(self, text) -> str:
+        ctx = MDApp.get_running_app().ctx
+        return self._parser(colorize_input(text, ctx))
 
     def keyboard_on_key_down(
         self,
@@ -1075,6 +1144,7 @@ class GameManager(ThemedApp):
             self.server_connect_bar.readonly = False
             self.title = self.base_title + " " + Utils.__version__
             self.progressbar.value = 0
+        self.textinput._trigger_refresh_text()
 
     def command_button_action(self, button):
         if self.ctx.server:
@@ -1360,7 +1430,7 @@ class KivyJSONtoTextParser(JSONtoTextParser):
         black: str = StringProperty("000000")
         red: str = StringProperty("EE0000")
         green: str = StringProperty("00FF7F")
-        yellow: str = StringProperty("FAFAD2")
+        yellow: str = StringProperty("FAFA40")
         blue: str = StringProperty("6495ED")
         magenta: str = StringProperty("EE00EE")
         cyan: str = StringProperty("00EEEE")
@@ -1420,10 +1490,19 @@ class KivyJSONtoTextParser(JSONtoTextParser):
         colors = node["color"].split(";")
         node["text"] = escape_markup(node["text"])
         for color in colors:
-            color_code = self.color_codes.get(color, None)
+            if color.endswith("_dark"):
+                color_code = get_dark_color(color[:-5], self.color_codes)
+            else:
+                color_code = self.color_codes.get(color)
             if color_code:
                 node["text"] = f"[color={color_code}]{node['text']}[/color]"
                 return self._handle_text(node)
+            elif color == "bold":
+                node["text"] = f"[b]{node['text']}[/b]"
+            elif color == "underline":
+                node["text"] = f"[u]{node['text']}[/u]"
+            elif color == "strikethrough":
+                node["text"] = f"[s]{node['text']}[/s]"
         return self._handle_text(node)
 
     def _handle_text(self, node: JSONMessagePart):

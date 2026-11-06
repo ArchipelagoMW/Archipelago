@@ -39,6 +39,7 @@ setups
 build
 bundle/components.wxs
 dist
+/ap_histories/
 /prof/
 README.html
 .vs/

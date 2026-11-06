@@ -17,6 +17,7 @@ import collections
 import importlib
 import logging
 import warnings
+import traceback
 import pathlib
 
 from argparse import Namespace
@@ -37,9 +38,11 @@ except ImportError:
     from yaml import Loader as UnsafeLoader, SafeLoader, Dumper
 
 if typing.TYPE_CHECKING:
-    import tkinter
-    from BaseClasses import Region
     import multiprocessing
+    import tkinter
+    from threading import Thread, Event
+    from BaseClasses import Region
+    from CommonClient import CommonContext
 
 
 def tuplize_version(version: str) -> Version:
@@ -572,11 +575,19 @@ def init_logging(name: str, loglevel: typing.Union[str, int] = logging.INFO,
     file_handler.addFilter(Filter("NoCarriageReturn", lambda record: '\r' not in record.getMessage()))
     root_logger.addHandler(file_handler)
     if sys.stdout:
-        formatter = logging.Formatter(fmt='[%(asctime)s] %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
+        line_clear = "\r\033[2K"
         stream_handler = logging.StreamHandler(sys.stdout)
         stream_handler.addFilter(Filter("NoFile", lambda record: not getattr(record, "NoStream", False)))
+
+        class CRFormatter(logging.Formatter):
+            def format(self, record: logging.LogRecord) -> str:
+                return line_clear + super().format(record).replace("\n", "\n\r") + "\r"
+
         if add_timestamp:
+            formatter = CRFormatter(fmt="[%(asctime)s] %(message)s", datefmt="%Y-%m-%d %H:%M:%S")
             stream_handler.setFormatter(formatter)
+        else:
+            stream_handler.setFormatter(CRFormatter(fmt="%(message)s"))
         root_logger.addHandler(stream_handler)
         if hasattr(sys.stdout, "reconfigure"):
             sys.stdout.reconfigure(encoding="utf-8", errors="replace")
@@ -637,6 +648,81 @@ def stream_input(stream: typing.TextIO, queue: "asyncio.Queue[str]"):
     thread = Thread(target=queuer, name=f"Stream handler for {stream.name}", daemon=True)
     thread.start()
     return thread
+
+
+def input_console(stream: typing.TextIO, queue: asyncio.Queue[str], name: str | None = None,
+                  ctx: CommonContext | None = None) -> tuple[Thread, Event | None]:
+    from threading import Thread, Event
+
+    try:
+        import _colorize
+        try:
+            from _pyrepl.windows_console import WindowsConsole as Console
+        except ModuleNotFoundError:
+            from _pyrepl.unix_console import UnixConsole as Console
+        from _pyrepl.readline import ReadlineAlikeReader, ReadlineConfig
+
+        console = Console(encoding=sys.getdefaultencoding() or "latin1")
+
+        if _colorize.can_colorize():
+            from NetUtils import JSONtoTextParser, colorize_input, color_code
+            parser = JSONtoTextParser(ctx)
+            class ColorizeReader(ReadlineAlikeReader):
+                def calc_screen(self) -> list[str]:
+                    # XXX: This method will break on python 3.15
+                    super(ColorizeReader, self).calc_screen()
+                    return [f"{color_code('reset')}\r{self.ps1}{parser(colorize_input(''.join(self.buffer), ctx))}"]
+            Reader = ColorizeReader
+        else:
+            Reader = ReadlineAlikeReader
+
+        exit_event = Event()
+
+        def queuer():
+            reader = Reader(console=console, config=ReadlineConfig(), ps1="> ", ps2="", ps3="", ps4="")
+
+            history_file = user_path("ap_histories", f".{name}_cmd_history") if name else None
+            if history_file:
+                try:
+                    # Once 3.14 is minimum we should be able to use the builtin history saving system. 3.13's doesn't
+                    # really seem easy to use for a separate reader like this?
+                    with open(history_file) as hist:
+                        reader.history = hist.read().split("\n")
+                except IOError:
+                    logging.debug(f"Did not find history file for '{name}' input console")
+
+            try:
+                while not exit_event.is_set():
+                    reader.prepare()
+                    try:
+                        reader.refresh()
+                        while not (reader.finished or exit_event.is_set()):
+                            reader.handle1(False)
+                        if reader.finished:
+                            queue.put_nowait(reader.get_unicode())
+                        reader.restore()
+                        if not reader.console.get_event(False):
+                            sleep(0.1)  # Somewhat prevents prompt from getting eaten by a response line
+                    except Exception as e:
+                        traceback.print_exc()
+            finally:
+                reader.restore()
+                if history_file:
+                    try:
+                        os.makedirs(user_path("ap_histories"), exist_ok=True)
+                        with open(history_file, "w") as hist:
+                            hist.write("\n".join(reader.history))
+                    except IOError as e:
+                        logging.warning(f"Could not save out history file for '{name}' input console")
+
+        thread = Thread(target=queuer, name=f"Interactive stream handler for {stream.name}")
+        thread.start()
+        return thread, exit_event
+
+    except Exception as e:
+        logging.info("Could not load interactive console, falling back to stream_input")
+        logging.debug(traceback.format_exc())
+        return stream_input(stream, queue), None
 
 
 def tkinter_center_window(window: "tkinter.Tk") -> None:

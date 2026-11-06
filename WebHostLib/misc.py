@@ -14,7 +14,7 @@ from worlds.AutoWorld import AutoWorldRegister, World
 from . import app, cache
 from .markdown import render_markdown
 from .models import Seed, Room, Command, UUID, uuid4
-from Utils import title_sorted, utcnow
+from Utils import cache_argsless, title_sorted, utcnow
 
 class WebWorldTheme(StrEnum):
     DIRT = "dirt"
@@ -43,6 +43,26 @@ def get_visible_worlds() -> dict[str, type(World)]:
         if not world.hidden:
             worlds[game] = world
     return worlds
+
+
+@cache_argsless
+def get_command_highlight_info():
+    from NetUtils import COMMAND_FORMS, SERVER_OPTIONS, CommandType, color_rgb, _basic_arg_colors, get_dark_color
+    data = {}
+    data["color_codes"] = color_rgb.copy()
+    data["color_codes"] |= {f"{color}_dark": get_dark_color(color, color_rgb) for color in color_rgb}
+
+    data["arg_colors"] = _basic_arg_colors
+
+    # Go through commands reversed so that current version gets inserted last and takes precedence
+    data["commands"] = {
+        form.command: {"pos_args": form.arg_types, "raw": form.raw, "vararg": form.vararg_type}
+        for form in reversed(COMMAND_FORMS) if form.command_type == CommandType.server_console
+    }
+
+    data["options"] = {option.option: option.val_type for option in SERVER_OPTIONS}
+
+    return data
 
 
 @app.errorhandler(404)
@@ -267,7 +287,8 @@ def host_room(room: UUID):
         except FileNotFoundError:
             return "", 0
 
-    return render_template("hostRoom.html", room=room, should_refresh=should_refresh, get_log=get_log)
+    return render_template("hostRoom.html", room=room, should_refresh=should_refresh, get_log=get_log,
+                           highlight_data=get_command_highlight_info())
 
 
 @app.route('/favicon.ico')

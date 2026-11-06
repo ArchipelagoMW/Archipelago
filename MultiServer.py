@@ -2336,7 +2336,7 @@ class ServerCommandProcessor(CommonCommandProcessor):
     def output(self, text: str):
         if self.client:
             self.ctx.notify_client(self.client, text, {"type": "AdminCommandResult"})
-        super(ServerCommandProcessor, self).output(text)
+        self.ctx.logger.info(text)
 
     def default(self, raw: str):
         self.ctx.broadcast_text_all('[Server]: ' + raw, {"type": "ServerChat", "message": raw})
@@ -2676,23 +2676,27 @@ class ServerCommandProcessor(CommonCommandProcessor):
 async def console(ctx: Context):
     import sys
     queue = asyncio.Queue()
-    worker = Utils.stream_input(sys.stdin, queue)
-    while not ctx.exit_event.is_set():
-        try:
-            # I don't get why this while loop is needed. Works fine without it on clients,
-            # but the queue.get() for server never fulfills if the queue is empty when entering the await.
-            while queue.qsize() == 0:
-                await asyncio.sleep(0.05)
-                if not worker.is_alive():
-                    return
-            input_text = await queue.get()
-            queue.task_done()
-            ctx.commandprocessor(input_text)
-        except asyncio.exceptions.CancelledError:
-            ctx.logger.info("ConsoleTask cancelled")
-        except:
-            import traceback
-            traceback.print_exc()
+    worker, console_exit = Utils.input_console(sys.stdin, queue, "multiserver")
+    try:
+        while not ctx.exit_event.is_set():
+            try:
+                # I don't get why this while loop is needed. Works fine without it on clients,
+                # but the queue.get() for server never fulfills if the queue is empty when entering the await.
+                while queue.qsize() == 0:
+                    await asyncio.sleep(0.05)
+                    if not worker.is_alive():
+                        return
+                input_text = await queue.get()
+                queue.task_done()
+                ctx.commandprocessor(input_text)
+            except asyncio.exceptions.CancelledError:
+                ctx.logger.info("ConsoleTask cancelled")
+            except:
+                import traceback
+                traceback.print_exc()
+    finally:
+        if console_exit:
+            console_exit.set()
 
 
 def parse_args() -> argparse.Namespace:
