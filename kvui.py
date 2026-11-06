@@ -245,7 +245,7 @@ MDButton.on_release = on_release
 class HoverBehavior(object):
     """originally from https://stackoverflow.com/a/605348110"""
     hovered = BooleanProperty(False)
-    border_point = ObjectProperty(None)
+    border_point = ObjectProperty(None, allownone=True)
 
     def __init__(self, **kwargs):
         self.register_event_type("on_enter")
@@ -254,27 +254,38 @@ class HoverBehavior(object):
         Window.bind(on_cursor_leave=self.on_cursor_leave)
         super(HoverBehavior, self).__init__(**kwargs)
 
-    def on_mouse_pos(self, window, pos):
-        if not self.get_root_window():
-            return  # Abort if not displayed
+    def _find_top_widget(self, widget, pos):
+        if hasattr(widget, "children"):
+            for child in widget.children:
+                res = self._find_top_widget(child, pos)
+                if res is not None:
+                    return res
+        if hasattr(widget, "collide_point") and hasattr(widget, "to_widget"):
+            if widget.collide_point(*widget.to_widget(*pos)):
+                return widget
+        return None
 
-        # to_widget translates window pos to within widget pos
-        inside = self.collide_point(*self.to_widget(*pos))
-        if self.hovered == inside:
-            return  # We have already done what was needed
+    def set_hovered(self, state, pos):
+        if self.hovered == state:
+            return
+        self.hovered = state
         self.border_point = pos
-        self.hovered = inside
-
-        if inside:
+        if state:
             self.dispatch("on_enter")
         else:
             self.dispatch("on_leave")
 
+    def on_mouse_pos(self, window, pos):
+        root_window = self.get_root_window()
+        if not root_window:
+            return  # Abort if not displayed
+
+        hovered_widget = self._find_top_widget(root_window, pos)
+        self.set_hovered(hovered_widget is self, pos)
+
     def on_cursor_leave(self, *args):
         # if the mouse left the window, it is obviously no longer inside the hover label.
-        self.hovered = BooleanProperty(False)
-        self.border_point = ObjectProperty(None)
-        self.dispatch("on_leave")
+        self.set_hovered(False, None)
 
 
 Factory.register("HoverBehavior", HoverBehavior)
@@ -542,6 +553,106 @@ class MarkupDropdown(MDDropdownMenu):
             self.menu.data = self._items
 
 
+class ToggleDropdownItem(RecycleDataViewBehavior, MDBoxLayout):
+    text = StringProperty("")
+    active = BooleanProperty(False)
+    padding_x = NumericProperty(dp(15))
+    index = None
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.toggle_text = MDButtonText(self.text, size_hint_x=1, size_hint_y=None)
+        self.toggle = ToggleButton(self.toggle_text, theme_width="Custom", size_hint_x=1,
+                                   radius=[dp(0),dp(0),dp(0),dp(0)])
+
+        self.padding = [0]
+        self.toggle_text.padding = [0]
+
+        def update_text(instance, value):
+            instance.toggle_text.text = value
+
+        def update_padding(instance, value):
+            instance.toggle._text_right_pad = value
+            instance.toggle._text_left_pad = value
+        self.bind(padding_x=update_padding)
+        self.bind(text=update_text)
+        update_padding(self, self.padding_x)
+        update_text(self, self.text)
+        self.toggle.bind(state=self._on_toggle)
+        self.rv = None
+        self.add_widget(self.toggle)
+
+    def refresh_view_attrs(self, rv, index, data):
+        self.index = index
+        self.rv = rv
+        self.text = data.get("text", "")
+        self.toggle.state = "down" if data.get("active") else "normal"
+        return super().refresh_view_attrs(rv, index, data)
+
+    def _on_toggle(self, toggle, new_state):
+        self.active = new_state == "down"
+        if self.rv is not None and self.index is not None:
+            self.rv.data[self.index]["active"] = self.active
+            toggle_func: typing.Callable[[bool], None] | None = self.rv.data[self.index].get("on_toggle")
+            if toggle_func:
+                toggle_func(self.active)
+
+
+Factory.register("ToggleDropdownItem", ToggleDropdownItem)
+
+
+class ToggleDropdown(MDDropdownMenu):
+    def open(self) -> None:
+        self.set_menu_properties()
+        Window.add_widget(self)
+        self.position = self.adjust_position()
+        
+        # Create dummy items for layout calculation to determine dropdown width
+        width_calculated = dp(20)
+        for item in self.items:
+            viewclass = Factory.get(item.get("viewclass", "ToggleDropdownItem"))
+            kwargs = {}
+            kwargs.update(item)
+            kwargs.pop("viewclass")
+            temp = viewclass(**kwargs)
+            if not hasattr(temp, "minimum_width"):
+                continue
+            temp.size_hint_x = None
+            temp.width = dp(1000)
+            if isinstance(temp, ToggleDropdownItem):
+                temp.toggle_text.texture_update()
+                temp.toggle.theme_width = "Primary"
+                temp.toggle.adjust_width()
+            if hasattr(temp, "do_layout"):
+                temp.do_layout()
+
+            width_calculated = max(width_calculated, temp.minimum_width)
+
+        self.width = width_calculated
+
+        self.height = self.target_height
+        self._tar_x, self._tar_y = self.get_target_pos()
+        self.x = self._tar_x
+        self.y = self._tar_y - self.target_height
+        self.scale_value_center = self.caller.center
+        self.set_menu_pos()
+        self.on_open()
+
+    def on_items(self, instance, value: list) -> None:
+        items = []
+
+        for data in value:
+            if "viewclass" not in data:
+                data["viewclass"] = "ToggleDropdownItem"
+
+            items.append(data)
+
+        self._items = items
+        # Update items in view
+        if hasattr(self, "menu"):
+            self.menu.data = self._items
+
+
 class AutocompleteHintInput(ResizableTextField):
     min_chars = NumericProperty(3)
 
@@ -632,8 +743,7 @@ class HintLabel(RecycleDataViewBehavior, MDBoxLayout):
             ctx.update_hint(self.hint["location"],
                             self.hint["finding_player"],
                             data)
-
-        self.dropdown.bind(on_release=self.dropdown.dismiss)
+            self.dropdown.dismiss()
 
     def set_height(self, instance, value):
         self.height = max([child.texture_size[1] for child in self.children])
@@ -659,13 +769,15 @@ class HintLabel(RecycleDataViewBehavior, MDBoxLayout):
                 status_label = self.ids["status"]
                 if status_label.collide_point(*touch.pos):
                     if self.hint["status"] == HintStatus.HINT_FOUND:
-                        return
+                        return True
                     ctx = MDApp.get_running_app().ctx
                     if ctx.slot_concerns_self(self.hint["receiving_player"]):  # If this player owns this hint
                         # open a dropdown
                         self.dropdown.open()
+                        return True
                 elif self.selected:
                     self.parent.clear_selection()
+                    return True
                 else:
                     text = "".join((self.receiving_text, "\'s ", self.item_text, " is at ", self.location_text, " in ",
                                     self.finding_text, "\'s World", (" at " + self.entrance_text)
@@ -682,20 +794,19 @@ class HintLabel(RecycleDataViewBehavior, MDBoxLayout):
             # find correct column
             for child in self.children:
                 if child.collide_point(*touch.pos):
-                    key = child.sort_key
-                    if key == "status":
-                        parent.hint_sorter = lambda element: status_sort_weights[element["status"]["hint"]["status"]]
-                    else:
-                        parent.hint_sorter = lambda element: (
-                            remove_between_brackets.sub("", element[key]["text"]).lower()
-                        )
-                    if key == parent.sort_key:
-                        # second click reverses order
-                        parent.reversed = not parent.reversed
-                    else:
-                        parent.sort_key = key
-                        parent.reversed = False
-                    MDApp.get_running_app().update_hints()
+                    if touch.button == 'right':
+                        for key,val in self.ids.items():
+                            if val == child:
+                                parent.pop_filter_dropdown_for(key, parent.data[1:], child,
+                                                               None,
+                                                               lambda _: MDApp.get_running_app().update_hints())
+                                return True
+                        return False
+                    elif parent.sort_by_key(child.sort_key):
+                        MDApp.get_running_app().update_hints()
+                        return True
+                    return False
+        return False
 
     def apply_selection(self, rv, index, is_selected):
         """ Respond to the selection of items in the view. """
@@ -1236,7 +1347,250 @@ status_sort_weights: dict[HintStatus, int] = {
     HintStatus.HINT_PRIORITY: 4,
 }
 
-class HintLog(MDRecycleView):
+
+class ColumnSorter:
+    key: str
+    sort_func: typing.Callable[[dict], typing.Any]
+    reverse: bool
+
+    def __init__(self, key: str, sort_func: typing.Callable[[dict], typing.Any], reverse: bool = False):
+        self.key = key
+        self.sort_func = sort_func
+        self.reverse = reverse
+
+    def sort(self, data: list[typing.Any]):
+        data.sort(key=self.sort_func, reverse=self.reverse)
+
+
+class ColumnSortMixin:
+    column_sorters: list[ColumnSorter]
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.column_sorters = []
+
+    def sort_by_key(self, key: str) -> bool:
+        found_sorter: ColumnSorter | None = None
+        for sorter in self.column_sorters:
+            if sorter.key == key:
+                found_sorter = sorter
+                break
+        if found_sorter:
+            idx = self.column_sorters.index(found_sorter)
+            if idx == len(self.column_sorters) - 1:  # reverse the order if already primarily sorted by this key
+                found_sorter.reverse = not found_sorter.reverse
+            else:
+                self.column_sorters.append(self.column_sorters.pop(idx))  # move this sorter to the end
+            return True
+        return False
+
+    def sort_columns(self, data):
+        for sorter in self.column_sorters:
+            sorter.sort(data)
+
+
+class ColumnFilter:
+    key: str  # Which column key this filter belongs to
+    str_conv_func: typing.Callable[[typing.Any], str | None] | None  # How to turn the data into simple strings
+    filter_denylist: set[str]  # Strings to disallow / hide
+    filter_allowlist: set[str]  # Strings to allow. If non-empty, disallows all not in this list.
+    option_list: set[str]  # Strings to show, whether they are currently in the data or not
+
+    def __init__(self, key: str, str_conv_func: typing.Callable[[typing.Any], str | None] | None = None):
+        self.key = key
+        self.str_conv_func = str_conv_func
+        self.filter_denylist = set()
+        self.filter_allowlist = set()
+        self.option_list = set()
+
+    def filter_str(self, value: str) -> bool:
+        if self.filter_allowlist and value not in self.filter_allowlist:
+            return False
+        if value in self.filter_denylist:
+            return False
+        return True
+
+    def filter_data(self, value: typing.Any) -> bool:
+        if self.str_conv_func:
+            value = self.str_conv_func(value)
+        if isinstance(value, str):
+            return self.filter_str(value)
+        return not self.filter_allowlist
+
+    def get_basic_menu_names(self, data: list[typing.Any]) -> list[str]:
+        # Based on denylist
+        shown_values = (self.option_list | self.filter_denylist)
+
+        for value in data:
+            str_value: str
+            if self.str_conv_func:
+                v = self.str_conv_func(value)
+                if v is None:
+                    continue
+                str_value = v
+            elif value is str:
+                str_value = value
+            else:
+                continue
+
+            shown_values.add(str_value)
+
+        return list(sorted(shown_values))
+
+    def build_menu_items(self, data: list[typing.Any]) -> list:
+        menu_items = []
+        for str_value in self.get_basic_menu_names(data):
+            def toggle(val: bool, name = str_value) -> None:
+                if val:
+                    self.filter_denylist.discard(name)
+                else:
+                    self.filter_denylist.add(name)
+            menu_items.append({
+                "text": str_value,
+                "active": str_value not in self.filter_denylist,
+                "on_toggle": toggle
+            })
+        return menu_items
+
+    def pop_filter_dropdown(self, data: list[typing.Any], caller,
+                            after_dropdown_closed: typing.Callable[[], None] | None = None,
+                            after_toggle: typing.Callable[[bool], None] | None = None):
+        menu_items = self.build_menu_items(data)
+        if not menu_items:
+            if after_dropdown_closed:
+                after_dropdown_closed()
+            return
+
+        if after_toggle:
+            # Add the 'after_toggle' function to every item
+            for item in menu_items:
+                func = item.get("on_toggle")
+                if func is None:
+                    item["on_toggle"] = after_toggle
+                else:
+                    def toggle(val, fn=func):
+                        fn(val)
+                        after_toggle(val)
+                    item["on_toggle"] = toggle
+
+        dropdown = ToggleDropdown(caller=caller, items=menu_items, border_margin=0)
+
+        def handle_closing(instance):
+            for mitem in instance.items:
+                on_closed: typing.Callable[[], None] = mitem.get("on_dropdown_closed")
+                if on_closed:
+                    on_closed()
+            if after_dropdown_closed:
+                after_dropdown_closed()
+
+        dropdown.bind(on_dismiss=handle_closing)
+        dropdown.open()
+
+
+class ColumnFilterMixin:
+    column_filters: list[ColumnFilter]
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.column_filters = []
+
+    def pop_filter_dropdown_for(self, key: str, data: list[typing.Any], caller,
+                                after_dropdown_closed: typing.Callable[[], None] | None = None,
+                                after_toggle: typing.Callable[[bool], None] | None = None
+                                ) -> bool:
+        found_filter: ColumnFilter | None = None
+        for filt in self.column_filters:
+            if filt.key == key:
+                found_filter = filt
+                break
+        if found_filter:
+            found_filter.pop_filter_dropdown(data, caller, after_dropdown_closed, after_toggle)
+            return True
+        return False
+
+    def filter_columns(self, data: list[typing.Any]) -> list[typing.Any]:
+        return [datum for datum in data if all(filt.filter_data(datum) for filt in self.column_filters)]
+
+
+class ColumnFilterItemClassification(ColumnFilter):
+    req_flags: int = 0
+    hide_flags: int = 0
+    hide_filler: bool = False
+    iclass_conv_func: typing.Callable[[typing.Any], int | None] | None  # How to turn the data into item classification
+
+    def __init__(self, key: str, str_conv_func: typing.Callable[[typing.Any], str | None] | None = None,
+                 iclass_conv_func: typing.Callable[[typing.Any], int | None] | None = None):
+        super().__init__(key, str_conv_func)
+        self.iclass_conv_func = iclass_conv_func
+
+    def build_menu_items(self, data: list[typing.Any]) -> list:
+        flags = (
+            ("Progression", 0b001),
+            ("Useful", 0b010),
+            ("Trap", 0b100),
+        )
+        menu_items = []
+        for name, bit in flags:
+            def toggle(val: bool, b=bit) -> None:
+                if val:
+                    self.req_flags |= b
+                else:
+                    self.req_flags &= ~b
+            menu_items.append({
+                "text": f'Req. {name}',
+                "active": (self.req_flags & bit) != 0,
+                "on_toggle": toggle,
+            })
+        for name, bit in flags:
+            def toggle(val: bool, b=bit) -> None:
+                if val:
+                    self.hide_flags |= b
+                else:
+                    self.hide_flags &= ~b
+            menu_items.append({
+                "text": f'Hide {name}',
+                "active": (self.hide_flags & bit) != 0,
+                "on_toggle": toggle,
+            })
+        menu_items.append({
+            "text": "Hide Filler",
+            "active": self.hide_filler,
+            "on_toggle": lambda val: setattr(self, "hide_filler", val)
+        })
+
+        base_menu_items = super().build_menu_items(data)
+        if base_menu_items:
+            menu_items.append({
+                "viewclass": "MDLabel",
+                "text": "----",
+                "size_hint_x": 1,
+                "theme_width": "Custom",
+                "halign": "center",
+            })
+            menu_items.extend(base_menu_items)
+
+        return menu_items
+
+    def filter_classification(self, value: int) -> bool:
+        if self.hide_filler and not value:
+            return False
+        if value & self.req_flags != self.req_flags:
+            return False
+        if value & self.hide_flags != 0:
+            return False
+        return True
+
+    def filter_data(self, value: typing.Any) -> bool:
+        if self.iclass_conv_func:
+            c = self.iclass_conv_func(value)
+            if c is None:
+                c = 0
+            if not self.filter_classification(c):
+                return False
+        return super().filter_data(value)
+
+
+class HintLog(MDRecycleView, ColumnSortMixin, ColumnFilterMixin):
     header = {
         "receiving": {"text": "[u]Receiving Player[/u]"},
         "item": {"text": "[u]Item[/u]"},
@@ -1248,13 +1602,40 @@ class HintLog(MDRecycleView):
         "striped": True,
     }
     data: list[typing.Any]
-    sort_key: str = ""
-    reversed: bool = True
 
     def __init__(self, parser):
         super(HintLog, self).__init__()
         self.data = [self.header]
         self.parser = parser
+        # Setup default sorters for each key in a sensible default order
+        # The last in the list will end up being the 'primary' sort, as each sorter is applied in-order.
+        # Custom clients should be able to modify these and add additional sorters
+        for key in ["entrance", "receiving", "finding", "item", "location"]:
+            self.column_sorters.append(ColumnSorter(
+                key,
+                lambda element, k=key: remove_between_brackets.sub("", element[k]["text"]).lower(),
+            ))
+        self.column_sorters.append(ColumnSorter(
+            "status",
+            lambda element: status_sort_weights[element["status"]["hint"]["status"]],
+            True
+        ))
+
+        # Filter order is irrelevant. Set up basic filters for each column.
+        for key in ["entrance", "receiving", "finding", "item", "location", "status"]:
+            cls = ColumnFilter
+            kwargs = {
+                "key": key,
+                "str_conv_func": lambda element, k=key: remove_between_brackets.sub("", element[k]["text"]),
+            }
+            if key == "item":
+                cls = ColumnFilterItemClassification
+                kwargs["iclass_conv_func"] = lambda element: element["item"]["flags"]
+            filt = cls(**kwargs)
+            if key == "status":
+                filt.filter_denylist.add(status_names[HintStatus.HINT_FOUND])  # filter out already-found hints by default
+                filt.option_list.update(status_names.values())
+            self.column_filters.append(filt)
 
     def refresh_hints(self, hints):
         if not hints:  # Fix the scrolling looking visually wrong in some edge cases
@@ -1271,12 +1652,15 @@ class HintLog(MDRecycleView):
                 hint_status_node = f"[u]{hint_status_node}[/u]"
             data.append({
                 "receiving": {"text": self.parser.handle_node({"type": "player_id", "text": hint["receiving_player"]})},
-                "item": {"text": self.parser.handle_node({
-                    "type": "item_id",
-                    "text": hint["item"],
-                    "flags": hint["item_flags"],
-                    "player": hint["receiving_player"],
-                })},
+                "item": {
+                    "text": self.parser.handle_node({
+                        "type": "item_id",
+                        "text": hint["item"],
+                        "flags": hint["item_flags"],
+                        "player": hint["receiving_player"],
+                    }),
+                    "flags": hint["item_flags"]
+                },
                 "finding": {"text": self.parser.handle_node({"type": "player_id", "text": hint["finding_player"]})},
                 "location": {"text": self.parser.handle_node({
                     "type": "location_id",
@@ -1292,15 +1676,13 @@ class HintLog(MDRecycleView):
                 },
             })
 
-        data.sort(key=self.hint_sorter, reverse=self.reversed)
+        data = self.filter_columns(data)
+        self.sort_columns(data)
+
         for i in range(0, len(data), 2):
             data[i]["striped"] = True
         data.insert(0, self.header)
         self.data = data
-
-    @staticmethod
-    def hint_sorter(element: dict) -> str:
-        return element["status"]["hint"]["status"]  # By status by default
 
     def fix_heights(self):
         """Workaround fix for divergent texture and layout heights"""
