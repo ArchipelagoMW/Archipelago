@@ -555,8 +555,10 @@ class MultiWorld():
     def has_beaten_game(self, state: CollectionState, player: Optional[int] = None) -> bool:
         if player:
             return self.completion_condition[player](state)
-        else:
-            return all((self.has_beaten_game(state, p) for p in range(1, self.players + 1)))
+        for p in range(1, self.players + 1):
+            if not self.completion_condition[p](state):
+                return False
+        return True
 
     def can_beat_game(self,
                       starting_state: Optional[CollectionState] = None,
@@ -992,7 +994,7 @@ class CollectionState():
 
     # item name related
     def has(self, item: str, player: int, count: int = 1) -> bool:
-        return self.prog_items[player][item] >= count
+        return self.prog_items[player].get(item, 0) >= count
 
     # for loops are specifically used in all/any/count methods, instead of all()/any()/sum(), to avoid the overhead of
     # creating and iterating generator instances. In `return all(player_prog_items[item] for item in items)`, the
@@ -1030,7 +1032,7 @@ class CollectionState():
         return False
 
     def count(self, item: str, player: int) -> int:
-        return self.prog_items[player][item]
+        return self.prog_items[player].get(item, 0)
 
     def has_from_list(self, items: Iterable[str], player: int, count: int) -> bool:
         """Returns True if the state contains at least `count` items matching any of the item names from a list."""
@@ -1592,7 +1594,7 @@ class ItemClassification(IntFlag):
 
 class Item:
     game: str = "Generic"
-    __slots__ = ("name", "classification", "code", "player", "location")
+    __slots__ = ("name", "classification", "code", "player", "location", "_advancement")
     name: str
     classification: ItemClassification
     code: Optional[int]
@@ -1607,6 +1609,12 @@ class Item:
         self.code = code
         self.location = None
 
+    def __setattr__(self, name: str, value) -> None:
+        object.__setattr__(self, name, value)
+        if name == "classification":
+            # Cache whether the item is an advancement, since it gets checked frequently
+            object.__setattr__(self, "_advancement", ItemClassification.progression in value)
+
     @property
     def hint_text(self) -> str:
         return getattr(self, "_hint_text", self.name.replace("_", " ").replace("-", " "))
@@ -1617,7 +1625,7 @@ class Item:
 
     @property
     def advancement(self) -> bool:
-        return ItemClassification.progression in self.classification
+        return self._advancement
 
     @property
     def skip_in_prog_balancing(self) -> bool:
