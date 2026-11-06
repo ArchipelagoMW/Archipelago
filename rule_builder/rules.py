@@ -598,7 +598,7 @@ class And(NestedRule[TWorld], game="Archipelago"):
 
         if len(items) == 1:
             item, count = next(iter(items.items()))
-            clauses.append(Has(item, count).resolve(world))
+            clauses.insert(0, Has(item, count).resolve(world))
         elif items and all(count == 1 for count in items.values()):
             clauses.append(HasAll(*items).resolve(world))
         elif items:
@@ -685,7 +685,7 @@ class Or(NestedRule[TWorld], game="Archipelago"):
 
         if len(items) == 1:
             item, count = next(iter(items.items()))
-            clauses.append(Has(item, count).resolve(world))
+            clauses.insert(0, Has(item, count).resolve(world))
         elif items and all(count == 1 for count in items.values()):
             clauses.append(HasAny(*items).resolve(world))
         elif items:
