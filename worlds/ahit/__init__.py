@@ -9,9 +9,10 @@ from .Options import AHITOptions, slot_data_options, adjust_options, RandomizeHa
 from .Types import HatType, ChapterIndex, HatInTimeItem, hat_type_to_item, Difficulty
 from .DeathWishLocations import create_dw_regions, dw_classes, death_wishes
 from .DeathWishRules import set_dw_rules, create_enemy_events, hit_list, bosses
+from .Tracker import map_page_locations, tracker_name_mapping, AHITSettings, poptracker_entrance_mapping, map_page_groups
 from worlds.AutoWorld import World, WebWorld, CollectionState
 from worlds.generic.Rules import add_rule
-from typing import List, Dict, TextIO
+from typing import List, Dict, TextIO, Any, ClassVar
 from worlds.LauncherComponents import Component, components, icon_paths, launch as launch_component, Type
 from Utils import local_path
 
@@ -54,6 +55,25 @@ class HatInTimeWorld(World):
     item_name_groups = relic_groups
     web = AWebInTime()
 
+    # UT integration
+    ut_can_gen_without_yaml = True
+    glitches_item_name = "Higher Logic Hat"
+    # TODO move to tracker.py? Does that make sense?
+    # settings: ClassVar[AHITSettings]
+    # # TODO: figure out how to have a decent map page layout, both groups and importing seem like a mess atm
+    # # Also not sure how to deal with the deathwish varient in a intuitive way
+    # # TODO: add item page?
+    # tracker_world: ClassVar = {
+        # "nested_pack" : True,
+        # "map_page_maps" : "maps/maps.json",
+        # "map_page_locations" : map_page_locations,
+        # "poptracker_name_mapping" : tracker_name_mapping,
+        # "poptracker_entrance_mapping" : poptracker_entrance_mapping,
+        # "map_page_layouts" : "layouts/map_tabs.json", # TODO: Add the deathwish varient tab layout?
+        # # "map_page_groups" : map_page_groups,
+        # "external_pack_key" : "ut_poptracker_path"
+    # }
+
     def __init__(self, multiworld: "MultiWorld", player: int):
         super().__init__(multiworld, player)
         self.act_connections: Dict[str, str] = {}
@@ -78,11 +98,85 @@ class HatInTimeWorld(World):
         self.nyakuza_thug_items: Dict[str, int] = {}
         self.badge_seller_count: int = 0
 
+        # UT generation
+        self.fake_gen = getattr(self.multiworld, "generation_is_fake",False)
+
     def get_filler_item_name(self) -> str:
         return self.random.choices(list(junk_weights.keys()), weights=junk_weights.values(), k=1)[0]
 
     def generate_early(self):
-        adjust_options(self)
+
+        # UT Integration
+        re_gen_passthrough = getattr(self.multiworld, "re_gen_passthrough", {})
+        if re_gen_passthrough and self.game in re_gen_passthrough:
+            # Get the passed through slot data from the real generation
+            slot_data: dict[str, Any] = re_gen_passthrough[self.game]
+
+            # Set all your options here instead of getting them from the yaml
+            for key, value in slot_data.items():
+                opt: Option[Any] | None = getattr(self.options, key, None)
+                if opt is not None:
+                    # You can also set .value directly but that won't work if you have OptionSets
+                    setattr(self.options, key, opt.from_any(value))
+
+            # Set chapter costs from slot data
+            self.chapter_timepiece_costs[ChapterIndex.MAFIA] = slot_data["Chapter1Cost"]
+            self.chapter_timepiece_costs[ChapterIndex.BIRDS] = slot_data["Chapter2Cost"]
+            self.chapter_timepiece_costs[ChapterIndex.SUBCON] = slot_data["Chapter3Cost"]
+            self.chapter_timepiece_costs[ChapterIndex.ALPINE] = slot_data["Chapter4Cost"]
+            self.chapter_timepiece_costs[ChapterIndex.FINALE] = slot_data["Chapter5Cost"]
+            self.chapter_timepiece_costs[ChapterIndex.CRUISE] = slot_data["Chapter6Cost"]
+            self.chapter_timepiece_costs[ChapterIndex.METRO] = slot_data["Chapter7Cost"]
+
+            # Set hat yarn costs and craft order from slot data
+            if self.has_yarn():
+                self.hat_yarn_costs[HatType.SPRINT] = slot_data["SprintYarnCost"]
+                self.hat_yarn_costs[HatType.BREWING] = slot_data["BrewingYarnCost"]
+                self.hat_yarn_costs[HatType.ICE] = slot_data["IceYarnCost"]
+                self.hat_yarn_costs[HatType.DWELLER] = slot_data["DwellerYarnCost"]
+                self.hat_yarn_costs[HatType.TIME_STOP] = slot_data["TimeStopYarnCost"]
+
+                self.hat_craft_order[0] = slot_data["Hat1"]
+                self.hat_craft_order[1] = slot_data["Hat2"]
+                self.hat_craft_order[2] = slot_data["Hat3"]
+                self.hat_craft_order[3] = slot_data["Hat4"]
+                self.hat_craft_order[4] = slot_data["Hat5"]
+
+            # Get randomized act locations from slot data
+            if self.options.ActRandomizer:
+                for key, value in chapter_act_info.items():
+                    if value in slot_data:
+                        self.act_connections[value] = slot_data[value]
+
+            # Set number of badge seller items from slot data
+            self.badge_seller_count = slot_data["BadgeSellerItemCount"]
+
+            # Set number of nyakuza thug shop items from slot data
+            if self.is_dlc2() and not self.is_dw_only():
+                thug_numbers = [0, 1, 2, 4, 5, 6, 7, 12, 13, 14]
+                for thug in thug_numbers:
+                    thug_name = f"Hat_NPC_NyakuzaShop_{thug}"
+                    self.nyakuza_thug_items[thug_name] = slot_data[thug_name]
+
+            # Set deathwish shuffle from slot data
+            # Need to get the key from dw_classes because slot data only has dw_classes values
+            # dw_shuffle is a list of dw_classes keys
+            if self.is_dw() and self.options.DWShuffle:
+                dw_count = len(dw_classes)
+                for i in range(dw_count):
+                    if f"dw_{i}" in slot_data:
+                        dw_class = slot_data[f"dw_{i}"]
+                        for key, value in dw_classes.items():
+                            if value == dw_class:
+                                self.dw_shuffle.append(key)
+                                break
+                    else:
+                        # No more dw in slot data
+                        break
+
+        # Options in slot data should already be adjusted properly
+        if not self.fake_gen:
+            adjust_options(self)
 
         if self.options.StartWithCompassBadge:
             self.multiworld.push_precollected(self.create_item("Compass Badge"))
@@ -91,6 +185,7 @@ class HatInTimeWorld(World):
             return
 
         # Take care of some extremely restrictive starts in other chapters with act shuffle off
+        # TODO: see if the random zipline is an issue for UT
         if not self.options.ActRandomizer:
             start_chapter = self.options.StartingChapter
             if start_chapter == ChapterIndex.ALPINE:
@@ -137,7 +232,8 @@ class HatInTimeWorld(World):
                     add_rule(loc, lambda state: has_paintings(state, self, 1))
 
     def create_items(self):
-        if self.has_yarn():
+        # Don't randomize hat costs and craft order if UT generation
+        if self.has_yarn() and not self.fake_gen:
             calculate_yarn_costs(self)
 
             if self.options.RandomizeHatOrder:
@@ -384,3 +480,31 @@ class HatInTimeWorld(World):
             return True
 
         return f"{name} - All Clear" in self.options.exclude_locations
+
+    @staticmethod
+    def interpret_slot_data(slot_data: dict[str, Any]) -> dict[str, Any]:
+        # Trigger a regen in UT instead of attempting tracker gen with local yaml
+        return slot_data
+
+        # TODO: Add UT defered entrances logic. Looks like most of the act logic is in Rules act_connections already? Would need to tie the deferral to those act completions I guess.
+        # Likely need to do time rift deferral as well, since those are tied to both act completion and location availability.
+        # Would need to potentially look at the deferred logic for deathwish too... is there anything else?
+
+        # TODO: Add "Glitched" logic (partial implementation done, have some stuff left in expert and need to decide if I want to deal with the random scattered difficulty rules without rule builder)
+        # Maybe move the glitched logic rules to a separate file referenced and called by rules, keep rules cleaner and make things more separate for a potential RB refactor?
+
+        # TODO: Add Custom Sorting? Could group region checks together. (I likely won't do this)
+
+        # TODO: Add UT map tracker support (integrate with existing poptracker)
+        # Looks like the item names don't match, so would also need to build a translation table (WIP)
+
+        # TODO: Add any Logic explanation overrides desired (I likely won't do this)
+
+        # TODO: Consider optimizations, cleaner code, make sure changes are clean and meet AP style standards
+
+        # TODO: Consider refactor to Rule Builder to greatly improve/streamline glitch logic. (I likely won't do this, but maybe!)
+        # Would need core PR 6401 to mostly follow existing logic using add_rule, would allow for an easier but less clean/ideal refactor
+
+        # TODO: add more item groups? Like Relics, Hats, Yarn, Timepieces, etc?
+        
+        # TODO: update AHIT docs as needed
