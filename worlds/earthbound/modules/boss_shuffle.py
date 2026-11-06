@@ -188,7 +188,7 @@ def initialize_bosses(world: "EarthBoundWorld") -> None:
                                     [],
                                     [0x06858E, 0x068595, 0x06859C, 0x0685A3, 0x0685AA]),
         "Dept. Store Spook": SlotInfo([0x0FC803], [], [], [0x06855F]),
-        "Evil Mani-Mani": SlotInfo([0x0FE6E4], [], [0x0978AD, 0x09782D, 0x097998], [0x068587]),
+        "Evil Mani-Mani": SlotInfo([0x0FE6E4], [0x097998], [0x0978AD, 0x09782D], [0x068587]),
         "Clumsy Robot": SlotInfo([0x0FC429], [], [], [0x06856D]),
         "Shrooom!": SlotInfo([], [], [], [0x06841B]),
         "Plague Rat of Doom": SlotInfo([], [], [], [0x068429]),
