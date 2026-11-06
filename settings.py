@@ -659,6 +659,13 @@ class GeneratorOptions(Group):
         """Meta file name, within the stated player_files_path location"""
         # this is special because the path is relative to player_files_path
 
+    class MetaUnknownWorldHandling(str):
+        """
+        What to do if an unrecognized world is in the meta.yaml
+        raise -> Raise an exception and abort
+        ignore -> Ignore that entry
+        """
+
     class Spoiler(IntEnum):
         """
         Create a spoiler file
@@ -696,6 +703,7 @@ class GeneratorOptions(Group):
     allow_quantity: AllowQuantity | bool = False
     weights_file_path: WeightsFilePath = WeightsFilePath("weights.yaml")
     meta_file_path: MetaFilePath = MetaFilePath("meta.yaml")
+    meta_unknown_world_handling: MetaUnknownWorldHandling = MetaUnknownWorldHandling("raise")
     spoiler: Spoiler = Spoiler(3)
     race: Race = Race(0)
     plando_options: PlandoOptions = PlandoOptions("bosses, connections, texts")
