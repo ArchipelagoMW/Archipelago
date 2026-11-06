@@ -546,9 +546,10 @@ class SMZ3World(World):
             locations = [loc for loc in self.locations.values() if loc.item is None]
             self.multiworld.random.shuffle(locations)
 
-            all_state = self.multiworld.get_all_state(False)
+            all_state = self.multiworld.get_all_state(perform_sweep=False)
             for item in self.smz3DungeonItems:
                 all_state.remove(item)
+            all_state.sweep_for_advancements()
 
             all_dungeonItems = self.smz3DungeonItems[:]
             fill_restrictive(self.multiworld, all_state, locations, all_dungeonItems, True, True)
