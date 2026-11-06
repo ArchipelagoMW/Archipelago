@@ -159,7 +159,7 @@ Warning: playthrough can take a significant amount of time for larger multiworld
                                             <select name="hint_cost" id="hint_cost">
                                                 {% for n in range(0, 110, 5) %}
                                                     <option {% if n == 10 %}selected="selected" {% endif %} value="{{ n }}">
-                                                        {% if n > 100 %}Off{% else %}{{ n }}%{% endif %}
+                                                        {% if n > 100 %}Disable Hints{% else %}{{ n }}%{% endif %}
                                                     </option>
                                                 {% endfor %}
                                             </select>
