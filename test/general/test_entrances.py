@@ -57,7 +57,7 @@ class TestBase(unittest.TestCase):
                         "As such, any call to get_all_state must use allow_partial_entrances = True."
                     ))
 
-                    return original_get_all_state(allow_partial_entrances, **kwargs)
+                    return original_get_all_state(use_cache=use_cache, allow_partial_entrances=allow_partial_entrances, **kwargs)
 
                 multiworld.get_all_state = patched_get_all_state
 

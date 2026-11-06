@@ -400,7 +400,7 @@ def verify_hm_moves(multiworld, world, player):
     last_intervene = None
     while True:
         intervene_move = None
-        test_state = multiworld.get_all_state(False, True, False)
+        test_state = multiworld.get_all_state(allow_partial_entrances=True, collect_pre_fill_items=False)
         if not logic.can_learn_hm(test_state, world, "Surf", player):
             intervene_move = "Surf"
         elif not logic.can_learn_hm(test_state, world, "Strength", player):

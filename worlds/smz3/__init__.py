@@ -546,7 +546,7 @@ class SMZ3World(World):
             locations = [loc for loc in self.locations.values() if loc.item is None]
             self.multiworld.random.shuffle(locations)
 
-            all_state = self.multiworld.get_all_state(False)
+            all_state = self.multiworld.get_all_state()
             for item in self.smz3DungeonItems:
                 all_state.remove(item)
 

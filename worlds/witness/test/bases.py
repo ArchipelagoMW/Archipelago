@@ -43,7 +43,7 @@ class WitnessTestBase(WorldTestBase):
             event_location.access_rule = lambda _: False
 
         # We can't use self.assertAccessDependency here, it doesn't work for event items. (As of 2024-06-30)
-        test_state = self.multiworld.get_all_state(False)
+        test_state = self.multiworld.get_all_state()
 
         self.assertFalse(spot.can_reach(test_state), f"{spot.name} is reachable without {item_name}")
 

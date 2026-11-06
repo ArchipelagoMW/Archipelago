@@ -441,10 +441,8 @@ class MultiWorld():
 
         :return: The completed CollectionState.
         """
-        if __debug__ and use_cache is not None:
-            # TODO swap to Utils.deprecate when we want this to crash on source and warn on frozen
-            warnings.warn("multiworld.get_all_state no longer caches all_state and this argument will be removed.",
-                          DeprecationWarning)
+        if use_cache is not None:
+            Utils.deprecate("multiworld.get_all_state no longer caches all_state and this argument will be removed.")
         ret = CollectionState(self, allow_partial_entrances)
 
         for item in self.itempool:
