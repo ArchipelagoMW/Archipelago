@@ -1,0 +1,367 @@
+{% set icons = {
+    "Wayward_Compass":                  "https://cdn.wikimg.net/en/hkwiki/images/thumb/7/7d/Wayward_Compass.png/71px-Wayward_Compass.png",
+    "Gathering_Swarm":                  "https://cdn.wikimg.net/en/hkwiki/images/thumb/8/8a/Gathering_Swarm.png/67px-Gathering_Swarm.png",
+    "Stalwart_Shell":                   "https://cdn.wikimg.net/en/hkwiki/images/thumb/f/f2/Stalwart_Shell.png/72px-Stalwart_Shell.png",
+    "Soul_Catcher":                     "https://cdn.wikimg.net/en/hkwiki/images/thumb/c/ca/Soul_Catcher.png/71px-Soul_Catcher.png",
+    "Shaman_Stone":                     "https://cdn.wikimg.net/en/hkwiki/images/thumb/5/5e/Shaman_Stone.png/72px-Shaman_Stone.png",
+    "Soul_Eater":                       "https://cdn.wikimg.net/en/hkwiki/images/thumb/6/6c/Soul_Eater.png/72px-Soul_Eater.png",
+    "Dashmaster":                       "https://cdn.wikimg.net/en/hkwiki/images/thumb/7/70/Dashmaster.png/71px-Dashmaster.png",
+    "Sprintmaster":                     "https://cdn.wikimg.net/en/hkwiki/images/thumb/e/e9/Sprintmaster.png/72px-Sprintmaster.png",
+    "Grubsong":                         "https://cdn.wikimg.net/en/hkwiki/images/thumb/7/78/Grubsong.png/72px-Grubsong.png",
+    "Grubberfly's_Elegy":               "https://cdn.wikimg.net/en/hkwiki/images/thumb/b/bd/Grubberfly%27s_Elegy.png/68px-Grubberfly%27s_Elegy.png",
+    "Fragile_Heart":                    "https://cdn.wikimg.net/en/hkwiki/images/thumb/1/13/Fragile_Heart.png/72px-Fragile_Heart.png",
+    "Unbreakable_Heart":                "https://cdn.wikimg.net/en/hkwiki/images/thumb/1/15/Unbreakable_Heart.png/69px-Unbreakable_Heart.png",
+    "Fragile_Greed":                    "https://cdn.wikimg.net/en/hkwiki/images/thumb/b/b6/Fragile_Greed.png/69px-Fragile_Greed.png",
+    "Unbreakable_Greed":                "https://cdn.wikimg.net/en/hkwiki/images/thumb/2/2a/Unbreakable_Greed.png/69px-Unbreakable_Greed.png",
+    "Progressive Unbreakable Greed":    "https://cdn.wikimg.net/en/hkwiki/images/thumb/2/2a/Unbreakable_Greed.png/69px-Unbreakable_Greed.png",
+    "Fragile_Strength":                 "https://cdn.wikimg.net/en/hkwiki/images/thumb/7/7b/Fragile_Strength.png/69px-Fragile_Strength.png",
+    "Progressive Fragile Strength":     "https://cdn.wikimg.net/en/hkwiki/images/thumb/7/7b/Fragile_Strength.png/69px-Fragile_Strength.png",
+    "Unbreakable_Strength":             "https://cdn.wikimg.net/en/hkwiki/images/thumb/a/ac/Unbreakable_Strength.png/69px-Unbreakable_Strength.png",
+    "Progressive Unbreakable Strength": "https://cdn.wikimg.net/en/hkwiki/images/thumb/a/ac/Unbreakable_Strength.png/69px-Unbreakable_Strength.png",
+    "Spell_Twister":                    "https://cdn.wikimg.net/en/hkwiki/images/thumb/3/33/Spell_Twister.png/66px-Spell_Twister.png",
+    "Steady_Body":                      "https://cdn.wikimg.net/en/hkwiki/images/thumb/f/f5/Steady_Body.png/69px-Steady_Body.png",
+    "Heavy_Blow":                       "https://cdn.wikimg.net/en/hkwiki/images/thumb/f/f6/Heavy_Blow.png/72px-Heavy_Blow.png",
+    "Quick_Slash":                      "https://cdn.wikimg.net/en/hkwiki/images/thumb/5/5f/Quick_Slash.png/67px-Quick_Slash.png",
+    "Longnail":                         "https://cdn.wikimg.net/en/hkwiki/images/thumb/d/d1/Longnail.png/72px-Longnail.png",
+    "Mark_of_Pride":                    "https://cdn.wikimg.net/en/hkwiki/images/thumb/6/69/Mark_of_Pride.png/71px-Mark_of_Pride.png",
+    "Fury_of_the_Fallen":               "https://cdn.wikimg.net/en/hkwiki/images/thumb/4/4f/Fury_of_the_Fallen.png/71px-Fury_of_the_Fallen.png",
+    "Thorns_of_Agony":                  "https://cdn.wikimg.net/en/hkwiki/images/thumb/8/8f/Thorns_of_Agony.png/72px-Thorns_of_Agony.png",
+    "Baldur_Shell":                     "https://cdn.wikimg.net/en/hkwiki/images/thumb/2/21/Baldur_Shell.png/72px-Baldur_Shell.png",
+    "Flukenest":                        "https://cdn.wikimg.net/en/hkwiki/images/thumb/7/79/Flukenest.png/72px-Flukenest.png",
+    "Defender's_Crest":                 "https://cdn.wikimg.net/en/hkwiki/images/thumb/5/56/Defender%27s_Crest.png/72px-Defender%27s_Crest.png",
+    "Glowing_Womb":                     "https://cdn.wikimg.net/en/hkwiki/images/thumb/c/c6/Glowing_Womb.png/72px-Glowing_Womb.png",
+    "Quick_Focus":                      "https://cdn.wikimg.net/en/hkwiki/images/thumb/6/6a/Quick_Focus.png/69px-Quick_Focus.png",
+    "Deep_Focus":                       "https://cdn.wikimg.net/en/hkwiki/images/thumb/e/ea/Deep_Focus.png/68px-Deep_Focus.png",
+    "Lifeblood_Heart":                  "https://cdn.wikimg.net/en/hkwiki/images/thumb/7/7c/Lifeblood_Heart.png/68px-Lifeblood_Heart.png",
+    "Lifeblood_Core":                   "https://cdn.wikimg.net/en/hkwiki/images/thumb/8/81/Lifeblood_Core.png/70px-Lifeblood_Core.png",
+    "Joni's_Blessing":                  "https://cdn.wikimg.net/en/hkwiki/images/thumb/6/67/Joni%27s_Blessing.png/72px-Joni%27s_Blessing.png",
+    "Hiveblood":                        "https://cdn.wikimg.net/en/hkwiki/images/thumb/e/eb/Hiveblood.png/64px-Hiveblood.png",
+    "Spore_Shroom":                     "https://cdn.wikimg.net/en/hkwiki/images/thumb/7/78/Spore_Shroom.png/72px-Spore_Shroom.png",
+    "Sharp_Shadow":                     "https://cdn.wikimg.net/en/hkwiki/images/thumb/1/13/Sharp_Shadow.png/71px-Sharp_Shadow.png",
+    "Shape_of_Unn":                     "https://cdn.wikimg.net/en/hkwiki/images/thumb/b/b4/Shape_of_Unn.png/69px-Shape_of_Unn.png",
+    "Nailmaster's_Glory":               "https://cdn.wikimg.net/en/hkwiki/images/thumb/0/0f/Nailmaster%27s_Glory.png/68px-Nailmaster%27s_Glory.png",
+    "Weaversong":                       "https://cdn.wikimg.net/en/hkwiki/images/thumb/2/26/Weaversong.png/72px-Weaversong.png",
+    "Dream_Wielder":                    "https://cdn.wikimg.net/en/hkwiki/images/thumb/9/94/Dream_Wielder.png/72px-Dream_Wielder.png",
+    "Dreamshield":                      "https://cdn.wikimg.net/en/hkwiki/images/thumb/4/47/Dreamshield.png/72px-Dreamshield.png",
+    "Grimmchild1":                      "https://cdn.wikimg.net/en/hkwiki/images/6/6a/Grimmchild01.png",
+    "Grimmchild2":                      "https://cdn.wikimg.net/en/hkwiki/images/5/5a/Grimmchild02.png",
+    "Grimmchild3":                      "https://cdn.wikimg.net/en/hkwiki/images/1/18/Grimmchild03.png",
+    "Grimmchild4":                      "https://cdn.wikimg.net/en/hkwiki/images/9/91/Grimmchild.png",
+    "Carefree Melody":                  "https://cdn.wikimg.net/en/hkwiki/images/c/c4/Carefree_Melody.png/70px-Carefree_Melody.png",
+    "Queen_Fragment":                   "https://cdn.wikimg.net/en/hkwiki/images/4/4d/Charm_KingSoul_Left.png",
+    "King_Fragment":                    "https://cdn.wikimg.net/en/hkwiki/images/6/62/Charm_KingSoul_Right.png",
+    "Kingsoul":                         "https://cdn.wikimg.net/en/hkwiki/images/3/34/Kingsoul.png",
+    "Void_Heart":                       "https://cdn.wikimg.net/en/hkwiki/images/b/bb/Void_Heart.png",
+    "Progressive Void_Heart":           "https://cdn.wikimg.net/en/hkwiki/images/b/bb/Void_Heart.png",
+
+    "Herrah":                           "https://cdn.wikimg.net/en/hkwiki/images/a/a1/Map_Pin_Beast.png",
+    "Lurien":                           "https://cdn.wikimg.net/en/hkwiki/images/1/10/Map_Pin_Watcher.png",
+    "Monomon":                          "https://cdn.wikimg.net/en/hkwiki/images/1/1e/Map_Pin_Teacher.png",
+
+    "Focus":                            "https://cdn.wikimg.net/en/hkwiki/images/2/25/Icon_HK_Focus.png",
+    "Vengeful_Spirit":                  "https://cdn.wikimg.net/en/hkwiki/images/a/ab/Icon_HK_Vengeful_Spirit.png",
+    "Shade_Soul":                       "https://cdn.wikimg.net/en/hkwiki/images/e/ef/Icon_HK_Shade_Soul.png",
+    "Progressive Fireball":             "https://cdn.wikimg.net/en/hkwiki/images/e/ef/Icon_HK_Shade_Soul.png",
+    "Desolate_Dive":                    "https://cdn.wikimg.net/en/hkwiki/images/c/c3/Icon_HK_Desolate_Dive.png",
+    "Descending_Dark":                  "https://cdn.wikimg.net/en/hkwiki/images/a/a1/Icon_HK_Descending_Dark.png",
+    "Progressive Dive":                 "https://cdn.wikimg.net/en/hkwiki/images/a/a1/Icon_HK_Descending_Dark.png",
+    "Howling_Wraiths":                  "https://cdn.wikimg.net/en/hkwiki/images/1/16/Icon_HK_Howling_Wraiths.png",
+    "Abyss_Shriek":                     "https://cdn.wikimg.net/en/hkwiki/images/b/bf/Icon_HK_Abyss_Shriek.png",
+    "Progressive Shriek":               "https://cdn.wikimg.net/en/hkwiki/images/b/bf/Icon_HK_Abyss_Shriek.png",
+
+    "Mothwing_Cloak":                   "https://cdn.wikimg.net/en/hkwiki/images/a/a2/Icon_HK_Mothwing_Cloak.png",
+    "Left_Mothwing_Cloak":              "https://cdn.wikimg.net/en/hkwiki/images/a/a2/Icon_HK_Mothwing_Cloak.png",
+    "Right_Mothwing_Cloak":             "https://cdn.wikimg.net/en/hkwiki/images/a/a2/Icon_HK_Mothwing_Cloak.png",
+    "Mantis_Claw":                      "https://cdn.wikimg.net/en/hkwiki/images/b/bf/Icon_HK_Mantis_Claw.png",
+    "Progressive Claw":                 "https://cdn.wikimg.net/en/hkwiki/images/b/bf/Icon_HK_Mantis_Claw.png",
+    "Left_Mantis_Claw":                 "https://cdn.wikimg.net/en/hkwiki/images/b/bf/Icon_HK_Mantis_Claw.png",
+    "Right_Mantis_Claw":                "https://cdn.wikimg.net/en/hkwiki/images/b/bf/Icon_HK_Mantis_Claw.png",
+    "Crystal_Heart":                    "https://cdn.wikimg.net/en/hkwiki/images/e/e8/Icon_HK_Crystal_Heart.png",
+    "Progressive Crystal Heart":        "https://cdn.wikimg.net/en/hkwiki/images/e/e8/Icon_HK_Crystal_Heart.png",
+    "Left_Crystal_Heart":               "https://cdn.wikimg.net/en/hkwiki/images/e/e8/Icon_HK_Crystal_Heart.png",
+    "Right_Crystal_Heart":              "https://cdn.wikimg.net/en/hkwiki/images/e/e8/Icon_HK_Crystal_Heart.png",
+    "Monarch_Wings":                    "https://cdn.wikimg.net/en/hkwiki/images/9/9b/Icon_HK_Monarch_Wings.png",
+    "Isma's_Tear":                      "https://cdn.wikimg.net/en/hkwiki/images/8/8c/Icon_HK_Isma%27s_Tear.png",
+    "Swim":                             "https://cdn.wikimg.net/en/hkwiki/images/thumb/a/a7/Icon_HK_Isma%27s_Tears_Art.png/300px-Icon_HK_Isma%27s_Tears_Art.png",
+    "Shade_Cloak":                      "https://cdn.wikimg.net/en/hkwiki/images/7/75/Icon_HK_Shade_Cloak.png",
+    "Progressive Cloak":                "https://cdn.wikimg.net/en/hkwiki/images/7/75/Icon_HK_Shade_Cloak.png",
+    "Left_Shade_Cloak":                 "https://cdn.wikimg.net/en/hkwiki/images/7/75/Icon_HK_Shade_Cloak.png",
+    "Right_Shade_Cloak":                "https://cdn.wikimg.net/en/hkwiki/images/7/75/Icon_HK_Shade_Cloak.png",
+    "Dream_Nail":                       "https://cdn.wikimg.net/en/hkwiki/images/a/a2/Icon_HK_Dream_Nail.png",
+    "Awoken_Dream_Nail":                "https://cdn.wikimg.net/en/hkwiki/images/b/b0/Icon_HK_Awoken_Dream_Nail.png",
+    "Progressive Dreamnail":            "https://cdn.wikimg.net/en/hkwiki/images/b/b0/Icon_HK_Awoken_Dream_Nail.png",
+    "Dream_Gate":                       "https://cdn.wikimg.net/en/hkwiki/images/3/34/Icon_HK_Dreamgate.png",
+    "World_Sense":                      "https://cdn.wikimg.net/en/hkwiki/images/thumb/d/d7/Icon_HK_World_Sense_Art.png/310px-Icon_HK_World_Sense_Art.png",
+    "Godtuner":                         "https://cdn.wikimg.net/en/hkwiki/images/0/0b/Godtuner_Lit.png",
+    
+    "Cyclone_Slash":                    "https://cdn.wikimg.net/en/hkwiki/images/4/4f/Icon_HK_Cyclone_Slash.png",
+    "Dash_Slash":                       "https://cdn.wikimg.net/en/hkwiki/images/f/fd/Icon_HK_Dash_Slash.png",
+    "Great_Slash":                      "https://cdn.wikimg.net/en/hkwiki/images/4/43/Icon_HK_Great_Slash.png",
+
+    "Rancid_Egg":                       "https://cdn.wikimg.net/en/hkwiki/images/3/3f/Rancid_Egg.png",
+    "City_Crest":                       "https://cdn.wikimg.net/en/hkwiki/images/f/fb/City_Crest.png",
+    "Elegant_Key":                      "https://cdn.wikimg.net/en/hkwiki/images/7/7f/Elegant_Key.png",
+    "King's_Brand":                     "https://cdn.wikimg.net/en/hkwiki/images/8/8f/Kings_Brand_inventory.png",
+    "Love_Key":                         "https://cdn.wikimg.net/en/hkwiki/images/e/ec/Love_Key.png",
+    "Lumafly_Lantern":                  "https://cdn.wikimg.net/en/hkwiki/images/5/5f/Lumafly_Lantern.png",
+    "Shopkeeper's_Key":                 "https://cdn.wikimg.net/en/hkwiki/images/a/ab/Shopkeeper%27s_Key.png",
+    "Simple_Key":                       "https://cdn.wikimg.net/en/hkwiki/images/f/f3/Simple_Key.png",
+    "Tram_Pass":                        "https://cdn.wikimg.net/en/hkwiki/images/6/69/Tram_Pass.png",
+    "Elevator_Pass":                    "https://cdn.wikimg.net/en/hkwiki/images/6/69/Tram_Pass.png",
+
+    "Charm_Notch":                      "https://cdn.wikimg.net/en/hkwiki/images/thumb/e/e3/Charm_Notch.png/88px-Charm_Notch.png",
+    "Grimmkin_Flame":                   "https://cdn.wikimg.net/en/hkwiki/images/thumb/8/8f/FlameConsumed.png/100px-FlameConsumed.png",
+    "Grub":                             "https://cdn.wikimg.net/en/hkwiki/images/0/0c/Grub.png",
+    "Pale_Ore":                         "https://cdn.wikimg.net/en/hkwiki/images/e/eb/Pale_Ore.png",
+    "Mask_Shard":                       "https://cdn.wikimg.net/en/hkwiki/images/6/69/Mask_Shard.png",
+    "Vessel_Fragment":                  "https://cdn.wikimg.net/en/hkwiki/images/2/29/Vessel_Fragment.png",
+    "Wanderer's_Journal":               "https://cdn.wikimg.net/en/hkwiki/images/b/b5/Wanderer%27s_Journal.png",
+    "Hallownest_Seal":                  "https://cdn.wikimg.net/en/hkwiki/images/3/38/Hallownest_Seal.png",
+    "King's_Idol":                      "https://cdn.wikimg.net/en/hkwiki/images/d/d2/King%27s_Idol.png",
+    "Arcane_Egg":                       "https://cdn.wikimg.net/en/hkwiki/images/1/18/Arcane_Egg.png",
+    "Essence":                          "https://cdn.wikimg.net/en/hkwiki/images/thumb/0/04/Hidden_Dreams_Icon.png/20px-Hidden_Dreams_Icon.png",
+
+    "Downslash":                        "https://cdn.wikimg.net/en/hkwiki/images/thumb/4/4a/Nail_5_Pure_Nail.png/36px-Nail_5_Pure_Nail.png",
+    "Leftslash":                        "https://cdn.wikimg.net/en/hkwiki/images/thumb/4/4a/Nail_5_Pure_Nail.png/36px-Nail_5_Pure_Nail.png",
+    "Rightslash":                       "https://cdn.wikimg.net/en/hkwiki/images/thumb/4/4a/Nail_5_Pure_Nail.png/36px-Nail_5_Pure_Nail.png",
+    "Upslash":                          "https://cdn.wikimg.net/en/hkwiki/images/thumb/4/4a/Nail_5_Pure_Nail.png/36px-Nail_5_Pure_Nail.png",
+
+    "Dirtmouth_Stag":                   "https://cdn.wikimg.net/en/hkwiki/images/thumb/5/5e/Map_Pin_Stag.png/50px-Map_Pin_Stag.png",
+    "Crossroads_Stag":                  "https://cdn.wikimg.net/en/hkwiki/images/thumb/5/5e/Map_Pin_Stag.png/50px-Map_Pin_Stag.png",
+    "Greenpath_Stag":                   "https://cdn.wikimg.net/en/hkwiki/images/thumb/5/5e/Map_Pin_Stag.png/50px-Map_Pin_Stag.png",
+    "Queen's_Station_Stag":             "https://cdn.wikimg.net/en/hkwiki/images/thumb/5/5e/Map_Pin_Stag.png/50px-Map_Pin_Stag.png",
+    "Queen's_Gardens_Stag":             "https://cdn.wikimg.net/en/hkwiki/images/thumb/5/5e/Map_Pin_Stag.png/50px-Map_Pin_Stag.png",
+    "City_Storerooms_Stag":             "https://cdn.wikimg.net/en/hkwiki/images/thumb/5/5e/Map_Pin_Stag.png/50px-Map_Pin_Stag.png",
+    "King's_Station_Stag":              "https://cdn.wikimg.net/en/hkwiki/images/thumb/5/5e/Map_Pin_Stag.png/50px-Map_Pin_Stag.png",
+    "Resting_Grounds_Stag":             "https://cdn.wikimg.net/en/hkwiki/images/thumb/5/5e/Map_Pin_Stag.png/50px-Map_Pin_Stag.png",
+    "Distant_Village_Stag":             "https://cdn.wikimg.net/en/hkwiki/images/thumb/5/5e/Map_Pin_Stag.png/50px-Map_Pin_Stag.png",
+    "Hidden_Station_Stag":              "https://cdn.wikimg.net/en/hkwiki/images/thumb/5/5e/Map_Pin_Stag.png/50px-Map_Pin_Stag.png",
+    "Stag_Nest_Stag":                   "https://cdn.wikimg.net/en/hkwiki/images/thumb/5/5e/Map_Pin_Stag.png/50px-Map_Pin_Stag.png"
+} %}
+
+{% set multi_items = [
+    "Charm_Notch",
+    "Grimmkin_Flame",
+    "Grub",
+    "Rancid_Egg",
+    "Simple_Key",
+    "Pale_Ore",
+    "Mask_Shard",
+    "Vessel_Fragment",
+    "Essence",
+    "Wanderer's_Journal",
+    "Hallownest_Seal",
+    "King's_Idol",
+    "Arcane_Egg"
+] %}
+
+{% set inventory_order_charms = [
+    "Wayward_Compass", "Gathering_Swarm", "Stalwart_Shell", "Soul_Catcher", "Shaman_Stone",
+    "Soul_Eater", "Dashmaster", "Sprintmaster", "Grubsong", "Grubberfly's_Elegy",
+    "Progressive Heart", "Progressive Greed", "Progressive Strength", "Spell_Twister", "Steady_Body",
+    "Heavy_Blow", "Quick_Slash", "Longnail", "Mark_of_Pride", "Fury_of_the_Fallen",
+    "Thorns_of_Agony", "Baldur_Shell", "Flukenest", "Defender's_Crest", "Glowing_Womb",
+    "Quick_Focus", "Deep_Focus", "Lifeblood_Heart", "Lifeblood_Core", "Joni's_Blessing",
+    "Hiveblood", "Spore_Shroom", "Sharp_Shadow", "Shape_of_Unn", "Nailmaster's_Glory",
+    "Weaversong", "Dream_Wielder", "Dreamshield", "Progressive Grimmchild", "Progressive Void Heart"
+] %}
+
+{% set inventory_order_skills = [
+    "Progressive Cloak", "Progressive Crystal Heart", "Progressive Claw", "Monarch_Wings", "Progressive Dreamnail",
+    "Cyclone_Slash", "Dash_Slash", "Great_Slash", "Progressive Fireball", "Progressive Dive", "Progressive Shriek", "Isma's_Tear"
+] %}
+
+{# Most have a duplicated 0th entry for when we have none of that item to still load the correct icon/name. #}
+{% set progressive_order = {
+    "Progressive Heart" :           ["Fragile_Heart", "Fragile_Heart", "Unbreakable_Heart"],
+    "Progressive Greed":            ["Fragile_Greed", "Fragile_Greed", "Unbreakable_Greed"],
+    "Progressive Strength":         ["Fragile_Strength", "Fragile_Strength", "Unbreakable_Strength"],
+    "Progressive Grimmchild":       ["Grimmchild1", "Grimmchild2", "Grimmchild3", "Grimmchild4"],
+    "Progressive Void Heart":       ["Kingsoul", "Queen_Fragment", "Kingsoul", "Void_Heart"],
+
+    "Progressive Cloak":            ["Mothwing_Cloak", "Mothwing_Cloak", "Shade_Cloak"],
+    "Progressive Left Cloak":       ["Left_Mothwing_Cloak", "Left_Mothwing_Cloak", "Left_Shade_Cloak"],
+    "Progressive Right Cloak":      ["Right_Mothwing_Cloak", "Right_Mothwing_Cloak", "Right_Shade_Cloak"],
+    "Progressive Claw":             ["Mantis_Claw", "Left_Mantis_Claw", "Right_Mantis_Claw", "Mantis_Claw"],
+    "Progressive Crystal Heart":    ["Crystal_Heart", "Left_Crystal_Heart", "Right_Crystal_Heart", "Crystal_Heart"],
+
+    "Progressive Fireball":         ["Vengeful_Spirit", "Vengeful_Spirit", "Shade_Soul"],
+    "Progressive Dive":             ["Desolate_Dive", "Desolate_Dive", "Descending_Dark"],
+    "Progressive Shriek":           ["Howling_Wraiths", "Howling_Wraiths", "Abyss_Shriek"],
+
+    "Progressive Dreamnail":        ["Dream_Nail", "Dream_Nail", "Dream_Gate", "Awoken_Dream_Nail"]
+} %}
+
+{% set randomizerGroups = {
+    "RandomizeDreamers":            ["Monomon", "Herrah", "Lurien"],
+    "RandomizeDreamers_WorldSense": ["World_Sense"],
+    "RandomizeSkills":              inventory_order_skills,
+    "RandomizeFocus":               ["Focus"],
+    "RandomizeSwim":                ["Swim"],
+    "RandomizeCharms":              inventory_order_charms,
+    "RandomizeKeys":                ["City_Crest", "Elegant_Key", "King's_Brand", "Love_Key", "Lumafly_Lantern", "Shopkeeper's_Key", "Simple_Key", "Godtuner", "Tram_Pass"],
+    "RandomizeMaskShards":          ["Mask_Shard"],
+    "RandomizeVesselFragments":     ["Vessel_Fragment"],
+    "RandomizeCharmNotches":        ["Charm_Notch"],
+    "RandomizePaleOre":             ["Pale_Ore"],
+    "RandomizeRancidEggs":          ["Rancid_Egg"],
+    "RandomizeEssence":             ["Essence"],
+    "RandomizeGrubs":               ["Grub"],
+    "RandomizeStags":               stags,
+    "RandomizeGrimmkinFlames":      ["Grimmkin_Flame"],
+    "RandomizeNail":                ["Downslash", "Leftslash", "Upslash", "Rightslash"],
+    "RandomizeElevatorPass":        ["Elevator_Pass"],
+    "RandomizeRelics":              ["Wanderer's_Journal", "Hallownest_Seal", "King's_Idol", "Arcane_Egg"]
+} %}
+
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ player_name }}&apos;s Tracker</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/globalStyles.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/tracker.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/themes/dirt.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/themes/base.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/tracker__HK.css') }}">
+</head>
+
+<body>
+    <header id="base-header">
+        <div id="base-header-left">
+            <a id="site-title" href="#">{{ player_name }}'s Tracker</a>
+        </div>
+    </header>
+
+    <div id="tracker-navigation">
+        <div class="tracker-navigation-bar">
+            <a class="tracker-navigation-button" href="{{ url_for("get_generic_game_tracker", tracker=room.tracker, tracked_team=team, tracked_player=player) }}"> 🡸 Switch To Generic Tracker </a>
+        </div>
+    </div>
+
+    {% if inventory_order|length == 0 %}
+        {# Theoretical case: if there are choosen just options which are not included in inventory_order show a short message. #}
+        {# There is no way to avoid this tracker page in that case therefore the notification. #}
+        <p>There is nothing randomized. So this tracker is empty.</p>
+    {% else %}
+        <div class="grid">
+            {# Show just the items in the grid which are included in the randomization #}
+            {% for (name, value) in inventory_order.items() %}
+                <div class="tracker-container {{value["cssClass"] }} col-{{ loop.index }}" style="margin-bottom: 0.5em;">
+                    {# Inventory Grid #}
+                    <div class="inventory-grid {{value["cssClass"] }}">
+                        {% for option in value["content"] %}
+                            {% for item in randomizerGroups[option] %}
+                                {% if item in progressive_order %}
+                                    {% set non_prog_item = progressive_order[item][inventory[item]] %}
+
+                                    {# Exception for cloak. Handling of splitted Mothwing/Shade Cloak and also the non splitted one. #}
+                                    {# Same in the CSS class below #}
+                                    {% if item == 'Progressive Cloak' and options["SplitMothwingCloak"] == 1 %}
+                                        {% if inventory["Progressive Left Cloak"] >= 1 %}
+                                            {% set non_prog_item = progressive_order[item][inventory["Progressive Left Cloak"]] %}
+                                        {% endif %}
+                                        {% if inventory["Progressive Right Cloak"] >= 1 %}
+                                            {% set non_prog_item = progressive_order[item][inventory["Progressive Right Cloak"]] %}
+                                        {% endif %}
+                                    {% endif %}
+
+                                    {# Show either just cloak or the splitted ones (rules in Python part) #}
+                                    <div class="item">
+                                        <img
+                                            src="{{ icons[non_prog_item] }}"
+                                            alt="{{ non_prog_item }}"
+                                            title="{{ non_prog_item }}"
+                                            class="{{ 'missing' if
+                                                        (item != 'Progressive Cloak' and (item not in inventory or inventory[item] == 0)) or
+                                                        (item == 'Progressive Cloak' and inventory[item] == 0 and options["SplitMothwingCloak"] == 0) or
+                                                        (item == 'Progressive Cloak' and options["SplitMothwingCloak"] == 1 and
+                                                            (inventory["Progressive Left Cloak"] == 0 and inventory["Progressive Right Cloak"] == 0)
+                                                        )
+                                                        else 'item-aquired' }}"
+                                        />
+        
+                                        {# Show L/R indicator for splitted skill #}
+                                        {% if
+                                            item == 'Progressive Cloak' and inventory[item] == 0 and inventory["Progressive Left Cloak"] >= 1 and options["SplitMothwingCloak"] == 1 or
+                                            item == 'Progressive Claw' and inventory["Left_Mantis_Claw"] == 1 and inventory["Mantis_Claw"] == 0 and options["SplitMantisClaw"] == 1 or
+                                            item == 'Progressive Crystal Heart' and inventory["Left_Crystal_Heart"] and inventory["Crystal_Heart"] == 0 and options["SplitCrystalHeart"] == 1
+                                        %}
+                                            <div class="quantity">L</div>
+                                        {% endif %}
+        
+                                        {% if
+                                            item == 'Progressive Cloak' and inventory[item] == 0 and inventory["Progressive Right Cloak"] >= 1 and options["SplitMothwingCloak"] == 1 or
+                                            item == 'Progressive Claw' and inventory["Right_Mantis_Claw"] == 1and inventory["Mantis_Claw"] == 0 and options["SplitMantisClaw"] == 1 or
+                                            item == 'Progressive Crystal Heart' and inventory["Right_Crystal_Heart"] and inventory["Crystal_Heart"] == 0 and options["SplitCrystalHeart"] == 1
+                                        %}
+                                            <div class="quantity">R</div>
+                                        {% endif %}
+                                    </div>
+                                {% else %}
+                                    <div class="item">
+                                        <img
+                                            src="{{ icons[item] }}"
+                                            alt="{{ item }}"
+                                            title="{{ item }}"
+                                            class="{{ 'missing' if item not in inventory or inventory[item] == 0 else 'item-aquired' }} {{ 'elevatorPass' if item == 'Elevator_Pass' }}
+                                                   {{ item if item.endswith('slash') }}"
+                                        />
+        
+                                        {% if item in multi_items %}
+                                            <div class="quantity">{{ inventory[item] }}</div>
+                                        {% endif %}
+
+                                        {% if item in stags %}
+                                            <div class="quantity">{{ stags[item] }}</div>
+                                        {% endif %}
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+
+
+    <script>
+        const parser = new DOMParser();
+        const interval = 15_000;
+
+        window.addEventListener("load", () => {
+            setInterval(() => updateTracker()
+                .then(() => console.log("Refreshed tracker."))
+                .catch(console.error), interval);
+        });
+
+        async function updateTracker() {
+            const response = await fetch(`${window.location}`);
+            if (!response.ok) {
+                throw new Error(`Failed to fetch tracker update from ${window.location}. Received response: ${response.statusText}`);
+            }
+
+            const fakeDOM = parser.parseFromString(await response.text(), "text/html");
+
+            const inventoryGrid = document.querySelectorAll(".inventory-grid");
+            const fakeInventoryGrid = fakeDOM.querySelectorAll(".inventory-grid");
+            
+            for (let i = 0; i < inventoryGrid.length; ++i) {
+                inventoryGrid[i].innerHTML = fakeInventoryGrid[i].innerHTML;
+            }
+
+            const regionDetailElements = document.querySelectorAll(".region-details");
+            const fakeDetailElements = fakeDOM.querySelectorAll(".region-details");
+
+            for (let i = 0; i < regionDetailElements.length; ++i) {
+                const isOpen = regionDetailElements[i].open;
+                regionDetailElements[i].innerHTML = fakeDetailElements[i].innerHTML;
+                regionDetailElements[i].open = isOpen;
+            }
+        }
+    </script>
+</body>
+</html>
