@@ -20,18 +20,24 @@ For more information on plando, you can reference the [general plando guide](/tu
 Triggers may be defined in either the root or in the relevant game sections. Generally, the best place to do this is the
 bottom of the YAML for clear organization.
 
-Each trigger consists of four parts:
-- `option_category` specifies the section which the triggering option is defined in.
+Each trigger consists of up to five parts, the following are used for single requirement triggers:
+- `option_category` specifies the section which the triggering option is defined in, this must ALWAYS be present.
     - Example: `A Link to the Past`
     - This is the category the option is located in. If the option you're triggering off of is in root then you
       would use `null`, otherwise this is the game for which you want this option trigger to activate.
-- `option_name` specifies the name of the triggering option.
+- `option_name` specifies the name of the triggering option, this must be used when option_advanced is not present.
     - Example: `shop_item_slots`
     - This can be any option from any category defined in the YAML file in either root or a game section.
 - `option_result` specifies the value of the option that activates this trigger.
     - Example: `15`
-    - Each trigger must be used for exactly one option result. If you would like the same thing to occur with multiple
-      results, you would need multiple triggers for this.
+    - With this option, each trigger must be used for exactly one option result. If you would like the same thing to
+      occur with multiple results you would need to use multiple triggers, `option_range`, or `option_advanced` as 
+      explained later.
+- `option_compare` specifies how you wish to compare values, this can be chosen from '=', '<', '<=', '>', '>=', or '!='.
+    - This option should not be used with `option_range`, and defaults to '=' when using `option_result`
+- `option_range` replaces `option_result` and specifies a RANGE of values you want to match.
+    - Example: [2, 7]
+    - This range includes the listed values.
 - `options` is where you define what will happen when the trigger activates. This can be something as simple as ensuring
   another option also gets selected or placing an item in a certain location. It is possible to have multiple things
   happen in this section.
@@ -52,21 +58,31 @@ The general format is:
 
 ### Examples
 
-The above examples all together will end up looking like this:
+Some of the above examples together will end up looking like this:
 
   ```yaml
   triggers:
     - option_category: A Link to the Past
       option_name: shop_item_slots
+      option_compare: '<='
       option_result: 15
       options:
         A Link to the Past:
           start_inventory:
             Rupees(300): 2
+    - option_category: A Link to the Past
+      option_name: shop_item_slots
+      option_range: [20,25]
+      options:
+        A Link to the Past:
+          retro_caves: true
   ```
 
-For this example, if the generator happens to roll 15 shuffled in shop item slots for your game, you'll be granted 600
-rupees at the beginning. Triggers can also be used to change other options.
+For this example, if the generator happens to roll 15 or fewer shuffled in shop item slots for your game, you'll be 
+granted 600 rupees at the beginning. If it rolls 20 through 25 shuffled in shop item slots for your game the retro_caves
+will be turned on.
+
+Triggers can also be used to change other options.
 
 For example:
 
@@ -83,8 +99,7 @@ For example:
 In this example, if your world happens to roll SpecificKeycards, then your game will also start in inverted.
 
 It is also possible to use imaginary values in options to trigger specific settings. You can use these made-up values in
-either your main options or to trigger from another trigger. Currently, this is the only way to trigger on "setting 1
-AND setting 2".
+either your main options or to trigger from another trigger.
 
 For example:
 
@@ -122,6 +137,38 @@ In this example (thanks to @Black-Sliver), if the `pupdunk` option is rolled, th
 again using the new options `normal`, `pupdunk_hard`, and `pupdunk_mystery`, and the exp modifier will be rerolled using
 new weights for 150 and 200. This allows for two more triggers that will only be used for the new `pupdunk_hard`
 and `pupdunk_mystery` options so that they will only be triggered on "pupdunk AND hard/mystery".
+
+## Advanced Trigger Option:
+
+If you wish to make more complicated triggers, `option_advanced` is the tool you likely wish to use. This option allows
+for combinations of requirements using or/and. If you want to trigger when option A is less than 12 or option B is more 
+than 3, this is likely the best way to do it.
+
+When using `option_advanced` triggers will have only 3 components: `option_category`, `option_advanced`, and `options`.
+`option_category` and `options` work exactly as they do in normal triggers. `option_advanced` takes a list of 
+requirements and logical operators. A requirement is given in the form 
+`[<option name>, <comparison to use>, <value to compare against>]` and logical operators can be chosen from 
+`"&", "and"` or `"|", "or"`. "And" operations are processed first, so if you have: a and b or c and d, then the trigger
+will activate if both a and b are true, OR if both c and d are true.
+
+Example:
+
+```yaml
+  triggers:
+    - option_category: Hollow Knight
+      option_advanced:
+        - [CostSanity, "!=", "off"]
+        - "and"
+        - [CostSanityHybridChance, ">", 20]
+        - "or"
+        - [MaximumGeoPrice, ">=", 1000]
+      options:
+        Hollow Knight:
+          StartingGeo: 1000
+```
+This says if (CostSanity is not off AND CostSanityHybridChance is above 20) OR if MaximumGeoPrice is at least 1000, then
+you should start with 1000 geo.
+There is no reasonable limit to the number of requirements you can list under `option_advanced`
 
 ## Adding or Removing from a List, Set, or Dict Option
 
