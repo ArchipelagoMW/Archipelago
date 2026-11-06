@@ -632,6 +632,13 @@ def launch(*new_args: str):
             else:
                 f.write(f"[path]\nread-data=__PATH__system-read-data__\nwrite-data={user_path('factorio')}")
 
+    # if mods have not yet been configured, set Space Age to disabled
+    mod_list = user_path('factorio', 'mods', 'mod-list.json')
+    if not os.path.exists(mod_list):
+        os.makedirs(os.path.dirname(mod_list), exist_ok=True)
+        with open(mod_list, 'w') as f:
+            f.write('{"mods": [{"name":"space-age", "enabled":false}]}')
+
     asyncio.run(main(lambda: FactorioContext(
         args.connect, args.password,
         initial_filter_connection_changes, initial_filter_item_sends, initial_bridge_chat_out,
