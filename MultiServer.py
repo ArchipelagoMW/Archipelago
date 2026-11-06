@@ -934,12 +934,12 @@ class Context:
             if hint.location == seeked_location and hint.finding_player == finding_player:
                 return hint
         return None
-    
+
     def replace_hint(self, team: int, slot: int, old_hint: Hint, new_hint: Hint) -> None:
         if old_hint in self.hints[team, slot]:
             self.hints[team, slot].remove(old_hint)
             self.hints[team, slot].add(new_hint)
-    
+
     # "events"
 
     def on_goal_achieved(self, client: Client):
@@ -1355,7 +1355,7 @@ def format_hint(ctx: Context, team: int, hint: Hint) -> str:
 
     if hint.entrance:
         text += f" at {hint.entrance}"
-    
+
     return text + ". " + status_names.get(hint.status, "(unknown)")
 
 
@@ -1892,11 +1892,15 @@ class ClientMessageProcessor(CommonCommandProcessor):
         else:
             if points_available >= cost:
                 if for_location:
-                    self.output(f"Nothing found for recognized location name \"{hint_name}\". "
-                                f"Location appears to not exist in this multiworld.")
+                    self.output(
+                        f"Recognized location \"{hint_name}\" does not exist for your slot. "
+                        f"This may be due to your options."
+                    )
                 else:
-                    self.output(f"Nothing found for recognized item name \"{hint_name}\". "
-                                f"Item appears to not exist in this multiworld.")
+                    self.output(
+                        f"Recognized item \"{hint_name}\" does not exist for your slot. "
+                        f"This may be due to your options."
+                    )
             else:
                 self.output(f"You can't afford the hint. "
                             f"You have {points_available} points and need at least "
@@ -2155,7 +2159,7 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
             # As of writing this code, only_new=True does not update status for existing hints
             ctx.notify_hints(client.team, hints, only_new=True, persist_even_if_found=True)
             ctx.save()
-        
+
         elif cmd == 'UpdateHint':
             location = args["location"]
             player = args["player"]
@@ -2570,7 +2574,10 @@ class ServerCommandProcessor(CommonCommandProcessor):
                     self.ctx.notify_hints(team, hints)
 
                 else:
-                    self.output("No hints found.")
+                    self.output(
+                        f"Recognized item \"{item}\" does not exist for this slot. "
+                        "This may be due to this slot's options."
+                    )
                 return True
             else:
                 self.output(response)
@@ -2609,7 +2616,10 @@ class ServerCommandProcessor(CommonCommandProcessor):
                 if hints:
                     self.ctx.notify_hints(team, hints)
                 else:
-                    self.output("No hints found.")
+                    self.output(
+                        f"Recognized location \"{location}\" does not exist for this slot. "
+                        "This may be due to this slot's options."
+                    )
                 return True
             else:
                 self.output(response)
