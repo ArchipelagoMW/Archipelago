@@ -197,7 +197,6 @@ LOCATIONS: dict[str, list[str]] = {
     "Music Box": ["Rescue Phantom"],
 }
 
-
 SUB_REGIONS: dict[str, list[str]] = {
     "Ninja Village": [
         "Right",
@@ -380,7 +379,6 @@ SUB_REGIONS: dict[str, list[str]] = {
     ],
 }
 
-
 # order is slightly funky here for back compat
 MEGA_SHARDS: dict[str, list[str]] = {
     "Autumn Hills - Lakeside Checkpoint": ["Autumn Hills Mega Shard"],
@@ -410,6 +408,20 @@ MEGA_SHARDS: dict[str, list[str]] = {
     "Elemental Skylands - Water Generator Shop": ["Water Mega Shard"],
 }
 
+SKYLANDS_GENERATORS: dict[str, list[str]] = {
+    "Elemental Skylands - Air Intro Shop": [
+        "Elemental Skylands - Shutdown Air Generator",
+    ],
+    "Elemental Skylands - Earth Generator Shop": [
+        "Elemental Skylands - Shutdown Earth Generator",
+    ],
+    "Elemental Skylands - Water Generator Shop": [
+        "Elemental Skylands - Shutdown Water Generator",
+    ],
+    "Elemental Skylands - Fire Intro Shop": [
+        "Elemental Skylands - Shutdown Fire Generator",
+    ],
+}
 
 REGION_CONNECTIONS: dict[str, dict[str, str]] = {
     "Menu": {"Tower HQ": "Start Game"},
@@ -430,7 +442,6 @@ REGION_CONNECTIONS: dict[str, dict[str, str]] = {
     },
 }
 """Vanilla layout mapping with all Tower HQ portals open. format is source[exit_region][entrance_name]"""
-
 
 # regions that don't have sub-regions
 LEVELS: list[str] = [

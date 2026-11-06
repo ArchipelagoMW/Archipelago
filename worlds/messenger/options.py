@@ -68,6 +68,15 @@ class MegaShards(Toggle):
     display_name = "Shuffle Mega Time Shards"
 
 
+class ShuffleSkylandsGenerators(Toggle):
+    """
+    Whether the elemental skylands generators should be locations.
+
+    With this setting, all four Progressive Generator Shutdown are required to open the final door in the Fire Generator room.
+    """
+    display_name = "Shuffle Elemental Skylands Generators"
+
+
 class LimitedMovement(Toggle):
     """
     Removes either rope dart or wingsuit from the itempool. Forces logic to at least hard and accessibility to minimal.
@@ -243,6 +252,7 @@ class MessengerOptions(DeathLinkMixin, PerGameCommonOptions):
     start_inventory: StartInventoryPool
     logic_level: Logic
     shuffle_shards: MegaShards
+    shuffle_skylands_generators: ShuffleSkylandsGenerators
     limited_movement: LimitedMovement
     early_meditation: EarlyMed
     available_portals: AvailablePortals

@@ -78,8 +78,8 @@ ALL_ITEMS: list[str] = [
     "Money Wrench",
     "Teleport Trap",
     "Prophecy Trap",
+    "Progressive Generator Shutdown",
 ]
-
 # locations
 # the names of these don't actually matter, but using the upstream's names for now
 # order must be exactly the same as upstream
