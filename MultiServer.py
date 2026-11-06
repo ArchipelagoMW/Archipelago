@@ -2653,6 +2653,9 @@ class ServerCommandProcessor(CommonCommandProcessor):
             # Update hint point amounts per slot
             for team, players in self.ctx.clients.items():
                 for slot, clients in players.items():
+                    if SlotType.player not in self.ctx.slot_info[slot].type:
+                        continue
+
                     self.ctx.broadcast(clients, [{
                         "cmd": "RoomUpdate",
                         option_name: getattr(self.ctx, option_name),
