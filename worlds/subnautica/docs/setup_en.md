@@ -8,7 +8,7 @@
 
 ## Installation Procedure
 
-1. Unpack the Archipelago Mod into your Subnautica folder, so that `Subnautica/BepInEx` is a valid path.
+1. Unpack the Archipelago Mod, and move all files into your Subnautica folder. `Subnautica/BepInEx` should be a valid path.
 
 2. Start Subnautica. You should see a connect form with three text boxes in the top left of your main menu.
 
