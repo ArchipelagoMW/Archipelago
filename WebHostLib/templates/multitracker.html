@@ -47,12 +47,12 @@
                             <th>#</th>
                             <th>Name</th>
                             {% if current_tracker == "Generic" %}<th>Game</th>{% endif %}
-                            <th>Status</th>
+                            <th class="status">Status</th>
                             {% block custom_table_headers %}
                             {# Implement this block in game-specific multi-trackers. #}
                             {% endblock %}
-                            <th class="center-column">Checks</th>
-                            <th class="center-column">&percnt;</th>
+                            <th class="center-column checks">Checks</th>
+                            <th class="center-column checks-percent">&percnt;</th>
                             <th class="center-column hours last-activity">Last<br>Activity</th>
                         </tr>
                     </thead>
@@ -114,11 +114,11 @@
                             <tr>
                                 <td colspan="2" style="text-align: right">Total</td>
                                 <td>All Games</td>
-                                <td>{{ completed_worlds[team] }}/{{ players | length }} Complete</td>
-                                <td class="center-column">
+                                <td class="status">{{ completed_worlds[team] }}/{{ players | length }} Complete</td>
+                                <td class="center-column checks">
                                     {{ total_team_locations_complete[team] }}/{{ total_team_locations[team] }}
                                 </td>
-                                <td class="center-column">
+                                <td class="center-column checks-percent">
                                     {%- if total_team_locations[team] == 0 -%}
                                         100
                                     {%- else -%}
