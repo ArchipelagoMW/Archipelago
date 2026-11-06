@@ -225,7 +225,10 @@ def main(args, seed=None, baked_server_options: dict[str, object] | None = None)
     if args.spoiler_only:
         if args.spoiler > 1:
             logger.info('Calculating playthrough.')
-            multiworld.spoiler.create_playthrough(create_paths=args.spoiler > 2)
+            if args.playthrough_mode == 0:
+                multiworld.spoiler.create_playthrough(create_paths=args.spoiler > 2)
+            else:
+                multiworld.spoiler.create_playthrough_sphere_fulfillment(create_paths=args.spoiler > 2)
 
         multiworld.spoiler.to_file(output_path('%s_Spoiler.txt' % outfilebase))
         logger.info('Done. Skipped multidata modification. Total time: %s', time.perf_counter() - start)
@@ -376,7 +379,10 @@ def main(args, seed=None, baked_server_options: dict[str, object] | None = None)
 
         if args.spoiler > 1:
             logger.info('Calculating playthrough.')
-            multiworld.spoiler.create_playthrough(create_paths=args.spoiler > 2)
+            if args.playthrough_mode == 0:
+                multiworld.spoiler.create_playthrough(create_paths=args.spoiler > 2)
+            else:
+                multiworld.spoiler.create_playthrough_sphere_fulfillment(create_paths=args.spoiler > 2)
 
         if args.spoiler:
             multiworld.spoiler.to_file(os.path.join(temp_dir, '%s_Spoiler.txt' % outfilebase))

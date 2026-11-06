@@ -38,6 +38,7 @@ def mystery_argparse(argv: list[str] | None = None) -> argparse.Namespace:
     parser.add_argument('--seed', help='Define seed number to generate.', type=int)
     parser.add_argument('--multi', default=defaults.players, type=lambda value: max(int(value), 1))
     parser.add_argument('--spoiler', type=int, default=defaults.spoiler)
+    parser.add_argument("--playthrough_mode", type=int, default=defaults.playthrough_mode)
     parser.add_argument('--outputpath', default=settings.general_options.output_path,
                         help="Path to output folder. Absolute or relative to cwd.")  # absolute or relative to cwd
     parser.add_argument('--allow_quantity', action="store_true", default=defaults.allow_quantity,
