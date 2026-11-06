@@ -49,6 +49,10 @@ def _has_energy_attack_item(state: CollectionState, player: int) -> bool:
     """`player` in `state` has items that can do a lot of damage (enough to beat bosses)"""
     return _has_energy_form(state, player) or _has_dual_form(state, player)
 
+def _has_final_boss_item(state: CollectionState, player: int) -> bool:
+    """`player` in `state` has items that is necessary to beat the final boss"""
+    return (_has_energy_form(state, player) and _has_dual_form(state, player) and
+            _has_sun_form(state, player) and _has_bind_song(state, player))
 
 def _has_shield_song(state: CollectionState, player: int) -> bool:
     """`player` in `state` has the shield song item"""
@@ -832,11 +836,11 @@ class AquariaRegions:
         Connect entrances of the different regions around The Body
         """
         self.__connect_one_way_regions(self.body_c, self.body_l,
-                                       lambda state: _has_energy_form(state, self.player))
+                                       lambda state: _has_energy_attack_item(state, self.player))
         self.__connect_one_way_regions(self.body_l, self.body_c)
         self.__connect_regions(self.body_c, self.body_rt)
         self.__connect_one_way_regions(self.body_c, self.body_rb,
-                                       lambda state: _has_energy_form(state, self.player))
+                                       lambda state: _has_energy_attack_item(state, self.player))
         self.__connect_one_way_regions(self.body_rb, self.body_c)
         self.__connect_regions(self.body_c, self.body_b,
                                lambda state: _has_dual_form(state, self.player))
@@ -845,25 +849,26 @@ class AquariaRegions:
         self.__connect_regions(self.final_boss_lobby, self.final_boss_tube,
                                lambda state: _has_nature_form(state, self.player))
         self.__connect_one_way_regions(self.final_boss_lobby, self.final_boss,
-                                       lambda state: _has_energy_form(state, self.player) and
-                                                     _has_dual_form(state, self.player) and
-                                                     _has_sun_form(state, self.player) and
-                                                     _has_bind_song(state, self.player))
+                                       lambda state: _has_final_boss_item(state, self.player))
         self.__connect_one_way_regions(self.final_boss, self.final_boss_end)
 
     def __connect_four_gods_end(self, options: AquariaOptions) -> None:
         """
         Connect an entrance for the four gods objective ending
         """
-        if options.mini_bosses_to_beat.value > 6:
-            victory_lambda = lambda state: (_has_four_gods_beated(state, self.player) and
-                                            _has_mini_bosses(state, self.player))
-        elif options.big_bosses_to_beat.value > 0:
-            victory_lambda = lambda state: (_has_four_gods_beated(state, self.player) and
-                                            _has_mini_bosses_four_gods(state, self.player))
-        else:
-            victory_lambda = lambda state: _has_four_gods_beated(state, self.player)
-        self.__connect_one_way_regions(self.menu, self.four_gods_end, victory_lambda)
+        mini_bosses_lambda = lambda state: True
+        if options.mini_bosses_to_beat.value > 0:
+            mini_bosses_lambda = lambda state: _has_mini_bosses(state, self.player)
+        big_bosses_lambda = lambda state: True
+        if options.big_bosses_to_beat.value > 4:
+            big_bosses_lambda = lambda state: state.has(ItemNames.THE_GOLEM_BEATED, self.player)
+        final_bosses_lambda = lambda state: True
+        if options.objective.value == Objective.option_gods_and_creator:
+            final_bosses_lambda = lambda state: _has_final_boss_item(state, self.player)
+        self.__connect_one_way_regions(self.menu, self.four_gods_end,
+                                       lambda state: _has_four_gods_beated(state, self.player) and
+                                                     mini_bosses_lambda(state) and big_bosses_lambda(state) and
+                                                     final_bosses_lambda(state))
 
     def __connect_transturtle(self, item_target: str, region_source: Region, region_target: Region) -> None:
         """Connect a single transturtle to another one"""
