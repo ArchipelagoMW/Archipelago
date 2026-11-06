@@ -211,7 +211,7 @@ class GauntletLegendsWorld(World):
                  "no_spawner" in locationName_to_data[location.name].tags])
             traps_frequency = int(len(self.get_locations()) * (self.options.traps_frequency / 100)) // len(self.options.included_traps.value)
             traps_frequency = min(traps_frequency, traps_cap // len(self.options.included_traps.value))
-            for item in self.options.included_traps.value:
+            for item in sorted(self.options.included_traps.value):
                 if items_required_count == 0:
                     break
                 self.multiworld.itempool += [self.create_item(item) for _ in range(min(traps_frequency, items_required_count))]
