@@ -12,10 +12,9 @@ from CommonClient import CommonContext, server_loop, gui_enabled, \
 import Utils
 from Utils import async_start
 from worlds import network_data_package
-from worlds.oot import OOTWorld
-from worlds.oot.Rom import Rom, compress_rom_file
-from worlds.oot.N64Patch import apply_patch_file
-from worlds.oot.Utils import data_path
+from . import OOTWorld
+from .Rom import Rom, compress_rom_file
+from .N64Patch import apply_patch_file
 
 
 CONNECTION_TIMING_OUT_STATUS = "Connection timing out. Please restart your emulator, then restart connector_oot.lua"
@@ -309,14 +308,12 @@ async def patch_and_run_game(apz5_file):
 
     apply_patch_file(rom, apz5_file, sub_file=sub_file)
     rom.write_to_file(decomp_path)
-    os.chdir(data_path("Compress"))
     compress_rom_file(decomp_path, comp_path)
     os.remove(decomp_path)
     async_start(run_game(comp_path))
 
 
-if __name__ == '__main__':
-
+def launch(*launch_args: str):
     Utils.init_logging("OoTClient")
 
     async def main():
@@ -324,7 +321,7 @@ if __name__ == '__main__':
         parser = get_base_parser()
         parser.add_argument('apz5_file', default="", type=str, nargs="?",
                             help='Path to an APZ5 file')
-        args = parser.parse_args()
+        args = parser.parse_args(launch_args)
 
         if args.apz5_file:
             logger.info("APZ5 file supplied, beginning patching process...")
@@ -352,3 +349,8 @@ if __name__ == '__main__':
 
     asyncio.run(main())
     colorama.deinit()
+
+
+if __name__ == '__main__':
+    import sys
+    launch(*sys.argv[1:])
