@@ -172,12 +172,14 @@ class VisualListSetCounter(MDDialog):
     input: ResizableTextField = ObjectProperty(None)
     dropdown: MDDropdownMenu
     valid_keys: typing.Iterable[str]
+    valid_keys_casefold: bool
 
     def __init__(self, *args, option: typing.Type[OptionSet] | typing.Type[OptionList],
-                 name: str, valid_keys: typing.Iterable[str], **kwargs):
+                 name: str, valid_keys: typing.Iterable[str], valid_keys_casefold: bool, **kwargs):
         self.option = option
         self.name = name
         self.valid_keys = valid_keys
+        self.valid_keys_casefold = valid_keys_casefold
         super().__init__(*args, **kwargs)
         self.dropdown = MarkupDropdown(caller=self.input, border_margin=dp(2),
                                        width=self.input.width, position="bottom")
@@ -186,7 +188,9 @@ class VisualListSetCounter(MDDialog):
 
     def validate_add(self, instance):
         if self.valid_keys:
-            if self.input.text not in self.valid_keys:
+            text = self.input.text.casefold() if self.valid_keys_casefold else self.input.text
+            valid = {entry.casefold() for entry in self.valid_keys} if self.valid_keys_casefold else self.valid_keys
+            if text not in valid:
                 MDSnackbar(MDSnackbarText(text="Item must be a valid key for this option."), y=dp(24),
                            pos_hint={"center_x": 0.5}, size_hint_x=0.5).open()
                 return
@@ -230,10 +234,10 @@ class VisualListSetCounter(MDDialog):
                 self.input.focus = True
                 self.dropdown.dismiss()
 
-            lowered = value.lower()
+            lowered = value.casefold()
             for item_name in self.valid_keys:
                 try:
-                    index = item_name.lower().index(lowered)
+                    index = item_name.casefold().index(lowered)
                 except ValueError:
                     pass  # substring not found
                 else:
@@ -475,7 +479,8 @@ class OptionsCreator(ThemedApp):
                     self.options[name][getattr(list_item.text, "text")] = int(getattr(list_item.value, "text"))
                 dialog.dismiss()
 
-        dialog = VisualListSetCounter(option=option, name=name, valid_keys=valid_keys)
+        dialog = VisualListSetCounter(option=option, name=name, valid_keys=valid_keys,
+                                      valid_keys_casefold=option.valid_keys_casefold)
         dialog.ids.container.spacing = dp(30)
         dialog.scrollbox.layout.theme_bg_color = "Custom"
         dialog.scrollbox.layout.md_bg_color = self.theme_cls.surfaceContainerLowColor
