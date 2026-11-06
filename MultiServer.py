@@ -2258,7 +2258,7 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
             else:
                 await ctx.send_msgs(client, [{
                     'cmd': 'InvalidPacket', "type": "arguments",
-                    'text': f'Bounce: Unknown operator. Supported: legacy, or, and. Found: {operator}',
+                    'text': f'Bounce: Unknown operator. Supported: legacy, or, and. Found: {boolean_operator}',
                     'original_cmd': cmd
                 }])
                 return
