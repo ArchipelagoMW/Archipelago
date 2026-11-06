@@ -226,4 +226,3 @@ class TestInvertedDeathMountain(TestInverted):
             ["Spike Cave", True, ['Boss Heart Container', 'Hammer', 'Progressive Glove', 'Lamp', 'Cane of Byrna']],
             ["Spike Cave", True, ['Boss Heart Container', 'Hammer', 'Progressive Glove', 'Flute', 'Cane of Byrna']],
         ])
-
