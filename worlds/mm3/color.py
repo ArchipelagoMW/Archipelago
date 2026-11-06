@@ -138,17 +138,6 @@ MM3_KNOWN_COLORS: dict[str, tuple[int, int]] = {
     "Frost Tower": (0x3D, 0x2C),
 }
 
-if "worlds.mm2" in sys.modules:
-    # is this the proper way to do this? who knows!
-    try:
-        mm2 = sys.modules["worlds.mm2"]
-        MM3_KNOWN_COLORS.update(mm2.color.MM2_COLORS)
-        for item in MM3_COLORS:
-            mm2.color.add_color_to_mm2(item, MM3_COLORS[item])
-    except AttributeError:
-        # pass through if an old MM2 is found
-        pass
-
 palette_pointers: dict[str, list[int]] = {
     "Mega Buster": [0x7C8A8, 0x4650],
     "Gemini Laser": [0x4654],
@@ -173,6 +162,16 @@ palette_pointers: dict[str, list[int]] = {
     "Doc Robot": [0x20B8]
 }
 
+def check_for_known_worlds():
+    if "worlds.mm2" in sys.modules:
+        try:
+            mm2 = sys.modules["worlds.mm2"]
+            MM3_KNOWN_COLORS.update(mm2.color.MM2_COLORS)
+            for item in MM3_COLORS:
+                mm2.color.add_color_to_mm2(item, MM3_COLORS[item])
+        except AttributeError:
+            # pass through if an old MM2 is found
+            pass
 
 def add_color_to_mm3(name: str, color: tuple[int, int]) -> None:
     """
