@@ -86,9 +86,9 @@ class FactorioContext(CommonContext):
     # updated by spinup server
     mod_version: Version = Version(0, 0, 0)
 
-    def __init__(self, server_address, password, filter_connection_changes: bool, filter_item_sends: bool, bridge_chat_out: bool,
-                 rcon_port: int, rcon_password: str, server_settings_path: str | None,
-                 config_file: str, factorio_server_args: tuple[str, ...] | list[str]):
+    def __init__(self, server_address, password, executable: str, filter_connection_changes: bool,
+                 filter_item_sends: bool, bridge_chat_out: bool, rcon_port: int, rcon_password: str,
+                 server_settings_path: str | None, config_file: str, factorio_server_args: tuple[str, ...] | list[str]):
         super(FactorioContext, self).__init__(server_address, password)
         self.send_index: int = 0
         self.rcon_client = None
@@ -98,6 +98,7 @@ class FactorioContext(CommonContext):
         self.factorio_json_text_parser = FactorioJSONtoTextParser(self)
         self.energy_link_increment = 0
         self.last_deplete = 0
+        self.executable = executable
         self.filter_connection_changes: bool = filter_connection_changes
         self.filter_item_sends: bool = filter_item_sends
         self.multiplayer: bool = False  # whether multiple different players have connected
@@ -367,9 +368,9 @@ async def factorio_server_watcher(ctx: FactorioContext):
     if not os.path.exists(savegame_name):
         logger.info(f"Creating savegame {savegame_name}")
         subprocess.run((
-            executable, "--create", savegame_name, "--preset", "archipelago", "--config", ctx.config_file
+            ctx.executable, "--create", savegame_name, "--preset", "archipelago", "--config", ctx.config_file
         ))
-    factorio_process = subprocess.Popen((executable, "--start-server", savegame_name,
+    factorio_process = subprocess.Popen((ctx.executable, "--start-server", savegame_name,
                                          *ctx.server_args),
                                         stderr=subprocess.PIPE,
                                         stdout=subprocess.PIPE,
@@ -481,10 +482,10 @@ async def factorio_spinup_server(ctx: FactorioContext) -> bool:
     if not os.path.exists(savegame_name):
         logger.info(f"Creating savegame {savegame_name}")
         subprocess.run((
-            executable, "--create", savegame_name, "--config", ctx.config_file
+            ctx.executable, "--create", savegame_name, "--config", ctx.config_file
         ))
     factorio_process = subprocess.Popen(
-        (executable, "--start-server", savegame_name, *ctx.server_args),
+        (ctx.executable, "--start-server", savegame_name, *ctx.server_args),
         stderr=subprocess.PIPE,
         stdout=subprocess.PIPE,
         stdin=subprocess.DEVNULL,
@@ -509,7 +510,7 @@ async def factorio_spinup_server(ctx: FactorioContext) -> bool:
                                        "this can lead to problems with multiple Factorio instances. "
                                        "If this is the case, you will get a file locked error running Factorio.")
                 elif "Couldn't create lock file" in msg:
-                    raise Exception(f"This Factorio (at {executable}) is either already running, "
+                    raise Exception(f"This Factorio (at {ctx.executable}) is either already running, "
                                     "or a Factorio sharing data directories is already running. "
                                     "Server could not start up.")
                 if not rcon_client and "Starting RCON interface at IP ADDR:" in msg:
@@ -571,18 +572,10 @@ class FactorioJSONtoTextParser(JSONtoTextParser):
 
 
 factorio_server_logger = logging.getLogger("FactorioServer")
-settings: FactorioSettings = get_settings().factorio_options
-if os.path.samefile(settings.executable, sys.executable):
-    selected_executable = settings.executable
-    settings.executable = FactorioSettings.executable  # reset to default
-    raise Exception(f"Factorio Client was set to run itself {selected_executable}, aborting process bomb.")
-
-executable = settings.executable
 
 
 def launch(*new_args: str):
     import colorama
-    global executable
     colorama.just_fix_windows_console()
 
     # args handling
@@ -598,6 +591,8 @@ def launch(*new_args: str):
     rcon_password = args.rcon_password if args.rcon_password else ''.join(
         random.choice(string.ascii_letters) for _ in range(32))
 
+    settings: FactorioSettings = get_settings().factorio_options
+
     server_settings = args.server_settings if args.server_settings \
         else getattr(settings, "server_settings", None)
 
@@ -610,6 +605,12 @@ def launch(*new_args: str):
     initial_filter_connection_changes = bool(settings.filter_connection_changes)
     initial_bridge_chat_out = bool(settings.bridge_chat_out)
 
+    if os.path.samefile(settings.executable, sys.executable):
+        selected_executable = settings.executable
+        settings.executable = FactorioSettings.executable  # reset to default
+        raise Exception(f"Factorio Client was set to run itself {selected_executable}, aborting process bomb.")
+
+    executable = settings.executable
     if not os.path.exists(os.path.dirname(executable)):
         raise FileNotFoundError(f"Path {os.path.dirname(executable)} does not exist or could not be accessed.")
     if os.path.isdir(executable) and os.path.exists(os.path.join(executable, "Contents", "MacOS", "factorio")):
@@ -633,7 +634,7 @@ def launch(*new_args: str):
                 f.write(f"[path]\nread-data=__PATH__system-read-data__\nwrite-data={user_path('factorio')}")
 
     asyncio.run(main(lambda: FactorioContext(
-        args.connect, args.password,
+        args.connect, args.password, executable,
         initial_filter_connection_changes, initial_filter_item_sends, initial_bridge_chat_out,
         rcon_port, rcon_password, server_settings, config_file, rest
     )))
