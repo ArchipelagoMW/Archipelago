@@ -350,8 +350,7 @@ if __name__ == '__main__':
         auto_start = typing.cast(typing.Union[bool, str],
                                  get_settings()["tloz_options"].get("rom_start", True))
         if auto_start is True:
-            import webbrowser
-            webbrowser.open(romfile)
+            Utils.open_file(romfile)
         elif isinstance(auto_start, str) and os.path.isfile(auto_start):
             subprocess.Popen([auto_start, romfile],
                              stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
