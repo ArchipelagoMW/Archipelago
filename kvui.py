@@ -6,6 +6,7 @@ import re
 import io
 import pkgutil
 from collections import deque
+
 assert "kivy" not in sys.modules, "kvui should be imported before kivy for frozen compatibility"
 
 if sys.platform == "win32":
@@ -27,6 +28,7 @@ if Utils.is_frozen():
     os.environ["KIVY_DATA_DIR"] = Utils.local_path("data")
 
 import platformdirs
+
 os.environ["KIVY_HOME"] = os.path.join(platformdirs.user_config_dir("Archipelago", False), "kivy")
 os.makedirs(os.environ["KIVY_HOME"], exist_ok=True)
 
@@ -41,6 +43,7 @@ Config.set("graphics", "multisamples", "0")  # multisamples crash old intel driv
 # which assumes all multi touch deviecs are touch screens. 
 # workaround provided by Snu of the kivy commmunity c:
 from kivy.utils import platform
+
 if platform == "linux":
     options = Config.options("input")
     for option in options:
@@ -52,6 +55,7 @@ if platform == "linux":
 # kivymd imports kivy.core.window, so we have to do this before the first kivymd import.
 # No longer necessary when we switch to kivy 3.0.0, which fixes this issue.
 from kivy.core.audio import SoundLoader
+
 for classobj in SoundLoader._classes:
     # The least invasive way to force a SoundLoader class to load its audio engine seems to be calling
     # .extensions(), which e.g. in audio_sdl2.pyx then calls a function called "mix_init()"
@@ -63,7 +67,7 @@ from kivy.core.clipboard import Clipboard
 from kivy.core.text.markup import MarkupLabel
 from kivy.core.image import ImageLoader, ImageLoaderBase, ImageData
 from kivy.base import ExceptionHandler, ExceptionManager
-from kivy.clock import Clock
+from kivy.clock import Clock, ClockEvent
 from kivy.factory import Factory
 from kivy.properties import BooleanProperty, ObjectProperty, NumericProperty, StringProperty
 from kivy.metrics import dp, sp
@@ -79,6 +83,8 @@ from kivy.animation import Animation
 from kivy.uix.popup import Popup
 from kivy.uix.image import AsyncImage
 from kivymd.app import MDApp
+from kivymd.effects.stiffscroll import StiffScrollEffect
+from kivymd.uix.behaviors.ripple_behavior import M3CommonRipple
 from kivymd.uix.dialog import MDDialog, MDDialogHeadlineText, MDDialogSupportingText, MDDialogButtonContainer
 from kivymd.uix.gridlayout import MDGridLayout
 from kivymd.uix.floatlayout import MDFloatLayout
@@ -86,7 +92,7 @@ from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.navigationbar import MDNavigationBar, MDNavigationItem
 from kivymd.uix.screen import MDScreen
 from kivymd.uix.screenmanager import MDScreenManager
-
+from kivymd.uix.behaviors import HoverBehavior
 from kivymd.uix.menu import MDDropdownMenu
 from kivymd.uix.menu.menu import MDDropdownTextItem
 from kivymd.uix.dropdownitem import MDDropDownItem, MDDropDownItemText
@@ -115,6 +121,32 @@ remove_between_brackets = re.compile(r"\[.*?]")
 
 def kv_unescape(text: str) -> str:
     return text.replace("&amp;", "&").replace("&bl;", "[").replace("&br;", "]")
+
+
+# TODO: remove after KivyMD 2.0.1+
+
+
+def ripple_fbos(self: M3CommonRipple):
+    from kivy.graphics import (
+        ClearBuffers,
+        ClearColor,
+        Fbo,
+        Color,
+        Rectangle
+    )
+    self._phase = 0.0
+    self.ripple_pos = (0, 0)
+    self.fbo = Fbo(size=[50] * 2, group="m3_ripple_behavior")
+    self.set_shader(self.fbo)
+
+    with self.fbo:
+        ClearColor(0, 0, 0, 0)
+        ClearBuffers()
+        Color(1, 1, 1, 1)
+        self.rect = Rectangle(pos=(0, 0), size=[50] * 2)
+
+
+M3CommonRipple.init_fbos = ripple_fbos
 
 
 class ThemedApp(MDApp):
@@ -214,72 +246,6 @@ class ToggleButton(MDButton, ToggleButtonBehavior):
                 child.icon_color = self.theme_cls.primaryColor
 
 
-# thanks kivymd
-class ResizableTextField(MDTextField):
-    """
-    Resizable MDTextField that manually overrides the builtin sizing.
-    Note that in order to use this, the sizing must be specified from within a .kv rule.
-    """
-    def __init__(self, *args, **kwargs):
-        # cursed rules override
-        rules = Builder.match(self)
-        textfield = next((rule for rule in rules if rule.name == f"<MDTextField>"), None)
-        if textfield:
-            subclasses = rules[rules.index(textfield) + 1:]
-            for subclass in subclasses:
-                height_rule = subclass.properties.get("height", None)
-                if height_rule:
-                    height_rule.ignore_prev = True
-        super().__init__(*args, **kwargs)
-
-
-def on_release(self: MDButton, *args):
-    super(MDButton, self).on_release(args)
-    self.on_leave()
-
-
-MDButton.on_release = on_release
-
-
-# I was surprised to find this didn't already exist in kivy :(
-class HoverBehavior(object):
-    """originally from https://stackoverflow.com/a/605348110"""
-    hovered = BooleanProperty(False)
-    border_point = ObjectProperty(None)
-
-    def __init__(self, **kwargs):
-        self.register_event_type("on_enter")
-        self.register_event_type("on_leave")
-        Window.bind(mouse_pos=self.on_mouse_pos)
-        Window.bind(on_cursor_leave=self.on_cursor_leave)
-        super(HoverBehavior, self).__init__(**kwargs)
-
-    def on_mouse_pos(self, window, pos):
-        if not self.get_root_window():
-            return  # Abort if not displayed
-
-        # to_widget translates window pos to within widget pos
-        inside = self.collide_point(*self.to_widget(*pos))
-        if self.hovered == inside:
-            return  # We have already done what was needed
-        self.border_point = pos
-        self.hovered = inside
-
-        if inside:
-            self.dispatch("on_enter")
-        else:
-            self.dispatch("on_leave")
-
-    def on_cursor_leave(self, *args):
-        # if the mouse left the window, it is obviously no longer inside the hover label.
-        self.hovered = BooleanProperty(False)
-        self.border_point = ObjectProperty(None)
-        self.dispatch("on_leave")
-
-
-Factory.register("HoverBehavior", HoverBehavior)
-
-
 class ToolTip(MDTooltipPlain):
     markup = True
 
@@ -288,7 +254,7 @@ class ServerToolTip(ToolTip):
     pass
 
 
-class HovererableLabel(HoverBehavior, MDLabel):
+class HovererableLabel(MDLabel, HoverBehavior):
     pass
 
 
@@ -303,24 +269,21 @@ class TooltipLabel(HovererableLabel, MDTooltip):
         shift_x = center_x - x
         if shift_x > 0:
             self.shift_left = shift_x
+            self.shift_right = 0
         else:
-            self.shift_right = shift_x
+            self.shift_left = 0
+            self.shift_right = -shift_x
 
         if self._tooltip:
             # update
             self._tooltip.text = text
         else:
             self._tooltip = ToolTip(text=text, pos_hint={})
-            self.display_tooltip()
+            Clock.schedule_once(self.display_tooltip, 0)
 
-    def on_mouse_pos(self, window, pos):
-        if not self.get_root_window():
-            return  # Abort if not displayed
-        if self.disabled:
-            return
-        super().on_mouse_pos(window, pos)
-        if self.refs and self.hovered:
-
+    def on_mouse_update(self, window, pos):
+        super().on_mouse_update(window, pos)
+        if self.refs and self.hover_visible:
             tx, ty = self.to_widget(*pos, relative=True)
             # Why TF is Y flipped *within* the texture?
             ty = self.texture_size[1] - ty
@@ -334,6 +297,7 @@ class TooltipLabel(HovererableLabel, MDTooltip):
                         break
             if not hit:
                 self.remove_tooltip()
+                self._tooltip = None
 
     def on_enter(self):
         pass
@@ -356,7 +320,9 @@ class ServerLabel(HoverBehavior, MDTooltip, MDBoxLayout):
 
     def on_enter(self):
         self._tooltip.text = self.get_text()
-        self.display_tooltip()
+        if self._tooltip.parent:
+            self.remove_tooltip()
+        Clock.schedule_once(self.display_tooltip, 0)
 
     def on_leave(self):
         self.animation_tooltip_dismiss()
@@ -481,51 +447,51 @@ class MarkupDropdown(MDDropdownMenu):
         for data in value:
             if "viewclass" not in data:
                 if (
-                    "leading_icon" not in data
-                    and "trailing_icon" not in data
-                    and "trailing_text" not in data
+                        "leading_icon" not in data
+                        and "trailing_icon" not in data
+                        and "trailing_text" not in data
                 ):
                     viewclass = "MarkupDropdownTextItem"
                 elif (
-                    "leading_icon" in data
-                    and "trailing_icon" not in data
-                    and "trailing_text" not in data
+                        "leading_icon" in data
+                        and "trailing_icon" not in data
+                        and "trailing_text" not in data
                 ):
                     viewclass = "MDDropdownLeadingIconItem"
                 elif (
-                    "leading_icon" not in data
-                    and "trailing_icon" in data
-                    and "trailing_text" not in data
+                        "leading_icon" not in data
+                        and "trailing_icon" in data
+                        and "trailing_text" not in data
                 ):
                     viewclass = "MDDropdownTrailingIconItem"
                 elif (
-                    "leading_icon" not in data
-                    and "trailing_icon" in data
-                    and "trailing_text" in data
+                        "leading_icon" not in data
+                        and "trailing_icon" in data
+                        and "trailing_text" in data
                 ):
                     viewclass = "MDDropdownTrailingIconTextItem"
                 elif (
-                    "leading_icon" in data
-                    and "trailing_icon" in data
-                    and "trailing_text" in data
+                        "leading_icon" in data
+                        and "trailing_icon" in data
+                        and "trailing_text" in data
                 ):
                     viewclass = "MDDropdownLeadingTrailingIconTextItem"
                 elif (
-                    "leading_icon" in data
-                    and "trailing_icon" in data
-                    and "trailing_text" not in data
+                        "leading_icon" in data
+                        and "trailing_icon" in data
+                        and "trailing_text" not in data
                 ):
                     viewclass = "MDDropdownLeadingTrailingIconItem"
                 elif (
-                    "leading_icon" not in data
-                    and "trailing_icon" not in data
-                    and "trailing_text" in data
+                        "leading_icon" not in data
+                        and "trailing_icon" not in data
+                        and "trailing_text" in data
                 ):
                     viewclass = "MDDropdownTrailingTextItem"
                 elif (
-                    "leading_icon" in data
-                    and "trailing_icon" not in data
-                    and "trailing_text" in data
+                        "leading_icon" in data
+                        and "trailing_icon" not in data
+                        and "trailing_text" in data
                 ):
                     viewclass = "MDDropdownLeadingIconTrailingTextItem"
 
@@ -542,18 +508,18 @@ class MarkupDropdown(MDDropdownMenu):
             self.menu.data = self._items
 
 
-class AutocompleteHintInput(ResizableTextField):
+class AutocompleteHintInput(MDTextField):
     min_chars = NumericProperty(3)
 
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
 
         self.dropdown = MarkupDropdown(caller=self, position="bottom", border_margin=dp(2), width=self.width)
         self.bind(on_text_validate=self.on_message)
         self.bind(width=lambda instance, x: setattr(self.dropdown, "width", x))
 
     def on_message(self, instance):
-        MDApp.get_running_app().commandprocessor("!hint "+instance.text)
+        MDApp.get_running_app().commandprocessor("!hint " + instance.text)
 
     def on_text(self, instance, value):
         if len(value) >= self.min_chars:
@@ -576,8 +542,8 @@ class AutocompleteHintInput(ResizableTextField):
                     pass  # substring not found
                 else:
                     prefix = escape_markup(item_name[:index])
-                    matching = escape_markup(item_name[index:index+len(value)])
-                    postfix = escape_markup(item_name[index+len(value):])
+                    matching = escape_markup(item_name[index:index + len(value)])
+                    postfix = escape_markup(item_name[index + len(value):])
                     text = f"{prefix}[b]{matching}[/b]{postfix}"
                     self.dropdown.items.append({
                         "text": text,
@@ -703,7 +669,7 @@ class HintLabel(RecycleDataViewBehavior, MDBoxLayout):
             self.selected = is_selected
 
 
-class ConnectBarTextInput(ResizableTextField):
+class ConnectBarTextInput(MDTextField):
     def insert_text(self, substring, from_undo=False):
         s = substring.replace("\n", "").replace("\r", "")
         return super(ConnectBarTextInput, self).insert_text(s, from_undo=from_undo)
@@ -713,11 +679,11 @@ def is_command_input(string: str) -> bool:
     return len(string) > 0 and string[0] in "/!"
 
 
-class CommandPromptTextInput(ResizableTextField):
+class CommandPromptTextInput(MDTextField):
     MAXIMUM_HISTORY_MESSAGES = 50
 
-    def __init__(self, **kwargs) -> None:
-        super().__init__(**kwargs)
+    def __init__(self, *args, **kwargs) -> None:
+        super().__init__(*args, **kwargs)
         self._command_history_index = -1
         self._command_history: typing.Deque[str] = deque(maxlen=CommandPromptTextInput.MAXIMUM_HISTORY_MESSAGES)
 
@@ -727,11 +693,11 @@ class CommandPromptTextInput(ResizableTextField):
             self._command_history.appendleft(new_entry)
 
     def keyboard_on_key_down(
-        self,
-        window,
-        keycode: typing.Tuple[int, str],
-        text: typing.Optional[str],
-        modifiers: typing.List[str]
+            self,
+            window,
+            keycode: typing.Tuple[int, str],
+            text: typing.Optional[str],
+            modifiers: typing.List[str]
     ) -> bool:
         """
         :param window: The kivy window object
@@ -857,9 +823,11 @@ class CommandButton(MDButton, MDTooltip):
     def on_enter(self):
         self._tooltip.text = self.manager.commandprocessor.get_help_text()
         self._tooltip.font_size = dp(20 - (len(self._tooltip.text) // 400))  # mostly guessing on the numbers here
-        self.display_tooltip()
+        if self._tooltip.parent:
+            self.remove_tooltip()
+        Clock.schedule_once(self.display_tooltip, 0)
 
-    def on_leave(self):
+    def on_leave(self) -> None:
         self.animation_tooltip_dismiss()
 
 
@@ -911,6 +879,7 @@ class GameManager(ThemedApp):
     def on_start(self):
         def on_start(*args):
             self.root.md_bg_color = self.theme_cls.backgroundColor
+
         super().on_start()
         Clock.schedule_once(on_start)
 
@@ -932,7 +901,6 @@ class GameManager(ThemedApp):
             if not self.ctx.server:
                 self.connect_button_action(sender)
 
-        self.server_connect_bar.height = dp(30)
         self.server_connect_bar.bind(on_text_validate=connect_bar_validate)
         self.connect_layout.add_widget(self.server_connect_bar)
         self.server_connect_button = MDButton(MDButtonText(text="Connect"), style="filled", size=(dp(100), dp(70)),
@@ -975,7 +943,8 @@ class GameManager(ThemedApp):
         self.grid.add_widget(self.main_area_container)
 
         # bottom part
-        bottom_layout = MDBoxLayout(orientation="horizontal", size_hint_y=None, height=dp(40), spacing=5, padding=(5, 10))
+        bottom_layout = MDBoxLayout(orientation="horizontal", size_hint_y=None, height=dp(40), spacing=5,
+                                    padding=(5, 10))
         info_button = CommandButton(MDButtonText(text="Command:", halign="left"), manager=self, radius=5,
                                     style="filled", size=(dp(100), dp(70)), size_hint_x=None, size_hint_y=None,
                                     pos_hint={"center_y": 0.575})
@@ -1135,7 +1104,7 @@ class GameManager(ThemedApp):
     def enable_energy_link(self):
         if not hasattr(self, "energy_link_label"):
             self.energy_link_label = MDLabel(text="Energy Link: Standby",
-                                           size_hint_x=None, width=150, halign="center")
+                                             size_hint_x=None, width=150, halign="center")
             self.connect_layout.add_widget(self.energy_link_label)
 
     def set_new_energy_link_value(self):
@@ -1170,6 +1139,7 @@ class LogtoUI(logging.Handler):
 class UILog(MDRecycleView):
     messages: typing.ClassVar[int]  # comes from kv file
     adaptive_height = True
+    effect_cls = StiffScrollEffect
 
     def __init__(self, *loggers_to_handle, **kwargs):
         super(UILog, self).__init__(**kwargs)
@@ -1236,7 +1206,9 @@ status_sort_weights: dict[HintStatus, int] = {
     HintStatus.HINT_PRIORITY: 4,
 }
 
+
 class HintLog(MDRecycleView):
+    effect_cls = StiffScrollEffect
     header = {
         "receiving": {"text": "[u]Receiving Player[/u]"},
         "item": {"text": "[u]Item[/u]"},
@@ -1262,7 +1234,7 @@ class HintLog(MDRecycleView):
         data = []
         ctx = MDApp.get_running_app().ctx
         for hint in hints:
-            if not hint.get("status"): # Allows connecting to old servers
+            if not hint.get("status"):  # Allows connecting to old servers
                 hint["status"] = HintStatus.HINT_FOUND if hint["found"] else HintStatus.HINT_UNSPECIFIED
             hint_status_node = self.parser.handle_node({"type": "color",
                                                         "color": status_colors.get(hint["status"], "red"),
@@ -1285,7 +1257,7 @@ class HintLog(MDRecycleView):
                 })},
                 "entrance": {"text": self.parser.handle_node({"type": "color" if hint["entrance"] else "text",
                                                               "color": "blue", "text": hint["entrance"]
-                                                              if hint["entrance"] else "Vanilla"})},
+                    if hint["entrance"] else "Vanilla"})},
                 "status": {
                     "text": hint_status_node,
                     "hint": hint,
