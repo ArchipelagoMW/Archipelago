@@ -501,13 +501,14 @@ def restricted_dumps(obj: Any) -> bytes:
     return s
 
 
+@deprecated("3.11 has been dropped, so ByValue is no longer needed for compatibility. "
+            "It will be removed in a future version.")
 class ByValue:
     """
     Mixin for enums to pickle value instead of name (restores pre-3.11 behavior). Use as left-most parent.
     See https://github.com/python/cpython/pull/26658 for why this exists.
     """
-    def __reduce_ex__(self, prot):
-        return self.__class__, (self._value_, )
+    pass
 
 
 class KeyedDefaultDict(collections.defaultdict):
@@ -1036,7 +1037,7 @@ def async_start(co: Coroutine[None, None, typing.Any], name: Optional[str] = Non
     Use this to start a task when you don't keep a reference to it or immediately await it,
     to prevent early garbage collection. "fire-and-forget"
     """
-    # https://docs.python.org/3.11/library/asyncio-task.html#asyncio.create_task
+    # https://docs.python.org/3/library/asyncio-task.html#asyncio.create_task
     # Python docs:
     # ```
     # Important: Save a reference to the result of [asyncio.create_task],

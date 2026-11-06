@@ -1782,10 +1782,6 @@ class ClientMessageProcessor(CommonCommandProcessor):
             self.ctx.notify_hints(self.client.team, list(hints), recipients=(self.client.slot,))
             self.output(f"A hint costs {self.ctx.get_hint_cost(self.client.slot)} points. "
                         f"You have {points_available} points.")
-            if hints and Utils.version_tuple < (0, 5, 0):
-                self.output("It was recently changed, so that the above hints are only shown to you. "
-                            "If you meant to alert another player of an above hint, "
-                            "please let them know of the content or to run !hint themselves.")
             return True
 
         elif input_text.isnumeric():

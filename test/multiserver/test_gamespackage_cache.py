@@ -1,8 +1,7 @@
 import typing as t
+from typing import override
 from copy import deepcopy
 from unittest import TestCase
-
-from typing_extensions import override
 
 import NetUtils
 from NetUtils import GamesPackage

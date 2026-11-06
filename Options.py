@@ -14,7 +14,7 @@ from copy import deepcopy
 from dataclasses import dataclass
 
 from schema import And, Optional, Or, Schema
-from typing_extensions import Self
+from typing import Self
 
 from Utils import get_file_safe_name, get_fuzzy_results, is_iterable_except_str, output_path
 

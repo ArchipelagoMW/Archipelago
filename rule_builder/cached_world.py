@@ -1,7 +1,5 @@
 from collections import defaultdict
-from typing import ClassVar, cast
-
-from typing_extensions import override
+from typing import ClassVar, cast, override
 
 from BaseClasses import CollectionState, Item, MultiWorld, Region
 from worlds.AutoWorld import LogicMixin, World
