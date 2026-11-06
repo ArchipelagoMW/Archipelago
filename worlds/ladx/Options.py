@@ -1,22 +1,39 @@
-from dataclasses import dataclass
-
-import os.path
-import typing
+from dataclasses import dataclass, asdict
 import logging
-from Options import Choice, Toggle, DefaultOnToggle, Range, FreeText, PerGameCommonOptions, OptionGroup, Removed, StartInventoryPool
-from collections import defaultdict
-import Utils
+from typing import Any, Tuple
+from enum import IntEnum
+from Options import (Choice, Toggle, DefaultOnToggle, Range, PerGameCommonOptions, OptionGroup, Removed,
+                     StartInventoryPool)
 
 DefaultOffToggle = Toggle
 
 logger = logging.getLogger("Link's Awakening Logger")
 
 
+def convert_ap_options_to_ladxr(options):
+    options_dict = options if isinstance(options, dict) else asdict(options)
+    ladxr_settings_dict = {}
+    for option in options_dict.values():
+        if not hasattr(option, 'to_ladxr_option'):
+            continue
+        name, value = option.to_ladxr_option(options_dict)
+        if name:
+            ladxr_settings_dict[name] = value
+    return ladxr_settings_dict
+
+
+class Override(IntEnum):
+    NEVER = 0
+    NOT_RACE = 1
+    ALWAYS = 2
+
+
 class LADXROption:
-    def to_ladxr_option(self, all_options):
+    may_override: Override = Override.NEVER
+    ladxr_name: str | None
+    def to_ladxr_option(self, all_options) -> Tuple[Any, Any]:
         if not self.ladxr_name:
             return None, None
-
         return (self.ladxr_name, self.name_lookup[self.value].replace("_", ""))
 
 
@@ -66,6 +83,7 @@ class TextShuffle(DefaultOffToggle, LADXROption):
     """
     display_name = "Text Shuffle"
     ladxr_name = "textshuffle"
+    may_override = Override.ALWAYS
 
 
 class Rooster(DefaultOnToggle, LADXROption):
@@ -119,6 +137,7 @@ class APTitleScreen(DefaultOnToggle, LADXROption):
     """
     display_name = "AP Title Screen"
     ladxr_name = "aptitlescreen"
+    may_override = Override.ALWAYS
 
 
 class BossShuffle(Choice):
@@ -293,6 +312,7 @@ class NagMessages(DefaultOffToggle, LADXROption):
     """
     display_name = "Nag Messages"
     ladxr_name = "nagmessages"
+    may_override = Override.ALWAYS
 
 
 class MusicChangeCondition(Choice, LADXROption):
@@ -309,6 +329,7 @@ class MusicChangeCondition(Choice, LADXROption):
     option_always = 1
     default = option_always
     ladxr_name = "musicchange"
+    may_override = Override.ALWAYS
 
 
 class HardMode(Choice, LADXROption):
@@ -361,6 +382,7 @@ class Quickswap(Choice, LADXROption):
     """
     display_name = "Quickswap"
     ladxr_name = "quickswap"
+    may_override = Override.ALWAYS
     rich_text_doc = True
     option_none = 0
     option_a = 1
@@ -374,6 +396,7 @@ class TextMode(Choice, LADXROption):
     """
     display_name = "Text Mode"
     ladxr_name = "textmode"
+    may_override = Override.ALWAYS
     rich_text_doc = True
     option_normal = 0
     option_fast = 1
@@ -386,6 +409,7 @@ class LowHpBeep(Choice, LADXROption):
     """
     display_name = "Low HP Beep"
     ladxr_name = "lowhpbeep"
+    may_override = Override.ALWAYS
     option_default = 0
     option_slow = 1
     option_none = 2
@@ -399,6 +423,7 @@ class NoFlash(DefaultOnToggle, LADXROption):
     """
     display_name = "No Flash"
     ladxr_name = "noflash"
+    may_override = Override.ALWAYS
 
 
 class BootsControls(Choice, LADXROption):
@@ -424,6 +449,7 @@ class BootsControls(Choice, LADXROption):
     option_press_b = 3
     alias_b = 3
     ladxr_name = "bootscontrols"
+    may_override = Override.ALWAYS
 
 
 class LinkPalette(Choice, LADXROption):
@@ -435,6 +461,7 @@ class LinkPalette(Choice, LADXROption):
     """
     display_name = "Link's Palette"
     ladxr_name = "linkspalette"
+    may_override = Override.ALWAYS
     option_normal = -1
     option_green = 0
     option_yellow = 1
@@ -475,6 +502,7 @@ class TrendyGame(Choice, LADXROption):
     option_impossible = 5
     default = option_normal
     ladxr_name = "trendygame"
+    may_override = Override.NOT_RACE
 
 
 class GfxMod(DefaultOffToggle, LADXROption):
@@ -483,6 +511,7 @@ class GfxMod(DefaultOffToggle, LADXROption):
     """
     display_name = "GFX Modification"
     ladxr_name = "gfxmod"
+    may_override = Override.ALWAYS
 
 
 class Palette(Choice, LADXROption):
@@ -513,6 +542,7 @@ class Palette(Choice, LADXROption):
     option_pink = 4
     option_inverted = 5
     ladxr_name = "palette"
+    may_override = Override.ALWAYS
 
 
 class Music(Choice, LADXROption):
@@ -525,6 +555,7 @@ class Music(Choice, LADXROption):
     """
     display_name = "Music"
     ladxr_name = "music"
+    may_override = Override.ALWAYS
     rich_text_doc = True
     option_vanilla = 0
     option_shuffled = 1
@@ -554,6 +585,7 @@ class Warps(Choice, LADXROption):
     option_improved_additional = 2
     default = option_vanilla
     ladxr_name = 'warps'
+    may_override = Override.NOT_RACE
 
 
 class InGameHints(DefaultOnToggle):
