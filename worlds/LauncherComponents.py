@@ -144,21 +144,6 @@ def _install_apworld(apworld_src: str = "") -> Optional[tuple[pathlib.Path, path
 
     apworld_path = pathlib.Path(apworld_src)
 
-    try:
-        import zipfile
-        zip = zipfile.ZipFile(apworld_path)
-        directories = [f.name for f in zipfile.Path(zip).iterdir() if f.is_dir()]
-        if len(directories) == 1 and directories[0] in apworld_path.stem:
-            module_name = directories[0]
-            apworld_name = module_name + ".apworld"
-        else:
-            raise Exception("APWorld appears to be invalid or damaged. (expected a single directory)")
-        zip.open(module_name + "/__init__.py")
-    except ValueError as e:
-        raise Exception("Archive appears invalid or damaged.") from e
-    except KeyError as e:
-        raise Exception("Archive appears to not be an apworld. (missing __init__.py)") from e
-
     import worlds
     if worlds.user_folder is None:
         raise Exception("Custom Worlds directory appears to not be writable.")
@@ -170,29 +155,33 @@ def _install_apworld(apworld_src: str = "") -> Optional[tuple[pathlib.Path, path
             raise Exception(f"APWorld is already installed at {world_source.resolved_path}.")
 
     # TODO: run generic test suite over the apworld.
-    # TODO: have some kind of version system to tell from metadata if the apworld should be compatible.
 
-    target = pathlib.Path(worlds.user_folder) / apworld_name
+    target = pathlib.Path(worlds.user_folder) / apworld_path.name
     import shutil
-    shutil.copyfile(apworld_path, target)
+    # Try creating world source before moving for validation, and then set path to new location if successful
+    world_source = worlds.WorldSource(apworld_src, is_zip=True, relative=False)
 
     # If a module with this name is already loaded, then we can't load it now.
     # TODO: We need to be able to unload a world module,
     # so the user can update a world without restarting the application.
+    # TODO: If this is still present with lazy loading, add some way to tell if the source is actually loaded.
     found_already_loaded = False
     for loaded_world in worlds.world_sources:
-        loaded_name = pathlib.Path(loaded_world.path).stem
-        if module_name == loaded_name:
+        if world_source.name == loaded_world.name:
             found_already_loaded = True
             break
-    if found_already_loaded and is_kivy_running():
-        raise Exception(f"Installed APWorld successfully, but '{module_name}' is already loaded, "
-                        "so a Launcher restart is required to use the new installation.")
-    world_source = worlds.WorldSource(str(target), is_zip=True, relative=False)
+
     bisect.insort(worlds.world_sources, world_source)
-    worlds.add_apworld_spec(world_source, worlds.APWorldContainer(world_source.resolved_path))
-    if not world_source.load():
-        raise Exception(f"World was installed, but failed to load. See the Launcher log for details.")
+    shutil.copyfile(apworld_path, target)
+    world_source.path = str(apworld_path)
+
+    if found_already_loaded and is_kivy_running():
+        raise Exception(f"Installed APWorld successfully, but '{world_source.name}' is already loaded, "
+                        "so a Launcher restart is required to use the new installation.")
+
+    success, message =  world_source.load()
+    if not success:
+        raise Exception(f"World was installed, but failed to load:\n{message}\nSee the Launcher log for full details.")
 
     return apworld_path, target
 

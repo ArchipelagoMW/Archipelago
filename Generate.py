@@ -188,7 +188,10 @@ def main(args=None) -> tuple[argparse.Namespace, int]:
                         f"Provide a general weights file ({args.weights_file_path}) or individual player files. "
                         f"A mix is also permitted.")
 
+    from worlds import load_world_sources
     from worlds.AutoWorld import AutoWorldRegister
+    load_world_sources()
+
     args.outputname = seed_name
     args.sprite = dict.fromkeys(range(1, args.multi+1), None)
     args.sprite_pool = dict.fromkeys(range(1, args.multi+1), None)

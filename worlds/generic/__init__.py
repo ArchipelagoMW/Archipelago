@@ -1,7 +1,3 @@
-from typing import NamedTuple, Union
-from typing_extensions import deprecated
-import logging
-
 from BaseClasses import Item, Tutorial, ItemClassification
 
 from ..AutoWorld import InvalidItemError, World, WebWorld

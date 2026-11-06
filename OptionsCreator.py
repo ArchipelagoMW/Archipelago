@@ -28,9 +28,12 @@ import typing
 import webbrowser
 import re
 from urllib.parse import urlparse
+from worlds import load_world_sources
 from worlds.AutoWorld import AutoWorldRegister, World
 from Options import (Option, Toggle, TextChoice, Choice, FreeText, NamedRange, Range, OptionSet, OptionList,
                      OptionCounter, Visibility)
+
+load_world_sources()
 
 
 def validate_url(x):

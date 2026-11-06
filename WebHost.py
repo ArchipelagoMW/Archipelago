@@ -99,6 +99,8 @@ if __name__ == "__main__":
     multiprocessing.freeze_support()
     multiprocessing.set_start_method('spawn')
     logging.basicConfig(format='[%(asctime)s] %(message)s', level=logging.INFO)
+    from worlds import AutoWorldRegister, network_data_package, load_world_sources
+    load_world_sources()
 
     from WebHostLib.autolauncher import autohost, autogen, stop
     from WebHostLib.options import create as create_options_files
@@ -110,7 +112,6 @@ if __name__ == "__main__":
         logging.exception(e)
         logging.warning("Could not update LttP sprites.")
     app = get_app()
-    from worlds import AutoWorldRegister, network_data_package
     # Update to only valid WebHost worlds
     invalid_worlds = {name for name, world in AutoWorldRegister.world_types.items()
                       if not hasattr(world.web, "tutorials")}

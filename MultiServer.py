@@ -616,6 +616,7 @@ class Context:
 
     def _load_world_data(self) -> None:
         import worlds
+        worlds.load_world_sources()
 
         for world_name, world in worlds.AutoWorldRegister.world_types.items():
             # TODO: move hint_blacklist into GamesPackage?
