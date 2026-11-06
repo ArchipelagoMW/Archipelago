@@ -89,6 +89,22 @@ class RuleBuilderLocation(Location):
     game = GAME_NAME
 
 
+class TestRule(Rule[World], game=GAME_NAME):
+    name: str
+
+    def __init__(self, name: str):
+        self.name = name
+
+    @override
+    def _instantiate(self, world: World) -> Rule.Resolved:
+        return self.Resolved(
+            self.name, player=world.player, caching_enabled=getattr(world, "rule_caching_enabled", False)
+        )
+
+    class Resolved(Rule.Resolved):
+        name: str
+
+
 class RuleBuilderTestCase(unittest.TestCase):
     old_world_types: dict[str, type[World]]  # pyright: ignore[reportUninitializedInstanceVariable]
     world_cls: type[World]  # pyright: ignore[reportUninitializedInstanceVariable]
@@ -256,12 +272,12 @@ class CachedRuleBuilderTestCase(RuleBuilderTestCase):
             HasAny.Resolved(("A", "B", "C", "D", "E"), player=1),
         ),
         (
-            And(HasAllCounts({"A": 1, "B": 2}), HasAllCounts({"A": 2, "B": 2})),
-            HasAllCounts.Resolved((("A", 2), ("B", 2)), player=1),
+            And(HasAllCounts({"A": 1, "B": 2, "C": 1}), HasAllCounts({"A": 2, "B": 2, "D": 1})),
+            HasAllCounts.Resolved((("A", 2), ("B", 2), ("C", 1), ("D", 1)), player=1),
         ),
         (
-            Or(HasAnyCount({"A": 1, "B": 2}), HasAnyCount({"A": 2, "B": 2})),
-            HasAnyCount.Resolved((("A", 1), ("B", 2)), player=1),
+            Or(HasAnyCount({"A": 1, "B": 2, "C": 1}), HasAnyCount({"A": 2, "B": 2, "D": 1})),
+            HasAnyCount.Resolved((("A", 1), ("B", 2), ("C", 1), ("D", 1)), player=1),
         ),
         (
             AtLeast(0, Has("A")),
@@ -288,14 +304,12 @@ class CachedRuleBuilderTestCase(RuleBuilderTestCase):
             False_.Resolved(player=1),
         ),
         (
-            # This test will fail when Or(Rule, Rule) will be optimized to Rule
-            AtLeast(1, Rule(), Rule()),
-            Or.Resolved((Rule.Resolved(player=1), Rule.Resolved(player=1)), player=1),
+            AtLeast(1, TestRule("A"), TestRule("B")),
+            Or.Resolved((TestRule.Resolved("A", player=1), TestRule.Resolved("B", player=1)), player=1),
         ),
         (
-            # This test will fail when And(Rule, Rule) will be optimized to Rule
-            AtLeast(2, Rule(), Rule()),
-            And.Resolved((Rule.Resolved(player=1), Rule.Resolved(player=1)), player=1),
+            AtLeast(2, TestRule("A"), TestRule("B")),
+            And.Resolved((TestRule.Resolved("A", player=1), TestRule.Resolved("B", player=1)), player=1),
         ),
     )
 )
