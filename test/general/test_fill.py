@@ -433,6 +433,49 @@ class TestFillRestrictive(unittest.TestCase):
         self.assertTrue(sphere1_loc1.item.name == one_to_two1 or
                         sphere1_loc2.item.name == one_to_two1, "Wrong item in Sphere 1")
 
+    def test_swap_when_multiple_items_need_swapping(self):
+        """
+        Test that the swapper can work out a situation where two items need to be swapped ahead, when each individual
+        item swap would always decrease the amount of reachable locations
+        """
+        def setup_multiple_swap_multiworld():
+            multi_world = generate_multi_world(1)
+            player1 = generate_player_data(multi_world, 1, 5, 5)
+            locations = player1.locations[:]  # copy required
+            items = player1.prog_items[:]  # copy required
+
+            for i in [3, 4]:
+                locations[i].access_rule = lambda state: state.has_all([item.name for item in items[2:4]], player1.id)
+            locations[2].access_rule = lambda state: state.has_all([item.name for item in items[0:2]], player1.id)
+
+            multi_world.completion_condition[player1.id] = lambda state: state.has_all(
+                [item.name for item in items], player1.id
+            )
+
+            return multi_world, player1, locations, items
+
+        validation_multiworld, _, validation_locations, validation_items = setup_multiple_swap_multiworld()
+
+        validation_locations[0].place_locked_item(validation_items[2])
+        validation_locations[1].place_locked_item(validation_items[3])
+        validation_locations[2].place_locked_item(validation_items[4])
+        validation_locations[3].place_locked_item(validation_items[0])
+        validation_locations[4].place_locked_item(validation_items[1])
+
+        self.assertTrue(
+            validation_multiworld.can_beat_game(),
+            "The presumed valid item placement is not actually valid - Test is flawed."
+        )
+
+        test_multiworld, test_player, _, _ = setup_multiple_swap_multiworld()
+        test_player.prog_items.reverse()
+
+        # Fill order will place items 0-2 on locations 0-2, then realize it can't place item 3 onto location 3.
+        # There is a valid item placement, but it needs TWO items to be swapped:
+        # Items 3-4 need to go on locations 0-1, which are already filled with items that together unlock a location.
+
+        fill_restrictive(test_multiworld, test_multiworld.state, test_player.locations, test_player.prog_items)
+
     def test_double_sweep(self):
         """Test that sweep doesn't duplicate Event items when sweeping"""
         # test for PR1114
