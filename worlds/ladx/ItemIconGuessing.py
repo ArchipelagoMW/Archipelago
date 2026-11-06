@@ -390,6 +390,69 @@ PHRASES = {
 # Item names will be uppercased when comparing.
 # Can be multi-word.
 GAME_SPECIFIC_PHRASES = {
+    "Donkey Kong 64": {
+        "Donkey": BOWWOW,
+        "Diddy": ROOSTER,
+        "Lanky": SONG2, #He has no style, he has no grace...
+        "Tiny": SONG1,
+        "Chunky": SONG3,
+        "Coconut": MEDICINE, #Moves are represented by potions in Donk itself.
+        "Peanut": MEDICINE,
+        "Grape": MEDICINE,
+        "Feather": FEATHER, #I had to.
+        "Pineapple": TRADING_ITEM_PINEAPPLE,
+        "Bongos": INSTRUMENT8,
+        "Guitar": INSTRUMENT1,
+        "Trombone": INSTRUMENT2, #It's the only wind instrument in the set.
+        "Saxophone": INSTRUMENT2,
+        "Triangle": INSTRUMENT6,
+        "Gorilla Grab": MEDICINE,
+        "Chimpy Charge": MEDICINE,
+        "Orangstand": MEDICINE,
+        "Pony Tail Twirl": MEDICINE,
+        "Primate Punch": MEDICINE,
+        "Strong Kong": MEDICINE,
+        "Rocketbarrel Boost": MEDICINE,
+        "Orangstand Sprint": MEDICINE,
+        "Mini Monkey": MEDICINE,
+        "Hunky Chunky": MEDICINE,
+        "Baboon Blast": MEDICINE,
+        "Simian Spring": MEDICINE,
+        "Baboon Balloon": MEDICINE,
+        "Monkeyport": MEDICINE,
+        "Gorilla Gone": MEDICINE,
+        "Progressive Slam": MEDICINE,
+        "Diving": FLIPPERS,
+        "Oranges": BOMB, #Oranges are explosive.
+        "Vines": TRADING_ITEM_STICK,
+        "Barrels": TRADING_ITEM_DOG_FOOD, #It's a cylinder.
+        "Fairy Camera": MEDICINE,
+        "Shockwave": MEDICINE,
+        "Homing Ammo": MEDICINE,
+        "Sniper Sight": MEDICINE,
+        "Progressive Instrument Upgrade": MAX_POWDER_UPGRADE, #Progressive Instrument Upgrade also governs your health extensions, but only once.
+        "Progressive Ammo Upgrade": MAX_BOMB_UPGRADE,
+        "Nintendo Coin": RUPEES_20,
+        "Rareware Coin": RUPEES_20,
+        "Pearl": TRADING_ITEM_NECKLACE, #Pearls are given in to a mermaid for a prize.
+        "The Bean": TOADSTOOL, #The Bean is planted in the ground to grow a beanstalk.
+        "Battle Crown": SEASHELL, #It looks kind of like a crown?
+        "Banana Medal": RUPEES_50,
+        "Rainbow Coin": RUPEES_100,
+        "Banana Fairy": TRADING_ITEM_HIBISCUS, #We must be the only Zelda game that can't represent this with an actual fairy.
+        "Golden Banana": TRADING_ITEM_BANANAS,
+        "Key": NIGHTMARE_KEY, #The Donk Keys are big, gold, and VERY important.
+        "Donkey Blueprint": MAP, #Blueprint SHOULD have priority over the Kong name.
+        "Diddy Blueprint": MAP,
+        "Lanky Blueprint": MAP,
+        "Tiny Blueprint": MAP,
+        "Chunky Blueprint": MAP,
+        "Junk Item (Melon Slice)": SINGLE_ARROW, #Recovery Heart would be ideal, but focus on the Junk item.
+        "Ice Trap (Bubble)": STONE_BEAK,
+        "Ice Trap (Reverse)": COMPASS,
+        "Ice Trap (Slow)": TRADING_ITEM_FISHING_HOOK,
+    },
+
     'Final Fantasy': {
         'OXYALE': 'MEDICINE',
         'VORPAL': 'SWORD',
@@ -879,5 +942,63 @@ GAME_SPECIFIC_PHRASES = {
         "Elixir": "MEDICINE",
         "Megalixir": "MEDICINE",
         
+    }
+    
+    "Yoshi's Island": {
+        "World 1 Gate": TAIL_KEY,
+        "World 2 Gate": BIRD_KEY,
+        "World 3 Gate": SLIME_KEY,
+        "World 4 Gate": ANGLER_KEY,
+        "World 5 Gate": FACE_KEY,
+        "World 6 Gate": NIGHTMARE_KEY, #I think I did all right with the levels-to-keys thing.
+        "Extra": SONG3,
+        "Bonus": SONG1,
+        "Spring Ball": FEATHER, #Makes you go up.
+        "! Switch": MAGIC_POWDER, #Makes something change properties temporarily.
+        "Chomp Rock": BOWWOW, #This was a gimme.
+        "Super Star": PIECE_OF_POWER, #Makes you invincible, oneshot enemies, and climb walls.
+        "Beanstalk": TOADSTOOL,
+        "Middle Ring": HEART_CONTAINER, #Refills your health.
+        "Dashed Stairs": HOOKSHOT, #Lets you reach far away heights.
+        "Dashed Platform": HOOKSHOT,
+        "Tulip": TRADING_ITEM_HIBISCUS, #Is a flower.
+        "Egg Plant": SWORD, #Lets you resupply your ammo.
+        "Egg Launcher": BOW, #Lets you strike distant targets.
+        "Helicopter Morph": ROOSTER, #Lets you hover infinitely.
+        "Mole Tank Morph": SHOVEL, #Lets you dig through dirt.
+        "Train Morph": HOOKSHOT, #Lets you cling to walls.
+        "Car Morph": PEGASUS_BOOTS, #Lets you go fast.
+        "Submarine Morph": FLIPPERS, #Lets you go underwater.
+        "Skis": PEGASUS_BOOTS, #Lets you go fast down hill.
+        "Key": KEY, #Unlocks doors in the middle of dungeons.
+        "Poochy": BOWWOW, #Good dog.
+        "Platform Ghost": ROOSTER, #The rooster started out dead.
+        "Arrow Wheel": FEATHER, #Mixed on Feather and Rooster for these ones.
+        "Bucket": FLIPPERS, #Lets you cross water.
+        "Egg Capacity Upgrade": MAX_BOMBS_UPGRADE, #Lets you hold more ammo.
+        "Flashing Eggs": RUPEES_100, #Red item that gives coins.
+        "Giant Eggs": OCARINA, #Required for the final boss.
+        "Secret Lens": TRADING_ITEM_MAGNIFYING_GLASS, #Lets you see things you couldn't before.
+        "Watermelon": BOW, #Lets you rapid-fire powerful projectiles.
+        "Fire Melon": MAGIC_ROD, #Lets you set things on fire.
+        "Ice Melon": MAGIC_ROD, #I wish we had an Ice Rod.
+        "Pocket Melon": ARROWS_10,
+        "Pocket Fire Melon": ARROWS_10,
+        "Pocket Ice Melon": ARROWS_10,
+        "+10 Stars": PIECE_OF_HEART,
+        "+20 Stars": PIECE_OF_HEART,
+        "Anywhere POW": BOMB,
+        "Winged Cloud Maker": TRADING_ITEM_BROOM,
+        "Magnifying Glass": TRADING_ITEM_MAGNIFYING_GLASS,
+        "Anytime Egg": ARROWS_10,
+        "Piece of Luigi": SEASHELL,
+        "1-Up": TRADING_ITEM_YOSHI_DOLL, #Gives you more Yoshis.
+        "2-Up": TRADING_ITEM_YOSHI_DOLL,
+        "3-Up": TRADING_ITEM_YOSHI_DOLL,
+        "10-Up": TRADING_ITEM_YOSHI_DOLL,
+        "Fuzzy Trap": TOADSTOOL,
+        "Reversal Trap": COMPASS,
+        "Darkness Trap": MEDICINE,
+        "Freeze Trap": STONE_BEAK,
     }
 }
