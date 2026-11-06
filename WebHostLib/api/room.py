@@ -4,7 +4,7 @@ from uuid import UUID
 from flask import abort, url_for
 
 from WebHostLib import to_url
-import worlds.Files
+from worlds.Files import is_ap_player_container
 from . import api_endpoints, get_players
 from ..models import Room
 
@@ -15,12 +15,14 @@ def room_info(room_id: UUID) -> Dict[str, Any]:
     if room is None:
         return abort(404)
 
-    def supports_apdeltapatch(game: str) -> bool:
-        return game in worlds.Files.AutoPatchRegister.patch_types
+    def supports_patch_download(game: str, data: bytes, player_id: int) -> bool:
+        if game == "Factorio":
+            return False
+        return is_ap_player_container(game, data, player_id)
 
     downloads = []
     for slot in sorted(room.seed.slots):
-        if slot.data and not supports_apdeltapatch(slot.game):
+        if slot.data and not supports_patch_download(slot.game, slot.data, slot.player_id):
             slot_download = {
                 "slot": slot.player_id,
                 "download": url_for("download_slot_file", room_id=room.id, player_id=slot.player_id)
