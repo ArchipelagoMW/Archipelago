@@ -460,8 +460,8 @@ class VariaRandomizer:
                     possibleStartAPs = sorted(list(set(possibleStartAPs).intersection(set(startLocationList))))
                     if len(possibleStartAPs) == 0:
                         #optErrMsgs += ["%s : %s" % (apName, cause) for apName, cause in reasons.items() if apName in startLocationList]
-                        raise Exception("Invalid start locations list with your settings." + 
-                                        "%s : %s" % (apName, cause) for apName, cause in reasons.items() if apName in startLocationList)
+                        raise Exception("Invalid start locations list with your settings. " +
+                                        ", ".join("%s : %s" % (apName, cause) for apName, cause in reasons.items() if apName in startLocationList))
                         #dumpErrorMsgs(args.output, optErrMsgs)
                 args.startLocation = random.choice(possibleStartAPs)
             elif args.startLocation not in possibleStartAPs:
