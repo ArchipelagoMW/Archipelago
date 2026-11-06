@@ -1,7 +1,7 @@
 import hashlib
 import logging
 from copy import deepcopy
-from typing import Dict, Any, TYPE_CHECKING, Optional, Sequence, Tuple, ClassVar, List
+from typing import Any, Sequence, ClassVar
 
 from BaseClasses import Tutorial, ItemClassification, MultiWorld, Item, Location
 from worlds.AutoWorld import World, WebWorld
@@ -9,7 +9,7 @@ from .names import (dr_wily, heat_man_stage, air_man_stage, wood_man_stage, bubb
                     flash_man_stage, metal_man_stage, crash_man_stage)
 from .items import (item_table, item_names, MM2Item, filler_item_weights, robot_master_weapon_table,
                     stage_access_table, item_item_table, lookup_item_to_id)
-from .locations import (MM2Location, mm2_regions, MM2Region, energy_pickups, etank_1ups, lookup_location_to_id,
+from .locations import (MM2Location, mm2_regions, MM2Region, lookup_location_to_id,
                         location_groups)
 from .rom import patch_rom, MM2ProcedurePatch, MM2LCHASH, PROTEUSHASH, MM2VCHASH, MM2NESHASH
 from .options import MM2Options, Consumables
@@ -21,22 +21,20 @@ import base64
 import settings
 logger = logging.getLogger("Mega Man 2")
 
-if TYPE_CHECKING:
-    from BaseClasses import CollectionState
-
 
 class MM2Settings(settings.Group):
     class RomFile(settings.UserFilePath):
         """File name of the MM2 EN rom"""
         description = "Mega Man 2 ROM File"
-        copy_to: Optional[str] = "Mega Man 2 (USA).nes"
+        copy_to: str | None = "Mega Man 2 (USA).nes"
         md5s = [MM2NESHASH, MM2VCHASH, MM2LCHASH, PROTEUSHASH]
 
         def browse(self: settings.T,
-                   filetypes: Optional[Sequence[Tuple[str, Sequence[str]]]] = None,
-                   **kwargs: Any) -> Optional[settings.T]:
+                   filetypes: Sequence[tuple[str, Sequence[str]]] | None = None,
+                   **kwargs: Any) -> settings.T | None:
             if not filetypes:
-                file_types = [("NES", [".nes"]), ("Program", [".exe"])]  # LC1 is only a windows executable, no linux
+                file_types = [("All supported extensions", [".nes", ".exe"]),
+                              ("NES", [".nes"]), ("Program", [".exe"])]  # LC1 is only a windows executable, no linux
                 return super().browse(file_types, **kwargs)
             else:
                 return super().browse(filetypes, **kwargs)
@@ -96,7 +94,7 @@ class MM2World(World):
     location_name_groups = location_groups
     web = MM2WebWorld()
     rom_name: bytearray
-    wily_5_weapons: Dict[int, List[int]]
+    wily_5_weapons: dict[int, list[int]]
 
     def __init__(self, multiworld: MultiWorld, player: int):
         self.rom_name = bytearray()
@@ -108,29 +106,22 @@ class MM2World(World):
     def create_regions(self) -> None:
         menu = MM2Region("Menu", self.player, self.multiworld)
         self.multiworld.regions.append(menu)
-        for region in mm2_regions:
-            stage = MM2Region(region, self.player, self.multiworld)
-            required_items = mm2_regions[region][0]
-            locations = mm2_regions[region][1]
-            prev_stage = mm2_regions[region][2]
-            if prev_stage is None:
-                menu.connect(stage, f"To {region}",
-                             lambda state, items=required_items: state.has_all(items, self.player))
+        for name, region in mm2_regions.items():
+            stage = MM2Region(name, self.player, self.multiworld)
+            if not region.parent:
+                menu.connect(stage, f"To {name}")
             else:
-                old_stage = self.get_region(prev_stage)
-                old_stage.connect(stage, f"To {region}",
-                                  lambda state, items=required_items: state.has_all(items, self.player))
-            stage.add_locations(locations, MM2Location)
+                old_stage = self.get_region(region.parent)
+                old_stage.connect(stage, f"To {name}")
+            stage.add_locations({loc: data.location_id for loc, data in region.locations.items()
+                                 if (not data.energy or self.options.consumables.value in
+                                     (Consumables.option_weapon_health, Consumables.option_all))
+                                 and (not data.oneup_tank or self.options.consumables.value in
+                                      (Consumables.option_1up_etank, Consumables.option_all))}, MM2Location)
             for location in stage.get_locations():
                 if location.address is None and location.name != dr_wily:
                     location.place_locked_item(MM2Item(location.name, ItemClassification.progression,
                                                        None, self.player))
-            if region in etank_1ups and self.options.consumables in (Consumables.option_1up_etank,
-                                                                     Consumables.option_all):
-                stage.add_locations(etank_1ups[region], MM2Location)
-            if region in energy_pickups and self.options.consumables in (Consumables.option_weapon_health,
-                                                                         Consumables.option_all):
-                stage.add_locations(energy_pickups[region], MM2Location)
             self.multiworld.regions.append(stage)
         goal_location = self.get_location(dr_wily)
         goal_location.place_locked_item(MM2Item("Victory", ItemClassification.progression, None, self.player))
@@ -192,10 +183,10 @@ class MM2World(World):
                 f"{self.options.starting_robot_master.current_key.replace('_', ' ').title()}")
 
     def fill_hook(self,
-                  progitempool: List["Item"],
-                  usefulitempool: List["Item"],
-                  filleritempool: List["Item"],
-                  fill_locations: List["Location"]) -> None:
+                  progitempool: list["Item"],
+                  usefulitempool: list["Item"],
+                  filleritempool: list["Item"],
+                  fill_locations: list["Location"]) -> None:
         # on a solo gen, fill can try to force Wily into sphere 2, but for most generations this is impossible
         # since MM2 can have a 2 item sphere 1, and 3 items are required for Wily
         if self.multiworld.players > 1:
@@ -265,19 +256,20 @@ class MM2World(World):
         finally:
             self.rom_name_available_event.set()  # make sure threading continues and errors are collected
 
-    def fill_slot_data(self) -> Dict[str, Any]:
+    def fill_slot_data(self) -> dict[str, Any]:
         return {
             "death_link": self.options.death_link.value,
             "weapon_damage": self.weapon_damage,
             "wily_5_weapons": self.wily_5_weapons,
         }
 
-    def interpret_slot_data(self, slot_data: Dict[str, Any]) -> Dict[str, Any]:
+    @staticmethod
+    def interpret_slot_data(slot_data: dict[str, Any]) -> dict[str, Any]:
         local_weapon = {int(key): value for key, value in slot_data["weapon_damage"].items()}
         local_wily = {int(key): value for key, value in slot_data["wily_5_weapons"].items()}
         return {"weapon_damage": local_weapon, "wily_5_weapons": local_wily}
 
-    def modify_multidata(self, multidata: Dict[str, Any]) -> None:
+    def modify_multidata(self, multidata: dict[str, Any]) -> None:
         # wait for self.rom_name to be available.
         self.rom_name_available_event.wait()
         rom_name = getattr(self, "rom_name", None)
