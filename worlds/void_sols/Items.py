@@ -1,0 +1,212 @@
+﻿from BaseClasses import Item, ItemClassification
+from .Names import ItemName
+
+class VoidSolsItem(Item):
+    """
+    Class representing an item in Void Sols.
+    """
+    game: str = "Void Sols"
+
+class ItemData:
+    """
+    Data class for defining item properties.
+    """
+    def __init__(self, code, classification, quantity=1):
+        self.code = code
+        self.classification = classification
+        self.quantity = quantity
+
+item_data_table = {
+    # Weapons
+    ItemName.sword: ItemData(1, ItemClassification.progression),
+    ItemName.dagger: ItemData(2, ItemClassification.progression),
+    ItemName.great_hammer: ItemData(3, ItemClassification.progression),
+    ItemName.pickaxe: ItemData(4, ItemClassification.useful),
+    ItemName.halberd: ItemData(5, ItemClassification.useful),
+    ItemName.katana: ItemData(6, ItemClassification.useful),
+    ItemName.gauntlets: ItemData(7, ItemClassification.useful),
+    ItemName.morningstar: ItemData(8, ItemClassification.useful),
+    ItemName.dual_handaxes: ItemData(9, ItemClassification.useful),
+    ItemName.scythe: ItemData(10, ItemClassification.useful),
+    ItemName.frying_pan: ItemData(11, ItemClassification.useful),
+
+    # Secondary
+    ItemName.parrying_shield: ItemData(100, ItemClassification.useful),
+    ItemName.throwing_dagger: ItemData(101, ItemClassification.useful),
+    ItemName.great_bow: ItemData(102, ItemClassification.useful),
+    ItemName.fishing_rod: ItemData(103, ItemClassification.progression),
+    ItemName.hunters_bow: ItemData(104, ItemClassification.useful),
+    ItemName.fire_talisman: ItemData(105, ItemClassification.progression),
+    ItemName.blizzard_talisman: ItemData(106, ItemClassification.progression),
+    ItemName.lightning_talisman: ItemData(107, ItemClassification.progression),
+    ItemName.crossbow: ItemData(108, ItemClassification.useful),
+    ItemName.heavy_shield: ItemData(109, ItemClassification.useful),
+
+    # Artifacts
+    ItemName.steel_feather: ItemData(200, ItemClassification.useful),
+    ItemName.obsidian_arrowhead: ItemData(201, ItemClassification.useful),
+    ItemName.ruby_phial: ItemData(202, ItemClassification.useful),
+    ItemName.bismuth_claw: ItemData(203, ItemClassification.useful),
+    ItemName.iron_pineapple: ItemData(204, ItemClassification.progression),
+    ItemName.jasper_chalice: ItemData(205, ItemClassification.useful),
+    ItemName.golden_clover: ItemData(206, ItemClassification.useful),
+    ItemName.emerald_phial: ItemData(207, ItemClassification.useful),
+    ItemName.topaz_phial: ItemData(208, ItemClassification.useful),
+    ItemName.silver_pouch: ItemData(209, ItemClassification.progression),
+    ItemName.brass_knuckles: ItemData(210, ItemClassification.useful),
+    ItemName.garnet_aegis: ItemData(211, ItemClassification.useful),
+    ItemName.brass_knuckles_plus: ItemData(212, ItemClassification.useful),
+
+    # Relics
+    ItemName.relic_of_agility: ItemData(300, ItemClassification.useful),
+    ItemName.relic_of_power: ItemData(301, ItemClassification.useful),
+    ItemName.relic_of_the_colossus: ItemData(302, ItemClassification.useful),
+    ItemName.relic_of_balance: ItemData(303, ItemClassification.useful),
+    ItemName.relic_of_finesse: ItemData(304, ItemClassification.useful),
+    ItemName.relic_of_redirection: ItemData(305, ItemClassification.useful),
+    ItemName.relic_of_invigoration: ItemData(306, ItemClassification.useful),
+    ItemName.relic_of_dousing: ItemData(307, ItemClassification.useful),
+    ItemName.relic_of_agility_plus: ItemData(308, ItemClassification.useful),
+    ItemName.relic_of_power_plus: ItemData(309, ItemClassification.useful),
+    ItemName.relic_of_the_colossus_plus: ItemData(310, ItemClassification.useful),
+    ItemName.relic_of_balance_plus: ItemData(311, ItemClassification.useful),
+    ItemName.relic_of_finesse_plus: ItemData(312, ItemClassification.useful),
+    ItemName.relic_of_mycology: ItemData(313, ItemClassification.useful),
+
+    # Flask Ingredients
+    ItemName.essence_of_a_hero: ItemData(400, ItemClassification.useful),
+    ItemName.courage_of_a_hero: ItemData(401, ItemClassification.useful),
+    ItemName.guile_of_a_traveler: ItemData(402, ItemClassification.useful),
+    ItemName.hubris_of_a_hero: ItemData(403, ItemClassification.useful),
+    ItemName.guile_of_a_rogue: ItemData(404, ItemClassification.useful),
+    ItemName.hubris_of_a_rogue: ItemData(405, ItemClassification.useful),
+    ItemName.courage_of_a_traveler: ItemData(406, ItemClassification.useful),
+    ItemName.essence_of_a_rogue: ItemData(407, ItemClassification.useful),
+
+    # Usable Items
+    ItemName.glitterstone_x1: ItemData(500, ItemClassification.filler, quantity=2),
+    ItemName.glitterstone_x2: ItemData(501, ItemClassification.filler),
+    ItemName.snare_trap_x2: ItemData(502, ItemClassification.filler),
+    ItemName.flaming_torch_x1: ItemData(503, ItemClassification.progression),
+    ItemName.flaming_torch_x2: ItemData(504, ItemClassification.progression),
+    ItemName.dynamite_x1: ItemData(505, ItemClassification.progression, quantity=2),
+    ItemName.mysterious_mushroom_x1: ItemData(506, ItemClassification.progression, quantity=5),
+    ItemName.harsh_pepper_x1: ItemData(507, ItemClassification.filler, quantity=2),
+    ItemName.ritual_needle_x2: ItemData(508, ItemClassification.filler),
+    ItemName.verdant_berry_x2: ItemData(509, ItemClassification.filler),
+    ItemName.quiver_of_holding_x1: ItemData(510, ItemClassification.useful),
+    ItemName.chewy_seaweed_x2: ItemData(511, ItemClassification.filler),
+    ItemName.purifying_needle_x2: ItemData(512, ItemClassification.filler),
+    ItemName.bursting_bubble_x1: ItemData(513, ItemClassification.filler),
+    ItemName.caltrops_x2: ItemData(514, ItemClassification.filler),
+    ItemName.stale_bread_x1: ItemData(515, ItemClassification.filler),
+    ItemName.stale_bread_x2: ItemData(516, ItemClassification.filler),
+    ItemName.pocket_barrel_x1: ItemData(517, ItemClassification.filler, quantity=5),
+    ItemName.pet_worm_x3: ItemData(518, ItemClassification.filler),
+
+    # Fish
+    ItemName.upstream_fish: ItemData(600, ItemClassification.progression),
+    ItemName.oceanic_fish: ItemData(601, ItemClassification.progression),
+    ItemName.flying_fish: ItemData(602, ItemClassification.progression),
+    ItemName.glitch_fish: ItemData(603, ItemClassification.progression),
+    ItemName.star_fish: ItemData(604, ItemClassification.progression),
+    ItemName.deep_fish: ItemData(605, ItemClassification.progression),
+    ItemName.frog_fish: ItemData(606, ItemClassification.progression),
+    ItemName.rich_fish: ItemData(607, ItemClassification.progression),
+    ItemName.sick_fish: ItemData(608, ItemClassification.progression),
+
+    # Maps
+    ItemName.prison_map_a: ItemData(700, ItemClassification.filler),
+    ItemName.prison_map_b: ItemData(701, ItemClassification.filler),
+    ItemName.prison_yard_map: ItemData(702, ItemClassification.filler),
+    ItemName.forest_map_a: ItemData(704, ItemClassification.filler),
+    ItemName.forest_map_b: ItemData(705, ItemClassification.filler),
+    ItemName.village_map: ItemData(706, ItemClassification.filler),
+    ItemName.deep_mines_map: ItemData(707, ItemClassification.filler),
+    ItemName.mines_map_1: ItemData(708, ItemClassification.filler),
+    ItemName.mines_map_2: ItemData(709, ItemClassification.filler),
+    ItemName.mines_map_3: ItemData(710, ItemClassification.filler),
+    ItemName.mines_map_4: ItemData(711, ItemClassification.filler),
+    ItemName.mountain_map_a: ItemData(712, ItemClassification.filler),
+    ItemName.mountain_map_b: ItemData(713, ItemClassification.filler),
+    ItemName.mountain_underpass_map: ItemData(714, ItemClassification.filler),
+    ItemName.supermax_map_a: ItemData(715, ItemClassification.filler),
+    ItemName.supermax_map_b: ItemData(716, ItemClassification.filler),
+    ItemName.supermax_map_c: ItemData(717, ItemClassification.filler),
+    ItemName.cultist_map_a: ItemData(718, ItemClassification.filler),
+    ItemName.cultist_map_b: ItemData(719, ItemClassification.filler),
+    ItemName.factory_map_a: ItemData(720, ItemClassification.filler),
+    ItemName.factory_map_b: ItemData(721, ItemClassification.filler),
+    ItemName.swamp_map: ItemData(722, ItemClassification.filler),
+    ItemName.apex_outskirts_map: ItemData(723, ItemClassification.filler),
+    ItemName.apex_town_map: ItemData(724, ItemClassification.filler),
+    ItemName.apex_hub_map: ItemData(725, ItemClassification.filler),
+    ItemName.hidden_room_map: ItemData(726, ItemClassification.useful), # Actually useful map
+
+    # Keys
+    ItemName.prison_key: ItemData(800, ItemClassification.progression),
+    ItemName.gate_key: ItemData(801, ItemClassification.progression),
+    ItemName.forest_bridge_key: ItemData(802, ItemClassification.progression),
+    ItemName.riverside_shack_key: ItemData(803, ItemClassification.progression),
+    ItemName.condemned_shack_key: ItemData(804, ItemClassification.progression),
+    ItemName.alchemist_cage_key: ItemData(805, ItemClassification.progression),
+    ItemName.mine_entrance_lift_key: ItemData(806, ItemClassification.progression),
+    ItemName.mountain_outpost_key: ItemData(807, ItemClassification.progression),
+    ItemName.minecart_wheel: ItemData(808, ItemClassification.progression),
+    ItemName.lift_key: ItemData(809, ItemClassification.progression),
+    ItemName.pit_catwalk_key: ItemData(810, ItemClassification.progression),
+    ItemName.temple_of_the_deep_key: ItemData(811, ItemClassification.progression),
+    ItemName.sol_forge_lab_key: ItemData(812, ItemClassification.progression),
+    ItemName.false_book: ItemData(813, ItemClassification.progression),
+    ItemName.central_cell_key: ItemData(814, ItemClassification.progression),
+    ItemName.minor_cell_key: ItemData(815, ItemClassification.progression),
+    ItemName.apex_outskirts_key: ItemData(816, ItemClassification.progression),
+    ItemName.infernal_key: ItemData(817, ItemClassification.progression),
+    ItemName.east_wing_key: ItemData(818, ItemClassification.progression),
+    ItemName.kings_emblem_right_half: ItemData(819, ItemClassification.progression),
+    ItemName.kings_emblem_left_half: ItemData(820, ItemClassification.progression),
+    ItemName.restricted_access_key: ItemData(821, ItemClassification.progression),
+    ItemName.data_disc_r: ItemData(822, ItemClassification.progression),
+    ItemName.data_disc_g: ItemData(823, ItemClassification.progression),
+    ItemName.data_disc_b: ItemData(824, ItemClassification.progression),
+    ItemName.master_bedroom_key: ItemData(825, ItemClassification.progression),
+    ItemName.apex_east_wing_key: ItemData(826, ItemClassification.progression),
+    ItemName.corroded_key: ItemData(827, ItemClassification.progression),
+    ItemName.guard_captains_key: ItemData(828, ItemClassification.progression),
+
+    # Misc
+    ItemName.metamorphic_alloy: ItemData(901, ItemClassification.progression, quantity=6),
+    ItemName.sol_alembic: ItemData(902, ItemClassification.progression, quantity=5),
+    ItemName.potions_increased: ItemData(903, ItemClassification.useful, quantity=6),
+    ItemName.minor_sol_shard: ItemData(904, ItemClassification.filler, quantity=32),
+    ItemName.major_sol_shard: ItemData(905, ItemClassification.filler, quantity=14),
+    ItemName.strange_totem: ItemData(906, ItemClassification.progression),
+    ItemName.relics_improved: ItemData(907, ItemClassification.useful, quantity=5),
+    ItemName.fish_tokens_x2: ItemData(908, ItemClassification.progression, quantity=9),
+    ItemName.strange_curio_1: ItemData(909, ItemClassification.progression),
+    ItemName.strange_curio_2: ItemData(910, ItemClassification.progression),
+    ItemName.strange_curio_3: ItemData(911, ItemClassification.progression),
+    ItemName.strange_curio_4: ItemData(912, ItemClassification.progression),
+
+    # Sols
+    ItemName.sols_1: ItemData(913, ItemClassification.filler, quantity=0),
+    ItemName.sols_25: ItemData(914, ItemClassification.filler, quantity=0),
+    ItemName.sols_50: ItemData(915, ItemClassification.filler, quantity=0),
+    ItemName.sols_100: ItemData(916, ItemClassification.filler, quantity=0),
+    ItemName.sols_250: ItemData(917, ItemClassification.filler, quantity=0),
+    
+    ItemName.victory: ItemData(1000, ItemClassification.progression),
+    
+    # Boss Events (Logic Only)
+    ItemName.prison_warden_defeated_event: ItemData(None, ItemClassification.progression),
+    ItemName.forest_poacher_defeated_event: ItemData(None, ItemClassification.progression),
+    ItemName.mountain_groundskeeper_defeated_event: ItemData(None, ItemClassification.progression),
+    ItemName.greater_void_worm_defeated_event: ItemData(None, ItemClassification.progression),
+    ItemName.cultist_amalgamate_defeated_event: ItemData(None, ItemClassification.progression),
+    ItemName.supermax_prison_infernal_warden_defeated_event: ItemData(None, ItemClassification.progression),
+    ItemName.factory_immaculate_defeated_event: ItemData(None, ItemClassification.progression),
+    ItemName.apex_gatekeeper_defeated_event: ItemData(None, ItemClassification.progression),
+    ItemName.apex_zenith_defeated_event: ItemData(None, ItemClassification.progression),
+}
+
+all_items = {name: data.code for name, data in item_data_table.items()}
