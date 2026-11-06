@@ -1,0 +1,35 @@
+<FactionBox>:
+    orientation: 'vertical'
+    padding: [10,5,10,5]
+    size_hint_y: 0.14
+
+<CommanderGroup>:
+    orientation: 'horizontal'
+
+<CommanderButton>:
+    text_size: self.size
+    size_hint: (None, 0.8)
+    width: 100
+    markup: True
+    halign: 'center'
+    valign: 'middle'
+    padding_x: 5
+    outline_width: 1
+    disabled: True
+    on_release: setattr(self, 'state', 'down')
+
+<ItemTracker>:
+    orientation: 'horizontal'
+    padding_y: 5
+
+<ItemLabel>:
+    size_hint_x: None
+    size: self.texture_size
+    pos_hint: {'left': 1}
+    padding: 30
+
+<LevelLabel>:
+    size_hint_x: None
+    size: self.texture_size
+    pos_hint: {'left': 1}
+    padding: 30
