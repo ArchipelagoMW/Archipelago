@@ -48,8 +48,10 @@ def get_random_filler_item_name(world: APQuestWorld) -> str:
     # For this purpose, we need to use a random generator.
 
     # IMPORTANT: Whenever you need to use a random generator, you must use world.random.
-    # This ensures that generating with the same generator seed twice yields the same output.
-    # DO NOT use a bare random object from Python's built-in random module.
+    # world.random is an instance of Python's random.Random class, but seeded deterministically by the multiworld seed.
+    # This ensures that generating with the same multiworld seed twice yields the same output.
+    # Do not create your own "bare" instance of Random, unless you seed that instance as well
+    #  (either with a static number, or using an output of world.random as the seed).
     if world.random.randint(0, 99) < world.options.trap_chance:
         return "Math Trap"
     return "Confetti Cannon"
