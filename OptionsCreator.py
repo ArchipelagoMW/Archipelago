@@ -413,7 +413,7 @@ class OptionsCreator(ThemedApp):
                 "text": option.get_option_name(choice),
                 "on_release": lambda val=choice: set_value(option.get_option_name(val), option.name_lookup[val])
             }
-            for choice in option.name_lookup
+            for choice in option.name_lookup if option.options_visibilities[choice] & Visibility.simple_ui
         ]
         dropdown = MDDropdownMenu(caller=main_button, items=items)
         self.options[name] = option.name_lookup[option.default] if not default_string else option.default

@@ -2,7 +2,7 @@ import collections.abc
 import json
 import os
 from textwrap import dedent
-from typing import Dict, Union
+from typing import Dict, Union, Any
 from docutils.core import publish_parts
 
 import yaml
@@ -29,6 +29,9 @@ def render_options_page(template: str, world_name: str, is_complex: bool = False
         return redirect("games")
     visibility_flag = Options.Visibility.complex_ui if is_complex else Options.Visibility.simple_ui
 
+    def visible(id: int, option: type[Options.Option[Any]]) -> bool:
+        return option.options_visibilities.get(id, Options.Visibility.all) & visibility_flag != 0
+
     start_collapsed = {"Game Options": False}
     for group in world.web.option_groups:
         start_collapsed[group.name] = group.start_collapsed
@@ -42,6 +45,7 @@ def render_options_page(template: str, world_name: str, is_complex: bool = False
         issubclass=issubclass,
         Options=Options,
         theme=get_world_theme(world_name),
+        option_visible=visible
     )
 
 
