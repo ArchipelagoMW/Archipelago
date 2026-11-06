@@ -15,7 +15,7 @@ import requests
 import shutil
 import subprocess  # nosec
 from tkinter import messagebox
-from typing import Any, Dict, Set, List
+from typing import Any, Dict, Set
 import urllib
 import urllib.parse
 
@@ -114,7 +114,10 @@ def update(target_asset: str, url: str) -> bool:
         response = send_request(url)
         if response.response_code == 403:  # rate limit exceeded
             return False
-        assets = response.data[0]["assets"]
+        if 0 in response.data:
+            assets = response.data[0]["assets"]
+        else:
+            assets = response.data["assets"]
         for asset in assets:
             if target_asset in asset["name"]:
                 newest_date: str = asset["updated_at"]
@@ -196,14 +199,14 @@ def install() -> None:
     if Utils.is_windows:
         windows_path = os.environ["WINDIR"]
         extractor_path = f"{windows_path}/System32/Extrac32"
-        subprocess.run([extractor_path, "/Y", "/E", "saving_princess.cab"])  #nosec
+        subprocess.run([extractor_path, "/Y", "/E", "saving_princess.cab"])  # nosec
     else:
         wine_path = shutil.which("wine")
         p7zip_path = shutil.which("7z")
         if wine_path is not None:
-            subprocess.run([wine_path, "Extrac32", "/Y", "/E", "saving_princess.cab"])  #nosec
+            subprocess.run([wine_path, "Extrac32", "/Y", "/E", "saving_princess.cab"])  # nosec
         elif p7zip_path is not None:
-            subprocess.run([p7zip_path, "e", "saving_princess.cab"])  #nosec
+            subprocess.run([p7zip_path, "e", "saving_princess.cab"])  # nosec
         else:
             error = "Could not find neither wine nor 7z.\n\nPlease install either the wine or the p7zip package."
             messagebox.showerror("Missing package!", f"Error: {error}")
