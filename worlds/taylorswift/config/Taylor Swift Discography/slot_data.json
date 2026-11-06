@@ -1,0 +1,84 @@
+{
+  "slot_data_keys": {
+    "include_debut": {
+      "type": "album",
+      "display_name": "Taylor Swift"
+    },
+    "include_fearless": {
+      "type": "album",
+      "display_name": "Fearless"
+    },
+    "include_fearless_tv": {
+      "type": "album",
+      "display_name": "Fearless (Taylor's Version)"
+    },
+    "include_speak_now": {
+      "type": "album",
+      "display_name": "Speak Now"
+    },
+    "include_speak_now_tv": {
+      "type": "album",
+      "display_name": "Speak Now (Taylor's Version)"
+    },
+    "include_red": {
+      "type": "album",
+      "display_name": "Red"
+    },
+    "include_red_tv": {
+      "type": "album",
+      "display_name": "Red (Taylor's Version)"
+    },
+    "include_1989": {
+      "type": "album",
+      "display_name": "1989"
+    },
+    "include_1989_tv": {
+      "type": "album",
+      "display_name": "1989 (Taylor's Version)"
+    },
+    "include_reputation": {
+      "type": "album",
+      "display_name": "Reputation"
+    },
+    "include_lover": {
+      "type": "album",
+      "display_name": "Lover"
+    },
+    "include_folklore": {
+      "type": "album",
+      "display_name": "Folklore"
+    },
+    "include_evermore": {
+      "type": "album",
+      "display_name": "Evermore"
+    },
+    "include_midnights": {
+      "type": "album",
+      "display_name": "Midnights"
+    },
+    "include_ttpd": {
+      "type": "album",
+      "display_name": "The Tortured Poets Department"
+    },
+    "include_tloas": {
+      "type": "album",
+      "display_name": "The Life of a Showgirl"
+    },
+    "include_vault_tracks": {
+      "type": "song_option",
+      "display_name": "Vault Tracks"
+    },
+    "include_re_recordings": {
+      "type": "album",
+      "display_name": "Re-recordings"
+    },
+    "include_deluxe": {
+      "type": "song_option",
+      "display_name": "Include Deluxe"
+    },
+    "include_extra": {
+      "type": "song_option",
+      "display_name": "Include Extra"
+    }
+  }
+}
