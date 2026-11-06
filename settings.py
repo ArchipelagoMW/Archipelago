@@ -529,6 +529,12 @@ class ServerOptions(Group):
     These overwrite command line arguments!
     """
 
+    class Host(str):
+        """
+        Host address to use when running a local server
+        Default/null is "localhost", an empty string will attempt to resolve your public IP address
+        """
+
     class ServerPassword(str):
         """
         Allows for clients to log on and manage the server.  If this is null, no remote administration is possible.
@@ -611,7 +617,7 @@ class ServerOptions(Group):
         OFF = 0
         ON = 1
 
-    host: str | None = None
+    host: Host | None = Host("localhost")
     port: int = 38281
     password: str | None = None
     multidata: str | None = None
