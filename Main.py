@@ -323,13 +323,21 @@ def main(args, seed=None, baked_server_options: dict[str, object] | None = None)
 
                 # get spheres -> filter address==None -> skip empty
                 spheres: list[dict[int, set[int]]] = []
+                # In order to make the excluded locations not appear to be early for hints and prioritize non-excluded
+                # locations, place the excluded locations as the last sphere
+                excluded_sphere: dict[int, set[int]] = {}
                 for sphere in multiworld.get_sendable_spheres():
                     current_sphere: dict[int, set[int]] = collections.defaultdict(set)
                     for sphere_location in sphere:
-                        current_sphere[sphere_location.player].add(sphere_location.address)
+                        if sphere_location.progress_type != LocationProgressType.EXCLUDED:
+                            current_sphere[sphere_location.player].add(sphere_location.address)
+                        else:
+                            excluded_sphere[sphere_location.player].add(sphere_location.address)
 
                     if current_sphere:
                         spheres.append(dict(current_sphere))
+                if excluded_sphere:
+                    spheres.append(dict(excluded_sphere))
 
                 multidata: NetUtils.MultiData = {
                     "slot_data": slot_data,
