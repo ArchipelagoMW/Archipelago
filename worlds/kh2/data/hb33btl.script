@@ -1,0 +1,21 @@
+Program 0x8E
+AllocEnemy 3145728
+Party DEFAULT
+AllocEffect 0x100000 0x80000
+Mission 0x196 "HB33_FM_LEX"
+BattleLevel 99
+Spawn "b_80"
+
+Program 0x9B
+AllocEnemy 3670016
+Party DEFAULT
+Mission 0x199 "HB33_FM_LAR"
+BattleLevel 99
+Spawn "b_81"
+
+Program 0x8F
+AllocEnemy 3670016
+Party DEFAULT
+Mission 0x199 "HB33_FM_LAR"
+BattleLevel 99
+Spawn "b_81"
