@@ -357,6 +357,8 @@ components: list[Component] = [
               description="Install an APWorld to play games not included with Archipelago by default."),
     Component('Text Client', 'CommonClient', 'ArchipelagoTextClient', func=launch_textclient,
               description="Connect to a multiworld using the text client."),
+    Component('Color Picker', 'ColorPicker', 'ArchipelagoColorPicker', component_type=Type.TOOL,
+              description="Visual adjuster for background and text color for Archipelago."),
     # Functions
     Component("Open host.yaml", func=open_host_yaml,
               description="Open the host.yaml file to change settings for generation, games, and more."),
