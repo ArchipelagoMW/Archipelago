@@ -3,6 +3,7 @@ import string
 import typing
 
 from BaseClasses import Item, MultiWorld, Region, Location, Entrance, Tutorial, ItemClassification
+from . import Items
 from .Items import item_table, faction_table
 from .Locations import location_table
 from .Regions import create_regions
@@ -73,6 +74,7 @@ class WargrooveWorld(World):
 
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = location_table
+    item_name_groups = Items.item_name_groups
 
     def _get_slot_data(self):
         return {

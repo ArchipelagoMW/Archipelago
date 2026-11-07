@@ -254,11 +254,17 @@ class FreeText(Option[str]):
 
     @classmethod
     def from_text(cls, text: str) -> FreeText:
+        cls.validate_text(text)
         return cls(text)
 
     @classmethod
     def from_any(cls, data: typing.Any) -> FreeText:
         return cls.from_text(str(data))
+
+    @classmethod
+    def validate_text(cls, text: str) -> None:
+        """Override to validate text inputs during yaml processing"""
+        return
 
     @classmethod
     def get_option_name(cls, value: str) -> str:
@@ -564,7 +570,8 @@ class Choice(NumericOption):
 
 
 class TextChoice(Choice):
-    """Allows custom string input and offers choices. Choices will resolve to int and text will resolve to string"""
+    """Allows custom string input and offers choices. Choices will resolve to int and text will resolve to string.
+    Custom text inputs should be validated by overriding 'validate_text' and raising if invalid."""
     value: str | int
 
     def __init__(self, value: str | int):
@@ -585,7 +592,13 @@ class TextChoice(Choice):
         for option_name, value in cls.options.items():
             if option_name.lower() == text.lower():
                 return cls(value)
+        cls.validate_text(text)
         return cls(text)
+
+    @classmethod
+    def validate_text(cls, value: str) -> None:
+        """Override to validate text during yaml processing"""
+        return
 
     @classmethod
     def get_option_name(cls, value: str | int) -> str:
@@ -938,26 +951,27 @@ class OptionCounter(OptionDict):
     min: int | None = None
     max: int | None = None
     cull_zeroes: bool = False
+    value: collections.Counter[str]
 
     def __init__(self, value: dict[str, int]) -> None:
-        cleaned_dict = {}
+        cleaned_dict = collections.Counter()
 
         invalid_value_errors = []
-        for key, value in value.items():
-            if not isinstance(value, (int, float)) or int(value) != value:
-                invalid_value_errors += [f"Invalid value {value} for key {key}, must be an integer."]
+        for key, subvalue in value.items():
+            if not isinstance(subvalue, (int, float)) or int(subvalue) != subvalue:
+                invalid_value_errors += [f"Invalid value {subvalue} for key {key}, must be an integer."]
                 continue
 
-            if self.cull_zeroes and value == 0:
+            if self.cull_zeroes and subvalue == 0:
                 continue
 
-            cleaned_dict[key] = int(value)
+            cleaned_dict[key] = int(subvalue)
 
         if invalid_value_errors:
             type_errors = [f"For option {self.__class__.__name__}:"] + invalid_value_errors
-            raise TypeError("\n".join(invalid_value_errors))
+            raise TypeError("\n".join(type_errors))
 
-        super(OptionCounter, self).__init__(collections.Counter(cleaned_dict))
+        self.value = cleaned_dict
 
     def verify(self, world: type[World], player_name: str, plando_options: PlandoOptions) -> None:
         super(OptionCounter, self).verify(world, player_name, plando_options)
@@ -1198,14 +1212,14 @@ class ConnectionsMeta(AssembleOptions):
 
 
 class PlandoConnection(typing.NamedTuple):
-    class Direction:
+    class Direction(enum.StrEnum):
         entrance = "entrance"
         exit = "exit"
         both = "both"
 
     entrance: str
     exit: str
-    direction: typing.Literal["entrance", "exit", "both"]  # TODO: convert Direction to StrEnum once 3.10 is dropped
+    direction: Direction
     percentage: int = 100
 
 

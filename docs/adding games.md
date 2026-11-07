@@ -104,7 +104,7 @@ A bare minimum world implementation must satisfy the following requirements:
 * The `/worlds/{game}` folder contains an `__init__.py`
 * Any subfolders within `/worlds/{game}` that contain `*.py` files also contain an `__init__.py` for frozen build 
   packaging
-* The game folder has at least one game_info doc named with follow the format `{language_code}_{game_name}.md`
+* The game folder has at least one game_info doc named following the format `{language_code}_{game_name}.md`
 * The game folder has at least one setup doc
 * There must be a `World` subclass in your game folder (typically in `/worlds/{game}/__init__.py`) where you create 
   your world and define all of its rules and features
