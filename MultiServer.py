@@ -540,6 +540,13 @@ class Context:
         # there might be a better place to put this.
         race_mode = decoded_obj.get("race_mode", 0)
         self.read_data["race_mode"] = lambda: race_mode
+        classifications = decoded_obj.get("classifications", {
+            "filler": 0b0,
+            "progression": 0b1,
+            "excellent": 0b10,
+            "trap": 0b100
+        })
+        self.read_data["classifications"] = lambda: classifications
         mdata_ver = decoded_obj["minimum_versions"]["server"]
         if mdata_ver > version_tuple:
             raise RuntimeError(f"Supplied Multidata (.archipelago) requires a server of at least version {mdata_ver}, "

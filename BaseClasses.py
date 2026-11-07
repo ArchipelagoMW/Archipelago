@@ -1574,6 +1574,12 @@ class ItemClassification:
         "currency": 0b100000000,
         # Item that acts as a currency in-game
     }
+    _aliases: dict[str, int] = {
+        "progression_deprioritized_skip_balancing": 0b011001,
+        "progression_deprioritized": 0b010001,
+        "progression_skip_balancing": 0b001001,
+        "useful": 0b100010,
+    }
 
     value: int
 
@@ -1648,10 +1654,12 @@ class ItemClassification:
 
     @classmethod
     def register_classification(cls, name: str) -> None:
-        cls._classifications[name] = max(cls._classifications.values()) + 1
+        cls._classifications[name] = max(cls._classifications.values()) << 1
 
     @classmethod
     def get_classification(cls, name: str) -> ItemClassification:
+        if name in cls._aliases:
+            return ItemClassification(cls._aliases[name])
         if name not in cls._classifications:
             cls.register_classification(name)
         return ItemClassification(cls._classifications[name])
@@ -1715,22 +1723,22 @@ class ItemClassification:
     def progression_deprioritized_skip_balancing(cls) -> ItemClassification:
         """ Since a common case of both skip_balancing and deprioritized is "insignificant progression",
         these items often want both flags. """
-        return cls.progression | cls.deprioritized | cls.skip_balancing
+        return cls.get_classification("progression_deprioritized_skip_balancing")
 
     @classproperty
     def progression_skip_balancing(cls) -> ItemClassification:
         """ Item that is logically relevant, but progression balancing should not touch. """
-        return cls.progression | cls.skip_balancing
+        return cls.get_classification("progression_skip_balancing")
 
     @classproperty
     def progression_deprioritized(cls) -> ItemClassification:
         """ Item that is logically relevant, but should not be considered for priority locations. """
-        return cls.progression | cls.deprioritized
+        return cls.get_classification("progression_deprioritized")
 
     @classproperty
     def useful(cls) -> ItemClassification:
         """ Deprecated. Use never_exclude for exclusion behaviors, and excellent for player-facing behaviors. """
-        return cls.never_exclude | cls.excellent
+        return cls.get_classification("useful")
 
 class Item:
     game: str = "Generic"

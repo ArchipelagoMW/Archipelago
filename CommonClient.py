@@ -1052,6 +1052,7 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
             game = ctx.slot_info[ctx.slot][1]
         ctx.stored_data_notification_keys.add(f"_read_item_name_groups_{game}")
         ctx.stored_data_notification_keys.add(f"_read_location_name_groups_{game}")
+        ctx.stored_data_notification_keys.add(f"_read_classifications")
         msgs = []
         if ctx.locations_checked:
             msgs.append({"cmd": "LocationChecks",
