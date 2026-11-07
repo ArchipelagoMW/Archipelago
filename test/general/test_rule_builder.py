@@ -119,7 +119,8 @@ class RuleBuilderTestCase(unittest.TestCase):
 
             @override
             def create_item(self, name: str) -> RuleBuilderItem:
-                classification = ItemClassification.filler if name == "Filler" else ItemClassification.progression
+                classification: ItemClassification = ItemClassification.filler if name == "Filler"\
+                    else ItemClassification.progression
                 return RuleBuilderItem(name, classification, self.item_name_to_id[name], self.player)
 
             @override

@@ -12,21 +12,21 @@ class ItemData(NamedTuple):
     progression: bool
     useful: bool = False  # primarily use this for incredibly useful items of their class, like Metal Blade
     skip_balancing: bool = False
-
+    additional_flags: tuple[str,...] = ()
 
 class MM3Item(Item):
     game = "Mega Man 3"
 
 
 robot_master_weapon_table = {
-    needle_cannon: ItemData(0x0001, True),
-    magnet_missile: ItemData(0x0002, True, True),
-    gemini_laser: ItemData(0x0003, True),
-    hard_knuckle: ItemData(0x0004, True),
-    top_spin: ItemData(0x0005, True, True),
-    search_snake: ItemData(0x0006, True),
-    spark_shock: ItemData(0x0007, True),
-    shadow_blade: ItemData(0x0008, True, True),
+    needle_cannon: ItemData(0x0001, True, additional_flags=("weapon",)),
+    magnet_missile: ItemData(0x0002, True, True, additional_flags=("weapon",)),
+    gemini_laser: ItemData(0x0003, True, additional_flags=("weapon",)),
+    hard_knuckle: ItemData(0x0004, True, additional_flags=("weapon",)),
+    top_spin: ItemData(0x0005, True, True, additional_flags=("weapon",)),
+    search_snake: ItemData(0x0006, True, additional_flags=("weapon",)),
+    spark_shock: ItemData(0x0007, True, additional_flags=("weapon",)),
+    shadow_blade: ItemData(0x0008, True, True, additional_flags=("weapon",)),
 }
 
 stage_access_table = {
@@ -45,16 +45,16 @@ stage_access_table = {
 }
 
 rush_item_table = {
-    rush_coil: ItemData(0x0011, True, True),
-    rush_marine: ItemData(0x0012, True),
-    rush_jet: ItemData(0x0013, True, True),
+    rush_coil: ItemData(0x0011, True, True, additional_flags=("Rush", "movement")),
+    rush_marine: ItemData(0x0012, True, additional_flags=("Rush", "movement")),
+    rush_jet: ItemData(0x0013, True, True, additional_flags=("Rush", "movement")),
 }
 
 filler_item_table = {
     one_up: ItemData(0x0020, False),
-    weapon_energy: ItemData(0x0021, False),
-    health_energy: ItemData(0x0022, False),
-    e_tank: ItemData(0x0023, False, True),
+    weapon_energy: ItemData(0x0021, False, additional_flags=("recovery",)),
+    health_energy: ItemData(0x0022, False, additional_flags=("recovery",)),
+    e_tank: ItemData(0x0023, False, True, additional_flags=("recovery",)),
 }
 
 filler_item_weights = {

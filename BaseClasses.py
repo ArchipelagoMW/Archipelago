@@ -298,9 +298,9 @@ class MultiWorld():
 
         for group_id, group in self.groups.items():
             def find_common_pool(players: Set[int], shared_pool: Set[str]) -> Tuple[
-                Optional[Dict[int, Dict[str, int]]], Optional[Dict[str, int]]
+                Optional[Dict[int, Dict[str, int]]], Optional[Dict[str, ItemClassification]]
             ]:
-                classifications: Dict[str, int] = collections.defaultdict(int)
+                classifications: Dict[str, ItemClassification] = collections.defaultdict(lambda: ItemClassification(0))
                 counters = {player: {name: 0 for name in shared_pool} for player in players}
                 for item in self.itempool:
                     if item.player in counters and item.name in shared_pool:
@@ -1545,50 +1545,200 @@ class Location:
     def hint_text(self) -> str:
         return "at " + self.name.replace("_", " ").replace("-", " ")
 
+class classproperty(object):
+    def __init__(self, f):
+        self.f = f
+    def __get__(self, obj, owner):
+        return self.f(owner)
 
-class ItemClassification(IntFlag):
-    filler = 0b00000
-    """ aka trash, as in filler items like ammo, currency etc """
+class ItemClassification:
+    _classifications: ClassVar[dict[str, int]] = {
+        # Some classifications are present by default
+        # Classification numbering in this dict are the number of shifts needed to get the flag
+        # Main flags, elaborated on in their members
+        "filler": 0b0,
+        "progression": 0b1,
+        "excellent": 0b10,
+        "trap": 0b100,
+        "skip_balancing": 0b1000,
+        "deprioritized": 0b10000,
+        "never_exclude": 0b100000,
 
-    progression = 0b00001
-    """ Item that is logically relevant.
-    Protects this item from being placed on excluded or unreachable locations. """
+        # Canon extra flags
+        "mcguffin": 0b1000000,
+        # Typically a progression item that does little to nothing by itself, but can be important in large quantities
 
-    useful = 0b00010
-    """ Item that is especially useful.
-    Protects this item from being placed on excluded or unreachable locations.
-    When combined with another flag like "progression", it means "an especially useful progression item". """
+        "weapon": 0b10000000,
+        # An item used to defeat enemies within the game
 
-    trap = 0b00100
-    """ Item that is detrimental in some way. """
+        "currency": 0b100000000,
+        # Item that acts as a currency in-game
+    }
+    _aliases: dict[str, int] = {
+        "progression_deprioritized_skip_balancing": 0b011001,
+        "progression_deprioritized": 0b010001,
+        "progression_skip_balancing": 0b001001,
+        "useful": 0b100010,
+    }
 
-    skip_balancing = 0b01000
-    """ should technically never occur on its own
-    Item that is logically relevant, but progression balancing should not touch.
+    value: int
 
-    Possible reasons for why an item should not be pulled ahead by progression balancing:
-    1. This item is quite insignificant, so pulling it earlier doesn't help (currency/etc.)
-    2. It is important for the player experience that this item is evenly distributed in the seed (e.g. goal items) """
+    def __init__(self, value: int):
+        self.value = value
 
-    deprioritized = 0b10000
-    """ Should technically never occur on its own.
-    Will not be considered for priority locations,
-    unless Priority Locations Fill runs out of regular progression items before filling all priority locations.
+    def __contains__(self, item: ItemClassification | int):
+        if isinstance(item, int):
+            item = ItemClassification(item)
+        return self.value & item.value == item.value
 
-    Should be used for items that would feel bad for the player to find on a priority location.
-    Usually, these are items that are plentiful or insignificant. """
+    def __iter__(self):
+        # num must be a positive integer
+        num = self.value
+        if num < 0:
+            raise ValueError('%r is not a positive integer' % num)
+        while num:
+            b = num & (~num + 1)
+            yield ItemClassification(b)
+            num ^= b
 
-    progression_deprioritized_skip_balancing = 0b11001
-    """ Since a common case of both skip_balancing and deprioritized is "insignificant progression",
-    these items often want both flags. """
+    def __len__(self):
+        return self.value.bit_count()
 
-    progression_skip_balancing = 0b01001  # only progression gets balanced
-    progression_deprioritized = 0b10001  # only progression can be placed during priority fill
+    def __str__(self):
+        return "<" + ", ".join(self.get_classifications()) + ">"
+
+    def __class_getitem__(cls, item: str):
+        return cls.get_classification(item)
+
+    def __eq__(self, other: ItemClassification | int) -> bool:
+        if isinstance(other, int):
+            return self.value == other
+        return self.value == other.value
+
+    def __and__(self, other: ItemClassification | int) -> ItemClassification:
+        if isinstance(other, int):
+            other = ItemClassification(other)
+        return ItemClassification(self.value & other.value)
+
+    def __or__(self, other: ItemClassification | int) -> ItemClassification:
+        if isinstance(other, int):
+            other = ItemClassification(other)
+        return ItemClassification(self.value | other.value)
+
+    def __xor__(self, other: ItemClassification | int) -> ItemClassification:
+        if isinstance(other, int):
+            other = ItemClassification(other)
+        return ItemClassification(self.value ^ other.value)
+
+    def __neg__(self) -> ItemClassification:
+        return ItemClassification(~self.value + 1)
+
+    def __hash__(self):
+        return hash(self.value)
 
     def as_flag(self) -> int:
         """As Network API flag int."""
-        return int(self & 0b00111)
+        return int(self.value & ~0b111000)
 
+    def get_classifications(self) -> list[str]:
+        classifications: list[str] = []
+        for name, flag in self._classifications.items():
+            if flag > 0:
+                if self.value & flag == flag:
+                    classifications.append(name)
+            else:
+                # since filler is the absence of progression/excellent/trap, check for it explicitly
+                if self.value & 0b111 == 0:
+                    classifications.append(name)
+        return classifications
+
+    @classmethod
+    def register_classification(cls, name: str) -> None:
+        cls._classifications[name] = max(cls._classifications.values()) << 1
+
+    @classmethod
+    def get_classification(cls, name: str) -> ItemClassification:
+        if name in cls._aliases:
+            return ItemClassification(cls._aliases[name])
+        if name not in cls._classifications:
+            cls.register_classification(name)
+        return ItemClassification(cls._classifications[name])
+
+    @classmethod
+    def get_classification_name(cls, value: ItemClassification | int) -> str:
+        if isinstance(value, ItemClassification):
+            value = value.value
+        return next((name for name, flags in cls._classifications.items() if flags == value), f"Unknown flag {value:x}")
+
+    @classproperty
+    def filler(cls) -> ItemClassification:
+        """ aka trash, as in filler items like ammo, currency etc """
+        return cls.get_classification("filler")
+
+    @classproperty
+    def progression(cls) -> ItemClassification:
+        """ Item that is logically relevant.
+        Protects this item from being placed on excluded or unreachable locations. """
+        return cls.get_classification("progression")
+
+    @classproperty
+    def excellent(cls) -> ItemClassification:
+        """ Item that is especially useful. When combined with another flag like "progression",
+        it means "an especially useful progression item". """
+        return cls.get_classification("excellent")
+
+    @classproperty
+    def trap(cls) -> ItemClassification:
+        """ Item that is detrimental in some way. """
+        return cls.get_classification("trap")
+
+    @classproperty
+    def skip_balancing(cls) -> ItemClassification:
+        """ should technically never occur on its own
+        Item that is logically relevant, but progression balancing should not touch.
+
+        Possible reasons for why an item should not be pulled ahead by progression balancing:
+        1. This item is quite insignificant, so pulling it earlier doesn't help (currency/etc.)
+        2. It is important for the player experience that this item is evenly distributed in the seed (e.g. goal items)
+        """
+        return cls.get_classification("skip_balancing")
+
+    @classproperty
+    def deprioritized(cls) -> ItemClassification:
+        """ Should technically never occur on its own.
+        Will not be considered for priority locations,
+        unless Priority Locations Fill runs out of regular progression items before filling all priority locations.
+
+        Should be used for items that would feel bad for the player to find on a priority location.
+        Usually, these are items that are plentiful or insignificant. """
+        return cls.get_classification("deprioritized")
+
+    @classproperty
+    def never_exclude(cls) -> ItemClassification:
+        """ Protects this item from being placed on excluded or unreachable locations. """
+        return cls.get_classification("never_exclude")
+
+
+    @classproperty
+    def progression_deprioritized_skip_balancing(cls) -> ItemClassification:
+        """ Since a common case of both skip_balancing and deprioritized is "insignificant progression",
+        these items often want both flags. """
+        return cls.get_classification("progression_deprioritized_skip_balancing")
+
+    @classproperty
+    def progression_skip_balancing(cls) -> ItemClassification:
+        """ Item that is logically relevant, but progression balancing should not touch. """
+        return cls.get_classification("progression_skip_balancing")
+
+    @classproperty
+    def progression_deprioritized(cls) -> ItemClassification:
+        """ Item that is logically relevant, but should not be considered for priority locations. """
+        return cls.get_classification("progression_deprioritized")
+
+    @classproperty
+    def useful(cls) -> ItemClassification:
+        """ Deprecated. Use never_exclude for exclusion behaviors, and excellent for player-facing behaviors. """
+        return cls.get_classification("useful")
 
 class Item:
     game: str = "Generic"
@@ -1624,6 +1774,10 @@ class Item:
         return ItemClassification.progression_skip_balancing in self.classification
 
     @property
+    def never_exclude(self) -> bool:
+        return ItemClassification.never_exclude in self.classification
+
+    @property
     def useful(self) -> bool:
         return ItemClassification.useful in self.classification
 
@@ -1641,7 +1795,7 @@ class Item:
 
     @property
     def excludable(self) -> bool:
-        return not (self.advancement or self.useful)
+        return not (self.advancement or self.never_exclude)
 
     @property
     def flags(self) -> int:
@@ -1650,6 +1804,8 @@ class Item:
     @property
     def is_event(self) -> bool:
         return self.code is None
+
+
 
     def __eq__(self, other: object) -> bool:
         if not isinstance(other, Item):

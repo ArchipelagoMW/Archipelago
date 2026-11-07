@@ -7,7 +7,7 @@ from BaseClasses import Tutorial, ItemClassification, MultiWorld, Item, Location
 from worlds.AutoWorld import World, WebWorld
 from .names import (gamma, gemini_man_stage, needle_man_stage, hard_man_stage, magnet_man_stage, top_man_stage,
                     snake_man_stage, spark_man_stage, shadow_man_stage, rush_marine, rush_jet, rush_coil)
-from .items import (item_table, item_names, MM3Item, filler_item_weights, robot_master_weapon_table,
+from .items import (item_table, item_names, ItemData, MM3Item, filler_item_weights, robot_master_weapon_table,
                     stage_access_table, rush_item_table, lookup_item_to_id)
 from .locations import (MM3Location, mm3_regions, MM3Region, lookup_location_to_id,
                         location_groups)
@@ -128,13 +128,16 @@ class MM3World(World):
         self.multiworld.completion_condition[self.player] = lambda state: state.has("Victory", self.player)
 
     def create_item(self, name: str, force_non_progression: bool = False) -> MM3Item:
-        item = item_table[name]
+        item: ItemData = item_table[name]
         classification = ItemClassification.filler
         if item.progression and not force_non_progression:
             classification = ItemClassification.progression_skip_balancing \
                 if item.skip_balancing else ItemClassification.progression
         if item.useful:
-            classification |= ItemClassification.useful
+            classification |= ItemClassification.excellent
+        if item.additional_flags:
+            for flag in item.additional_flags:
+                classification |= ItemClassification.get_classification(flag)
         return MM3Item(name, classification, item.code, self.player)
 
     def get_filler_item_name(self) -> str:

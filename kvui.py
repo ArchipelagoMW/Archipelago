@@ -1389,15 +1389,13 @@ class KivyJSONtoTextParser(JSONtoTextParser):
 
     def _handle_item_name(self, node: JSONMessagePart):
         flags = node.get("flags", 0)
+        classifications: list[str] = self.ctx.stored_data.get("_read_classifications")
         item_types = []
-        if flags & 0b001:  # advancement
-            item_types.append("progression")
-        if flags & 0b010:  # useful
-            item_types.append("useful")
-        if flags & 0b100:  # trap
-            item_types.append("trap")
+        for i, name in enumerate(classifications):
+            if flags & (1 << i):
+                item_types.append(name)
         if not item_types:
-            item_types.append("normal")
+            item_types.append("filler")
 
         node.setdefault("refs", []).append("Item Class: " + ", ".join(item_types))
         return super(KivyJSONtoTextParser, self)._handle_item_name(node)
