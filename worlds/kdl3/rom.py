@@ -476,7 +476,6 @@ def patch_rom(world: "KDL3World", patch: KDL3ProcedurePatch) -> None:
     patch.write_token(APTokenTypes.WRITE, 0x3D01A, world.options.starsanity.value.to_bytes(2, "little"))
     patch.write_token(APTokenTypes.WRITE, 0x3D01C, world.options.gifting.value.to_bytes(2, "little"))
     patch.write_token(APTokenTypes.WRITE, 0x3D01E, world.options.strict_bosses.value.to_bytes(2, "little"))
-    # don't write gifting for solo game, since there's no one to send anything to
 
     for level in world.player_levels:
         for i in range(len(world.player_levels[level])):
