@@ -3,7 +3,7 @@ from dataclasses import dataclass
 from typing import List
 
 from Options import DeathLinkMixin, Choice, Toggle, OptionDict, Range, PlandoBosses, DefaultOnToggle, \
-    PerGameCommonOptions, Visibility, NamedRange, OptionGroup, PlandoConnections
+    PerGameCommonOptions, Visibility, OptionGroup, PlandoConnections
 from .names import location_name
 
 
