@@ -9223,7 +9223,12 @@ async def _check_objects_by_id(ctx: NO100FContext, locations_checked: set, id_ta
                     key_gone = _check_platform_state(ctx, fix_ptr)
                     if key_gone == 0:  # Key is Gone, but check has not been sent
                         locations_checked.add(k)
+            if scene == b'P003' and ctx.isRev1:
+                if v[1] == Upgrades.PlungerPower.value:
 
+                    fix_ptr = _find_obj_in_obj_table(Upgrades.PlungerPower.value, ptr, size, ctx.isRev1)
+                    if fix_ptr is None: break
+                    locations_checked.add(k)
 
             if check_cb(ctx, obj_ptr):
                 locations_checked.add(k)
@@ -9323,7 +9328,10 @@ async def enable_map_warping(ctx: NO100FContext):
             if ((not saved_warps & 2**8) and saved_warps & 2**9):  # Give G005 Warp if we have received G008 as an item (Thanks Heavy Iron)
                 fix_ptr = _find_obj_in_obj_table(0x78A1C3B8, ptr, size, ctx.isRev1)
                 _set_trigger_state(ctx, fix_ptr, 0x1c)
-                dolphin_memory_engine.write_word(0x801B7F54, 1)
+                if ctx.isRev1:
+                    dolphin_memory_engine.write_word(0x801C6914, 1)
+                else:
+                    dolphin_memory_engine.write_word(0x801B7F54, 1)
             if (saved_warps & 2**8 and (not saved_warps & 2**9)):  # Prevent G008 Warp if we have received G005 as an item (Thanks Heavy Iron)
                 fix_ptr = _find_obj_in_obj_table(0x6B2EA611, ptr, size, ctx.isRev1)
                 _set_trigger_state(ctx, fix_ptr, 0x1c)
@@ -9527,6 +9535,9 @@ async def apply_level_fixes(ctx: NO100FContext):
                     dolphin_memory_engine.write_word(HEALTH_ADDR_REV1, 5)
                 else:
                     dolphin_memory_engine.write_word(HEALTH_ADDR, 5)    # Give scooby health to teleport out if entering creepy backwards
+            if ctx.isRev1:
+                fix_ptr = _find_obj_in_obj_table(Upgrades.PlungerPower.value, ptr, size, ctx.isRev1)
+                _set_platform_state(ctx, fix_ptr, 0)
 
     # Credits Location
     if scene == b"S005":  #We are in the final room
