@@ -1248,7 +1248,7 @@ def distribute_items_restrictive(multiworld: MultiWorld,
     for item in itempool:
         if item.advancement:
             progitempool.append(item)
-        elif item.useful:
+        elif item.never_exclude:
             usefulitempool.append(item)
         else:
             filleritempool.append(item)
