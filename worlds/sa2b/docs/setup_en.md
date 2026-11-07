@@ -28,9 +28,7 @@
 
 4. Unpack the Archipelago Mod into the `/mods` directory in the folder into which you installed Sonic Adventure 2: Battle, so that `/mods/SA2B_Archipelago` is a valid path.
 
-5. In the SA2B_Archipelago folder, run the `CopyAPCppDLL.bat` script (a window will very quickly pop up and go away).
-
-6. Launch the `SAModManager.exe` and make sure the SA2B_Archipelago mod is listed and enabled.
+5. Launch the `SAModManager.exe` and make sure the SA2B_Archipelago mod is listed and enabled.
 
 ## Installation Procedures (Linux and Steam Deck)
 
@@ -42,17 +40,15 @@
 
 4. Unpack the Archipelago Mod into this folder, so that `/mods/SA2B_Archipelago` is a valid path.
 
-5. In the SA2B_Archipelago folder, copy the `APCpp.dll` file and paste it in the Sonic Adventure 2 install folder (where `sonic2app.exe` is).
+5. Install SA Mod Manager as per [its instructions](https://github.com/X-Hax/SA-Mod-Manager/tree/master?tab=readme-ov-file). Specifically, extract SAModManager.exe file to the folder that Sonic Adventure 2: Battle is installed to. To launch it, add ``SAModManager.exe`` as a non-Steam game. In the properties on Steam for SA Mod Manager, set it to use Proton as the compatibility tool.
 
-6. Install SA Mod Manager as per [its instructions](https://github.com/X-Hax/SA-Mod-Manager/tree/master?tab=readme-ov-file). Specifically, extract SAModManager.exe file to the folder that Sonic Adventure 2: Battle is installed to. To launch it, add ``SAModManager.exe`` as a non-Steam game. In the properties on Steam for SA Mod Manager, set it to use Proton as the compatibility tool.
+6. Run SAModManager.exe from Steam once. It should produce an error popup saying you need .NET Desktop Runtime and ask you if you'd like to download it. Say yes and it will download through your browser.
 
-7. Run SAModManager.exe from Steam once. It should produce an error popup saying you need .NET Desktop Runtime and ask you if you'd like to download it. Say yes and it will download through your browser.
+7. Install protontricks, on the Steam Deck this can be done via the Discover store, on other distros instructions vary, [see its github page](https://github.com/Matoking/protontricks).
 
-8. Install protontricks, on the Steam Deck this can be done via the Discover store, on other distros instructions vary, [see its github page](https://github.com/Matoking/protontricks).
+8. Right click the .NET Desktop Runtime exe that was downloaded in step 5, and assuming protontricks was installed correctly, the option to "Open with Protontricks Launcher" should be available. Click that, and in the popup window that opens, select SAModManager.exe. Follow the prompts after this to install the .NET Desktop Runtime for SAModManager. Once it is done, you should be able to successfully launch SAModManager to steam.
 
-9. Right click the .NET Desktop Runtime exe that was downloaded in step 6, and assuming protontricks was installed correctly, the option to "Open with Protontricks Launcher" should be available. Click that, and in the popup window that opens, select SAModManager.exe. Follow the prompts after this to install the .NET Desktop Runtime for SAModManager. Once it is done, you should be able to successfully launch SAModManager to steam.
-
-10. Launch `SAModManager.exe` from Steam and make sure the SA2B_Archipelago mod is listed and enabled.
+9. Launch `SAModManager.exe` from Steam and make sure the SA2B_Archipelago mod is listed and enabled.
 
 Note: Ensure that you launch Sonic Adventure 2 from Steam directly on Linux, rather than launching using the `Save & Play` button in SA Mod Manager.
 

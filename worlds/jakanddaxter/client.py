@@ -20,9 +20,9 @@ from psutil import NoSuchProcess
 # Archipelago imports
 import ModuleUpdate
 import Utils
-from CommonClient import ClientCommandProcessor, CommonContext, server_loop, gui_enabled
+from CommonClient import server_loop, gui_enabled
 from NetUtils import ClientStatus
-from PyMemoryEditor import OpenProcess, ProcessNotFoundError
+from PyMemoryEditor import OpenProcess, ProcessNotFoundError, AmbiguousProcessNameError
 
 # Jak imports
 from .game_id import jak1_name, jak1_gk, jak1_goalc
@@ -30,6 +30,20 @@ from .options import EnableOrbsanity
 from .agents.memory_reader import JakAndDaxterMemoryReader
 from .agents.repl_client import JakAndDaxterReplClient
 from . import JakAndDaxterWorld
+
+# Load Universal Tracker
+tracker_loaded: bool = False
+try:
+    from worlds.tracker.TrackerClient import (
+        TrackerCommandProcessor as ClientCommandProcessor,
+        TrackerGameContext as CommonContext,
+        UT_VERSION
+    )
+
+    tracker_loaded = True
+except ImportError:
+    from CommonClient import ClientCommandProcessor, CommonContext
+    UT_VERSION = 0
 
 
 ModuleUpdate.update()
@@ -116,17 +130,15 @@ class JakAndDaxterContext(CommonContext):
         # self.memr.load_data()
         super().__init__(server_address, password)
 
-    def run_gui(self):
-        from kvui import GameManager
+    def make_gui(self):
+        ui = super().make_gui()
+        ui.base_title = f"Jak and Daxter ArchipelaGOAL Client"
+        if tracker_loaded:
+            ui.base_title += f" | Universal Tracker {UT_VERSION}"
 
-        class JakAndDaxterManager(GameManager):
-            logging_pairs = [
-                ("Client", "Archipelago")
-            ]
-            base_title = "Jak and Daxter ArchipelaGOAL Client"
-
-        self.ui = JakAndDaxterManager(self)
-        self.ui_task = asyncio.create_task(self.ui.async_run(), name="UI")
+        # AP version is added behind this automatically
+        ui.base_title += " | Archipelago"
+        return ui
 
     async def server_auth(self, password_requested: bool = False):
         if password_requested and not self.password:
@@ -146,6 +158,7 @@ class JakAndDaxterContext(CommonContext):
         await super(JakAndDaxterContext, self).disconnect(allow_autoreconnect)
 
     def on_package(self, cmd: str, args: dict):
+        super().on_package(cmd, args)
 
         if cmd == "RoomInfo":
             self.slot_seed = args["seed_name"]
@@ -471,17 +484,25 @@ async def run_game(ctx: JakAndDaxterContext):
     # These may already be running. If they are not running, try to start them.
     gk_running = False
     try:
-        OpenProcess(process_name=jak1_gk)  # The GOAL Kernel
+        OpenProcess(name=jak1_gk)  # The GOAL Kernel
         gk_running = True
     except ProcessNotFoundError:
         ctx.on_log_warn(logger, "Game not running, attempting to start.")
+    except AmbiguousProcessNameError:
+        ctx.on_log_error(logger, "Two or more instances of the game were found. "
+                                 "Please close one and restart this client.")
+        return
 
     goalc_running = False
     try:
-        OpenProcess(process_name=jak1_goalc)  # The GOAL Compiler and REPL
+        OpenProcess(name=jak1_goalc)  # The GOAL Compiler and REPL
         goalc_running = True
     except ProcessNotFoundError:
         ctx.on_log_warn(logger, "Compiler not running, attempting to start.")
+    except AmbiguousProcessNameError:
+        ctx.on_log_error(logger, "Two or more instances of the compiler were found. "
+                                 "Please close one and restart this client.")
+        return
 
     try:
         auto_detect_root_directory = JakAndDaxterWorld.settings.auto_detect_root_directory
@@ -672,6 +693,12 @@ async def main():
     Utils.init_logging("JakAndDaxterClient", exception_logger="Client")
 
     ctx = JakAndDaxterContext(None, None)
+
+    # If UT is loaded. Run generator, and remove tracker tag.
+    if tracker_loaded:
+        ctx.run_generator()
+        ctx.tags.discard("Tracker")
+
     ctx.server_task = asyncio.create_task(server_loop(ctx), name="server loop")
     ctx.repl_task = create_task_log_exception(ctx.run_repl_loop())
     ctx.memr_task = create_task_log_exception(ctx.run_memr_loop())
