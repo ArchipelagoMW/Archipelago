@@ -529,7 +529,7 @@ class MultiData(typing.TypedDict):
     connect_names: dict[str, tuple[int, int]]
     locations: dict[int, dict[int, tuple[int, int, int]]]
     checks_in_area: dict[int, dict[str, int | list[int]]]
-    classifications: dict[str, int]
+    classifications: list[str]
     server_options: dict[str, object]
     er_hint_data: dict[int, dict[int, str]]
     precollected_items: dict[int, list[int]]
