@@ -24,7 +24,7 @@ def create_itempool(world: "HatInTimeWorld") -> List[Item]:
     for name in item_table.keys():
         if name == world.glitches_item_name:
             continue
-        
+
         if name == "Yarn":
             continue
 
@@ -260,7 +260,7 @@ ahit_items = {
     "Metro Ticket - Green": ItemData(2000300046, ItemClassification.progression, HatDLC.dlc2),
     "Metro Ticket - Blue": ItemData(2000300047, ItemClassification.progression, HatDLC.dlc2),
     "Metro Ticket - Pink": ItemData(2000300048, ItemClassification.progression, HatDLC.dlc2),
-    
+
     # UT fake item, should never be in item pool
     "Higher Logic Hat": ItemData(2000300900, ItemClassification.progression),
 }

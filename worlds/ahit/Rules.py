@@ -588,7 +588,8 @@ def set_glitched_moderate_rules(world: "HatInTimeWorld"):
         add_rule(location, lambda state: glitch_logic(state, world), "or")
         for key in shop_locations.keys():
             if "Pink Paw Station Thug" in key and is_location_valid(world, key):
-                add_rule(world.multiworld.get_location(key, world.player), lambda state: glitch_logic(state, world), "or")
+                add_rule(world.multiworld.get_location(key, world.player),
+                         lambda state: glitch_logic(state, world), "or")
 
         # Moderate: clear Rush Hour without Hookshot or Dweller Mask
         add_rule(world.multiworld.get_location("Act Completion (Rush Hour)", world.player),

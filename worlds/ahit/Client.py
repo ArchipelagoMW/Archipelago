@@ -8,6 +8,7 @@ from copy import deepcopy
 from typing import List, Any, Iterable
 from NetUtils import decode, encode, JSONtoTextParser, JSONMessagePart, NetworkItem, NetworkPlayer
 from MultiServer import Endpoint
+from typing import ClassVar
 
 # UT integration
 tracker_loaded = False
@@ -33,7 +34,7 @@ class AHITCommandProcessor(ClientCommandProcessor):
 
 
 class AHITContext(CommonContext):
-    tags = {"AP"} # remove tracker tag if UT loaded
+    tags: ClassVar = {"AP"} # remove tracker tag if UT loaded
     command_processor = AHITCommandProcessor
     game = "A Hat in Time"
 

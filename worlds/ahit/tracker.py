@@ -22,7 +22,7 @@ map_page_locations = [
     "locations/nyakuza.json",
     # "locations/spaceship.json", # Has commnets in the file
     "locations/subcon.json",
-    
+
     # "locations/entrances/chapter_time_rifts.json", # jsonc
     "locations/entrances/chapter1.json",
     # "locations/entrances/chapter2.json", # jsonc
@@ -366,19 +366,19 @@ poptracker_entrance_mapping = {
     # "Time Rift - Rumbi Factory/Can Complete"
 
     "Act 1 - Welcome to Mafia Town/Can Enter" : "Mafia Town - Act 1",
-    # "Act 1 - Welcome to Mafia Town/Can Complete" : 
+    # "Act 1 - Welcome to Mafia Town/Can Complete" :
     "Act 2 - Barrel Battle/Can Enter" : "Mafia Town - Act 2",
-    # "Act 2 - Barrel Battle/Can Complete" : 
+    # "Act 2 - Barrel Battle/Can Complete" :
     "Act 3 - She Came from Outer Space/Can Enter" : "Mafia Town - Act 3",
-    # "Act 3 - She Came from Outer Space/Can Complete" : 
+    # "Act 3 - She Came from Outer Space/Can Complete" :
     "Act 4 - Down with the Mafia!/Can Enter" : "Mafia Town - Act 4",
-    # "Act 4 - Down with the Mafia!/Can Complete" : 
+    # "Act 4 - Down with the Mafia!/Can Complete" :
     "Act 5 - Cheating the Race/Can Enter" : "Mafia Town - Act 5",
-    # "Act 5 - Cheating the Race/Can Complete" : 
+    # "Act 5 - Cheating the Race/Can Complete" :
     "Act 6 - Heating up Mafia Town/Can Enter" : "Mafia Town - Act 6",
-    # "Act 6 - Heating up Mafia Town/Can Complete" : 
+    # "Act 6 - Heating up Mafia Town/Can Complete" :
     "Act 7 - The Golden Vault/Can Enter" : "Mafia Town - Act 7"
-    # "Act 7 - The Golden Vault/Can Complete" : 
+    # "Act 7 - The Golden Vault/Can Complete" :
 
     # TODO: continue with chapter2? Doesn't even seem to be working. Is it worth it?
 }

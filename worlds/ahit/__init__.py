@@ -9,7 +9,7 @@ from .Options import AHITOptions, slot_data_options, adjust_options, RandomizeHa
 from .Types import HatType, ChapterIndex, HatInTimeItem, hat_type_to_item, Difficulty
 from .DeathWishLocations import create_dw_regions, dw_classes, death_wishes
 from .DeathWishRules import set_dw_rules, create_enemy_events, hit_list, bosses
-from .Tracker import map_page_locations, tracker_name_mapping, AHITSettings, poptracker_entrance_mapping, map_page_groups
+from .tracker import map_page_locations, tracker_name_mapping, AHITSettings, poptracker_entrance_mapping, map_page_groups
 from worlds.AutoWorld import World, WebWorld, CollectionState
 from worlds.generic.Rules import add_rule
 from typing import List, Dict, TextIO, Any, ClassVar
@@ -506,5 +506,5 @@ class HatInTimeWorld(World):
         # Would need core PR 6401 to mostly follow existing logic using add_rule, would allow for an easier but less clean/ideal refactor
 
         # TODO: add more item groups? Like Relics, Hats, Yarn, Timepieces, etc?
-        
+
         # TODO: update AHIT docs as needed

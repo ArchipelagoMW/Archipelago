@@ -483,11 +483,11 @@ def randomize_act_entrances(world: "HatInTimeWorld"):
     # Don't randomize if UT generation, but still need to connect the acts
     if world.fake_gen:
         for key in world.act_connections:
-            for ent in chapter_act_info:
-                if key == chapter_act_info[ent]:
+            for ent, ent_id in chapter_act_info.items():
+                if key == ent_id:
                     ent_region = world.multiworld.get_region(ent, world.player)
-                    for exit in chapter_act_info:
-                        if world.act_connections[key] == chapter_act_info[exit]:
+                    for exit, exit_id in chapter_act_info.items():
+                        if world.act_connections[key] == exit_id:
                             exit_region = world.multiworld.get_region(exit, world.player)
                             connect_acts(world, ent_region, exit_region, rift_dict)
                             break
