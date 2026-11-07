@@ -19,7 +19,7 @@ import factorio_rcon
 from CommonClient import ClientCommandProcessor, CommonContext, logger, server_loop, gui_enabled, get_base_parser
 from MultiServer import mark_raw
 from NetUtils import ClientStatus, NetworkItem, JSONtoTextParser, JSONMessagePart
-from Utils import async_start, get_file_safe_name, is_windows, Version, format_SI_prefix, get_text_between, user_path
+from Utils import async_start, get_file_safe_name, is_linux, is_windows, Version, format_SI_prefix, get_text_between, user_path
 from .settings import FactorioSettings
 from settings import get_settings
 
@@ -627,7 +627,10 @@ def launch(*new_args: str):
     if not os.path.exists(config_file):
         os.makedirs(os.path.dirname(config_file), exist_ok=True)
         with open(config_file, 'w') as f:
-            f.write(f"[path]\nread-data=__PATH__system-read-data__\nwrite-data={user_path('factorio')}")
+            if is_linux:
+                f.write(f"[path]\nread-data=__PATH__executable__/../../data/\nwrite-data={user_path('factorio')}")
+            else:
+                f.write(f"[path]\nread-data=__PATH__system-read-data__\nwrite-data={user_path('factorio')}")
 
     asyncio.run(main(lambda: FactorioContext(
         args.connect, args.password,
