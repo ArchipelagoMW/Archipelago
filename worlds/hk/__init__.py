@@ -94,6 +94,7 @@ class HKWorld(RandomizerCoreWorld):
     charm_costs: list[int]
     charm_names_and_costs: dict[str, int]
     soul_modes: NearbySoul
+    event_paths: list[str]
 
     # imported class functions
     collect = hk_collect
@@ -112,6 +113,7 @@ class HKWorld(RandomizerCoreWorld):
         self.entrance_by_term = defaultdict(list)
         self.entrance_pairs = {}
         self.entrance_state_modifier_by_term = defaultdict(list)
+        self.event_paths = []
 
     # generate_early
     def generate_early(self):
@@ -1118,6 +1120,9 @@ class HKWorld(RandomizerCoreWorld):
             spoiler_handle.write("\n\nTWO WAYS:")
             for src, tgt in two_ways:
                 spoiler_handle.write(f"\n{src} <-> {tgt}")
+        if self.event_paths:
+            spoiler_handle.write(f"\n\n{self.player_name} Event Paths:\n")
+            spoiler_handle.write("\n".join(p for p in self.event_paths))
 
     def extend_hint_information(self, hint_data: dict[int, dict[int, str]]) -> None:
         if not self.entrance_pairs:
@@ -1146,3 +1151,5 @@ class HKWorld(RandomizerCoreWorld):
             if loc.address is not None:
                 # we want spoiler paths to events but not hint text
                 hint_data[self.player][loc.address] = text
+            else:
+                self.event_paths.append(f"%{loc.name}%:\n\t{text}")
