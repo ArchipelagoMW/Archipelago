@@ -342,6 +342,8 @@ def main(args, seed=None, baked_server_options: dict[str, object] | None = None)
                     "precollected_items": precollected_items,
                     "precollected_hints": precollected_hints,
                     "version": (version_tuple.major, version_tuple.minor, version_tuple.build),
+                    "world_versions": {game_world.game: game_world.world_version.as_simple_string()
+                                       for game_world in multiworld.worlds.values()},
                     "tags": ["AP"],
                     "minimum_versions": minimum_versions,
                     "seed_name": multiworld.seed_name,

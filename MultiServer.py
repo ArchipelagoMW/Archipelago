@@ -601,6 +601,11 @@ class Context:
             server_options = decoded_obj.get("server_options", {})
             self._set_options(server_options)
 
+        world_version = decoded_obj.get("world_versions", {
+            world: "0.0.0" for world in self.games.values()
+        })
+        self.read_data["world_versions"] = lambda: world_version
+
         # load and apply world data and (embedded) data package
         self._load_world_data()
         self._load_data_package(decoded_obj.get("datapackage", {}))

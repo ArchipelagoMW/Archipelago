@@ -534,6 +534,7 @@ class MultiData(typing.TypedDict):
     precollected_items: dict[int, list[int]]
     precollected_hints: dict[int, set[Hint]]
     version: tuple[int, int, int]
+    world_versions: dict[str, str]
     tags: list[str]
     minimum_versions: MinimumVersions
     seed_name: str
