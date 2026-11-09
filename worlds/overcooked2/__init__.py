@@ -2,6 +2,7 @@ from enum import IntEnum
 from typing import Any, List, Dict, Set, Callable, Optional, TextIO
 
 from BaseClasses import ItemClassification, CollectionState, Region, Entrance, Location, Tutorial, LocationProgressType
+from Options import OptionError
 from worlds.AutoWorld import World, WebWorld
 
 from .Overcooked2Levels import Overcooked2Dlc, Overcooked2Level, Overcooked2GenericLevel
@@ -240,7 +241,7 @@ class Overcooked2World(World):
         else:
             self.level_mapping = None
             if Overcooked2Dlc.STORY not in self.enabled_dlc:
-                raise Exception(f"Invalid OC2 settings({self.player_name}) Need either Level Shuffle disabled or 'Story' DLC enabled")
+                raise OptionError(f"Invalid OC2 settings({self.player_name}) Need either Level Shuffle disabled or 'Story' DLC enabled")
 
             self.enabled_dlc = {Overcooked2Dlc.STORY}
 

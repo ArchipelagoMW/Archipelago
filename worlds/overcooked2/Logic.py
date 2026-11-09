@@ -1,4 +1,5 @@
 from BaseClasses import CollectionState
+from Options import OptionError
 from .Overcooked2Levels import Overcooked2GenericLevel, Overcooked2Dlc, Overcooked2Level, OverworldRegion, overworld_region_by_level
 from typing import Dict, Set
 from random import Random
@@ -165,7 +166,7 @@ def level_shuffle_factory(
         else:
             prep_text = " NON-PREP"
 
-        raise Exception(f"Invalid OC2 settings({player_name}): OC2 needs at least {level_count}{prep_text} levels in the level pool (currently has {len(pool)})")
+        raise OptionError(f"Invalid OC2 settings({player_name}): OC2 needs at least {level_count}{prep_text} levels in the level pool (currently has {len(pool)})")
 
     # Sort the pool to eliminate risk
     pool.sort(key=lambda x: int(x.dlc)*1000 + x.level_id)
