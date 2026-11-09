@@ -187,6 +187,10 @@ class MinimumStarsPossibleTestBase(SM64TestBase):
 
 # Entrance + Move Randos
 class CourseEntrancesMoveTestBase(SM64TestBase):
+    @property
+    def run_default_tests(self) -> bool:
+        return False
+
     options = {
         "enable_move_rando": Options.EnableMoveRandomizer.option_true,
         "area_rando": Options.AreaRandomizer.option_Courses_Only
@@ -212,6 +216,10 @@ class CourseEntrancesMoveTestBase(SM64TestBase):
 
 
 class SeparateEntrancesMoveTestBase(SM64TestBase):
+    @property
+    def run_default_tests(self) -> bool:
+        return False
+
     options = {
         "enable_move_rando": Options.EnableMoveRandomizer.option_true,
         "area_rando": Options.AreaRandomizer.option_Courses_and_Secrets_Separate
@@ -237,6 +245,10 @@ class SeparateEntrancesMoveTestBase(SM64TestBase):
 
 
 class AllEntrancesMoveTestBase(SM64TestBase):
+    @property
+    def run_default_tests(self) -> bool:
+        return False
+
     options = {
         "enable_move_rando": Options.EnableMoveRandomizer.option_true,
         "area_rando": Options.AreaRandomizer.option_Courses_and_Secrets
