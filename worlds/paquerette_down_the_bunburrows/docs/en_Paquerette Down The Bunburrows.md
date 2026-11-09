@@ -8,6 +8,7 @@
 - [APWorld Repository](https://github.com/SergeAzel/Archipelago_PDTB/releases)
 - [Client Mod - Thunderstore](https://thunderstore.io/c/paquerette-down-the-bunburrows/p/BNYSmod/Bunject_Archipelago/)
 - [Client Repository](https://github.com/SergeAzel/Bunject/releases/)
+- [AI Usage Disclosure](https://github.com/SergeAzel/Archipelago_PDTB/blob/main/worlds/paquerette_down_the_bunburrows/ai.md)
 
 
 ## Compatibility
