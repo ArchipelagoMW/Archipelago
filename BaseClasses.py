@@ -1274,7 +1274,7 @@ class Region:
             return self._list[index]
 
         def __setitem__(self, index: int, value: Location) -> None:
-            return NotImplementedError
+            raise NotImplementedError()
 
         def __len__(self) -> int:
             return len(self._list)
@@ -1289,7 +1289,7 @@ class Region:
         def __delitem__(self, index: int) -> None:
             location: Location = self._list[index]
             del self._list[index]
-            del (self.region_manager.location_cache[location.player][location.name])
+            del self.region_manager.location_cache[location.player][location.name]
 
         def insert(self, index: int, value: Location) -> None:
             assert value.name not in self.region_manager.location_cache[value.player], \
@@ -1467,9 +1467,9 @@ class Region:
             for connecting_region, name in exits.items()
         ]
 
-    def __repr__(self):
-        return self.multiworld.get_name_string_for_object(
-            self) if self.multiworld else f'{self.name} (Player {self.player})'
+    def __repr__(self) -> str:
+        return (self.multiworld.get_name_string_for_object(self) if self.multiworld
+                else f'{self.name} (Player {self.player})')
 
 
 class LocationProgressType(IntEnum):
