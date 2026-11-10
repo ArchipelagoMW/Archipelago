@@ -100,7 +100,7 @@ class ClientCommandProcessor(CommandProcessor):
             self.ctx.on_print_json({"data": parts, "cmd": "PrintJSON"})
         return True
 
-    def _cmd_missing(self, filter_text = "") -> bool:
+    def _cmd_missing(self, filter_text="") -> bool:
         """List all missing location checks, from your local game state.
         Can be given text, which will be used as filter."""
         if not self.ctx.game:
@@ -608,7 +608,7 @@ class CommonContext:
     
     def is_connection_change(self, print_json_packet: dict) -> bool:
         """Helper function for filtering out connection changes."""
-        return print_json_packet.get("type", "") in ["Join","Part"]
+        return print_json_packet.get("type", "") in ["Join", "Part"]
 
     def on_print(self, args: dict):
         logger.info(args["text"])
@@ -695,7 +695,7 @@ class CommonContext:
             cached_checksum: str | None = self.checksums.get(game)
             # no action required if cached version is new enough
             if remote_checksum != cached_checksum:
-                local_checksum: str  | None = network_data_package["games"].get(game, {}).get("checksum")
+                local_checksum: str | None = network_data_package["games"].get(game, {}).get("checksum")
                 if remote_checksum == local_checksum:
                     self.update_game(network_data_package["games"][game], game)
                 else:
