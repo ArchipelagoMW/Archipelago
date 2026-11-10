@@ -115,7 +115,7 @@ You need at least one magic spell before you can use summons.
 
 ### Why am I not sending or receiving any items, despite being connected to the server?
 
-Make sure you are using the KH1 Client and not the Text Client. You will need to open the KH1 client via the Archipelago Launcher.<br>
+Make sure you are using the KH1 Client and not the Text Client. You will need to open the KH1 Client via the Archipelago Launcher.<br>
 If the correct client is being used, try reinstalling both Panacea and Lua Backend via the Setup Wizard under Settings.<br>
 Uncommonly, the folder `KH1FM` failed to generate within `%LocalAppData%`, and needs to be manually created. Alternately, the contents within `%LocalAppData%/KH1FM/` may need to be deleted.
 
