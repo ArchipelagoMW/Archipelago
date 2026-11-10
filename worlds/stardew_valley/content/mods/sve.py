@@ -5,7 +5,7 @@ from ..vanilla.ginger_island import ginger_island_content_pack as ginger_island_
 from ...data import villagers_data, fish_data
 from ...data.game_item import ItemTag, Tag
 from ...data.harvest import ForagingSource, HarvestCropSource
-from ...data.requirement import YearRequirement, CombatRequirement, RelationshipRequirement, ToolRequirement, SkillRequirement, FishingRequirement
+from ...data.requirement import YearRequirement, CombatRequirement, SpecificFriendRequirement, ToolRequirement, SkillRequirement, FishingRequirement
 from ...data.shop import ShopSource
 from ...mods.mod_data import ModNames
 from ...strings.craftable_names import ModEdible
@@ -82,18 +82,18 @@ register_mod_content_pack(SVEContentPack(
         ModNames.jasper,  # To override Marlon and Gunther
     ),
     shop_sources={
-        SVEGift.aged_blue_moon_wine: (ShopSource(money_price=28000, shop_region=SVERegion.blue_moon_vineyard),),
-        SVEGift.blue_moon_wine: (ShopSource(money_price=3000, shop_region=SVERegion.blue_moon_vineyard),),
-        ModEdible.lightning_elixir: (ShopSource(money_price=12000, shop_region=SVERegion.galmoran_outpost),),
-        ModEdible.barbarian_elixir: (ShopSource(money_price=22000, shop_region=SVERegion.galmoran_outpost),),
-        ModEdible.gravity_elixir: (ShopSource(money_price=4000, shop_region=SVERegion.galmoran_outpost),),
-        SVEMeal.grampleton_orange_chicken: (ShopSource(money_price=650,
+        SVEGift.aged_blue_moon_wine: (ShopSource(price=28000, shop_region=SVERegion.blue_moon_vineyard),),
+        SVEGift.blue_moon_wine: (ShopSource(price=3000, shop_region=SVERegion.blue_moon_vineyard),),
+        ModEdible.lightning_elixir: (ShopSource(price=12000, shop_region=SVERegion.galmoran_outpost),),
+        ModEdible.barbarian_elixir: (ShopSource(price=22000, shop_region=SVERegion.galmoran_outpost),),
+        ModEdible.gravity_elixir: (ShopSource(price=4000, shop_region=SVERegion.galmoran_outpost),),
+        SVEMeal.grampleton_orange_chicken: (ShopSource(price=650,
                                                        shop_region=Region.saloon,
-                                                       other_requirements=(RelationshipRequirement(ModNPC.sophia, 6),)),),
-        ModEdible.hero_elixir: (ShopSource(money_price=8000, shop_region=SVERegion.isaac_shop),),
-        ModEdible.aegis_elixir: (ShopSource(money_price=28000, shop_region=SVERegion.galmoran_outpost),),
-        SVEBeverage.sports_drink: (ShopSource(money_price=750, shop_region=Region.hospital),),
-        SVEMeal.stamina_capsule: (ShopSource(money_price=4000, shop_region=Region.hospital),),
+                                                       other_requirements=(SpecificFriendRequirement(ModNPC.sophia, 6),)),),
+        ModEdible.hero_elixir: (ShopSource(price=8000, shop_region=SVERegion.isaac_shop),),
+        ModEdible.aegis_elixir: (ShopSource(price=28000, shop_region=SVERegion.galmoran_outpost),),
+        SVEBeverage.sports_drink: (ShopSource(price=750, shop_region=Region.hospital),),
+        SVEMeal.stamina_capsule: (ShopSource(price=4000, shop_region=Region.hospital),),
     },
     harvest_sources={
         Mushroom.red: (

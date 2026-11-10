@@ -28,7 +28,7 @@
 name: Player{number}
 
 # Used to describe your yaml. Useful if you have multiple files.
-description: {{ yaml_dump("Default %s Template" % game) }}
+description: {{ yaml_dump("%s Preset for %s" % (preset_name, game)) if preset_name else yaml_dump("Default %s Template" % game) }}
 
 game: {{ yaml_dump(game) }}
 requires:
@@ -38,11 +38,11 @@ requires:
     {{ yaml_dump(game) }}: {{ world_version }} # Version of the world required for this yaml to work as expected.
   {%- endif %}
 
-{%- macro range_option(option) %}
+{%- macro range_option(option, option_val) %}
     # You can define additional values between the minimum and maximum values.
     # Minimum value is {{ option.range_start }}
     # Maximum value is {{ option.range_end }}
-    {%- set data, notes = dictify_range(option) %}
+    {%- set data, notes = dictify_range(option, option_val) %}
     {%- for entry, default in data.items() %}
     {{ entry }}: {{ default }}{% if notes[entry] %} # {{ notes[entry] }}{% endif %}
     {%- endfor -%}
@@ -56,6 +56,10 @@ requires:
 
   {%- for option_key, option in group_options.items() %}
   {{ option_key }}:
+    {%- set option_val = option.default %}
+    {%- if option_key in preset %}
+      {%- set option_val = preset[option_key] %}
+    {%- endif -%}
     {%- if option.__doc__ %}
     # {{ cleandoc(option.__doc__)
         | trim
@@ -69,25 +73,25 @@ requires:
     {%- endif -%}
 
     {%- if option.range_start is defined and option.range_start is number %}
-    {{- range_option(option) -}}
+    {{- range_option(option, option_val) -}}
 
     {%- elif option.options -%}
     {%- for suboption_option_id, sub_option_name in option.name_lookup.items() %}
-    {{ yaml_dump(sub_option_name) }}: {% if suboption_option_id == option.default %}50{% else %}0{% endif %}
+    {{ yaml_dump(sub_option_name) }}: {% if suboption_option_id == option_val or sub_option_name == option_val %}50{% else %}0{% endif %}
     {%- endfor -%}
-
-    {%- if option.name_lookup[option.default] not in option.options %}
-    {{ yaml_dump(option.default) }}: 50
+  
+    {%- if option.name_lookup[option_val] not in option.options and option_val not in option.options %}
+    {{ yaml_dump(option_val) }}: 50
     {%- endif -%}
 
-    {%- elif option.default is string %}
-    {{ yaml_dump(option.default) }}: 50
+    {%- elif option_val is string %}
+    {{ yaml_dump(option_val) }}: 50
 
-    {%- elif option.default is iterable and option.default is not mapping %}
-    {{ option.default | list }}
+    {%- elif option_val is iterable and option_val is not mapping %}
+    {{ option_val | list }}
 
     {%- else %}
-    {{ yaml_dump(option.default) | indent(4, first=false) }}
+    {{ yaml_dump(option_val) | indent(4, first=false) }}
     {%- endif -%}
     {{ "\n" }}
   {%- endfor %}

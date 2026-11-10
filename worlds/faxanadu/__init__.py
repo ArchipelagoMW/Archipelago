@@ -43,7 +43,7 @@ class FaxanaduWorld(World):
     item_name_to_item = {item.name: item for item in Items.items}
     location_name_to_id = {loc.name: loc.id for loc in Locations.locations if loc.id is not None}
 
-    def __init__(self, world: MultiWorld, player: int):
+    def __init__(self, multiworld: MultiWorld, player: int):
         self.filler_ratios: Dict[str, int] = {
             item.name: item.count
             for item in Items.items
@@ -51,7 +51,7 @@ class FaxanaduWorld(World):
         }
         # Remove poison by default to respect itemlinking
         self.filler_ratios["Poison"] = 0
-        super().__init__(world, player)
+        super().__init__(multiworld, player)
 
     def create_regions(self):
         Regions.create_regions(self)

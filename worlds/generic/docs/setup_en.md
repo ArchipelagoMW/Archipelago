@@ -178,7 +178,7 @@ privileges may be gained by entering `!admin <password>` from the `ArchipelagoTe
 
 #### The room page
 
-![Screenshot of Room Page](/static/generated/docs/Archipelago/example_room.png)
+![Screenshot of Room Page](example_room.png)
 1. Server/Host Name
 2. Port
 3. Slot Name

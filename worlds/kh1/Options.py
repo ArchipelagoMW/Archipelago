@@ -568,7 +568,7 @@ class DestinyIslands(Toggle):
     
     When "Destiny Islands" is found, Traverse Town will have an additional place to land - Seashore.
     
-    "Raft Materials" allow progress into Day 2 and to Homecoming.  The amount is defined in Day 2 Materials and Homecoming Materials.
+    "Raft Materials" allow progress into Day 2 and to Homecoming (Final Bosses).  The amount is defined in Day 2 Materials and Homecoming Materials.
     """
     display_name = "Destiny Islands"
 
@@ -752,7 +752,7 @@ class Day2Materials(Range):
 
 class HomecomingMaterials(Range):
     """
-    The amount of Raft Materials required to access Homecoming.
+    The amount of Raft Materials required to access Homecoming (Final Bosses).
     """
     display_name = "Homecoming Materials"
     default = 10
@@ -761,7 +761,7 @@ class HomecomingMaterials(Range):
 
 class MaterialsInPool(Range):
     """
-    The amount of Raft Materials required to access Homecoming.
+    The amount of Raft Materials required to access Homecoming (Final Bosses).
     """
     display_name = "Materials in Pool"
     default = 16

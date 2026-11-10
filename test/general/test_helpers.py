@@ -1,9 +1,11 @@
 import unittest
-from typing import Callable, Dict, Optional
+from typing import Any, Dict, Optional
 
 from typing_extensions import override
 
-from BaseClasses import CollectionState, MultiWorld, Region
+from BaseClasses import CollectionRule, MultiWorld, Region
+from rule_builder.rules import Has, Rule
+from test.general import TestWorld
 
 
 class TestHelpers(unittest.TestCase):
@@ -16,6 +18,7 @@ class TestHelpers(unittest.TestCase):
         self.multiworld.game[self.player] = "helper_test_game"
         self.multiworld.player_name = {1: "Tester"}
         self.multiworld.set_seed()
+        self.multiworld.worlds[self.player] = TestWorld(self.multiworld, self.player)
 
     def test_region_helpers(self) -> None:
         """Tests `Region.add_locations()` and `Region.add_exits()` have correct behavior"""
@@ -46,8 +49,9 @@ class TestHelpers(unittest.TestCase):
             "TestRegion1": {"TestRegion3"}
         }
 
-        exit_rules: Dict[str, Callable[[CollectionState], bool]] = {
-            "TestRegion1": lambda state: state.has("test_item", self.player)
+        exit_rules: Dict[str, CollectionRule | Rule[Any]] = {
+            "TestRegion1": lambda state: state.has("test_item", self.player),
+            "TestRegion2": Has("test_item2"),
         }
 
         self.multiworld.regions += [Region(region, self.player, self.multiworld, regions[region]) for region in regions]
@@ -74,13 +78,17 @@ class TestHelpers(unittest.TestCase):
                         self.assertTrue(f"{parent} -> {exit_reg}" in created_exit_names)
                     if exit_reg in exit_rules:
                         entrance_name = exit_name if exit_name else f"{parent} -> {exit_reg}"
-                        self.assertEqual(exit_rules[exit_reg],
-                                         self.multiworld.get_entrance(entrance_name, self.player).access_rule)
+                        rule = exit_rules[exit_reg]
+                        if isinstance(rule, Rule):
+                            self.assertEqual(rule.resolve(self.multiworld.worlds[self.player]),
+                                             self.multiworld.get_entrance(entrance_name, self.player).access_rule)
+                        else:
+                            self.assertEqual(rule, self.multiworld.get_entrance(entrance_name, self.player).access_rule)
 
-            for region in reg_exit_set:
+            for region, exit_set in reg_exit_set.items():
                 current_region = self.multiworld.get_region(region, self.player)
-                current_region.add_exits(reg_exit_set[region])
+                current_region.add_exits(exit_set)
                 exit_names = {_exit.name for _exit in current_region.exits}
-                for reg_exit in reg_exit_set[region]:
+                for reg_exit in exit_set:
                     self.assertTrue(f"{region} -> {reg_exit}" in exit_names,
                                     f"{region} -> {reg_exit} not in {exit_names}")

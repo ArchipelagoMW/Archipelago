@@ -471,7 +471,7 @@ class GoalSelection(OptionSet):
     Configure them further with other options.
 
     Possible values are:
-    - **Space Elevator Tier**
+    - **Space Elevator Phase**
     - **AWESOME Sink Points (total)**
     - **AWESOME Sink Points (per minute)**
     - **Exploration Collectables**

@@ -3,6 +3,7 @@ import string
 import typing
 
 from BaseClasses import Item, MultiWorld, Region, Location, Entrance, Tutorial, ItemClassification
+from . import Items
 from .Items import item_table, faction_table
 from .Locations import location_table
 from .Regions import create_regions
@@ -73,6 +74,7 @@ class WargrooveWorld(World):
 
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = location_table
+    item_name_groups = Items.item_name_groups
 
     def _get_slot_data(self):
         return {
@@ -143,8 +145,8 @@ class WargrooveWorld(World):
         return self.multiworld.random.choice(["Commander Defense Boost", "Income Boost"])
 
 
-def create_region(world: MultiWorld, player: int, name: str, locations=None, exits=None):
-    ret = Region(name, player, world)
+def create_region(multiworld: MultiWorld, player: int, name: str, locations=None, exits=None):
+    ret = Region(name, player, multiworld)
     if locations:
         for location in locations:
             loc_id = location_table.get(location, 0)

@@ -1,5 +1,12 @@
 # Dark Souls III Randomizer Setup Guide
 
+[Game Page] | Setup | [Items] | [Locations] | [Enemy Randomization]
+
+[Game Page]: /games/Dark%20Souls%20III/info/en
+[Items]: /tutorial/Dark%20Souls%20III/items/en
+[Locations]: /tutorial/Dark%20Souls%20III/locations/en
+[Enemy Randomization]: /tutorial/Dark%20Souls%20III/enemy-randomization/en
+
 ## Required Software
 
 - [Dark Souls III](https://store.steampowered.com/app/374320/DARK_SOULS_III/)

@@ -600,7 +600,7 @@ item_name_groups[ItemGroupNames.KERRIGAN_LOGIC_ACTIVE_ABILITIES] = kerrigan_logi
     item_name for item_name in kerrigan_active_abilities if item_name != item_names.KERRIGAN_ASSIMILATION_AURA
 ]
 item_name_groups[ItemGroupNames.KERRIGAN_TIER_1] = kerrigan_tier_1 = [
-    item_names.KERRIGAN_CRUSHING_GRIP, item_names.KERRIGAN_HEROIC_FORTITUDE, item_names.KERRIGAN_LEAPING_STRIKE
+    item_names.KERRIGAN_KINETIC_BLAST, item_names.KERRIGAN_HEROIC_FORTITUDE, item_names.KERRIGAN_LEAPING_STRIKE
 ]
 item_name_groups[ItemGroupNames.KERRIGAN_TIER_2] = kerrigan_tier_2= [
     item_names.KERRIGAN_CRUSHING_GRIP, item_names.KERRIGAN_CHAIN_REACTION, item_names.KERRIGAN_PSIONIC_SHIFT

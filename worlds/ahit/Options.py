@@ -72,6 +72,7 @@ def adjust_options(world: "HatInTimeWorld"):
         world.options.EndGoal.value = EndGoal.option_seal_the_deal
         world.options.ActRandomizer.value = 0
         world.options.ShuffleAlpineZiplines.value = 0
+        world.options.ShuffleDirectorTokens.value = 0
         world.options.ShuffleSubconPaintings.value = 0
         world.options.ShuffleStorybookPages.value = 0
         world.options.ShuffleActContracts.value = 0
@@ -217,6 +218,12 @@ class ShuffleStorybookPages(DefaultOnToggle):
     """If enabled, each storybook page in the purple Time Rifts is an item check.
     The Compass Badge can track these down for you."""
     display_name = "Shuffle Storybook Pages"
+
+
+class ShuffleDirectorTokens(Toggle):
+    """If enabled, causes the Conductor/DJ Grooves tokens found in Chapter 2 levels to become item checks.
+    NOTE: This also includes the time bonus pickups from Train Rush, since the level doesn't have any tokens."""
+    display_name = "Shuffle Director Tokens"
 
 
 class ShuffleActContracts(DefaultOnToggle):
@@ -658,6 +665,7 @@ class AHITOptions(PerGameCommonOptions):
     StartWithCompassBadge:    StartWithCompassBadge
     CompassBadgeMode:         CompassBadgeMode
     ShuffleStorybookPages:    ShuffleStorybookPages
+    ShuffleDirectorTokens:    ShuffleDirectorTokens
     ShuffleActContracts:      ShuffleActContracts
     ShuffleSubconPaintings:   ShuffleSubconPaintings
     NoPaintingSkips:          NoPaintingSkips
@@ -722,7 +730,8 @@ class AHITOptions(PerGameCommonOptions):
 
 
 ahit_option_groups: Dict[str, List[Any]] = {
-    "General Options": [EndGoal, ShuffleStorybookPages, ShuffleAlpineZiplines, ShuffleSubconPaintings,
+    "General Options": [EndGoal, ShuffleStorybookPages, ShuffleDirectorTokens,
+                        ShuffleAlpineZiplines, ShuffleSubconPaintings,
                         ShuffleActContracts, MinPonCost, MaxPonCost, BadgeSellerMinItems, BadgeSellerMaxItems,
                         LogicDifficulty, NoPaintingSkips, CTRLogic],
 
@@ -759,6 +768,7 @@ slot_data_options: List[str] = [
     "StartWithCompassBadge",
     "CompassBadgeMode",
     "ShuffleStorybookPages",
+    "ShuffleDirectorTokens",
     "ShuffleActContracts",
     "ShuffleSubconPaintings",
     "NoPaintingSkips",

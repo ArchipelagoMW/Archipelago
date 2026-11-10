@@ -23,6 +23,8 @@
 *.gb
 *.gbc
 *.gba
+*.nds
+*.iso
 *.wixobj
 *.lck
 *.db3
@@ -45,6 +47,7 @@ EnemizerCLI/
 /SNI/
 /sni-*/
 /appimagetool*
+/VC_redist.x64.exe
 /host.yaml
 /options.yaml
 /config.yaml
@@ -62,9 +65,12 @@ Output Logs/
 /setup.ini
 /installdelete.iss
 /data/user.kv
+/data/jak1/
 /datapackage
 /datapackage_export.json
 /custom_worlds
+# stubgen output
+/out/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

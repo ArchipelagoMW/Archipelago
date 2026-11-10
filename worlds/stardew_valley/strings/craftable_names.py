@@ -63,6 +63,7 @@ class Fishing:
     curiosity_lure = "Curiosity Lure"
     deluxe_bait = "Deluxe Bait"
     challenge_bait = "Challenge Bait"
+    golden_bobber = "Golden Bobber"
 
 
 class Ring:
@@ -121,10 +122,16 @@ class Lighting:
 
 
 class Furniture:
+    modern_lamp = "Modern Lamp"
+    candle_lamp = "Candle Lamp"
     tub_o_flowers = "Tub o' Flowers"
     wicked_statue = "Wicked Statue"
     flute_block = "Flute Block"
     drum_block = "Drum Block"
+    single_bed = "Single Bed"
+    cursed_mannequin = "Cursed Mannequin"
+    crane_game_house_plant = "House Plant 13 (Crane Game)"
+    exotic_double_bed = "Exotic Double Bed"
 
 
 class Storage:
@@ -176,7 +183,7 @@ class ModEdible:
 class ModCraftable:
     travel_core = "Travel Core"
     glass_brazier = "Glass Brazier"
-    water_shifter = "Water Shifter"
+    water_sifter = "Water Sifter"
     rusty_brazier = "Rusty Brazier"
     glass_fence = "Glass Fence"
     bone_fence = "Bone Fence"

@@ -1,11 +1,11 @@
-from typing import TYPE_CHECKING, Optional, Set, List, Dict
+import asyncio
 import struct
 
+from typing import TYPE_CHECKING, Optional, Set, List, Dict
 from NetUtils import ClientStatus
 from .Locations import roomCount, nonBlock, beanstones, roomException, shop, badge, pants, eReward
 from .Items import items_by_id
 
-import asyncio
 
 import worlds._bizhawk as bizhawk
 from worlds._bizhawk.client import BizHawkClient
@@ -41,8 +41,6 @@ class MLSSClient(BizHawkClient):
         self.local_events = []
 
     async def validate_rom(self, ctx: "BizHawkClientContext") -> bool:
-        from CommonClient import logger
-
         try:
             # Check ROM name/patch version
             rom_name_bytes = await bizhawk.read(ctx.bizhawk_ctx, [(0xA0, 14, "ROM")])
@@ -72,20 +70,15 @@ class MLSSClient(BizHawkClient):
     async def set_auth(self, ctx: "BizHawkClientContext") -> None:
         ctx.auth = self.player_name
 
-    def on_package(self, ctx, cmd, args) -> None:
-        if cmd == "RoomInfo":
-            ctx.seed_name = args["seed_name"]
-
     async def game_watcher(self, ctx: "BizHawkClientContext") -> None:
         from CommonClient import logger
-
         try:
-            if ctx.seed_name is None:
+            if ctx.server_seed_name is None:
                 return
             if not self.seed_verify:
-                seed = await bizhawk.read(ctx.bizhawk_ctx, [(0xDF00A0, len(ctx.seed_name), "ROM")])
+                seed = await bizhawk.read(ctx.bizhawk_ctx, [(0xDF00A0, len(ctx.server_seed_name), "ROM")])
                 seed = seed[0].decode("UTF-8")
-                if seed not in ctx.seed_name:
+                if seed not in ctx.server_seed_name:
                     logger.info(
                         "ERROR: The ROM you loaded is for a different game of AP. "
                         "Please make sure the host has sent you the correct patch file, "

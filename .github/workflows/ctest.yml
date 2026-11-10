@@ -24,6 +24,8 @@ on:
       - '**/CMakeLists.txt'
       - '.github/workflows/ctest.yml'
 
+permissions: {}
+
 jobs:
   ctest:
     runs-on: ${{ matrix.os }}
@@ -35,7 +37,7 @@ jobs:
         os: [ubuntu-latest, windows-latest]
 
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v6.0.2
     - uses: ilammy/msvc-dev-cmd@0b201ec74fa43914dc39ae48a89fd1d8cb592756
       if: startsWith(matrix.os,'windows')
     - uses: Bacondish2023/setup-googletest@49065d1f7a6d21f6134864dd65980fe5dbe06c73

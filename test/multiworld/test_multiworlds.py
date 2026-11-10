@@ -61,16 +61,18 @@ class TestAllGamesMultiworld(MultiworldTestBase):
         with self.subTest("filling multiworld", seed=self.multiworld.seed):
             distribute_items_restrictive(self.multiworld)
             call_all(self.multiworld, "post_fill")
+            call_all(self.multiworld, "finalize_multiworld")
             self.assertTrue(self.fulfills_accessibility(), "Collected all locations, but can't beat the game")
 
 
-@classvar_matrix(game=AutoWorldRegister.world_types.keys())
+@classvar_matrix(game=AutoWorldRegister.testable_worlds.keys())
 class TestTwoPlayerMulti(MultiworldTestBase):
+    world_relevant = True
     game: ClassVar[str]
 
     def test_two_player_single_game_fills(self) -> None:
         """Tests that a multiworld of two players for each registered game world can generate."""
-        world_type = AutoWorldRegister.world_types[self.game]
+        world_type = AutoWorldRegister.testable_worlds[self.game]
         self.multiworld = setup_multiworld([world_type, world_type], ())
         for world in self.multiworld.worlds.values():
             world.options.accessibility.value = Accessibility.option_full
@@ -78,4 +80,5 @@ class TestTwoPlayerMulti(MultiworldTestBase):
         with self.subTest("filling multiworld", games=world_type.game, seed=self.multiworld.seed):
             distribute_items_restrictive(self.multiworld)
             call_all(self.multiworld, "post_fill")
+            call_all(self.multiworld, "finalize_multiworld")
             self.assertTrue(self.fulfills_accessibility(), "Collected all locations, but can't beat the game")

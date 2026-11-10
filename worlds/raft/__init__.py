@@ -236,8 +236,8 @@ class RaftWorld(World):
             "DeathLink": bool(self.options.death_link)
         }
 
-def create_region(world: MultiWorld, player: int, name: str, locations=None, exits=None):
-    ret = Region(name, player, world)
+def create_region(multiworld: MultiWorld, player: int, name: str, locations=None, exits=None):
+    ret = Region(name, player, multiworld)
     if locations:
         for location in locations:
             loc_id = locations_lookup_name_to_id.get(location, 0)

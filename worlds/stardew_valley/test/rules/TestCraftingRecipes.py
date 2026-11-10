@@ -1,36 +1,43 @@
 from ..bases import SVTestBase
-from ... import options
+from ... import options, StartWithoutOptionName
 from ...data.craftable_data import all_crafting_recipes_by_name
-from ...options import BuildingProgression, ExcludeGingerIsland, Craftsanity, SeasonRandomization
+from ...options import StartWithout
 
 
 class TestCraftsanityLogic(SVTestBase):
     options = {
-        BuildingProgression.internal_name: BuildingProgression.option_progressive,
+        StartWithout.internal_name: frozenset({StartWithoutOptionName.buildings}),
+        options.SeasonRandomization.internal_name: options.SeasonRandomization.option_disabled,
+        options.SkillProgression.internal_name: options.SkillProgression.option_progressive,
+        options.BuildingProgression.internal_name: options.BuildingProgression.option_progressive,
         options.Cropsanity.internal_name: options.Cropsanity.option_enabled,
-        Craftsanity.internal_name: Craftsanity.option_all,
-        ExcludeGingerIsland.internal_name: ExcludeGingerIsland.option_true,
+        options.Craftsanity.internal_name: options.Craftsanity.option_all,
+        options.ExcludeGingerIsland.internal_name: options.ExcludeGingerIsland.option_true,
     }
 
     def test_can_craft_recipe(self):
+        location = "Craft Marble Brazier"
+        self.collect(self.create_item("Landslide Removed"))
         self.collect([self.create_item("Progressive Pickaxe")] * 4)
         self.collect([self.create_item("Progressive Fishing Rod")] * 4)
         self.collect([self.create_item("Progressive Sword")] * 4)
         self.collect([self.create_item("Progressive Mine Elevator")] * 24)
+        self.collect([self.create_item("Progressive Pan")] * 4)
         self.collect([self.create_item("Mining Level")] * 10)
         self.collect([self.create_item("Combat Level")] * 10)
         self.collect([self.create_item("Fishing Level")] * 10)
         self.collect_all_the_money()
-        self.assert_cannot_reach_location("Craft Marble Brazier")
+        self.assert_cannot_reach_location(location)
 
         self.multiworld.state.collect(self.create_item("Marble Brazier Recipe"))
-        self.assert_can_reach_location("Craft Marble Brazier")
+        self.assert_can_reach_location(location)
 
     def test_can_learn_crafting_recipe(self):
-        self.assert_cannot_reach_location("Marble Brazier Recipe")
+        location = "Marble Brazier Recipe"
+        self.assert_cannot_reach_location(location)
 
         self.collect_lots_of_money()
-        self.assert_can_reach_location("Marble Brazier Recipe")
+        self.assert_can_reach_location(location)
 
     def test_can_craft_festival_recipe(self):
         recipe = all_crafting_recipes_by_name["Jack-O-Lantern"]
@@ -47,8 +54,9 @@ class TestCraftsanityLogic(SVTestBase):
         self.assert_rule_true(rule)
 
     def test_require_furnace_recipe_for_smelting_checks(self):
-        locations = ["Craft Furnace", "Smelting", "Copper Pickaxe Upgrade", "Gold Trash Can Upgrade"]
+        locations = ["Craft Furnace", "Quest: Smelting", "Copper Pickaxe Upgrade", "Gold Trash Can Upgrade"]
         rules = [self.world.logic.region.can_reach_location(location) for location in locations]
+        self.collect(self.create_item("Landslide Removed"))
         self.collect([self.create_item("Progressive Pickaxe")] * 4)
         self.collect([self.create_item("Progressive Fishing Rod")] * 4)
         self.collect([self.create_item("Progressive Sword")] * 4)
@@ -66,11 +74,11 @@ class TestCraftsanityLogic(SVTestBase):
 
 class TestCraftsanityWithFestivalsLogic(SVTestBase):
     options = {
-        BuildingProgression.internal_name: BuildingProgression.option_progressive,
+        options.BuildingProgression.internal_name: options.BuildingProgression.option_progressive,
         options.Cropsanity.internal_name: options.Cropsanity.option_enabled,
         options.FestivalLocations.internal_name: options.FestivalLocations.option_easy,
-        Craftsanity.internal_name: Craftsanity.option_all,
-        ExcludeGingerIsland.internal_name: ExcludeGingerIsland.option_true,
+        options.Craftsanity.internal_name: options.Craftsanity.option_all,
+        options.ExcludeGingerIsland.internal_name: options.ExcludeGingerIsland.option_true,
     }
 
     def test_can_craft_festival_recipe(self):
@@ -90,12 +98,13 @@ class TestCraftsanityWithFestivalsLogic(SVTestBase):
 
 class TestNoCraftsanityLogic(SVTestBase):
     options = {
-        BuildingProgression.internal_name: BuildingProgression.option_progressive,
-        SeasonRandomization.internal_name: SeasonRandomization.option_progressive,
+        options.SkillProgression.internal_name: options.SkillProgression.option_progressive,
+        options.BuildingProgression.internal_name: options.BuildingProgression.option_progressive,
+        options.SeasonRandomization.internal_name: options.SeasonRandomization.option_progressive,
         options.Cropsanity.internal_name: options.Cropsanity.option_enabled,
         options.FestivalLocations.internal_name: options.FestivalLocations.option_disabled,
-        Craftsanity.internal_name: Craftsanity.option_none,
-        ExcludeGingerIsland.internal_name: ExcludeGingerIsland.option_true,
+        options.Craftsanity.internal_name: options.Craftsanity.option_none,
+        options.ExcludeGingerIsland.internal_name: options.ExcludeGingerIsland.option_true,
     }
 
     def test_can_craft_recipe(self):
@@ -115,8 +124,9 @@ class TestNoCraftsanityLogic(SVTestBase):
         self.assert_rule_true(rule)
 
     def test_requires_mining_levels_for_smelting_checks(self):
-        locations = ["Smelting", "Copper Pickaxe Upgrade", "Gold Trash Can Upgrade"]
+        locations = ["Quest: Smelting", "Copper Pickaxe Upgrade", "Gold Trash Can Upgrade"]
         rules = [self.world.logic.region.can_reach_location(location) for location in locations]
+        self.collect(self.create_item("Landslide Removed"))
         self.collect([self.create_item("Progressive Pickaxe")] * 4)
         self.collect([self.create_item("Progressive Fishing Rod")] * 4)
         self.collect([self.create_item("Progressive Sword")] * 4)
@@ -134,11 +144,11 @@ class TestNoCraftsanityLogic(SVTestBase):
 
 class TestNoCraftsanityWithFestivalsLogic(SVTestBase):
     options = {
-        BuildingProgression.internal_name: BuildingProgression.option_progressive,
+        options.BuildingProgression.internal_name: options.BuildingProgression.option_progressive,
         options.Cropsanity.internal_name: options.Cropsanity.option_enabled,
         options.FestivalLocations.internal_name: options.FestivalLocations.option_easy,
-        Craftsanity.internal_name: Craftsanity.option_none,
-        ExcludeGingerIsland.internal_name: ExcludeGingerIsland.option_true,
+        options.Craftsanity.internal_name: options.Craftsanity.option_none,
+        options.ExcludeGingerIsland.internal_name: options.ExcludeGingerIsland.option_true,
     }
 
     def test_can_craft_festival_recipe(self):

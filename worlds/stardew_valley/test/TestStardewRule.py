@@ -1,4 +1,5 @@
 import unittest
+from collections import Counter
 from typing import cast
 from unittest.mock import MagicMock, Mock
 
@@ -103,7 +104,7 @@ class TestEvaluateWhileSimplifying(unittest.TestCase):
 
     def test_short_circuit_when_combinable_rules_is_false(self):
         collection_state = MagicMock()
-        collection_state.has = Mock(return_value=False)
+        collection_state.prog_items = {1: Counter()}
         other_rule = MagicMock()
         rule = And(Received("Potato", 1, 10), cast(StardewRule, other_rule))
 
@@ -113,6 +114,7 @@ class TestEvaluateWhileSimplifying(unittest.TestCase):
 
     def test_identity_is_removed_from_other_rules(self):
         collection_state = MagicMock()
+        collection_state.prog_items = {1: Counter()}
         rule = Or(false_, Received("Potato", 1, 10))
 
         rule.evaluate_while_simplifying(collection_state)
@@ -122,6 +124,7 @@ class TestEvaluateWhileSimplifying(unittest.TestCase):
 
     def test_complement_replaces_combinable_rules(self):
         collection_state = MagicMock()
+        collection_state.prog_items = {1: Counter()}
         rule = Or(Received("Potato", 1, 10), true_)
 
         rule.evaluate_while_simplifying(collection_state)
@@ -132,6 +135,7 @@ class TestEvaluateWhileSimplifying(unittest.TestCase):
         expected_simplified = true_
         expected_result = True
         collection_state = MagicMock()
+        collection_state.prog_items = {1: Counter()}
         rule = Or(Or(expected_simplified), Received("Potato", 1, 10))
 
         actual_simplified, actual_result = rule.evaluate_while_simplifying(collection_state)
@@ -142,6 +146,7 @@ class TestEvaluateWhileSimplifying(unittest.TestCase):
 
     def test_already_simplified_rules_are_not_simplified_again(self):
         collection_state = MagicMock()
+        collection_state.prog_items = {1: Counter()}
         other_rule = MagicMock()
         other_rule.evaluate_while_simplifying = Mock(return_value=(other_rule, False))
         rule = Or(cast(StardewRule, other_rule), Received("Potato", 1, 10))

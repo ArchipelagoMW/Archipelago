@@ -20,7 +20,7 @@ import Utils
 from MultiServer import CommandProcessor, mark_raw
 from NetUtils import (Endpoint, decode, NetworkItem, encode, JSONtoTextParser, ClientStatus, Permission, NetworkSlot,
                       RawJSONtoTextParser, add_json_text, add_json_location, add_json_item, JSONTypes, HintStatus, SlotType)
-from Utils import Version, stream_input, async_start
+from Utils import gui_enabled, Version, stream_input, async_start
 from worlds import network_data_package
 
 if TYPE_CHECKING:
@@ -36,9 +36,6 @@ if __name__ == "__main__":
 
 
 logger = logging.getLogger("Client")
-
-# without terminal, we have to use gui mode
-gui_enabled = not sys.stdout or "--nogui" not in sys.argv
 
 
 @Utils.cache_argsless
@@ -67,6 +64,8 @@ class ClientCommandProcessor(CommandProcessor):
 
     def _cmd_exit(self) -> bool:
         """Close connections and client"""
+        if self.ctx.ui:
+            self.ctx.ui.stop()
         self.ctx.exit_event.set()
         return True
 
@@ -235,7 +234,7 @@ class CommonContext:
     # The following attributes are used to Connect and should be adjusted as needed in subclasses
     tags: set[str] = {"AP"}
     game: str | None = None
-    items_handling: int | None = None
+    items_handling: int
     want_slot_data: bool = True  # should slot_data be retrieved via Connect
 
     class NameLookupDict:
@@ -344,6 +343,10 @@ class CommonContext:
     """Name used in Connect packet"""
     seed_name: str | None
     """Seed name that will be validated on opening a socket if present"""
+    server_seed_name: str | None
+    """Actual seed_name reported by the server in RoomInfo"""
+    connected_identity: tuple[str, int, int] | None
+    """(server_seed_name, team, slot) of the last successful connection, used to detect a session switch"""
 
     # locations
     locations_checked: set[int]
@@ -362,6 +365,8 @@ class CommonContext:
     """Container of Locations that are unchecked per server state"""
     checked_locations: set[int]
     """Container of Locations that are checked per server state"""
+    pending_locations: set[int]
+    """Container of Locations that are in the process of changing from unchecked to checked server state"""
     server_locations: set[int]
     """Container of Locations that exist per server state; a combination between missing and checked locations"""
     locations_info: dict[int, NetworkItem]
@@ -402,10 +407,15 @@ class CommonContext:
         self.slot = None
         self.auth = None
         self.seed_name = None
+        self.server_seed_name = None
+        self.connected_identity = None
+        # decouple from the class-level mutable set so tag changes (e.g. DeathLink) don't leak across instances
+        self.tags = set(type(self).tags)
 
         self.locations_checked = set()  # local state
         self.locations_scouted = set()
         self.items_received = []
+        self.pending_locations = set()  # local state
         self.missing_locations = set()  # server state
         self.checked_locations = set()  # server state
         self.server_locations = set()  # all locations the server knows of, missing_location | checked_locations
@@ -463,6 +473,8 @@ class CommonContext:
         self.team = None
         self.items_received = []
         self.locations_info = {}
+        self.pending_locations = set()
+        self.server_seed_name = None
         self.server_version = Version(0, 0, 0)
         self.generator_version = Version(0, 0, 0)
         self.server = None
@@ -473,6 +485,22 @@ class CommonContext:
             "collect": "disabled",
             "remaining": "disabled",
         }
+
+    def reset_session_state(self):
+        """Clear local progress and data-storage state tied to a single session."""
+        self.locations_checked = set()
+        self.locations_scouted = set()
+        self.locations_info = {}
+        self.items_received = []
+        self.pending_locations = set()
+        self.missing_locations = set()
+        self.checked_locations = set()
+        self.server_locations = set()
+        self.finished_game = False
+        self.ready = False
+        self.stored_data = {}
+        self.stored_data_notification_keys = set()
+        self.current_energy_link_value = None
 
     async def disconnect(self, allow_autoreconnect: bool = False):
         if not allow_autoreconnect:
@@ -534,8 +562,9 @@ class CommonContext:
 
     async def check_locations(self, locations: Collection[int]) -> set[int]:
         """Send new location checks to the server. Returns the set of actually new locations that were sent."""
-        locations = set(locations) & self.missing_locations
+        locations = set(locations) & (self.missing_locations - self.pending_locations)
         if locations:
+            self.pending_locations |= locations
             await self.send_msgs([{"cmd": 'LocationChecks', "locations": tuple(locations)}])
         return locations
 
@@ -778,7 +807,7 @@ class CommonContext:
         if len(parts) == 1:
             parts = title.split(', ', 1)
         if len(parts) > 1:
-            text = parts[1] + '\n\n' + text
+            text = f"{parts[1]}\n\n{text}" if text else parts[1]
             title = parts[0]
         # display error
         self._messagebox = MessageBox(title, text, error=True)
@@ -901,6 +930,8 @@ async def server_loop(ctx: CommonContext, address: str | None = None) -> None:
                                    "May not be running Archipelago on that address or port.")
     except websockets.InvalidURI:
         ctx.handle_connection_loss("Failed to connect to the multiworld server (invalid URI)")
+    except asyncio.TimeoutError:
+        ctx.handle_connection_loss("Failed to connect to the multiworld server. Connection timed out.")
     except OSError:
         ctx.handle_connection_loss("Failed to connect to the multiworld server")
     except Exception:
@@ -927,6 +958,7 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
         logger.exception(f"Could not get command from {args}")
         raise
     if cmd == 'RoomInfo':
+        ctx.server_seed_name = args["seed_name"]
         if ctx.seed_name and ctx.seed_name != args["seed_name"]:
             msg = "The server is running a different multiworld than your client is. (invalid seed_name)"
             logger.info(msg, extra={'compact_gui': True})
@@ -1007,6 +1039,11 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
         ctx.username = ctx.auth
         ctx.team = args["team"]
         ctx.slot = args["slot"]
+        # on a switch to a different session, clear session state before stale checks/goal are replayed below
+        identity = (ctx.server_seed_name, ctx.team, ctx.slot)
+        if ctx.connected_identity is not None and identity != ctx.connected_identity:
+            ctx.reset_session_state()
+        ctx.connected_identity = identity
         # int keys get lost in JSON transfer
         ctx.slot_info = {0: NetworkSlot("Archipelago", "Archipelago", SlotType.player)}
         ctx.slot_info.update({int(pid): data for pid, data in args["slot_info"].items()})
@@ -1043,6 +1080,7 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
         ctx.missing_locations = set(args["missing_locations"])
         ctx.checked_locations = set(args["checked_locations"])
         ctx.server_locations = ctx.missing_locations | ctx. checked_locations
+        ctx.pending_locations = set()
 
         server_url = urllib.parse.urlparse(ctx.server_address)
         Utils.persistent_store("client", "last_server_address", server_url.netloc)
@@ -1072,13 +1110,18 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
         if "players" in args:
             ctx.consume_players_package(args["players"])
         if "hint_points" in args:
-            ctx.hint_points = args['hint_points']
+            ctx.hint_points = args["hint_points"]
         if "checked_locations" in args:
             checked = set(args["checked_locations"])
             ctx.checked_locations |= checked
             ctx.missing_locations -= checked
+            ctx.pending_locations -= checked
         if "permissions" in args:
             ctx.update_permissions(args["permissions"])
+
+        # Update hint info for local display
+        if "hint_cost" in args:
+            ctx.hint_cost = int(args["hint_cost"])
 
     elif cmd == 'Print':
         ctx.on_print(args)
@@ -1091,9 +1134,12 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
 
     elif cmd == "Bounced":
         tags = args.get("tags", [])
-        # we can skip checking "DeathLink" in ctx.tags, as otherwise we wouldn't have been send this
-        if "DeathLink" in tags and ctx.last_death_link != args["data"]["time"]:
-            ctx.on_deathlink(args["data"])
+        # we can skip checking "DeathLink" in ctx.tags, as otherwise we wouldn't have been sent this
+        if "DeathLink" in tags:
+            data = args.get("data", {})
+            time = data.get("time")
+            if time is not None and ctx.last_death_link != time:
+                ctx.on_deathlink(args["data"])
 
     elif cmd == "Retrieved":
         ctx.stored_data.update(args["keys"])

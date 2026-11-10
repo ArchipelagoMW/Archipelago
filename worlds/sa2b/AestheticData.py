@@ -175,9 +175,18 @@ sample_chao_names = [
 	"Jak",
 	"Wario",
 	"Theo",
+	"Charles",
+	"Mercer",
+	"Ness",
+	"HardMan",
+	"Skorne",
 ]
 
 totally_real_item_names: dict[str, list[str]] = {
+	"APQuest": [
+		"Mallet",
+	],
+
 	"Bumper Stickers": [
 		"Bonus Score",
 		"Boosting Bumper",
@@ -207,6 +216,11 @@ totally_real_item_names: dict[str, list[str]] = {
 		"Blueberry",
 	],
 
+	"Choo-Choo Charles": [
+		"Cyan Egg",
+		"Insect Repellant",
+	],
+
 	"Civilization VI": [
 		"Advanced Trebuchets",
 		"The Wheel 2",
@@ -218,11 +232,22 @@ totally_real_item_names: dict[str, list[str]] = {
 		"Bonus Token",
 	],
 
+	"EarthBound": [
+		"Cheese Pizza",
+		"Piggy Tail",
+	],
+
 	"Factorio": [
 		"logistic-ai",
 		"progressive-militia",
 		"progressive-stronger-explosives",
 		"uranium-food",
+	],
+
+	"Gauntlet Legends": [
+		"Thunder Shield",
+		"Lightning Hammer",
+		"Halo",
 	],
 
 	"A Hat in Time": [
@@ -280,6 +305,11 @@ totally_real_item_names: dict[str, list[str]] = {
 
 	"Mario & Luigi Superstar Saga": [
 		"Mega Nut",
+	],
+
+	"Mega Man 3": [
+		"Hard Knuckles",
+		"Search Python",
 	],
 
 	"The Messenger": [
@@ -347,6 +377,13 @@ totally_real_item_names: dict[str, list[str]] = {
 		"Progressive Chefs",
 		"The Living Safe",
 		"Lady Quinn",
+	],
+
+	"Satisfactory": [
+		"Recipe: Reinforced Frame",
+		"Recipe: Linux Computer",
+		"Recipe: Large Language Model",
+		"Building: Power Pole Mk.6",
 	],
 
 	"Saving Princess": [

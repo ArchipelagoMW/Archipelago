@@ -20,11 +20,7 @@
                 {% for file_name, file_data in tutorial_data.files.items() %}
                     <li>
                         <a href="{{ url_for("tutorial", game=world_name, file=file_name) }}">{{ file_data.language }}</a>
-                        by
-                        {% for author in file_data.authors %}
-                            {{ author }}
-                            {% if not loop.last %}, {% endif %}
-                        {% endfor %}
+                        by {{ file_data.authors | join(", ") }}
                     </li>
                 {% endfor %}
             </ul>

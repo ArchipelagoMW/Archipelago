@@ -1,5 +1,6 @@
 class AnimalProduct:
     any_egg = "Any Egg"
+    any_milk = "Any Milk"
     brown_egg = "Egg (Brown)"
     chicken_egg = "Chicken Egg"
     cow_milk = "Cow Milk"
@@ -38,10 +39,13 @@ class AnimalProduct:
     slime_egg_red = "Red Slime Egg"
     slime_egg_tiger = "Tiger Slime Egg"
     squid_ink = "Squid Ink"
-    sturgeon_roe = "Sturgeon Roe"
     truffle = "Truffle"
     void_egg_starter = "Void Egg (Starter)"
     """This item does not really exist and should never end up being displayed.
     It's there to patch the loop in logic because of the Chicken-and-egg problem."""
     void_egg = "Void Egg"
     wool = "Wool"
+
+    @classmethod
+    def specific_roe(cls, fish: str) -> str:
+        return f"{cls.roe} [{fish}]"

@@ -129,7 +129,7 @@ def adjust_mission_pools(world: 'SC2World', pools: SC2MOGenMissionPools):
     if grant_story_tech == GrantStoryTech.option_grant:
         # Additional starter mission if player is granted story tech
         pools.move_mission(SC2Mission.ENEMY_WITHIN, Difficulty.EASY, Difficulty.STARTER)
-        pools.move_mission(SC2Mission.THE_ESCAPE, Difficulty.MEDIUM, Difficulty.STARTER)
+        pools.move_mission(SC2Mission.THE_ESCAPE, Difficulty.EASY, Difficulty.STARTER)
         pools.move_mission(SC2Mission.IN_THE_ENEMY_S_SHADOW, Difficulty.MEDIUM, Difficulty.STARTER)
     if not war_council_nerfs or grant_story_tech == GrantStoryTech.option_grant:
         pools.move_mission(SC2Mission.TEMPLAR_S_RETURN, Difficulty.MEDIUM, Difficulty.STARTER)
