@@ -448,6 +448,7 @@ class CommonContext:
         """Will return None until connected."""
         if self.checked_locations or self.missing_locations:
             return len(self.checked_locations | self.missing_locations)
+        return None
 
     async def connection_closed(self):
         if self.server and self.server.socket is not None:
@@ -504,6 +505,7 @@ class CommonContext:
             logger.info('Enter the password required to join this game:')
             self.password = await self.console_input()
             return self.password
+        return None
 
     async def get_username(self):
         if not self.auth:
