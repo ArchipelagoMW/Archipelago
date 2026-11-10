@@ -9,28 +9,29 @@ import sys
 import typing
 import time
 import functools
-
-import ModuleUpdate
-ModuleUpdate.update()
-
 import websockets
+import os
+import ssl
 
 import Utils
-
-if __name__ == "__main__":
-    Utils.init_logging("TextClient", exception_logger="Client")
 
 from MultiServer import CommandProcessor, mark_raw
 from NetUtils import (Endpoint, decode, NetworkItem, encode, JSONtoTextParser, ClientStatus, Permission, NetworkSlot,
                       RawJSONtoTextParser, add_json_text, add_json_location, add_json_item, JSONTypes, HintStatus, SlotType)
 from Utils import Version, stream_input, async_start
 from worlds import network_data_package
-import os
-import ssl
 
 if typing.TYPE_CHECKING:
     import kvui
     import argparse
+
+import ModuleUpdate
+ModuleUpdate.update()
+
+
+if __name__ == "__main__":
+    Utils.init_logging("TextClient", exception_logger="Client")
+
 
 logger = logging.getLogger("Client")
 
