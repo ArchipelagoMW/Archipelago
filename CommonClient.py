@@ -1163,7 +1163,6 @@ def handle_url_arg(args: "argparse.Namespace",
         if not parser:
             parser = get_base_parser()
         parser.error(f"bad url, found {args.url}, expected url in form of archipelago://archipelago.gg:38281")
-        return args
 
     args.url = url
     args.connect = url.netloc
