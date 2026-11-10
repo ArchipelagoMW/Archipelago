@@ -1,5 +1,6 @@
 from BaseClasses import Item, ItemClassification, Tutorial, Location, MultiWorld
-from .Items import item_table, create_item, relic_groups, act_contracts, create_itempool, get_shop_trap_name, \
+from Options import Option
+from .Items import item_table, create_item, relic_groups, create_itempool, get_shop_trap_name, \
     calculate_yarn_costs, alps_hooks, junk_weights
 from .Regions import create_regions, randomize_act_entrances, chapter_act_info, create_events, get_shuffled_region
 from .Locations import location_table, contract_locations, is_location_valid, get_location_names, TASKSANITY_START_ID, \
@@ -9,10 +10,9 @@ from .Options import AHITOptions, slot_data_options, adjust_options, RandomizeHa
 from .Types import HatType, ChapterIndex, HatInTimeItem, hat_type_to_item, Difficulty
 from .DeathWishLocations import create_dw_regions, dw_classes, death_wishes
 from .DeathWishRules import set_dw_rules, create_enemy_events, hit_list, bosses
-from .tracker import map_page_locations, tracker_name_mapping, AHITSettings, poptracker_entrance_mapping, map_page_groups
 from worlds.AutoWorld import World, WebWorld, CollectionState
 from worlds.generic.Rules import add_rule
-from typing import List, Dict, TextIO, Any, ClassVar
+from typing import List, Dict, TextIO, Any
 from worlds.LauncherComponents import Component, components, icon_paths, launch as launch_component, Type
 from Utils import local_path
 
@@ -58,21 +58,6 @@ class HatInTimeWorld(World):
     # UT integration
     ut_can_gen_without_yaml = True
     glitches_item_name = "Higher Logic Hat"
-    # TODO move to tracker.py? Does that make sense?
-    # settings: ClassVar[AHITSettings]
-    # # TODO: figure out how to have a decent map page layout, both groups and importing seem like a mess atm
-    # # Also not sure how to deal with the deathwish varient in a intuitive way
-    # # TODO: add item page?
-    # tracker_world: ClassVar = {
-        # "nested_pack" : True,
-        # "map_page_maps" : "maps/maps.json",
-        # "map_page_locations" : map_page_locations,
-        # "poptracker_name_mapping" : tracker_name_mapping,
-        # "poptracker_entrance_mapping" : poptracker_entrance_mapping,
-        # "map_page_layouts" : "layouts/map_tabs.json", # TODO: Add the deathwish varient tab layout?
-        # # "map_page_groups" : map_page_groups,
-        # "external_pack_key" : "ut_poptracker_path"
-    # }
 
     def __init__(self, multiworld: "MultiWorld", player: int):
         super().__init__(multiworld, player)
@@ -144,7 +129,7 @@ class HatInTimeWorld(World):
 
             # Get randomized act locations from slot data
             if self.options.ActRandomizer:
-                for key, value in chapter_act_info.items():
+                for value in chapter_act_info.values():
                     if value in slot_data:
                         self.act_connections[value] = slot_data[value]
 
@@ -185,7 +170,6 @@ class HatInTimeWorld(World):
             return
 
         # Take care of some extremely restrictive starts in other chapters with act shuffle off
-        # TODO: see if the random zipline is an issue for UT
         if not self.options.ActRandomizer:
             start_chapter = self.options.StartingChapter
             if start_chapter == ChapterIndex.ALPINE:
@@ -486,25 +470,3 @@ class HatInTimeWorld(World):
         # Trigger a regen in UT instead of attempting tracker gen with local yaml
         return slot_data
 
-        # TODO: Add UT defered entrances logic. Looks like most of the act logic is in Rules act_connections already? Would need to tie the deferral to those act completions I guess.
-        # Likely need to do time rift deferral as well, since those are tied to both act completion and location availability.
-        # Would need to potentially look at the deferred logic for deathwish too... is there anything else?
-
-        # TODO: Add "Glitched" logic (partial implementation done, have some stuff left in expert and need to decide if I want to deal with the random scattered difficulty rules without rule builder)
-        # Maybe move the glitched logic rules to a separate file referenced and called by rules, keep rules cleaner and make things more separate for a potential RB refactor?
-
-        # TODO: Add Custom Sorting? Could group region checks together. (I likely won't do this)
-
-        # TODO: Add UT map tracker support (integrate with existing poptracker)
-        # Looks like the item names don't match, so would also need to build a translation table (WIP)
-
-        # TODO: Add any Logic explanation overrides desired (I likely won't do this)
-
-        # TODO: Consider optimizations, cleaner code, make sure changes are clean and meet AP style standards
-
-        # TODO: Consider refactor to Rule Builder to greatly improve/streamline glitch logic. (I likely won't do this, but maybe!)
-        # Would need core PR 6401 to mostly follow existing logic using add_rule, would allow for an easier but less clean/ideal refactor
-
-        # TODO: add more item groups? Like Relics, Hats, Yarn, Timepieces, etc?
-
-        # TODO: update AHIT docs as needed

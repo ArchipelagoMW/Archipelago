@@ -35,12 +35,8 @@ act_connections = {
 }
 
 
-# TODO: find a better way to do this. Maybe just use state.has in the lambda rule at this point...
 def glitch_logic(state: CollectionState, world: "HatInTimeWorld"):
-    # if world.fake_gen:
     return state.has(world.glitches_item_name, world.player)
-    # else:
-        # return False
 
 
 def can_use_hat(state: CollectionState, world: "HatInTimeWorld", hat: HatType) -> bool:

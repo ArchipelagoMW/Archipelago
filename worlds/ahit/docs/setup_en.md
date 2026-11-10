@@ -9,6 +9,8 @@
 ## Optional Software
 - [A Hat in Time Archipelago Map Tracker](https://github.com/Mysteryem/ahit-poptracker/releases), for use with [PopTracker](https://github.com/black-sliver/PopTracker/releases)
 
+- [Universal Tracker](https://github.com/FarisTheAncient/Archipelago/releases?q=Tracker), to enable additional tracking in the **Archipelago AHIT Client**
+
 
 ## Instructions
 

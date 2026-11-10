@@ -13,7 +13,8 @@ from typing import ClassVar
 # UT integration
 tracker_loaded = False
 try:
-    from worlds.tracker.TrackerClient import TrackerGameContext as CommonContext, gui_enabled, ClientCommandProcessor, logger, get_base_parser
+    from worlds.tracker.TrackerClient import TrackerGameContext as CommonContext, gui_enabled, ClientCommandProcessor, \
+    logger, get_base_parser
     tracker_loaded = True
 except ModuleNotFoundError:
     from CommonClient import CommonContext, gui_enabled, ClientCommandProcessor, logger, get_base_parser
@@ -111,10 +112,9 @@ class AHITContext(CommonContext):
         self.server_msgs.append(encode([{"cmd": "ReceivedItems", "index": 0, "items": self.full_inventory}]))
 
     def on_package(self, cmd: str, args: dict):
-        # TODO: see how this interacts or nullifies the optimization logic below. Can maybe modify to only keep slot info, and anything else, for itself instead of wiping it all? How does this affect the game itself?
-        # Should probably talk to CookieCat about how to handle this.
         # UT integration
-        super().on_package(cmd, args)
+        if tracker_loaded:
+            super().on_package(cmd, args)
 
         if cmd == "Connected":
             json = args
