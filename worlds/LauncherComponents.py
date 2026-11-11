@@ -90,7 +90,7 @@ class Component:
             self.func(*args)
         elif self.script_name:
             import subprocess
-            subprocess.run([*get_exe(self.script_name), *args])
+            subprocess.Popen([*get_exe(self.script_name), *args])
         else:
             logging.warning(f"Component {self} does not appear to be executable.")
 
