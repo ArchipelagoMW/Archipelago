@@ -1,6 +1,6 @@
 from dataclasses import dataclass
+from typing import ClassVar
 from enum import IntEnum
-from typing import TypedDict
 from Options import DefaultOnToggle, PerGameCommonOptions, Toggle, Range, Choice, OptionSet
 from .Overcooked2Levels import Overcooked2Dlc
 
@@ -46,7 +46,7 @@ class LocationBalancing(Choice):
 class RampTricks(OC2Toggle):
     """If enabled, generated games may require sequence breaks on the overworld map. This includes crossing small gaps and escaping out of bounds."""
     display_name = "Overworld Tricks"
-    
+
 
 class DeathLink(Choice):
     """DeathLink is an opt-in feature for Multiworlds where individual death events are propagated to all games with DeathLink enabled.
@@ -91,8 +91,8 @@ class ShuffleLevelOrder(OC2OnToggle):
 class DLCOptionSet(OptionSet):
     """Which DLCs should be included when 'Shuffle Level Order' is enabled?'"""
     display_name = "Enabled DLC"
-    default = {"Story", "Seasonal"}
-    valid_keys = [dlc.value for dlc in Overcooked2Dlc]
+    default: ClassVar = {"Story", "Seasonal"}
+    valid_keys: ClassVar = [dlc.value for dlc in Overcooked2Dlc]
 
 
 class IncludeHordeLevels(OC2OnToggle):
@@ -118,7 +118,7 @@ class FixBugs(OC2OnToggle):
 class ShorterLevelDuration(OC2OnToggle):
     """Modifies level duration to be about 1/3rd shorter than in the original game, thus bringing the item discovery
     pace in line with other popular Archipelago games.
-    
+
     Points required to earn stars are scaled accordingly. ("Boss Levels" which change scenery mid-game are not
     affected.)"""
     display_name = "Shorter Level Duration"
@@ -173,17 +173,17 @@ class OC2Options(PerGameCommonOptions):
     # generator options
     location_balancing: LocationBalancing
     ramp_tricks: RampTricks
-    
+
     # deathlink
     deathlink: DeathLink
-    
+
     # randomization options
     shuffle_level_order: ShuffleLevelOrder
     include_dlcs: DLCOptionSet
     include_horde_levels: IncludeHordeLevels
     prep_levels: PrepLevels
     kevin_levels: KevinLevels
-    
+
     # quality of life options
     fix_bugs: FixBugs
     shorter_level_duration: ShorterLevelDuration
@@ -191,7 +191,7 @@ class OC2Options(PerGameCommonOptions):
     always_preserve_cooking_progress: AlwaysPreserveCookingProgress
     always_serve_oldest_order: AlwaysServeOldestOrder
     display_leaderboard_scores: DisplayLeaderboardScores
-    
+
     # difficulty settings
     stars_to_win: StarsToWin
     star_threshold_scale: StarThresholdScale

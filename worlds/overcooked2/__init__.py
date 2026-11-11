@@ -1,12 +1,14 @@
 from enum import IntEnum
-from typing import Any, List, Dict, Set, Callable, Optional, TextIO
+from typing import Any, TextIO, ClassVar
+from collections.abc import Callable
 
-from BaseClasses import ItemClassification, CollectionState, Region, Entrance, Location, Tutorial, LocationProgressType
+from BaseClasses import ItemClassification, CollectionState, Region, Location, Tutorial, LocationProgressType
+from Options import OptionError
 from worlds.AutoWorld import World, WebWorld
 
 from .Overcooked2Levels import Overcooked2Dlc, Overcooked2Level, Overcooked2GenericLevel
 from .Locations import Overcooked2Location, oc2_location_name_to_id, oc2_location_id_to_name
-from .Options import OC2Options, OC2OnToggle, LocationBalancingMode, DeathLinkMode
+from .Options import OC2Options, LocationBalancingMode, DeathLinkMode
 from .Items import item_table, Overcooked2Item, item_name_to_id, item_id_to_name, item_to_unlock_event, item_frequencies, dlc_exclusives
 from .Logic import has_requirements_for_level_star, has_requirements_for_level_access, level_shuffle_factory, is_item_progression, is_useful
 
@@ -24,7 +26,7 @@ class Overcooked2Web(WebWorld):
         ["toasterparty"]
     )
 
-    tutorials = [setup_en]
+    tutorials: ClassVar = [setup_en]
 
 
 class PrepLevelMode(IntEnum):
@@ -57,7 +59,7 @@ class Overcooked2World(World):
 
     options_dataclass = OC2Options
     options: OC2Options
-    itempool: List[Overcooked2Item]
+    itempool: list[Overcooked2Item]
 
     # Helper Functions
 
@@ -86,10 +88,10 @@ class Overcooked2World(World):
         )
         self.multiworld.regions.append(region)
 
-    def connect_regions(self, source: str, target: str, rule: Optional[Callable[[CollectionState], bool]] = None):
-        sourceRegion = self.multiworld.get_region(source, self.player)
-        targetRegion = self.multiworld.get_region(target, self.player)
-        sourceRegion.connect(targetRegion, rule=rule)
+    def connect_regions(self, source: str, target: str, rule: Callable[[CollectionState], bool] | None = None):
+        source_region = self.multiworld.get_region(source, self.player)
+        target_region = self.multiworld.get_region(target, self.player)
+        source_region.connect(target_region, rule=rule)
 
     def add_level_location(
         self,
@@ -136,9 +138,9 @@ class Overcooked2World(World):
             location
         )
 
-    def get_n_random_locations(self, n: int) -> List[int]:
+    def get_n_random_locations(self, n: int) -> list[int]:
         """Return a list of n random non-repeating level locations"""
-        levels = list()
+        levels = []
 
         if n == 0:
             return levels
@@ -151,23 +153,23 @@ class Overcooked2World(World):
 
             levels.append(level.level_id)
 
-        self.multiworld.random.shuffle(levels)
+        self.random.shuffle(levels)
         return levels[:n]
 
-    def get_priority_locations(self) -> List[int]:
+    def get_priority_locations(self) -> list[int]:
         """Randomly generate list of priority locations, thus insulating this game
         from the negative effects of being shuffled with games that contain large
         ammounts of filler"""
 
         if self.multiworld.players == 1:
             # random priority locations have no desirable effect on solo seeds
-            return list()
+            return []
 
         balancing_mode = self.options.location_balancing
 
         if balancing_mode == LocationBalancingMode.disabled:
             # Location balancing is disabled, progression density is purely determined by filler
-            return list()
+            return []
 
         # Count how many progression items are required for this overcooked instance
         game_item_count = len(self.itempool)
@@ -196,7 +198,7 @@ class Overcooked2World(World):
         if total_progression_density >= game_progression_density:
             # This game has more filler than the average of all other games.
             # It is not in need of location balancing
-            return list()
+            return []
 
         # Calculate the midpoint between the two ratios
         target_progression_ratio = (game_progression_density - total_progression_density) / 2.0 + total_progression_density
@@ -209,9 +211,9 @@ class Overcooked2World(World):
     # Helper Data
 
     player_name: str
-    level_unlock_counts: Dict[int, int]  # level_id, stars to purchase
-    level_mapping: Dict[int, Overcooked2GenericLevel]  # level_id, level
-    enabled_dlc: Set[Overcooked2Dlc]
+    level_unlock_counts: dict[int, int]  # level_id, stars to purchase
+    level_mapping: dict[int, Overcooked2GenericLevel]  # level_id, level
+    enabled_dlc: set[Overcooked2Dlc]
 
     # Autoworld Hooks
 
@@ -230,7 +232,7 @@ class Overcooked2World(World):
         if self.options.shuffle_level_order:
             self.level_mapping = \
                 level_shuffle_factory(
-                    self.multiworld.random,
+                    self.random,
                     self.options.prep_levels != PrepLevelMode.excluded,
                     self.options.include_horde_levels.result,
                     self.options.kevin_levels.result,
@@ -240,7 +242,7 @@ class Overcooked2World(World):
         else:
             self.level_mapping = None
             if Overcooked2Dlc.STORY not in self.enabled_dlc:
-                raise Exception(f"Invalid OC2 settings({self.player_name}) Need either Level Shuffle disabled or 'Story' DLC enabled")
+                raise OptionError(f"Invalid OC2 settings({self.player_name}) Need either Level Shuffle disabled or 'Story' DLC enabled")
 
             self.enabled_dlc = {Overcooked2Dlc.STORY}
 
@@ -337,12 +339,12 @@ class Overcooked2World(World):
         # useful = list()
         # filler = list()
         # progression = list()
-        for item_name in item_table:            
+        for item_name in item_table:
             if item_name in item_frequencies:
                 freq = item_frequencies[item_name]
             else:
                 freq = 1
-            
+
             if freq <= 0:
                 # not used
                 continue
@@ -426,11 +428,11 @@ class Overcooked2World(World):
 
     # Items get distributed to locations
 
-    def fill_json_data(self) -> Dict[str, Any]:
+    def fill_json_data(self) -> dict[str, Any]:
         mod_name = f"AP-{self.multiworld.seed_name}-P{self.player}-{self.player_name}"
 
         # Serialize Level Order
-        story_level_order = dict()
+        story_level_order = {}
 
         if self.options.shuffle_level_order:
             for level_id in self.level_mapping:
@@ -440,17 +442,17 @@ class Overcooked2World(World):
                     "LevelID": level.level_id,
                 }
 
-        custom_level_order = dict()
+        custom_level_order = {}
         custom_level_order["Story"] = story_level_order
 
         # Serialize Unlock Requirements
-        level_purchase_requirements = dict()
+        level_purchase_requirements = {}
         for level_id in self.level_unlock_counts:
             level_purchase_requirements[str(level_id)] = self.level_unlock_counts[level_id]
 
         # Override Vanilla Unlock Chain Behavior
         # (all worlds accessible from the start and progressible in any order)
-        level_unlock_requirements = dict()
+        level_unlock_requirements = {}
         level_force_reveal = [
             1,   # 1-1
             7,   # 2-1
@@ -465,7 +467,7 @@ class Overcooked2World(World):
 
         # Set Kevin Unlock Requirements
         if self.options.kevin_levels:
-            def kevin_level_to_keyholder_level_id(level_id: int) -> Optional[int]:
+            def kevin_level_to_keyholder_level_id(level_id: int) -> int | None:
                 location = self.multiworld.find_item(f"Kevin-{level_id-36}", self.player)
                 if location.player != self.player:
                     return None  # This kevin level will be unlocked by the server at runtime
@@ -478,7 +480,7 @@ class Overcooked2World(World):
                     level_unlock_requirements[str(level_id)] = keyholder_level_id
 
         # Place Items at Level Completion Screens (local only)
-        on_level_completed: Dict[str, list[Dict[str, str]]] = dict()
+        on_level_completed: dict[str, list[dict[str, str]]] = {}
         locations = self.multiworld.get_filled_locations(self.player)
         for location in locations:
             if location.item.code is None:
@@ -577,7 +579,7 @@ class Overcooked2World(World):
 
         return base_data
 
-    def fill_slot_data(self) -> Dict[str, Any]:
+    def fill_slot_data(self) -> dict[str, Any]:
         return self.fill_json_data()
 
     def write_spoiler(self, spoiler_handle: TextIO) -> None:
@@ -589,11 +591,11 @@ class Overcooked2World(World):
         for overworld_id in world.level_mapping:
             overworld_name = Overcooked2GenericLevel(overworld_id).shortname.split("Story ")[1]
             kitchen_name = world.level_mapping[overworld_id].shortname
-            spoiler_handle.write(f'{overworld_name} | {kitchen_name}\n')
+            spoiler_handle.write(f"{overworld_name} | {kitchen_name}\n")
 
 
-def level_unlock_requirement_factory(stars_to_win: int) -> Dict[int, int]:
-    level_unlock_counts = dict()
+def level_unlock_requirement_factory(stars_to_win: int) -> dict[int, int]:
+    level_unlock_counts = {}
     level = 1
     sublevel = 1
     for n in range(1, 37):

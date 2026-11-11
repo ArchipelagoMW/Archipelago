@@ -1,5 +1,4 @@
 from enum import Enum, IntEnum
-from typing import List
 
 
 class Overcooked2Dlc(Enum):
@@ -56,13 +55,13 @@ class Overcooked2Dlc(Enum):
         return self.start_level_id + id
 
     # Tutorial + Horde Levels + Endgame
-    def excluded_levels(self) -> List[int]:
+    def excluded_levels(self) -> list[int]:
         if self == Overcooked2Dlc.STORY:
             return [0, 36]
 
         return []
 
-    def horde_levels(self) -> List[int]:
+    def horde_levels(self) -> list[int]:
         if self == Overcooked2Dlc.NIGHT_OF_THE_HANGRY_HORDE:
             return [12, 13, 14, 15, 16, 17, 18, 19]
         if self == Overcooked2Dlc.SEASONAL:
@@ -70,7 +69,7 @@ class Overcooked2Dlc(Enum):
 
         return []
 
-    def prep_levels(self) -> List[int]:
+    def prep_levels(self) -> list[int]:
         if self == Overcooked2Dlc.STORY:
             return [1, 2, 5, 10, 12, 13, 28, 31]
         if self == Overcooked2Dlc.SURF_N_TURF:
@@ -127,7 +126,7 @@ class Overcooked2GameWorld(IntEnum):
         return "World " + self.as_str
 
 
-class Overcooked2GenericLevel():
+class Overcooked2GenericLevel:
     dlc: Overcooked2Dlc
     level_id: int
 
@@ -196,7 +195,7 @@ class Overcooked2Level:
         return self.level_name + " Level Complete"
 
     def location_name_star_event(self, stars: int) -> str:
-        return "%s (%d-Star)" % (self.level_name, stars)
+        return f"{self.level_name} ({stars}-Star)"
 
     @property
     def as_generic_level(self) -> Overcooked2GenericLevel:
