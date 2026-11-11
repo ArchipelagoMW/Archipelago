@@ -153,7 +153,7 @@ class Overcooked2World(World):
 
             levels.append(level.level_id)
 
-        self.multiworld.random.shuffle(levels)
+        self.random.shuffle(levels)
         return levels[:n]
 
     def get_priority_locations(self) -> list[int]:
@@ -232,7 +232,7 @@ class Overcooked2World(World):
         if self.options.shuffle_level_order:
             self.level_mapping = \
                 level_shuffle_factory(
-                    self.multiworld.random,
+                    self.random,
                     self.options.prep_levels != PrepLevelMode.excluded,
                     self.options.include_horde_levels.result,
                     self.options.kevin_levels.result,
