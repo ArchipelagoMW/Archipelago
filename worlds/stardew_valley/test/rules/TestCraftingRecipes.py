@@ -1,7 +1,6 @@
-from ..bases import SVTestBase
-from ... import options, StartWithoutOptionName
-from ...data.craftable_data import all_crafting_recipes_by_name
+from ... import StartWithoutOptionName, options
 from ...options import StartWithout
+from ..bases import SVTestBase
 
 
 class TestCraftsanityLogic(SVTestBase):
@@ -18,6 +17,9 @@ class TestCraftsanityLogic(SVTestBase):
     def test_can_craft_recipe(self):
         location = "Craft Marble Brazier"
         self.collect(self.create_item("Landslide Removed"))
+        self.collect(self.create_item("Bus Repair"))
+        self.collect(self.create_item("Skull Key"))
+        self.collect(self.create_item("Progressive House"))
         self.collect([self.create_item("Progressive Pickaxe")] * 4)
         self.collect([self.create_item("Progressive Fishing Rod")] * 4)
         self.collect([self.create_item("Progressive Sword")] * 4)
@@ -40,7 +42,7 @@ class TestCraftsanityLogic(SVTestBase):
         self.assert_can_reach_location(location)
 
     def test_can_craft_festival_recipe(self):
-        recipe = all_crafting_recipes_by_name["Jack-O-Lantern"]
+        recipe = self.world.content.crafting_recipes["Jack-O-Lantern"]
         self.multiworld.state.collect(self.create_item("Pumpkin Seeds"))
         self.multiworld.state.collect(self.create_item("Torch Recipe"))
         self.collect_lots_of_money()
@@ -82,7 +84,7 @@ class TestCraftsanityWithFestivalsLogic(SVTestBase):
     }
 
     def test_can_craft_festival_recipe(self):
-        recipe = all_crafting_recipes_by_name["Jack-O-Lantern"]
+        recipe = self.world.content.crafting_recipes["Jack-O-Lantern"]
         self.multiworld.state.collect(self.create_item("Pumpkin Seeds"))
         self.multiworld.state.collect(self.create_item("Fall"))
         self.collect_lots_of_money()
@@ -98,6 +100,7 @@ class TestCraftsanityWithFestivalsLogic(SVTestBase):
 
 class TestNoCraftsanityLogic(SVTestBase):
     options = {
+        options.StartWithout.internal_name: frozenset({StartWithoutOptionName.tools}),
         options.SkillProgression.internal_name: options.SkillProgression.option_progressive,
         options.BuildingProgression.internal_name: options.BuildingProgression.option_progressive,
         options.SeasonRandomization.internal_name: options.SeasonRandomization.option_progressive,
@@ -108,13 +111,15 @@ class TestNoCraftsanityLogic(SVTestBase):
     }
 
     def test_can_craft_recipe(self):
-        recipe = all_crafting_recipes_by_name["Wood Floor"]
+        recipe = self.world.content.crafting_recipes["Wood Floor"]
         rule = self.world.logic.crafting.can_craft(recipe)
+        self.collect([self.create_item("Progressive Hoe"), self.create_item("Progressive Watering Can"), self.create_item("Progressive Axe")])
         self.assert_rule_true(rule)
 
     def test_can_craft_festival_recipe(self):
-        recipe = all_crafting_recipes_by_name["Jack-O-Lantern"]
-        self.multiworld.state.collect(self.create_item("Pumpkin Seeds"))
+        recipe = self.world.content.crafting_recipes["Jack-O-Lantern"]
+        self.collect(self.create_item("Pumpkin Seeds"))
+        self.collect([self.create_item("Progressive Hoe"), self.create_item("Progressive Watering Can"), self.create_item("Progressive Axe")])
         self.collect_lots_of_money()
         rule = self.world.logic.crafting.can_craft(recipe)
         result = rule(self.multiworld.state)
@@ -123,23 +128,30 @@ class TestNoCraftsanityLogic(SVTestBase):
         self.collect([self.create_item("Progressive Season")] * 2)
         self.assert_rule_true(rule)
 
-    def test_requires_mining_levels_for_smelting_checks(self):
-        locations = ["Quest: Smelting", "Copper Pickaxe Upgrade", "Gold Trash Can Upgrade"]
-        rules = [self.world.logic.region.can_reach_location(location) for location in locations]
+    def test_requires_pickaxe_for_smelting_checks(self):
+        locations_easy = ["Quest: Smelting", "Copper Pickaxe Upgrade"]
+        locations_hard = ["Gold Trash Can Upgrade"]
+        rules_easy = [self.world.logic.region.can_reach_location(location) for location in locations_easy]
+        rules_hard = [self.world.logic.region.can_reach_location(location) for location in locations_hard]
         self.collect(self.create_item("Landslide Removed"))
-        self.collect([self.create_item("Progressive Pickaxe")] * 4)
+        self.collect([self.create_item("Progressive Hoe"), self.create_item("Progressive Watering Can"), self.create_item("Progressive Axe")])
         self.collect([self.create_item("Progressive Fishing Rod")] * 4)
         self.collect([self.create_item("Progressive Sword")] * 4)
         self.collect([self.create_item("Progressive Mine Elevator")] * 24)
-        self.collect([self.create_item("Progressive Trash Can")] * 2)
+        self.collect([self.create_item("Progressive Trash Can")] * 3)
         self.multiworld.state.collect(self.create_item("Furnace Recipe"))
         self.collect([self.create_item("Combat Level")] * 10)
         self.collect([self.create_item("Fishing Level")] * 10)
+        self.collect([self.create_item("Mining Level")] * 1)
         self.collect_all_the_money()
-        self.assert_rules_false(rules, self.multiworld.state)
+        self.assert_rules_false(rules_easy, self.multiworld.state)
 
-        self.collect([self.create_item("Mining Level")] * 10)
-        self.assert_rules_true(rules, self.multiworld.state)
+        self.collect(self.create_item("Progressive Pickaxe"))
+        self.assert_rules_true(rules_easy, self.multiworld.state)
+        self.assert_rules_false(rules_hard, self.multiworld.state)
+        self.collect([self.create_item("Progressive Pickaxe")] * 4)
+        self.collect([self.create_item("Mining Level")] * 9)
+        self.assert_rules_true(rules_hard, self.multiworld.state)
 
 
 class TestNoCraftsanityWithFestivalsLogic(SVTestBase):
@@ -152,7 +164,7 @@ class TestNoCraftsanityWithFestivalsLogic(SVTestBase):
     }
 
     def test_can_craft_festival_recipe(self):
-        recipe = all_crafting_recipes_by_name["Jack-O-Lantern"]
+        recipe = self.world.content.crafting_recipes["Jack-O-Lantern"]
         self.multiworld.state.collect(self.create_item("Pumpkin Seeds"))
         self.multiworld.state.collect(self.create_item("Fall"))
         self.collect_lots_of_money()

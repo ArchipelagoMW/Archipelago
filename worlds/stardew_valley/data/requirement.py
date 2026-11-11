@@ -6,6 +6,11 @@ from ..strings.tool_names import ToolMaterial
 
 
 @dataclass(frozen=True)
+class ReceivedRequirement(Requirement):
+    item: str
+
+
+@dataclass(frozen=True)
 class HasItemRequirement(Requirement):
     item: str
 
@@ -25,6 +30,11 @@ class ToolRequirement(Requirement):
 class SkillRequirement(Requirement):
     skill: str
     level: int
+
+
+@dataclass(frozen=True)
+class MasteryRequirement(Requirement):
+    skill: str
 
 
 @dataclass(frozen=True)
@@ -60,6 +70,11 @@ class MeetRequirement(Requirement):
 @dataclass(frozen=True)
 class SpecificFriendRequirement(Requirement):
     npc: str
+    hearts: int
+
+
+@dataclass(frozen=True)
+class BachelorFriendRequirement(Requirement):
     hearts: int
 
 
@@ -121,6 +136,16 @@ class CaughtFishRequirement(Requirement):
 
 
 @dataclass(frozen=True)
+class MuseumMineralsRequirement(Requirement):
+    number_donated: int = 53
+
+
+@dataclass(frozen=True)
+class MuseumArtifactsRequirement(Requirement):
+    number_donated: int = 42
+
+
+@dataclass(frozen=True)
 class MuseumCompletionRequirement(Requirement):
     number_donated: int = 95
 
@@ -143,6 +168,11 @@ class CookedRecipesRequirement(Requirement):
 @dataclass(frozen=True)
 class CraftedItemsRequirement(Requirement):
     number_of_recipes: int
+
+
+@dataclass(frozen=True)
+class CraftedSpecificItemRequirement(Requirement):
+    item: str
 
 
 @dataclass(frozen=True)
@@ -197,5 +227,15 @@ class MonsterKillRequirement(Requirement):
 
 
 @dataclass(frozen=True)
-class CatalogueRequirement(Requirement):
-    catalogue: str
+class FestivalItemReceivedRequirement(Requirement):
+    item_name: str
+
+
+@dataclass(frozen=True)
+class EndgameItemReceivedRequirement(Requirement):
+    item_name: str
+
+
+@dataclass(frozen=True)
+class SpeakJunimoRequirement(Requirement):
+    pass

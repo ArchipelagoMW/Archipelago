@@ -10,11 +10,22 @@ from .feature import BooksanityFeature, BuildingProgressionFeature, CropsanityFe
 from .feature.base import DisableSourceHook, DisableRequirementHook, FeatureBase
 from ..data.animal import Animal
 from ..data.building import Building
+from ..data.cooking_recipe import CookingRecipe
+from ..data.craftable_data import CraftingRecipe
+from ..data.festival_data import FestivalData
 from ..data.fish_data import FishItem
 from ..data.game_item import GameItem, Source, ItemTag, Requirement
 from ..data.hats_data import HatItem
 from ..data.skill import Skill
+from ..data.tool import ToolUpgrade
 from ..data.villagers_data import Villager
+
+
+def find_sources_of_type_on_items(items, *types: type[Source]):
+    for item in items.values():
+        for source in item.sources:
+            if isinstance(source, types):
+                yield source
 
 
 @dataclass(frozen=True)
@@ -25,19 +36,39 @@ class StardewContent:
     # regions -> To be used with can reach rule
 
     game_items: dict[str, GameItem] = field(default_factory=dict)
+    currencies: set[str] = field(default_factory=set)
     fishes: dict[str, FishItem] = field(default_factory=dict)
     villagers: dict[str, Villager] = field(default_factory=dict)
     farm_buildings: dict[str, Building] = field(default_factory=dict)
+    tool_upgrades: dict[str, ToolUpgrade] = field(default_factory=dict)
     animals: dict[str, Animal] = field(default_factory=dict)
     skills: dict[str, Skill] = field(default_factory=dict)
     quests: dict[str, Any] = field(default_factory=dict)
     hats: dict[str, HatItem] = field(default_factory=dict)
+    festivals: dict[str, FestivalData] = field(default_factory=dict)
+    cooking_recipes: dict[str, CookingRecipe] = field(default_factory=dict)
+    crafting_recipes: dict[str, CraftingRecipe] = field(default_factory=dict)
 
     def find_sources_of_type(self, *types: type[Source]) -> Iterable[Source]:
-        for item in self.game_items.values():
-            for source in item.sources:
-                if isinstance(source, types):
-                    yield source
+        yield from find_sources_of_type_on_items(self.game_items, *types)
+        yield from find_sources_of_type_on_items(self.farm_buildings, *types)
+        yield from find_sources_of_type_on_items(self.tool_upgrades, *types)
+        yield from find_sources_of_type_on_items(self.animals, *types)
+        yield from find_sources_of_type_on_items(self.cooking_recipes, *types)
+        yield from find_sources_of_type_on_items(self.crafting_recipes, *types)
+
+    def find_sources_of_type_filtered_by_feature(self, *types: type[Source]) -> Iterable[Source]:
+        yield from find_sources_of_type_on_items(self.game_items, *types)
+        if self.features.building_progression.is_progressive:
+            yield from find_sources_of_type_on_items(self.farm_buildings, *types)
+        if self.features.tool_progression.is_progressive:
+            yield from find_sources_of_type_on_items(self.tool_upgrades, *types)
+        yield from find_sources_of_type_on_items(self.animals, *types)
+        yield from find_sources_of_type_on_items(self.cooking_recipes, *types)
+        yield from find_sources_of_type_on_items(self.crafting_recipes, *types)
+
+    def find_item_sources_of_type(self, *types: type[Source]) -> Iterable[Source]:
+        yield from find_sources_of_type_on_items(self.game_items, *types)
 
     def source_item(self, item_name: str, *sources: Source) -> GameItem:
         filtered_sources = list(self._filter_sources(sources))
@@ -154,17 +185,17 @@ class ContentPack:
 
     shop_sources: Mapping[str, Iterable[Source]] = field(default_factory=dict)
 
+    currencies: Iterable[str] = ()
+
+    # def fish_hook(self, content: StardewContent):
+    #     ...
+
     def shop_source_hook(self, content: StardewContent):
         ...
 
     fishes: Iterable[FishItem] = ()
 
     def fish_hook(self, content: StardewContent):
-        ...
-
-    crafting_sources: Mapping[str, Iterable[Source]] = field(default_factory=dict)
-
-    def crafting_hook(self, content: StardewContent):
         ...
 
     artisan_good_sources: Mapping[str, Iterable[Source]] = field(default_factory=dict)
@@ -180,6 +211,12 @@ class ContentPack:
     farm_buildings: Iterable[Building] = ()
 
     def farm_building_hook(self, content: StardewContent):
+        ...
+        ...
+
+    tool_upgrades: Iterable[ToolUpgrade] = ()
+
+    def tool_upgrade_hook(self, content: StardewContent):
         ...
 
     animals: Iterable[Animal] = ()
@@ -201,6 +238,21 @@ class ContentPack:
     hat_sources: Mapping[HatItem, Iterable[Source]] = field(default_factory=dict)
 
     def hat_source_hook(self, content: StardewContent):
+        ...
+
+    festivals: Iterable[FestivalData] = ()
+
+    def festival_source_hook(self, content: StardewContent):
+        ...
+
+    cooking_recipes: Iterable[CookingRecipe] = ()
+
+    def cooking_recipe_source_hook(self, content: StardewContent):
+        ...
+
+    crafting_recipes: Iterable[CraftingRecipe] = ()
+
+    def crafting_recipe_source_hook(self, content: StardewContent):
         ...
 
     def finalize_hook(self, content: StardewContent):

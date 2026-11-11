@@ -1,23 +1,42 @@
 from random import Random
-from typing import List, Tuple, Dict
+from typing import Dict, List, Tuple
 
-from .bundle import Bundle
-from .bundle_room import BundleRoom, BundleRoomTemplate
 from ..content import StardewContent
-from ..data.bundles_data.bundle_data import pantry_remixed, \
-    crafts_room_remixed, fish_tank_remixed, boiler_room_remixed, bulletin_board_remixed, vault_remixed, \
-    all_bundle_items_except_money, \
-    abandoned_joja_mart_remixed, giant_stump_remixed
-from ..data.bundles_data.bundle_set import vanilla_bundles, remixed_bundles, thematic_bundles
-from ..data.bundles_data.meme_bundles import community_center_meme_bundles, pantry_meme, crafts_room_meme, \
-    fish_tank_meme, bulletin_board_meme, \
-    boiler_room_meme, vault_meme
+from ..data.bundles_data.bundle_data import (
+    abandoned_joja_mart_remixed,
+    all_bundle_items_except_money,
+    boiler_room_remixed,
+    bulletin_board_remixed,
+    crafts_room_remixed,
+    fish_tank_remixed,
+    giant_stump_remixed,
+    pantry_remixed,
+    vault_remixed,
+)
+from ..data.bundles_data.bundle_set import remixed_bundles, thematic_bundles, vanilla_bundles
+from ..data.bundles_data.meme_bundles import (
+    boiler_room_meme,
+    bulletin_board_meme,
+    community_center_easy_meme_bundles,
+    community_center_meme_bundles,
+    crafts_room_meme,
+    fish_tank_meme,
+    pantry_meme,
+    vault_meme,
+)
 from ..data.bundles_data.remixed_anywhere_bundles import community_center_remixed_anywhere
 from ..data.game_item import ItemTag
-from ..data.recipe_data import all_cooking_recipes
+from ..locations import LocationTags, locations_by_tag
 from ..logic.logic import StardewLogic
 from ..options import BundleRandomization, StardewValleyOptions
+from ..strings.animal_product_names import AnimalProduct
 from ..strings.bundle_names import CCRoom
+from ..strings.material_names import Material
+from ..strings.metal_names import MetalBar, Mineral
+from ..strings.monster_names import Monster
+from ..strings.villager_names import NPC
+from .bundle import Bundle
+from .bundle_room import BundleRoom, BundleRoomTemplate
 
 
 def get_all_bundles(random: Random, logic: StardewLogic, content: StardewContent, options: StardewValleyOptions, player_name: str) -> List[BundleRoom]:
@@ -32,7 +51,9 @@ def get_all_bundles(random: Random, logic: StardewLogic, content: StardewContent
     elif options.bundle_randomization == BundleRandomization.option_shuffled:
         return get_shuffled_bundles(random, logic, content, options)
     elif options.bundle_randomization == BundleRandomization.option_meme:
-        return get_meme_bundles(random, content, options, player_name)
+        return get_meme_bundles(random, content, options, player_name, True)
+    elif options.bundle_randomization == BundleRandomization.option_meme_easy:
+        return get_meme_bundles(random, content, options, player_name, False)
 
     raise NotImplementedError
 
@@ -78,8 +99,12 @@ def get_remixed_bundles_anywhere(random: Random, content: StardewContent, option
     return [pantry, crafts_room, fish_tank, boiler_room, bulletin_board, vault, abandoned_joja_mart, raccoon]
 
 
-def get_meme_bundles(random: Random, content: StardewContent, options: StardewValleyOptions, player_name: str) -> List[BundleRoom]:
-    big_room = community_center_meme_bundles.create_bundle_room(random, content, options, player_name, is_entire_cc=True)
+def get_meme_bundles(random: Random, content: StardewContent, options: StardewValleyOptions, player_name: str, allow_hard_meme_bundles: bool) -> List[BundleRoom]:
+    if allow_hard_meme_bundles:
+        big_room = community_center_meme_bundles.create_bundle_room(random, content, options, player_name, is_entire_cc=True)
+    else:
+        big_room = community_center_easy_meme_bundles.create_bundle_room(random, content, options, player_name, is_entire_cc=True)
+
     all_chosen_bundles = big_room.bundles
     random.shuffle(all_chosen_bundles)
 
@@ -116,9 +141,12 @@ def get_shuffled_bundles(random: Random, logic: StardewLogic, content: StardewCo
     random.shuffle(rooms)
 
     # Remove duplicates of the same item
-    valid_bundle_items = [item1 for i, item1 in enumerate(valid_bundle_items)
+    valid_unique_bundle_items = [item1 for i, item1 in enumerate(valid_bundle_items)
                           if not any(item1.item_name == item2.item_name and item1.quality == item2.quality for item2 in valid_bundle_items[:i])]
-    chosen_bundle_items = random.sample(valid_bundle_items, required_items)
+    if required_items > len(valid_unique_bundle_items):
+        chosen_bundle_items = random.sample(valid_bundle_items, required_items)
+    else:
+        chosen_bundle_items = random.sample(valid_unique_bundle_items, required_items)
     for room in rooms:
         for bundle in room.bundles:
             num_items = len(bundle.items)
@@ -147,8 +175,7 @@ def get_trash_bear_requests(random: Random, content: StardewContent, options: St
     if options.bundle_per_room >= 0:
         # Cooking items are not in content packs yet. This can be simplified once they are
         # trash_bear_requests["Cooking"] = pick_trash_bear_items(ItemTag.COOKING, content, num_per_type, random)
-        trash_bear_requests["Cooking"] = random.sample(
-            [recipe.meal for recipe in all_cooking_recipes if not recipe.content_pack or content.is_enabled(recipe.content_pack)], num_per_type)
+        trash_bear_requests["Cooking"] = random.sample([recipe.name for recipe in content.cooking_recipes.values()], num_per_type)
     if options.bundle_per_room >= 1:
         trash_bear_requests["Farming"] = pick_trash_bear_items(ItemTag.CROPSANITY, content, num_per_type, random)
     if options.bundle_per_room >= 2:
@@ -161,3 +188,44 @@ def get_trash_bear_requests(random: Random, content: StardewContent, options: St
 def pick_trash_bear_items(item_tag: ItemTag, content: StardewContent, number_items: int, random: Random):
     forage_items = [item.name for item in content.find_tagged_items(item_tag)]
     return random.sample(forage_items, number_items)
+
+def get_help_wanted_quests(random: Random, content: StardewContent, options: StardewValleyOptions) -> Dict[str, str]:
+    help_wanted_quests = dict()
+    if options.quest_locations.value <= 0:
+        return help_wanted_quests
+
+    num_help_wanteds = options.quest_locations.value
+    available_locations = locations_by_tag[LocationTags.HELP_WANTED]
+    picked_locations = random.sample(available_locations, num_help_wanteds)
+
+    slaying_requesters = [NPC.clint, NPC.lewis, NPC.demetrius, NPC.wizard]
+
+    forages = [item.name for item in content.find_tagged_items(ItemTag.FORAGE)]
+    crops = [item.name for item in content.find_tagged_items(ItemTag.CROPSANITY)]
+    minerals = [MetalBar.copper, MetalBar.iron, MetalBar.gold, MetalBar.iridium, Mineral.quartz, Mineral.amethyst, Mineral.topaz, Mineral.emerald, Mineral.ruby, Mineral.earth_crystal, Mineral.aquamarine, Mineral.diamond, Mineral.fire_quartz, Mineral.frozen_tear, Mineral.jade]
+    animal_prodcts = [AnimalProduct.egg, AnimalProduct.brown_egg, AnimalProduct.milk, AnimalProduct.goat_milk, AnimalProduct.wool, AnimalProduct.duck_egg, AnimalProduct.truffle]
+    all_fish = [fish for fish in content.fishes]
+    item_delivery_items = list(sorted({*forages, *crops, *minerals, *animal_prodcts, *all_fish}))
+
+    for location in picked_locations:
+        location_name = location.name
+        if LocationTags.HELP_WANTED_HELLO in location.tags:
+            help_wanted_quests[location_name] = NPC.emily
+        elif LocationTags.HELP_WANTED_SLAYING in location.tags:
+            if "Crab" in location_name:
+                help_wanted_quests[location_name] = NPC.demetrius
+            elif Monster.green_slime in location_name or Monster.blue_slime in location_name or Monster.red_slime in location_name:
+                help_wanted_quests[location_name] = random.choice(slaying_requesters)
+            else:
+                help_wanted_quests[location_name] = NPC.wizard
+        elif LocationTags.HELP_WANTED_GATHERING in location.tags:
+            requester = NPC.robin if (Material.wood in location_name or Material.stone in location_name) else NPC.clint
+            help_wanted_quests[location_name] = requester
+        elif LocationTags.HELP_WANTED_FISHING in location.tags:
+            season = location_name.split(" ")[-1]
+            seasonal_fish = [fish for fish in all_fish if season in content.fishes[fish].seasons]
+            help_wanted_quests[location_name] = random.choice(seasonal_fish)
+        elif LocationTags.HELP_WANTED_ITEM_DELIVERY in location.tags:
+            help_wanted_quests[location_name] = random.choice(item_delivery_items)
+
+    return help_wanted_quests

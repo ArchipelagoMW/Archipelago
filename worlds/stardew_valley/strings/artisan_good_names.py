@@ -1,4 +1,4 @@
-from worlds.stardew_valley.strings.fish_names import Fish
+from .fish_names import Fish
 
 
 class ArtisanGood:

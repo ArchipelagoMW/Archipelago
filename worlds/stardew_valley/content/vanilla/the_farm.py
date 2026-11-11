@@ -6,6 +6,7 @@ from ...data.harvest import FruitBatsSource, MushroomCaveSource
 from ...data.shop import ShopSource
 from ...strings.animal_product_names import AnimalProduct
 from ...strings.building_names import Building
+from ...strings.currency_names import Currency, MemeCurrency
 from ...strings.forageable_names import Forageable, Mushroom
 from ...strings.region_names import Region
 
@@ -14,6 +15,14 @@ the_farm = ContentPack(
     dependencies=(
         pelican_town_content_pack.name,
     ),
+    currencies={
+        Currency.money,
+        MemeCurrency.bank_money,
+        MemeCurrency.sleep_days,
+        MemeCurrency.child,
+        MemeCurrency.dead_crops,
+        MemeCurrency.dead_pumpkins,
+    },
     harvest_sources={
         # Fruit cave
         Forageable.blackberry: (
@@ -59,41 +68,41 @@ the_farm = ContentPack(
         Animal(AnimalName.chicken,
                required_building=Building.coop,
                sources=(
-                   ShopSource(shop_region=Region.ranch, price=800),
+                   ShopSource(shop_region=Region.ranch_shop, price=800),
                    # For now there is no way to obtain the starter item, so this adds additional rules in the system for nothing.
                    # IncubatorSource(AnimalProduct.egg_starter)
                )),
         Animal(AnimalName.cow,
                required_building=Building.barn,
                sources=(
-                   ShopSource(shop_region=Region.ranch, price=1500),
+                   ShopSource(shop_region=Region.ranch_shop, price=1500),
                )),
         Animal(AnimalName.goat,
                required_building=Building.big_barn,
                sources=(
-                   ShopSource(shop_region=Region.ranch, price=4000),
+                   ShopSource(shop_region=Region.ranch_shop, price=4000),
                )),
         Animal(AnimalName.duck,
                required_building=Building.big_coop,
                sources=(
-                   ShopSource(shop_region=Region.ranch, price=1200),
+                   ShopSource(shop_region=Region.ranch_shop, price=1200),
                    # For now there is no way to obtain the starter item, so this adds additional rules in the system for nothing.
                    # IncubatorSource(AnimalProduct.duck_egg_starter)
                )),
         Animal(AnimalName.sheep,
                required_building=Building.deluxe_barn,
                sources=(
-                   ShopSource(shop_region=Region.ranch, price=8000),
+                   ShopSource(shop_region=Region.ranch_shop, price=8000),
                )),
         Animal(AnimalName.rabbit,
                required_building=Building.deluxe_coop,
                sources=(
-                   ShopSource(shop_region=Region.ranch, price=8000),
+                   ShopSource(shop_region=Region.ranch_shop, price=8000),
                )),
         Animal(AnimalName.pig,
                required_building=Building.deluxe_barn,
                sources=(
-                   ShopSource(shop_region=Region.ranch, price=16000),
+                   ShopSource(shop_region=Region.ranch_shop, price=16000),
                )),
         Animal(AnimalName.void_chicken,
                required_building=Building.big_coop,

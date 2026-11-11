@@ -1,13 +1,13 @@
-from ..bases import SVTestBase
-from ... import FarmType
-from ...options import ToolProgression, QuestLocations, Secretsanity
+from ...options import FarmType, QuestLocations, Secretsanity, StartWithout, ToolProgression
 from ...strings.ap_names.ap_option_names import SecretsanityOptionName
+from ..bases import SVTestBase
 
 
 class TestQuestsLogic(SVTestBase):
     options = {
         QuestLocations.internal_name: 0,
         ToolProgression.internal_name: ToolProgression.option_progressive,
+        StartWithout.internal_name: frozenset(),
     }
 
     def test_giant_stump_requires_one_raccoon(self):

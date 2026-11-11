@@ -3,19 +3,12 @@ from typing import Union, Iterable
 from Utils import cache_self1
 from .base_logic import BaseLogicMixin, BaseLogic
 from ..stardew_rule import StardewRule, False_
+from ..strings.ap_names.ap_option_names import CustomLogicOptionName
 from ..strings.ap_names.skill_level_names import ModSkillLevel
-from ..strings.region_names import Region, LogicRegion
+from ..strings.region_names import Region
 from ..strings.skill_names import Skill
 from ..strings.spells import MagicSpell
 from ..strings.tool_names import ToolMaterial, Tool, FishingRod
-
-fishing_rod_prices = {
-    FishingRod.training: 25,
-    FishingRod.bamboo: 500,
-    FishingRod.fiberglass: 1800,
-    FishingRod.iridium: 7500,
-    FishingRod.advanced_iridium: 25000,
-}
 
 tool_materials = {
     ToolMaterial.basic: 1,
@@ -23,13 +16,6 @@ tool_materials = {
     ToolMaterial.iron: 3,
     ToolMaterial.gold: 4,
     ToolMaterial.iridium: 5
-}
-
-tool_upgrade_prices = {
-    ToolMaterial.copper: 2000,
-    ToolMaterial.iron: 5000,
-    ToolMaterial.gold: 10000,
-    ToolMaterial.iridium: 25000
 }
 
 
@@ -66,15 +52,12 @@ class ToolLogic(BaseLogic):
         if material == ToolMaterial.basic:
             return self.logic.true_
 
-        return self.logic.tool._can_purchase_upgrade(material)
+        tool_upgrade_data = self.content.tool_upgrades[f"{material} {tool}"]
+        return self.logic.source.has_access_to_any(tool_upgrade_data.sources)
 
     @cache_self1
     def can_mine_using(self, material: str) -> StardewRule:
         return self.logic.tool.has_tool(Tool.pickaxe, material)
-
-    @cache_self1
-    def _can_purchase_upgrade(self, material: str) -> StardewRule:
-        return self.logic.region.can_reach(LogicRegion.blacksmith_upgrade(material))
 
     def can_use_tool_at(self, tool: str, material: str, region: str) -> StardewRule:
         return self.has_tool(tool, material) & self.logic.region.can_reach(region)
@@ -92,7 +75,8 @@ class ToolLogic(BaseLogic):
         if material == ToolMaterial.copper:
             return pan_cutscene_rule
 
-        return pan_cutscene_rule & self.logic.tool._can_purchase_upgrade(material)
+        pan_upgrade_data = self.content.tool_upgrades[f"{material} Pan"]
+        return pan_cutscene_rule & self.logic.source.has_access_to_any(pan_upgrade_data.sources)
 
     @cache_self1
     def has_scythe(self, material: str = ToolMaterial.basic) -> StardewRule:
@@ -119,7 +103,11 @@ class ToolLogic(BaseLogic):
         level = FishingRod.material_to_tier[material]
         tool_progression = self.content.features.tool_progression
 
-        rebuy_rule = self.logic.money.can_spend_at(Region.fish_shop, fishing_rod_prices[material])
+        buy_rule = self.logic.source.has_access_to_any_without_other_requirements(self.content.tool_upgrades[material].sources)
+        if CustomLogicOptionName.critical_free_samples in self.options.custom_logic:
+            rebuy_rule = self.logic.true_
+        else:
+            rebuy_rule = buy_rule
 
         if tool_progression.is_progressive:
             return self.logic.tool._has_progressive_tool(Tool.fishing_rod, level) & rebuy_rule
@@ -127,12 +115,12 @@ class ToolLogic(BaseLogic):
         if material == FishingRod.bamboo:
             return self.logic.region.can_reach(Region.beach) & rebuy_rule
         if material == FishingRod.fiberglass:
-            return self.logic.skill.has_level(Skill.fishing, 2) & rebuy_rule
+            return self.logic.skill.has_level(Skill.fishing, 2) & buy_rule
         if material == FishingRod.iridium:
-            return self.logic.skill.has_level(Skill.fishing, 6) & rebuy_rule
+            return self.logic.skill.has_level(Skill.fishing, 6) & buy_rule
         if material == FishingRod.advanced_iridium:
             return self.logic.skill.has_mastery(Skill.fishing) & rebuy_rule
-        return rebuy_rule
+        return buy_rule
 
     def _has_progressive_tool(self, tool: str, amount: int) -> StardewRule:
         tool_progression = self.content.features.tool_progression
@@ -143,10 +131,6 @@ class ToolLogic(BaseLogic):
             return self.logic.true_
 
         return self.logic.received(tool_progression.to_progressive_item_name(tool), amount)
-
-    @cache_self1
-    def _can_purchase_upgrade(self, material: str) -> StardewRule:
-        return self.logic.region.can_reach(LogicRegion.blacksmith_upgrade(material))
 
     # Should be cached
     def can_forage(self, season: Union[str, Iterable[str]], region: str = Region.forest, need_hoe: bool = False) -> StardewRule:

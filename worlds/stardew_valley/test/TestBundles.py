@@ -2,11 +2,11 @@ import unittest
 from typing import Dict, Optional
 
 from .bases import SVTestBase, SVTestCase
-from .. import BundleRandomization, location_table
+from .. import BundleRandomization, location_table, BundlePerRoom
 from ..bundles.bundle import Bundle
 from ..data.bundles_data.bundle_data import all_bundle_items_except_money, quality_crops_items_thematic, \
     quality_foraging_items, quality_fish_items
-from ..data.bundles_data.meme_bundles import all_cc_meme_bundles
+from ..data.bundles_data.meme_bundles import all_cc_meme_bundles, hard_meme_bundles
 from ..locations import LocationTags
 from ..options import BundleWhitelist, BundleBlacklist, BundlePrice
 from ..strings.bundle_names import BundleName, MemeBundleName, all_meme_bundle_names
@@ -105,6 +105,7 @@ class TestMemeBundles(SVTestBase):
     options = {
         BundleRandomization.internal_name: BundleRandomization.option_meme,
         BundlePrice.internal_name: BundlePrice.option_maximum,
+        BundlePerRoom.internal_name: BundlePerRoom.option_four_extra,
     }
 
     def test_can_complete_all_bundles_with_all_state(self):
@@ -212,3 +213,31 @@ class TestInvestmentBundleBlacklist(SVTestBase):
     def test_investment_bundle_is_not_there(self):
         location_names = {location.name for location in self.multiworld.get_locations()}
         self.assertNotIn(MemeBundleName.investment, location_names)
+
+
+class TestEasyMemeBundles(SVTestBase):
+    options = {
+        BundleRandomization.internal_name: BundleRandomization.option_meme_easy,
+        BundlePerRoom.internal_name: BundlePerRoom.option_four_extra,
+    }
+
+    def test_no_hard_bundles_included(self):
+        location_names = self.get_real_location_names()
+        for hard_meme_bundle in hard_meme_bundles:
+            self.assertNotIn(hard_meme_bundle, location_names)
+
+
+class TestHardMemeBundles(SVTestBase):
+    options = {
+        BundleRandomization.internal_name: BundleRandomization.option_meme,
+        BundlePerRoom.internal_name: BundlePerRoom.option_four_extra,
+    }
+
+    def test_no_hard_bundles_included(self):
+        location_names = self.get_real_location_names()
+        at_least_one = False
+        for hard_meme_bundle in hard_meme_bundles:
+            if hard_meme_bundle in location_names:
+                at_least_one = True
+                break
+        self.assertTrue(at_least_one)

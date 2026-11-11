@@ -31,7 +31,7 @@ class ActionLogic(BaseLogic):
 
     @cache_self1
     def can_open_geode(self, geode: str) -> StardewRule:
-        blacksmith_access = self.logic.region.can_reach(Region.blacksmith)
+        blacksmith_access = self.logic.region.can_reach(Region.blacksmith_shop)
         geodes = [Geode.geode, Geode.frozen, Geode.magma, Geode.omni]
         if geode == Generic.any:
             return blacksmith_access & self.logic.or_(*(self.logic.has(geode_type) for geode_type in geodes))

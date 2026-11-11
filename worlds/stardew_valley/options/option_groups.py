@@ -31,7 +31,8 @@ else:
         ]),
         OptionGroup("Extra Shuffling", [
             options.FestivalLocations,
-            options.ArcadeMachineLocations,
+            options.JourneyOfThePrairieKing,
+            options.JunimoKart,
             options.SpecialOrderLocations,
             options.QuestLocations,
             options.Fishsanity,
@@ -51,6 +52,9 @@ else:
             options.Secretsanity,
             options.Hatsanity,
             options.IncludeEndgameLocations,
+            options.EntranceRandomizationBehavior,
+            options.DataRandomizationBehavior,
+            options.DataRandomization,
         ]),
         OptionGroup("Multipliers, Buffs and extra customization", [
             options.StartingMoney,
@@ -78,6 +82,7 @@ else:
         OptionGroup("Very Advanced Options", [
             options.Mods,
             options.CustomLogic,
+            options.EntrancePlando,
             ap_options.ProgressionBalancing,
             ap_options.Accessibility,
         ]),

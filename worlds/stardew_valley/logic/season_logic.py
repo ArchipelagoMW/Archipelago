@@ -4,7 +4,7 @@ from typing import Iterable
 from Utils import cache_self1
 from .base_logic import BaseLogic, BaseLogicMixin
 from ..options import SeasonRandomization
-from ..stardew_rule import StardewRule, True_, true_
+from ..stardew_rule import StardewRule
 from ..strings.generic_names import Generic
 from ..strings.season_names import Season
 
@@ -38,22 +38,22 @@ class SeasonLogic(BaseLogic):
         assert isinstance(season, str), "use has_any() or has_all() to check multiple seasons at once"
 
         if season == Generic.any:
-            return True_()
+            return self.logic.true_
         seasons_order = [Season.spring, Season.summer, Season.fall, Season.winter]
         if self.options.season_randomization == SeasonRandomization.option_progressive:
             return self.logic.received(Season.progressive, seasons_order.index(season))
         if self.options.season_randomization == SeasonRandomization.option_disabled:
             if season == Season.spring:
-                return True_()
+                return self.logic.true_
             return self.logic.time.has_lived_months(1)
         return self.logic.received(season)
 
     def has_any(self, seasons: Iterable[str]):
-        if seasons == Season.all:
-            return true_
+        if seasons == Season.all or sorted(seasons) == sorted(Season.all):
+            return self.logic.true_
         if not seasons:
             # That should be false, but I'm scared.
-            return True_()
+            return self.logic.true_
         return self.logic.or_(*(self.logic.season.has(season) for season in seasons))
 
     def has_any_not_winter(self):
