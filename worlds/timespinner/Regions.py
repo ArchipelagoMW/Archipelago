@@ -43,7 +43,6 @@ def create_regions_and_locations(multiworld: MultiWorld, player: int, options: T
         create_region(multiworld, player, locations_per_region, 'Lower Lake Serene'),
         create_region(multiworld, player, locations_per_region, 'Caves of Banishment (upper)'),
         create_region(multiworld, player, locations_per_region, 'Caves of Banishment (Maw)'),
-        create_region(multiworld, player, locations_per_region, 'Caves of Banishment (Flooded)'),
         create_region(multiworld, player, locations_per_region, 'Caves of Banishment (Sirens)'),
         create_region(multiworld, player, locations_per_region, 'Castle Ramparts'),
         create_region(multiworld, player, locations_per_region, 'Castle Keep'),
@@ -150,8 +149,7 @@ def create_regions_and_locations(multiworld: MultiWorld, player: int, options: T
     connect(multiworld, player, 'Caves of Banishment (upper)', 'Caves of Banishment (Maw)', lambda state: not flooded.flood_maw or state.has('Water Mask', player))
     connect(multiworld, player, 'Caves of Banishment (upper)', 'Space time continuum', logic.has_teleport)
     connect(multiworld, player, 'Caves of Banishment (Maw)', 'Caves of Banishment (upper)', lambda state: logic.has_doublejump(state) if not flooded.flood_maw else state.has('Water Mask', player))
-    connect(multiworld, player, 'Caves of Banishment (Maw)', 'Caves of Banishment (Sirens)', lambda state: state.has_any({'Gas Mask', 'Talaria Attachment'}, player) )
-    connect(multiworld, player, 'Caves of Banishment (Maw)', 'Caves of Banishment (Flooded)', lambda state: flooded.flood_maw or state.has('Water Mask', player))
+    connect(multiworld, player, 'Caves of Banishment (Maw)', 'Caves of Banishment (Sirens)', lambda state: state.has_any({'Gas Mask', 'Talaria Attachment'}, player))
     connect(multiworld, player, 'Caves of Banishment (Maw)', 'Space time continuum', logic.has_teleport)
     connect(multiworld, player, 'Caves of Banishment (Sirens)', 'Forest')
     connect(multiworld, player, 'Castle Ramparts', 'Forest')

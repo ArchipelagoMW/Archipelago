@@ -96,10 +96,10 @@ SHOP_POINTS: dict[str, list[str]] = {
         "Air Generator",
         "Earth Intro",
         "Earth Generator",
-        "Fire Intro",
-        "Fire Generator",
         "Water Intro",
         "Water Generator",
+        "Fire Intro",
+        "Fire Generator",
     ],
     "Sunken Shrine": [
         "Above Portal",
@@ -107,7 +107,7 @@ SHOP_POINTS: dict[str, list[str]] = {
         "Sun Path",
         "Tabi Gauntlet",
         "Moon Path",
-    ]
+    ],
 }
 
 CHECKPOINTS: dict[str, list[str]] = {

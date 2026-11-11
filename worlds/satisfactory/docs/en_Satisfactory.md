@@ -2,9 +2,9 @@
 
 <!-- Spellchecker config - cspell:ignore FICSIT Nobelisk Zoop -->
 
-## Where is the settings page?
+## Where is the options page?
 
-The [player settings page for this game](../player-options)
+The [player options page for this game](../player-options)
 contains all the options you need to configure and export a config file.
 
 ## What does randomization do to this game?
@@ -18,7 +18,7 @@ The materials required for constructing Assemblers and Foundries is altered to i
 
 ## What is the goal of Satisfactory?
 
-The player can choose from a number of goals using their YAML settings:
+The player can choose from a number of goals using their YAML options:
 
 - Complete the selected number of **[Space Elevator](https://satisfactory.wiki.gg/wiki/Space_Elevator) Phases**.
   - The goal completes upon submitting your selected Space Elevator Phase. Any other progression you may have access to (HUB, MAM, AWESOME Shop) is not required for goal completion.
@@ -62,7 +62,7 @@ In Satisfactory multiplayer, each Satisfactory player gets a copy of the sample.
 Certain recipes and items, like Somersloops, are always excluded from samples.
 
 You can separately configure how many samples to receive for buildings, equipment, and crafting components
-in your player settings.
+in your player options.
 
 ## What is a Resource Bundle?
 
@@ -78,7 +78,7 @@ unless they can't fit, in which case they can be collected by building an Archip
 
 Traps are items intended to disrupt the player that replace non-progression filler items.
 Satisfactory's traps currently include spawning disruptive creatures or sending inconvenient items to your Archipelago Portal.
-The player settings page gives full control over which traps are enabled,
+The player options page gives full control over which traps are enabled,
 how many traps replace filler items,
 as well as some pre-selected groups of themed traps.
 
@@ -108,7 +108,7 @@ Bundles will instantly be added to the Archipelago Portal network and can be col
 ## What is EnergyLink?
 
 EnergyLink is an energy storage supported by certain games that is shared across all worlds in a multiworld.
-In Satisfactory, if enabled in the player settings, all base-game Power Storage buildings will act as Energy Link interfaces.
+In Satisfactory, if enabled in the player options, all base-game Power Storage buildings will act as Energy Link interfaces.
 They will deposit surplus produced energy and draw energy from the shared storage when needed.
 
 Just like the base game, there is no limit to the discharge/draw rate of one building,
@@ -198,10 +198,10 @@ It is possible to use other Satisfactory mods in tandem with the Archipelago Sat
 However, no guarantee is made that they will work correctly,
 especially if they affect game progression, recipes, or add unlocks to base-game technologies.
 
-Content added by unaffiliated mods may end up inaccessible based on your chosen slot settings,
+Content added by unaffiliated mods may end up inaccessible based on your chosen slot options,
 for example, its milestones could be in a tier that is after your goal.
 You may be able to write patches using [ContentLib](https://ficsit.app/mod/ContentLib)
-to adjust other mods to work with your slot settings,
+to adjust other mods to work with your slot options,
 but doing so is out of the scope of this guide.
 
 [The Satisfactory Archipelago mod GitHub](https://github.com/Jarno458/SatisfactoryArchipelagoMod/blob/main/Docs/AdditionalMods.md)
