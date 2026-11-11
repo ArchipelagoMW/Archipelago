@@ -194,11 +194,11 @@ class TestGatheringQuestsWithoutStartingToolsRequiresMinesAndAxeAndPickaxe(SVTes
         self.assert_cannot_reach_location(gathering_location)
 
 
-class TestPrizeTicketAndHelpWanted(SVTestBase):
+class TestPrizeTicketAndVanillaHelpWanted(SVTestBase):
     options = {  # noqa: RUF012
         options.ToolProgression: options.ToolProgression.option_progressive,
         options.StartWithout: frozenset({StartWithoutOptionName.tools, StartWithoutOptionName.landslide}),
-        options.QuestLocations: 7,
+        options.QuestLocations: 0,
         options.Booksanity: options.Booksanity.option_all,
         options.Hatsanity: options.Hatsanity.preset_all,
     }

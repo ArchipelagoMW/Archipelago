@@ -833,7 +833,7 @@ def set_story_quests_rules(all_location_names: Set[str], logic: StardewLogic, ru
 def set_special_order_rules(all_location_names: Set[str], logic: StardewLogic, rule_collector: StardewRuleCollector,
                             world_options: StardewValleyOptions, content: StardewContent):
     if world_options.special_order_locations & SpecialOrderLocations.option_board:
-        board_rule = logic.received("Special Order Board") & logic.time.has_lived_months(4)
+        board_rule = logic.received("Special Order Board") & logic.region.can_reach(Region.town) & logic.time.has_lived_months(4)
         for board_order in locations.locations_by_tag[LocationTags.SPECIAL_ORDER_BOARD]:
             if board_order.name in all_location_names:
                 order_rule = board_rule & logic.registry.special_order_rules[board_order.name]

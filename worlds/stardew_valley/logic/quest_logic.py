@@ -139,12 +139,20 @@ class QuestLogic(BaseLogic):
     def can_complete_help_wanteds(self, number: int) -> StardewRule:
         number_per_month = 7
         number_months = number // number_per_month
-        if number <= 7:
-            return self.logic.time.has_lived_months(number_months)
-        return self.logic.time.has_lived_months(number_months) & \
-            self.can_do_item_delivery_quest() & self.can_do_gathering_quest() & \
-            self.can_do_fishing_quest() & self.can_do_slaying_quest()
+        time_rule = self.logic.time.has_lived_months(number_months)
+        if self.options.quest_locations > number:
+            return self.logic.count(number, *[self.logic.region.can_reach_location(loc) for loc in self.help_wanted_quests.keys()])
+        elif self.options.quest_locations > 0:
+            return self.logic.and_(*[self.logic.region.can_reach_location(loc) for loc in self.help_wanted_quests.keys()])
+        else:
+            # Doing vanilla quests over and over
+            if number <= 7:
+                return time_rule
+            return time_rule & \
+                self.can_do_item_delivery_quest() & self.can_do_gathering_quest() & \
+                self.can_do_fishing_quest() & self.can_do_slaying_quest()
 
+    # The following methods are only relevant when help wanteds are not shuffled at all
     def can_do_item_delivery_quest(self) -> StardewRule:
         return self.logic.region.can_reach(Region.town) & self.logic.relationship.people_exist(8)
 

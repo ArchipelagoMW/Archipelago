@@ -236,10 +236,10 @@ class StardewValleyWorld(World):
 
         world_regions, randomized_connections = create_regions(create_region, self.options, self.content, self.random)
 
-        self.logic = StardewLogic(self.player, self.options, self.content, world_regions.keys())
+        self.help_wanted_quests = get_help_wanted_quests(self.random, self.content, self.options)
+        self.logic = StardewLogic(self.player, self.options, self.content, world_regions.keys(), self.help_wanted_quests)
         self.modified_bundles = get_all_bundles(self.random, self.logic, self.content, self.options, self.player_name)
         self.trash_bear_requests = get_trash_bear_requests(self.random, self.content, self.options)
-        self.help_wanted_quests = get_help_wanted_quests(self.random, self.content, self.options)
         if self.options.entrance_randomization_behavior.is_chaos():
             self.randomized_entrances = randomized_connections
         else:

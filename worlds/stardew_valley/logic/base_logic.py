@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import typing
-from typing import Dict, Collection
+from typing import Collection, Dict
 
 from ..content.game_content import StardewContent
 from ..options import StardewValleyOptions
@@ -42,14 +42,16 @@ class BaseLogic(BaseLogicMixin):
     options: StardewValleyOptions
     content: StardewContent
     regions: Collection[str]
+    help_wanted_quests: dict[str, str]
     logic: StardewLogic
 
     def __init__(self, player: int, registry: LogicRegistry, options: StardewValleyOptions, content: StardewContent, regions: Collection[str],
-                 logic: StardewLogic):
-        super().__init__(player, registry, options, content, regions, logic)
+                 help_wanted_quests: dict[str, str], logic: StardewLogic):
+        super().__init__(player, registry, options, content, regions, help_wanted_quests, logic)
         self.player = player
         self.registry = registry
         self.options = options
         self.content = content
         self.regions = regions
+        self.help_wanted_quests = help_wanted_quests
         self.logic = logic
