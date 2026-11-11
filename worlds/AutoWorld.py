@@ -63,7 +63,7 @@ class AutoWorldRegister(type):
             dct["location_id_to_name"] = {code: name for name, code in dct["location_name_to_id"].items()}
             if __debug__:
                 for id_type in ("item", "location"):
-                    if any(not -(2 ** 31) <= code < 2 ** 31 for code in dct[f"{id_type}_id_to_name"]):
+                    if not all(-(2 ** 31) <= code < 2 ** 31 for code in dct[f"{id_type}_id_to_name"]):
                         logging.warning(f"{name}: {id_type} IDs are outside the signed 32-bit integer range "
                                         f"and may fail in the future.")
 
