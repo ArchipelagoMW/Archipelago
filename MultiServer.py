@@ -51,6 +51,7 @@ from apmw.multiserver.gamespackagecache import GamesPackageCache
 
 
 min_client_version = Version(0, 5, 0)
+max_say_length = 2000  # longest chat message the server relays; longer Say packets get InvalidPacket
 colorama.just_fix_windows_console()
 
 no_version = Version(0, 0, 0)
@@ -2211,6 +2212,11 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
         elif cmd == 'Say':
             if "text" not in args or type(args["text"]) is not str or not args["text"].isprintable():
                 await ctx.send_msgs(client, [{'cmd': 'InvalidPacket', "type": "arguments", "text": 'Say',
+                                              "original_cmd": cmd}])
+                return
+            if len(args["text"]) > max_say_length:
+                await ctx.send_msgs(client, [{"cmd": "InvalidPacket", "type": "arguments",
+                                              "text": f"Say: message is longer than {max_say_length} characters",
                                               "original_cmd": cmd}])
                 return
 
