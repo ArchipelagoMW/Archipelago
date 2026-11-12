@@ -42,6 +42,11 @@ logger = logging.getLogger("Worlds")
 logger.propagate = False
 logger.setLevel(logging.INFO)
 
+
+class NonWorldFolderError(Exception):
+    pass
+
+
 @dataclasses.dataclass(order=True)
 class WorldSource:
     path: str  # typically relative path from this module
@@ -113,7 +118,7 @@ class WorldSource:
                 os.path.isfile(os.path.join(self.resolved_path, "__init__.py"))
                 or os.path.isfile(os.path.join(self.resolved_path, "__init__.pyc"))
             ):
-                raise RuntimeError(f"Could not find __init__.py in {self.resolved_path}")
+                raise NonWorldFolderError(f"Could not find __init__.py in {self.resolved_path}")
 
             for dirpath, _dirnames, filenames in os.walk(self.resolved_path):
                 for file in filenames:
@@ -204,7 +209,8 @@ for folder in (folder for folder in (user_folder, local_folder) if folder):
     for entry in os.scandir(folder):
         # prevent loading of __pycache__ and allow _* for non-world folders, disable files/folders starting with "."
         if not entry.name.startswith(("_", ".")):
-            if test_worlds_filter is not None and Path(entry.name).stem not in test_worlds_filter:
+            source_name = Path(entry.name).stem
+            if test_worlds_filter is not None and source_name not in test_worlds_filter:
                 continue
             file_name = entry.name if relative else os.path.join(folder, entry.name)
             is_packaged = entry.is_file() and entry.name.endswith(".apworld")
@@ -212,9 +218,12 @@ for folder in (folder for folder in (user_folder, local_folder) if folder):
                 try:
                     source = WorldSource(file_name, is_zip=is_packaged, relative=relative)
                     world_sources.append(source)
+                except NonWorldFolderError:
+                    logging.debug(f"Ignoring {entry.name} folder with no __init__.py for world sources")
                 except Exception as e:
                     logging.warning(f"Not adding {entry.name} to world sources due to error creating it")
                     logging.warning(e)
+                    failed_world_loads[source_name] = str(e)
 
 
 # Try adding apworld specs so apworlds can be imported inside of other worlds.
