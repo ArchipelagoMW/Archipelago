@@ -281,10 +281,10 @@ def run_gui(launch_components: list["Component"], args: Any) -> None:
             if "worlds" in sys.modules:
                 logging.warning("worlds module already loaded.")
             else:
-                import importlib
                 import time
                 start = time.perf_counter()
-                importlib.import_module("worlds")
+                from worlds import load_world_sources
+                load_world_sources()
                 logging.error(f"Worlds module loaded in {time.perf_counter() - start:.2f} seconds")
 
             global refresh_components
@@ -419,6 +419,9 @@ def main(args: argparse.Namespace | dict | None = None):
             else:
                 args['launch_components'] = [text_client_component, *components]
         else:
+            from worlds import load_world_sources
+            load_world_sources()
+
             from worlds.LauncherComponents import identify
             file, component = identify(path)
             if file:

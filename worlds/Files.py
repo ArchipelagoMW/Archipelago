@@ -146,7 +146,10 @@ class APContainer:
         else:
             opened_zipfile.writestr(self.manifest_path, manifest_str)
 
-    def read(self, file: Optional[Union[str, BinaryIO]] = None) -> None:
+    def validate_zip(self, zip_file: zipfile.ZipFile) -> None:
+        pass
+
+    def read(self, file: str | BinaryIO | None = None) -> None:
         """Read data into patch object. file can be file-like, such as an outer zip file's stream."""
         zip_file = file if file else self.path
         if not zip_file:
@@ -154,6 +157,7 @@ class APContainer:
         with zipfile.ZipFile(zip_file, "r") as zf:
             if file:
                 self.path = zf.filename
+            self.validate_zip(zf)
             try:
                 self.read_contents(zf)
             except Exception as e:
@@ -197,6 +201,21 @@ class APWorldContainer(APContainer):
     world_version: "Version | None" = None
     minimum_ap_version: "Version | None" = None
     maximum_ap_version: "Version | None" = None
+
+    def validate_zip(self, zip_file: zipfile.ZipFile) -> None:
+        directories = [f.name for f in zipfile.Path(zip_file).iterdir() if f.is_dir()]
+        if len(directories) == 1:
+            module_name = directories[0]
+        else:
+            raise Exception(f"The world source {self.path} appears invalid/damaged. (expected a single directory)")
+
+        try:
+            zip_file.open(module_name + "/__init__.pyc")
+        except KeyError:
+            try:
+                zip_file.open(module_name + "/__init__.py")
+            except KeyError:
+                raise Exception(f"The world source {self.path} appears to not be an APWorld. (missing __init__.py)")
 
     def read_contents(self, opened_zipfile: zipfile.ZipFile) -> Dict[str, Any]:
         from Utils import tuplize_version

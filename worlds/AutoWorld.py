@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import hashlib
 import logging
+import os
 import pathlib
 import sys
 import time
@@ -17,7 +18,7 @@ from Utils import Version
 
 if TYPE_CHECKING:
     from BaseClasses import CollectionRule, Item, Location, MultiWorld, Region, Tutorial
-    from NetUtils import GamesPackage, MultiData
+    from NetUtils import DataPackage, GamesPackage, MultiData
     from settings import Group
 
 perf_logger = logging.getLogger("performance")
@@ -27,12 +28,24 @@ class InvalidItemError(KeyError):
     pass
 
 
+# AP_TEST_WORLDS scopes auto-loading to the named worlds; these are always loaded for the
+# suite's fixtures but aren't themselves worlds under test.
+_SUITE_FIXTURE_WORLDS = {"generic", "apquest"}
+_test_worlds_env = os.environ.get("AP_TEST_WORLDS") if "pytest" in sys.modules or "unittest" in sys.modules else None
+_requested_worlds = {name.strip() for name in _test_worlds_env.split(",") if name.strip()} if _test_worlds_env else None
+test_worlds_filter = _requested_worlds | _SUITE_FIXTURE_WORLDS if _requested_worlds else None
+
+
+# stub for prior to world load
+network_data_package: DataPackage = {"games": {}}
+
+
 class AutoWorldRegister(type):
     world_types: dict[str, Type[World]] = {}
-    testable_worlds: dict[str, Type[World]] = world_types
+    testable_worlds: dict[str, Type[World]] = {}
     """worlds under test; scoped to AP_TEST_WORLDS by worlds/__init__"""
     __file__: str
-    zip_path: Optional[str]
+    zip_path: pathlib.Path | None
     settings_key: str
     __settings: Any
 
@@ -88,16 +101,20 @@ class AutoWorldRegister(type):
                                    f"can only be set from manifest.")
 
         # construct class
-        new_class = super().__new__(mcs, name, bases, dct)
+        new_class: type[World] = super().__new__(mcs, name, bases, dct)  # type: ignore
         new_class.__file__ = sys.modules[new_class.__module__].__file__
+        parents = pathlib.Path(new_class.__file__).parents
         if "game" in dct:
             if dct["game"] in AutoWorldRegister.world_types:
                 raise RuntimeError(f"""Game {dct["game"]} already registered in 
                 {AutoWorldRegister.world_types[dct["game"]].__file__} when attempting to register from
                 {new_class.__file__}.""")
             AutoWorldRegister.world_types[dct["game"]] = new_class
+            if _requested_worlds and parents[0].name in _requested_worlds:
+                AutoWorldRegister.testable_worlds[dct["game"]] = new_class
+            network_data_package["games"][dct["game"]] = new_class.get_data_package_data()
         if ".apworld" in new_class.__file__:
-            new_class.zip_path = pathlib.Path(new_class.__file__).parents[1]
+            new_class.zip_path = parents[1]
         if "settings_key" not in dct:
             mod_name = new_class.__module__
             world_folder_name = mod_name[7:].lower() if mod_name.startswith("worlds.") else mod_name.lower()
