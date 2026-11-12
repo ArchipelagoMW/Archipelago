@@ -22,8 +22,6 @@ def create_itempool(world: "HatInTimeWorld") -> List[Item]:
         itempool += yarn_pool
 
     for name in item_table.keys():
-        if name == world.glitches_item_name:
-            continue
 
         if name == "Yarn":
             continue

@@ -57,7 +57,6 @@ class HatInTimeWorld(World):
 
     # UT integration
     ut_can_gen_without_yaml = True
-    glitches_item_name = "Higher Logic Hat"
 
     def __init__(self, multiworld: "MultiWorld", player: int):
         super().__init__(multiworld, player)
