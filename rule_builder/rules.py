@@ -599,6 +599,8 @@ class And(NestedRule[TWorld], game="Archipelago"):
             for i in range(len(clauses) - 1, -1, -1):
                 clause = clauses[i]
                 intersection = clause.combine_and(child, world)
+                if intersection is NotImplemented:
+                    intersection = child.combine_and(clause, world)
                 if intersection is not NotImplemented:
                     if len(intersection) == 1 and clause == intersection[0]:
                         # The child was destroyed, nothing new can happen
@@ -680,6 +682,8 @@ class Or(NestedRule[TWorld], game="Archipelago"):
             for i in range(len(clauses) - 1, -1, -1):
                 clause = clauses[i]
                 intersection = clause.combine_or(child, world)
+                if intersection is NotImplemented:
+                    intersection = child.combine_or(clause, world)
                 if intersection is not NotImplemented:
                     if len(intersection) == 1 and clause == intersection[0]:
                         # The child was destroyed, nothing new can happen
@@ -918,24 +922,6 @@ class Has(Rule[TWorld], game="Archipelago"):
                         return [other_rule]
                     return [self]
                 return [HasAllCounts({self.item_name: self.count, other_rule.item_name: other_rule.count}).resolve(world)]
-
-            if isinstance(other_rule, HasAll.Resolved):
-                if self.count > 1:
-                    items = dict.fromkeys(other_rule.item_names, 1)
-                    items[self.item_name] = self.count
-                    return [HasAllCounts(items).resolve(world)]
-                if self.item_name in other_rule.item_names:
-                    return [other_rule]
-
-                return [HasAll(*other_rule.item_names, self.item_name).resolve(world)]
-
-            if isinstance(other_rule, HasAllCounts.Resolved):
-                items = dict(other_rule.item_counts)
-                if self.item_name in items and self.count <= items[self.item_name]:
-                    return [other_rule]
-                items[self.item_name] = self.count
-                return [HasAllCounts(items).resolve(world)]
-
             return NotImplemented
 
         @override
@@ -950,23 +936,6 @@ class Has(Rule[TWorld], game="Archipelago"):
                         return [other_rule]
                     return [self]
                 return [HasAnyCount({self.item_name: self.count, other_rule.item_name: other_rule.count}).resolve(world)]
-
-            if isinstance(other_rule, HasAny.Resolved):
-                if self.item_name in other_rule.item_names:
-                    return [other_rule]
-                if self.count > 1:
-                    items = dict.fromkeys(other_rule.item_names, 1)
-                    items[self.item_name] = self.count
-                    return [HasAnyCount(items).resolve(world)]
-
-                return [HasAny(*other_rule.item_names, self.item_name).resolve(world)]
-
-            if isinstance(other_rule, HasAnyCount.Resolved):
-                items = dict(other_rule.item_counts)
-                if self.item_name in items and self.count >= items[self.item_name]:
-                    return [other_rule]
-                items[self.item_name] = self.count
-                return [HasAnyCount(items).resolve(world)]
 
             return NotImplemented
 
@@ -1112,17 +1081,6 @@ class HasAll(Rule[TWorld], game="Archipelago"):
                     return [other_rule]
                 return [HasAll(*items).resolve(world)]
 
-            if isinstance(other_rule, HasAllCounts.Resolved):
-                items = dict(other_rule.item_counts)
-                changed = False
-                for item_name in self.item_names:
-                    if item_name not in items:
-                        items[item_name] = 1
-                        changed = True
-                if not changed:
-                    return [other_rule]
-                return [HasAllCounts(items).resolve(world)]
-
             return NotImplemented
 
 
@@ -1266,17 +1224,6 @@ class HasAny(Rule[TWorld], game="Archipelago"):
                 if len(items) == len(other_rule.item_names):
                     return [other_rule]
                 return [HasAny(*items).resolve(world)]
-
-            if isinstance(other_rule, HasAnyCount.Resolved):
-                items = dict(other_rule.item_counts)
-                changed = False
-                for item_name in self.item_names:
-                    if item_name not in items or items[item_name] > 1:
-                        items[item_name] = 1
-                        changed = True
-                if not changed:
-                    return [other_rule]
-                return [HasAnyCount(items).resolve(world)]
 
             return NotImplemented
 
