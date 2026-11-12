@@ -5,7 +5,6 @@ from .Types import HatType, ChapterIndex, hat_type_to_item, Difficulty, HitType
 from BaseClasses import Location, Entrance, Region
 from typing import TYPE_CHECKING, List, Callable, Union, Dict
 from .Options import EndGoal, CTRLogic, NoTicketSkips
-from rule_builder.rules import Has
 
 if TYPE_CHECKING:
     from . import HatInTimeWorld
