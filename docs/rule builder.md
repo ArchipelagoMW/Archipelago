@@ -75,7 +75,7 @@ When assigning the rule you must use the `set_rule` helper to correctly resolve 
 self.set_rule(location_or_entrance, rule)
 ```
 
-When modifying an existing rule with additional clauses you muse use the `add_rule` helper to correctly resolve and
+When modifying an existing rule with additional clauses you must use the `add_rule` helper to correctly resolve and
 register the changes to the rule. By default it will combine the previous rule and the new rule with an `And`, but you
 can specify to use an `Or` instead.
 
