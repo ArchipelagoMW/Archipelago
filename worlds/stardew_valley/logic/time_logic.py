@@ -29,7 +29,9 @@ class TimeLogic(BaseLogic):
             return self.logic.true_
 
         number = min(number, MAX_MONTHS)
-        return HasProgressionPercent(self.player, number * MONTH_COEFFICIENT)
+        percent = number * MONTH_COEFFICIENT
+        rule = HasProgressionPercent(self.player, percent)
+        return rule
 
     @cached_property
     def has_lived_max_months(self) -> StardewRule:

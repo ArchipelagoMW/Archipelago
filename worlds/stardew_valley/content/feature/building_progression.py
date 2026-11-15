@@ -2,12 +2,12 @@ from abc import ABC
 from dataclasses import dataclass
 from typing import ClassVar
 
-from .base import FeatureBase
 from ...strings.building_names import Building
+from .base import FeatureBase
 
 progressive_house = "Progressive House"
 
-# This assumes that the farm house is always available, which might not be true forever...
+# Even if you start with the farmhouse, we keep all the logic and code the same. We just place one farmhouse in your start inventory. it's much simpler this way.
 progressive_house_by_upgrade_name = {
     Building.farm_house: 1,
     Building.kitchen: 2,
