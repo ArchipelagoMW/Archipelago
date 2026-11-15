@@ -19,7 +19,7 @@ from .rules import MessengerHardRules, MessengerOOBRules, MessengerRules
 from .shop import FIGURINES, PROG_SHOP_ITEMS, SHOP_ITEMS, USEFUL_SHOP_ITEMS, shuffle_shop_prices
 from .subclasses import MessengerItem, MessengerRegion, MessengerShopLocation
 from .transitions import disconnect_entrances, shuffle_transitions
-from .universal_tracker import reverse_portal_exits_into_portal_plando, reverse_transitions_into_plando_connections
+from .universal_tracker import reverse_portal_exits_into_portal_plando, reverse_shop_prices, reverse_transitions_into_plando_connections
 
 components.append(
     Component(
@@ -169,7 +169,11 @@ class MessengerWorld(World):
         if self.options.early_meditation:
             self.multiworld.early_items[self.player]["Meditation"] = 1
 
-        self.shop_prices, self.figurine_prices = shuffle_shop_prices(self)
+        if not hasattr(self.multiworld, "re_gen_passthrough"):
+            self.shop_prices, self.figurine_prices = shuffle_shop_prices(self)
+        else:
+            if slot_data := self.multiworld.re_gen_passthrough.get(self.game):
+                self.shop_prices, self.figurine_prices = reverse_shop_prices(slot_data["shop"], slot_data["figures"])
 
         starting_portals = ["Autumn Hills", "Howling Grotto", "Glacial Peak", "Riviere Turquoise", "Sunken Shrine",
                             "Searing Crags"]
@@ -276,6 +280,10 @@ class MessengerWorld(World):
 
         self.multiworld.itempool += filler
 
+        if hasattr(self.multiworld, "re_gen_passthrough"):
+            if slot_data := self.multiworld.re_gen_passthrough.get(self.game):
+                self.total_shards = slot_data["max_price"]
+
     def set_rules(self) -> None:
         logic = self.options.logic_level
         if logic == Logic.option_normal:
@@ -296,8 +304,11 @@ class MessengerWorld(World):
             slot_data = self.multiworld.re_gen_passthrough.get(self.game)
             if slot_data:
                 self.multiworld.plando_options |= PlandoOptions.connections
-                self.options.portal_plando.value = reverse_portal_exits_into_portal_plando(slot_data["portal_exits"])
-                self.options.plando_connections.value = reverse_transitions_into_plando_connections(slot_data["transitions"])
+                if slot_data["portal_exits"]:
+                    self.options.portal_plando.value = reverse_portal_exits_into_portal_plando(slot_data["portal_exits"])
+                if slot_data["transitions"]:
+                    self.options.plando_connections.value = reverse_transitions_into_plando_connections(self.options.shuffle_transitions,
+                                                                                                        slot_data["transitions"])
                 keep_entrance_logic = True
 
         add_closed_portal_reqs(self)

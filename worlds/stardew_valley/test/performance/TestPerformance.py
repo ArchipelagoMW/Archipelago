@@ -9,7 +9,7 @@ from BaseClasses import get_seed
 from Fill import distribute_items_restrictive, balance_multiworld_progression
 from worlds import AutoWorld
 from ..bases import SVTestCase, setup_multiworld
-from ..options.presets import default_6_x_x, allsanity_no_mods_6_x_x, minimal_locations_maximal_items, allsanity_mods_7_x_x, allsanity_no_mods_7_x_x, \
+from ..options.presets import default_6_x_x, maxsanity_no_mods_6_x_x, minimal_locations_maximal_items, maxsanity_mods_7_x_x, maxsanity_no_mods_7_x_x, \
     default_7_x_x
 
 default_number_generations = 25
@@ -213,9 +213,9 @@ class TestMinLocationMaxItems(SVPerformanceTestCase):
         self.performance_test_multiworld(multiworld_options)
 
 
-class TestAllsanityWithoutMods6xx(SVPerformanceTestCase):
+class TestMaxsanityWithoutMods6xx(SVPerformanceTestCase):
     acceptable_time_per_player = 10
-    options = allsanity_no_mods_6_x_x()
+    options = maxsanity_no_mods_6_x_x()
     results = []
 
     def test_solo(self):
@@ -242,9 +242,9 @@ class TestAllsanityWithoutMods6xx(SVPerformanceTestCase):
         self.performance_test_multiworld(multiworld_options)
 
 
-class TestAllsanityWithoutMods7xx(SVPerformanceTestCase):
+class TestMaxsanityWithoutMods7xx(SVPerformanceTestCase):
     acceptable_time_per_player = 10
-    options = allsanity_no_mods_7_x_x()
+    options = maxsanity_no_mods_7_x_x()
     results = []
 
     def test_solo(self):
@@ -270,9 +270,9 @@ class TestAllsanityWithoutMods7xx(SVPerformanceTestCase):
         self.performance_test_multiworld(multiworld_options)
 
 
-class TestAllsanityWithMods7xx(SVPerformanceTestCase):
+class TestMaxsanityWithMods7xx(SVPerformanceTestCase):
     acceptable_time_per_player = 25
-    options = allsanity_mods_7_x_x()
+    options = maxsanity_mods_7_x_x()
     results = []
 
     @unittest.skip

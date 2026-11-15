@@ -5,6 +5,8 @@ def is_auto_scroll(state, player, level):
     level_id = level_name_to_id[level]
     if state.has_any(["Cancel Auto Scroll", f"Cancel Auto Scroll - {level}"], player):
         return False
+    if state.has("ut_glitch", player) and state.multiworld.worlds[player].auto_scroll_levels[level_id] == 3:
+        return state.has(f"Auto Scroll - {level}", player)
     return state.multiworld.worlds[player].auto_scroll_levels[level_id] > 0
 
 
@@ -287,8 +289,12 @@ def mario_zone_3_coins(state, player, coins):
     if state.has("Carrot", player):
         reachable_spike_coins = 15
     else:
-        sprites = state.multiworld.worlds[player].sprite_data["Mario Zone 3"]
-        reachable_spike_coins = min(3, len({sprites[i]["sprite"] == "Claw Grabber" for i in (17, 18, 25)})
+        if state.multiworld.worlds[player].ut:
+            claw_grabbers = state.multiworld.worlds[player].mario_zone_3_crane_count
+        else:
+            sprites = state.multiworld.worlds[player].sprite_data["Mario Zone 3"]
+            claw_grabbers = len({sprites[i]["sprite"] == "Claw Grabber" for i in (17, 18, 25)})
+        reachable_spike_coins = min(3, claw_grabbers
                                     + state.has("Mushroom", player) + state.has("Fire Flower", player)) * 5
     reachable_coins += reachable_spike_coins
     if not auto_scroll:
@@ -309,8 +315,11 @@ def mario_zone_4_coins(state, player, coins):
 
 
 def not_blocked_by_sharks(state, player):
-    sharks = [state.multiworld.worlds[player].sprite_data["Turtle Zone 1"][i]["sprite"]
-              for i in (27, 28)].count("Shark")
+    if state.multiworld.worlds[player].ut:
+        sharks = state.multiworld.worlds[player].turtle_zone_1_shark_count
+    else:
+        sharks = [state.multiworld.worlds[player].sprite_data["Turtle Zone 1"][i]["sprite"]
+                  for i in (27, 28)].count("Shark")
     if state.has("Carrot", player) or not sharks:
         return True
     if sharks == 2:

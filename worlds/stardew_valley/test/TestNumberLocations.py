@@ -1,7 +1,7 @@
 from BaseClasses import ItemClassification
 from .bases import SVTestBase
-from .options.presets import default_7_x_x, allsanity_no_mods_7_x_x, get_minsanity_options, \
-    minimal_locations_maximal_items, minimal_locations_maximal_items_with_island, allsanity_mods_7_x_x_exclude_disabled
+from .options.presets import default_7_x_x, maxsanity_no_mods_7_x_x, get_minsanity_options, \
+    minimal_locations_maximal_items, minimal_locations_maximal_items_with_island, maxsanity_mods_7_x_x_exclude_disabled
 from .. import location_table
 from ..items import Group, item_table
 from ..items.item_data import FILLER_GROUPS
@@ -63,7 +63,7 @@ class TestDefaultSettingsHasAllExpectedLocations(SVTestBase):
     options = default_7_x_x()
 
     def test_default_settings_has_exactly_locations(self):
-        expected_locations = 475
+        expected_locations = 471
         real_locations = self.get_real_locations()
         number_locations = len(real_locations)
         print(f"Stardew Valley - Default options locations: {number_locations}")
@@ -75,33 +75,33 @@ class TestDefaultSettingsHasAllExpectedLocations(SVTestBase):
 
 
 class TestAllSanitySettingsHasAllExpectedLocations(SVTestBase):
-    options = allsanity_no_mods_7_x_x()
+    options = maxsanity_no_mods_7_x_x()
 
-    def test_allsanity_without_mods_has_at_least_locations(self):
+    def test_maxsanity_without_mods_has_at_least_locations(self):
         expected_locations = 2812
         real_locations = self.get_real_locations()
         number_locations = len(real_locations)
-        print(f"Stardew Valley - Allsanity Locations without mods: {number_locations}")
+        print(f"Stardew Valley - Maxsanity Locations without mods: {number_locations}")
         self.assertGreaterEqual(number_locations, expected_locations)
         if number_locations != expected_locations:
             print(f"\tNew locations detected!"
-                  f"\n\tPlease update test_allsanity_without_mods_has_at_least_locations"
+                  f"\n\tPlease update test_maxsanity_without_mods_has_at_least_locations"
                   f"\n\t\tExpected: {expected_locations}"
                   f"\n\t\tActual: {number_locations}")
 
 
 class TestAllSanityWithModsSettingsHasAllExpectedLocations(SVTestBase):
-    options = allsanity_mods_7_x_x_exclude_disabled()
+    options = maxsanity_mods_7_x_x_exclude_disabled()
 
-    def test_allsanity_with_mods_has_at_least_locations(self):
+    def test_maxsanity_with_mods_has_at_least_locations(self):
         expected_locations = 3180  # It was 3473 before disabling SVE
         real_locations = self.get_real_locations()
         number_locations = len(real_locations)
-        print(f"Stardew Valley - Allsanity Locations with all mods: {number_locations}")
+        print(f"Stardew Valley - Maxsanity Locations with all mods: {number_locations}")
         self.assertGreaterEqual(number_locations, expected_locations)
         if number_locations != expected_locations:
             print(f"\tNew locations detected!"
-                  f"\n\tPlease update test_allsanity_with_mods_has_at_least_locations"
+                  f"\n\tPlease update test_maxsanity_with_mods_has_at_least_locations"
                   f"\n\t\tExpected: {expected_locations}"
                   f"\n\t\tActual: {number_locations}")
 

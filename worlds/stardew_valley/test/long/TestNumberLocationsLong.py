@@ -3,7 +3,7 @@ import unittest
 from BaseClasses import ItemClassification
 from ..assertion import get_all_location_names
 from ..bases import skip_long_tests, SVTestCase, solo_multiworld
-from ..options.presets import setting_mins_and_maxes, allsanity_no_mods_7_x_x, get_minsanity_options, default_7_x_x
+from ..options.presets import setting_mins_and_maxes, maxsanity_no_mods_7_x_x, get_minsanity_options, default_7_x_x
 from ...items import Group, item_table
 from ...items.item_data import FILLER_GROUPS
 
@@ -30,7 +30,7 @@ class TestCountsPerSetting(SVTestCase):
             with self.subTest(f"{name}"):
                 highest_variance_items = -1
                 highest_variance_locations = -1
-                for preset in [allsanity_no_mods_7_x_x, default_7_x_x, get_minsanity_options]:
+                for preset in [maxsanity_no_mods_7_x_x, default_7_x_x, get_minsanity_options]:
                     lowest_items = 9999
                     lowest_locations = 9999
                     highest_items = -1

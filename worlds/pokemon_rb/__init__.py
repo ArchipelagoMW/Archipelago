@@ -19,7 +19,7 @@ from .options import PokemonRBOptions
 from .rom_addresses import rom_addresses
 from .text import encode_text
 from .rom import generate_output, PokemonRedProcedurePatch, PokemonBlueProcedurePatch
-from .pokemon import process_pokemon_data, process_move_data, verify_hm_moves
+from .pokemon import process_pokemon_data, process_move_data, rebuild_hm_mons_cache, verify_hm_moves
 from .encounters import process_pokemon_locations, process_trainer_data
 from .rules import set_rules
 from .level_scaling import level_scaling
@@ -101,6 +101,7 @@ class PokemonRedBlueWorld(World):
         self.type_chart = None
         self.local_poke_data = None
         self.local_move_data = None
+        self.local_hm_mons_cache = None
         self.local_tms = None
         self.learnsets = None
         self.trainer_name = None
@@ -252,6 +253,7 @@ class PokemonRedBlueWorld(World):
 
         process_move_data(self)
         process_pokemon_data(self)
+        rebuild_hm_mons_cache(self)
 
         self.dexsanity_table = [
             *(True for _ in range(round(self.options.dexsanity.value))),
@@ -629,7 +631,7 @@ class PokemonRedBlueWorld(World):
         if (combined_traps > 0 and
                 self.random.randint(1, 100) <= self.options.trap_percentage.value):
             return self.select_trap()
-        banned_items = item_groups["Unique"]
+        banned_items = item_groups["Unique"].copy()
         if (((not self.options.tea) or "Saffron City" not in [self.fly_map, self.town_map_fly_map])
                 and (not self.options.door_shuffle)):
             # under these conditions, you should never be able to reach the Copycat or Pokémon Tower without being

@@ -12,7 +12,7 @@ class TestItemLinksEverythingIncluded(SVTestBase):
                }
 
     def test_filler_of_all_types_generated(self):
-        max_number_filler = 199
+        max_number_filler = 197
         filler_generated = []
         at_least_one_trap = False
         at_least_one_island = False
@@ -41,7 +41,7 @@ class TestItemLinksNoIsland(SVTestBase):
                }
 
     def test_filler_has_no_island_but_has_traps(self):
-        max_number_filler = 192
+        max_number_filler = 190
         filler_generated = []
         at_least_one_trap = False
         for i in range(0, max_iterations):
@@ -67,7 +67,7 @@ class TestItemLinksNoTraps(SVTestBase):
                }
 
     def test_filler_has_no_traps_but_has_island(self):
-        max_number_filler = 176
+        max_number_filler = 174
         filler_generated = []
         at_least_one_island = False
         for i in range(0, max_iterations):
@@ -93,7 +93,7 @@ class TestItemLinksNoTrapsAndIsland(SVTestBase):
                }
 
     def test_filler_generated_without_island_or_traps(self):
-        max_number_filler = 169
+        max_number_filler = 167
         filler_generated = []
         for i in range(0, max_iterations):
             filler = self.multiworld.worlds[1].get_filler_item_name()

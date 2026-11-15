@@ -8,12 +8,13 @@ from dataclasses import dataclass
 from queue import Queue
 from typing import Callable
 
-from PyMemoryEditor import OpenProcess, ProcessNotFoundError, ProcessIDNotExistsError, ClosedProcess
+from PyMemoryEditor import OpenProcess, PyMemoryEditorError
 
 import asyncio
 from asyncio import StreamReader, StreamWriter, Lock
 
 from NetUtils import NetworkItem
+from .utils import user_data_path
 from ..game_id import jak1_id, jak1_max, jak1_gk, jak1_goalc
 from ..items import item_table, trap_item_table
 from ..locs import (
@@ -65,10 +66,10 @@ class JakAndDaxterReplClient:
 
     # The REPL client needs the REPL/compiler process running, but that process
     # also needs the game running. Therefore, the REPL client needs both running.
-    gk_process: OpenProcess = None
-    goalc_process: OpenProcess = None
+    gk_process: OpenProcess | None = None
+    goalc_process: OpenProcess | None = None
 
-    item_inbox: dict[int, NetworkItem] = {}
+    item_inbox: list[NetworkItem] = []
     inbox_index = 0
     json_message_queue: Queue[JsonMessageData] = queue.Queue()
 
@@ -101,10 +102,8 @@ class JakAndDaxterReplClient:
 
         if self.connected:
             try:
-                # TODO - When PyMemoryEditor issue #15 is resolved, swap out this line for the commented one.
-                # self.gk_process.read_process_memory(0, bytes, 1)  # Ping to see if it's alive.
-                OpenProcess(process_name=jak1_gk)
-            except (ProcessNotFoundError, ProcessIDNotExistsError, ClosedProcess):
+                OpenProcess(name=jak1_gk)
+            except PyMemoryEditorError as e:
                 msg = (f"Error reading game memory! (Did the game crash?)\n"
                        f"Please close all open windows and reopen the Jak and Daxter Client "
                        f"from the Archipelago Launcher.\n"
@@ -114,12 +113,11 @@ class JakAndDaxterReplClient:
                        f"   Then click Advanced > Open REPL.\n"
                        f"   Then close and reopen the Jak and Daxter Client from the Archipelago Launcher.")
                 self.log_error(logger, msg)
+                logger.error(e)
                 self.connected = False
             try:
-                # TODO - When PyMemoryEditor issue #15 is resolved, swap out this line for the commented one.
-                # self.goalc_process.read_process_memory(0, bytes, 1)  # Ping to see if it's alive.
-                OpenProcess(process_name=jak1_goalc)
-            except (ProcessNotFoundError, ProcessIDNotExistsError, ClosedProcess):
+                OpenProcess(name=jak1_goalc)
+            except PyMemoryEditorError as e:
                 msg = (f"Error sending data to compiler! (Did the compiler crash?)\n"
                        f"Please close all open windows and reopen the Jak and Daxter Client "
                        f"from the Archipelago Launcher.\n"
@@ -129,6 +127,7 @@ class JakAndDaxterReplClient:
                        f"   Then click Advanced > Open REPL.\n"
                        f"   Then close and reopen the Jak and Daxter Client from the Archipelago Launcher.")
                 self.log_error(logger, msg)
+                logger.error(e)
                 self.connected = False
         else:
             return
@@ -142,18 +141,17 @@ class JakAndDaxterReplClient:
                 self.processed_initial_items = True
                 await self.send_connection_status("ready")
 
-        # Receive Items from AP. Handle 1 item per tick.
+        # Receive Items from AP. receive_item() will update the inbox index
         if len(self.item_inbox) > self.inbox_index:
             await self.receive_item()
             await self.save_data()
-            self.inbox_index += 1
 
         if self.received_deathlink:
             await self.receive_deathlink()
             self.received_deathlink = False
 
         # Progressively empty the queue during each tick
-        # if text messages happen to be too slow we could pool dequeuing here, 
+        # if text messages happen to be too slow we could pool dequeuing here,
         # but it'd slow down the ItemReceived message during release
         if not self.json_message_queue.empty():
             json_txt_data = self.json_message_queue.get_nowait()
@@ -180,17 +178,19 @@ class JakAndDaxterReplClient:
 
     async def connect(self):
         try:
-            self.gk_process = OpenProcess(process_name=jak1_gk)  # The GOAL Kernel
+            self.gk_process = OpenProcess(name=jak1_gk)  # The GOAL Kernel
             logger.debug("Found the gk process: " + str(self.gk_process.pid))
-        except ProcessNotFoundError:
+        except PyMemoryEditorError as e:
             self.log_error(logger, "Could not find the game process.")
+            logger.error(e)
             return
 
         try:
-            self.goalc_process = OpenProcess(process_name=jak1_goalc)  # The GOAL Compiler and REPL
+            self.goalc_process = OpenProcess(name=jak1_goalc)  # The GOAL Compiler and REPL
             logger.debug("Found the goalc process: " + str(self.goalc_process.pid))
-        except ProcessNotFoundError:
+        except PyMemoryEditorError as e:
             self.log_error(logger, "Could not find the compiler process.")
+            logger.error(e)
             return
 
         try:
@@ -280,12 +280,14 @@ class JakAndDaxterReplClient:
     # - It must be a valid character from the ALLOWED_CHARACTERS list.
     # - All lowercase letters must be uppercase.
     # - It must be wrapped in double quotes (for the REPL command).
-    # - Apostrophes must be handled specially - GOAL uses invisible ASCII character 0x12.
+    # - Single quotes must be replaced - GOAL uses invisible ASCII character 0x12.
+    # - Double quotes must be prepended with a backslash to escape it.
     # I also only allotted 32 bytes to each string in OpenGOAL, so we must truncate.
     @staticmethod
     def sanitize_game_text(text: str) -> str:
         result = "".join([c if c in ALLOWED_CHARACTERS else "?" for c in text[:32]]).upper()
         result = result.replace("'", "\\c12")
+        result = result.replace("\"", "\\\"")
         return f"\"{result}\""
 
     # Like sanitize_game_text, but the settings file will NOT allow any whitespace in the slot_name or slot_seed data.
@@ -315,105 +317,104 @@ class JakAndDaxterReplClient:
         await self.send_form(f"(begin {body} (none))", print_ok=False)
 
     async def receive_item(self):
-        ap_id = getattr(self.item_inbox[self.inbox_index], "item")
+        # orbs and pills are just increment the in game counter, so just tally them up.
+        # The rest are kept in an array to be fed in one big command.
+        received_orbs = 0
+        received_pills = 0
+        received_cells = 0
 
-        # Determine the type of item to receive.
-        if ap_id in range(jak1_id, jak1_id + flies.fly_offset):
-            await self.receive_power_cell(ap_id)
-        elif ap_id in range(jak1_id + flies.fly_offset, jak1_id + specials.special_offset):
-            await self.receive_scout_fly(ap_id)
-        elif ap_id in range(jak1_id + specials.special_offset, jak1_id + caches.orb_cache_offset):
-            await self.receive_special(ap_id)
-        elif ap_id in range(jak1_id + caches.orb_cache_offset, jak1_id + orbs.orb_offset):
-            await self.receive_move(ap_id)
-        elif ap_id in range(jak1_id + orbs.orb_offset, jak1_max - max(trap_item_table)):
-            await self.receive_precursor_orb(ap_id)  # Ponder the orbs.
-        elif ap_id in range(jak1_max - max(trap_item_table), jak1_max):
-            await self.receive_trap(ap_id)
-        elif ap_id == jak1_max:
-            await self.receive_green_eco()  # Ponder why I chose to do ID's this way.
-        else:
-            self.log_error(logger, f"Tried to receive item with unknown AP ID {ap_id}!")
+        received_scout_flies = []
+        received_special = []
+        received_moves = []
+        received_traps = []
 
-    async def receive_power_cell(self, ap_id: int) -> bool:
-        cell_id = cells.to_game_id(ap_id)
-        ok = await self.send_form("(send-event "
-                                  "*target* \'get-archipelago "
-                                  "(pickup-type fuel-cell) "
-                                  "(the float " + str(cell_id) + "))")
+        # an attempt to make the code easier to read
+        fly_start = jak1_id + flies.fly_offset
+        special_start = jak1_id + specials.special_offset
+        cache_start = jak1_id + caches.orb_cache_offset
+        orb_start = jak1_id + orbs.orb_offset
+        trap_start = jak1_max - max(trap_item_table)
+
+        for new_item in self.item_inbox[self.inbox_index:]:
+            ap_id = new_item.item
+
+            if ap_id < jak1_id or ap_id > jak1_max: # bail early instead of wasting time checking all of them
+                self.log_error(logger, f"Tried to receive item with unknown AP ID {ap_id}!")
+                continue
+
+            # not bothering with array searches since >= and < are enough.
+            # Since I checked if less than minimum I can remove all of the lower bound checks, elif already skips once range is found.
+            if ap_id < fly_start:
+                received_cells += 1
+
+            elif ap_id < special_start:
+                fly_id = flies.to_game_id(ap_id)
+                received_scout_flies.append(str(fly_id))
+
+            elif ap_id < cache_start:
+                special_id = specials.to_game_id(ap_id)
+                received_special.append(str(special_id))
+
+            elif ap_id < orb_start:
+                move_id = caches.to_game_id(ap_id)
+                received_moves.append(str(move_id))
+
+            elif ap_id < trap_start:
+                orb_amount = orbs.to_game_id(ap_id)
+                received_orbs += orb_amount
+
+            elif ap_id < jak1_max:
+                received_traps.append(str(jak1_max - ap_id))
+
+            elif ap_id == jak1_max:
+                received_pills += 1
+
+            else:
+                self.log_error(logger, f"Tried to receive item with unknown AP ID {ap_id}!")
+                continue
+
+        # Traps and pills are useless on the title screen so I don't bother sending them
+        if received_cells > 0:
+            await self.receive_item_amount("Power Cells", "fuel-cell", received_cells)
+        if len(received_scout_flies) > 0:
+            await self.receive_items("Scout Flies", "buzzer", received_scout_flies)
+        if len(received_special) > 0:
+            await self.receive_items("Special Unlocks", "ap-special", received_special)
+        if len(received_moves) > 0:
+            await self.receive_items("Moves", "ap-move", received_moves)
+        if self.processed_initial_items and len(received_traps) > 0:
+            await self.receive_items("Traps", "ap-trap", received_traps)
+        if received_orbs > 0:
+            await self.receive_item_amount("Precursor orbs", "money", received_orbs)
+        if self.processed_initial_items and received_pills > 0:
+            await self.receive_item_amount("Green Eco Pills", "eco-pill", received_pills, event="get-pickup")
+
+        self.inbox_index = len(self.item_inbox)
+
+
+    async def receive_items(self, pretty_name : str, pickup_type : str, items : list[str]):
+        # An int array is created instead of floats because with highest move id it turns it into hex for some reason idky
+        ok = await self.send_form(f"(let ((arr (new 'static 'array int {len(items)} {' '.join(items)})))"
+                                  f"(dotimes (i {len(items)})"
+                                   "(send-event "
+                                   "*target* \'get-archipelago "
+                                  f"(pickup-type {pickup_type}) "
+                                   "(the float (-> arr i)) )))")
         if ok:
-            logger.debug(f"Received a Power Cell!")
+            logger.debug(f"Received {len(items)} {pretty_name}!")
         else:
-            self.log_error(logger, f"Unable to receive a Power Cell!")
+            self.log_error(logger, f"Unable to receive {len(items)} {pretty_name}s!")
         return ok
 
-    async def receive_scout_fly(self, ap_id: int) -> bool:
-        fly_id = flies.to_game_id(ap_id)
+    async def receive_item_amount(self, pretty_name : str, pickup_type : str, count : int, event : str = "get-archipelago"):
         ok = await self.send_form("(send-event "
-                                  "*target* \'get-archipelago "
-                                  "(pickup-type buzzer) "
-                                  "(the float " + str(fly_id) + "))")
+                                 f"*target* \'{event} "
+                                 f"(pickup-type {pickup_type})"
+                                 f"(the float {count}))")
         if ok:
-            logger.debug(f"Received a {item_table[ap_id]}!")
+            logger.debug(f"Received {count} {pretty_name}!")
         else:
-            self.log_error(logger, f"Unable to receive a {item_table[ap_id]}!")
-        return ok
-
-    async def receive_special(self, ap_id: int) -> bool:
-        special_id = specials.to_game_id(ap_id)
-        ok = await self.send_form("(send-event "
-                                  "*target* \'get-archipelago "
-                                  "(pickup-type ap-special) "
-                                  "(the float " + str(special_id) + "))")
-        if ok:
-            logger.debug(f"Received special unlock {item_table[ap_id]}!")
-        else:
-            self.log_error(logger, f"Unable to receive special unlock {item_table[ap_id]}!")
-        return ok
-
-    async def receive_move(self, ap_id: int) -> bool:
-        move_id = caches.to_game_id(ap_id)
-        ok = await self.send_form("(send-event "
-                                  "*target* \'get-archipelago "
-                                  "(pickup-type ap-move) "
-                                  "(the float " + str(move_id) + "))")
-        if ok:
-            logger.debug(f"Received the ability to {item_table[ap_id]}!")
-        else:
-            self.log_error(logger, f"Unable to receive the ability to {item_table[ap_id]}!")
-        return ok
-
-    async def receive_precursor_orb(self, ap_id: int) -> bool:
-        orb_amount = orbs.to_game_id(ap_id)
-        ok = await self.send_form("(send-event "
-                                  "*target* \'get-archipelago "
-                                  "(pickup-type money) "
-                                  "(the float " + str(orb_amount) + "))")
-        if ok:
-            logger.debug(f"Received {orb_amount} Precursor orbs!")
-        else:
-            self.log_error(logger, f"Unable to receive {orb_amount} Precursor orbs!")
-        return ok
-
-    async def receive_trap(self, ap_id: int) -> bool:
-        trap_id = jak1_max - ap_id
-        ok = await self.send_form("(send-event "
-                                  "*target* \'get-archipelago "
-                                  "(pickup-type ap-trap) "
-                                  "(the float " + str(trap_id) + "))")
-        if ok:
-            logger.debug(f"Received a {item_table[ap_id]}!")
-        else:
-            self.log_error(logger, f"Unable to receive a {item_table[ap_id]}!")
-        return ok
-
-    # Green eco pills are our filler item. Use the get-pickup event instead to handle being full health.
-    async def receive_green_eco(self) -> bool:
-        ok = await self.send_form("(send-event *target* \'get-pickup (pickup-type eco-pill) (the float 1))")
-        if ok:
-            logger.debug(f"Received a green eco pill!")
-        else:
-            self.log_error(logger, f"Unable to receive a green eco pill!")
+            self.log_error(logger, f"Unable to receive {count} {pretty_name}!")
         return ok
 
     async def receive_deathlink(self) -> bool:
@@ -502,14 +503,14 @@ class JakAndDaxterReplClient:
         return ok
 
     async def save_data(self):
-        with open("jakanddaxter_item_inbox.json", "w+") as f:
+        with open(user_data_path("jakanddaxter_item_inbox.json"), "w+") as f:
             dump = {
                 "inbox_index": self.inbox_index,
                 "item_inbox": [{
-                    "item": self.item_inbox[k].item,
-                    "location": self.item_inbox[k].location,
-                    "player": self.item_inbox[k].player,
-                    "flags": self.item_inbox[k].flags
+                    "item": k.item,
+                    "location": k.location,
+                    "player": k.player,
+                    "flags": k.flags
                     } for k in self.item_inbox
                 ]
             }
@@ -517,15 +518,15 @@ class JakAndDaxterReplClient:
 
     def load_data(self):
         try:
-            with open("jakanddaxter_item_inbox.json", "r") as f:
+            with open(user_data_path("jakanddaxter_item_inbox.json"), "r") as f:
                 load = json.load(f)
                 self.inbox_index = load["inbox_index"]
-                self.item_inbox = {k: NetworkItem(
+                self.item_inbox = [NetworkItem(
                         item=load["item_inbox"][k]["item"],
                         location=load["item_inbox"][k]["location"],
                         player=load["item_inbox"][k]["player"],
                         flags=load["item_inbox"][k]["flags"]
                     ) for k in range(0, len(load["item_inbox"]))
-                }
+                ]
         except FileNotFoundError:
             pass

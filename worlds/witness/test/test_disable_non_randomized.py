@@ -8,7 +8,7 @@ class TestDisableNonRandomized(WitnessTestBase):
     options = {
         "disable_non_randomized_puzzles": True,
         "shuffle_doors": "panels",
-        "early_symbol_item": False,
+        "early_good_items": {},
     }
 
     def test_locations_got_disabled_and_alternate_activation_triggers_work(self) -> None:
