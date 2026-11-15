@@ -4038,6 +4038,7 @@
       Starting Room:
         door: Painting Shortcut
         painting: True
+      Roof: True # through ceiling of sunwarp
     panels:
       HOLLOW:
         id: Hallway Room/Panel_hollow_hollow

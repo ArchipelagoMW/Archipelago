@@ -8,9 +8,11 @@ from . import setup_solo_multiworld
 
 
 class TestImplemented(unittest.TestCase):
+    world_relevant = True
+
     def test_completion_condition(self):
         """Ensure a completion condition is set that has requirements."""
-        for game_name, world_type in AutoWorldRegister.world_types.items():
+        for game_name, world_type in AutoWorldRegister.testable_worlds.items():
             if not world_type.hidden:
                 with self.subTest(game_name):
                     multiworld = setup_solo_multiworld(world_type)
@@ -18,7 +20,7 @@ class TestImplemented(unittest.TestCase):
 
     def test_entrance_parents(self):
         """Tests that the parents of created Entrances match the exiting Region."""
-        for game_name, world_type in AutoWorldRegister.world_types.items():
+        for game_name, world_type in AutoWorldRegister.testable_worlds.items():
             if not world_type.hidden:
                 with self.subTest(game_name):
                     multiworld = setup_solo_multiworld(world_type)
@@ -28,7 +30,7 @@ class TestImplemented(unittest.TestCase):
 
     def test_stage_methods(self):
         """Tests that worlds don't try to implement certain steps that are only ever called as stage."""
-        for game_name, world_type in AutoWorldRegister.world_types.items():
+        for game_name, world_type in AutoWorldRegister.testable_worlds.items():
             if not world_type.hidden:
                 with self.subTest(game_name):
                     for method in ("assert_generate",):
@@ -40,7 +42,7 @@ class TestImplemented(unittest.TestCase):
         # has an await for generate_output which isn't being called
         excluded_games = ("Ocarina of Time",)
         worlds_to_test = {game: world
-                          for game, world in AutoWorldRegister.world_types.items() if game not in excluded_games}
+                          for game, world in AutoWorldRegister.testable_worlds.items() if game not in excluded_games}
         for game_name, world_type in worlds_to_test.items():
             multiworld = setup_solo_multiworld(world_type)
             with self.subTest(game=game_name, seed=multiworld.seed):
@@ -58,12 +60,12 @@ class TestImplemented(unittest.TestCase):
 
     def test_prefill_items(self):
         """Test that every world can reach every location from allstate before pre_fill."""
-        for gamename, world_type in AutoWorldRegister.world_types.items():
+        for gamename, world_type in AutoWorldRegister.testable_worlds.items():
             if gamename not in ("Archipelago", "Final Fantasy", "Test Game"):
                 with self.subTest(gamename):
                     multiworld = setup_solo_multiworld(world_type, ("generate_early", "create_regions", "create_items",
                                                                     "set_rules", "connect_entrances", "generate_basic"))
-                    allstate = multiworld.get_all_state(False)
+                    allstate = multiworld.get_all_state()
                     locations = multiworld.get_locations()
                     reachable = multiworld.get_reachable_locations(allstate)
                     unreachable = [location for location in locations if location not in reachable]
@@ -78,7 +80,7 @@ class TestImplemented(unittest.TestCase):
         # Because the iteration order of blocked_connections in CollectionState.update_reachable_regions() is
         # nondeterministic, this test may sometimes pass with the same seed even when there are missing indirect
         # conditions.
-        for game_name, world_type in AutoWorldRegister.world_types.items():
+        for game_name, world_type in AutoWorldRegister.testable_worlds.items():
             multiworld = setup_solo_multiworld(world_type)
             world = multiworld.get_game_worlds(game_name)[0]
             if not world.explicit_indirect_conditions:
@@ -140,7 +142,7 @@ class TestImplemented(unittest.TestCase):
 
     def test_no_items_or_locations_or_regions_submitted_in_init(self):
         """Test that worlds don't submit items/locations/regions to the multiworld in __init__"""
-        for game_name, world_type in AutoWorldRegister.world_types.items():
+        for game_name, world_type in AutoWorldRegister.testable_worlds.items():
             with self.subTest("Game", game=game_name):
                 multiworld = setup_solo_multiworld(world_type, ())
                 self.assertEqual(len(multiworld.itempool), 0)

@@ -19,7 +19,7 @@ import factorio_rcon
 from CommonClient import ClientCommandProcessor, CommonContext, logger, server_loop, gui_enabled, get_base_parser
 from MultiServer import mark_raw
 from NetUtils import ClientStatus, NetworkItem, JSONtoTextParser, JSONMessagePart
-from Utils import async_start, get_file_safe_name, is_windows, Version, format_SI_prefix, get_text_between, user_path
+from Utils import async_start, get_file_safe_name, is_linux, is_windows, Version, format_SI_prefix, get_text_between, user_path
 from .settings import FactorioSettings
 from settings import get_settings
 
@@ -366,9 +366,17 @@ async def factorio_server_watcher(ctx: FactorioContext):
     savegame_name = os.path.abspath(os.path.join(ctx.write_data_path, "saves", "Archipelago", ctx.savegame_name))
     if not os.path.exists(savegame_name):
         logger.info(f"Creating savegame {savegame_name}")
-        subprocess.run((
-            executable, "--create", savegame_name, "--preset", "archipelago", "--config", ctx.config_file
-        ))
+        try:
+            subprocess.run(
+                (executable, "--create", savegame_name, "--preset", "archipelago", "--config", ctx.config_file),
+                check=True,
+                stderr=subprocess.STDOUT,
+                stdout=subprocess.PIPE,
+                encoding="utf-8",
+            )
+        except subprocess.CalledProcessError as e:
+            logger.error(e.output)
+            return False
     factorio_process = subprocess.Popen((executable, "--start-server", savegame_name,
                                          *ctx.server_args),
                                         stderr=subprocess.PIPE,
@@ -480,9 +488,17 @@ async def factorio_spinup_server(ctx: FactorioContext) -> bool:
     savegame_name = user_path("factorio", "saves", "Archipelago.zip")
     if not os.path.exists(savegame_name):
         logger.info(f"Creating savegame {savegame_name}")
-        subprocess.run((
-            executable, "--create", savegame_name, "--config", ctx.config_file
-        ))
+        try:
+            subprocess.run(
+                (executable, "--create", savegame_name, "--config", ctx.config_file),
+                check=True,
+                stderr=subprocess.STDOUT,
+                stdout=subprocess.PIPE,
+                encoding="utf-8",
+            )
+        except subprocess.CalledProcessError as e:
+            logger.error(e.output)
+            return False
     factorio_process = subprocess.Popen(
         (executable, "--start-server", savegame_name, *ctx.server_args),
         stderr=subprocess.PIPE,
@@ -627,7 +643,10 @@ def launch(*new_args: str):
     if not os.path.exists(config_file):
         os.makedirs(os.path.dirname(config_file), exist_ok=True)
         with open(config_file, 'w') as f:
-            f.write(f"[path]\nread-data=__PATH__system-read-data__\nwrite-data={user_path('factorio')}")
+            if is_linux:
+                f.write(f"[path]\nread-data=__PATH__executable__/../../data/\nwrite-data={user_path('factorio')}")
+            else:
+                f.write(f"[path]\nread-data=__PATH__system-read-data__\nwrite-data={user_path('factorio')}")
 
     asyncio.run(main(lambda: FactorioContext(
         args.connect, args.password,

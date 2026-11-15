@@ -320,9 +320,12 @@ class KH2World(World):
         universal_logic = Rules.KH2WorldRules(self)
         form_logic = Rules.KH2FormRules(self)
         fight_rules = Rules.KH2FightRules(self)
+        location_rules = Rules.KH2LocationRules(self)
+
         fight_rules.set_kh2_fight_rules()
         universal_logic.set_kh2_rules()
         form_logic.set_kh2_form_rules()
+        location_rules.set_kh2_location_rules()
 
     def generate_output(self, output_directory: str):
         """
@@ -475,9 +478,10 @@ class KH2World(World):
             logging.info(
                     f"Lucky Emblem Amount {self.options.LuckyEmblemsAmount.value} is less than required "
                     f"{self.options.LuckyEmblemsRequired.value} for player {self.multiworld.get_file_safe_player_name(self.player)}."
-                    f" Setting amount to {self.options.LuckyEmblemsRequired.value}")
-            luckyemblemamount = max(self.lucky_emblem_amount, self.lucky_emblem_required)
-            self.options.LuckyEmblemsAmount.value = luckyemblemamount
+                    f" Swapping {self.options.LuckyEmblemsRequired.value} and {self.options.LuckyEmblemsAmount.value}")
+            temp = self.options.LuckyEmblemsAmount.value
+            self.options.LuckyEmblemsAmount.value = self.options.LuckyEmblemsRequired.value
+            self.options.LuckyEmblemsRequired.value = temp
 
         self.item_quantity_dict[ItemName.LuckyEmblem] = self.options.LuckyEmblemsAmount.value
         # give this proof to unlock the final door once the player has the amount of lucky emblem required

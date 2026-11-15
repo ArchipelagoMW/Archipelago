@@ -8,10 +8,10 @@ import secrets
 import warnings
 from argparse import Namespace
 from collections import Counter, deque, defaultdict
-from collections.abc import Callable, Collection, Iterable, Iterator, Mapping, MutableSequence, Set
+from collections.abc import Callable, Collection, Iterable, Iterator, Mapping, MutableSequence, Set as AbstractSet
 from enum import IntEnum, IntFlag
-from typing import (AbstractSet, Any, ClassVar, Dict, List, Literal, NamedTuple,
-                    Optional, Protocol, Tuple, Union, TYPE_CHECKING, overload)
+from typing import (Any, ClassVar, Dict, List, Literal, NamedTuple,
+                    Optional, Protocol, Set, Tuple, Union, TYPE_CHECKING, overload)
 import dataclasses
 
 from typing_extensions import NotRequired, TypedDict
@@ -49,7 +49,7 @@ class ThreadBarrierProxy:
             return getattr(self.obj, name)
         else:
             raise RuntimeError("You are in a threaded context and global random state was removed for your safety. "
-                               "Please use multiworld.per_slot_randoms[player] or randomize ahead of output.")
+                               "Please use world.random or randomize ahead of output.")
 
 
 class HasNameAndPlayer(Protocol):
@@ -100,8 +100,6 @@ class MultiWorld():
     game: Dict[int, str]
 
     random: random.Random
-    per_slot_randoms: Utils.DeprecateDict[int, random.Random]
-    """Deprecated. Please use `self.random` instead."""
 
     class AttributeProxy():
         def __init__(self, rule):
@@ -177,8 +175,6 @@ class MultiWorld():
             set_player_attr('game', "Archipelago")
             set_player_attr('completion_condition', lambda state: True)
         self.worlds = {}
-        self.per_slot_randoms = Utils.DeprecateDict("Using per_slot_randoms is now deprecated. Please use the "
-                                                    "world's random object instead (usually self.random)", True)
         self.plando_options = PlandoOptions.none
 
     def get_all_ids(self) -> Tuple[int, ...]:
@@ -514,7 +510,7 @@ class MultiWorld():
         state.can_reach(Region) in the Entrance's traversal condition, as opposed to pure transition logic."""
         self.indirect_connections.setdefault(region, set()).add(entrance)
 
-    def get_locations(self, player: Optional[int] = None) -> Iterable[Location]:
+    def get_locations(self, player: int | None = None) -> Collection[Location]:
         if player is not None:
             return self.regions.location_cache[player].values()
         return Utils.RepeatableChain(tuple(self.regions.location_cache[player].values()

@@ -4,7 +4,7 @@ Option definitions for Pokemon Emerald
 from dataclasses import dataclass
 
 from Options import (Choice, DeathLink, DefaultOnToggle, OptionSet, NamedRange, Range, Toggle, FreeText,
-                     PerGameCommonOptions, OptionGroup, StartInventory, OptionList)
+                     PerGameCommonOptions, OptionGroup, StartInventory)
 
 from .data import data
 
@@ -129,14 +129,14 @@ class Dexsanity(Toggle):
     display_name = "Dexsanity"
 
 
-class DexsanityEncounterTypes(OptionList):
+class DexsanityEncounterTypes(OptionSet):
     """
     Determines which Dexsanity encounter areas are in logic.
 
     Logic will only consider access to Pokemon at these encounter types, but they may still be found elsewhere.
     """
     display_name = "Dexsanity Encounter Types"
-    valid_keys = {"Land", "Water", "Fishing"}
+    valid_keys = ["Land", "Water", "Fishing"]
     default = valid_keys.copy()
 
 
