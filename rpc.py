@@ -6,6 +6,7 @@ from functools import partial
 from typing import Callable
 
 import picklerpc
+import rpctypes
 import Utils
 import MultiServer as ms
 import NetUtils
@@ -37,47 +38,14 @@ def rpc(name: str):
     return wrap
 
 
-@dataclass
-class Item:
-    name: str
-    location: str
-    sent_by: str
-
-    @staticmethod
-    def from_network_item(
-        ctx: ms.Context, game: str, ni: NetUtils.NetworkItem
-    ) -> "Item":
-        name = ctx.item_names[game][ni.item]
-        if ni.player == 0:
-            location = "Server"
-        else:
-            location = ctx.location_names[ctx.slot_info[ni.player].game][ni.location]
-        sent_by = ctx.player_names[0, ni.player] if ni.player else "<Archipelago>"
-        return Item(name=name, location=location, sent_by=sent_by)
-
-
-@dataclass
-class Inventory:
-    game: str
-    start_inventory: list[Item]
-    received_items: list[Item]
-
-    @staticmethod
-    def from_network_items(
-        ctx: ms.Context,
-        game: str,
-        start_inventory: list[NetUtils.NetworkItem],
-        received_items: list[NetUtils.NetworkItem],
-    ) -> "Inventory":
-        return Inventory(
-            game=game,
-            start_inventory=list(
-                Item.from_network_item(ctx, game, ni) for ni in start_inventory
-            ),
-            received_items=list(
-                Item.from_network_item(ctx, game, ni) for ni in received_items
-            ),
-        )
+def to_item(ctx: ms.Context, game: str, ni: NetUtils.NetworkItem) -> rpctypes.Item:
+    name = ctx.item_names[game][ni.item]
+    if ni.player == 0:
+        location = "Server"
+    else:
+        location = ctx.location_names[ctx.slot_info[ni.player].game][ni.location]
+    sent_by = ctx.player_names[0, ni.player] if ni.player else "<Archipelago>"
+    return rpctypes.Item(name=name, location=location, sent_by=sent_by)
 
 
 @dataclass
@@ -95,14 +63,36 @@ class Session:
         self.ctx.commandprocessor(cmd)
         return "ok"
 
+    # Raises `KeyError` for a slot that doesn't exist.
     @rpc("inventory")
-    async def inventory(self, player: int) -> Inventory:
+    async def inventory(self, player: int) -> rpctypes.Inventory:
+        game = self.ctx.slot_info[player].game
         start_inventory = ms.get_start_inventory(self.ctx, player, True)
         received_items = ms.get_received_items(self.ctx, 0, player, True)
-        game = self.ctx.slot_info[player].game
-        return Inventory.from_network_items(
-            self.ctx, game, start_inventory, received_items
+        return rpctypes.Inventory(
+            game=game,
+            start_inventory=[to_item(self.ctx, game, ni) for ni in start_inventory],
+            received_items=[to_item(self.ctx, game, ni) for ni in received_items],
         )
+
+    # Team 0 only, and no item link groups.
+    @rpc("players")
+    async def players(self) -> list[rpctypes.Player]:
+        return [
+            rpctypes.Player(
+                slot=slot,
+                name=info.name,
+                game=info.game,
+                finished=self.ctx.client_game_state[0, slot]
+                == NetUtils.ClientStatus.CLIENT_GOAL,
+            )
+            for slot, info in self.ctx.slot_info.items()
+            if info.type == NetUtils.SlotType.player
+        ]
+
+    @rpc("server_info")
+    async def server_info(self) -> rpctypes.ServerInfo:
+        return rpctypes.ServerInfo(port=self.ctx.port, password=self.ctx.password)
 
     @rpc("subscribe")
     async def subscribe(self) -> None:
