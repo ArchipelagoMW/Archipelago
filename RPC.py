@@ -5,21 +5,21 @@ from functools import partial
 
 from typing import Callable
 
-import picklerpc
-import rpctypes
+import PickleRPC
+import RPCTypes
 import Utils
 import MultiServer as ms
 import NetUtils
 
 
-def emit_console_output(session: picklerpc.Session, text: str):
+def emit_console_output(session: PickleRPC.Session, text: str):
     Utils.async_start(session.notification("console_out", text))
 
 
 class RemoteConsoleLogger(logging.Handler):
-    session: picklerpc.Session
+    session: PickleRPC.Session
 
-    def __init__(self, session: picklerpc.Session):
+    def __init__(self, session: PickleRPC.Session):
         super().__init__()
         self.session = session
 
@@ -38,19 +38,19 @@ def rpc(name: str):
     return wrap
 
 
-def to_item(ctx: ms.Context, game: str, ni: NetUtils.NetworkItem) -> rpctypes.Item:
+def to_item(ctx: ms.Context, game: str, ni: NetUtils.NetworkItem) -> RPCTypes.Item:
     name = ctx.item_names[game][ni.item]
     if ni.player == 0:
         location = "Server"
     else:
         location = ctx.location_names[ctx.slot_info[ni.player].game][ni.location]
     sent_by = ctx.player_names[0, ni.player] if ni.player else "<Archipelago>"
-    return rpctypes.Item(name=name, location=location, sent_by=sent_by)
+    return RPCTypes.Item(name=name, location=location, sent_by=sent_by)
 
 
 @dataclass
 class Session:
-    session: picklerpc.Session
+    session: PickleRPC.Session
     ctx: ms.Context
     exit_callbacks: list[Callable[[], None]] = field(default_factory=list)
 
@@ -65,11 +65,11 @@ class Session:
 
     # Raises `KeyError` for a slot that doesn't exist.
     @rpc("inventory")
-    async def inventory(self, player: int) -> rpctypes.Inventory:
+    async def inventory(self, player: int) -> RPCTypes.Inventory:
         game = self.ctx.slot_info[player].game
         start_inventory = ms.get_start_inventory(self.ctx, player, True)
         received_items = ms.get_received_items(self.ctx, 0, player, True)
-        return rpctypes.Inventory(
+        return RPCTypes.Inventory(
             game=game,
             start_inventory=[to_item(self.ctx, game, ni) for ni in start_inventory],
             received_items=[to_item(self.ctx, game, ni) for ni in received_items],
@@ -77,9 +77,9 @@ class Session:
 
     # Team 0 only, and no item link groups.
     @rpc("players")
-    async def players(self) -> list[rpctypes.Player]:
+    async def players(self) -> list[RPCTypes.Player]:
         return [
-            rpctypes.Player(
+            RPCTypes.Player(
                 slot=slot,
                 name=info.name,
                 game=info.game,
@@ -91,8 +91,8 @@ class Session:
         ]
 
     @rpc("server_info")
-    async def server_info(self) -> rpctypes.ServerInfo:
-        return rpctypes.ServerInfo(port=self.ctx.port, password=self.ctx.password)
+    async def server_info(self) -> RPCTypes.ServerInfo:
+        return RPCTypes.ServerInfo(port=self.ctx.port, password=self.ctx.password)
 
     @rpc("subscribe")
     async def subscribe(self) -> None:
@@ -129,8 +129,8 @@ class Session:
 async def handle_session(
     ctx: ms.Context, reader: asyncio.StreamReader, writer: asyncio.StreamWriter
 ) -> None:
-    session = Session(picklerpc.spawn_session(reader, writer), ctx)
+    session = Session(PickleRPC.spawn_session(reader, writer), ctx)
 
-    logging.info("picklerpc session started")
+    logging.info("PickleRPC session started")
 
     await session.run_event_loop()

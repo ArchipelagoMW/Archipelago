@@ -11,7 +11,7 @@ from collections.abc import Coroutine
 from typing import NewType, Optional, Any, Callable, TypeVar, Generic, NoReturn
 from typing_extensions import Protocol
 
-import transport
+import Transport
 
 RequestId = NewType("RequestId", int)
 
@@ -82,7 +82,7 @@ class Ivar(Generic[T]):
 
 
 class Session:
-    session: transport.Session
+    session: Transport.Session
     curr_id: RequestId
     pending_jobs: set[asyncio.Task]
     pending_requests: dict[RequestId, Ivar[Response]]
@@ -233,5 +233,5 @@ class Session:
 
 # create a session
 def spawn_session(reader, writer, *, raise_on_error_response=True) -> Session:
-    sess = transport.Session(reader, writer)
+    sess = Transport.Session(reader, writer)
     return Session(sess, raise_on_error_response)

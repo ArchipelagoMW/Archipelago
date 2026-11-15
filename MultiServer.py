@@ -2728,7 +2728,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument('multidata', nargs="?", default=defaults["multidata"])
     parser.add_argument('--host', default=defaults["host"])
     parser.add_argument('--port', default=defaults["port"], type=int)
-    parser.add_argument('--rpc-sock', help="Path of a unix socket to serve picklerpc on.")
+    parser.add_argument('--rpc-sock', help="Path of a unix socket to serve PickleRPC on.")
     parser.add_argument('--server_password', default=defaults["server_password"])
     parser.add_argument('--password', default=defaults["password"])
     parser.add_argument('--savefile', default=defaults["savefile"])
@@ -2881,9 +2881,9 @@ async def main(args: argparse.Namespace):
     await ctx.server
     if args.rpc_sock:
         import pathlib
-        import rpc  # deferred, rpc imports MultiServer
+        import RPC  # deferred, RPC imports MultiServer
         pathlib.Path(args.rpc_sock).unlink(missing_ok=True)
-        await asyncio.start_unix_server(functools.partial(rpc.handle_session, ctx), path=args.rpc_sock)
+        await asyncio.start_unix_server(functools.partial(RPC.handle_session, ctx), path=args.rpc_sock)
     console_task = asyncio.create_task(console(ctx))
     if ctx.auto_shutdown:
         ctx.shutdown_task = asyncio.create_task(auto_shutdown(ctx, [console_task]))

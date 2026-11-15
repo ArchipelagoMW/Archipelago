@@ -9,15 +9,15 @@ ModuleUpdate.requirements_files.add("requirements.txt")
 ModuleUpdate.update()
 
 import aioconsole
-import picklerpc
+import PickleRPC
 
 
-async def ping(session: picklerpc.Session, _: argparse.Namespace):
+async def ping(session: PickleRPC.Session, _: argparse.Namespace):
     result = await session.request("ping")
     print(result)
 
 
-async def send_console_cmd(session: picklerpc.Session, args: argparse.Namespace):
+async def send_console_cmd(session: PickleRPC.Session, args: argparse.Namespace):
     cmd_text = " ".join(args.cmd_text)
     if not cmd_text:
         print("empty command?")
@@ -26,7 +26,7 @@ async def send_console_cmd(session: picklerpc.Session, args: argparse.Namespace)
     print(result)
 
 
-async def inventory(session: picklerpc.Session, args: argparse.Namespace):
+async def inventory(session: PickleRPC.Session, args: argparse.Namespace):
     inv = await session.request("inventory", args.player)
     if args.json:
         print(json.dumps(dataclasses.asdict(inv), indent=2))
@@ -42,7 +42,7 @@ async def inventory(session: picklerpc.Session, args: argparse.Namespace):
         ))
 
 
-async def console(session: picklerpc.Session, _: argparse.Namespace):
+async def console(session: PickleRPC.Session, _: argparse.Namespace):
     session.register_handler("console_out", aioconsole.aprint)
     await session.request("subscribe")
     await asyncio.sleep(0)
@@ -62,7 +62,7 @@ async def console(session: picklerpc.Session, _: argparse.Namespace):
 async def main(parser) -> None:
     args = parser.parse_args()
     reader, writer = await asyncio.open_unix_connection(args.socket)
-    session = picklerpc.spawn_session(reader, writer)
+    session = PickleRPC.spawn_session(reader, writer)
     session.run_in_background(session.run_event_loop())
     await args.func(session, args)
     writer.close()
