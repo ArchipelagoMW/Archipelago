@@ -545,9 +545,7 @@ async def check_locations(ctx: TWWContext) -> None:
                 ctx.locations_checked.add(TWWLocation.get_apid(data.code))
 
     # Send the list of newly-checked locations to the server.
-    locations_checked = ctx.locations_checked.difference(ctx.checked_locations)
-    if locations_checked:
-        await ctx.send_msgs([{"cmd": "LocationChecks", "locations": locations_checked}])
+    await ctx.check_locations(ctx.locations_checked)
 
 
 async def check_current_stage_changed(ctx: TWWContext) -> None:

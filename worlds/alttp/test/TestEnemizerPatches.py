@@ -106,10 +106,12 @@ class TestEnemizerPatches(unittest.TestCase):
 
         included_hp_sprite_id = 0x01
         included_damage_sprite_id = 0x02
+        boss_damage_sprite_id = 0x53
         excluded_sprite_id = min(EXCLUDED_ENEMY_TABLE_SPRITE_IDS)
         rom.write_byte(ENEMY_HP_TABLE_ADDRESS + included_hp_sprite_id, 0x06)
         rom.write_byte(ENEMY_HP_TABLE_ADDRESS + excluded_sprite_id, 0x07)
-        rom.write_byte(ENEMY_DAMAGE_TABLE_ADDRESS + included_damage_sprite_id, 0x06)
+        rom.write_byte(ENEMY_DAMAGE_TABLE_ADDRESS + included_damage_sprite_id, 0x86)
+        rom.write_byte(ENEMY_DAMAGE_TABLE_ADDRESS + boss_damage_sprite_id, 0x17)
         rom.write_byte(ENEMY_DAMAGE_TABLE_ADDRESS + excluded_sprite_id, 0x05)
 
         world = self._build_world(
@@ -133,7 +135,10 @@ class TestEnemizerPatches(unittest.TestCase):
         self.assertGreaterEqual(rom.read_byte(ENEMY_HP_TABLE_ADDRESS + included_hp_sprite_id), 2)
         self.assertLess(rom.read_byte(ENEMY_HP_TABLE_ADDRESS + included_hp_sprite_id), 25)
         self.assertEqual(rom.read_byte(ENEMY_HP_TABLE_ADDRESS + excluded_sprite_id), 0x07)
-        self.assertIn(rom.read_byte(ENEMY_DAMAGE_TABLE_ADDRESS + included_damage_sprite_id), range(8))
+        randomized_damage = rom.read_byte(ENEMY_DAMAGE_TABLE_ADDRESS + included_damage_sprite_id)
+        self.assertEqual(randomized_damage & 0xF0, 0x80)
+        self.assertIn(randomized_damage & 0x0F, range(8))
+        self.assertEqual(rom.read_byte(ENEMY_DAMAGE_TABLE_ADDRESS + boss_damage_sprite_id), 0x17)
         self.assertEqual(rom.read_byte(ENEMY_DAMAGE_TABLE_ADDRESS + excluded_sprite_id), 0x05)
         for group_id in range(10):
             group_address = DAMAGE_GROUP_TABLE_ADDRESS + (group_id * 3)

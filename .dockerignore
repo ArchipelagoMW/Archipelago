@@ -68,6 +68,7 @@ Output Logs/
 /setup.ini
 /installdelete.iss
 /data/user.kv
+/data/jak1/
 /datapackage
 /custom_worlds
 
@@ -197,9 +198,6 @@ minecraft_versions.json
 
 # pyenv
 .python-version
-
-#undertale stuff
-/Undertale/
 
 # OS General Files
 .DS_Store

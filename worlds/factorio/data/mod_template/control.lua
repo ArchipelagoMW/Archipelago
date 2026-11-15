@@ -1,10 +1,10 @@
-{% from "macros.lua" import dict_to_lua %}
+{% from "macros.lua" import dict_to_lua, variable_to_lua %}
 -- this file gets written automatically by the Archipelago Randomizer and is in its raw form a Jinja2 Template
 require "lib"
 require "util"
 
 FREE_SAMPLES = {{ free_samples }}
-SLOT_NAME = "{{ slot_name }}"
+SLOT_NAME = {{ variable_to_lua(slot_name) }}
 SEED_NAME = "{{ seed_name }}"
 FREE_SAMPLE_BLACKLIST = {{ dict_to_lua(free_sample_blacklist) }}
 TRAP_EVO_FACTOR = {{ evolution_trap_increase }} / 100
@@ -407,11 +407,12 @@ function update_player(index)
     --player.print(serpent.block(data['pending_samples']))
     local stack = {}
 
+    local quality = "{{ free_sample_quality_name }}"
     for name, count in pairs(samples) do
         stack.name = name
         stack.count = count
         if script.active_mods["quality"] then
-            stack.quality = "{{ free_sample_quality_name }}"
+            stack.quality = quality
         end
         if prototypes.item[name] then
             if character.can_insert(stack) then
@@ -420,7 +421,7 @@ function update_player(index)
                 sent = 0
             end
             if sent > 0 then
-                player.print({"archipelago.receive-sample-item", sent, "[item=" .. name .. ",quality="..stack.quality.."]"})
+                player.print({"archipelago.receive-sample-item", sent, "[item=" .. name .. ",quality="..quality.."]"})
                 data.suppress_full_inventory_message = false
             end
             if sent ~= count then               -- Couldn't full send.
@@ -434,7 +435,7 @@ function update_player(index)
                 samples[name] = nil             -- Remove from the list
             end
         else
-            player.print({"archipelago.sample-inventory-full", count, name})
+            player.print({"archipelago.sample-error", count, name})
             samples[name] = nil
         end
     end
@@ -842,7 +843,7 @@ commands.add_command("ap-deathlink", "Kill all players", function(call)
     local force = game.forces["player"]
     local source = call.parameter or "Archipelago"
     kill_players(force)
-    game.print("Death was granted by " .. source)
+    game.print({"archipelago.death-link",source})
 end)
 
 commands.add_command("ap-energylink", "Used by the Archipelago client to manage Energy Link", function(call)
