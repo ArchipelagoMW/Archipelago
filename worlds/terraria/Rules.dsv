@@ -382,6 +382,9 @@ Hardmode Forge;                     ;                                           
 Adamantite Bar;                     ;                                           (Hardmode Forge & Adamantite Ore) | Wall of Flesh;
 Adamantite Pickaxe;                 Pickaxe(180);                               Hardmode Anvil & Adamantite Bar;
 Forbidden Armor;                    Armor Minions(2);                           Hardmode Anvil & Adamantite Bar & Forbidden Fragment;
+Infernal Suevite;                   Calamity;                                   @pickaxe(150) | Brimstone Elemental;
+Unholy Core;                        Calamity;                                   (Infernal Suevite & Hellstone) | Brimstone Elemental;
+Ruin Medallion;                     Calamity;                                   (Hardmode Anvil & Coin of Deceit & Unholy Core & Essence of Havoc) | Dark Matter Sheath;
 Aquatic Scourge;                    Calamity | Location | Item;
 Cragmaw Mire;                       Calamity | Location | Item;                 #Acid Rain Tier 2;
 Nuclear Fuel Rod;                   Calamity | Minions(1);                      #Cragmaw Mire | Star-Tainted Generator;
@@ -411,9 +414,6 @@ Topped Off;                         Achievement;                                
 Old One's Army Tier 2;              Location | Item;                            #Old One's Army Tier 1 & ((Wall of Flesh & @mech_boss(1)) | #Old One's Army Tier 3);
 
 // Brimstone Elemental
-Infernal Suevite;                   Calamity;                                   @pickaxe(150) | Brimstone Elemental;
-Unholy Core;                        Calamity;                                   (Infernal Suevite & Hellstone) | Brimstone Elemental;
-Ruin Medallion;                     Calamity;                                   (Hardmode Anvil & Coin of Deceit & Unholy Core & Essence of Havoc) | Dark Matter Sheath;
 
 // The Destroyer
 Soul of Might;                      ;                                           #The Destroyer | Avenger Emblem | Light Disc | (@calamity & (Mechanical Glove | Celestial Emblem));

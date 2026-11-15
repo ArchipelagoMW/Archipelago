@@ -3,6 +3,7 @@
     "../BizHawkClient.py",
     "../Patch.py",
     "../rule_builder/cached_world.py",
+    "../rule_builder/field_resolvers.py",
     "../rule_builder/options.py",
     "../rule_builder/rules.py",
     "../test/param.py",
@@ -18,6 +19,7 @@
     "../test/programs/test_multi_server.py",
     "../test/utils/__init__.py",
     "../test/webhost/test_descriptions.py",
+    "../test/webhost/test_suuid.py",
     "../worlds/AutoSNIClient.py",
     "type_check.py"
   ],
