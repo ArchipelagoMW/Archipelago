@@ -158,16 +158,31 @@ ContainerLayout:
                         text: "Game: None"
                         pos_hint: {"center_x": 0.5, "center_y": 0.5}
 
-                    MDButton:
-                        pos_hint: {"center_x": 0.5, "center_y": 0.5}
-                        on_press: app.export_options(self)
-                        theme_width: "Custom"
-                        size_hint_y: 1
-                        size_hint_x: 1
+                    MDBoxLayout:
+                        orientation: "horizontal"
+                        spacing: "5dp"
 
-                        MDButtonText:
+                        MDButton:
                             pos_hint: {"center_x": 0.5, "center_y": 0.5}
-                            text: "Export Options"
+                            on_press: app.export_options(self)
+                            theme_width: "Custom"
+                            size_hint_y: 1
+                            size_hint_x: 1
+
+                            MDButtonText:
+                                pos_hint: {"center_x": 0.5, "center_y": 0.5}
+                                text: "Export Options"
+
+                        AdvToggleButton:
+                            pos_hint: {"center_x": 0.5, "center_y": 0.5}
+                            theme_width: "Custom"
+                            size_hint_x: 1
+                            size_hint_y: 1
+                            id: advanced_toggle
+
+                            MDButtonText:
+                                pos_hint: {"center_x": 0.5, "center_y": 0.5}
+                                text: "Show Advanced"
 
             MainLayout:
                 cols: 1
