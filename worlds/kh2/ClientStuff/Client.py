@@ -8,7 +8,6 @@ import asyncio
 import json
 import requests
 
-from pymem import pymem
 from worlds.kh2 import item_dictionary_table, exclusion_item_table, CheckDupingItems, all_locations, exclusion_table, \
     SupportAbility_Table, ActionAbility_Table, all_weapon_slot
 from worlds.kh2.Names import ItemName
@@ -123,30 +122,34 @@ class KH2Context(CommonContext):
             "receive_popup_type":     "chest",  # can be Puzzle, Info, Chest or None
         }
 
-        if "localappdata" in os.environ:
-            self.game_communication_path = os.path.expandvars(r"%localappdata%\KH2AP")
-            self.kh2_client_settings_join = os.path.join(self.game_communication_path, "kh2_client_settings.json")
-            if not os.path.exists(self.game_communication_path):
-                os.makedirs(self.game_communication_path)
-            if not os.path.exists(self.kh2_client_settings_join):
-                # make the json with the settings
-                with open(self.kh2_client_settings_join, "wt") as f:
-                    f.close()
-            elif os.path.exists(self.kh2_client_settings_join):
-                with open(self.kh2_client_settings_join) as f:
-                    # if the file isnt empty load it
-                    # this is the best I could fine to valid json stuff https://stackoverflow.com/questions/23344948/validate-and-format-json-files
-                    try:
-                        self.client_settings = json.load(f)
-                    except json.decoder.JSONDecodeError:
-                        pass
-                        # this is what is effectively doing on
-                        # self.client_settings = default
-                    f.close()
+        if Utils.is_windows:
+            base_path = os.path.expandvars("%localappdata%")
+        else:
+            base_path = os.getenv("XDG_DATA_HOME", os.path.expanduser("~/.local/share"))
+        self.game_communication_path = os.path.join(base_path, "KH2AP")
+        self.kh2_client_settings_join = os.path.join(self.game_communication_path, "kh2_client_settings.json")
+        if not os.path.exists(self.game_communication_path):
+            os.makedirs(self.game_communication_path)
+        if not os.path.exists(self.kh2_client_settings_join):
+            # make the json with the settings
+            with open(self.kh2_client_settings_join, "wt") as f:
+                f.close()
+        elif os.path.exists(self.kh2_client_settings_join):
+            with open(self.kh2_client_settings_join) as f:
+                # if the file isnt empty load it
+                # this is the best I could fine to valid json stuff https://stackoverflow.com/questions/23344948/validate-and-format-json-files
+                try:
+                    self.client_settings = json.load(f)
+                except json.decoder.JSONDecodeError:
+                    pass
+                    # this is what is effectively doing on
+                    # self.client_settings = default
+                f.close()
 
         self.hitlist_bounties = 0
         # hooked object
         self.kh2 = None
+        self.kh2_base_address = None
         self.final_xemnas = False
         self.worldid_to_locations = {
             #  1:   {},  # world of darkness (story cutscenes)
@@ -271,7 +274,7 @@ class KH2Context(CommonContext):
         self.deathlink_toggle = False
         self.deathlink_blacklist = []
 
-    from .ReadAndWrite import kh2_read_longlong, kh2_read_int, kh2_read_string, kh2_read_byte, kh2_write_bytes, kh2_write_int, kh2_write_short, kh2_write_byte, kh2_read_short, kh2_return_base_address
+    from .ReadAndWrite import kh2_read_longlong, kh2_read_int, kh2_read_string, kh2_read_byte, kh2_write_bytes, kh2_write_int, kh2_write_short, kh2_write_byte, kh2_read_short, kh2_return_base_address, kh2_open_process, kh2_close_process
     from .SendChecks import checkWorldLocations, checkSlots, checkLevels, verifyChests, verifyLevel
     from .RecieveItems import displayPuzzlePieceTextinGame, displayInfoTextinGame, displayChestTextInGame, verifyItems, give_item, IsInShop, to_khscii
 
@@ -550,7 +553,7 @@ class KH2Context(CommonContext):
 
         try:
             if not self.kh2:
-                self.kh2 = pymem.Pymem(process_name="KINGDOM HEARTS II FINAL MIX")
+                self.kh2_open_process()
                 self.get_addresses()
 
         except Exception as e:
@@ -704,12 +707,12 @@ async def kh2_watcher(ctx: KH2Context):
 
             elif not ctx.kh2connected and ctx.serverconnected:
                 logger.info("Game Connection lost. trying to reconnect.")
-                ctx.kh2 = None
+                ctx.kh2_close_process()
                 #todo: change this to be an option for the client to auto reconnect with the default being yes
                 # reason is because the await sleep causes the client to hang if you close the game then the client without disconnecting.
                 while not ctx.kh2connected and ctx.serverconnected:
                     try:
-                        ctx.kh2 = pymem.Pymem(process_name="KINGDOM HEARTS II FINAL MIX")
+                        ctx.kh2_open_process()
                         ctx.get_addresses()
                         logger.info("Game Connection Established.")
                     except Exception as e:
