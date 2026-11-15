@@ -21,5 +21,14 @@ class Building:
     pet_bowl = "Pet Bowl"
 
 
+class WizardBuilding:
+    earth_obelisk = "Earth Obelisk"
+    water_obelisk = "Water Obelisk"
+    desert_obelisk = "Desert Obelisk"
+    island_obelisk = "Island Obelisk"
+    junimo_hut = "Junimo Hut"
+    gold_clock = "Gold Clock"
+
+
 class ModBuilding:
     tractor_garage = "Tractor Garage"

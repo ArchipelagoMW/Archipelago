@@ -99,7 +99,7 @@ case-sensitive. You can also use item groups and location groups that are define
 
 ## Item Plando Examples
 ```yaml
- plando_items:
+  plando_items:
     # Example block - Pokémon Red and Blue
     - items:
         Potion: 3
@@ -215,6 +215,28 @@ The first block will place the player's Biggoron Sword, Bow, Magic Meter, streng
 dungeon major item chests. Because the from_pool value is `false`, a copy of these items is added to these locations, 
 while the originals remain in the item pool to be shuffled. The second block will place the Kokiri Sword in the Deku 
 Tree Slingshot Chest, again not from the pool.
+
+```yaml
+  plando_items:
+  # Example block - Hollow Knight
+    - items:
+        Claw : true
+      world:
+        - BobsWitness
+        - BobsRogueLegacy
+```
+This block will attempt to place all items in the Claw item group into any locations within the game slots named
+"BobsWitness" and "BobsRogueLegacy."
+
+**NOTE:** As item groups may contain items that are not currently present in the item pool, use of `true` with
+item groups, as shown here, is strongly recommended to avoid creation of unintended items.
+
+For example, the Claw item group for Hollow Knight includes Mantis_Claw, Left_Mantis_Claw, and Right_Mantis_Claw.
+Depending on a different yaml setting, the Generator will create either one Mantis_Claw item, or one each of the
+Left_Mantis_Claw and Right_Mantis_Claw items. By default, the Generator will create any missing item(s) in addition
+to using the intended item(s), resulting in placement of all three items from the item group: Mantis_Claw,
+Left_Mantis_Claw and Right_Mantis_Claw. Use of the true value, as shown in the example, restricts the Generator to
+using only the items from the item group that are already present in the item pool.
 
 ## Boss Plando
 

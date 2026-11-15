@@ -1,7 +1,7 @@
 import typing
 
-from . import MessengerTestBase
 from ..constants import NOTES, PHOBEKINS
+from . import MessengerTestBase
 
 
 class AccessTest(MessengerTestBase):
@@ -52,25 +52,58 @@ class AccessTest(MessengerTestBase):
     def test_wingsuit(self) -> None:
         """locations that hard require the Wingsuit"""
         locations = [
-            "Ninja Village - Candle", "Ninja Village Seal - Tree House", "Autumn Hills - Climbing Claws",
-            "Autumn Hills - Key of Hope", "Autumn Hills Seal - Trip Saws", "Autumn Hills Seal - Double Swing Saws",
-            "Autumn Hills Seal - Spike Ball Swing", "Autumn Hills Seal - Spike Ball Darts", "Catacombs - Necro",
-            "Catacombs - Ruxxtin's Amulet", "Catacombs Seal - Triple Spike Crushers",
-            "Catacombs Seal - Crusher Gauntlet", "Catacombs Seal - Dirty Pond", "Bamboo Creek - Claustro",
-            "Cloud Ruins - Acro", "Bamboo Creek Seal - Spike Crushers and Doors", "Bamboo Creek Seal - Spike Ball Pits",
-            "Bamboo Creek Seal - Spike Crushers and Doors v2", "Howling Grotto Seal - Crushing Pits",
-            "Howling Grotto Seal - Windy Saws and Balls", "Tower of Time Seal - Lantern Climb",
-            "Forlorn Temple - Demon King", "Cloud Ruins Seal - Ghost Pit", "Cloud Ruins Seal - Toothbrush Alley",
-            "Cloud Ruins Seal - Saw Pit", "Cloud Ruins Seal - Money Farm Room", "Tower of Time Seal - Lantern Climb",
-            "Tower of Time Seal - Arcane Orbs", "Underworld Seal - Sharp and Windy Climb",
-            "Underworld Seal - Fireball Wave", "Elemental Skylands Seal - Air", "Elemental Skylands Seal - Water",
-            "Elemental Skylands Seal - Fire", "Elemental Skylands - Key of Symbiosis",
-            "Forlorn Temple Seal - Rocket Maze", "Forlorn Temple Seal - Rocket Sunset", "Ninja Village - Astral Seed",
-            "Searing Crags - Astral Tea Leaves", "Autumn Hills Mega Shard", "Hidden Entrance Mega Shard",
-            "Sunny Day Mega Shard", "Down Under Mega Shard", "Catacombs Mega Shard", "Above Entrance Mega Shard",
-            "Abandoned Mega Shard", "Time Loop Mega Shard", "Earth Mega Shard", "Water Mega Shard",
-            "Money Farm Room Mega Shard 1", "Money Farm Room Mega Shard 2",
-            "Autumn Hills - Leaf Golem", "Catacombs - Ruxxtin", "Howling Grotto - Emerald Golem"
+            "Ninja Village - Candle",
+            "Ninja Village Seal - Tree House",
+            "Autumn Hills - Climbing Claws",
+            "Autumn Hills - Key of Hope",
+            "Autumn Hills Seal - Trip Saws",
+            "Autumn Hills Seal - Double Swing Saws",
+            "Autumn Hills Seal - Spike Ball Swing",
+            "Autumn Hills Seal - Spike Ball Darts",
+            "Catacombs - Necro",
+            "Catacombs - Ruxxtin's Amulet",
+            "Catacombs Seal - Triple Spike Crushers",
+            "Catacombs Seal - Crusher Gauntlet",
+            "Catacombs Seal - Dirty Pond",
+            "Bamboo Creek - Claustro",
+            "Cloud Ruins - Acro",
+            "Bamboo Creek Seal - Spike Crushers and Doors",
+            "Bamboo Creek Seal - Spike Ball Pits",
+            "Bamboo Creek Seal - Spike Crushers and Doors v2",
+            "Howling Grotto Seal - Windy Saws and Balls",
+            "Tower of Time Seal - Lantern Climb",
+            "Forlorn Temple - Demon King",
+            "Cloud Ruins Seal - Ghost Pit",
+            "Cloud Ruins Seal - Toothbrush Alley",
+            "Cloud Ruins Seal - Saw Pit",
+            "Cloud Ruins Seal - Money Farm Room",
+            "Tower of Time Seal - Lantern Climb",
+            "Tower of Time Seal - Arcane Orbs",
+            "Underworld Seal - Sharp and Windy Climb",
+            "Underworld Seal - Fireball Wave",
+            "Elemental Skylands Seal - Air",
+            "Elemental Skylands Seal - Water",
+            "Elemental Skylands Seal - Fire",
+            "Elemental Skylands - Key of Symbiosis",
+            "Forlorn Temple Seal - Rocket Maze",
+            "Forlorn Temple Seal - Rocket Sunset",
+            "Ninja Village - Astral Seed",
+            "Searing Crags - Astral Tea Leaves",
+            "Autumn Hills Mega Shard",
+            "Hidden Entrance Mega Shard",
+            "Sunny Day Mega Shard",
+            "Down Under Mega Shard",
+            "Catacombs Mega Shard",
+            "Above Entrance Mega Shard",
+            "Abandoned Mega Shard",
+            "Time Loop Mega Shard",
+            "Earth Mega Shard",
+            "Water Mega Shard",
+            "Money Farm Room Mega Shard 1",
+            "Money Farm Room Mega Shard 2",
+            "Autumn Hills - Leaf Golem",
+            "Catacombs - Ruxxtin",
+            "Howling Grotto - Emerald Golem",
         ]
         items = [["Wingsuit"]]
         self.assertAccessDependency(locations, items)

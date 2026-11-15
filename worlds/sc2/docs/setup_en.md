@@ -145,7 +145,7 @@ That's the default value in the template, which should let you know to use this 
 #### How do I know the exact names of items and locations?
 
 You can look up a complete list of the item names in the 
-[Icon Repository](https://matthewmarinets.github.io/ap_sc2_icons/) page.
+[APSC2 Item Docs](https://archipelago-sc2.github.io/content-docs/) page.
 This page also contains supplementary information of each item.
 
 Locations are of the format `<mission name>: <location name>`. Names are most easily looked up by hovering
@@ -156,15 +156,17 @@ This page includes all data associated with all games.
 
 ## How do I join a MultiWorld game?
 
-1. Run ArchipelagoStarcraft2Client.exe.
+1. Run ArchipelagoLauncher.exe.
    - macOS users should instead follow the instructions found at ["Running in macOS"](#running-in-macos) for this step 
    only.
-2. In the Archipelago tab, type `/connect [server IP]`.
+2. Search for the Starcraft 2 Client in the launcher to open the game-specific client
+   - Alternatively, steps 1 and 2 can be combined by providing the `"Starcraft 2 Client"` launch argument to the launcher.
+3. In the Archipelago tab, type `/connect [server IP]`.
    - If you're running through the website, the server IP should be displayed near the top of the room page.
    - The server IP may also be typed into the top bar, and then clicking "Connect"
-3. Type your slot name from your YAML when prompted.
-4. If the server has a password, enter that when prompted.
-5. Once connected, switch to the 'StarCraft 2 Launcher' tab in the client. There, you can see all the missions in your 
+4. Type your slot name from your YAML when prompted.
+5. If the server has a password, enter that when prompted.
+6. Once connected, switch to the 'StarCraft 2 Launcher' tab in the client. There, you can see all the missions in your 
 world.
 
 Unreachable missions will have greyed-out text. Completed missions (all locations collected) will have white text.
@@ -173,7 +175,22 @@ Mission buttons will have a color corresponding to the faction you play as in th
 
 Click on an available mission to start it.
 
-## The game isn't launching when I try to start a mission.
+## Troubleshooting
+
+### I can't connect to my seed.
+
+Rooms on the Archipelago website go to sleep after two hours of inactivity; reload or refresh the room page
+to start them back up.
+When restarting the room, the connection port may change (the numbers after "archipelago.gg:"),
+make sure that is accurate.
+Your slot name should be displayed on the room page as well; make sure that exactly matches the slot name you
+type into your client, and note that it is case-sensitive.
+
+If none of these things solve the problem, visit the [Discord](https://discord.com/invite/8Z65BR2) and check
+the #software-announcements channel to see if there's a listed outage, or visit the #starcraft-2 channel for
+tech support.
+
+### The game isn't launching when I try to start a mission.
 
 Usually, this is caused by the mod files not being downloaded.
 Make sure you have run `/download_data` in the Archipelago tab before playing.
@@ -183,12 +200,12 @@ Make sure that you are running an up-to-date version of the client.
 Check the [Archipelago Releases Page](https://github.com/ArchipelagoMW/Archipelago/releases) to
 look up what the latest version is (RC releases are not necessary; that stands for "Release Candidate").
 
-If these things are in order, check the log file for issues (stored at `[Archipelago Directory]/logs/Starcraft2Client.txt`).
+If these things are in order, check the log file for issues (stored at `[Archipelago Directory]/logs/SC2Client_<date>.txt`).
 If you can't figure out the log file, visit our [Discord's](https://discord.com/invite/8Z65BR2) tech-support channel 
 for help. 
 Please include a specific description of what's going wrong and attach your log file to your message.
 
-## My keyboard shortcuts profile is not available when I play *StarCraft 2 Archipelago*.
+### My keyboard shortcuts profile is not available when I play *StarCraft 2 Archipelago*.
 
 For your keyboard shortcuts profile to work in Archipelago, you need to copy your shortcuts file from 
 `Documents/StarCraft II/Accounts/######/Hotkeys` to `Documents/StarCraft II/Hotkeys`. 

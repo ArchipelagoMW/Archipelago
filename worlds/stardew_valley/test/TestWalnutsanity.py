@@ -45,6 +45,7 @@ class TestWalnutsanityNone(SVWalnutsanityTestBase):
 
     def test_logic_received_walnuts(self):
         # You need to receive 0, and collect 40
+        self.collect("Wizard Invitation")
         self.collect("Island Obelisk")
         self.collect("Island West Turtle")
         self.collect("Progressive House")
@@ -96,13 +97,14 @@ class TestWalnutsanityPuzzles(SVWalnutsanityTestBase):
         location_names = ["Walnutsanity: Complete Large Animal Collection", "Walnutsanity: Complete Snake Collection",
                           "Walnutsanity: Complete Mummified Frog Collection", "Walnutsanity: Complete Mummified Bat Collection",
                           "Walnutsanity: Purple Flowers Island Survey", "Walnutsanity: Purple Starfish Island Survey", ]
+        self.collect("Wizard Invitation")
         self.collect("Island Obelisk")
         self.collect("Island North Turtle")
         self.collect("Island West Turtle")
         self.collect("Island Resort")
         self.collect("Dig Site Bridge")
         self.collect("Progressive House")
-        self.collect("Progressive Pan")
+        self.collect("Progressive Pan", 4)
         self.collect("Progressive Fishing Rod")
         self.collect("Progressive Watering Can")
         self.collect("Progressive Pickaxe", 4)
@@ -155,6 +157,7 @@ class TestWalnutsanityPuzzlesAndBushes(SVWalnutsanityTestBase):
 
     def test_logic_received_walnuts(self):
         # You need to receive 25, and collect 15
+        self.collect("Wizard Invitation")
         self.collect("Island Obelisk")
         self.collect("Island West Turtle")
         self.collect("5 Golden Walnuts", 5)
@@ -220,6 +223,7 @@ class TestWalnutsanityAll(SVWalnutsanityTestBase):
 
     def test_logic_received_walnuts(self):
         # You need to receive 40, and collect 4
+        self.collect("Wizard Invitation")
         self.collect("Island Obelisk")
         self.collect("Island West Turtle")
         self.assert_cannot_reach_location(Transportation.parrot_express)

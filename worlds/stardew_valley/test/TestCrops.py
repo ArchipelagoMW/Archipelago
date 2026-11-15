@@ -17,7 +17,7 @@ class TestCropsanityRules(SVTestBase):
 
         self.multiworld.state.collect(self.create_item(Seed.cactus))
         self.multiworld.state.collect(self.create_item(Building.shipping_bin))
-        self.multiworld.state.collect(self.create_item(Transportation.desert_obelisk))
+        self.multiworld.state.collect(self.create_item(Transportation.bus_repair))
         self.assert_cannot_reach_location(harvest_cactus_fruit)
 
         self.multiworld.state.collect(self.create_item(Region.greenhouse))

@@ -556,7 +556,7 @@ for term, cost in cost_terms.items():
         ),
         "default": cost.weight
     }
-    if cost == 'GEO':
+    if term == 'GEO':
         extra_data["__doc__"] += " Geo costs will never be chosen for Grubfather, Seer, or Egg Shop."
 
     option = type(option_name, (Range,), extra_data)

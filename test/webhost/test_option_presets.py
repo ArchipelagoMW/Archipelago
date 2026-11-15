@@ -2,13 +2,15 @@ import unittest
 
 from BaseClasses import PlandoOptions
 from worlds import AutoWorldRegister
-from Options import OptionCounter, NamedRange, NumericOption, OptionList, OptionSet
+from Options import OptionCounter, NamedRange, NumericOption, OptionList, OptionSet, Visibility
 
 
 class TestOptionPresets(unittest.TestCase):
+    world_relevant = True
+
     def test_option_presets_have_valid_options(self):
         """Test that all predefined option presets are valid options."""
-        for game_name, world_type in AutoWorldRegister.world_types.items():
+        for game_name, world_type in AutoWorldRegister.testable_worlds.items():
             presets = world_type.web.options_presets
             for preset_name, preset in presets.items():
                 for option_name, option_value in preset.items():
@@ -19,6 +21,9 @@ class TestOptionPresets(unittest.TestCase):
                             # pass in all plando options in case a preset wants to require certain plando options
                             # for some reason
                             option.verify(world_type, "Test Player", PlandoOptions(sum(PlandoOptions)))
+                            if not (Visibility.complex_ui in option.visibility or Visibility.simple_ui in option.visibility):
+                                self.fail(f"'{option_name}' in preset '{preset_name}' for game '{game_name}' is not "
+                                          f"visible in any supported UI.")
                             supported_types = [NumericOption, OptionSet, OptionList, OptionCounter]
                             if not any([issubclass(option.__class__, t) for t in supported_types]):
                                 self.fail(f"'{option_name}' in preset '{preset_name}' for game '{game_name}' "
@@ -35,7 +40,7 @@ class TestOptionPresets(unittest.TestCase):
         """Test that option preset values are not a special flavor of 'random' or use from_text to resolve another
         value.
         """
-        for game_name, world_type in AutoWorldRegister.world_types.items():
+        for game_name, world_type in AutoWorldRegister.testable_worlds.items():
             presets = world_type.web.options_presets
             for preset_name, preset in presets.items():
                 for option_name, option_value in preset.items():

@@ -29,6 +29,8 @@ def create_er_regions(world: "TunicWorld") -> dict[Portal, Portal]:
     world.used_shop_numbers = set()
 
     for region_name, region_data in world.er_regions.items():
+        if region_name == "Zig Skip Exit":
+            continue
         if world.options.entrance_rando and region_name == "Zig Skip Exit":
             # need to check if there's a seed group for this first
             if world.options.entrance_rando.value not in EntranceRando.options.values():
@@ -773,11 +775,17 @@ def pair_portals(world: "TunicWorld", regions: dict[str, Region]) -> dict[Portal
 # loop through our list of paired portals and make two-way connections
 def create_randomized_entrances(world: "TunicWorld", portal_pairs: dict[Portal, Portal], regions: dict[str, Region]) -> None:
     for portal1, portal2 in portal_pairs.items():
+        # this portal is completely inaccessible, so let's not make this connection
+        if portal1.region == "Zig Skip Exit":
+            continue
         # connect to the outlet region if there is one, if not connect to the actual region
         regions[portal1.region].connect(
             connecting_region=regions[get_portal_outlet_region(portal2, world)],
             name=portal1.name)
         if not world.options.decoupled or not world.options.entrance_rando:
+            # this portal is completely inaccessible, so let's not make this connection
+            if portal2.region == "Zig Skip Exit":
+                continue
             regions[portal2.region].connect(
                 connecting_region=regions[get_portal_outlet_region(portal1, world)],
                 name=portal2.name)
