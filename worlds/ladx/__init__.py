@@ -3,7 +3,6 @@ import dataclasses
 import os
 import typing
 import logging
-import re
 import struct
 
 import settings
@@ -13,12 +12,11 @@ from Fill import fill_restrictive
 from worlds.AutoWorld import WebWorld, World
 from worlds.LauncherComponents import Component, components, SuffixIdentifier, Type, launch, icon_paths
 from .Common import *
-from . import ItemIconGuessing
+from .ForeignItemIcons import ForeignItemIconMatcher
 from .Items import (DungeonItemData, DungeonItemType, ItemName, LinksAwakeningItem, TradeItemData,
                     ladxr_item_to_la_item_name, links_awakening_items, links_awakening_items_by_name,
                     links_awakening_item_name_groups)
 from .LADXR.itempool import ItemPool as LADXRItemPool
-from .LADXR.locations.constants import CHEST_ITEMS
 from .LADXR.locations.instrument import Instrument
 from .LADXR.logic import Logic as LADXRLogic
 from .LADXR.settings import Settings as LADXRSettings
@@ -80,9 +78,10 @@ class LinksAwakeningSettings(settings.Group):
 
     class GfxModFile(settings.FilePath):
         """
-        Gfxmod file, get it from upstream: https://github.com/daid/LADXR/tree/master/gfx
-        Only .bin or .bdiff files
-        The same directory will be checked for a matching text modification file
+        Gfxmod file, select one from the `Archipelago/data/sprites/ladx/` folder,
+        or make your own. You can generate a template here: https://ladx-gfx.3and3.dev/
+        Only .bin or .bdiff files.
+        Extended spritesheets from the upstream randomizer are not supported.
         """
         def browse(self, filetypes=None, **kwargs):
             filetypes = [("Binary / Patch files", [".bin", ".bdiff"])]
@@ -180,7 +179,17 @@ class LinksAwakeningWorld(World):
     }
 
     def convert_ap_options_to_ladxr_logic(self):
-        self.ladxr_settings = LADXRSettings(dataclasses.asdict(self.options))
+        # store a dict of ladxr settings as a middle step so that we can also create a
+        # ladxr settings object on the other side of the patch
+        options_dict = dataclasses.asdict(self.options)
+        self.ladxr_settings_dict = {}
+        for option in options_dict.values():
+            if not hasattr(option, 'to_ladxr_option'):
+                continue
+            name, value = option.to_ladxr_option(options_dict)
+            if name:
+                self.ladxr_settings_dict[name] = value
+        self.ladxr_settings = LADXRSettings(self.ladxr_settings_dict)
 
         self.ladxr_settings.validate()
         world_setup = LADXRWorldSetup()
@@ -226,10 +235,10 @@ class LinksAwakeningWorld(World):
 
         assert(start)
 
-        menu_region = LinksAwakeningRegion("Menu", None, "Menu", self.player, self.multiworld)        
+        menu_region = LinksAwakeningRegion("Menu", None, "Menu", self.player, self.multiworld)
         menu_region.exits = [Entrance(self.player, "Start Game", menu_region)]
         menu_region.exits[0].connect(start)
-        
+
         self.multiworld.regions.append(menu_region)
 
         # Place RAFT, other access events
@@ -237,14 +246,14 @@ class LinksAwakeningWorld(World):
             for loc in region.locations:
                 if loc.address is None:
                     loc.place_locked_item(self.create_event(loc.ladxr_item.event))
-        
+
         # Connect Windfish -> Victory
         windfish = self.multiworld.get_region("Windfish", self.player)
         l = Location(self.player, "Windfish", parent=windfish)
         windfish.locations = [l]
-                
+
         l.place_locked_item(self.create_event("An Alarm Clock"))
-        
+
         self.multiworld.completion_condition[self.player] = lambda state: state.has("An Alarm Clock", player=self.player)
 
     def create_item(self, item_name: str):
@@ -320,8 +329,8 @@ class LinksAwakeningWorld(World):
         event_location = Location(self.player, "Can Play Trendy Game", parent=trendy_region)
         trendy_region.locations.insert(0, event_location)
         event_location.place_locked_item(self.create_event("Can Play Trendy Game"))
-       
-        self.dungeon_locations_by_dungeon = [[], [], [], [], [], [], [], [], []]     
+
+        self.dungeon_locations_by_dungeon = [[], [], [], [], [], [], [], [], []]
         for r in self.multiworld.get_regions(self.player):
             # Set aside dungeon locations
             if r.dungeon_index:
@@ -395,7 +404,7 @@ class LinksAwakeningWorld(World):
 
         # set containing the list of all possible dungeon locations for the player
         all_dungeon_locs = set()
-        
+
         # Do dungeon specific things
         for dungeon_index in range(0, 9):
             # set up allow-list for dungeon specific items
@@ -462,77 +471,40 @@ class LinksAwakeningWorld(World):
         partial_all_state.sweep_for_advancements()
 
         fill_restrictive(self.multiworld, partial_all_state, all_dungeon_locs_to_fill, all_dungeon_items_to_fill, lock=True, single_player_placement=True, allow_partial=False)
-        
 
-    name_cache = {}
-    # Tries to associate an icon from another game with an icon we have
-    def guess_icon_for_other_world(self, foreign_item):
-        if not self.name_cache:
-            for item in ladxr_item_to_la_item_name.keys():
-                self.name_cache[item] = item
-                splits = item.split("_")
-                for word in item.split("_"):
-                    if word not in ItemIconGuessing.BLOCKED_ASSOCIATIONS and not word.isnumeric():
-                        self.name_cache[word] = item
-            for name in ItemIconGuessing.SYNONYMS.values():
-                assert name in self.name_cache, name
-                assert name in CHEST_ITEMS, name
-            self.name_cache.update(ItemIconGuessing.SYNONYMS)
-            pluralizations = {k + "S": v for k, v in self.name_cache.items()}
-            self.name_cache = pluralizations | self.name_cache
-
-        uppered = foreign_item.name.upper()
-        foreign_game = self.multiworld.game[foreign_item.player]
-        phrases = ItemIconGuessing.PHRASES.copy()
-        if foreign_game in ItemIconGuessing.GAME_SPECIFIC_PHRASES:
-            phrases.update(ItemIconGuessing.GAME_SPECIFIC_PHRASES[foreign_game])
-
-        for phrase, icon in phrases.items():
-            if phrase.upper() in uppered:
-                return icon
-        # pattern for breaking down camelCase, also separates out digits
-        pattern = re.compile(r"(?<=[a-z])(?=[A-Z])|(?<=[A-Z])(?=[A-Z][a-z])|(?<=[a-zA-Z])(?=\d)")
-        possibles = pattern.sub(' ', foreign_item.name).upper()
-        for ch in "[]()_":
-            possibles = possibles.replace(ch, " ")
-        possibles = possibles.split()
-        for name in possibles:
-            if name in self.name_cache:
-                return self.name_cache[name]
-        
-        return "TRADING_ITEM_LETTER"
 
     def generate_output(self, output_directory: str):
-        # copy items back to locations
+        matcher = ForeignItemIconMatcher()
+        self.rom_item_placements = []
         for r in self.multiworld.get_regions(self.player):
             for loc in r.locations:
                 if isinstance(loc, LinksAwakeningLocation):
                     assert(loc.item)
-                        
+                    spot = {}
                     # If we're a links awakening item, just use the item
                     if isinstance(loc.item, LinksAwakeningItem):
-                        loc.ladxr_item.item = loc.item.item_data.ladxr_id
+                        spot["item"] = loc.item.item_data.ladxr_id
 
                     # If the item name contains "sword", use a sword icon, etc
                     # Otherwise, use a cute letter as the icon
                     elif self.options.foreign_item_icons == 'guess_by_name':
-                        loc.ladxr_item.item = self.guess_icon_for_other_world(loc.item)
-                        loc.ladxr_item.setCustomItemName(loc.item.name)
-
+                        game = self.multiworld.game[loc.item.player]
+                        spot["item"] = matcher.get_icon_for_other_world(loc.item.name, game)
                     else:
                         if loc.item.advancement:
-                            loc.ladxr_item.item = 'PIECE_OF_POWER'
+                            spot["item"] = 'PIECE_OF_POWER'
                         else:
-                            loc.ladxr_item.item = 'GUARDIAN_ACORN'
-                        loc.ladxr_item.setCustomItemName(loc.item.name)
+                            spot["item"] = 'GUARDIAN_ACORN'
+
+                    spot["custom_item_name"] = loc.item.name
 
                     if loc.item:
-                        loc.ladxr_item.item_owner = loc.item.player
+                        spot["item_owner"] = loc.item.player
                     else:
-                        loc.ladxr_item.item_owner = self.player
+                        spot["item_owner"] = self.player
 
-                    # Kind of kludge, make it possible for the location to differentiate between local and remote items
-                    loc.ladxr_item.location_owner = self.player
+                    spot["name_id"] = loc.ladxr_item.nameId
+                    self.rom_item_placements.append(spot)
 
         
         patch = LADXProcedurePatch(player=self.player, player_name=self.player_name)
