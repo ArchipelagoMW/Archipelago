@@ -514,6 +514,7 @@ progression_set = {
             ItemName.AerialDive,
             ItemName.AerialSpiral,
             ItemName.AerialFinish,
+            ItemName.MagnetBurst,
             ItemName.AutoValor,
             ItemName.AutoWisdom,
             ItemName.AutoLimit,
