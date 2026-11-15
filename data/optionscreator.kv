@@ -169,6 +169,27 @@ ContainerLayout:
                             pos_hint: {"center_x": 0.5, "center_y": 0.5}
                             text: "Export Options"
 
+                MDBoxLayout:
+                    orientation: "vertical"
+                    spacing: "15dp"
+
+                    TooltipLabel:
+                        id: pool_count
+                        text: ""
+                        font_size: "16sp"
+                        pos_hint: {"center_x": 0.5, "center_y": 0.5}
+
+                    MDButton:
+                        pos_hint: {"center_x": 0.5, "center_y": 0.5}
+                        on_press: app.count_items(self)
+                        theme_width: "Custom"
+                        size_hint_y: 1
+                        size_hint_x: 1
+
+                        MDButtonText:
+                            pos_hint: {"center_x": 0.5, "center_y": 0.5}
+                            text: "Count Items"
+
             MainLayout:
                 cols: 1
                 id: options
