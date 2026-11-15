@@ -2335,13 +2335,32 @@ def update_client_status(ctx: Context, client: Client, new_status: ClientStatus)
 
 
 class ServerCommandProcessor(CommonCommandProcessor):
+    remote_outputs: dict[int, typing.Callable[[str], None]]
+    id_counter: int = 0
+
     def __init__(self, ctx: Context):
         self.ctx = ctx
+        self.remote_outputs = {}
         super(ServerCommandProcessor, self).__init__()
+
+    def fresh_id(self):
+        result = self.id_counter
+        self.id_counter += 1
+        return result
+
+    def register_remote_output(self, callback: typing.Callable[[str], None]) -> int:
+        id = self.fresh_id()
+        self.remote_outputs[id] = callback
+        return id
+
+    def unregister_remote_output(self, id: int):
+        del self.remote_outputs[id]
 
     def output(self, text: str):
         if self.client:
             self.ctx.notify_client(self.client, text, {"type": "AdminCommandResult"})
+        for remote_output in self.remote_outputs.values():
+            remote_output(text)
         super(ServerCommandProcessor, self).output(text)
 
     def default(self, raw: str):
@@ -2709,6 +2728,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument('multidata', nargs="?", default=defaults["multidata"])
     parser.add_argument('--host', default=defaults["host"])
     parser.add_argument('--port', default=defaults["port"], type=int)
+    parser.add_argument('--rpc-sock', help="Path of a unix socket to serve picklerpc on.")
     parser.add_argument('--server_password', default=defaults["server_password"])
     parser.add_argument('--password', default=defaults["password"])
     parser.add_argument('--savefile', default=defaults["savefile"])
@@ -2859,6 +2879,11 @@ async def main(args: argparse.Namespace):
                                                  'No password' if not ctx.password else 'Password: %s' % ctx.password))
 
     await ctx.server
+    if args.rpc_sock:
+        import pathlib
+        import rpc  # deferred, rpc imports MultiServer
+        pathlib.Path(args.rpc_sock).unlink(missing_ok=True)
+        await asyncio.start_unix_server(functools.partial(rpc.handle_session, ctx), path=args.rpc_sock)
     console_task = asyncio.create_task(console(ctx))
     if ctx.auto_shutdown:
         ctx.shutdown_task = asyncio.create_task(auto_shutdown(ctx, [console_task]))
