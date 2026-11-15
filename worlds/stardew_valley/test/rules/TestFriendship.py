@@ -1,5 +1,5 @@
+from ..bases import SVTestBase
 from ...options import SeasonRandomization, Friendsanity, FriendsanityHeartSize
-from ...test import SVTestBase
 
 
 class TestFriendsanityDatingRules(SVTestBase):
@@ -11,6 +11,7 @@ class TestFriendsanityDatingRules(SVTestBase):
 
     def test_earning_dating_heart_requires_dating(self):
         self.collect_all_the_money()
+        self.collect(self.create_item("Landslide Removed"))
         self.multiworld.state.collect(self.create_item("Fall"))
         self.multiworld.state.collect(self.create_item("Beach Bridge"))
         self.multiworld.state.collect(self.create_item("Progressive House"))
@@ -48,11 +49,9 @@ class TestFriendsanityDatingRules(SVTestBase):
             if i % step != 0 and i != 14:
                 continue
             location = f"{prefix}{npc} {i}{suffix}"
-            can_reach = self.world.logic.region.can_reach_location(location)(self.multiworld.state)
-            self.assertTrue(can_reach, f"Should be able to earn relationship up to {i} hearts")
+            self.assert_can_reach_location(location)
         for i in range(max_reachable + 1, 14 + 1):
             if i % step != 0 and i != 14:
                 continue
             location = f"{prefix}{npc} {i}{suffix}"
-            can_reach = self.world.logic.region.can_reach_location(location)(self.multiworld.state)
-            self.assertFalse(can_reach, f"Should not be able to earn relationship up to {i} hearts")
+            self.assert_cannot_reach_location(location)

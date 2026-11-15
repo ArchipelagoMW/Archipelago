@@ -1,4 +1,4 @@
-from Options import PerGameCommonOptions, Choice, Toggle, DeathLink, DefaultOnToggle, StartInventoryPool
+from Options import PerGameCommonOptions, Range, Choice, Toggle, DeathLink, DefaultOnToggle, StartInventoryPool
 from dataclasses import dataclass
 
 
@@ -144,6 +144,116 @@ class Episode5(Toggle):
     display_name = "Episode 5"
 
 
+class SplitBagOfHolding(Toggle):
+    """Split the Bag of Holding into six individual items, each one increasing ammo capacity for one type of weapon only."""
+    display_name = "Split Bag of Holding"
+
+
+class BagOfHoldingCount(Range):
+    """How many Bags of Holding will be available.
+    If Split Bag of Holding is set, this will be the number of each capacity upgrade available."""
+    display_name = "Bag of Holding Count"
+    range_start = 0
+    range_end = 10
+    default = 1
+
+
+class MaxAmmoCrystals(Range):
+    """Set the starting ammo capacity for crystals (Elven Wand ammo)."""
+    display_name = "Max Ammo - Crystals"
+    range_start = 100
+    range_end = 999
+    default = 100
+
+
+class MaxAmmoArrows(Range):
+    """Set the starting ammo capacity for arrows (Ethereal Crossbow ammo)."""
+    display_name = "Max Ammo - Arrows"
+    range_start = 50
+    range_end = 999
+    default = 50
+
+
+class MaxAmmoClawOrbs(Range):
+    """Set the starting ammo capacity for claw orbs (Dragon Claw ammo)."""
+    display_name = "Max Ammo - Claw Orbs"
+    range_start = 200
+    range_end = 999
+    default = 200
+
+
+class MaxAmmoRunes(Range):
+    """Set the starting ammo capacity for runes (Hellstaff ammo)."""
+    display_name = "Max Ammo - Runes"
+    range_start = 200
+    range_end = 999
+    default = 200
+
+
+class MaxAmmoFlameOrbs(Range):
+    """Set the starting ammo capacity for flame orbs (Phoenix Rod ammo)."""
+    display_name = "Max Ammo - Flame Orbs"
+    range_start = 20
+    range_end = 999
+    default = 20
+
+
+class MaxAmmoSpheres(Range):
+    """Set the starting ammo capacity for spheres (Firemace ammo)."""
+    display_name = "Max Ammo - Spheres"
+    range_start = 150
+    range_end = 999
+    default = 150
+
+
+class AddedAmmoCrystals(Range):
+    """Set the amount of crystal capacity gained when collecting a bag of holding or a capacity upgrade."""
+    display_name = "Added Ammo - Crystals"
+    range_start = 10
+    range_end = 999
+    default = 100
+
+
+class AddedAmmoArrows(Range):
+    """Set the amount of arrow capacity gained when collecting a bag of holding or a capacity upgrade."""
+    display_name = "Added Ammo - Arrows"
+    range_start = 5
+    range_end = 999
+    default = 50
+
+
+class AddedAmmoClawOrbs(Range):
+    """Set the amount of claw orb capacity gained when collecting a bag of holding or a capacity upgrade."""
+    display_name = "Added Ammo - Claw Orbs"
+    range_start = 20
+    range_end = 999
+    default = 200
+
+
+class AddedAmmoRunes(Range):
+    """Set the amount of rune capacity gained when collecting a bag of holding or a capacity upgrade."""
+    display_name = "Added Ammo - Runes"
+    range_start = 20
+    range_end = 999
+    default = 200
+
+
+class AddedAmmoFlameOrbs(Range):
+    """Set the amount of flame orb capacity gained when collecting a bag of holding or a capacity upgrade."""
+    display_name = "Added Ammo - Flame Orbs"
+    range_start = 2
+    range_end = 999
+    default = 20
+
+
+class AddedAmmoSpheres(Range):
+    """Set the amount of sphere capacity gained when collecting a bag of holding or a capacity upgrade."""
+    display_name = "Added Ammo - Spheres"
+    range_start = 15
+    range_end = 999
+    default = 150
+
+
 @dataclass
 class HereticOptions(PerGameCommonOptions):
     start_inventory_from_pool: StartInventoryPool
@@ -163,3 +273,18 @@ class HereticOptions(PerGameCommonOptions):
     episode3: Episode3
     episode4: Episode4
     episode5: Episode5
+
+    split_bag_of_holding: SplitBagOfHolding
+    bag_of_holding_count: BagOfHoldingCount
+    max_ammo_crystals: MaxAmmoCrystals
+    max_ammo_arrows: MaxAmmoArrows
+    max_ammo_claw_orbs: MaxAmmoClawOrbs
+    max_ammo_runes: MaxAmmoRunes
+    max_ammo_flame_orbs: MaxAmmoFlameOrbs
+    max_ammo_spheres: MaxAmmoSpheres
+    added_ammo_crystals: AddedAmmoCrystals
+    added_ammo_arrows: AddedAmmoArrows
+    added_ammo_claw_orbs: AddedAmmoClawOrbs
+    added_ammo_runes: AddedAmmoRunes
+    added_ammo_flame_orbs: AddedAmmoFlameOrbs
+    added_ammo_spheres: AddedAmmoSpheres

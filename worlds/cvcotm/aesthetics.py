@@ -48,11 +48,17 @@ class OtherGameAppearancesInfo(TypedDict):
 
 
 other_game_item_appearances: Dict[str, Dict[str, OtherGameAppearancesInfo]] = {
-    # NOTE: Symphony of the Night is currently an unsupported world not in main.
+    # NOTE: Symphony of the Night and Harmony of Dissonance are custom worlds that are not core verified.
     "Symphony of the Night": {"Life Vessel": {"type": 0xE4,
                                               "appearance": 0x01},
                               "Heart Vessel": {"type": 0xE4,
                                                "appearance": 0x00}},
+
+    "Castlevania - Harmony of Dissonance": {"Life Max Up": {"type": 0xE4,
+                                                            "appearance": 0x01},
+                                            "Heart Max Up": {"type": 0xE4,
+                                                             "appearance": 0x00}},
+
     "Timespinner": {"Max HP": {"type": 0xE4,
                                "appearance": 0x01},
                     "Max Aura": {"type": 0xE4,
@@ -728,8 +734,8 @@ def get_start_inventory_data(world: "CVCotMWorld") -> Tuple[Dict[int, bytes], bo
                 magic_items_array[array_offset] += 1
 
     # Add the start inventory arrays to the offset data in bytes form.
-    start_inventory_data[0x680080] = bytes(magic_items_array)
-    start_inventory_data[0x6800A0] = bytes(cards_array)
+    start_inventory_data[0x690080] = bytes(magic_items_array)
+    start_inventory_data[0x6900A0] = bytes(cards_array)
 
     # Add the extra max HP/MP/Hearts to all classes' base stats. Doing it this way makes us less likely to hit the max
     # possible Max Ups.

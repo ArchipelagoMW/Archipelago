@@ -3,23 +3,48 @@ import string
 import typing
 
 from BaseClasses import Item, MultiWorld, Region, Location, Entrance, Tutorial, ItemClassification
+from . import Items
 from .Items import item_table, faction_table
 from .Locations import location_table
 from .Regions import create_regions
 from .Rules import set_rules
 from worlds.AutoWorld import World, WebWorld
-from .Options import WargrooveOptions
+from .Options import WargrooveOptions, wargroove_option_groups
+from worlds.LauncherComponents import Component, components, Type, launch as launch_component
+
+
+def launch_client(*args: str):
+    from .Client import launch
+    launch_component(launch, name="WargrooveClient", args=args)
+
+
+components.append(Component("Wargroove Client", game_name="Wargroove", func=launch_client, component_type=Type.CLIENT))
 
 
 class WargrooveSettings(settings.Group):
     class RootDirectory(settings.UserFolderPath):
         """
-        Locate the Wargroove root directory on your system.
-        This is used by the Wargroove client, so it knows where to send communication files to
+        Locates the Wargroove root directory on your system.
+        This is used by the Wargroove client, so it knows where to send communication files to.
         """
         description = "Wargroove root directory"
 
+    class SaveDirectory(settings.UserFolderPath):
+        """
+        Locates the Wargroove save file directory on your system.
+        This is used by the Wargroove client, so it knows where to send mod and save files to.
+        """
+        description = "Wargroove save file/appdata directory"
+
+        def browse(self, **kwargs):
+            from Utils import messagebox
+            messagebox("AppData folder not found",
+                       "WargrooveClient couldn't detect a path to the AppData folder.\n"
+                       "Please select the folder containing the \"/Chucklefish/Wargroove/\" directories.")
+            super().browse(**kwargs)
+
     root_directory: RootDirectory = RootDirectory("C:/Program Files (x86)/Steam/steamapps/common/Wargroove")
+    save_directory: SaveDirectory = SaveDirectory("%APPDATA%")
 
 
 class WargrooveWeb(WebWorld):
@@ -31,6 +56,8 @@ class WargrooveWeb(WebWorld):
         "wargroove/en",
         ["Fly Sniper"]
     )]
+
+    option_groups = wargroove_option_groups
 
 
 class WargrooveWorld(World):
@@ -47,6 +74,7 @@ class WargrooveWorld(World):
 
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = location_table
+    item_name_groups = Items.item_name_groups
 
     def _get_slot_data(self):
         return {
@@ -55,6 +83,11 @@ class WargrooveWorld(World):
             'commander_defense_boost': self.options.commander_defense_boost.value,
             'can_choose_commander': self.options.commander_choice.value != 0,
             'commander_choice': self.options.commander_choice.value,
+            'player_sacrifice_limit': self.options.player_sacrifice_limit.value,
+            'player_summon_limit': self.options.player_summon_limit.value,
+            'ai_sacrifice_limit': self.options.ai_sacrifice_limit.value,
+            'ai_summon_limit': self.options.ai_summon_limit.value,
+            'death_link': self.options.death_link.value,
             'starting_groove_multiplier': 20  # Backwards compatibility in case this ever becomes an option
         }
 
@@ -112,8 +145,8 @@ class WargrooveWorld(World):
         return self.multiworld.random.choice(["Commander Defense Boost", "Income Boost"])
 
 
-def create_region(world: MultiWorld, player: int, name: str, locations=None, exits=None):
-    ret = Region(name, player, world)
+def create_region(multiworld: MultiWorld, player: int, name: str, locations=None, exits=None):
+    ret = Region(name, player, multiworld)
     if locations:
         for location in locations:
             loc_id = location_table.get(location, 0)

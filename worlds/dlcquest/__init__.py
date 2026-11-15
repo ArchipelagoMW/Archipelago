@@ -34,6 +34,7 @@ class DLCqwebworld(WebWorld):
         ["Deoxis"]
     )
     tutorials = [setup_en, setup_fr]
+    game_info_languages = ["en", "fr"]
 
 
 class DLCqworld(World):
@@ -65,10 +66,10 @@ class DLCqworld(World):
                                for location in self.multiworld.get_locations(self.player)
                                if not location.advancement])
 
-        items_to_exclude = [excluded_items
+        items_to_exclude = [excluded_items.name
                             for excluded_items in self.multiworld.precollected_items[self.player]]
 
-        created_items = create_items(self, self.options, locations_count + len(items_to_exclude), self.multiworld.random)
+        created_items = create_items(self, self.options, locations_count, items_to_exclude, self.multiworld.random)
 
         self.multiworld.itempool += created_items
 
@@ -83,9 +84,7 @@ class DLCqworld(World):
             else:
                 early_items[self.player]["Movement Pack"] = 1
 
-        for item in items_to_exclude:
-            if item in self.multiworld.itempool:
-                self.multiworld.itempool.remove(item)
+
 
     def precollect_coinsanity(self):
         if self.options.campaign == Options.Campaign.option_basic:

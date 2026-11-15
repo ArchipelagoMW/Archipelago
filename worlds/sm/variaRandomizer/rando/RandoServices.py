@@ -1,5 +1,4 @@
-
-import copy, random, sys, logging, os
+import copy, sys, logging, os
 from enum import Enum, unique
 from ..utils import log
 from ..utils.parameters import infinity
@@ -19,12 +18,13 @@ class ComebackCheckType(Enum):
 
 # collection of stateless services to be used mainly by fillers
 class RandoServices(object):
-    def __init__(self, graph, restrictions, cache=None):
+    def __init__(self, graph, restrictions, cache=None, *, random):
         self.restrictions = restrictions
         self.settings = restrictions.settings
         self.areaGraph = graph
         self.cache = cache
         self.log = log.get('RandoServices')
+        self.random = random
 
     @staticmethod
     def printProgress(s):
@@ -217,7 +217,7 @@ class RandoServices(object):
                     # choose a morph item location in that context
                     morphItemLoc = ItemLocation(
                         morph,
-                        random.choice(morphLocs)
+                        self.random.choice(morphLocs)
                     )
                     # acquire morph in new context and see if we can still open new locs
                     newAP = self.collect(ap, containerCpy, morphItemLoc)
@@ -232,7 +232,7 @@ class RandoServices(object):
         if morphLocItem is None or len(itemLocDict) == 1:
             # no morph, or it is the only possibility: nothing to do
             return
-        morphLocs = self.restrictions.lateMorphCheck(container, itemLocDict[morphLocItem])
+        morphLocs = self.restrictions.lateMorphCheck(container, itemLocDict[morphLocItem], self.random)
         if morphLocs is not None:
             itemLocDict[morphLocItem] = morphLocs
         else:
@@ -380,10 +380,10 @@ class RandoServices(object):
         (itemLocDict, isProg) = self.getPossiblePlacements(ap, container, ComebackCheckType.NoCheck)
         assert not isProg
         items = list(itemLocDict.keys())
-        random.shuffle(items)
+        self.random.shuffle(items)
         for item in items:
             cont = copy.copy(container)
-            loc = random.choice(itemLocDict[item])
+            loc = self.random.choice(itemLocDict[item])
             itemLoc1 = ItemLocation(item, loc)
             self.log.debug("itemLoc1 attempt: "+getItemLocStr(itemLoc1))
             newAP = self.collect(ap, cont, itemLoc1)
@@ -391,8 +391,8 @@ class RandoServices(object):
                 self.cache.reset()
             (ild, isProg) = self.getPossiblePlacements(newAP, cont, ComebackCheckType.NoCheck)
             if isProg:
-                item2 = random.choice(list(ild.keys()))
-                itemLoc2 = ItemLocation(item2, random.choice(ild[item2]))
+                item2 = self.random.choice(list(ild.keys()))
+                itemLoc2 = ItemLocation(item2, self.random.choice(ild[item2]))
                 self.log.debug("itemLoc2: "+getItemLocStr(itemLoc2))
                 return (itemLoc1, itemLoc2)
         return None

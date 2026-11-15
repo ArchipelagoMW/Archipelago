@@ -13,7 +13,7 @@ class ItemType(enum.Enum):
     POT = "pot"
     POT_COMPLETE = "pot-complete"
     POT_DUPLICATE = "pot-duplicate"
-    POT_COMPELTE_DUPLICATE = "pot-complete-duplicate"
+    POT_COMPLETE_DUPLICATE = "pot-complete-duplicate"
     KEY = "key"
     KEY_OPTIONAL = "key-optional"
     ABILITY = "ability"
@@ -117,16 +117,16 @@ item_table = {
     "Lightning Pot Top DUPE": ItemData(None, ItemType.POT_DUPLICATE),
     "Sand Pot Top DUPE": ItemData(None, ItemType.POT_DUPLICATE),
     "Metal Pot Top DUPE": ItemData(None, ItemType.POT_DUPLICATE),
-    "Water Pot Complete DUPE": ItemData(None, ItemType.POT_COMPELTE_DUPLICATE),
-    "Wax Pot Complete DUPE": ItemData(None, ItemType.POT_COMPELTE_DUPLICATE),
-    "Ash Pot Complete DUPE": ItemData(None, ItemType.POT_COMPELTE_DUPLICATE),
-    "Oil Pot Complete DUPE": ItemData(None, ItemType.POT_COMPELTE_DUPLICATE),
-    "Cloth Pot Complete DUPE": ItemData(None, ItemType.POT_COMPELTE_DUPLICATE),
-    "Wood Pot Complete DUPE": ItemData(None, ItemType.POT_COMPELTE_DUPLICATE),
-    "Crystal Pot Complete DUPE": ItemData(None, ItemType.POT_COMPELTE_DUPLICATE),
-    "Lightning Pot Complete DUPE": ItemData(None, ItemType.POT_COMPELTE_DUPLICATE),
-    "Sand Pot Complete DUPE": ItemData(None, ItemType.POT_COMPELTE_DUPLICATE),
-    "Metal Pot Complete DUPE": ItemData(None, ItemType.POT_COMPELTE_DUPLICATE),
+    "Water Pot Complete DUPE": ItemData(None, ItemType.POT_COMPLETE_DUPLICATE),
+    "Wax Pot Complete DUPE": ItemData(None, ItemType.POT_COMPLETE_DUPLICATE),
+    "Ash Pot Complete DUPE": ItemData(None, ItemType.POT_COMPLETE_DUPLICATE),
+    "Oil Pot Complete DUPE": ItemData(None, ItemType.POT_COMPLETE_DUPLICATE),
+    "Cloth Pot Complete DUPE": ItemData(None, ItemType.POT_COMPLETE_DUPLICATE),
+    "Wood Pot Complete DUPE": ItemData(None, ItemType.POT_COMPLETE_DUPLICATE),
+    "Crystal Pot Complete DUPE": ItemData(None, ItemType.POT_COMPLETE_DUPLICATE),
+    "Lightning Pot Complete DUPE": ItemData(None, ItemType.POT_COMPLETE_DUPLICATE),
+    "Sand Pot Complete DUPE": ItemData(None, ItemType.POT_COMPLETE_DUPLICATE),
+    "Metal Pot Complete DUPE": ItemData(None, ItemType.POT_COMPLETE_DUPLICATE),
 
     # Filler
     "Empty": ItemData(None, ItemType.FILLER, ItemClassification.filler),

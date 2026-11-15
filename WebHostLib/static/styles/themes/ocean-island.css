@@ -72,3 +72,13 @@ code{
     padding-right: 0.25rem;
     color: #000000;
 }
+
+code.grassy {
+    background-color: #b5e9a4;
+    border: 1px solid #2a6c2f;
+    white-space: preserve;
+    text-align: left;
+    display: block;
+    font-size: 14px;
+    line-height: 20px;
+}

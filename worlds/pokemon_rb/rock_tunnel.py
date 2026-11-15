@@ -1,4 +1,54 @@
+import random
+import typing
+
+from worlds.Files import APTokenTypes
+
 from .rom_addresses import rom_addresses
+
+if typing.TYPE_CHECKING:
+    from .rom import PokemonBlueProcedurePatch, PokemonRedProcedurePatch
+
+
+layout1F = [
+    [20, 22, 32, 34, 20, 25, 22, 32, 34, 20, 25, 25, 25, 22, 20, 25, 22,  2,  2,  2],
+    [24, 26, 40,  1, 24, 25, 26, 62,  1, 28, 29, 29, 29, 30, 28, 29, 30,  1, 40,  2],
+    [28, 30,  1,  1, 28, 29, 30,  1,  1,  1,  1,  1,  1,  1,  1,  1,  2,  1,  1, 23],
+    [23,  1,  1,  1,  1,  1, 23,  1,  1,  1,  1,  1,  1,  1,  1,  1,  2,  1,  1, 31],
+    [31,  1,  1,  1,  1,  1, 31, 32, 34,  2,  1,  1,  2, 32, 34, 32, 34,  1,  1, 23],
+    [23,  1,  1, 23,  1,  1, 23,  1, 40, 23,  1,  1,  1,  1,  1,  1,  1,  1,  1, 31],
+    [31,  1,  1, 31,  1,  1, 31,  1,  1, 31,  1,  1,  1,  1,  1,  1,  1,  1,  1, 23],
+    [23,  1,  1, 23,  1,  1,  1,  1,  1,  2, 32, 34, 32, 34, 32, 34, 32, 34,  2, 31],
+    [31,  1,  1, 31,  1,  1,  1,  1,  1,  1,  1, 23,  1,  1,  1, 23,  1,  1, 40, 23],
+    [23,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1, 31,  1,  1,  1, 31,  1,  1,  1, 31],
+    [31,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1, 23,  1,  1,  1, 23,  1,  1,  1, 23],
+    [23, 32, 34, 32, 34, 32, 34, 32, 34, 32, 34, 31,  1,  1,  1, 31,  1,  1,  1, 31],
+    [31,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1, 23,  1,  1,  1, 23],
+    [ 2,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1, 31,  1,  1,  1, 31],
+    [20, 21, 21, 21, 22, 42,  1,  1,  1,  1, 20, 21, 22,  1,  1,  1,  1,  1,  1, 23],
+    [24, 25, 25, 25, 26,  1,  1,  1,  1,  1, 24, 25, 26,  1,  1,  1,  1,  1,  1, 31],
+    [24, 25, 25, 25, 26,  1,  1, 62,  1,  1, 24, 25, 26, 20, 21, 21, 21, 21, 21, 22],
+    [28, 29, 29, 29, 30, 78, 81, 82, 77, 78, 28, 29, 30, 28, 29, 29, 29, 29, 29, 30],
+]
+layout2F = [
+    [23,  2, 32, 34, 32, 34, 32, 34, 32, 34, 32, 34, 32, 34, 32, 34, 32, 34, 32, 34],
+    [31, 62,  1, 23,  1,  1, 23,  1,  1,  1,  1,  1, 23, 62,  1,  1,  1,  1,  1,  2],
+    [23,  1,  1, 31,  1,  1, 31,  1,  1,  1,  1,  1, 31,  1,  1,  1,  1,  1,  1, 23],
+    [31,  1,  1, 23,  1,  1, 23,  1,  1, 23,  1,  1, 23,  1,  1, 23, 23,  1,  1, 31],
+    [23,  1,  1, 31,  1,  1, 31,  1,  1, 31,  2,  2, 31,  1,  1, 31, 31,  1,  1, 23],
+    [31,  1,  1,  1,  1,  1, 23,  1,  1,  1,  1, 62, 23,  1,  1,  1,  1,  1,  1, 31],
+    [23,  1,  1,  1,  1,  1, 31,  1,  1,  1,  1,  1, 31,  1,  1,  1,  1,  1,  1, 23],
+    [31,  1,  1, 23,  1,  1,  1,  1,  1, 23, 32, 34, 32, 34, 32, 34,  1,  1,  1, 31],
+    [23,  1,  1, 31,  1,  1,  1,  1,  1, 31,  1,  1,  1,  1,  1,  1,  1,  1,  1, 23],
+    [31,  1,  1, 23,  1,  1,  2,  1,  1, 23,  1,  1,  1,  1,  1,  1,  1,  1,  1, 31],
+    [23,  1,  1, 31,  1,  1,  2,  1,  1, 31,  1,  1,  1, 32, 34, 32, 34, 32, 34, 23],
+    [31,  2,  2,  2,  1,  1, 32, 34, 32, 34,  1,  1,  1, 23,  1,  1,  1,  1,  1, 31],
+    [23,  1,  1,  1,  1,  1, 23,  1,  1,  1,  1,  1,  1, 31,  1,  1, 62,  1,  1, 23],
+    [31,  1,  1,  1,  1,  1, 31,  1,  1,  1,  1,  1,  1, 23,  1,  1,  1,  1,  1, 31],
+    [23, 32, 34, 32, 34, 32, 34,  1,  1, 32, 34, 32, 34, 31,  1,  1,  1,  1,  1, 23],
+    [31,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1, 31],
+    [ 2,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1, 23],
+    [32, 34, 32, 34, 32, 34, 32, 34, 32, 34, 32, 34, 32, 34, 32, 34, 32, 34,  2, 31]
+]
 
 disallowed1F = [[2, 2], [3, 2], [1, 8], [2, 8], [7, 7], [8, 7], [10, 4], [11, 4], [11, 12],
               [11, 13], [16, 10], [17, 10], [18, 10], [16, 12], [17, 12], [18, 12]]
@@ -7,29 +57,12 @@ disallowed2F = [[16, 2], [17, 2], [18, 2], [15, 5], [15, 6], [10, 10], [11, 10],
                 [11, 1]]
 
 
-def randomize_rock_tunnel(data, random):
-
+def randomize_rock_tunnel(patch: "PokemonRedProcedurePatch | PokemonBlueProcedurePatch", random: random.Random):
     seed = random.randint(0, 999999999999999999)
     random.seed(seed)
 
-    map1f = []
-    map2f = []
-
-    address = rom_addresses["Map_Rock_Tunnel1F"]
-    for y in range(0, 18):
-        row = []
-        for x in range(0, 20):
-            row.append(data[address])
-            address += 1
-        map1f.append(row)
-
-    address = rom_addresses["Map_Rock_TunnelB1F"]
-    for y in range(0, 18):
-        row = []
-        for x in range(0, 20):
-            row.append(data[address])
-            address += 1
-        map2f.append(row)
+    map1f = [row.copy() for row in layout1F]
+    map2f = [row.copy() for row in layout2F]
 
     current_map = map1f
 
@@ -177,7 +210,11 @@ def randomize_rock_tunnel(data, random):
         if random.randint(0, 1):
             floor(10, 7)
             floor(11, 7)
-            tall(random.randint(12, 17), 8)
+            if current_map[10][13]==1:
+                # (13,10) is floor
+                tall(random.randint(14, 16), 8)
+            else:
+                tall(random.randint(12, 16), 8)
         else:
             floor(12, 5)
             floor(12, 6)
@@ -185,8 +222,10 @@ def randomize_rock_tunnel(data, random):
             wide(17, random.randint(3, 5))
         r = random.choice([1, 3])
         floor(12, r)
-        floor(12,  + 1)
-
+        floor(12, r + 1)
+        if current_map[4][12] + current_map[5][12] == 2:
+            # (12,4) and (12,5) are floor
+            wide(11,4)
     elif c == 2:
         r = random.randint(0, 6)
         if r == 0:
@@ -221,6 +260,9 @@ def randomize_rock_tunnel(data, random):
             #early block
             wide(13, random.randint(2, 5))
             tall(random.randint(14, 15), 1)
+            if not 1 in (current_map[1][14],current_map[2][13]):
+                # wide(13,2) and tall(14,1) overlap
+                single(13,2)
         elif r == 1:
             if random.randint(0, 1):
                 tall(16, 5)
@@ -243,19 +285,34 @@ def randomize_rock_tunnel(data, random):
         r = random.randint(r, 6)
         if r == 6:
             #late open
-            r2 = random.randint(0, 2)
-            floor(1 + (r2 * 2), 14)
-            floor(2 + (r2 * 2), 14)
+            if random.randint(0, 1):
+                floor(1, 14)
+                floor(2, 14)
+            else:
+                floor(3, 14)
+                floor(4, 14)
         elif r == 5:
-            floor(6, 12)
-            floor(6, 13)
+            if random.randint(0,1):
+                floor(6, 12)
+                floor(6, 13)
+            else:
+                floor(5, 14)
+                floor(6, 14)
         elif r == 4:
             if random.randint(0, 1):
                 floor(6, 11)
                 floor(7, 11)
             else:
                 floor(8, 11)
-                floor(9, 11)
+                if current_map[12][10]==32:
+                    # (10,12) is wide
+                    single(9, 11)
+                else:
+                    floor(9, 11)
+            if 31 in (current_map[8][6],current_map[8][7]):
+                # (6,7) or (7,7) are tall
+                floor(6, 10)
+                wide(7, 9)
         elif r == 3:
             floor(9, 9)
             floor(9, 10)
@@ -281,14 +338,6 @@ def randomize_rock_tunnel(data, random):
         current_map = map2f
         check_addable_block(map2f, disallowed2F)
 
-    address = rom_addresses["Map_Rock_Tunnel1F"]
-    for y in map1f:
-        for x in y:
-            data[address] = x
-            address += 1
-    address = rom_addresses["Map_Rock_TunnelB1F"]
-    for y in map2f:
-        for x in y:
-            data[address] = x
-            address += 1
+    patch.write_token(APTokenTypes.WRITE, rom_addresses["Map_Rock_Tunnel1F"], bytes([b for row in map1f for b in row]))
+    patch.write_token(APTokenTypes.WRITE, rom_addresses["Map_Rock_TunnelB1F"], bytes([b for row in map2f for b in row]))
     return seed

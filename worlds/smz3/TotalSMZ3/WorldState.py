@@ -1,6 +1,5 @@
 from enum import Enum
 from typing import List
-from copy import copy
 
 from .Patch import DropPrize
 from .Region import RewardType
@@ -91,7 +90,11 @@ class WorldState:
             self.Green = 1
 
             if (distribution is not None): 
-                self = copy(distribution)
+                self.Boss = distribution.Boss
+                self.Blue = distribution.Blue
+                self.Red = distribution.Red
+                self.Pend = distribution.Pend
+                self.Green = distribution.Green
             if (boss is not None): 
                 self.Boss = boss
             if (blue is not None): 
@@ -111,11 +114,11 @@ class WorldState:
             p -= self.Boss
             if (p < 0): return (RewardType.AnyBossToken, WorldState.Distribution(self, boss = self.Boss - WorldState.Distribution.factor))
             p -= self.Blue
-            if (p - self.Blue < 0): return (RewardType.CrystalBlue, WorldState.Distribution(self, blue = self.Blue - WorldState.Distribution.factor))
+            if (p < 0): return (RewardType.CrystalBlue, WorldState.Distribution(self, blue = self.Blue - WorldState.Distribution.factor))
             p -= self.Red
-            if (p - self.Red < 0): return (RewardType.CrystalRed, WorldState.Distribution(self, red = self.Red - WorldState.Distribution.factor))
+            if (p < 0): return (RewardType.CrystalRed, WorldState.Distribution(self, red = self.Red - WorldState.Distribution.factor))
             p -= self.Pend
-            if (p - self.Pend < 0): return (RewardType.PendantNonGreen, WorldState.Distribution(self, pend = self.Pend - 1))
+            if (p < 0): return (RewardType.PendantNonGreen, WorldState.Distribution(self, pend = self.Pend - 1))
             return (RewardType.PendantGreen, WorldState.Distribution(self, green = self.Green - 1))
 
         def Generate(self, func):

@@ -210,6 +210,7 @@ class LocationName():
     WWW_Control_Room_1_Screen = "WWW Control Room 1 Screen"
     WWW_Wilys_Desk = "WWW Wily's Desk"
     Undernet_4_Pillar_Prog = "Undernet 4 Pillar Prog"
+    Serenade = "Serenade"
 
     ## Numberman Codes
     Numberman_Code_01 = "Numberman Code 01"
@@ -261,6 +262,7 @@ class LocationName():
     Somebody_please_help = "Job: Somebody, please help!"
     Looking_for_condor = "Job: Looking for condor"
     Help_with_rehab = "Job: Help with rehab"
+    Help_with_rehab_bonus = "Job: Help with rehab bonus"
     Old_Master = "Job: Old Master"
     Catching_gang_members = "Job: Catching gang members"
     Please_adopt_a_virus = "Job: Please adopt a virus!"

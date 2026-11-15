@@ -221,7 +221,8 @@ overworlds = [
     LocationData(LocationName.Hades_Boat_Dock,                    0xb310ab, 0x200024c, 0x10, 0x7519B0, 223, [3]),
     LocationData(LocationName.WWW_Control_Room_1_Screen,          0xb310ac, 0x200024d, 0x40, 0x7596C4, 222, [3, 4]),
     LocationData(LocationName.WWW_Wilys_Desk,                     0xb310ad, 0x200024d, 0x2, 0x759384, 229, [3]),
-    LocationData(LocationName.Undernet_4_Pillar_Prog,             0xb310ae, 0x2000161, 0x1, 0x7746C8, 191, [0, 1])
+    LocationData(LocationName.Undernet_4_Pillar_Prog,             0xb310ae, 0x2000161, 0x1, 0x7746C8, 191, [0, 1]),
+    LocationData(LocationName.Serenade,                           0xb3110f, 0x2000178, 0x40, 0x7B3C74, 1, [0])
 ]
 
 jobs = [
@@ -240,7 +241,8 @@ jobs = [
     # LocationData(LocationName.Gathering_Data,             0xb310bb, 0x2000300, 0x10, 0x739580, 193, [0]),
     LocationData(LocationName.Somebody_please_help,       0xb310bc, 0x2000301, 0x4, 0x73A14C, 193, [0]),
     LocationData(LocationName.Looking_for_condor,         0xb310bd, 0x2000301, 0x2, 0x749444, 203, [0]),
-    LocationData(LocationName.Help_with_rehab,            0xb310be, 0x2000301, 0x1, 0x762CF0, 192, [3]),
+    LocationData(LocationName.Help_with_rehab,            0xb310be, 0x2000301, 0x1, 0x762CF0, 192, [0]),
+    LocationData(LocationName.Help_with_rehab_bonus,      0xb3110e, 0x2000301, 0x1, 0x762CF0, 192, [3]),
     LocationData(LocationName.Old_Master,                 0xb310bf, 0x2000302, 0x80, 0x760E80, 193, [0]),
     LocationData(LocationName.Catching_gang_members,      0xb310c0, 0x2000302, 0x40, 0x76EAE4, 193, [0]),
     LocationData(LocationName.Please_adopt_a_virus,       0xb310c1, 0x2000302, 0x20, 0x76A4F4, 193, [0]),
@@ -250,7 +252,7 @@ jobs = [
     LocationData(LocationName.Hide_and_seek_Second_Child, 0xb310c5, 0x2000188, 0x2, 0x75ADA8, 191, [0]),
     LocationData(LocationName.Hide_and_seek_Third_Child,  0xb310c6, 0x2000188, 0x1, 0x75B5EC, 191, [0]),
     LocationData(LocationName.Hide_and_seek_Fourth_Child, 0xb310c7, 0x2000189, 0x80, 0x75BEB0, 191, [0]),
-    LocationData(LocationName.Hide_and_seek_Completion,   0xb310c8, 0x2000302, 0x8, 0x7406A0, 193, [0]),
+    LocationData(LocationName.Hide_and_seek_Completion,   0xb310c8, 0x2000302, 0x8, 0x742D40, 193, [0]),
     LocationData(LocationName.Finding_the_blue_Navi,      0xb310c9, 0x2000302, 0x4, 0x773700, 192, [0]),
     LocationData(LocationName.Give_your_support,          0xb310ca, 0x2000302, 0x2, 0x752D80, 192, [0]),
     LocationData(LocationName.Stamp_collecting,           0xb310cb, 0x2000302, 0x1, 0x756074, 193, [0]),
@@ -329,10 +331,7 @@ chocolate_shop = [
     LocationData(LocationName.Chocolate_Shop_32, 0xb3110d, 0x20001c3, 0x01, 0x73F8FC, 181, [0]),
 ]
 
-always_excluded_locations = [
-    LocationName.Undernet_7_PMD,
-    LocationName.Undernet_7_Northeast_BMD,
-    LocationName.Undernet_7_Northwest_BMD,
+secret_locations = {
     LocationName.Secret_1_Northwest_BMD,
     LocationName.Secret_1_Northeast_BMD,
     LocationName.Secret_1_South_BMD,
@@ -341,19 +340,23 @@ always_excluded_locations = [
     LocationName.Secret_2_Island_BMD,
     LocationName.Secret_3_Island_BMD,
     LocationName.Secret_3_BugFrag_BMD,
-    LocationName.Secret_3_South_BMD
-]
+    LocationName.Secret_3_South_BMD,
+    LocationName.Serenade
+}
 
+location_groups: typing.Dict[str, typing.Set[str]] = {
+    "BMDs": {loc.name for loc in bmds},
+    "PMDs": {loc.name for loc in pmds},
+    "Jobs": {loc.name for loc in jobs},
+    "Number Trader": {loc.name for loc in number_traders},
+    "Bugfrag Trader": {loc.name for loc in chocolate_shop},
+    "Secret Area": {LocationName.Secret_1_Northwest_BMD, LocationName.Secret_1_Northeast_BMD,
+                    LocationName.Secret_1_South_BMD, LocationName.Secret_2_Upper_BMD, LocationName.Secret_2_Lower_BMD,
+                    LocationName.Secret_2_Island_BMD, LocationName.Secret_3_Island_BMD,
+                    LocationName.Secret_3_BugFrag_BMD, LocationName.Secret_3_South_BMD, LocationName.Serenade},
+}
 
 all_locations: typing.List[LocationData] = bmds + pmds + overworlds + jobs + number_traders + chocolate_shop
 scoutable_locations: typing.List[LocationData] = [loc for loc in all_locations if loc.hint_flag is not None]
 location_table: typing.Dict[str, int] = {locData.name: locData.id for locData in all_locations}
 location_data_table: typing.Dict[str, LocationData] = {locData.name: locData for locData in all_locations}
-
-
-"""
-def setup_locations(world, player: int):
-    # If we later include options to change what gets added to the random pool,
-    # this is where they would be changed
-    return {locData.name: locData.id for locData in all_locations}
-"""

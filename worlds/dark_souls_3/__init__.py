@@ -6,6 +6,7 @@ from logging import warning
 from typing import cast, Any, Callable, Dict, Set, List, Optional, TextIO, Union
 
 from BaseClasses import CollectionState, MultiWorld, Region, Location, LocationProgressType, Entrance, Tutorial, ItemClassification
+from Fill import remaining_fill
 
 from worlds.AutoWorld import World, WebWorld
 from worlds.generic.Rules import CollectionRule, ItemRule, add_rule, add_item_rule
@@ -25,19 +26,10 @@ class DarkSouls3Web(WebWorld):
         "English",
         "setup_en.md",
         "setup/en",
-        ["Marech"]
+        ["Natalie", "Marech"]
     )
 
-    setup_fr = Tutorial(
-        setup_en.tutorial_name,
-        setup_en.description,
-        "Français",
-        "setup_fr.md",
-        "setup/fr",
-        ["Marech"]
-    )
-
-    tutorials = [setup_en, setup_fr]
+    tutorials = [setup_en]
     option_groups = option_groups
     item_descriptions = item_descriptions
     rich_text_options_doc = True
@@ -84,6 +76,13 @@ class DarkSouls3World(World):
     """The pool of all items within this particular world. This is a subset of
     `self.multiworld.itempool`."""
 
+    missable_dupe_prog_locs: Set[str] = {"PC: Storm Ruler - Siegward",
+                                         "US: Pyromancy Flame - Cornyx",
+                                         "US: Tower Key - kill Irina"}
+    """Locations whose vanilla item is a missable duplicate of a non-missable progression item.
+    If vanilla, these locations shouldn't be expected progression, so they aren't created and don't get rules.
+    """
+
     def __init__(self, multiworld: MultiWorld, player: int):
         super().__init__(multiworld, player)
         self.all_excluded_locations = set()
@@ -91,6 +90,22 @@ class DarkSouls3World(World):
     def generate_early(self) -> None:
         self.created_regions = set()
         self.all_excluded_locations.update(self.options.exclude_locations.value)
+
+        # This code doesn't work because tests don't verify options
+        # Don't consider disabled locations to be AP-excluded
+        # if not self.options.enable_dlc:
+            # self.options.exclude_locations.value = {
+                # location
+                # for location in self.options.exclude_locations
+                # if not location_dictionary[location].dlc
+            # }
+
+        # if not self.options.enable_ngp:
+            # self.options.exclude_locations.value = {
+                # location for
+                # location in self.options.exclude_locations
+                # if not location_dictionary[location].ngp
+            # }
 
         # Inform Universal Tracker where Yhorm is being randomized to.
         if hasattr(self.multiworld, "re_gen_passthrough"):
@@ -266,11 +281,19 @@ class DarkSouls3World(World):
                 ):
                     new_location.progress_type = LocationProgressType.EXCLUDED
             else:
+                # Don't consider non-randomized locations to be AP-excluded
+                if location.name in excluded:
+                    excluded.remove(location.name)
+                    # Only remove from all_excluded if excluded does not have priority over missable
+                    if not (self.options.missable_location_behavior < self.options.excluded_location_behavior):
+                        self.all_excluded_locations.remove(location.name)
+
                 # Don't allow missable duplicates of progression items to be expected progression.
-                if location.name in {"PC: Storm Ruler - Siegward",
-                                     "US: Pyromancy Flame - Cornyx",
-                                     "US: Tower Key - kill Irina"}:
-                    continue
+                if location.name in self.missable_dupe_prog_locs: continue
+
+                # Don't create DLC and NGP locations if those are disabled
+                if location.dlc and not self.options.enable_dlc: continue
+                if location.ngp and not self.options.enable_ngp: continue
 
                 # Replace non-randomized items with events that give the default item
                 event_item = (
@@ -282,15 +305,8 @@ class DarkSouls3World(World):
                     self.player,
                     location,
                     parent = new_region,
-                    event = True,
                 )
-                event_item.code = None
                 new_location.place_locked_item(event_item)
-                if location.name in excluded:
-                    excluded.remove(location.name)
-                    # Only remove from all_excluded if excluded does not have priority over missable
-                    if not (self.options.missable_location_behavior < self.options.excluded_location_behavior):
-                        self.all_excluded_locations.remove(location.name)
 
             new_region.locations.append(new_location)
 
@@ -716,7 +732,7 @@ class DarkSouls3World(World):
         if self._is_location_available("US: Young White Branch - by white tree #2"):
             self._add_item_rule(
                 "US: Young White Branch - by white tree #2",
-                lambda item: item.player == self.player and not item.data.unique
+                lambda item: item.player != self.player or not item.data.unique
             )
         
         # Make sure the Storm Ruler is available BEFORE Yhorm the Giant
@@ -1297,8 +1313,9 @@ class DarkSouls3World(World):
             data = location_dictionary[location]
             if data.dlc and not self.options.enable_dlc: continue
             if data.ngp and not self.options.enable_ngp: continue
+            # Don't add rules to missable duplicates of progression items
+            if location in self.missable_dupe_prog_locs and not self._is_location_available(location): continue
 
-            if not self._is_location_available(location): continue
             if isinstance(rule, str):
                 assert item_dictionary[rule].classification == ItemClassification.progression
                 rule = lambda state, item=rule: state.has(item, self.player)
@@ -1359,7 +1376,7 @@ class DarkSouls3World(World):
         if self.yhorm_location != default_yhorm_location:
             text += f"\nYhorm takes the place of {self.yhorm_location.name} in {self.player_name}'s world\n"
 
-        if self.options.excluded_location_behavior == "allow_useful":
+        if self.options.excluded_location_behavior != "forbid_useful":
             text += f"\n{self.player_name}'s world excluded: {sorted(self.all_excluded_locations)}\n"
 
         if text:
@@ -1457,6 +1474,7 @@ class DarkSouls3World(World):
                         f"contain smoothed items, but only {len(converted_item_order)} items to smooth."
                     )
 
+                sorted_spheres = []
                 for sphere in locations_by_sphere:
                     locations = [loc for loc in sphere if loc.item.name in names]
 
@@ -1464,12 +1482,12 @@ class DarkSouls3World(World):
                     offworld = ds3_world._shuffle([loc for loc in locations if loc.game != "Dark Souls III"])
                     onworld = sorted((loc for loc in locations if loc.game == "Dark Souls III"),
                                      key=lambda loc: loc.data.region_value)
-
                     # Give offworld regions the last (best) items within a given sphere
-                    for location in onworld + offworld:
-                        new_item = ds3_world._pop_item(location, converted_item_order)
-                        location.item = new_item
-                        new_item.location = location
+                    sorted_spheres.extend(onworld)
+                    sorted_spheres.extend(offworld)
+
+                converted_item_order.reverse()
+                remaining_fill(multiworld, sorted_spheres, converted_item_order, name="DS3 Smoothing", check_location_can_fill=True)
 
             if ds3_world.options.smooth_upgrade_items:
                 base_names = {
@@ -1501,19 +1519,6 @@ class DarkSouls3World(World):
         copy = list(seq)
         self.random.shuffle(copy)
         return copy
-
-    def _pop_item(
-        self,
-        location: Location,
-        items: List[DarkSouls3Item]
-    ) -> DarkSouls3Item:
-        """Returns the next item in items that can be assigned to location."""
-        for i, item in enumerate(items):
-            if location.can_fill(self.multiworld.state, item, False):
-                return items.pop(i)
-
-        # If we can't find a suitable item, give up and assign an unsuitable one.
-        return items.pop(0)
 
     def _get_our_locations(self) -> List[DarkSouls3Location]:
         return cast(List[DarkSouls3Location], self.multiworld.get_locations(self.player))

@@ -37,7 +37,7 @@ CONNECTIONS: dict[str, dict[str, list[str]]] = {
             "Autumn Hills - Lakeside Checkpoint",
         ],
         "Dimension Climb Shop": [
-            "Autumn Hills - Lakeside Checkpoint",
+            "Autumn Hills - Lakeside Checkpoint",  # Only possible in 16 bits
             "Autumn Hills - Portal",
             "Autumn Hills - Double Swing Checkpoint",
         ],
@@ -60,7 +60,7 @@ CONNECTIONS: dict[str, dict[str, list[str]]] = {
         "Double Swing Checkpoint": [
             "Autumn Hills - Dimension Climb Shop",
             "Autumn Hills - Spike Ball Swing Checkpoint",
-            "Autumn Hills - Bottom",
+            "Autumn Hills - Bottom",  # Only possible in 16 bits
         ],
         "Spike Ball Swing Checkpoint": [
             "Autumn Hills - Double Swing Checkpoint",
@@ -90,7 +90,6 @@ CONNECTIONS: dict[str, dict[str, list[str]]] = {
             "Forlorn Temple - Sunny Day Checkpoint",
         ],
         "Climb Shop": [
-            "Forlorn Temple - Rocket Maze Checkpoint",
             "Forlorn Temple - Rocket Sunset Shop",
         ],
         "Rocket Sunset Shop": [
@@ -135,6 +134,7 @@ CONNECTIONS: dict[str, dict[str, list[str]]] = {
         ],
         "Triple Spike Crushers Shop": [
             "Catacombs - Bottom Left",
+            "Catacombs - Top Left",
             "Catacombs - Death Trap Checkpoint",
         ],
         "Ruxxtin Shop": [
@@ -153,7 +153,7 @@ CONNECTIONS: dict[str, dict[str, list[str]]] = {
             "Catacombs - Bottom",
             "Catacombs - Death Trap Checkpoint",
             "Catacombs - Crusher Gauntlet Checkpoint",
-            "Catacombs - Ruxxtin Shop",
+            "Catacombs - Ruxxtin Shop",  # In 16 bits, requires rope dart (to reach the Dirty Pond Seal as well)
         ],
     },
     "Bamboo Creek": {
@@ -244,14 +244,12 @@ CONNECTIONS: dict[str, dict[str, list[str]]] = {
         "Bottom Left": [
             "Howling Grotto - Top",
             "Quillshroom Marsh - Sand Trap Shop",
-            "Quillshroom Marsh - Bottom Right",
         ],
         "Top Right": [
             "Quillshroom Marsh - Queen of Quills Shop",
             "Searing Crags - Left",
         ],
         "Bottom Right": [
-            "Quillshroom Marsh - Bottom Left",
             "Quillshroom Marsh - Sand Trap Shop",
             "Searing Crags - Bottom",
         ],
@@ -318,7 +316,7 @@ CONNECTIONS: dict[str, dict[str, list[str]]] = {
         "Searing Mega Shard Shop": [
             "Searing Crags - Falling Rocks Shop",
             "Searing Crags - Before Final Climb Shop",
-            "Searing Crags - Key of Strength Shop",
+            "Searing Crags - Key of Strength Room",
         ],
         "Before Final Climb Shop": [
             "Searing Crags - Raining Rocks Checkpoint",
@@ -332,6 +330,9 @@ CONNECTIONS: dict[str, dict[str, list[str]]] = {
             "Searing Crags - Top",
         ],
         "Key of Strength Shop": [
+            "Searing Crags - Key of Strength Room",
+        ],
+        "Key of Strength Room": [
             "Searing Crags - Searing Mega Shard Shop",
         ],
         "Triple Ball Spinner Checkpoint": [
@@ -485,8 +486,7 @@ CONNECTIONS: dict[str, dict[str, list[str]]] = {
         "Barm'athaziel Shop": [
             "Underworld - Hot Tub Checkpoint",
         ],
-        "Key of Chaos Shop": [
-        ],
+        "Key of Chaos Shop": [],
         "Hot Dip Checkpoint": [
             "Underworld - Left Shop",
             "Underworld - Fireball Wave Shop",
@@ -535,8 +535,7 @@ CONNECTIONS: dict[str, dict[str, list[str]]] = {
         "Restock Shop": [
             "Riviere Turquoise - Butterfly Matriarch Shop",
         ],
-        "Butterfly Matriarch Shop": [
-        ],
+        "Butterfly Matriarch Shop": [],
         "Flower Flight Checkpoint": [
             "Riviere Turquoise - Waterfall Shop",
             "Riviere Turquoise - Launch of Faith Shop",
@@ -555,6 +554,7 @@ CONNECTIONS: dict[str, dict[str, list[str]]] = {
             "Elemental Skylands - Air Generator Shop",
         ],
         "Air Generator Shop": [
+            "Elemental Skylands - Air Seal Checkpoint",
             "Elemental Skylands - Earth Shmup",
         ],
         "Earth Shmup": [
@@ -573,6 +573,7 @@ CONNECTIONS: dict[str, dict[str, list[str]]] = {
             "Elemental Skylands - Water Generator Shop",
         ],
         "Water Generator Shop": [
+            "Elemental Skylands - Water Intro Shop",
             "Elemental Skylands - Fire Shmup",
         ],
         "Fire Shmup": [
@@ -638,45 +639,47 @@ CONNECTIONS: dict[str, dict[str, list[str]]] = {
     },
 }
 
+# fmt: off
 RANDOMIZED_CONNECTIONS: dict[str, str] = {
-    "Ninja Village - Right": "Autumn Hills - Left",
-    "Autumn Hills - Left": "Ninja Village - Right",
-    "Autumn Hills - Right": "Forlorn Temple - Left",
-    "Autumn Hills - Bottom": "Catacombs - Bottom Left",
-    "Forlorn Temple - Left": "Autumn Hills - Right",
-    "Forlorn Temple - Right": "Bamboo Creek - Top Left",
-    "Forlorn Temple - Bottom": "Catacombs - Top Left",
-    "Catacombs - Top Left": "Forlorn Temple - Bottom",
-    "Catacombs - Bottom Left": "Autumn Hills - Bottom",
-    "Catacombs - Bottom": "Dark Cave - Right",
-    "Catacombs - Right": "Bamboo Creek - Bottom Left",
-    "Bamboo Creek - Bottom Left": "Catacombs - Right",
-    "Bamboo Creek - Right": "Howling Grotto - Left",
-    "Bamboo Creek - Top Left": "Forlorn Temple - Right",
-    "Howling Grotto - Left": "Bamboo Creek - Right",
-    "Howling Grotto - Top": "Quillshroom Marsh - Bottom Left",
-    "Howling Grotto - Right": "Quillshroom Marsh - Top Left",
-    "Howling Grotto - Bottom": "Sunken Shrine - Left",
-    "Quillshroom Marsh - Top Left": "Howling Grotto - Right",
-    "Quillshroom Marsh - Bottom Left": "Howling Grotto - Top",
-    "Quillshroom Marsh - Top Right": "Searing Crags - Left",
+    "Ninja Village - Right":            "Autumn Hills - Left",
+    "Autumn Hills - Left":              "Ninja Village - Right",
+    "Autumn Hills - Right":             "Forlorn Temple - Left",
+    "Autumn Hills - Bottom":            "Catacombs - Bottom Left",
+    "Forlorn Temple - Left":            "Autumn Hills - Right",
+    "Forlorn Temple - Right":           "Bamboo Creek - Top Left",
+    "Forlorn Temple - Bottom":          "Catacombs - Top Left",
+    "Catacombs - Top Left":             "Forlorn Temple - Bottom",
+    "Catacombs - Bottom Left":          "Autumn Hills - Bottom",
+    "Catacombs - Bottom":               "Dark Cave - Right",
+    "Catacombs - Right":                "Bamboo Creek - Bottom Left",
+    "Bamboo Creek - Bottom Left":       "Catacombs - Right",
+    "Bamboo Creek - Right":             "Howling Grotto - Left",
+    "Bamboo Creek - Top Left":          "Forlorn Temple - Right",
+    "Howling Grotto - Left":            "Bamboo Creek - Right",
+    "Howling Grotto - Top":             "Quillshroom Marsh - Bottom Left",
+    "Howling Grotto - Right":           "Quillshroom Marsh - Top Left",
+    "Howling Grotto - Bottom":          "Sunken Shrine - Left",
+    "Quillshroom Marsh - Top Left":     "Howling Grotto - Right",
+    "Quillshroom Marsh - Bottom Left":  "Howling Grotto - Top",
+    "Quillshroom Marsh - Top Right":    "Searing Crags - Left",
     "Quillshroom Marsh - Bottom Right": "Searing Crags - Bottom",
-    "Searing Crags - Left": "Quillshroom Marsh - Top Right",
-    "Searing Crags - Top": "Glacial Peak - Bottom",
-    "Searing Crags - Bottom": "Quillshroom Marsh - Bottom Right",
-    "Searing Crags - Right": "Underworld - Left",
-    "Glacial Peak - Bottom": "Searing Crags - Top",
-    "Glacial Peak - Top": "Cloud Ruins - Left",
-    "Glacial Peak - Left": "Elemental Skylands - Air Shmup",
-    "Cloud Ruins - Left": "Glacial Peak - Top",
-    "Elemental Skylands - Right": "Glacial Peak - Left",
-    "Tower HQ": "Tower of Time - Left",
-    "Artificer": "Corrupted Future",
-    "Underworld - Left": "Searing Crags - Right",
-    "Dark Cave - Right": "Catacombs - Bottom",
-    "Dark Cave - Left": "Riviere Turquoise - Right",
-    "Sunken Shrine - Left": "Howling Grotto - Bottom",
+    "Searing Crags - Left":             "Quillshroom Marsh - Top Right",
+    "Searing Crags - Top":              "Glacial Peak - Bottom",
+    "Searing Crags - Bottom":           "Quillshroom Marsh - Bottom Right",
+    "Searing Crags - Right":            "Underworld - Left",
+    "Glacial Peak - Bottom":            "Searing Crags - Top",
+    "Glacial Peak - Top":               "Cloud Ruins - Left",
+    "Glacial Peak - Left":              "Elemental Skylands - Air Shmup",
+    "Cloud Ruins - Left":               "Glacial Peak - Top",
+    "Elemental Skylands - Right":       "Glacial Peak - Left",
+    "Tower HQ":                         "Tower of Time - Left",
+    "Artificer":                        "Corrupted Future",
+    "Underworld - Left":                "Searing Crags - Right",
+    "Dark Cave - Right":                "Catacombs - Bottom",
+    "Dark Cave - Left":                 "Riviere Turquoise - Right",
+    "Sunken Shrine - Left":             "Howling Grotto - Bottom",
 }
+# fmt: on
 
 TRANSITIONS: list[str] = [
     "Ninja Village - Right",

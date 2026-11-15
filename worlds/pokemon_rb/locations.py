@@ -749,8 +749,8 @@ location_data = [
     LocationData("Cinnabar Gym", "Super Nerd 2", None, rom_addresses["Trainersanity_EVENT_BEAT_CINNABAR_GYM_TRAINER_2_ITEM"], EventFlag(372), inclusion=trainersanity),
     LocationData("Cinnabar Gym", "Burglar 2", None, rom_addresses["Trainersanity_EVENT_BEAT_CINNABAR_GYM_TRAINER_3_ITEM"], EventFlag(371), inclusion=trainersanity),
     LocationData("Cinnabar Gym", "Super Nerd 3", None, rom_addresses["Trainersanity_EVENT_BEAT_CINNABAR_GYM_TRAINER_4_ITEM"], EventFlag(370), inclusion=trainersanity),
-    LocationData("Cinnabar Gym", "Super Nerd 4", None, rom_addresses["Trainersanity_EVENT_BEAT_CINNABAR_GYM_TRAINER_5_ITEM"], EventFlag(369), inclusion=trainersanity),
-    LocationData("Cinnabar Gym", "Super Nerd 5", None, rom_addresses["Trainersanity_EVENT_BEAT_CINNABAR_GYM_TRAINER_6_ITEM"], EventFlag(368), inclusion=trainersanity),
+    LocationData("Cinnabar Gym", "Burglar 3", None, rom_addresses["Trainersanity_EVENT_BEAT_CINNABAR_GYM_TRAINER_5_ITEM"], EventFlag(369), inclusion=trainersanity),
+    LocationData("Cinnabar Gym", "Super Nerd 4", None, rom_addresses["Trainersanity_EVENT_BEAT_CINNABAR_GYM_TRAINER_6_ITEM"], EventFlag(368), inclusion=trainersanity),
 
     LocationData("Celadon Prize Corner", "Item Prize 1", "TM23 Dragon Rage", rom_addresses["Prize_Item_A"], EventFlag(0x69a), inclusion=prizesanity),
     LocationData("Celadon Prize Corner", "Item Prize 2", "TM15 Hyper Beam", rom_addresses["Prize_Item_B"], EventFlag(0x69B), inclusion=prizesanity),

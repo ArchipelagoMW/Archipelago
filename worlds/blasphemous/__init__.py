@@ -1,9 +1,9 @@
 from typing import Dict, List, Set, Any
 from collections import Counter
-from BaseClasses import Region, Location, Item, Tutorial, ItemClassification
+from BaseClasses import Region, Location, Item, Tutorial, ItemClassification, CollectionState
 from Options import OptionError
 from worlds.AutoWorld import World, WebWorld
-from .Items import base_id, item_table, group_table, tears_list, reliquary_set
+from .Items import base_id, item_table, group_table, tears_list, reliquary_set, group_table_reverse
 from .Locations import location_names
 from .Rules import BlasRules
 from worlds.generic.Rules import set_rule
@@ -67,7 +67,8 @@ class BlasphemousWorld(World):
 
     def generate_early(self):
         if not self.options.starting_location.randomized:
-            if self.options.starting_location == "mourning_havoc" and self.options.difficulty < 2:
+            if (self.options.starting_location == "knot_of_words" or self.options.starting_location == "rooftops" \
+                or self.options.starting_location == "mourning_havoc") and self.options.difficulty < 2:
                 raise OptionError(f"[Blasphemous - '{self.player_name}'] "
                                 f"{self.options.starting_location} cannot be chosen if Difficulty is lower than Hard.")
 
@@ -83,6 +84,8 @@ class BlasphemousWorld(World):
             locations: List[int] = [ 0, 1, 2, 3, 4, 5, 6 ]
 
             if self.options.difficulty < 2:
+                locations.remove(4)
+                locations.remove(5)
                 locations.remove(6)
 
             if self.options.dash_shuffle:
@@ -102,6 +105,9 @@ class BlasphemousWorld(World):
 
         if not self.options.wall_climb_shuffle:
             self.multiworld.push_precollected(self.create_item("Wall Climb Ability"))
+
+        if self.options.thorn_shuffle == "local_only":
+            self.options.local_items.value.add("Thorn Upgrade")
 
         if not self.options.boots_of_pleading:
             self.disabled_locations.append("RE401")
@@ -200,11 +206,7 @@ class BlasphemousWorld(World):
 
         if not self.options.skill_randomizer:
             self.place_items_from_dict(skill_dict)
-
-        if self.options.thorn_shuffle == "local_only":
-            self.options.local_items.value.add("Thorn Upgrade")
         
-
     def place_items_from_set(self, location_set: Set[str], name: str):
         for loc in location_set:
             self.get_location(loc).place_locked_item(self.create_item(name))
@@ -214,6 +216,27 @@ class BlasphemousWorld(World):
         for loc, item in option_dict.items():
             self.get_location(loc).place_locked_item(self.create_item(item))
 
+    def collect(self, state: CollectionState, item: Item) -> bool:
+        changed = super().collect(state, item)
+        if changed:
+            name = item.name
+            if name in group_table_reverse and state.count(name, self.player) == 1:
+                # Count was 0 before super().collect().
+                group_name = group_table_reverse[name]
+                # Increase unique count for items in this group.
+                state.prog_items[self.player][group_name] += 1
+        return changed
+
+    def remove(self, state: CollectionState, item: Item) -> bool:
+        changed = super().remove(state, item)
+        if changed:
+            name = item.name
+            if name in group_table_reverse and state.count(name, self.player) == 0:
+                # Count was 1 before super().remove().
+                group_name = group_table_reverse[name]
+                # Decrease unique count for items in this group.
+                state.prog_items[self.player][group_name] -= 1
+        return changed
 
     def create_regions(self) -> None:
         multiworld = self.multiworld

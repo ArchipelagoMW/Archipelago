@@ -10,7 +10,7 @@ from BaseClasses import CollectionState
 from worlds.generic.Rules import CollectionRule, set_rule
 
 from .data import static_logic as static_witness_logic
-from .data.utils import WitnessRule
+from .data.definition_classes import WitnessRule
 from .player_logic import WitnessPlayerLogic
 
 if TYPE_CHECKING:
@@ -196,15 +196,14 @@ def _has_item(item: str, world: "WitnessWorld",
     if item == "Entity Hunt":
         # Right now, panel hunt is the only type of entity hunt. This may need to be changed later
         return _can_do_panel_hunt(world)
+    if "Eggs" in item:
+        return SimpleItemRepresentation("Egg", int(item.split(" ")[0]))
     if item == "PP2 Weirdness":
         return lambda state: _can_do_expert_pp2(state, world)
     if item == "Theater to Tunnels":
         return lambda state: _can_do_theater_to_tunnels(state, world)
 
-    actual_item = static_witness_logic.get_parent_progressive_item(item)
-    needed_amount = player_logic.PARENT_ITEM_COUNT_PER_BASE_ITEM[item]
-
-    simple_rule: SimpleItemRepresentation = SimpleItemRepresentation(actual_item, needed_amount)
+    simple_rule: SimpleItemRepresentation = SimpleItemRepresentation(item, 1)
     return simple_rule
 
 
@@ -212,6 +211,7 @@ def optimize_requirement_option(requirement_option: List[Union[CollectionRule, S
         -> List[Union[CollectionRule, SimpleItemRepresentation]]:
     """
     This optimises out a requirement like [("Progressive Dots": 1), ("Progressive Dots": 2)] to only the "2" version.
+    It is unclear how much this does after the recent rework the progressive items, but there is no reason to remove it.
     """
 
     direct_items = [rule for rule in requirement_option if isinstance(rule, SimpleItemRepresentation)]
@@ -229,11 +229,14 @@ def optimize_requirement_option(requirement_option: List[Union[CollectionRule, S
 
 
 def convert_requirement_option(requirement: List[Union[CollectionRule, SimpleItemRepresentation]],
-                               player: int) -> List[CollectionRule]:
+                               world: "WitnessWorld") -> List[CollectionRule]:
     """
     Converts a list of CollectionRules and SimpleItemRepresentations to just a list of CollectionRules.
     If the list is ONLY SimpleItemRepresentations, we can just return a CollectionRule based on state.has_all_counts()
     """
+
+    player_logic = world.player_logic
+    player = world.player
 
     collection_rules = [rule for rule in requirement if not isinstance(rule, SimpleItemRepresentation)]
     item_rules = [rule for rule in requirement if isinstance(rule, SimpleItemRepresentation)]
@@ -249,7 +252,7 @@ def convert_requirement_option(requirement: List[Union[CollectionRule, SimpleIte
         # Sort the list by which item you are least likely to have (E.g. last stage of progressive item chains)
         sorted_item_list = sorted(
             item_counts.keys(),
-            key=lambda item_name: item_counts[item_name] if ("Progressive" in item_name) else 1.5,
+            key=lambda item_name: player_logic.PARENT_ITEM_COUNT_PER_BASE_ITEM.get(item_name, 1.5),
             reverse=True
             # 1.5 because you are less likely to have a single stage item than one copy of a 2-stage chain
             # I did some testing and every part of this genuinely gives a tiiiiny performance boost over not having it!
@@ -270,8 +273,6 @@ def _meets_item_requirements(requirements: WitnessRule, world: "WitnessWorld") -
     """
     Converts a WitnessRule into a CollectionRule.
     """
-    player = world.player
-
     if requirements == frozenset({frozenset()}):
         return None
 
@@ -282,7 +283,7 @@ def _meets_item_requirements(requirements: WitnessRule, world: "WitnessWorld") -
 
     optimized_rule_conversion = [optimize_requirement_option(sublist) for sublist in rule_conversion]
 
-    fully_converted_rules = [convert_requirement_option(sublist, player) for sublist in optimized_rule_conversion]
+    fully_converted_rules = [convert_requirement_option(sublist, world) for sublist in optimized_rule_conversion]
 
     if len(fully_converted_rules) == 1:
         if len(fully_converted_rules[0]) == 1:
@@ -303,6 +304,11 @@ def make_lambda(entity_hex: str, world: "WitnessWorld") -> Optional[CollectionRu
     return _meets_item_requirements(entity_req, world)
 
 
+def make_region_lambda(region_name: str, world: "WitnessWorld") -> CollectionRule:
+    region = world.get_region(region_name)
+    return lambda state: region.can_reach(state)
+
+
 def set_rules(world: "WitnessWorld") -> None:
     """
     Sets all rules for all locations
@@ -312,8 +318,12 @@ def set_rules(world: "WitnessWorld") -> None:
         real_location = location
 
         if location in world.player_locations.EVENT_LOCATION_TABLE:
-            entity_hex = world.player_logic.EVENT_ITEM_PAIRS[location][1]
-            real_location = static_witness_logic.ENTITIES_BY_HEX[entity_hex]["checkName"]
+            entity_hex_or_region_name = world.player_logic.EVENT_ITEM_PAIRS[location][1]
+            if entity_hex_or_region_name in static_witness_logic.ALL_REGIONS_BY_NAME:
+                set_rule(world.get_location(location), make_region_lambda(entity_hex_or_region_name, world))
+                continue
+
+            real_location = static_witness_logic.ENTITIES_BY_HEX[entity_hex_or_region_name]["checkName"]
 
         associated_entity = world.player_logic.REFERENCE_LOGIC.ENTITIES_BY_NAME[real_location]
         entity_hex = associated_entity["entity_hex"]

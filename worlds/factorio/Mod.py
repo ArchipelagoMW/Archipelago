@@ -23,7 +23,6 @@ template_env: Optional[jinja2.Environment] = None
 
 data_template: Optional[jinja2.Template] = None
 data_final_template: Optional[jinja2.Template] = None
-locale_template: Optional[jinja2.Template] = None
 control_template: Optional[jinja2.Template] = None
 settings_template: Optional[jinja2.Template] = None
 
@@ -37,8 +36,8 @@ base_info = {
     "description": "Integration client for the Archipelago Randomizer",
     "factorio_version": "2.0",
     "dependencies": [
-        "base >= 2.0.15",
-        "? quality >= 2.0.15",
+        "base >= 2.0.28",
+        "? quality >= 2.0.28",
         "! space-age",
         "? science-not-invited",
         "? factory-levels"
@@ -63,10 +62,11 @@ recipe_time_ranges = {
 }
 
 
-class FactorioModFile(worlds.Files.APContainer):
+class FactorioModFile(worlds.Files.APPlayerContainer):
     game = "Factorio"
     compression_method = zipfile.ZIP_DEFLATED  # Factorio can't load LZMA archives
     writing_tasks: List[Callable[[], Tuple[str, Union[str, bytes]]]]
+    patch_file_ending = ".zip"
 
     def __init__(self, *args: Any, **kwargs: Any):
         super().__init__(*args, **kwargs)
@@ -74,13 +74,6 @@ class FactorioModFile(worlds.Files.APContainer):
 
     def write_contents(self, opened_zipfile: zipfile.ZipFile):
         # directory containing Factorio mod has to come first, or Factorio won't recognize this file as a mod.
-        mod_dir = self.path[:-4]  # cut off .zip
-        for root, dirs, files in os.walk(mod_dir):
-            for file in files:
-                filename = os.path.join(root, file)
-                opened_zipfile.write(filename,
-                                     os.path.relpath(filename,
-                                                     os.path.join(mod_dir, '..')))
         for task in self.writing_tasks:
             target, content = task()
             opened_zipfile.writestr(target, content)
@@ -93,7 +86,7 @@ def generate_mod(world: "Factorio", output_directory: str):
     multiworld = world.multiworld
     random = world.random
 
-    global data_final_template, locale_template, control_template, data_template, settings_template
+    global data_final_template, control_template, data_template, settings_template
     with template_load_lock:
         if not data_final_template:
             def load_template(name: str):
@@ -106,12 +99,11 @@ def generate_mod(world: "Factorio", output_directory: str):
 
             data_template = template_env.get_template("data.lua")
             data_final_template = template_env.get_template("data-final-fixes.lua")
-            locale_template = template_env.get_template(r"locale/en/locale.cfg")
             control_template = template_env.get_template("control.lua")
             settings_template = template_env.get_template("settings.lua")
     # get data for templates
     locations = [(location, location.item)
-                 for location in world.science_locations]
+                 for location in world.science_locations + world.craftsanity_locations]
     mod_name = f"AP-{multiworld.seed_name}-P{player}-{multiworld.get_file_safe_player_name(player)}"
     versioned_mod_name = mod_name + "_" + Utils.__version__
 
@@ -194,9 +186,7 @@ def generate_mod(world: "Factorio", output_directory: str):
                                       control_template.render(**template_data)))
     mod.writing_tasks.append(lambda: (versioned_mod_name + "/settings.lua",
                                       settings_template.render(**template_data)))
-    mod.writing_tasks.append(lambda: (versioned_mod_name + "/locale/en/locale.cfg",
-                                      locale_template.render(**template_data)))
-
+    
     info = base_info.copy()
     info["name"] = mod_name
     mod.writing_tasks.append(lambda: (versioned_mod_name + "/info.json",

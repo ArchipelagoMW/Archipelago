@@ -19,7 +19,11 @@ preventing them from being used until they are unlocked.<br>
 
 Entrances can also be randomized, shuffling the connections between every door, teleporter, etc. in the game.
 
-Enemy randomization and other options are also available and can be turned on in the client mod.
+Ladders, fuses, and bells can additionally be shuffled to add further layers of progression to the randomizer.
+
+Grass and breakable objects can also be turned into locations for extra checks.
+
+Enemy randomization and other features are also available within the client mod.
 
 ## What is the goal of TUNIC when randomized?
 The standard goal is the same as the vanilla game. Find the three hexagon keys, then Take Your
@@ -44,11 +48,11 @@ a question mark symbol on it. Additionally, non-TUNIC items are color-coded by c
 ## Is there a tracker pack?
 There is a [tracker pack](https://github.com/SapphireSapphic/TunicTracker/releases/latest). It is compatible with both Poptracker and Emotracker. Using Poptracker, it will automatically track checked locations and important items received. It can also automatically tab between maps as you traverse the world. This tracker was originally created by SapphireSapphic and ScoutJD, and has been extensively updated by Br00ty.
 
-There is also a [standalone item tracker](https://github.com/radicoon/tunic-rando-tracker/releases/latest), which tracks what items you have received. It is great for adding an item overlay to streaming setups. This item tracker was created by Radicoon.
+There is also a [standalone item tracker](https://github.com/radicoon/tunic-rando-tracker/releases/latest), which tracks what items you have received. It is great for adding an item overlay to streaming setups. This item tracker was created by RadRingtail.
 
-There is an [entrance tracker](https://scipiowright.gitlab.io/tunic-tracker/) for the entrance randomizer. This is a manual tracker that runs in your browser. This tracker was created by ScipioWright, and is a fork of the Pokémon Tracker by [Sergi "Sekii" Santana](https://gitlab.com/Sekii/pokemon-tracker).
+There is an [entrance tracker](https://scipiowright.gitlab.io/tunic-tracker/) for the entrance randomizer that runs in your browser and supports auto-tracking. This tracker was created by ScipioWright, and is a fork of the Pokémon Tracker by [Sergi "Sekii" Santana](https://gitlab.com/Sekii/pokemon-tracker).
 
-You can also use the Universal Tracker (by Faris and qwint) to find a complete list of what checks are in logic with your current items. You can find it on the Archipelago Discord, in its post in the future-game-design channel. This tracker is an extension of the regular Archipelago Text Client.
+You can also use [Universal Tracker](https://github.com/FarisTheAncient/Archipelago/releases/latest) (by Faris and qwint) to find a complete list of what checks are in logic with your current items. You can find it on the Archipelago Discord, in its post in the future-game-design channel. This tracker is an extension of the regular Archipelago Text Client.
 
 ## What should I know regarding logic?
 In general:
@@ -83,11 +87,13 @@ Notes:
 - The Entrance Randomizer option must be enabled for it to work.
 - The `direction` field is not supported. Connections are always coupled.
 - For a list of entrance names, check `er_data.py` in the TUNIC world folder or generate a game with the Entrance Randomizer option enabled and check the spoiler log.
-- There is no limit to the number of Shops you can plando.
+- You can plando up to 500 additional shops in Decoupled. You should not do this.
 
 See the [Archipelago Plando Guide](../../../tutorial/Archipelago/plando/en) for more information on Plando and Connection Plando.
 
 ## Is there anything else I should know?
-You can go to [The TUNIC Randomizer Website](https://rando.tunic.run/) for a list of randomizer features as well as some helpful tips.
-You can use the Fairy Seeking Spell (ULU RDR) to locate the nearest unchecked location.
-You can use the Entrance Seeking Spell (RDR ULU) to locate the nearest unused entrance.
+- You can go to [The TUNIC Randomizer Website](https://rando.tunic.run/) for a list of randomizer features as well as some helpful tips.
+- You can use the Fairy Seeking Spell (ULU RDR) to locate the nearest unchecked location.
+- You can use the Entrance Seeking Spell (RDR ULU) to locate the nearest unused entrance.
+- Death Link can be toggled in game, and it can be set to receive traps instead of deaths.
+- Trap Link can be toggled in-game as well, which makes it so other players with Trap Link enabled will share the effects of traps with you, and vice versa. Trap Link functions cross-game, but only with other games that have Trap Link implemented, and only some traps can be shared, depending on the game.

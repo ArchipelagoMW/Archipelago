@@ -4,14 +4,17 @@ import random
 
 
 class ChoiceIsRandom(Choice):
-    randomized: bool = False
+    randomized: bool
+
+    def __init__(self, value: int, randomized: bool = False):
+        super().__init__(value)
+        self.randomized = randomized
 
     @classmethod
     def from_text(cls, text: str) -> Choice:
         text = text.lower()
         if text == "random":
-            cls.randomized = True
-            return cls(random.choice(list(cls.name_lookup)))
+            return cls(random.choice(list(cls.name_lookup)), True)
         for option_name, value in cls.options.items():
             if option_name == text:
                 return cls(value)
@@ -204,11 +207,7 @@ class EnemyScaling(DefaultOnToggle):
 
 
 class BlasphemousDeathLink(DeathLink):
-    """
-    When you die, everyone dies. The reverse is also true.
-
-    Note that Guilt Fragments will not appear when killed by Death Link.
-    """
+    __doc__ = DeathLink.__doc__ + "\n\n    Note that Guilt Fragments will not appear when killed by death link."
 
 
 @dataclass

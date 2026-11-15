@@ -18,7 +18,7 @@ if __name__ == "__main__":
         for entity_id, entity_object in static_witness_logic.ENTITIES_BY_HEX.items():
             location_id = entity_object["id"]
 
-            area = entity_object["area"]["name"]
+            area = entity_object["area"].name
             area_to_entity_ids[area].append(entity_id)
 
             if location_id is None:
@@ -40,6 +40,15 @@ if __name__ == "__main__":
             "\n".join(
                 '\t{"' + area + '", { ' + ", ".join(entity_ids) + " }},"
                 for area, entity_ids in area_to_entity_ids.items()
+            )
+        )
+        datafile.write("\n};\n\n")
+
+        datafile.write("inline std::map<int, std::string> entityToName = {")
+        datafile.write(
+            "\n".join(
+                "\t{ " + entity_hex + ', "' + entity_object["checkName"] + '" },'
+                for entity_hex, entity_object in static_witness_logic.ENTITIES_BY_HEX.items()
             )
         )
         datafile.write("\n};\n\n")

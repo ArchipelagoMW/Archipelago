@@ -1,10 +1,10 @@
-{% from "macros.lua" import dict_to_lua %}
+{% from "macros.lua" import dict_to_lua, variable_to_lua %}
 -- this file gets written automatically by the Archipelago Randomizer and is in its raw form a Jinja2 Template
 require "lib"
 require "util"
 
 FREE_SAMPLES = {{ free_samples }}
-SLOT_NAME = "{{ slot_name }}"
+SLOT_NAME = {{ variable_to_lua(slot_name) }}
 SEED_NAME = "{{ seed_name }}"
 FREE_SAMPLE_BLACKLIST = {{ dict_to_lua(free_sample_blacklist) }}
 TRAP_EVO_FACTOR = {{ evolution_trap_increase }} / 100
@@ -134,6 +134,9 @@ end
 
 script.on_event(defines.events.on_player_changed_position, on_player_changed_position)
 {% endif %}
+-- Handle the pathfinding result of teleport traps
+script.on_event(defines.events.on_script_path_request_finished, handle_teleport_attempt)
+
 function count_energy_bridges()
     local count = 0
     for i, bridge in pairs(storage.energy_link_bridges) do
@@ -143,9 +146,11 @@ function count_energy_bridges()
     end
     return count
 end
+
 function get_energy_increment(bridge)
     return ENERGY_INCREMENT + (ENERGY_INCREMENT * 0.3 * bridge.quality.level)
 end
+
 function on_check_energy_link(event)
     --- assuming 1 MJ increment and 5MJ battery:
     --- first 2 MJ request fill, last 2 MJ push energy, middle 1 MJ does nothing
@@ -402,11 +407,12 @@ function update_player(index)
     --player.print(serpent.block(data['pending_samples']))
     local stack = {}
 
+    local quality = "{{ free_sample_quality_name }}"
     for name, count in pairs(samples) do
         stack.name = name
         stack.count = count
         if script.active_mods["quality"] then
-            stack.quality = "{{ free_sample_quality_name }}"
+            stack.quality = quality
         end
         if prototypes.item[name] then
             if character.can_insert(stack) then
@@ -415,12 +421,12 @@ function update_player(index)
                 sent = 0
             end
             if sent > 0 then
-                player.print("Received " .. sent .. "x [item=" .. name .. ",quality={{ free_sample_quality_name }}]")
+                player.print({"archipelago.receive-sample-item", sent, "[item=" .. name .. ",quality="..quality.."]"})
                 data.suppress_full_inventory_message = false
             end
             if sent ~= count then               -- Couldn't full send.
                 if not data.suppress_full_inventory_message then
-                    player.print("Additional items will be sent when inventory space is available.", {r=1, g=1, b=0.25})
+                    player.print({"archipelago.sample-inventory-full"}, {r=1, g=1, b=0.25})
                 end
                 data.suppress_full_inventory_message = true -- Avoid spamming them with repeated full inventory messages.
                 samples[name] = count - sent    -- Buffer the remaining items
@@ -429,7 +435,7 @@ function update_player(index)
                 samples[name] = nil             -- Remove from the list
             end
         else
-            player.print("Unable to receive " .. count .. "x [item=" .. name .. "] as this item does not exist.")
+            player.print({"archipelago.sample-error", count, name})
             samples[name] = nil
         end
     end
@@ -444,6 +450,10 @@ function update_player_event(event)
 end
 
 script.on_event(defines.events.on_player_main_inventory_changed, update_player_event)
+
+-- Update players when the cutscene is cancelled or finished.  (needed for skins_factored)
+script.on_event(defines.events.on_cutscene_cancelled, update_player_event)
+script.on_event(defines.events.on_cutscene_finished, update_player_event)
 
 function add_samples(force, name, count)
     local function add_to_table(t)
@@ -656,7 +666,7 @@ function spawn_entity(surface, force, name, x, y, radius, randomize, avoid_ores)
         end
     end
     if new_entity == nil then
-        force.print("Failed to place " .. args.name .. " in " .. serpent.line({x = x, y = y, radius = radius}))
+        force.print({"archipelago.fail-to-place", args.name, serpent.line({x = x, y = y, radius = radius})})
     end
 end
 
@@ -713,15 +723,15 @@ TRAP_TABLE = {
     game.surfaces["nauvis"].build_enemy_base(game.forces["player"].get_spawn_position(game.get_surface(1)), 25)
 end,
 ["Evolution Trap"] = function ()
-    game.forces["enemy"].evolution_factor = game.forces["enemy"].evolution_factor + (TRAP_EVO_FACTOR * (1 - game.forces["enemy"].evolution_factor))
-    game.print({"", "New evolution factor:", game.forces["enemy"].evolution_factor})
+    local new_factor = game.forces["enemy"].get_evolution_factor("nauvis") +
+        (TRAP_EVO_FACTOR * (1 - game.forces["enemy"].get_evolution_factor("nauvis")))
+    game.forces["enemy"].set_evolution_factor(new_factor, "nauvis")
+    game.print({"traps.new-evolution-factor", new_factor})
 end,
-["Teleport Trap"] = function ()
+["Teleport Trap"] = function()
     for _, player in ipairs(game.forces["player"].players) do
-        current_character = player.character
-        if current_character ~= nil then
-            current_character.teleport(current_character.surface.find_non_colliding_position(
-                current_character.prototype.name, random_offset_position(current_character.position, 1024), 0, 1))
+        if player.character then
+            attempt_teleport_player(player, 1)
         end
     end
 end,
@@ -744,6 +754,11 @@ end,
         fire_entity_at_entities("atomic-rocket", {cliffs[math.random(#cliffs)]}, 0.1)
     end
 end,
+["Inventory Spill Trap"] = function ()
+    for _, player in ipairs(game.forces["player"].players) do
+        spill_character_inventory(player.character)
+    end
+end,
 }
 
 commands.add_command("ap-get-technology", "Grant a technology, used by the Archipelago Client.", function(call)
@@ -763,10 +778,10 @@ commands.add_command("ap-get-technology", "Grant a technology, used by the Archi
     if index == nil then
         game.print("ap-get-technology is only to be used by the Archipelago Factorio Client")
         return
-    elseif index == -1 then -- for coop sync and restoring from an older savegame
+    elseif index == "-1" then -- for coop sync and restoring from an older savegame
         tech = force.technologies[item_name]
         if tech.researched ~= true then
-            game.print({"", "Received [technology=" .. tech.name .. "] as it is already checked."})
+            game.print({"archipelago.receive-ap-catchup", "[technology=" .. tech.name .. "]"})
             game.play_sound({path="utility/research_completed"})
             tech.researched = true
         end
@@ -778,7 +793,7 @@ commands.add_command("ap-get-technology", "Grant a technology, used by the Archi
             for _, item_name in ipairs(tech_stack) do
                 tech = force.technologies[item_name]
                 if tech.researched ~= true then
-                    game.print({"", "Received [technology=" .. tech.name .. "] from ", source})
+                    game.print({"archipelago.receive-ap-item", "[technology=" .. tech.name .. "]", source})
                     game.play_sound({path="utility/research_completed"})
                     tech.researched = true
                     return
@@ -790,7 +805,7 @@ commands.add_command("ap-get-technology", "Grant a technology, used by the Archi
         if tech ~= nil then
             storage.index_sync[index] = tech
             if tech.researched ~= true then
-                game.print({"", "Received [technology=" .. tech.name .. "] from ", source})
+                game.print({"archipelago.receive-ap-item", "[technology=" .. tech.name .. "]", source})
                 game.play_sound({path="utility/research_completed"})
                 tech.researched = true
             end
@@ -798,7 +813,7 @@ commands.add_command("ap-get-technology", "Grant a technology, used by the Archi
     elseif TRAP_TABLE[item_name] ~= nil then
         if storage.index_sync[index] ~= item_name then -- not yet received trap
             storage.index_sync[index] = item_name
-            game.print({"", "Received ", item_name, " from ", source})
+            game.print({"archipelago.receive-ap-item", item_name, source})
             TRAP_TABLE[item_name]()
         end
     else
@@ -828,7 +843,7 @@ commands.add_command("ap-deathlink", "Kill all players", function(call)
     local force = game.forces["player"]
     local source = call.parameter or "Archipelago"
     kill_players(force)
-    game.print("Death was granted by " .. source)
+    game.print({"archipelago.death-link",source})
 end)
 
 commands.add_command("ap-energylink", "Used by the Archipelago client to manage Energy Link", function(call)
@@ -843,6 +858,10 @@ end)
 
 commands.add_command("toggle-ap-send-filter", "Toggle filtering of item sends that get displayed in-game to only those that involve you.", function(call)
     log("Player command toggle-ap-send-filter") -- notifies client
+end)
+
+commands.add_command("toggle-ap-connection-change-filter", "Toggle filtering of players joining or parting", function(call)
+    log("Player command toggle-ap-connection-change-filter") -- notifies client
 end)
 
 commands.add_command("toggle-ap-chat", "Toggle sending of chat messages from players on the Factorio server to Archipelago.", function(call)

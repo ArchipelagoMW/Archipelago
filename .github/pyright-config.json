@@ -1,8 +1,27 @@
 {
   "include": [
-    "type_check.py",
+    "../BizHawkClient.py",
+    "../Patch.py",
+    "../rule_builder/cached_world.py",
+    "../rule_builder/field_resolvers.py",
+    "../rule_builder/options.py",
+    "../rule_builder/rules.py",
+    "../test/param.py",
+    "../test/general/test_groups.py",
+    "../test/general/test_helpers.py",
+    "../test/general/test_memory.py",
+    "../test/general/test_names.py",
+    "../test/general/test_rule_builder.py",
+    "../test/multiworld/__init__.py",
+    "../test/multiworld/test_multiworlds.py",
+    "../test/netutils/__init__.py",
+    "../test/programs/__init__.py",
+    "../test/programs/test_multi_server.py",
+    "../test/utils/__init__.py",
+    "../test/webhost/test_descriptions.py",
+    "../test/webhost/test_suuid.py",
     "../worlds/AutoSNIClient.py",
-    "../Patch.py"
+    "type_check.py"
   ],
 
   "exclude": [
@@ -16,7 +35,7 @@
   "reportMissingImports": true,
   "reportMissingTypeStubs": true,
 
-  "pythonVersion": "3.10",
+  "pythonVersion": "3.11",
   "pythonPlatform": "Windows",
 
   "executionEnvironments": [

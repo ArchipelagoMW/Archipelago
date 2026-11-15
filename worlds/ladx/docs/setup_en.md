@@ -12,8 +12,8 @@
 
 1. Download and install [Archipelago](<https://github.com/ArchipelagoMW/Archipelago/releases/latest>). **The installer 
    file is located in the assets section at the bottom of the version information.**
-2. The first time you do local generation or patch your game, you will be asked to locate your base ROM file.
-   This is your Links Awakening DX ROM file. This only needs to be done once..
+2. The first time you patch your game, you will be asked to locate your base ROM file.
+   This is your Links Awakening DX ROM file. This only needs to be done once.
 
 3. You should assign your emulator as your default program for launching ROM
    files.
@@ -73,9 +73,8 @@ You only have to do these steps once. Note, RetroArch 1.9.x will not work as it 
 1. Enter the RetroArch main menu screen.
 2. Go to Settings --> User Interface. Set "Show Advanced Settings" to ON.
 3. Go to Settings --> Network. Set "Network Commands" to ON. (It is found below Request Device 16.) Leave the default
-   Network Command Port at 55355.
-
-![Screenshot of Network Commands setting](/static/generated/docs/A%20Link%20to%20the%20Past/retroarch-network-commands-en.png)
+   Network Command Port at 55355. \
+   ![Screenshot of Network Commands setting](../../generic/docs/retroarch-network-commands-en.png)
 4. Go to Main Menu --> Online Updater --> Core Downloader. Scroll down and select "Nintendo - Gameboy / Color (SameBoy)".
 
 #### BizHawk 2.8 or newer (older versions untested)

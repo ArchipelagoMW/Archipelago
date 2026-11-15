@@ -1,15 +1,7 @@
 from functools import cached_property
-from typing import Union
 
 from Utils import cache_self1
 from .base_logic import BaseLogicMixin, BaseLogic
-from .farming_logic import FarmingLogicMixin
-from .has_logic import HasLogicMixin
-from .received_logic import ReceivedLogicMixin
-from .region_logic import RegionLogicMixin
-from .season_logic import SeasonLogicMixin
-from .time_logic import TimeLogicMixin
-from .tool_logic import ToolLogicMixin
 from ..data.harvest import ForagingSource, HarvestFruitTreeSource, HarvestCropSource
 from ..stardew_rule import StardewRule
 from ..strings.ap_names.community_upgrade_names import CommunityUpgrade
@@ -22,8 +14,7 @@ class HarvestingLogicMixin(BaseLogicMixin):
         self.harvesting = HarvestingLogic(*args, **kwargs)
 
 
-class HarvestingLogic(BaseLogic[Union[HarvestingLogicMixin, HasLogicMixin, ReceivedLogicMixin, RegionLogicMixin, SeasonLogicMixin, ToolLogicMixin,
-FarmingLogicMixin, TimeLogicMixin]]):
+class HarvestingLogic(BaseLogic):
 
     @cached_property
     def can_harvest_from_fruit_bats(self) -> StardewRule:
@@ -36,8 +27,14 @@ FarmingLogicMixin, TimeLogicMixin]]):
     @cache_self1
     def can_forage_from(self, source: ForagingSource) -> StardewRule:
         seasons_rule = self.logic.season.has_any(source.seasons)
-        regions_rule = self.logic.region.can_reach_any(source.regions)
-        return seasons_rule & regions_rule
+        if source.require_all_regions:
+            regions_rule = self.logic.region.can_reach_all(*source.regions)
+        else:
+            regions_rule = self.logic.region.can_reach_any(*source.regions)
+        if source.grind_months == 0:
+            return seasons_rule & regions_rule
+        else:
+            return seasons_rule & regions_rule & self.logic.time.has_lived_months(source.grind_months)
 
     @cache_self1
     def can_harvest_tree_from(self, source: HarvestFruitTreeSource) -> StardewRule:

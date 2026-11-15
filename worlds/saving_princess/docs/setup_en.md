@@ -135,7 +135,7 @@ Additionally, if you get an item while already having the max for that item (for
 It is likely that you do not have release or collect permissions, or that there is nothing to release or collect.
 Another option is that your connection was interrupted.
 
-If you would still like to use release or collect, refer to [this section of the server commands page](https://archipelago.gg/tutorial/Archipelago/commands/en#collect/release).
+If you would still like to use release or collect, refer to [this section of the server commands page](/tutorial/Archipelago/commands/en#collectrelease).
 
 You may use the in-game console to execute the commands, if your slot has permissions to do so.
 

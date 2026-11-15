@@ -16,7 +16,7 @@ Al usar BizHawk, esta guía solo es aplicable en los sistemas de Windows y Linux
 
 ## Software Opcional
 
-- [Tracker de mapa para Pokémon Red and Blue Archipelago](https://github.com/coveleski/rb_tracker/releases/latest), para usar con [PopTracker](https://github.com/black-sliver/PopTracker/releases)
+- [Tracker de mapa para Pokémon Red and Blue Archipelago](https://github.com/palex00/rb_tracker/releases/latest), para usar con [PopTracker](https://github.com/black-sliver/PopTracker/releases)
 
 
 ## Configurando BizHawk
@@ -77,7 +77,7 @@ Y los siguientes caracteres especiales (cada uno ocupa un carácter):
 ### Generar y parchar un juego
 
 1. Crea tu archivo de opciones (YAML).
-2. Sigue las instrucciones generales de Archipelago para [generar un juego](../../Archipelago/setup/en#generating-a-game).
+2. Sigue las instrucciones generales de Archipelago para [generar un juego](/tutorial/Archipelago/setup_en#generating-a-game).
 Haciendo esto se generará un archivo de salida. Tu parche tendrá la extensión de archivo `.apred` o `.apblue`.
 3. Abre `ArchipelagoLauncher.exe`
 4. Selecciona "Open Patch" en el lado izquierdo y selecciona tu parche.
@@ -114,7 +114,7 @@ presiona enter (si el servidor usa contraseña, escribe en el campo de texto inf
 
 Pokémon Red and Blue tiene un mapa completamente funcional que soporta seguimiento automático. 
 
-1. Descarga el [Tracker de mapa para Pokémon Red and Blue Archipelago](https://github.com/coveleski/rb_tracker/releases/latest) y [PopTracker](https://github.com/black-sliver/PopTracker/releases). 
+1. Descarga el [Tracker de mapa para Pokémon Red and Blue Archipelago](https://github.com/palex00/rb_tracker/releases/latest) y [PopTracker](https://github.com/black-sliver/PopTracker/releases). 
 2. Abre PopTracker, y carga el pack de Pokémon Red and Blue.
 3. Haz clic en el símbolo "AP" en la parte superior.
 4. Ingresa la dirección de AP, nombre del slot y contraseña (si es que hay).

@@ -2,7 +2,7 @@ from dataclasses import dataclass
 
 from schema import And, Schema
 
-from Options import Toggle, Choice, DefaultOnToggle, Range, PerGameCommonOptions, StartInventoryPool, OptionDict, \
+from Options import Toggle, Choice, DefaultOnToggle, Range, PerGameCommonOptions, StartInventoryPool, OptionCounter, \
     OptionGroup
 from .items import TRAP_ITEMS
 
@@ -222,14 +222,23 @@ class TrapPercentage(Range):
     default = 20
 
 
-class TrapWeights(OptionDict):
+class TrapWeights(OptionCounter):
     """Specify the distribution of traps that should be placed into the pool.
 
     If you don't want a specific type of trap, set the weight to zero.
     """
     display_name = "Trap Weights"
-    schema = Schema({trap_name: And(int, lambda n: n >= 0) for trap_name in TRAP_ITEMS})
+    valid_keys = TRAP_ITEMS
+    min = 0
     default = {trap_name: 1 for trap_name in TRAP_ITEMS}
+
+
+class SpeedBoostMode(Toggle):
+    """
+    If on, the player's default speed is halved, as if affected by a Slowness Trap. Speed Boosts are added to
+    the item pool, which temporarily return the player to normal speed. Slowness Traps are removed from the pool.
+    """
+    display_name = "Speed Boost Mode"
 
 
 class PuzzleSkipPercentage(Range):
@@ -260,6 +269,7 @@ lingo_option_groups = [
         Level2Requirement,
         TrapPercentage,
         TrapWeights,
+        SpeedBoostMode,
         PuzzleSkipPercentage,
     ])
 ]
@@ -287,6 +297,7 @@ class LingoOptions(PerGameCommonOptions):
     shuffle_postgame: ShufflePostgame
     trap_percentage: TrapPercentage
     trap_weights: TrapWeights
+    speed_boost_mode: SpeedBoostMode
     puzzle_skip_percentage: PuzzleSkipPercentage
     death_link: DeathLink
     start_inventory_from_pool: StartInventoryPool

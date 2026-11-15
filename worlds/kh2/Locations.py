@@ -982,7 +982,6 @@ popups_set = {
     LocationName.BaileySecretAnsemReport7,
     LocationName.BaseballCharm,
     LocationName.AnsemsStudyMasterForm,
-    LocationName.AnsemsStudySkillRecipe,
     LocationName.AnsemsStudySleepingLion,
     LocationName.FFFightsCureElement,
     LocationName.ThousandHeartlessSecretAnsemReport1,
@@ -1282,6 +1281,25 @@ exclusion_table = {
         LocationName.HadesCupTrophyParadoxCups,
         LocationName.MusicalOrichalcumPlus,
     ],
+    "HitlistCasual":          [
+        LocationName.FuturePete,
+        LocationName.BetwixtandBetweenBondofFlame,
+        LocationName.GrimReaper2,
+        LocationName.ThousandHeartless,
+        LocationName.WinnersProof,
+        LocationName.Experiment,
+        LocationName.Groundshaker,
+        LocationName.Hades,
+        LocationName.GenieJafar,
+        LocationName.Xaldin,
+        LocationName.StormRider,
+        LocationName.MansionBasementCorridorHiPotion,
+        LocationName.Xemnas1SecretAnsemReport13,
+        LocationName.XigbarSecretAnsemReport3,
+        LocationName.MCP,
+        LocationName.Lvl50,
+        LocationName.Lvl99
+    ],
     "Cups":          {
         LocationName.ProtectBeltPainandPanicCup,
         LocationName.SerenityGemPainandPanicCup,
@@ -1353,8 +1371,80 @@ exclusion_table = {
     }
 }
 
+FightLogicRegions = [
+    RegionName.ShanYu,
+    RegionName.AnsemRiku,
+    RegionName.StormRider,
+    RegionName.DataXigbar,
+    RegionName.TwinLords,
+    RegionName.GenieJafar,
+    RegionName.DataLexaeus,
+    RegionName.OldPete,
+    RegionName.FuturePete,
+    RegionName.Terra,
+    RegionName.DataMarluxia,
+    RegionName.PrMinute,
+    RegionName.Barbosa,
+    RegionName.GrimReaper1,
+    RegionName.GrimReaper2,
+    RegionName.DataLuxord,
+    RegionName.Cerberus,
+    RegionName.OlympusPete,
+    RegionName.Hydra,
+    RegionName.Hades,
+    RegionName.DataZexion,
+    RegionName.OcPainAndPanicCup,
+    RegionName.OcCerberusCup,
+    RegionName.Oc2TitanCup,
+    RegionName.Oc2GofCup,
+    RegionName.HadesCups,
+    RegionName.Thresholder,
+    RegionName.Beast,
+    RegionName.DarkThorn,
+    RegionName.Xaldin,
+    RegionName.DataXaldin,
+    RegionName.HostileProgram,
+    RegionName.Mcp,
+    RegionName.DataLarxene,
+    RegionName.PrisonKeeper,
+    RegionName.OogieBoogie,
+    RegionName.Experiment,
+    RegionName.DataVexen,
+    RegionName.Hb2Corridors,
+    RegionName.HBDemyx,
+    RegionName.ThousandHeartless,
+    RegionName.DataDemyx,
+    RegionName.Sephi,
+    RegionName.CorFirstFight,
+    RegionName.CorSecondFight,
+    RegionName.Transport,
+    RegionName.Scar,
+    RegionName.GroundShaker,
+    RegionName.DataSaix,
+    RegionName.TwilightThorn,
+    RegionName.Axel1,
+    RegionName.Axel2,
+    RegionName.DataRoxas,
+    RegionName.DataAxel,
+    RegionName.Roxas,
+    RegionName.Xigbar,
+    RegionName.Luxord,
+    RegionName.Saix,
+    RegionName.Xemnas,
+    RegionName.ArmoredXemnas,
+    RegionName.ArmoredXemnas2,
+    RegionName.FinalXemnas,
+    RegionName.DataXemnas
+]
+
+
 location_groups: typing.Dict[str, list]
 location_groups = {
     Region_Name: [loc for loc in Region_Locs if "Event" not in loc]
     for Region_Name, Region_Locs in KH2REGIONS.items() if Region_Locs and "Event" not in Region_Locs[0]
 }
+
+# This seems like the not-correct way to handle these location groups, but making these sets regions so the above works
+# causes not enough items to be generated for some reason.
+location_groups["Casual Bounties"] = exclusion_table["HitlistCasual"]
+location_groups["General Bounties"] = exclusion_table["Hitlist"]
