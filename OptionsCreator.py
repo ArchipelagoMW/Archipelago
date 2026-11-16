@@ -384,10 +384,11 @@ class OptionsCreator(ThemedApp):
     def create_free_text(self, option: typing.Type[FreeText] | typing.Type[TextChoice], name: str):
         text = VisualFreeText(option=option, name=name)
 
-        def set_value(instance):
-            self.options[name] = instance.text
+        def set_value(instance, value):
+            self.options[name] = value
 
-        text.bind(on_text_validate=set_value)
+        text.bind(text=set_value)
+        self.options[name] = option.default
         return text
 
     def create_choice(self, option: typing.Type[Choice], name: str):
@@ -617,21 +618,18 @@ class OptionsCreator(ThemedApp):
                                                                                            item=group_item:
                                                                                            self.tap_expansion_chevron(
                                                                                                item, x)),
-                                                                 md_bg_color=self.theme_cls.surfaceContainerLowestColor,
+                                                                 md_bg_color=self.theme_cls.surfaceVariantColor,
                                                                  theme_bg_color="Custom",
                                                                  on_release=lambda x, item=group_item:
                                                                  self.tap_expansion_chevron(item, x)))
                 group_content = MDExpansionPanelContent(orientation="vertical", theme_bg_color="Custom",
-                                                        md_bg_color=self.theme_cls.surfaceContainerLowestColor,
+                                                        md_bg_color=self.theme_cls.surfaceContainerColor,
                                                         padding=[dp(12), dp(100), dp(12), 0],
                                                         spacing=dp(3))
                 group_item.add_widget(group_header)
-                group_item.add_widget(group_content)
-                group_box = ScrollBox()
-                group_box.layout.orientation = "vertical"
-                group_box.layout.spacing = dp(3)
                 for name, option in options:
                     group_content.add_widget(self.create_option(option, name, cls))
+                group_item.add_widget(group_content) # must be added *after* the contents have been added
                 expansion_box.layout.add_widget(group_item)
             self.option_layout.add_widget(expansion_box)
         self.game_label.text = f"Game: {self.current_game}"

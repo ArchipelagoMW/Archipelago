@@ -88,16 +88,19 @@ class SatisfactoryWorld(World):
             self.items.build_item_pool(self.random, precollected_items, number_of_locations)
 
     def set_rules(self) -> None:
-        resource_sink_goal: bool = "AWESOME Sink Points (total)" in self.options.goal_selection \
-                                   or "AWESOME Sink Points (per minute)" in self.options.goal_selection
-
         required_parts = set(self.game_logic.space_elevator_phases[self.options.final_elevator_phase.value - 1].keys())
+        required_buildings = set()
 
-        if resource_sink_goal:
-            required_parts.union(self.game_logic.buildings["AWESOME Sink"].inputs)
+        if "Space Elevator Phase" in self.options.goal_selection:
+            required_buildings.add("Space Elevator")
+
+        if "AWESOME Sink Points (total)" in self.options.goal_selection \
+                or "AWESOME Sink Points (per minute)" in self.options.goal_selection:
+            required_buildings.add("AWESOME Sink")
 
         self.multiworld.completion_condition[self.player] = \
-            lambda state: self.state_logic.can_produce_all(state, required_parts)
+            lambda state: self.state_logic.can_produce_all(state, required_parts) \
+                and self.state_logic.can_build_all(state, required_buildings)
 
     def collect(self, state: CollectionState, item: Item) -> bool:
         change = super().collect(state, item)
@@ -244,14 +247,14 @@ class SatisfactoryWorld(World):
                 or self.options.awesome_logic_placement.value == Placement.starting_inventory:
             locations_visible_from_start.update(range(1338700, 1338709))  # ids of shop locations 1 to 10
 
-            location_names_with_useful_items: Iterable[str] = [
-                location.name
-                for location in self.get_locations()
-                if location.address in locations_visible_from_start and location.item \
-                        and location.item.flags & (ItemClassification.progression | ItemClassification.useful) > 0
-            ]
+        location_names_with_useful_items: Iterable[str] = [
+            location.name
+            for location in self.get_locations()
+            if location.address in locations_visible_from_start and location.item \
+                    and location.item.flags & (ItemClassification.progression | ItemClassification.useful) > 0
+        ]
 
-            self.options.start_location_hints.value.update(location_names_with_useful_items)
+        self.options.start_location_hints.value.update(location_names_with_useful_items)
 
     def push_precollected_by_name(self, item_name: str) -> None:
         item = self.create_item(item_name)

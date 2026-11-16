@@ -218,12 +218,12 @@ def dice_simulation_state_change(state, player, frags_per_dice, frags_per_roll, 
     return state.prog_items[player]["maximum_achievable_score"]
 
 
-def set_yacht_rules(world: MultiWorld, player: int, frags_per_dice, frags_per_roll, allowed_categories, difficulty):
+def set_yacht_rules(multiworld: MultiWorld, player: int, frags_per_dice, frags_per_roll, allowed_categories, difficulty):
     """
     Sets rules on reaching scores
     """
 
-    for location in world.get_locations(player):
+    for location in multiworld.get_locations(player):
         set_rule(
             location,
             lambda state, curscore=location.yacht_dice_score, player=player: dice_simulation_state_change(
@@ -233,8 +233,8 @@ def set_yacht_rules(world: MultiWorld, player: int, frags_per_dice, frags_per_ro
         )
 
 
-def set_yacht_completion_rules(world: MultiWorld, player: int):
+def set_yacht_completion_rules(multiworld: MultiWorld, player: int):
     """
     Sets rules on completion condition
     """
-    world.completion_condition[player] = lambda state: state.has("Victory", player)
+    multiworld.completion_condition[player] = lambda state: state.has("Victory", player)

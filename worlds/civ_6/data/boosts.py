@@ -165,9 +165,9 @@ boosts: List[CivVIBoostData] = [
         "BOOST_TECH_CASTLES",
         "ERA_MEDIEVAL",
         [
-            "CIVIC_SUFFRAGE",
-            "CIVIC_TOTALITARIANISM",
-            "CIVIC_CLASS_STRUGGLE",
+            "CIVIC_EXPLORATION",
+            "CIVIC_DIVINE_RIGHT",
+            "CIVIC_REFORMED_CHURCH",
         ],
         1,
         "DEFAULT",
