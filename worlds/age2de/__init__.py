@@ -1,5 +1,11 @@
 # world/age2DE/__init__.py
 
+import sys
+
+from . import ordered_set
+
+sys.modules.setdefault("ordered_set", ordered_set)
+
 import functools
 import logging
 from Options import OptionError
