@@ -160,6 +160,8 @@ cdef class LocationStore:
         for sender, locations in sorted(locations_dict.items()):
             self.sender_index[sender].start = i
             self.sender_index[sender].count = 0
+            if not count:
+                continue  # scan-build doesn't see that the following loop can never be entered if count is 0
             # Sorting locations here makes it possible to write a faster lookup without an additional index.
             for location, data in sorted(locations.items()):
                 self.entries[i].sender = sender

@@ -55,7 +55,7 @@ class Version(typing.NamedTuple):
         return ".".join(str(item) for item in self)
 
 
-__version__ = "0.6.8"
+__version__ = "0.6.9"
 version_tuple = tuplize_version(__version__)
 
 is_linux = sys.platform.startswith("linux")
@@ -1150,7 +1150,7 @@ def visualize_regions(
 
     Example usage in World code:
     from Utils import visualize_regions
-    state = self.multiworld.get_all_state(False)
+    state = self.multiworld.get_all_state()
     state.update_reachable_regions(self.player)
     visualize_regions(self.get_region("Menu"), "my_world.puml", show_entrance_names=True,
                       regions_to_highlight=state.reachable_regions[self.player])

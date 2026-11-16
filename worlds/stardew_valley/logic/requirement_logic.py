@@ -191,7 +191,7 @@ class RequirementLogic(BaseLogic):
 
     @meet_requirement.register
     def _(self, requirement: MonsterKillRequirement):
-        return self.logic.monster.can_kill_any(requirement.monsters, math.log10(requirement.amount) // 1)
+        return self.logic.monster.can_kill_any(requirement.monsters, math.floor(math.log10(requirement.amount)))
 
     @meet_requirement.register
     def _(self, requirement: CatalogueRequirement):

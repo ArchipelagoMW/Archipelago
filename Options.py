@@ -254,11 +254,17 @@ class FreeText(Option[str]):
 
     @classmethod
     def from_text(cls, text: str) -> FreeText:
+        cls.validate_text(text)
         return cls(text)
 
     @classmethod
     def from_any(cls, data: typing.Any) -> FreeText:
         return cls.from_text(str(data))
+
+    @classmethod
+    def validate_text(cls, text: str) -> None:
+        """Override to validate text inputs during yaml processing"""
+        return
 
     @classmethod
     def get_option_name(cls, value: str) -> str:
@@ -564,7 +570,8 @@ class Choice(NumericOption):
 
 
 class TextChoice(Choice):
-    """Allows custom string input and offers choices. Choices will resolve to int and text will resolve to string"""
+    """Allows custom string input and offers choices. Choices will resolve to int and text will resolve to string.
+    Custom text inputs should be validated by overriding 'validate_text' and raising if invalid."""
     value: str | int
 
     def __init__(self, value: str | int):
@@ -585,7 +592,13 @@ class TextChoice(Choice):
         for option_name, value in cls.options.items():
             if option_name.lower() == text.lower():
                 return cls(value)
+        cls.validate_text(text)
         return cls(text)
+
+    @classmethod
+    def validate_text(cls, value: str) -> None:
+        """Override to validate text during yaml processing"""
+        return
 
     @classmethod
     def get_option_name(cls, value: str | int) -> str:
