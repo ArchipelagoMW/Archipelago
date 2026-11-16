@@ -5,8 +5,8 @@ from functools import partial
 
 from typing import Callable
 
-import PickleRPC
-import RPCTypes
+from rpc import PickleRPC
+from rpc import RPCTypes
 import Utils
 import MultiServer as ms
 import NetUtils

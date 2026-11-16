@@ -2881,7 +2881,7 @@ async def main(args: argparse.Namespace):
     await ctx.server
     if args.rpc_sock:
         import pathlib
-        import RPC  # deferred, RPC imports MultiServer
+        from rpc import RPC  # deferred, RPC imports MultiServer
         pathlib.Path(args.rpc_sock).unlink(missing_ok=True)
         await asyncio.start_unix_server(functools.partial(RPC.handle_session, ctx), path=args.rpc_sock)
     console_task = asyncio.create_task(console(ctx))

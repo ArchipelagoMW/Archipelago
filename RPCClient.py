@@ -9,7 +9,7 @@ ModuleUpdate.requirements_files.add("requirements.txt")
 ModuleUpdate.update()
 
 import aioconsole
-import PickleRPC
+from rpc import PickleRPC
 
 
 async def ping(session: PickleRPC.Session, _: argparse.Namespace):

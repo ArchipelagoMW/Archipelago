@@ -11,7 +11,7 @@ from collections.abc import Coroutine
 from typing import NewType, Optional, Any, Callable, TypeVar, Generic, NoReturn
 from typing_extensions import Protocol
 
-import Transport
+from rpc import Transport
 
 RequestId = NewType("RequestId", int)
 
