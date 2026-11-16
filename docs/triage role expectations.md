@@ -33,7 +33,7 @@ on issues or pull requests, just the same as any other GitHub user contributing 
 
 ## Labeling
 
-As of the time of writing this document, there are 15 distinct labels that can be applied to issues and pull requests.
+As of the time of updating this document, there are 23 distinct labels that can be applied to issues and pull requests.
 
 ### Affects
 
@@ -98,3 +98,30 @@ and tackle.
 * `meta: wontfix` is to be applied for any issues/PRs that are opened that will not be actioned because it's out of 
 scope or determined to not be an issue. 
     * This should be reserved for use by a world's code owner(s) on their relevant world or by core maintainers.
+
+### Waiting-On
+
+These labels notate the current review status of a given pull request. More than one of these labels can be used on a pull
+request, if relevant, but at least one of these labels should be applied to every open non-draft pull request. These are not
+relevant to issues and should not be applied to them.
+
+* `waiting-on: author` is to be applied to any PRs that cannot be merged and/or reviewed meaningfully without the PR author
+  updating the code and/or replying to feedback.
+    * These should include a comment describing what is required of the author before the label can be removed.
+    * If the requirement is merge conflicts they should include a comment tagging the author to inform them of the conflicts.
+* `waiting-on: core-review` is to be applied to any PRs that have cleared other review requirements.
+* `waiting-on: other` is to be applied to any PRs that have some other blocker in the way of their progress.
+    * These should include a comment describing what is blocking the PR.
+* `waiting-on: peer-review` is to be applied to any PRs that have not been reviewed by members of the community.
+    * The standard threshold is two peer reviews can move a PR through peer review status, but Triage users may use their
+      discresion. For example a smaller PR may move forward with only one peer review.
+* `waiting-on: world-maintainer` is to be applied to any PRs that affect a world's code that are not from that world's
+  maintainer before they have an approval from the maintainer.
+
+
+### Other
+
+These labels are created by automatic tooling and are not used.
+
+* `dependencies`
+* `python`
