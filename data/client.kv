@@ -17,7 +17,7 @@
     # KivyMD theming parameters
     theme_style: "Dark" # Light/Dark
     primary_palette: "Lightsteelblue" # Many options
-    dynamic_scheme_name: "VIBRANT"
+    dynamic_scheme_name: "EXPRESSIVE"
     dynamic_scheme_contrast: 0.0
 <MDLabel>:
     color: self.theme_cls.primaryColor
@@ -50,7 +50,7 @@
     text_color: 1, 1, 1, 1
     canvas.before:
         Color:
-            rgba: (self.theme_cls.primaryColor[0], self.theme_cls.primaryColor[1], self.theme_cls.primaryColor[2], .3) if self.selected else self.theme_cls.surfaceContainerLowestColor
+            rgba: (self.theme_cls.primaryColor[0], self.theme_cls.primaryColor[1], self.theme_cls.primaryColor[2], .3) if self.selected else self.theme_cls.surfaceContainerLowColor
         Rectangle:
             size: self.size
             pos: self.pos
@@ -86,7 +86,6 @@
     scroll_y: 0
     scroll_type: ["content", "bars"]
     bar_width: dp(12)
-    effect_cls: "ScrollEffect"
     SelectableRecycleBoxLayout:
         default_size: None, dp(20)
         default_size_hint: 1, None
@@ -156,7 +155,6 @@
     scroll_y: self.height
     scroll_type: ["content", "bars"]
     bar_width: dp(12)
-    effect_cls: "ScrollEffect"
     SelectableRecycleBoxLayout:
         default_size: None, dp(20)
         default_size_hint: 1, None
