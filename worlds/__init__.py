@@ -60,7 +60,7 @@ class WorldSource:
     def load(self) -> bool:
         try:
             start = time.perf_counter()
-            if not self.relative:
+            if not self.is_zip and not self.relative:
                 if is_frozen():
                     raise Exception("Refusing to load unpacked worlds from custom_worlds.  Please checkout the repository for world development.")
                 basename = os.path.basename(self.path)
