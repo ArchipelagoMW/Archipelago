@@ -2,9 +2,10 @@ from __future__ import annotations
 
 import json
 from enum import Enum
-from pathlib import Path
 
-with (Path(__file__).parent / 'sources' / f'unit_projectile_info.json').open() as file:
+from .._resources import resource
+
+with resource('datasets', 'sources', 'unit_projectile_info.json').open() as file:
     # Open projectiles source-file for raw data. Used in `ProjectileInfo.get_unit_projectile(...)`
     _unit_projectile_info: dict = json.load(file)
 

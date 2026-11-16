@@ -1,9 +1,9 @@
 from __future__ import annotations
 
 import json
-from pathlib import Path
 
 from AoE2ScenarioParser.datasets.dataset_enum import _DataSetIntEnums
+from ..._resources import resource
 
 _attribute_dataset_editor_names = None
 
@@ -33,7 +33,7 @@ class Attribute(_DataSetIntEnums):
         global _attribute_dataset_editor_names
 
         if _attribute_dataset_editor_names is None:
-            with (Path(__file__).parent.parent / 'sources' / 'resource_editor_names.json').open() as file:
+            with resource('datasets', 'sources', 'resource_editor_names.json').open() as file:
                 _attribute_dataset_editor_names = json.load(file)
 
         # None when a name is not assigned to a resource

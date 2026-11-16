@@ -31,6 +31,7 @@ from AoE2ScenarioParser.scenarios.scenario_store import store
 from AoE2ScenarioParser.scenarios.support.object_factory import ObjectFactory
 from AoE2ScenarioParser.scenarios.support.scenario_actions import ScenarioActions
 from AoE2ScenarioParser.sections.aoe2_file_section import AoE2FileSection, SectionName
+from .._resources import resource
 
 if TYPE_CHECKING:
     from AoE2ScenarioParser.objects.aoe2_object import AoE2Object
@@ -751,7 +752,7 @@ def _compress_bytes(file_content: bytes) -> bytes:
     return compressed
 
 
-def _get_version_directory_path() -> Path:
+def _get_version_directory_path():
     """
     Get the path of the AoE2ScenarioParser/versions directory. Simply '../../versions' is not used as that is not OS
     friendly.
@@ -759,7 +760,7 @@ def _get_version_directory_path() -> Path:
     Returns:
         The full path of the AoE2ScenarioParser/versions directory.
     """
-    return Path(__file__).parent.parent / 'versions'
+    return resource('versions')
 
 
 def _get_version_dependent_structure_file(game_version: str, scenario_version: str, name: str) -> dict:
@@ -810,7 +811,7 @@ def _get_version_default_scenario_filepath(game_version: str, scenario_version: 
         v = f"{game_version}:{scenario_version}"
         raise UnknownStructureError(f"A default scenario file could not be found for version: {v} - please report this, as this is a bug")
 
-    return str(default_scx_path.absolute())
+    return str(default_scx_path)
 
 
 def _get_structure(game_version: str, scenario_version: str) -> Dict[str, Any]:
