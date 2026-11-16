@@ -114,7 +114,7 @@ relevant to issues and should not be applied to them.
     * These should include a comment describing what is blocking the PR.
 * `waiting-on: peer-review` is to be applied to any PRs that have not been reviewed by members of the community.
     * The standard threshold is two peer reviews can move a PR through peer review status, but Triage users may use their
-      discresion. For example a smaller PR may move forward with only one peer review.
+      discretion. For example a smaller PR may move forward with only one peer review.
 * `waiting-on: world-maintainer` is to be applied to any PRs that affect a world's code that are not from that world's
   maintainer before they have an approval from the maintainer.
 
