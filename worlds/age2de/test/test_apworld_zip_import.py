@@ -48,5 +48,16 @@ class TestTheVendoredPackagesWorkFromAnApworldZip(unittest.TestCase):
         self.assertEqual(0, done.returncode, done.stderr)
 
 
+class TestNothingShellsOutToAVendoredBinary(unittest.TestCase):
+
+    def test_the_parsers_xs_check_integration_is_off(self):
+        from ..campaign import ScenarioParser  # noqa: F401
+        from ..AoE2ScenarioParser import settings
+        self.assertFalse(settings.ENABLE_XS_CHECK_INTEGRATION)
+
+    def test_the_binaries_are_left_out_of_the_build(self):
+        self.assertIn("/AoE2ScenarioParser/dependencies/", (WORLD / ".apignore").read_text())
+
+
 if __name__ == "__main__":
     unittest.main()

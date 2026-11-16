@@ -12,6 +12,7 @@ from ..AoE2ScenarioParser.scenarios.aoe2_de_scenario import AoE2DEScenario
 from ..locations.Locations import Age2ScenarioLocationData
 
 settings.PRINT_STATUS_UPDATES = False
+settings.ENABLE_XS_CHECK_INTEGRATION = False
 
 logger = logging.getLogger("Client")
 

@@ -1,0 +1,3 @@
+# xs-check is never invoked: campaign/ScenarioParser.py turns the parser's
+# integration off, and an executable cannot be run from inside the zip anyway.
+/AoE2ScenarioParser/dependencies/
