@@ -63,7 +63,7 @@ class CheckValues(OptionCounter):
 
     - Short Win Minutes (default 30, 15 to 45): win faster than this, with no leaver or bot in the match.
     - Long Win Minutes (default 60, 40 to 90): win a match lasting at least this long.
-    - Roshan Kills (default 2, 1 to 4): win a match where your team killed Roshan at least this many times.
+    - Roshan Kills (default 1, 1 to 4): win a match where your team killed Roshan at least this many times.
     - Camps Stacked (default 10, 1 to 100): camps to stack over the whole seed.
     - Wards Placed (default 15, 1 to 200): observer and sentry wards to place over the whole seed.
     - Building Damage (default 10000, 1000 to 200000): damage to deal to buildings over the whole seed.

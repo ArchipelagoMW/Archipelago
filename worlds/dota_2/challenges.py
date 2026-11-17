@@ -47,7 +47,7 @@ CHALLENGE_CHECKS = [name for names in FAMILIES.values() for name in names]
 VALUES: dict[str, tuple[int, int, int]] = {
     "Short Win Minutes": (30, 15, 45),
     "Long Win Minutes": (60, 40, 90),
-    "Roshan Kills": (2, 1, 4),
+    "Roshan Kills": (1, 1, 4),
     "Camps Stacked": (10, 1, 100),
     "Wards Placed": (15, 1, 200),
     "Building Damage": (10000, 1000, 200000),
