@@ -90,6 +90,14 @@ def build_item_name_to_dname() -> List[LocationDef]:
 
         item_name_to_dname = {item_name: item_data["dname"] for item_name, item_data in data.items() if item_data.get("dname")}
 
+        # OpenDota reports purchases by internal item name, which is the image file name and can
+        # differ from the key here: ancient_janggo (Drum of Endurance), assault (Assault Cuirass),
+        # angels_demise (Khanda), devastator (Parasma)
+        for item_data in data.values():
+            img = item_data.get("img") or ""
+            if "/items/" in img and item_data.get("dname"):
+                item_name_to_dname.setdefault(img.split("/items/")[1].split(".png")[0], item_data["dname"])
+
     return item_name_to_dname
 
 def load_game_stat_locations() -> List[LocationDef]:
