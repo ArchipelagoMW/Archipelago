@@ -154,6 +154,15 @@ td .won { color: var(--ok); font-weight: 600; }
 .banner { background: var(--gold-soft); border-radius: 6px; padding: 10px 14px; font-size: 14px; margin: 0; }
 .banner[hidden] { display: none; }
 code { font: 500 13px var(--mono); overflow-wrap: anywhere; }
+.field .hint a { color: var(--gold); }
+.help { border: 1px solid var(--line); border-radius: 8px; background: var(--panel); }
+.help summary { cursor: pointer; padding: 12px 16px; font-weight: 600; }
+.help summary:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+.help-body { display: grid; gap: 20px; padding: 4px 16px 18px; max-width: 75ch; }
+.help-body section { gap: 8px; }
+.help-body p, .help-body ul, .help-body ol { margin: 0; font-size: 14px; }
+.help-body ul, .help-body ol { padding-left: 20px; display: grid; gap: 4px; }
+.help-body .chip { font-size: 13px; padding: 1px 6px; }
 @media (prefers-reduced-motion: no-preference) { .bar i { transition: width .4s ease; } }
 </style>
 </head>
@@ -197,7 +206,7 @@ code { font: 500 13px var(--mono); overflow-wrap: anywhere; }
       <div class="field">
         <label for="f-steam">Steam account ID</label>
         <input id="f-steam" name="steam" inputmode="numeric" autocomplete="off" placeholder="123456789">
-        <span class="hint">The number you gave the client with /set_player_id (the 64-bit SteamID works too). Needed for your matches and progress.</span>
+        <span class="hint">The number you gave the client with /set_player_id (the 64-bit SteamID works too). Needed for your matches and progress. <a href="#help-steam" id="steam-help">Where to find it</a></span>
       </div>
       <div class="field">
         <label for="f-since">Seed start date</label>
@@ -217,6 +226,50 @@ code { font: 500 13px var(--mono); overflow-wrap: anywhere; }
       <span class="status" id="setup-msg" role="status"></span>
     </div>
   </form>
+
+  <details class="help" id="help">
+    <summary>How to: Steam account ID, reading your matches, what the tracker shows</summary>
+    <div class="help-body">
+      <section id="help-steam">
+        <h3>Find your Steam account ID</h3>
+        <p>The client and this tracker need your Steam account ID, a number of 8 to 10 digits. Any of these official places shows it:</p>
+        <ul>
+          <li><b>In Dota 2:</b> open your profile (your avatar, top left). Your <b>Friend ID</b> is shown on your player card. That's the number.</li>
+          <li><b>In Steam:</b> Friends → Add a Friend. <b>Your Friend Code</b> is the same number.</li>
+          <li><b>On the Steam website:</b> your account details page (store.steampowered.com/account) shows your <b>Steam ID</b>, a 17-digit number starting with 7656. The tracker accepts it as is; for the client, use the Friend ID.</li>
+        </ul>
+        <p>Then, once, in the Dota 2 client of Archipelago: <code>/set_player_id 123456789</code> with your Friend ID.</p>
+      </section>
+      <section>
+        <h3>Make your matches visible</h3>
+        <p>Your matches can only be read if they are public:</p>
+        <ul>
+          <li>In Dota 2: Settings → Social → <b>Expose Public Match Data</b>, turned on.</li>
+          <li>In Steam: your profile → Edit Profile → Privacy Settings → <b>My Profile</b> set to Public.</li>
+        </ul>
+        <p>If your matches don't show up here or on OpenDota, check these two settings first. Matches played while they were off may stay hidden.</p>
+      </section>
+      <section>
+        <h3>After each match: /parse_recent_match</h3>
+        <p>The client doesn't watch your games: it only counts a match when you type <code>/parse_recent_match</code>. It reads your <b>most recent</b> match only, so run it after every match, win or loss, before starting the next one. A match you skip can't be read later.</p>
+        <p>Why it sometimes takes a while:</p>
+        <ol>
+          <li><b>The match has to reach OpenDota.</b> Valve publishes it a minute or so after the end. Before that, the command reads your previous match, which was already counted, and nothing happens: wait a little and run it again.</li>
+          <li><b>The replay has to be parsed.</b> Kills and wins are known right away, but purchases (and so item checks) are only in the replay. The command asks OpenDota to download and parse it, then waits, checking every 10 seconds. It usually takes one to a few minutes, longer when OpenDota is busy.</li>
+        </ol>
+        <p>Run <code>/goal</code> in the client to see your progress as the client counts it: it's the reference.</p>
+      </section>
+      <section>
+        <h3>What the tracker shows</h3>
+        <ul>
+          <li><b>Checks:</b> the server's state. <span class="chip ready">Gold</span> purchases have all their components unlocked, so buying them counts. <span class="chip done">Green</span> checks are already sent.</li>
+          <li><b>Wins and heroes won:</b> only the client knows them. Without its save, the tracker estimates them from OpenDota (matches with an unlocked hero). Load the save in Settings for the exact numbers.</li>
+          <li><b>Read by the client</b> (Matches tab): deduced from the checks done on the server. "✗ not read" means a stat check of that match is still to do. "?" usually means OpenDota hasn't parsed that match yet: the tracker only reads OpenDota, it never asks for a parse.</li>
+          <li>The tracker connects to the server in read-only mode: it never sends checks and doesn't count as you playing.</li>
+        </ul>
+      </section>
+    </div>
+  </details>
 
   <p class="status" id="status" role="status" hidden></p>
 
@@ -974,6 +1027,11 @@ async function load() {
 }
 
 $("open-settings").addEventListener("click", () => { fillForm(cfg); showSettings($("setup").hidden); });
+$("steam-help").addEventListener("click", e => {
+  e.preventDefault();
+  $("help").open = true;
+  $("help-steam").scrollIntoView({ behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
+});
 $("f-room").addEventListener("change", suggestSlots);
 $("setup").addEventListener("submit", e => {
   e.preventDefault();
