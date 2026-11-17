@@ -1900,8 +1900,8 @@ def dump_player_options(multiworld: MultiWorld) -> None:
     from csv import DictWriter
 
     game_players = defaultdict(list)
-    for player, game in multiworld.game.items():
-        game_players[game].append(player)
+    for player in multiworld.player_ids:
+        game_players[multiworld.game[player]].append(player)
     game_players = dict(sorted(game_players.items()))
 
     output = []
