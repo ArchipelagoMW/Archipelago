@@ -1,7 +1,7 @@
 from Options import OptionError
 
 from .bases import Dota2TestBase
-from ..challenges import CHALLENGE_FAMILIES, FAMILIES, VALUES, match_challenges, completed_quests, stat_checks, resolve_values
+from ..challenges import CHALLENGE_FAMILIES, FAMILIES, VALUES, match_challenges, completed_quests, stat_checks, resolve_values, challenge_values
 from ..dota_api import DotaMatchData, damage_by_type
 from ..options import CheckValues
 
@@ -146,3 +146,14 @@ class TooManyChecksOff(Dota2TestBase):
     def test_refused(self) -> None:
         with self.assertRaises(OptionError):
             self.world_setup()
+
+
+class SeedThresholds(Dota2TestBase):
+    def test_thresholds_from_old_seed_names(self) -> None:
+        # A seed from the original apworld: three stat checks per stat by name, and no check_values
+        old_seed = {"Get 1 Kill(s)", "Get 5 Kill(s)", "Get 10 Kill(s)", "Get 75 Last Hits", "Get 125 Last Hits"}
+        values = challenge_values({}, old_seed)
+        self.assertEqual(values["Kills"], [1, 5, 10])
+        self.assertEqual(values["Assists"], [])
+        checks = stat_checks(sample_match(kills=6, last_hits=200), values)
+        self.assertEqual(checks, ["Get 1 Kill(s)", "Get 5 Kill(s)", "Get 75 Last Hits", "Get 125 Last Hits"])

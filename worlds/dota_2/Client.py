@@ -482,8 +482,13 @@ class Dota2Context(CommonContext):
             role = "Carry" if "Carry" in hero.roles else "Support"
             self.output(f"{hero.name} - {group_name} - {hero.primary_attr} - {hero.attack_type} - {hero.legs} legs - {role}")
 
+    def seed_check_names(self) -> set[str]:
+        """Names of this seed's checks, done or not."""
+        names = self.location_names[self.game]
+        return {names[i] for i in set(self.missing_locations) | set(self.checked_locations) if i in names}
+
     def get_quests(self) -> None:
-        values = challenge_values(getattr(self, "slot_data", None) or {})
+        values = challenge_values(getattr(self, "slot_data", None) or {}, self.seed_check_names())
         for quest in QUESTS:
             targets = " / ".join(str(t) for t in values[quest.value])
             self.output(f"{quest.pattern.replace('{}', '…')}: {self.save.quest_totals.get(quest.field, 0)} (targets: {targets})")
@@ -583,7 +588,7 @@ class Dota2Context(CommonContext):
 
         #all other game stat and buy checks, with this seed's tiers and values
         purchases = match_data.purchase
-        values = challenge_values(getattr(self, "slot_data", None) or {})
+        values = challenge_values(getattr(self, "slot_data", None) or {}, self.seed_check_names())
         checks.extend(stat_checks(match_data, values))
 
         game_locations = self.location_names[self.game]

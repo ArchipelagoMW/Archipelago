@@ -148,9 +148,13 @@ def scale_checks_in_seed(values: dict[str, Any]) -> set[str]:
     return {s.name(t) for key, s in SCALES.items() for t in values[key]}
 
 
-def challenge_values(slot_data: dict[str, Any]) -> dict[str, Any]:
-    """Values for this seed, as sent in slot_data."""
-    return resolve_values(slot_data.get("check_values") or {})
+def challenge_values(slot_data: dict[str, Any], seed_checks: set[str] | None = None) -> dict[str, Any]:
+    """Values for this seed, as sent in slot_data. Given the seed's check names, stat and quest thresholds come from
+    them instead, so seeds from the original apworld (Get 1/5/10 Kill(s), no check_values) keep working."""
+    values = resolve_values(slot_data.get("check_values") or {})
+    if seed_checks is not None:
+        values.update({key: [t for t in s.grid if s.name(t) in seed_checks] for key, s in SCALES.items()})
+    return values
 
 
 def stat_checks(m: DotaMatchData, values: dict[str, Any]) -> list[str]:
