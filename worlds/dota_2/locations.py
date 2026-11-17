@@ -10,7 +10,7 @@ from .hero import Hero, get_all_heroes,get_starting_hero_pool
 from BaseClasses import ItemClassification, Location
 
 from . import items
-from .challenges import CHALLENGE_CHECKS, STATS, MAX_STAT_CHECKS, ORIGINAL_STAT_CHECKS, stat_check
+from .challenges import CHALLENGE_CHECKS, STATS, MAX_THRESHOLDS, ORIGINAL_STATS, ORIGINAL_STAT_CHECKS, numbered
 from .constants import MAX_HERO_GROUPS, ORIGINAL_HERO_GROUPS
 
 
@@ -158,9 +158,12 @@ def load_extra_group_locations() -> List[LocationDef]:
             for i in range(ORIGINAL_HERO_GROUPS + 1, MAX_HERO_GROUPS + 1)]
 
 def load_extra_stat_locations() -> List[LocationDef]:
-    """Stat checks past the original three per stat, at the end so existing location ids don't move."""
-    return [LocationDef(name=stat_check(label, n), type="GAME_STAT")
-            for label, _, _, _ in STATS for n in range(ORIGINAL_STAT_CHECKS + 1, MAX_STAT_CHECKS + 1)]
+    """Stat checks past the original three per stat, then the new stats, at the end so existing location ids
+    don't move."""
+    return ([LocationDef(name=numbered(label, n), type="GAME_STAT")
+             for label in ORIGINAL_STATS for n in range(ORIGINAL_STAT_CHECKS + 1, MAX_THRESHOLDS + 1)]
+            + [LocationDef(name=numbered(label, n), type="GAME_STAT")
+               for label, _, _, _ in STATS if label not in ORIGINAL_STATS for n in range(1, MAX_THRESHOLDS + 1)])
 
 def load_challenge_locations() -> List[LocationDef]:
     return [LocationDef(name=name, type="CHALLENGE") for name in CHALLENGE_CHECKS]

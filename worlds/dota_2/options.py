@@ -6,7 +6,7 @@ from importlib import resources
 from typing import Any
 from Options import Choice, Range, PerGameCommonOptions, OptionSet, OptionDict
 
-from .challenges import FAMILIES, DISABLEABLE_CHECKS, VALUES, STATS, MAX_STAT_CHECKS
+from .challenges import FAMILIES, DISABLEABLE_CHECKS, VALUES, MULTI_VALUES, MAX_THRESHOLDS
 from .constants import MAX_HERO_GROUPS
 
 class GoalType(Choice):
@@ -67,34 +67,36 @@ class HeroGroups(Range):
 
 class DisabledChecks(OptionSet):
     """Checks to remove: families or check names. Hero group wins and the goal always stay.
-    Families: Attribute Wins, Attack Type Wins, Legs Wins, Role Wins, Kills, Assists, Dewards, Last Hits, Denies,
-    Purchases, First Blood, Courier Kill, Runes, Buyback, Aegis, Positions, Short Win, Long Win, Roshan Win, Quests"""
+    Families: Attribute Wins, Attack Type Wins, Legs Wins, Role Wins, Purchases, Kills, Assists, Dewards, Last Hits,
+    Denies, Healing, Physical Damage, Magical Damage, Physical Hit, Magical Hit, First Blood, Courier Kill, Runes,
+    Buyback, Aegis, Positions, Short Win, Long Win, Roshan Win, Quests, Stack Camps, Place Wards, Damage Buildings,
+    Heal Heroes"""
     display_name = "Disabled Checks"
     valid_keys = sorted(FAMILIES) + DISABLEABLE_CHECKS
 
 
 class CheckValues(OptionDict):
-    """Numbers used by checks. Stats count in one match; a list gives one check per number, e.g. Last Hits: [75, 150, 250].
-    Short Win needs no leaver or bot. Roshan Kills are your team's, in a win. Quests add up over the whole seed."""
+    """Numbers used by checks. Stats count in one match, quests over the whole seed; a list gives one check per number,
+    e.g. Last Hits: [300, 450]. Hits are one hit on a hero. Short Win needs no leaver or bot. Roshan Kills are your
+    team's, in a win."""
     display_name = "Check Values"
     valid_keys = list(VALUES)
     default = {name: default for name, (default, _, _) in VALUES.items()}
 
     def __init__(self, value: dict[str, Any]) -> None:
         super().__init__(value)
-        stats = {label for label, _, _, _ in STATS}
         errors = []
         for key, v in self.value.items():
             if key not in VALUES:
                 continue  # unknown keys are reported by the key check
             _, low, high = VALUES[key]
             many = isinstance(v, (list, tuple))
-            if many and key not in stats:
+            if many and key not in MULTI_VALUES:
                 errors.append(f"{key} takes a single number, got {v}.")
                 continue
             numbers = list(v) if many else [v]
-            if not numbers or (many and len(numbers) > MAX_STAT_CHECKS):
-                errors.append(f"{key} takes 1 to {MAX_STAT_CHECKS} thresholds, got {len(numbers)}.")
+            if not numbers or (many and len(numbers) > MAX_THRESHOLDS):
+                errors.append(f"{key} takes 1 to {MAX_THRESHOLDS} thresholds, got {len(numbers)}.")
             elif any(not isinstance(n, int) or isinstance(n, bool) for n in numbers):
                 errors.append(f"{key} must be whole numbers, got {v}.")
             elif any(not low <= n <= high for n in numbers):

@@ -1,8 +1,8 @@
 from Options import OptionError
 
 from .bases import Dota2TestBase
-from ..challenges import CHALLENGE_CHECKS, FAMILIES, VALUES, match_challenges, completed_quests, stat_checks, resolve_values
-from ..dota_api import DotaMatchData
+from ..challenges import CHALLENGE_FAMILIES, FAMILIES, VALUES, match_challenges, completed_quests, stat_checks, resolve_values
+from ..dota_api import DotaMatchData, damage_by_type
 from ..options import CheckValues
 
 
@@ -15,7 +15,11 @@ def sample_match(**fields) -> DotaMatchData:
 class DefaultSeed(Dota2TestBase):
     def test_all_challenges_in_seed(self) -> None:
         names = {loc.name for loc in self.multiworld.get_locations(self.player)}
-        self.assertTrue(set(CHALLENGE_CHECKS) <= names)
+        self.assertTrue({name for names in CHALLENGE_FAMILIES.values() for name in names} <= names)
+        # Quests have a lower and a full target by default
+        self.assertTrue({"Stack Camps #1", "Stack Camps #2", "Heal Heroes #2"} <= names)
+        self.assertNotIn("Stack Camps #3", names)
+        self.assertTrue({"Healing #1", "Physical Damage #1", "Magical Hit #1"} <= names)
         self.assertIn("Kills #1", names)
         self.assertNotIn("Kills #2", names)
 
@@ -63,7 +67,7 @@ class CustomSeed(Dota2TestBase):
         self.assertEqual(values["Short Win Minutes"], 25)
         self.assertEqual(values["Kills"], [8])
         self.assertEqual(values["Last Hits"], [75, 150, 250, 400, 600])
-        self.assertEqual(values["Long Win Minutes"], 50)
+        self.assertEqual(values["Long Win Minutes"], 60)
 
     def test_stat_checks_in_seed(self) -> None:
         names = {loc.name for loc in self.multiworld.get_locations(self.player)}
@@ -93,7 +97,7 @@ class ChallengeRules(Dota2TestBase):
 
     def test_stat_checks(self) -> None:
         values = resolve_values({"Kills": [15, 1, 5]})
-        checks = stat_checks(sample_match(kills=12, last_hits=410), values)
+        checks = stat_checks(sample_match(kills=12, last_hits=460), values)
         self.assertEqual(checks, ["Kills #1", "Kills #2", "Last Hits #1"])
 
     def test_match_challenges(self) -> None:
@@ -108,7 +112,18 @@ class ChallengeRules(Dota2TestBase):
         # Short but with a leaver or a bot: not a short win
         self.assertNotIn("Win a Short Match", checks)
         self.assertIn("Win a Match Where Your Team Took Roshan", checks)
-        self.assertEqual(completed_quests({"camps_stacked": 20, "wards_placed": 3}, values), ["Stack Camps"])
+        self.assertEqual(completed_quests({"camps_stacked": 15, "wards_placed": 3}, values), ["Stack Camps #1"])
+        self.assertEqual(completed_quests({"camps_stacked": 20}, resolve_values({"Camps Stacked": 30})), [])
+
+    def test_damage_by_type(self) -> None:
+        me = {"damage_inflictor": {"null": 5000, "lina_laguna_blade": 3000, "juggernaut_omni_slash": 900,
+                                   "pudge_meat_hook": 700, "blade_mail": 400},
+              "hero_hits": {"null": 50, "lina_laguna_blade": 4, "juggernaut_omni_slash": 9, "pudge_meat_hook": 3},
+              "max_hero_hit": {"value": 1200, "inflictor": "lina_laguna_blade"}}
+        d = damage_by_type(me)
+        # Attacks and Omni Slash are physical, Laguna Blade magical; Meat Hook (pure) and items count as neither
+        self.assertEqual((d["physical_damage"], d["magical_damage"]), (5900, 3000))
+        self.assertEqual((d["physical_hit"], d["magical_hit"]), (100, 1200))
 
 
 class TooManyChecksOff(Dota2TestBase):

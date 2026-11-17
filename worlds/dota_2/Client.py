@@ -484,8 +484,9 @@ class Dota2Context(CommonContext):
 
     def get_quests(self) -> None:
         values = challenge_values(getattr(self, "slot_data", None) or {})
-        for name, key, value in QUESTS:
-            self.output(f"{name}: {self.save.quest_totals.get(key, 0)} / {values[value]}")
+        for name, key, value, _, _ in QUESTS:
+            targets = " / ".join(str(t) for t in values[value])
+            self.output(f"{name}: {self.save.quest_totals.get(key, 0)} (targets: {targets})")
 
     def get_hero_wins(self) -> None:
         self.output(f"Hero Wins: {len(self.save.unique_heroes_won)}")

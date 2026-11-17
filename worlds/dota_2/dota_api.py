@@ -1,4 +1,5 @@
 import asyncio
+import json
 import logging
 
 import requests
@@ -31,6 +32,11 @@ class DotaMatchData:
     camps_stacked: int = 0
     wards_placed: int = 0
     building_damage: int = 0
+    healing: int = 0
+    physical_damage: int = 0
+    magical_damage: int = 0
+    physical_hit: int = 0
+    magical_hit: int = 0
 
 
 api_logger = logging.getLogger("Client")
@@ -233,7 +239,44 @@ def challenge_data(match, me) -> dict:
         camps_stacked = me.get('camps_stacked') or 0,
         wards_placed = (me.get('obs_placed') or 0) + (me.get('sen_placed') or 0),
         building_damage = me.get('tower_damage') or 0,
+        healing = me.get('hero_healing') or 0,
+        **damage_by_type(me),
     )
+
+
+_ABILITY_DAMAGE_TYPES: dict | None = None
+
+def ability_damage_types() -> dict:
+    """Damage type of each ability (Magical, Physical, Pure), from OpenDota's constants."""
+    global _ABILITY_DAMAGE_TYPES
+    if _ABILITY_DAMAGE_TYPES is None:
+        from importlib import resources
+        with resources.files(__package__).joinpath("data/abilityDamageTypes.json").open("r", encoding="utf-8") as f:
+            _ABILITY_DAMAGE_TYPES = json.load(f)["ability_damage_types"]
+    return _ABILITY_DAMAGE_TYPES
+
+def damage_by_type(me) -> dict:
+    """Physical and magical damage to heroes, and the biggest hit of each type we can be sure of.
+    Auto-attacks (inflictor "null") are physical; pure damage and items count as neither.
+    OpenDota keeps only the match's single biggest hit, so a type's biggest hit is that one when it has this type,
+    or else the best average hit of a source of this type (at least one hit was that big)."""
+    types = ability_damage_types()
+    kind = lambda source: "Physical" if source in (None, "null") else types.get(source)
+    inflictors, hits = me.get('damage_inflictor') or {}, me.get('hero_hits') or {}
+    totals = {"Physical": 0, "Magical": 0}
+    best = {"Physical": 0, "Magical": 0}
+    for source, damage in inflictors.items():
+        t = kind(source)
+        if t in totals:
+            totals[t] += damage
+            if hits.get(source):
+                best[t] = max(best[t], damage // hits[source])
+    biggest = me.get('max_hero_hit') or {}
+    t = kind(biggest.get('inflictor'))
+    if t in best:
+        best[t] = max(best[t], biggest.get('value') or 0)
+    return dict(physical_damage=totals["Physical"], magical_damage=totals["Magical"],
+                physical_hit=best["Physical"], magical_hit=best["Magical"])
 
 
 
