@@ -6,6 +6,7 @@ the purchases, and the global challenges and quests any hero can do.
 from __future__ import annotations
 
 import json
+from dataclasses import dataclass
 from importlib import resources
 from typing import TYPE_CHECKING, Any
 
@@ -14,45 +15,59 @@ if TYPE_CHECKING:
 
 MAX_THRESHOLDS = 5  # checks per stat or quest, one per threshold
 
-# Stats, in one match: one check per threshold set in the YAML. Defaults are round numbers a bit above what a player
-# in the most favourable position reaches one match in four (OpenDota public matches).
-# (label, DotaMatchData field, default thresholds, maximum threshold)
+
+@dataclass(frozen=True)
+class Scale:
+    """A stat (one match) or a quest (whole seed) checked against thresholds the YAML picks on a grid.
+    Every value of the grid has its own location name, declared up front since names can't depend on the YAML."""
+    value: str  # key in check_values
+    field: str  # DotaMatchData field, also the quest total key
+    pattern: str  # location name, {} being the threshold
+    default: tuple[int, ...]
+    low: int
+    high: int
+    step: int
+
+    def name(self, threshold: int) -> str:
+        return self.pattern.replace("{}", str(threshold))
+
+    @property
+    def grid(self) -> list[int]:
+        return list(range(self.low, self.high + 1, self.step))
+
+    @property
+    def names(self) -> list[str]:
+        return [self.name(t) for t in self.grid]
+
+
+# Stats, in one match. Defaults are round numbers a bit above what a player in the most favourable position reaches
+# one match in four (OpenDota public matches). The first five keep the original apworld's location names.
 STATS = [
-    ("Kills", "kills", [15], 50),
-    ("Assists", "assists", [30], 60),
-    ("Dewards", "dewards", [5], 30),
-    ("Last Hits", "last_hits", [450], 800),
-    ("Denies", "denies", [20], 100),
-    ("Healing", "healing", [2000], 50000),
-    ("Physical Damage", "physical_damage", [25000], 200000),
-    ("Magical Damage", "magical_damage", [20000], 200000),
-    ("Physical Hit", "physical_hit", [500], 5000),
-    ("Magical Hit", "magical_hit", [500], 5000),
-    ("Stun Time", "stun_time", [60], 600),  # seconds of stun on enemy heroes
+    Scale("Kills", "kills", "Get {} Kill(s)", (15,), 1, 50, 1),
+    Scale("Assists", "assists", "Get {} Assists", (30,), 1, 60, 1),
+    Scale("Dewards", "dewards", "Get {} Deward(s)", (5,), 1, 30, 1),
+    Scale("Last Hits", "last_hits", "Get {} Last Hits", (450,), 25, 800, 25),
+    Scale("Denies", "denies", "Get {} Denies", (20,), 1, 60, 1),
+    Scale("Healing", "healing", "Heal {} in a Match", (2000,), 500, 20000, 500),
+    Scale("Physical Damage", "physical_damage", "Deal {} Physical Damage in a Match", (25000,), 2500, 75000, 2500),
+    Scale("Magical Damage", "magical_damage", "Deal {} Magical Damage in a Match", (20000,), 2500, 75000, 2500),
+    Scale("Physical Hit", "physical_hit", "Land a {} Physical Hit", (500,), 100, 3000, 100),
+    Scale("Magical Hit", "magical_hit", "Land a {} Magical Hit", (500,), 100, 3000, 100),
+    Scale("Stun Time", "stun_time", "Stun Enemies for {}s in a Match", (60,), 10, 300, 10),  # seconds
 ]
-ORIGINAL_STATS = ["Kills", "Assists", "Dewards", "Last Hits", "Denies"]  # their #1 to #3 reuse the original locations
-ORIGINAL_STAT_CHECKS = 3
 
-# Quests add up over the whole seed, with a lower and a full target by default.
-# (label, save total key and DotaMatchData field, value name, default thresholds, maximum threshold)
+# Quests add up over the whole seed, with a lower and a full target by default (about ten matches in the most
+# favourable position for the full one).
 QUESTS = [
-    ("Stack Camps", "camps_stacked", "Camps Stacked", [10, 20], 100),
-    ("Place Wards", "wards_placed", "Wards Placed", [50, 100], 300),
-    ("Damage Buildings", "building_damage", "Building Damage", [25000, 50000], 200000),
-    ("Heal Heroes", "healing", "Total Healing", [7500, 15000], 500000),
-    ("Deal Physical Damage", "physical_damage", "Total Physical Damage", [75000, 150000], 2000000),
-    ("Deal Magical Damage", "magical_damage", "Total Magical Damage", [60000, 120000], 2000000),
-    ("Stun Enemies", "stun_time", "Total Stun Time", [200, 400], 10000),
+    Scale("Camps Stacked", "camps_stacked", "Stack {} Camps", (10, 20), 5, 100, 5),
+    Scale("Wards Placed", "wards_placed", "Place {} Wards", (50, 100), 10, 300, 10),
+    Scale("Building Damage", "building_damage", "Deal {} Building Damage", (25000, 50000), 5000, 200000, 5000),
+    Scale("Total Healing", "healing", "Heal {} in Total", (7500, 15000), 2500, 100000, 2500),
+    Scale("Total Physical Damage", "physical_damage", "Deal {} Physical Damage in Total", (75000, 150000), 25000, 500000, 25000),
+    Scale("Total Magical Damage", "magical_damage", "Deal {} Magical Damage in Total", (60000, 120000), 20000, 500000, 20000),
+    Scale("Total Stun Time", "stun_time", "Stun Enemies for {}s in Total", (200, 400), 50, 1000, 50),
 ]
-
-
-def numbered(label: str, n: int) -> str:
-    """Name of the n-th check of a stat or quest, by increasing threshold. Names can't hold the threshold, which
-    depends on the YAML."""
-    return f"{label} #{n}"
-
-
-stat_check = numbered
+SCALES = {s.value: s for s in STATS + QUESTS}
 
 # OpenDota rune keys are the game's DOTA_RUNE values
 RUNES = {
@@ -78,9 +93,7 @@ CHALLENGE_FAMILIES: dict[str, list[str]] = {
     "Long Win": ["Win a Long Match"],
     "Roshan Win": ["Win a Match Where Your Team Took Roshan"],
 }
-QUEST_FAMILIES = {label: [numbered(label, n) for n in range(1, MAX_THRESHOLDS + 1)] for label, _, _, _, _ in QUESTS}
-# New locations, in location order: challenges, then quests
-CHALLENGE_CHECKS = [name for names in [*CHALLENGE_FAMILIES.values(), *QUEST_FAMILIES.values()] for name in names]
+CHALLENGE_CHECKS = [name for names in CHALLENGE_FAMILIES.values() for name in names]
 
 
 def _purchase_checks() -> list[str]:
@@ -88,31 +101,31 @@ def _purchase_checks() -> list[str]:
         return [item["dname"] for item in json.load(f).values() if item.get("dname")]
 
 
-# Every family a YAML can turn off. Hero group wins and the goal stay, since the seed's progression relies on them.
+# Families a YAML can turn off. Hero group wins and the goal stay, since the seed's progression relies on them.
+# A stat or quest is turned off as a whole: which of its names are in the seed comes from check_values.
 FAMILIES: dict[str, list[str]] = {
     "Attribute Wins": ["Win as a Strength Hero", "Win as a Agility Hero", "Win as a Intelligence Hero", "Win as a Universal Hero"],
     "Attack Type Wins": ["Win as a Melee Hero", "Win as a Ranged Hero"],
     "Legs Wins": ["Win as a 0 Legged Hero", "Win as a 2 Legged Hero", "Win as a 4+ Legged Hero"],
     "Role Wins": ["Win as a Carry Hero", "Win as a Support Hero"],
-    **{label: [numbered(label, n) for n in range(1, MAX_THRESHOLDS + 1)] for label, _, _, _ in STATS},
+    **{s.value: s.names for s in STATS},
     "Purchases": _purchase_checks(),
     **CHALLENGE_FAMILIES,
-    **QUEST_FAMILIES,
-    "Quests": [name for names in QUEST_FAMILIES.values() for name in names],
+    **{s.value: s.names for s in QUESTS},
+    "Quests": [name for s in QUESTS for name in s.names],
 }
-DISABLEABLE_CHECKS = sorted({name for names in FAMILIES.values() for name in names})
+SCALE_NAMES = {name for s in SCALES.values() for name in s.names}
+DISABLEABLE_CHECKS = sorted({name for names in FAMILIES.values() for name in names} - SCALE_NAMES)
 
-# Values players can change in their YAML: name -> (default, minimum, maximum).
-# Stats and quests take one threshold, or a list of up to MAX_THRESHOLDS thresholds (one check each).
+# Values players can change in their YAML: name -> (default, minimum, maximum). Stats and quests take one threshold
+# or a list of up to MAX_THRESHOLDS thresholds on their grid (one check each).
 VALUES: dict[str, tuple[Any, int, int]] = {
-    **{label: (default, 1, maximum) for label, _, default, maximum in STATS},
+    **{s.value: (list(s.default) if len(s.default) > 1 else s.default[0], s.low, s.high) for s in STATS},
     "Short Win Minutes": (30, 15, 45),
     "Long Win Minutes": (60, 40, 90),
     "Roshan Kills": (1, 1, 4),
-    **{value: (default, 1, maximum) for _, _, value, default, maximum in QUESTS},
+    **{s.value: (list(s.default), s.low, s.high) for s in QUESTS},
 }
-# Values that take a list of thresholds, and the checks each one numbers
-MULTI_VALUES = {**{label: label for label, _, _, _ in STATS}, **{value: label for label, _, value, _, _ in QUESTS}}
 
 
 def resolve_disabled(disabled: set[str]) -> set[str]:
@@ -126,14 +139,13 @@ def thresholds(value: int | list[int]) -> list[int]:
 
 def resolve_values(chosen: dict[str, Any]) -> dict[str, Any]:
     """Defaults, overridden by what the YAML sets. Stats and quests become sorted lists of thresholds."""
-    return {name: thresholds(chosen.get(name, default)) if name in MULTI_VALUES else int(chosen.get(name, default))
+    return {name: thresholds(chosen.get(name, default)) if name in SCALES else int(chosen.get(name, default))
             for name, (default, _, _) in VALUES.items()}
 
 
-def numbered_checks_in_seed(values: dict[str, Any]) -> dict[str, bool]:
-    """For each numbered check (Kills #2, Stack Camps #1...), whether this seed's values give it a threshold."""
-    return {numbered(label, n): n <= len(values[value]) for value, label in MULTI_VALUES.items()
-            for n in range(1, MAX_THRESHOLDS + 1)}
+def scale_checks_in_seed(values: dict[str, Any]) -> set[str]:
+    """Names of the stat and quest checks this seed's thresholds pick."""
+    return {s.name(t) for key, s in SCALES.items() for t in values[key]}
 
 
 def challenge_values(slot_data: dict[str, Any]) -> dict[str, Any]:
@@ -143,8 +155,7 @@ def challenge_values(slot_data: dict[str, Any]) -> dict[str, Any]:
 
 def stat_checks(m: DotaMatchData, values: dict[str, Any]) -> list[str]:
     """Stat thresholds reached in a match."""
-    return [numbered(label, n) for label, field, _, _ in STATS
-            for n, threshold in enumerate(values[label], 1) if getattr(m, field) >= threshold]
+    return [s.name(t) for s in STATS for t in values[s.value] if getattr(m, s.field) >= t]
 
 
 def match_challenges(m: DotaMatchData, values: dict[str, Any]) -> list[str]:
@@ -174,9 +185,8 @@ def match_challenges(m: DotaMatchData, values: dict[str, Any]) -> list[str]:
 
 def quest_amounts(m: DotaMatchData) -> dict[str, int]:
     """What a match adds to each quest total."""
-    return {key: getattr(m, key) for _, key, _, _, _ in QUESTS}
+    return {s.field: getattr(m, s.field) for s in QUESTS}
 
 
 def completed_quests(totals: dict[str, int], values: dict[str, Any]) -> list[str]:
-    return [numbered(label, n) for label, key, value, _, _ in QUESTS
-            for n, threshold in enumerate(values[value], 1) if totals.get(key, 0) >= threshold]
+    return [s.name(t) for s in QUESTS for t in values[s.value] if totals.get(s.field, 0) >= t]

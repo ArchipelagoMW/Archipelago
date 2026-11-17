@@ -6,7 +6,7 @@ from importlib import resources
 from typing import Any
 from Options import Choice, Range, PerGameCommonOptions, OptionSet, OptionDict
 
-from .challenges import FAMILIES, DISABLEABLE_CHECKS, VALUES, MULTI_VALUES, MAX_THRESHOLDS
+from .challenges import FAMILIES, DISABLEABLE_CHECKS, VALUES, SCALES, MAX_THRESHOLDS
 from .constants import MAX_HERO_GROUPS
 
 class GoalType(Choice):
@@ -77,8 +77,8 @@ class DisabledChecks(OptionSet):
 
 class CheckValues(OptionDict):
     """Numbers used by checks. Stats count in one match, quests over the whole seed; a list gives one check per number,
-    e.g. Last Hits: [300, 450]. Hits are one hit on a hero, stun times are in seconds. Short Win needs no leaver or
-    bot. Roshan Kills are your team's, in a win."""
+    e.g. Last Hits: [300, 450], each on its grid (Last Hits by 25, damage by 2500...). Hits are one hit on a hero,
+    stun times are in seconds. Short Win needs no leaver or bot. Roshan Kills are your team's, in a win."""
     display_name = "Check Values"
     valid_keys = list(VALUES)
     default = {name: default for name, (default, _, _) in VALUES.items()}
@@ -91,7 +91,7 @@ class CheckValues(OptionDict):
                 continue  # unknown keys are reported by the key check
             _, low, high = VALUES[key]
             many = isinstance(v, (list, tuple))
-            if many and key not in MULTI_VALUES:
+            if many and key not in SCALES:
                 errors.append(f"{key} takes a single number, got {v}.")
                 continue
             numbers = list(v) if many else [v]
@@ -103,6 +103,8 @@ class CheckValues(OptionDict):
                 errors.append(f"{key} must be between {low} and {high}, got {v}.")
             elif len(set(numbers)) != len(numbers):
                 errors.append(f"{key} thresholds must be different, got {v}.")
+            elif key in SCALES and any((n - low) % SCALES[key].step for n in numbers):
+                errors.append(f"{key} goes by steps of {SCALES[key].step} from {low}, got {v}.")
         if errors:
             raise ValueError("\n".join([f"For option {self.__class__.__name__}:"] + errors))
 

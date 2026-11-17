@@ -15,39 +15,39 @@
     },
     {
       "id": 4,
-      "name": "Kills #1"
+      "name": "Get 1 Kill(s)"
     },
     {
       "id": 5,
-      "name": "Kills #2"
+      "name": "Get 5 Kill(s)"
     },
     {
       "id": 6,
-      "name": "Kills #3"
+      "name": "Get 10 Kill(s)"
     },
     {
       "id": 7,
-      "name": "Assists #1"
+      "name": "Get 5 Assists"
     },
     {
       "id": 8,
-      "name": "Assists #2"
+      "name": "Get 10 Assists"
     },
     {
       "id": 10,
-      "name": "Assists #3"
+      "name": "Get 20 Assists"
     },
     {
       "id": 11,
-      "name": "Dewards #1"
+      "name": "Get 1 Deward(s)"
     },
     {
       "id": 12,
-      "name": "Dewards #2"
+      "name": "Get 3 Deward(s)"
     },
     {
       "id": 13,
-      "name": "Dewards #3"
+      "name": "Get 7 Deward(s)"
     },
     {
       "id": 14,
@@ -71,27 +71,27 @@
     },
     {
       "id": 19,
-      "name": "Last Hits #1"
+      "name": "Get 75 Last Hits"
     },
     {
       "id": 20,
-      "name": "Last Hits #2"
+      "name": "Get 125 Last Hits"
     },
     {
       "id": 21,
-      "name": "Last Hits #3"
+      "name": "Get 175 Last Hits"
     },
     {
       "id": 22,
-      "name": "Denies #1"
+      "name": "Get 8 Denies"
     },
     {
       "id": 23,
-      "name": "Denies #2"
+      "name": "Get 16 Denies"
     },
     {
       "id": 24,
-      "name": "Denies #3"
+      "name": "Get 32 Denies"
     },
     {
       "id": 25,

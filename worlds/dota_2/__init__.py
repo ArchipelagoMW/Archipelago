@@ -18,7 +18,7 @@ from .locations import DOTA2Location, LocationDef, load_hero_locations, build_lo
 from .rules import set_dota_rules
 from .regions import create_regions_and_locations
 from .hero import Hero, get_starting_hero_pool, get_all_heroes
-from .challenges import resolve_disabled, resolve_values, numbered_checks_in_seed
+from .challenges import resolve_disabled, resolve_values, scale_checks_in_seed, SCALE_NAMES
 from Options import OptionError
 # For our game to display correctly on the website, we need to define a WebWorld subclass.
 class DOTA2WebWorld(WebWorld):
@@ -120,12 +120,12 @@ class DOTA2World(World):
         disabled = resolve_disabled(self.options.disabled_checks.value)
         group_count = len(self.hero_groups)
         values = resolve_values(self.options.check_values.value)
-        numbered_in_seed = numbered_checks_in_seed(values)  # Kills #2, Stack Camps #1... only up to the YAML's thresholds
+        scale_in_seed = scale_checks_in_seed(values)  # of the stat and quest names, only the YAML's thresholds
 
         def location_type_valid(d: LocationDef) -> bool:
             if d.name.startswith("Win with Hero from Group "):
                 return int(d.name.removeprefix("Win with Hero from Group ")) <= group_count
-            if d.name in disabled or not numbered_in_seed.get(d.name, True):
+            if d.name in disabled or (d.name in SCALE_NAMES and d.name not in scale_in_seed):
                 return False
             if d.type == "MINIGAME":
                 return not exclude_minigames
