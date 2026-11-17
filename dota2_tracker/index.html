@@ -900,6 +900,19 @@ function tagCell(k, v, label) {
   td.append(b); return td;
 }
 
+// Match objectives in a readable order: wins by trait, then each stat from its lowest threshold up
+const MATCH_ORDER = ["Strength", "Agility", "Intelligence", "Universal", "Melee", "Ranged", "0 Legged", "2 Legged", "4+ Legged",
+  "Carry", "Support", "Kill", "Assist", "Deward", "Last Hit", "Denies"];
+function matchRank(name) {
+  const i = MATCH_ORDER.findIndex(w => name.includes(w));
+  const n = +(name.match(/\d+/g) || [0]).pop();
+  return [i < 0 ? MATCH_ORDER.length : i, i >= 6 && i <= 8 ? 0 : n];
+}
+function byMatchRank(a, b) {
+  const [x, y] = [matchRank(a.name), matchRank(b.name)];
+  return x[0] - y[0] || x[1] - y[1] || a.name.localeCompare(b.name);
+}
+
 function render() {
   renderHeroes();
   const kinds = [["hero", "Wins by group"], ["match", "Match objectives"], ["item", "Items to buy"]];
@@ -907,6 +920,7 @@ function render() {
   kinds.forEach(([k, label]) => {
     // "Unlocked": for purchases, only the ones you can make (and those already done)
     const list = D.checks.filter(c => c.kind === k && match(c.name) && !(hideDone && c.done) && (!onlyOn || k !== "item" || c.done || c.ready));
+    if (k === "match") list.sort(byMatchRank);
     if (!list.length) return;
     const g = el("div", "group"), h = el("div", "group-head");
     h.append(el("h3", null, label), el("span", "eyebrow", list.filter(c => !c.done).length + " left"));
