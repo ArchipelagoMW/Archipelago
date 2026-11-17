@@ -523,7 +523,7 @@ async function opendotaMatches(steam, since) {
 }
 
 // Stats, purchases and challenge data of each match, as the client reads them; kept once OpenDota has parsed the match
-const DETAILS_KEY = "dota-ap-tracker:matches:v3";
+const DETAILS_KEY = "dota-ap-tracker:matches:v4";
 const PENDING_KEY = "dota-ap-tracker:unparsed";
 async function matchDetails(ids, steam, damageTypes) {
   const cache = store.get(DETAILS_KEY) || {};
@@ -550,7 +550,7 @@ async function matchDetails(ids, steam, damageTypes) {
                       all_players_stayed: m.human_players === 10 && players.length === 10 && players.every(p => !p.leaver_status),
                       team_roshan_kills: objectives.filter(o => o.type === "CHAT_MESSAGE_ROSHAN_KILL" && o.team === myTeam).length,
                       camps_stacked: me.camps_stacked || 0, wards_placed: (me.obs_placed || 0) + (me.sen_placed || 0),
-                      building_damage: me.tower_damage || 0, healing: me.hero_healing || 0,
+                      building_damage: me.tower_damage || 0, healing: me.hero_healing || 0, stun_time: Math.round(me.stuns || 0),
                       ...damageByType(me, damageTypes) };
         delete pending[id];
       } catch (e) {}
@@ -586,7 +586,7 @@ const STATS = [["Kills", "kills", 15, [1, 5, 10], "Get {} Kill(s)"], ["Assists",
   ["Dewards", "dewards", 5, [1, 3, 7], "Get {} Deward(s)"], ["Last Hits", "last_hits", 450, [75, 125, 175], "Get {} Last Hits"],
   ["Denies", "denies", 20, [8, 16, 32], "Get {} Denies"], ["Healing", "healing", 2000, [], ""],
   ["Physical Damage", "physical_damage", 25000, [], ""], ["Magical Damage", "magical_damage", 20000, [], ""],
-  ["Physical Hit", "physical_hit", 500, [], ""], ["Magical Hit", "magical_hit", 500, [], ""]];
+  ["Physical Hit", "physical_hit", 500, [], ""], ["Magical Hit", "magical_hit", 500, [], ""], ["Stun Time", "stun_time", 60, [], ""]];
 const RUNES = { 0: "Double Damage", 1: "Haste", 2: "Illusion", 3: "Invisibility", 4: "Regeneration",
   5: "Bounty", 6: "Arcane", 7: "Water", 8: "Wisdom", 9: "Shield" };
 const runeCheck = r => `Pick up ${/^[AEIOU]/.test(r) ? "an" : "a"} ${r} Rune`;
@@ -594,7 +594,8 @@ const runeCheck = r => `Pick up ${/^[AEIOU]/.test(r) ? "an" : "a"} ${r} Rune`;
 const QUESTS = [["Stack Camps", "camps_stacked", "Camps Stacked", [10, 20]], ["Place Wards", "wards_placed", "Wards Placed", [50, 100]],
   ["Damage Buildings", "building_damage", "Building Damage", [25000, 50000]], ["Heal Heroes", "healing", "Total Healing", [7500, 15000]],
   ["Deal Physical Damage", "physical_damage", "Total Physical Damage", [75000, 150000]],
-  ["Deal Magical Damage", "magical_damage", "Total Magical Damage", [60000, 120000]]];
+  ["Deal Magical Damage", "magical_damage", "Total Magical Damage", [60000, 120000]],
+  ["Stun Enemies", "stun_time", "Total Stun Time", [200, 400]]];
 const questOf = name => QUESTS.find(([label]) => name.startsWith(label + " #"));
 const VALUE_DEFAULTS = {
   ...Object.fromEntries(STATS.map(([label, , t]) => [label, t])),
@@ -1017,7 +1018,7 @@ function tagCell(k, v, label) {
 
 // Match objectives in a readable order: wins by trait, then each stat from its lowest threshold up
 const MATCH_ORDER = ["Strength", "Agility", "Intelligence", "Universal", "Melee", "Ranged", "0 Legged", "2 Legged", "4+ Legged",
-  "Carry", "Support", "Kill", "Assist", "Deward", "Last Hit", "Denies", "Healing", "Physical Damage", "Magical Damage", "Physical Hit", "Magical Hit"];
+  "Carry", "Support", "Kill", "Assist", "Deward", "Last Hit", "Denies", "Healing", "Physical Damage", "Magical Damage", "Physical Hit", "Magical Hit", "Stun Time"];
 function matchRank(name) {
   const i = MATCH_ORDER.findIndex(w => name.includes(w));
   const n = +(name.match(/\d+/g) || [0]).pop();
