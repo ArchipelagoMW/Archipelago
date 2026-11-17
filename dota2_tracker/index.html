@@ -302,8 +302,8 @@ code { font: 500 13px var(--mono); overflow-wrap: anywhere; }
     <input id="q" type="search" placeholder="Search a hero or a check…" aria-label="Search a hero or a check">
     <div class="toggle" role="group" aria-label="Checks shown">
       <button data-mode="all" type="button" aria-pressed="false" title="All checks">All</button>
-      <button data-mode="on" type="button" aria-pressed="false" title="Purchases you can make, done checks included">Unlocked</button>
-      <button data-mode="todo" type="button" aria-pressed="true" title="Unlocked, without the checks already sent">To do</button>
+      <button data-mode="on" type="button" aria-pressed="false" title="Checks you can do now, done ones included">Unlocked</button>
+      <button data-mode="todo" type="button" aria-pressed="true" title="Checks you can do now, without the ones already sent">To do</button>
     </div>
   </div>
 
@@ -691,10 +691,25 @@ async function build(cfg, say) {
   }
 
   const heroImg = h => h.key ? `${CDN}/apps/dota2/images/dota_react/heroes/${h.key}.png` : "";
+  // Wins that need a group or a kind of hero you can't play yet, like the apworld's logic (regions.py)
+  const TRAIT = {
+    "Strength": h => h.attr === "str", "Agility": h => h.attr === "agi", "Intelligence": h => h.attr === "int", "Universal": h => h.attr === "all",
+    "Melee": h => h.attack === "Melee", "Ranged": h => h.attack === "Ranged",
+    "0 Legged": h => h.legs === 0, "2 Legged": h => h.legs === 2, "4+ Legged": h => h.legs >= 4,
+    "Carry": h => h.roles.includes("Carry"), "Support": h => h.roles.includes("Support"),
+  };
+  const playable = name => {
+    const group = name.match(/^Win with Hero from Group (\d+)$/);
+    if (group) return heroes.some(h => h.group === +group[1]);
+    const trait = name.match(/^Win as a (.+) Hero$/);
+    if (trait && TRAIT[trait[1]]) return heroes.some(TRAIT[trait[1]]);
+    return true;
+  };
   const check = (name, done) => {
     const ck = { name, kind: locKind(name), done };
     const it = S.items[name];
     if (ck.kind === "item" && it) { ck.img = it.img; ck.ready = it.req.every(r => unlockedKeys.has(r)); }
+    else if (!playable(name)) ck.ready = false;
     return ck;
   };
   const componentKeys = Object.keys(dp.item_name_to_id).filter(n => n.startsWith("Unlock ")).map(n => n.slice(7));
@@ -918,7 +933,8 @@ function render() {
   const cg = $("check-groups"); cg.replaceChildren();
   kinds.forEach(([k, label]) => {
     // "Unlocked": for purchases, only the ones you can make (and those already done)
-    const list = D.checks.filter(c => c.kind === k && match(c.name) && !(hideDone && c.done) && (!onlyOn || k !== "item" || c.done || c.ready));
+    // "Unlocked": purchases with all their components, and wins with a group or a kind of hero you can play
+    const list = D.checks.filter(c => c.kind === k && match(c.name) && !(hideDone && c.done) && (!onlyOn || c.done || (k === "item" ? c.ready : c.ready !== false)));
     if (k === "match") list.sort(byMatchRank);
     if (!list.length) return;
     const g = el("div", "group"), h = el("div", "group-head");
