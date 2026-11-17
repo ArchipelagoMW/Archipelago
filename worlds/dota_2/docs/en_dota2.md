@@ -12,7 +12,7 @@ A **Meta-progression randomizer** for DOTA 2. You play regular online matches an
 
 - **Global Challenges** - Checks any hero can do, read from the parsed match: get first blood, kill a courier, pick up each type of rune, use a buyback, pick up the Aegis, win as each position (1 to 5), win a short match (no leaver or bot in the match), win a long match, and win a match where your team took Roshan.
 
-- **Healing and damage** - In a match: healing done to heroes, physical and magical damage to heroes, and one big physical or magical hit on a hero. Damage types come from the abilities (auto-attacks are physical; pure damage and items count as neither).
+- **Healing and damage** - In a match: healing done to heroes, physical and magical damage to heroes, and one big physical or magical hit on a hero. Damage types come from the abilities (auto-attacks are physical, pure damage counts as magical, items as neither).
 
 - **Quests** - Checks that add up over the whole seed: stack camps, place wards (observers and sentries), damage buildings and heal heroes, each with a lower and a full target by default. Each match counts once, even if parsed again. Type `/quests` in the client to see your progress.
 

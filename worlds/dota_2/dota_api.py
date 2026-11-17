@@ -257,11 +257,12 @@ def ability_damage_types() -> dict:
 
 def damage_by_type(me) -> dict:
     """Physical and magical damage to heroes, and the biggest hit of each type we can be sure of.
-    Auto-attacks (inflictor "null") are physical; pure damage and items count as neither.
+    Auto-attacks (inflictor "null") are physical, pure damage counts as magical (the usual convention), items as
+    neither.
     OpenDota keeps only the match's single biggest hit, so a type's biggest hit is that one when it has this type,
     or else the best average hit of a source of this type (at least one hit was that big)."""
     types = ability_damage_types()
-    kind = lambda source: "Physical" if source in (None, "null") else types.get(source)
+    kind = lambda source: "Physical" if source in (None, "null") else "Magical" if types.get(source) == "Pure" else types.get(source)
     inflictors, hits = me.get('damage_inflictor') or {}, me.get('hero_hits') or {}
     totals = {"Physical": 0, "Magical": 0}
     best = {"Physical": 0, "Magical": 0}

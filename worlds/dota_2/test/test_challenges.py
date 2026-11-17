@@ -121,8 +121,8 @@ class ChallengeRules(Dota2TestBase):
               "hero_hits": {"null": 50, "lina_laguna_blade": 4, "juggernaut_omni_slash": 9, "pudge_meat_hook": 3},
               "max_hero_hit": {"value": 1200, "inflictor": "lina_laguna_blade"}}
         d = damage_by_type(me)
-        # Attacks and Omni Slash are physical, Laguna Blade magical; Meat Hook (pure) and items count as neither
-        self.assertEqual((d["physical_damage"], d["magical_damage"]), (5900, 3000))
+        # Attacks and Omni Slash are physical; Laguna Blade and Meat Hook (pure) magical; items neither
+        self.assertEqual((d["physical_damage"], d["magical_damage"]), (5900, 3700))
         self.assertEqual((d["physical_hit"], d["magical_hit"]), (100, 1200))
 
 
