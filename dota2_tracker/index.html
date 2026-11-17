@@ -324,7 +324,6 @@ code { font: 500 13px var(--mono); overflow-wrap: anywhere; }
   <div class="panel" id="panel-items" role="tabpanel" aria-labelledby="tab-items" hidden>
     <section id="items">
       <div class="sec-head"><h2>Components</h2><span class="eyebrow" id="items-count"></span></div>
-      <p class="note">The basic items you must receive before buying them counts. Built items need all their components.</p>
       <div class="chips" id="components"></div>
     </section>
   </div>
@@ -333,7 +332,6 @@ code { font: 500 13px var(--mono); overflow-wrap: anywhere; }
     <div class="stats" id="game-stats"></div>
     <section>
       <div class="sec-head"><h2>Match history</h2><span class="eyebrow" id="games-count"></span></div>
-      <p class="note" id="games-note"></p>
       <div class="tablebox"><table>
         <thead><tr><th scope="col">Date</th><th scope="col">Hero</th><th scope="col">Result</th><th scope="col" class="num">K / D / A</th><th scope="col" class="num">Duration</th><th scope="col">Read by the client</th><th scope="col">Details</th></tr></thead>
         <tbody id="game-rows"></tbody>
@@ -983,9 +981,6 @@ function renderGames() {
   $("tab-games").textContent = "Matches (" + G.length + ")";
   $("game-stats").replaceChildren(...(G.length ? [stat("Wins", wins.length, G.length, Math.round(100 * wins.length / G.length) + "% win rate")] : []));
   $("games-count").textContent = D.games ? G.length + " match(es) since " + fmtDate(D.games_since) : "";
-  $("games-note").textContent = "From OpenDota, since the seed start. A win only counts if the hero is unlocked"
-    + " and you ran /parse_recent_match in the client before your next match: it only reads the most recent one."
-    + " \"Read by the client\" is deduced from the checks done on the server (hover the cell for details).";
   const body = $("game-rows"); body.replaceChildren();
   [...G].reverse().forEach(g => {
     const tr = el("tr", g.open ? "" : "locked");
