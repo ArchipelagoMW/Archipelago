@@ -10,6 +10,7 @@ from datetime import datetime
 
 from .constants import PROGRESSIVE_GROUP_UNLOCK_ID, PRIMORDIAL_FRAGMENT_ID, FILLER_ITEM_ID
 from .dota_api import parse_most_recent_match_data, DotaMatchData
+from .challenges import QUESTS, challenge_values, match_challenges, quest_amounts, completed_quests
 from .locations import LocationDef, load_item_locations, build_item_name_to_dname, load_minigame_locations
 from .hero import Hero, get_all_heroes, hero_from_dict
 
@@ -44,6 +45,10 @@ class Dota2CommandProcessor(ClientCommandProcessor):
     def _cmd_hero_wins(self) -> None:
         """View hero wins"""
         self.ctx.get_hero_wins()
+
+    def _cmd_quests(self) -> None:
+        """View your progress on the quests, which add up over the whole seed"""
+        self.ctx.get_quests()
 
     def _cmd_minigame(self, name: str ="", score: int = 0) -> None:
         """Submit Minigame scores when unlocked. /minigame {first world of name} {score} Ex. /minigame Nest 80000"""
@@ -84,6 +89,10 @@ class Dota2Save:
     
     # Anti-duplicate
     submitted_match_ids: list[int] = field(default_factory=list)
+
+    # Quest totals over the seed, and the matches already added to them
+    quest_totals: dict[str, int] = field(default_factory=dict)
+    quest_match_ids: list[int] = field(default_factory=list)
 
     most_recent_game_time: int = 0
 
@@ -473,6 +482,11 @@ class Dota2Context(CommonContext):
             role = "Carry" if "Carry" in hero.roles else "Support"
             self.output(f"{hero.name} - {group_name} - {hero.primary_attr} - {hero.attack_type} - {hero.legs} legs - {role}")
 
+    def get_quests(self) -> None:
+        values = challenge_values(getattr(self, "slot_data", None) or {})
+        for name, key, value in QUESTS:
+            self.output(f"{name}: {self.save.quest_totals.get(key, 0)} / {values[value]}")
+
     def get_hero_wins(self) -> None:
         self.output(f"Hero Wins: {len(self.save.unique_heroes_won)}")
         for hero in self.save.unique_heroes_won:
@@ -608,6 +622,15 @@ class Dota2Context(CommonContext):
         purchase_checks = self.check_purchases(purchases, all_item_locations)
     
         checks.extend(purchase_checks)
+
+        # Global challenges, and quests that add up over the seed (each match counted once)
+        values = challenge_values(getattr(self, "slot_data", None) or {})
+        checks.extend(match_challenges(match_data, values))
+        if match_data.match_id not in self.save.quest_match_ids:
+            self.save.quest_match_ids.append(match_data.match_id)
+            for key, amount in quest_amounts(match_data).items():
+                self.save.quest_totals[key] = self.save.quest_totals.get(key, 0) + amount
+        checks.extend(completed_quests(self.save.quest_totals, values))
        
         valid_location_ids = []
         for check in checks:

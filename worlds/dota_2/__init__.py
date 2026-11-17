@@ -14,10 +14,11 @@ from worlds.AutoWorld import World, WebWorld
 from .constants import DOTA2_BASE_ID
 from .options import (DOTA2Options, GoalType, CrownFall)
 from .items import DOTA2Item, ItemDef, load_hero_unlock_items, build_item_name_to_id, FILLER_ITEM_NAME,load_item_defs, load_shop_unlock_items, load_minigame_unlock_items
-from .locations import DOTA2Location, LocationDef, load_hero_locations, build_location_name_to_id, load_item_locations, load_game_stat_locations,load_static_hero_locations, load_victory_location, load_minigame_locations
+from .locations import DOTA2Location, LocationDef, load_hero_locations, build_location_name_to_id, load_item_locations, load_game_stat_locations,load_static_hero_locations, load_victory_location, load_minigame_locations, load_challenge_locations
 from .rules import set_dota_rules
 from .regions import create_regions_and_locations
 from .hero import Hero, get_starting_hero_pool, get_all_heroes
+from .challenges import resolve_disabled, VALUES
 # For our game to display correctly on the website, we need to define a WebWorld subclass.
 class DOTA2WebWorld(WebWorld):
     # We need to override the "game" field of the WebWorld superclass.
@@ -73,6 +74,7 @@ class DOTA2World(World):
             + load_game_stat_locations()
             + load_victory_location()
             + load_minigame_locations()
+            + load_challenge_locations()  # last, so the ids of older locations don't move
         )
 
     _item_defs = load_item_defs()
@@ -104,15 +106,19 @@ class DOTA2World(World):
         self._location_defs.extend(load_game_stat_locations())
         self._location_defs.extend(load_victory_location())
         self._location_defs.extend(load_minigame_locations())
+        self._location_defs.extend(load_challenge_locations())
 
         self._item_defs.extend(load_hero_unlock_items(self))
         self._item_defs.extend(load_shop_unlock_items())
         self._item_defs.extend(load_minigame_unlock_items())
 
         exclude_minigames = self.options.crownfall == CrownFall.option_off
+        disabled_challenges = resolve_disabled(self.options.disabled_checks.value)
 
         # location_name_to_id is set per-instance in generate_early from filtered defs (see below).
         def location_type_valid(d: LocationDef) -> bool:
+            if d.type == "CHALLENGE":
+                return d.name not in disabled_challenges
             if not exclude_minigames: 
                 return d.type == "HERO_WIN" or d.type ==  "ITEM_BUY" or d.type ==  "GAME_STAT" or d.type ==  "GOAL" or d.type ==  "MINIGAME"
             if exclude_minigames:
@@ -179,7 +185,8 @@ class DOTA2World(World):
             "hero_groups": hero_groups,
             "progressive_hero_group_unlocks": self.progressive_hero_group_unlocks,
             "items_received_index": self.items_received_index,
-            "item_name_to_id": self.item_id_to_name
+            "item_name_to_id": self.item_id_to_name,
+            "check_values": {name: self.options.check_values.value.get(name, default) for name, (default, _, _) in VALUES.items()},
             # "game_mode": self.options.game_mode.value,
             # "exclude_hard_locations": self.options.exclude_hard_locations.value,
         }
@@ -191,8 +198,8 @@ class DOTA2World(World):
             for _ in range(d.copies):
                 pool.append(self.create_item(d.name))
 
-        # Pad pool so total items = locations
-        loc_count = len(self.multiworld.get_locations(self.player))
+        # Pad pool so total items = locations that take an item (Goal Complete already holds its locked event)
+        loc_count = len([loc for loc in self.multiworld.get_locations(self.player) if loc.address is not None])
         if len(pool) < loc_count:
             pool += [self.create_item(FILLER_ITEM_NAME) for _ in range(loc_count - len(pool))]
 

@@ -3,7 +3,9 @@ from __future__ import annotations
 import json
 from dataclasses import dataclass
 from importlib import resources
-from Options import Choice, Range, PerGameCommonOptions
+from Options import Choice, Range, PerGameCommonOptions, OptionSet, OptionCounter
+
+from .challenges import FAMILIES, CHALLENGE_CHECKS, VALUES
 
 class GoalType(Choice):
     """How game completion is determined.
@@ -45,6 +47,39 @@ class CrownFall(Choice):
     option_on = 1
     default = 0
 
+class DisabledChecks(OptionSet):
+    """Global checks to remove from the seed. All of them are in the seed by default.
+
+    List families or single checks. Families: First Blood, Courier Kill, Runes, Buyback, Aegis, Positions,
+    Short Win, Long Win, Roshan Win, Quests.
+    Example: ["Runes", "Kill a Courier"]
+    """
+    display_name = "Disabled Checks"
+    valid_keys = sorted(FAMILIES) + CHALLENGE_CHECKS
+
+
+class CheckValues(OptionCounter):
+    """Change the values used by global checks. Only list the ones you want to change.
+
+    - Short Win Minutes (default 30, 15 to 45): win faster than this, with no leaver or bot in the match.
+    - Long Win Minutes (default 60, 40 to 90): win a match lasting at least this long.
+    - Roshan Kills (default 2, 1 to 4): win a match where your team killed Roshan at least this many times.
+    - Camps Stacked (default 10, 1 to 100): camps to stack over the whole seed.
+    - Wards Placed (default 15, 1 to 200): observer and sentry wards to place over the whole seed.
+    - Building Damage (default 10000, 1000 to 200000): damage to deal to buildings over the whole seed.
+    Example: {"Short Win Minutes": 25, "Wards Placed": 20}
+    """
+    display_name = "Check Values"
+    valid_keys = list(VALUES)
+
+    def __init__(self, value: dict[str, int]) -> None:
+        super().__init__(value)
+        errors = [f"{key} must be between {VALUES[key][1]} and {VALUES[key][2]}, got {v}."
+                  for key, v in self.value.items() if key in VALUES and not VALUES[key][1] <= v <= VALUES[key][2]]
+        if errors:
+            raise ValueError("\n".join([f"For option {self.__class__.__name__}:"] + errors))
+
+
 # class PrimordialFragmentsToUnlockFinal(Range):
 #     """Number of Primordial Fragments (MacGuffin) you must collect to unlock your final character (Win with Character goal).
 
@@ -82,6 +117,8 @@ class DOTA2Options(PerGameCommonOptions):
     total_wins_to_win: TotalWinsToWin
     primordial_fragments_to_win: PrimordialFragmentsToWin
     crownfall: CrownFall
+    disabled_checks: DisabledChecks
+    check_values: CheckValues
     #primordial_fragments_to_unlock_final: PrimordialFragmentsToUnlockFinal
     #final_character: FinalCharacter
     # game_mode: GameMode

@@ -4,7 +4,7 @@ import logging
 import requests
 import time
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 @dataclass
 class DotaMatchData:
     match_id: int
@@ -18,6 +18,19 @@ class DotaMatchData:
     win: int
     dewards: int
     rosh: int
+    # Global challenges and quests (see challenges.py)
+    first_blood: bool = False
+    courier_kills: int = 0
+    runes: dict = field(default_factory=dict)
+    buybacks: int = 0
+    aegis: bool = False
+    position: int = 0
+    duration: int = 0
+    all_players_stayed: bool = False
+    team_roshan_kills: int = 0
+    camps_stacked: int = 0
+    wards_placed: int = 0
+    building_damage: int = 0
 
 
 api_logger = logging.getLogger("Client")
@@ -197,7 +210,29 @@ async def parse_most_recent_match_data(steamID):
         denies = my_player['denies'],
         win = my_player['win'],
         dewards = my_player['observer_kills'] + my_player['sentry_kills'],
-        rosh = my_player['roshan_kills']
+        rosh = my_player['roshan_kills'],
+        **challenge_data(match, my_player),
+    )
+
+def challenge_data(match, me) -> dict:
+    """Fields of DotaMatchData used by the global challenges and quests."""
+    objectives = match.get('objectives') or []
+    my_team = 2 if me['player_slot'] < 128 else 3  # objectives use 2 for Radiant, 3 for Dire
+    players = match.get('players') or []
+    return dict(
+        first_blood = bool(me.get('firstblood_claimed')),
+        courier_kills = me.get('courier_kills') or 0,
+        runes = {str(k): v for k, v in (me.get('runes') or {}).items()},
+        buybacks = me.get('buyback_count') or len(me.get('buyback_log') or []),
+        aegis = any(o.get('type') == 'CHAT_MESSAGE_AEGIS' and o.get('player_slot') == me['player_slot'] for o in objectives),
+        position = me.get('position_est') or 0,
+        duration = match.get('duration') or 0,
+        all_players_stayed = match.get('human_players') == 10 and len(players) == 10
+            and all((p.get('leaver_status') or 0) == 0 for p in players),
+        team_roshan_kills = sum(1 for o in objectives if o.get('type') == 'CHAT_MESSAGE_ROSHAN_KILL' and o.get('team') == my_team),
+        camps_stacked = me.get('camps_stacked') or 0,
+        wards_placed = (me.get('obs_placed') or 0) + (me.get('sen_placed') or 0),
+        building_damage = me.get('tower_damage') or 0,
     )
 
 

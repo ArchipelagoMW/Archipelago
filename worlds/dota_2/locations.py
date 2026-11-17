@@ -10,12 +10,13 @@ from .hero import Hero, get_all_heroes,get_starting_hero_pool
 from BaseClasses import ItemClassification, Location
 
 from . import items
+from .challenges import CHALLENGE_CHECKS
 
 
 @dataclass(frozen=True)
 class LocationDef:
     name: str
-    type: str = ""  # "HERO_WIN", "ITEM_BUY", "GAME_STAT", "GOAL", MINIGAME
+    type: str = ""  # "HERO_WIN", "ITEM_BUY", "GAME_STAT", "GOAL", MINIGAME, CHALLENGE
     requirements: list[str] = field(default_factory=list)
 
 
@@ -148,6 +149,9 @@ def load_static_hero_locations() -> List[LocationDef]:
         )
 
     return locs
+
+def load_challenge_locations() -> List[LocationDef]:
+    return [LocationDef(name=name, type="CHALLENGE") for name in CHALLENGE_CHECKS]
 
 def load_victory_location() -> List[LocationDef]:
     locs: List[LocationDef] = []
