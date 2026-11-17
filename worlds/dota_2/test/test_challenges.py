@@ -29,7 +29,7 @@ class DefaultSeed(Dota2TestBase):
     def test_default_values_in_slot_data(self) -> None:
         values = self.world.fill_slot_data()["check_values"]
         self.assertEqual(values, resolve_values({}))
-        self.assertEqual(values["Kills"], [5])
+        self.assertEqual(values["Kills"], [10])
 
 
 class CustomSeed(Dota2TestBase):
@@ -63,7 +63,7 @@ class CustomSeed(Dota2TestBase):
         self.assertEqual(values["Short Win Minutes"], 25)
         self.assertEqual(values["Kills"], [8])
         self.assertEqual(values["Last Hits"], [75, 150, 250, 400, 600])
-        self.assertEqual(values["Long Win Minutes"], 60)
+        self.assertEqual(values["Long Win Minutes"], 50)
 
     def test_stat_checks_in_seed(self) -> None:
         names = {loc.name for loc in self.multiworld.get_locations(self.player)}
@@ -93,7 +93,7 @@ class ChallengeRules(Dota2TestBase):
 
     def test_stat_checks(self) -> None:
         values = resolve_values({"Kills": [15, 1, 5]})
-        checks = stat_checks(sample_match(kills=12, last_hits=130), values)
+        checks = stat_checks(sample_match(kills=12, last_hits=260), values)
         self.assertEqual(checks, ["Kills #1", "Kills #2", "Last Hits #1"])
 
     def test_match_challenges(self) -> None:

@@ -13,13 +13,14 @@ if TYPE_CHECKING:
     from .dota_api import DotaMatchData
 
 # Stat checks: one check per threshold set in the YAML, one threshold by default.
+# Defaults are round numbers an average player reaches about one match in four (OpenDota public matches).
 # (label, DotaMatchData field, default threshold, maximum threshold)
 STATS = [
-    ("Kills", "kills", 5, 50),
-    ("Assists", "assists", 10, 60),
-    ("Dewards", "dewards", 3, 30),
-    ("Last Hits", "last_hits", 125, 800),
-    ("Denies", "denies", 16, 100),
+    ("Kills", "kills", 10, 50),
+    ("Assists", "assists", 15, 60),
+    ("Dewards", "dewards", 5, 30),
+    ("Last Hits", "last_hits", 250, 800),
+    ("Denies", "denies", 10, 100),
 ]
 MAX_STAT_CHECKS = 5  # thresholds per stat
 ORIGINAL_STAT_CHECKS = 3  # checks #1 to #3 reuse the locations of the original three thresholds
@@ -87,11 +88,12 @@ DISABLEABLE_CHECKS = sorted({name for names in FAMILIES.values() for name in nam
 VALUES: dict[str, tuple[int, int, int]] = {
     **{label: (default, 1, maximum) for label, _, default, maximum in STATS},
     "Short Win Minutes": (30, 15, 45),
-    "Long Win Minutes": (60, 40, 90),
+    "Long Win Minutes": (50, 40, 90),
     "Roshan Kills": (1, 1, 4),
+    # Quests: about ten matches for an average player
     "Camps Stacked": (10, 1, 100),
-    "Wards Placed": (15, 1, 200),
-    "Building Damage": (10000, 1000, 200000),
+    "Wards Placed": (50, 1, 200),
+    "Building Damage": (30000, 1000, 200000),
 }
 
 
