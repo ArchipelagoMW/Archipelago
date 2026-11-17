@@ -14,7 +14,7 @@ A **Meta-progression randomizer** for DOTA 2. You play regular online matches an
 
 - **Healing and damage** - In a match: healing done to heroes, physical and magical damage to heroes, and one big physical or magical hit on a hero. Damage types come from the abilities (auto-attacks are physical, pure damage counts as magical, items as neither).
 
-- **Quests** - Checks that add up over the whole seed: stack camps, place wards (observers and sentries), damage buildings and heal heroes, each with a lower and a full target by default. Each match counts once, even if parsed again. Type `/quests` in the client to see your progress.
+- **Quests** - Checks that add up over the whole seed: stack camps, place wards (observers and sentries), damage buildings, heal heroes, and deal physical or magical damage to heroes, each with a lower and a full target by default. Each match counts once, even if parsed again. Type `/quests` in the client to see your progress.
 
 - **Customizing checks** - All checks are in the seed by default. In your YAML, `disabled_checks` removes families (such as Legs Wins, Purchases or Runes) or single checks, and `check_values` changes their values: stat thresholds, short and long match lengths, Roshan kills, quest targets. Only list what you want to change; the options page lists every family and value with its default:
 

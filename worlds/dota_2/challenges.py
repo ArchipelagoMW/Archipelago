@@ -39,6 +39,8 @@ QUESTS = [
     ("Place Wards", "wards_placed", "Wards Placed", [50, 100], 300),
     ("Damage Buildings", "building_damage", "Building Damage", [25000, 50000], 200000),
     ("Heal Heroes", "healing", "Total Healing", [7500, 15000], 500000),
+    ("Deal Physical Damage", "physical_damage", "Total Physical Damage", [75000, 150000], 2000000),
+    ("Deal Magical Damage", "magical_damage", "Total Magical Damage", [60000, 120000], 2000000),
 ]
 
 
