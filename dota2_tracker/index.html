@@ -480,11 +480,12 @@ function apFetch(host, cfg) {
           send({ cmd: "GetDataPackage", games: [out.game] });
         } else if (m.cmd === "ReceivedItems") {
           out.received.push(...m.items);
-          out.gotItems = true;
         } else if (m.cmd === "DataPackage") {
           out.datapackage = m.data.games[out.game];
         }
-        if (out.connected && out.datapackage && out.gotItems) finish(null, out);
+        // The server sends ReceivedItems right after Connected, so before the DataPackage we ask for then,
+        // and doesn't send it at all to a slot that has received nothing yet
+        if (out.connected && out.datapackage) finish(null, out);
       }
     };
   });
