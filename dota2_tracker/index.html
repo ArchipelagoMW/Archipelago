@@ -801,7 +801,7 @@ function renderStatic() {
   if (!D.has_steam) say("Add your Steam account ID in Settings to see your wins and matches.");
   else if (!D.games_since) say("Add the seed start date in Settings (or load the client save) to see your wins and matches.");
   else if (!P) say("Progress unavailable: " + (D.games_error || "OpenDota unreachable") + ".");
-  else if (!P.steamid_set) say("No Steam ID set in the client: run /set_player_id once so your matches count.");
+  else if (P.source === "save" && !P.steamid_set) say("No Steam ID set in the client: run /set_player_id once so your matches count.");
   $("log-count").textContent = D.received.length + " items";
   if (D.journal_since) $("log-note").textContent = "When this browser saw the item arrive (to the nearest refresh). Items received before "
     + fmtTime(D.journal_since) + " have no time.";
