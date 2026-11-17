@@ -19,7 +19,7 @@ class DefaultSeed(Dota2TestBase):
         # Quests have a lower and a full target by default
         self.assertTrue({"Stack Camps #1", "Stack Camps #2", "Heal Heroes #2", "Deal Magical Damage #2"} <= names)
         self.assertNotIn("Stack Camps #3", names)
-        self.assertTrue({"Healing #1", "Physical Damage #1", "Magical Hit #1"} <= names)
+        self.assertTrue({"Healing #1", "Physical Damage #1", "Magical Hit #1", "Stun Time #1", "Stun Enemies #2"} <= names)
         self.assertIn("Kills #1", names)
         self.assertNotIn("Kills #2", names)
 

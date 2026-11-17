@@ -37,6 +37,7 @@ class DotaMatchData:
     magical_damage: int = 0
     physical_hit: int = 0
     magical_hit: int = 0
+    stun_time: int = 0
 
 
 api_logger = logging.getLogger("Client")
@@ -240,6 +241,7 @@ def challenge_data(match, me) -> dict:
         wards_placed = (me.get('obs_placed') or 0) + (me.get('sen_placed') or 0),
         building_damage = me.get('tower_damage') or 0,
         healing = me.get('hero_healing') or 0,
+        stun_time = round(me.get('stuns') or 0),
         **damage_by_type(me),
     )
 

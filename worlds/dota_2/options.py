@@ -68,17 +68,17 @@ class HeroGroups(Range):
 class DisabledChecks(OptionSet):
     """Checks to remove: families or check names. Hero group wins and the goal always stay.
     Families: Attribute Wins, Attack Type Wins, Legs Wins, Role Wins, Purchases, Kills, Assists, Dewards, Last Hits,
-    Denies, Healing, Physical Damage, Magical Damage, Physical Hit, Magical Hit, First Blood, Courier Kill, Runes,
+    Denies, Healing, Physical Damage, Magical Damage, Physical Hit, Magical Hit, Stun Time, First Blood, Courier Kill, Runes,
     Buyback, Aegis, Positions, Short Win, Long Win, Roshan Win, Quests, Stack Camps, Place Wards, Damage Buildings,
-    Heal Heroes, Deal Physical Damage, Deal Magical Damage"""
+    Heal Heroes, Deal Physical Damage, Deal Magical Damage, Stun Enemies"""
     display_name = "Disabled Checks"
     valid_keys = sorted(FAMILIES) + DISABLEABLE_CHECKS
 
 
 class CheckValues(OptionDict):
     """Numbers used by checks. Stats count in one match, quests over the whole seed; a list gives one check per number,
-    e.g. Last Hits: [300, 450]. Hits are one hit on a hero. Short Win needs no leaver or bot. Roshan Kills are your
-    team's, in a win."""
+    e.g. Last Hits: [300, 450]. Hits are one hit on a hero, stun times are in seconds. Short Win needs no leaver or
+    bot. Roshan Kills are your team's, in a win."""
     display_name = "Check Values"
     valid_keys = list(VALUES)
     default = {name: default for name, (default, _, _) in VALUES.items()}

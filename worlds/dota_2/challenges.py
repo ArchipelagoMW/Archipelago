@@ -28,6 +28,7 @@ STATS = [
     ("Magical Damage", "magical_damage", [20000], 200000),
     ("Physical Hit", "physical_hit", [500], 5000),
     ("Magical Hit", "magical_hit", [500], 5000),
+    ("Stun Time", "stun_time", [60], 600),  # seconds of stun on enemy heroes
 ]
 ORIGINAL_STATS = ["Kills", "Assists", "Dewards", "Last Hits", "Denies"]  # their #1 to #3 reuse the original locations
 ORIGINAL_STAT_CHECKS = 3
@@ -41,6 +42,7 @@ QUESTS = [
     ("Heal Heroes", "healing", "Total Healing", [7500, 15000], 500000),
     ("Deal Physical Damage", "physical_damage", "Total Physical Damage", [75000, 150000], 2000000),
     ("Deal Magical Damage", "magical_damage", "Total Magical Damage", [60000, 120000], 2000000),
+    ("Stun Enemies", "stun_time", "Total Stun Time", [200, 400], 10000),
 ]
 
 
