@@ -50,7 +50,7 @@ class CrownFall(Choice):
     default = 0
 
 class StartingHeroes(Range):
-    """Number of heroes you can play from the start. The other heroes are split into groups to unlock."""
+    """Number of heroes playable from the start."""
     display_name = "Starting Heroes"
     range_start = 5
     range_end = 120
@@ -58,8 +58,7 @@ class StartingHeroes(Range):
 
 
 class HeroGroups(Range):
-    """Number of hero groups to unlock, each with a "Progressive Group Unlock". The heroes left after the starting
-    pool are split evenly between them. There can't be more groups than heroes left."""
+    """Number of hero groups to unlock. The other heroes are split evenly between them."""
     display_name = "Hero Groups"
     range_start = 1
     range_end = MAX_HERO_GROUPS
@@ -67,40 +66,19 @@ class HeroGroups(Range):
 
 
 class DisabledChecks(OptionSet):
-    """Checks to remove from the seed. All checks are in the seed by default.
-
-    List families or single checks (by their name). Wins with a hero group and the goal can't be removed.
-    Families: Attribute Wins, Attack Type Wins, Legs Wins, Role Wins, Kills, Assists, Dewards, Last Hits,
-    Denies, Purchases, First Blood, Courier Kill, Runes, Buyback, Aegis, Positions, Short Win, Long Win,
-    Roshan Win, Quests.
-    Example: ["Runes", "Legs Wins", "Divine Rapier", "Kills #2"]
-    """
+    """Checks to remove: families or check names. Hero group wins and the goal always stay.
+    Families: Attribute Wins, Attack Type Wins, Legs Wins, Role Wins, Kills, Assists, Dewards, Last Hits, Denies,
+    Purchases, First Blood, Courier Kill, Runes, Buyback, Aegis, Positions, Short Win, Long Win, Roshan Win, Quests"""
     display_name = "Disabled Checks"
     valid_keys = sorted(FAMILIES) + DISABLEABLE_CHECKS
 
 
 class CheckValues(OptionDict):
-    """Change the values checks use. Only list the ones you want to change.
-
-    Stats, in one match: one threshold for one check, or a list of up to 5 thresholds for one check each
-    (named #1, #2... by increasing threshold).
-    - Kills (default 5, up to 50)
-    - Assists (default 10, up to 60)
-    - Dewards (default 3, up to 30)
-    - Last Hits (default 125, up to 800)
-    - Denies (default 16, up to 100)
-    Global challenges:
-    - Short Win Minutes (default 30, 15 to 45): win faster than this, with no leaver or bot in the match.
-    - Long Win Minutes (default 60, 40 to 90): win a match lasting at least this long.
-    - Roshan Kills (default 1, 1 to 4): win a match where your team killed Roshan at least this many times.
-    Quests, over the whole seed:
-    - Camps Stacked (default 10, 1 to 100)
-    - Wards Placed (default 15, 1 to 200): observer and sentry wards.
-    - Building Damage (default 10000, 1000 to 200000)
-    Example: {"Kills": 8, "Last Hits": [75, 150, 250], "Short Win Minutes": 25}
-    """
+    """Numbers used by checks. Stats count in one match; a list gives one check per number, e.g. Last Hits: [75, 150, 250].
+    Short Win needs no leaver or bot. Roshan Kills are your team's, in a win. Quests add up over the whole seed."""
     display_name = "Check Values"
     valid_keys = list(VALUES)
+    default = {name: default for name, (default, _, _) in VALUES.items()}
 
     def __init__(self, value: dict[str, Any]) -> None:
         super().__init__(value)
