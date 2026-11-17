@@ -592,7 +592,9 @@ const RUNES = { 0: "Double Damage", 1: "Haste", 2: "Illusion", 3: "Invisibility"
 const runeCheck = r => `Pick up ${/^[AEIOU]/.test(r) ? "an" : "a"} ${r} Rune`;
 // Quests add up over the seed, one check per threshold: [label, total key, value with the thresholds, default]
 const QUESTS = [["Stack Camps", "camps_stacked", "Camps Stacked", [10, 20]], ["Place Wards", "wards_placed", "Wards Placed", [50, 100]],
-  ["Damage Buildings", "building_damage", "Building Damage", [25000, 50000]], ["Heal Heroes", "healing", "Total Healing", [7500, 15000]]];
+  ["Damage Buildings", "building_damage", "Building Damage", [25000, 50000]], ["Heal Heroes", "healing", "Total Healing", [7500, 15000]],
+  ["Deal Physical Damage", "physical_damage", "Total Physical Damage", [75000, 150000]],
+  ["Deal Magical Damage", "magical_damage", "Total Magical Damage", [60000, 120000]]];
 const questOf = name => QUESTS.find(([label]) => name.startsWith(label + " #"));
 const VALUE_DEFAULTS = {
   ...Object.fromEntries(STATS.map(([label, , t]) => [label, t])),
