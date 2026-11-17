@@ -44,9 +44,9 @@ def rune_check(rune: str) -> str:
 
 # Quests add up over the whole seed: (check name, save total key, value that sets the target)
 QUESTS = [
-    ("Quest: Stack Camps", "camps_stacked", "Camps Stacked"),
-    ("Quest: Place Wards", "wards_placed", "Wards Placed"),
-    ("Quest: Damage Buildings", "building_damage", "Building Damage"),
+    ("Stack Camps", "camps_stacked", "Camps Stacked"),
+    ("Place Wards", "wards_placed", "Wards Placed"),
+    ("Damage Buildings", "building_damage", "Building Damage"),
 ]
 
 # Global challenges, in location order. New checks go at the end so existing location ids don't move.

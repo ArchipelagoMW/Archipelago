@@ -108,7 +108,7 @@ class ChallengeRules(Dota2TestBase):
         # Short but with a leaver or a bot: not a short win
         self.assertNotIn("Win a Short Match", checks)
         self.assertIn("Win a Match Where Your Team Took Roshan", checks)
-        self.assertEqual(completed_quests({"camps_stacked": 10, "wards_placed": 3}, values), ["Quest: Stack Camps"])
+        self.assertEqual(completed_quests({"camps_stacked": 10, "wards_placed": 3}, values), ["Stack Camps"])
 
 
 class TooManyChecksOff(Dota2TestBase):
