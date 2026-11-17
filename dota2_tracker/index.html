@@ -570,8 +570,8 @@ const RUNES = { 0: "Double Damage", 1: "Haste", 2: "Illusion", 3: "Invisibility"
   5: "Bounty", 6: "Arcane", 7: "Water", 8: "Wisdom", 9: "Shield" };
 const runeCheck = r => `Pick up ${/^[AEIOU]/.test(r) ? "an" : "a"} ${r} Rune`;
 // Quests add up over the seed: [check, total key, value that sets the target]
-const QUESTS = [["Quest: Stack Camps", "camps_stacked", "Camps Stacked"], ["Quest: Place Wards", "wards_placed", "Wards Placed"],
-  ["Quest: Damage Buildings", "building_damage", "Building Damage"]];
+const QUESTS = [["Stack Camps", "camps_stacked", "Camps Stacked"], ["Place Wards", "wards_placed", "Wards Placed"],
+  ["Damage Buildings", "building_damage", "Building Damage"]];
 const VALUE_DEFAULTS = {
   ...Object.fromEntries(STATS.map(([label, , t]) => [label, t])),
   "Short Win Minutes": 30, "Long Win Minutes": 60, "Roshan Kills": 1, "Camps Stacked": 10, "Wards Placed": 15, "Building Damage": 10000,
@@ -696,7 +696,7 @@ async function build(cfg, say) {
   const unlockedKeys = new Set(names.filter(n => n.startsWith("Unlock ")).map(n => n.slice(7)));
   const checked = new Set(c.checked_locations);
   const allLocs = [...new Set([...c.missing_locations, ...c.checked_locations])].sort((a, b) => a - b);
-  const locKind = n => n.startsWith("Win with") ? "hero" : n in S.items ? "item" : n.startsWith("Quest: ") ? "quest"
+  const locKind = n => n.startsWith("Win with") ? "hero" : n in S.items ? "item" : QUESTS.some(([q]) => q === n) ? "quest"
     : n.startsWith("Win as a ") || / #\d$/.test(n) || /^Get \d/.test(n) ? "match" : "challenge";
   const values = seedValues(sd);
   const seedChecks = new Set(allLocs.map(i => locNames[i]));
@@ -998,7 +998,7 @@ function byMatchRank(a, b) {
 
 function render() {
   renderHeroes();
-  const kinds = [["hero", "Wins by group"], ["match", "Match objectives"], ["challenge", "Challenges"], ["quest", "Quests (whole seed)"], ["item", "Items to buy"]];
+  const kinds = [["hero", "Wins by group"], ["match", "Match objectives"], ["challenge", "Challenges"], ["quest", "Quests"], ["item", "Items to buy"]];
   const cg = $("check-groups"); cg.replaceChildren();
   kinds.forEach(([k, label]) => {
     // "Unlocked": for purchases, only the ones you can make (and those already done)
