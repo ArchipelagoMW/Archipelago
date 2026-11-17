@@ -18,6 +18,7 @@ class DotaMatchData:
     win: int
     dewards: int
     rosh: int
+    start_time: int = 0
 
 
 api_logger = logging.getLogger("Client")
@@ -162,6 +163,12 @@ async def request_match_parse(steamID, match_id=None):
 
     if match_id is None:
         return None
+
+    # No need to ask for a new parse when OpenDota already parsed the replay
+    match = OPEN_DOTA.get_match(match_id)
+    if match and match.get('version') is not None:
+        return match
+
     result = OPEN_DOTA.request_parse(match_id)
 
     job_id = result['job']["jobId"]
@@ -208,7 +215,8 @@ async def parse_most_recent_match_data(steamID, match_id=None):
         denies = my_player['denies'],
         win = my_player['win'],
         dewards = my_player['observer_kills'] + my_player['sentry_kills'],
-        rosh = my_player['roshan_kills']
+        rosh = my_player['roshan_kills'],
+        start_time = match.get('start_time') or 0
     )
 
 

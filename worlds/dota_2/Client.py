@@ -544,6 +544,13 @@ class Dota2Context(CommonContext):
         if(match_data.match_id == self.save.last_valid_match_id):
             self.output(f"Match {match_data.match_id} already proccessed")
             return  
+
+        # Matches played before this seed's save was created can't count
+        if match_data.start_time and self.save.start_date_local:
+            seed_start = datetime.fromisoformat(self.save.start_date_local).timestamp()
+            if match_data.start_time < seed_start:
+                self.output(f"Match {match_data.match_id} was played before this seed started ({self.save.start_date_local}), ignored.")
+                return
               
         #first check if played hero is even unlocked
         hero_id = match_data.hero_id
