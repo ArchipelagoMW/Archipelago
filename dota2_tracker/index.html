@@ -275,6 +275,7 @@ code { font: 500 13px var(--mono); overflow-wrap: anywhere; }
   <noscript><p class="status err">This tracker needs JavaScript: allow it for this site, then reload the page.</p></noscript>
 
   <div id="app" hidden>
+  <p class="banner" id="save-note" hidden></p>
   <div class="tabs" role="tablist" aria-label="Views">
     <button id="tab-tracker" type="button" role="tab" aria-selected="true" aria-controls="panel-tracker">Tracker</button>
     <button id="tab-items" type="button" role="tab" aria-selected="false" aria-controls="panel-items">Components</button>
@@ -290,7 +291,6 @@ code { font: 500 13px var(--mono); overflow-wrap: anywhere; }
 
   <section id="heroes">
     <div class="sec-head"><h2>Heroes</h2><span class="eyebrow" id="heroes-count"></span></div>
-    <p class="banner" id="save-note" hidden></p>
     <div class="hfilters" id="hfilters" role="group" aria-label="Hero filters"></div>
     <div class="tablebox"><table>
       <thead><tr id="hero-head"></tr></thead>
@@ -786,7 +786,6 @@ function renderStatic() {
   if (!D.has_steam) say("Add your Steam account ID in Settings to see your wins and matches.");
   else if (!D.games_since) say("Add the seed start date in Settings (or load the client save) to see your wins and matches.");
   else if (!P) say("Progress unavailable: " + (D.games_error || "OpenDota unreachable") + ".");
-  else if (P.source === "opendota") say("Wins estimated from OpenDota (matches with an unlocked hero). The client only counts matches read with /parse_recent_match: /goal is the reference. Load the client save in Settings for exact numbers.");
   else if (!P.steamid_set) say("No Steam ID set in the client: run /set_player_id once so your matches count.");
   $("log-count").textContent = D.received.length + " items";
   if (D.journal_since) $("log-note").textContent = "When this browser saw the item arrive (to the nearest refresh). Items received before "
