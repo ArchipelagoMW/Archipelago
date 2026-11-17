@@ -563,9 +563,9 @@ async function matchDetails(ids, steam) {
 // The client's rules, as in worlds/dota_2/challenges.py. Stat checks are named by order ("Kills #2"), one per
 // threshold in the seed's check_values; seeds from older apworlds name them by threshold ("Get 5 Kill(s)").
 // [label, match field, default threshold, older apworlds' thresholds and names]
-const STATS = [["Kills", "kills", 5, [1, 5, 10], "Get {} Kill(s)"], ["Assists", "assists", 10, [5, 10, 20], "Get {} Assists"],
-  ["Dewards", "dewards", 3, [1, 3, 7], "Get {} Deward(s)"], ["Last Hits", "last_hits", 125, [75, 125, 175], "Get {} Last Hits"],
-  ["Denies", "denies", 16, [8, 16, 32], "Get {} Denies"]];
+const STATS = [["Kills", "kills", 10, [1, 5, 10], "Get {} Kill(s)"], ["Assists", "assists", 15, [5, 10, 20], "Get {} Assists"],
+  ["Dewards", "dewards", 5, [1, 3, 7], "Get {} Deward(s)"], ["Last Hits", "last_hits", 250, [75, 125, 175], "Get {} Last Hits"],
+  ["Denies", "denies", 10, [8, 16, 32], "Get {} Denies"]];
 const RUNES = { 0: "Double Damage", 1: "Haste", 2: "Illusion", 3: "Invisibility", 4: "Regeneration",
   5: "Bounty", 6: "Arcane", 7: "Water", 8: "Wisdom", 9: "Shield" };
 const runeCheck = r => `Pick up ${/^[AEIOU]/.test(r) ? "an" : "a"} ${r} Rune`;
@@ -574,7 +574,7 @@ const QUESTS = [["Stack Camps", "camps_stacked", "Camps Stacked"], ["Place Wards
   ["Damage Buildings", "building_damage", "Building Damage"]];
 const VALUE_DEFAULTS = {
   ...Object.fromEntries(STATS.map(([label, , t]) => [label, t])),
-  "Short Win Minutes": 30, "Long Win Minutes": 60, "Roshan Kills": 1, "Camps Stacked": 10, "Wards Placed": 15, "Building Damage": 10000,
+  "Short Win Minutes": 30, "Long Win Minutes": 50, "Roshan Kills": 1, "Camps Stacked": 10, "Wards Placed": 50, "Building Damage": 30000,
 };
 // Stats become sorted lists of thresholds, like resolve_values()
 function seedValues(sd) {
