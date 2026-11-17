@@ -76,7 +76,7 @@ header .title { display: grid; gap: 6px; min-width: 0; }
 .res { font-weight: 600; } .res.win { color: var(--ok); } .res.loss { color: var(--c-str); }
 td.sub.read-yes { color: var(--ok); } td.sub.read-no { color: var(--c-str); font-weight: 600; }
 td.sub[title] { cursor: help; }
-td.sub, .hero .sub { color: var(--muted); font-size: 13px; font-weight: 400; }
+td.sub, .hero .sub, .chip .sub { color: var(--muted); font-size: 13px; font-weight: 400; }
 td a { color: inherit; }
 .log time { font: 500 12px var(--mono); color: var(--muted); margin-right: 10px; }
 .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 12px; }
@@ -263,6 +263,7 @@ code { font: 500 13px var(--mono); overflow-wrap: anywhere; }
         <h3>What the tracker shows</h3>
         <ul>
           <li><b>Checks:</b> the server's state. <span class="chip ready">Gold</span> purchases have all their components unlocked, so buying them counts. <span class="chip done">Green</span> checks are already sent.</li>
+          <li><b>Challenges and quests</b> (apworlds that have them): challenges are done in one match, any hero. Quests add up over the seed; their progress comes from the client save, or is estimated from OpenDota.</li>
           <li><b>Wins and heroes won:</b> only the client knows them. Without its save, the tracker estimates them from OpenDota (matches with an unlocked hero). Load the save in Settings for the exact numbers.</li>
           <li><b>Read by the client</b> (Matches tab): deduced from the checks done on the server. "✗ not read" means a stat check of that match is still to do. "?" usually means OpenDota hasn't parsed that match yet: the tracker only reads OpenDota, it never asks for a parse.</li>
           <li>The tracker connects to the server in read-only mode: it never sends checks and doesn't count as you playing.</li>
@@ -521,8 +522,8 @@ async function opendotaMatches(steam, since) {
   return matches.filter(m => m.start_time >= from).sort((a, b) => a.start_time - b.start_time);
 }
 
-// Stats and purchases of each match, as the client reads them; kept once OpenDota has parsed the match
-const DETAILS_KEY = "dota-ap-tracker:matches";
+// Stats, purchases and challenge data of each match, as the client reads them; kept once OpenDota has parsed the match
+const DETAILS_KEY = "dota-ap-tracker:matches:v2";
 const PENDING_KEY = "dota-ap-tracker:unparsed";
 async function matchDetails(ids, steam) {
   const cache = store.get(DETAILS_KEY) || {};
@@ -536,8 +537,20 @@ async function matchDetails(ids, steam) {
         const m = await getJSON(`${OPENDOTA}/matches/${id}`);
         const me = (m.players || []).find(p => p.account_id === steam);
         if (!me || me.purchase == null) { pending[id] = Date.now(); return; }  // not parsed by OpenDota yet
+        const objectives = m.objectives || [], players = m.players || [];
+        const myTeam = me.player_slot < 128 ? 2 : 3;  // objectives use 2 for Radiant, 3 for Dire
         cache[id] = { kills: me.kills, assists: me.assists, last_hits: me.last_hits, denies: me.denies,
-                      dewards: (me.observer_kills || 0) + (me.sentry_kills || 0), purchase: Object.keys(me.purchase).sort() };
+                      dewards: (me.observer_kills || 0) + (me.sentry_kills || 0), purchase: Object.keys(me.purchase).sort(),
+                      // Same fields as challenge_data() in worlds/dota_2/dota_api.py
+                      first_blood: !!me.firstblood_claimed, courier_kills: me.courier_kills || 0,
+                      runes: Object.fromEntries(Object.entries(me.runes || {}).map(([k, v]) => [String(k), v])),
+                      buybacks: me.buyback_count || (me.buyback_log || []).length,
+                      aegis: objectives.some(o => o.type === "CHAT_MESSAGE_AEGIS" && o.player_slot === me.player_slot),
+                      position: me.position_est || 0, duration: m.duration || 0,
+                      all_players_stayed: m.human_players === 10 && players.length === 10 && players.every(p => !p.leaver_status),
+                      team_roshan_kills: objectives.filter(o => o.type === "CHAT_MESSAGE_ROSHAN_KILL" && o.team === myTeam).length,
+                      camps_stacked: me.camps_stacked || 0, wards_placed: (me.obs_placed || 0) + (me.sen_placed || 0),
+                      building_damage: me.tower_damage || 0 };
         delete pending[id];
       } catch (e) {}
     }));
@@ -547,16 +560,53 @@ async function matchDetails(ids, steam) {
   return cache;
 }
 
-// Stat check thresholds of the Dota 2 client (Client.py, check_dota_goals_and_locations)
-const STAT_CHECKS = [["kills", "Get {} Kill(s)", [1, 5, 10]], ["assists", "Get {} Assists", [5, 10, 20]],
-  ["dewards", "Get {} Deward(s)", [1, 3, 7]], ["last_hits", "Get {} Last Hits", [75, 125, 175]], ["denies", "Get {} Denies", [8, 16, 32]]];
+// The client's rules, as in worlds/dota_2/challenges.py. Stat checks are named by tier ("Kills Tier 2"), with
+// thresholds from the seed's check_values; seeds from older apworlds name them by threshold ("Get 5 Kill(s)").
+const STATS = [["Kills", "kills", [1, 5, 10], "Get {} Kill(s)"], ["Assists", "assists", [5, 10, 20], "Get {} Assists"],
+  ["Dewards", "dewards", [1, 3, 7], "Get {} Deward(s)"], ["Last Hits", "last_hits", [75, 125, 175], "Get {} Last Hits"],
+  ["Denies", "denies", [8, 16, 32], "Get {} Denies"]];
+const RUNES = { 0: "Double Damage", 1: "Haste", 2: "Illusion", 3: "Invisibility", 4: "Regeneration",
+  5: "Bounty", 6: "Arcane", 7: "Water", 8: "Wisdom", 9: "Shield" };
+const runeCheck = r => `Pick up ${/^[AEIOU]/.test(r) ? "an" : "a"} ${r} Rune`;
+// Quests add up over the seed: [check, total key, value that sets the target]
+const QUESTS = [["Quest: Stack Camps", "camps_stacked", "Camps Stacked"], ["Quest: Place Wards", "wards_placed", "Wards Placed"],
+  ["Quest: Damage Buildings", "building_damage", "Building Damage"]];
+const VALUE_DEFAULTS = {
+  ...Object.fromEntries(STATS.flatMap(([label, , tiers]) => tiers.map((t, i) => [`${label} Tier ${i + 1}`, t]))),
+  "Short Win Minutes": 30, "Long Win Minutes": 60, "Roshan Kills": 1, "Camps Stacked": 10, "Wards Placed": 15, "Building Damage": 10000,
+};
+const seedValues = sd => ({ ...VALUE_DEFAULTS, ...(sd.check_values || {}) });
+
+// Checks a match sends whatever its result (stats and challenges), and the ones that need a win
+function statAndChallengeChecks(d, values) {
+  const stats = STATS.flatMap(([label, k, tiers, legacy]) => tiers.flatMap((t, i) => [
+    ...(d[k] >= values[`${label} Tier ${i + 1}`] ? [`${label} Tier ${i + 1}`] : []),
+    ...(d[k] >= t ? [legacy.replace("{}", t)] : []),
+  ]));
+  if (d.first_blood) stats.push("Get First Blood");
+  if (d.courier_kills > 0) stats.push("Kill a Courier");
+  Object.entries(d.runes || {}).forEach(([k, n]) => { if (n && RUNES[k]) stats.push(runeCheck(RUNES[k])); });
+  if (d.buybacks > 0) stats.push("Use a Buyback");
+  if (d.aegis) stats.push("Pick up the Aegis");
+  return stats;
+}
+function winChallenges(d, values) {
+  const out = [];
+  if (d.position >= 1 && d.position <= 5) out.push(`Win as Position ${d.position}`);
+  // A match ended early by a leaver or with bots doesn't count as a short win
+  if (d.all_players_stayed && d.duration < values["Short Win Minutes"] * 60) out.push("Win a Short Match");
+  if (d.duration >= values["Long Win Minutes"] * 60) out.push("Win a Long Match");
+  if (d.team_roshan_kills >= values["Roshan Kills"]) out.push("Win a Match Where Your Team Took Roshan");
+  return out;
+}
 const ATTR_CHECK = { str: "Win as a Strength Hero", agi: "Win as a Agility Hero", int: "Win as a Intelligence Hero", all: "Win as a Universal Hero" };
 
-// Checks /parse_recent_match would have sent for a match: [stats, everything].
-// Stats don't depend on any unlock; wins and purchases do, so they only serve as proof
-function matchTriggers(game, d, hero, group, shopByKey) {
-  const stats = STAT_CHECKS.flatMap(([k, name, ts]) => ts.filter(t => d[k] >= t).map(t => name.replace("{}", t)));
+// Checks /parse_recent_match would have sent for a match, among this seed's checks: [stats, everything].
+// Stats and challenges don't depend on any unlock; wins and purchases do, so they only serve as proof
+function matchTriggers(game, d, hero, group, shopByKey, values, seedChecks) {
+  const stats = statAndChallengeChecks(d, values).filter(c => seedChecks.has(c));
   const extra = d.purchase.filter(k => k in shopByKey).map(k => shopByKey[k]);
+  if (game.win) extra.push(...winChallenges(d, values));
   if (game.win && hero) {
     extra.push(group === 0 ? "Win with hero from starting pool" : `Win with Hero from Group ${group}`);
     extra.push(ATTR_CHECK[hero.attr] || "", `Win as a ${hero.attack} Hero`);
@@ -564,7 +614,7 @@ function matchTriggers(game, d, hero, group, shopByKey) {
     if (hero.roles.includes("Carry")) extra.push("Win as a Carry Hero");
     else if (hero.roles.includes("Support")) extra.push("Win as a Support Hero");
   }
-  return [stats, stats.concat(extra)];
+  return [stats, stats.concat(extra.filter(c => seedChecks.has(c)))];
 }
 
 // Whether /parse_recent_match read each match, from what it would have sent and the checks done:
@@ -638,7 +688,10 @@ async function build(cfg, say) {
   const unlockedKeys = new Set(names.filter(n => n.startsWith("Unlock ")).map(n => n.slice(7)));
   const checked = new Set(c.checked_locations);
   const allLocs = [...new Set([...c.missing_locations, ...c.checked_locations])].sort((a, b) => a - b);
-  const locKind = n => n.startsWith("Win with") ? "hero" : n.startsWith("Win as") || n.startsWith("Get ") ? "match" : "item";
+  const locKind = n => n.startsWith("Win with") ? "hero" : n in S.items ? "item" : n.startsWith("Quest: ") ? "quest"
+    : n.startsWith("Win as a ") || / Tier \d$/.test(n) || /^Get \d/.test(n) ? "match" : "challenge";
+  const values = seedValues(sd);
+  const seedChecks = new Set(allLocs.map(i => locNames[i]));
 
   // The client save is the reference for progress; it must belong to this seed
   let save = store.get(saveKey(cfg));
@@ -664,6 +717,8 @@ async function build(cfg, say) {
   const steam = steam32(cfg.steam || save?.steamid);
   const since = cfg.since || save?.start_date_local?.slice(0, 10) || "";
   let games = null, gamesError = null, prog = progress;
+  // Quest totals: the client save's, or an estimate from the matches with an unlocked hero
+  let questTotals = save?.quest_totals || null, questSource = questTotals ? "save" : null;
   if (steam && since) {
     say("Reading your matches on OpenDota…");
     try {
@@ -683,7 +738,11 @@ async function build(cfg, say) {
       const groupOf = Object.fromEntries(heroes.map(h => [h.name, h.group]));
       const shopByKey = Object.fromEntries(Object.entries(S.items).map(([n, it]) => [it.internal, n]));
       const triggers = {};
-      games.forEach(g => { if (details[g.id]) triggers[g.id] = matchTriggers(g, details[g.id], S.attrs[g.hero], groupOf[g.hero], shopByKey); });
+      games.forEach(g => { if (details[g.id]) triggers[g.id] = matchTriggers(g, details[g.id], S.attrs[g.hero], groupOf[g.hero], shopByKey, values, seedChecks); });
+      if (!questTotals) {
+        questTotals = {}; questSource = "opendota";
+        games.filter(g => g.open && details[g.id]).forEach(g => QUESTS.forEach(([, k]) => { questTotals[k] = (questTotals[k] || 0) + (details[g.id][k] || 0); }));
+      }
       readStatuses(games, triggers, new Set([...checked].map(i => locNames[i])), progress?.submitted);
     } catch (e) { gamesError = "OpenDota unreachable: " + e.message; games = null; }
   }
@@ -708,6 +767,8 @@ async function build(cfg, say) {
     const it = S.items[name];
     if (ck.kind === "item" && it) { ck.img = it.img; ck.ready = it.req.every(r => unlockedKeys.has(r)); }
     else if (!playable(name)) ck.ready = false;
+    const quest = QUESTS.find(([n]) => n === name);
+    if (quest && questTotals) ck.progress = [questTotals[quest[1]] || 0, values[quest[2]], questSource];
     return ck;
   };
   const componentKeys = Object.keys(dp.item_name_to_id).filter(n => n.startsWith("Unlock ")).map(n => n.slice(7));
@@ -927,7 +988,7 @@ function byMatchRank(a, b) {
 
 function render() {
   renderHeroes();
-  const kinds = [["hero", "Wins by group"], ["match", "Match objectives"], ["item", "Items to buy"]];
+  const kinds = [["hero", "Wins by group"], ["match", "Match objectives"], ["challenge", "Challenges"], ["quest", "Quests (whole seed)"], ["item", "Items to buy"]];
   const cg = $("check-groups"); cg.replaceChildren();
   kinds.forEach(([k, label]) => {
     // "Unlocked": for purchases, only the ones you can make (and those already done)
@@ -946,7 +1007,13 @@ function render() {
       const chip = el(filt ? "button" : "span", "chip" + (c.done ? " done" : "") + (ready ? " ready" : "") + (c.img ? " item" : "") + (filt ? " link" : ""));
       if (filt) { chip.type = "button"; chip.title = "Show the heroes that complete this check"; chip.addEventListener("click", () => showHeroesFor(filt)); }
       if (c.img) { const img = el("img"); img.src = c.img; img.alt = ""; img.loading = "lazy"; img.onerror = () => img.remove(); chip.append(img); }
-      chip.append(c.name); chips.append(chip);
+      chip.append(c.name);
+      if (c.progress && !c.done) {
+        const [have, need, source] = c.progress;
+        chip.append(el("span", "sub", ` ${have.toLocaleString()} / ${need.toLocaleString()}`));
+        chip.title = source === "save" ? "From the client save" : "Estimated from OpenDota (matches with an unlocked hero)";
+      }
+      chips.append(chip);
     });
     g.append(chips); cg.append(g);
   });
