@@ -186,7 +186,7 @@ async def _check_goal_and_send_if_met(
     goal_type, unique_req, total_wins_req, fragments_req = _get_goal_options(slot_data)
     goal_met = False
     if goal_type == GOAL_STANDARD:
-        if (len(ctx.save.unique_heroes_won) >= unique_req and _count_fragments_received(ctx) >= fragments_req) and len(ctx.save.unique_heroes_won) >= unique_req:
+        if (len(ctx.save.unique_heroes_won) >= unique_req and _count_fragments_received(ctx) >= fragments_req) and wins_after >= total_wins_req:
             goal_met = True
     if goal_type == GOAL_All_HEROES:
         if (len(ctx.save.unique_heroes_won) >= unique_req and _count_fragments_received(ctx) >= fragments_req) and len(ctx.save.unique_heroes_won) >= unique_req:
