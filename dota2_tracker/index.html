@@ -523,9 +523,9 @@ async function opendotaMatches(steam, since) {
 }
 
 // Stats, purchases and challenge data of each match, as the client reads them; kept once OpenDota has parsed the match
-const DETAILS_KEY = "dota-ap-tracker:matches:v2";
+const DETAILS_KEY = "dota-ap-tracker:matches:v3";
 const PENDING_KEY = "dota-ap-tracker:unparsed";
-async function matchDetails(ids, steam) {
+async function matchDetails(ids, steam, damageTypes) {
   const cache = store.get(DETAILS_KEY) || {};
   // Matches OpenDota hasn't parsed yet often stay that way: retry them every 10 minutes, not on every load
   const pending = store.get(PENDING_KEY) || {};
@@ -550,7 +550,8 @@ async function matchDetails(ids, steam) {
                       all_players_stayed: m.human_players === 10 && players.length === 10 && players.every(p => !p.leaver_status),
                       team_roshan_kills: objectives.filter(o => o.type === "CHAT_MESSAGE_ROSHAN_KILL" && o.team === myTeam).length,
                       camps_stacked: me.camps_stacked || 0, wards_placed: (me.obs_placed || 0) + (me.sen_placed || 0),
-                      building_damage: me.tower_damage || 0 };
+                      building_damage: me.tower_damage || 0, healing: me.hero_healing || 0,
+                      ...damageByType(me, damageTypes) };
         delete pending[id];
       } catch (e) {}
     }));
@@ -560,30 +561,56 @@ async function matchDetails(ids, steam) {
   return cache;
 }
 
+// Physical and magical damage to heroes, and the biggest hit of each type we can be sure of (damage_by_type() in
+// worlds/dota_2/dota_api.py): attacks are physical, pure damage and items neither; OpenDota keeps only the biggest
+// hit, so a type's biggest hit is that one, or the best average hit of a source of that type
+function damageByType(me, types) {
+  const kind = src => src == null || src === "null" ? "Physical" : types[src];
+  const inflictors = me.damage_inflictor || {}, hits = me.hero_hits || {};
+  const total = { Physical: 0, Magical: 0 }, best = { Physical: 0, Magical: 0 };
+  Object.entries(inflictors).forEach(([src, dmg]) => {
+    const t = kind(src);
+    if (!(t in total)) return;
+    total[t] += dmg;
+    if (hits[src]) best[t] = Math.max(best[t], Math.floor(dmg / hits[src]));
+  });
+  const big = me.max_hero_hit || {}, t = kind(big.inflictor);
+  if (t in best) best[t] = Math.max(best[t], big.value || 0);
+  return { physical_damage: total.Physical, magical_damage: total.Magical, physical_hit: best.Physical, magical_hit: best.Magical };
+}
+
 // The client's rules, as in worlds/dota_2/challenges.py. Stat checks are named by order ("Kills #2"), one per
 // threshold in the seed's check_values; seeds from older apworlds name them by threshold ("Get 5 Kill(s)").
 // [label, match field, default threshold, older apworlds' thresholds and names]
-const STATS = [["Kills", "kills", 15, [1, 5, 10], "Get {} Kill(s)"], ["Assists", "assists", 25, [5, 10, 20], "Get {} Assists"],
-  ["Dewards", "dewards", 10, [1, 3, 7], "Get {} Deward(s)"], ["Last Hits", "last_hits", 400, [75, 125, 175], "Get {} Last Hits"],
-  ["Denies", "denies", 15, [8, 16, 32], "Get {} Denies"]];
+const STATS = [["Kills", "kills", 15, [1, 5, 10], "Get {} Kill(s)"], ["Assists", "assists", 30, [5, 10, 20], "Get {} Assists"],
+  ["Dewards", "dewards", 5, [1, 3, 7], "Get {} Deward(s)"], ["Last Hits", "last_hits", 450, [75, 125, 175], "Get {} Last Hits"],
+  ["Denies", "denies", 20, [8, 16, 32], "Get {} Denies"], ["Healing", "healing", 2000, [], ""],
+  ["Physical Damage", "physical_damage", 25000, [], ""], ["Magical Damage", "magical_damage", 20000, [], ""],
+  ["Physical Hit", "physical_hit", 500, [], ""], ["Magical Hit", "magical_hit", 500, [], ""]];
 const RUNES = { 0: "Double Damage", 1: "Haste", 2: "Illusion", 3: "Invisibility", 4: "Regeneration",
   5: "Bounty", 6: "Arcane", 7: "Water", 8: "Wisdom", 9: "Shield" };
 const runeCheck = r => `Pick up ${/^[AEIOU]/.test(r) ? "an" : "a"} ${r} Rune`;
-// Quests add up over the seed: [check, total key, value that sets the target]
-const QUESTS = [["Stack Camps", "camps_stacked", "Camps Stacked"], ["Place Wards", "wards_placed", "Wards Placed"],
-  ["Damage Buildings", "building_damage", "Building Damage"]];
+// Quests add up over the seed, one check per threshold: [label, total key, value with the thresholds, default]
+const QUESTS = [["Stack Camps", "camps_stacked", "Camps Stacked", [10, 20]], ["Place Wards", "wards_placed", "Wards Placed", [50, 100]],
+  ["Damage Buildings", "building_damage", "Building Damage", [25000, 50000]], ["Heal Heroes", "healing", "Total Healing", [7500, 15000]]];
+const questOf = name => QUESTS.find(([label]) => name.startsWith(label + " #"));
 const VALUE_DEFAULTS = {
   ...Object.fromEntries(STATS.map(([label, , t]) => [label, t])),
-  "Short Win Minutes": 30, "Long Win Minutes": 50, "Roshan Kills": 1, "Camps Stacked": 20, "Wards Placed": 100, "Building Damage": 50000,
+  "Short Win Minutes": 30, "Long Win Minutes": 60, "Roshan Kills": 1,
+  ...Object.fromEntries(QUESTS.map(([, , value, t]) => [value, t])),
 };
-// Stats become sorted lists of thresholds, like resolve_values()
+// Stats and quests become sorted lists of thresholds, like resolve_values()
 function seedValues(sd) {
   const v = { ...VALUE_DEFAULTS, ...(sd.check_values || {}) };
-  STATS.forEach(([label]) => { v[label] = [...new Set([].concat(v[label]).map(Number))].sort((a, b) => a - b); });
+  [...STATS.map(([label]) => label), ...QUESTS.map(([, , value]) => value)]
+    .forEach(k => { v[k] = [...new Set([].concat(v[k]).map(Number))].sort((a, b) => a - b); });
   return v;
 }
-// Threshold of each stat check, to show next to its name
-const statThresholds = values => Object.fromEntries(STATS.flatMap(([label]) => values[label].map((t, i) => [`${label} #${i + 1}`, t])));
+// Threshold of each numbered check (Kills #2, Stack Camps #1), to show next to its name
+const statThresholds = values => Object.fromEntries([
+  ...STATS.flatMap(([label]) => values[label].map((t, i) => [`${label} #${i + 1}`, t])),
+  ...QUESTS.flatMap(([label, , value]) => values[value].map((t, i) => [`${label} #${i + 1}`, t])),
+]);
 
 // Checks a match sends whatever its result (stats and challenges), and the ones that need a win
 function statAndChallengeChecks(d, values) {
@@ -661,7 +688,10 @@ function stampReceived(cfg, seed, count) {
 // ---------- building the page data ----------
 
 async function loadStatic() {
-  const [heroes, shop] = await Promise.all([getJSON(DATA_URL + "heroes.json"), getJSON(DATA_URL + "dotaShopLocations.json")]);
+  const [heroes, shop, abilities] = await Promise.all([getJSON(DATA_URL + "heroes.json"), getJSON(DATA_URL + "dotaShopLocations.json"),
+    getJSON(OPENDOTA + "/constants/abilities").catch(() => ({}))]);
+  const damageTypes = Object.fromEntries(Object.entries(abilities).filter(([, a]) => ["Magical", "Physical", "Pure"].includes(a.dmg_type))
+    .map(([k, a]) => [k, a.dmg_type]));
   const attrs = {};
   heroes.dota_heroes.forEach(h => {
     attrs[h.localized_name] = { id: h.id, key: h.name.replace("npc_dota_hero_", ""), attr: h.primary_attr, attack: h.attack_type, legs: h.legs, roles: h.roles };
@@ -675,7 +705,7 @@ async function loadStatic() {
     items[it.dname] = { img: CDN + img, internal, req: it.requirements || [] };
     byKey[key] = it.dname;
   });
-  return { attrs, items, byKey };
+  return { attrs, items, byKey, damageTypes };
 }
 
 async function build(cfg, say) {
@@ -696,7 +726,7 @@ async function build(cfg, say) {
   const unlockedKeys = new Set(names.filter(n => n.startsWith("Unlock ")).map(n => n.slice(7)));
   const checked = new Set(c.checked_locations);
   const allLocs = [...new Set([...c.missing_locations, ...c.checked_locations])].sort((a, b) => a - b);
-  const locKind = n => n.startsWith("Win with") ? "hero" : n in S.items ? "item" : QUESTS.some(([q]) => q === n) ? "quest"
+  const locKind = n => n.startsWith("Win with") ? "hero" : n in S.items ? "item" : questOf(n) ? "quest"
     : n.startsWith("Win as a ") || / #\d$/.test(n) || /^Get \d/.test(n) ? "match" : "challenge";
   const values = seedValues(sd);
   const seedChecks = new Set(allLocs.map(i => locNames[i]));
@@ -743,7 +773,7 @@ async function build(cfg, say) {
         const wins = games.filter(g => g.open && g.win);
         prog = { source: "opendota", since, wins: wins.length, matches: games.filter(g => g.open).length, unique_won: [...new Set(wins.map(g => g.hero))].sort() };
       }
-      const details = await matchDetails(games.map(g => g.id), steam);
+      const details = await matchDetails(games.map(g => g.id), steam, S.damageTypes);
       const groupOf = Object.fromEntries(heroes.map(h => [h.name, h.group]));
       const shopByKey = Object.fromEntries(Object.entries(S.items).map(([n, it]) => [it.internal, n]));
       const triggers = {};
@@ -776,9 +806,9 @@ async function build(cfg, say) {
     const it = S.items[name];
     if (ck.kind === "item" && it) { ck.img = it.img; ck.ready = it.req.every(r => unlockedKeys.has(r)); }
     else if (!playable(name)) ck.ready = false;
-    if (name in thresholds) ck.threshold = thresholds[name];
-    const quest = QUESTS.find(([n]) => n === name);
-    if (quest && questTotals) ck.progress = [questTotals[quest[1]] || 0, values[quest[2]], questSource];
+    const quest = questOf(name);
+    if (quest && questTotals) ck.progress = [questTotals[quest[1]] || 0, thresholds[name], questSource];
+    else if (name in thresholds) ck.threshold = thresholds[name];
     return ck;
   };
   const componentKeys = Object.keys(dp.item_name_to_id).filter(n => n.startsWith("Unlock ")).map(n => n.slice(7));
@@ -985,7 +1015,7 @@ function tagCell(k, v, label) {
 
 // Match objectives in a readable order: wins by trait, then each stat from its lowest threshold up
 const MATCH_ORDER = ["Strength", "Agility", "Intelligence", "Universal", "Melee", "Ranged", "0 Legged", "2 Legged", "4+ Legged",
-  "Carry", "Support", "Kill", "Assist", "Deward", "Last Hit", "Denies"];
+  "Carry", "Support", "Kill", "Assist", "Deward", "Last Hit", "Denies", "Healing", "Physical Damage", "Magical Damage", "Physical Hit", "Magical Hit"];
 function matchRank(name) {
   const i = MATCH_ORDER.findIndex(w => name.includes(w));
   const n = +(name.match(/\d+/g) || [0]).pop();
