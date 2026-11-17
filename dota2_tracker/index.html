@@ -579,48 +579,33 @@ function damageByType(me, types) {
   return { physical_damage: total.Physical, magical_damage: total.Magical, physical_hit: best.Physical, magical_hit: best.Magical };
 }
 
-// The client's rules, as in worlds/dota_2/challenges.py. Stat checks are named by order ("Kills #2"), one per
-// threshold in the seed's check_values; seeds from older apworlds name them by threshold ("Get 5 Kill(s)").
-// [label, match field, default threshold, older apworlds' thresholds and names]
-const STATS = [["Kills", "kills", 15, [1, 5, 10], "Get {} Kill(s)"], ["Assists", "assists", 30, [5, 10, 20], "Get {} Assists"],
-  ["Dewards", "dewards", 5, [1, 3, 7], "Get {} Deward(s)"], ["Last Hits", "last_hits", 450, [75, 125, 175], "Get {} Last Hits"],
-  ["Denies", "denies", 20, [8, 16, 32], "Get {} Denies"], ["Healing", "healing", 2000, [], ""],
-  ["Physical Damage", "physical_damage", 25000, [], ""], ["Magical Damage", "magical_damage", 20000, [], ""],
-  ["Physical Hit", "physical_hit", 500, [], ""], ["Magical Hit", "magical_hit", 500, [], ""], ["Stun Time", "stun_time", 60, [], ""]];
+// The client's rules, as in worlds/dota_2/challenges.py. Stat and quest checks are named after their threshold
+// ("Get 450 Last Hits", "Stack 10 Camps"): the name templates give the threshold and the match field it's checked on.
+const STAT_NAMES = [["Get {} Kill(s)", "kills"], ["Get {} Assists", "assists"], ["Get {} Deward(s)", "dewards"],
+  ["Get {} Last Hits", "last_hits"], ["Get {} Denies", "denies"], ["Heal {} in a Match", "healing"],
+  ["Deal {} Physical Damage in a Match", "physical_damage"], ["Deal {} Magical Damage in a Match", "magical_damage"],
+  ["Land a {} Physical Hit", "physical_hit"], ["Land a {} Magical Hit", "magical_hit"], ["Stun Enemies for {}s in a Match", "stun_time"]];
+// Quests add up over the seed; the field is also the quest total's key
+const QUEST_NAMES = [["Stack {} Camps", "camps_stacked"], ["Place {} Wards", "wards_placed"], ["Deal {} Building Damage", "building_damage"],
+  ["Heal {} in Total", "healing"], ["Deal {} Physical Damage in Total", "physical_damage"],
+  ["Deal {} Magical Damage in Total", "magical_damage"], ["Stun Enemies for {}s in Total", "stun_time"]];
+const nameRegex = t => new RegExp("^" + t.replace(/[.*+?^$()|[\]\\]/g, "\\$&").replace("{}", "(\\d+)") + "$");
+const STAT_RES = STAT_NAMES.map(([t, field]) => [nameRegex(t), field]);
+const QUEST_RES = QUEST_NAMES.map(([t, field]) => [nameRegex(t), field]);
+// { field, threshold } of a stat or quest check, or null
+function scaleOf(name, res) {
+  for (const [re, field] of res) { const m = name.match(re); if (m) return { field, threshold: +m[1] }; }
+  return null;
+}
 const RUNES = { 0: "Double Damage", 1: "Haste", 2: "Illusion", 3: "Invisibility", 4: "Regeneration",
   5: "Bounty", 6: "Arcane", 7: "Water", 8: "Wisdom", 9: "Shield" };
 const runeCheck = r => `Pick up ${/^[AEIOU]/.test(r) ? "an" : "a"} ${r} Rune`;
-// Quests add up over the seed, one check per threshold: [label, total key, value with the thresholds, default]
-const QUESTS = [["Stack Camps", "camps_stacked", "Camps Stacked", [10, 20]], ["Place Wards", "wards_placed", "Wards Placed", [50, 100]],
-  ["Damage Buildings", "building_damage", "Building Damage", [25000, 50000]], ["Heal Heroes", "healing", "Total Healing", [7500, 15000]],
-  ["Deal Physical Damage", "physical_damage", "Total Physical Damage", [75000, 150000]],
-  ["Deal Magical Damage", "magical_damage", "Total Magical Damage", [60000, 120000]],
-  ["Stun Enemies", "stun_time", "Total Stun Time", [200, 400]]];
-const questOf = name => QUESTS.find(([label]) => name.startsWith(label + " #"));
-const VALUE_DEFAULTS = {
-  ...Object.fromEntries(STATS.map(([label, , t]) => [label, t])),
-  "Short Win Minutes": 30, "Long Win Minutes": 60, "Roshan Kills": 1,
-  ...Object.fromEntries(QUESTS.map(([, , value, t]) => [value, t])),
-};
-// Stats and quests become sorted lists of thresholds, like resolve_values()
-function seedValues(sd) {
-  const v = { ...VALUE_DEFAULTS, ...(sd.check_values || {}) };
-  [...STATS.map(([label]) => label), ...QUESTS.map(([, , value]) => value)]
-    .forEach(k => { v[k] = [...new Set([].concat(v[k]).map(Number))].sort((a, b) => a - b); });
-  return v;
-}
-// Threshold of each numbered check (Kills #2, Stack Camps #1), to show next to its name
-const statThresholds = values => Object.fromEntries([
-  ...STATS.flatMap(([label]) => values[label].map((t, i) => [`${label} #${i + 1}`, t])),
-  ...QUESTS.flatMap(([label, , value]) => values[value].map((t, i) => [`${label} #${i + 1}`, t])),
-]);
+// Values the win challenges use, from the seed's check_values
+const seedValues = sd => ({ "Short Win Minutes": 30, "Long Win Minutes": 60, "Roshan Kills": 1, ...(sd.check_values || {}) });
 
-// Checks a match sends whatever its result (stats and challenges), and the ones that need a win
-function statAndChallengeChecks(d, values) {
-  const stats = STATS.flatMap(([label, k, , legacyTiers, legacy]) => [
-    ...values[label].flatMap((t, i) => d[k] >= t ? [`${label} #${i + 1}`] : []),
-    ...legacyTiers.flatMap(t => d[k] >= t ? [legacy.replace("{}", t)] : []),
-  ]);
+// Checks a match sends whatever its result (stats and challenges), among the seed's checks
+function statAndChallengeChecks(d, seedChecks) {
+  const stats = [...seedChecks].filter(name => { const s = scaleOf(name, STAT_RES); return s && d[s.field] >= s.threshold; });
   if (d.first_blood) stats.push("Get First Blood");
   if (d.courier_kills > 0) stats.push("Kill a Courier");
   Object.entries(d.runes || {}).forEach(([k, n]) => { if (n && RUNES[k]) stats.push(runeCheck(RUNES[k])); });
@@ -642,7 +627,7 @@ const ATTR_CHECK = { str: "Win as a Strength Hero", agi: "Win as a Agility Hero"
 // Checks /parse_recent_match would have sent for a match, among this seed's checks: [stats, everything].
 // Stats and challenges don't depend on any unlock; wins and purchases do, so they only serve as proof
 function matchTriggers(game, d, hero, group, shopByKey, values, seedChecks) {
-  const stats = statAndChallengeChecks(d, values).filter(c => seedChecks.has(c));
+  const stats = statAndChallengeChecks(d, seedChecks).filter(c => seedChecks.has(c));
   const extra = d.purchase.filter(k => k in shopByKey).map(k => shopByKey[k]);
   if (game.win) extra.push(...winChallenges(d, values));
   if (game.win && hero) {
@@ -729,11 +714,10 @@ async function build(cfg, say) {
   const unlockedKeys = new Set(names.filter(n => n.startsWith("Unlock ")).map(n => n.slice(7)));
   const checked = new Set(c.checked_locations);
   const allLocs = [...new Set([...c.missing_locations, ...c.checked_locations])].sort((a, b) => a - b);
-  const locKind = n => n.startsWith("Win with") ? "hero" : n in S.items ? "item" : questOf(n) ? "quest"
-    : n.startsWith("Win as a ") || / #\d$/.test(n) || /^Get \d/.test(n) ? "match" : "challenge";
+  const locKind = n => n.startsWith("Win with") ? "hero" : n in S.items ? "item" : scaleOf(n, QUEST_RES) ? "quest"
+    : n.startsWith("Win as a ") || scaleOf(n, STAT_RES) ? "match" : "challenge";
   const values = seedValues(sd);
   const seedChecks = new Set(allLocs.map(i => locNames[i]));
-  const thresholds = statThresholds(values);
 
   // The client save is the reference for progress; it must belong to this seed
   let save = store.get(saveKey(cfg));
@@ -783,7 +767,7 @@ async function build(cfg, say) {
       games.forEach(g => { if (details[g.id]) triggers[g.id] = matchTriggers(g, details[g.id], S.attrs[g.hero], groupOf[g.hero], shopByKey, values, seedChecks); });
       if (!questTotals) {
         questTotals = {}; questSource = "opendota";
-        games.filter(g => g.open && details[g.id]).forEach(g => QUESTS.forEach(([, k]) => { questTotals[k] = (questTotals[k] || 0) + (details[g.id][k] || 0); }));
+        games.filter(g => g.open && details[g.id]).forEach(g => QUEST_NAMES.forEach(([, k]) => { questTotals[k] = (questTotals[k] || 0) + (details[g.id][k] || 0); }));
       }
       readStatuses(games, triggers, new Set([...checked].map(i => locNames[i])), progress?.submitted);
     } catch (e) { gamesError = "OpenDota unreachable: " + e.message; games = null; }
@@ -809,9 +793,8 @@ async function build(cfg, say) {
     const it = S.items[name];
     if (ck.kind === "item" && it) { ck.img = it.img; ck.ready = it.req.every(r => unlockedKeys.has(r)); }
     else if (!playable(name)) ck.ready = false;
-    const quest = questOf(name);
-    if (quest && questTotals) ck.progress = [questTotals[quest[1]] || 0, thresholds[name], questSource];
-    else if (name in thresholds) ck.threshold = thresholds[name];
+    const quest = scaleOf(name, QUEST_RES);
+    if (quest && questTotals) ck.progress = [questTotals[quest.field] || 0, quest.threshold, questSource];
     return ck;
   };
   const componentKeys = Object.keys(dp.item_name_to_id).filter(n => n.startsWith("Unlock ")).map(n => n.slice(7));
@@ -1018,7 +1001,7 @@ function tagCell(k, v, label) {
 
 // Match objectives in a readable order: wins by trait, then each stat from its lowest threshold up
 const MATCH_ORDER = ["Strength", "Agility", "Intelligence", "Universal", "Melee", "Ranged", "0 Legged", "2 Legged", "4+ Legged",
-  "Carry", "Support", "Kill", "Assist", "Deward", "Last Hit", "Denies", "Healing", "Physical Damage", "Magical Damage", "Physical Hit", "Magical Hit", "Stun Time"];
+  "Carry", "Support", "Kill", "Assist", "Deward", "Last Hit", "Denies", "Heal", "Physical Damage", "Magical Damage", "Physical Hit", "Magical Hit", "Stun"];
 function matchRank(name) {
   const i = MATCH_ORDER.findIndex(w => name.includes(w));
   const n = +(name.match(/\d+/g) || [0]).pop();
@@ -1051,7 +1034,6 @@ function render() {
       if (filt) { chip.type = "button"; chip.title = "Show the heroes that complete this check"; chip.addEventListener("click", () => showHeroesFor(filt)); }
       if (c.img) { const img = el("img"); img.src = c.img; img.alt = ""; img.loading = "lazy"; img.onerror = () => img.remove(); chip.append(img); }
       chip.append(c.name);
-      if (c.threshold) chip.append(el("span", "sub", " " + c.threshold.toLocaleString() + "+"));
       if (c.progress && !c.done) {
         const [have, need, source] = c.progress;
         chip.append(el("span", "sub", ` ${have.toLocaleString()} / ${need.toLocaleString()}`));
