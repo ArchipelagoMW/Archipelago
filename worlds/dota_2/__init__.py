@@ -14,11 +14,11 @@ from worlds.AutoWorld import World, WebWorld
 from .constants import DOTA2_BASE_ID
 from .options import (DOTA2Options, GoalType, CrownFall)
 from .items import DOTA2Item, ItemDef, load_hero_unlock_items, build_item_name_to_id, FILLER_ITEM_NAME,load_item_defs, load_shop_unlock_items, load_minigame_unlock_items
-from .locations import DOTA2Location, LocationDef, load_hero_locations, build_location_name_to_id, load_item_locations, load_game_stat_locations,load_static_hero_locations, load_victory_location, load_minigame_locations, load_challenge_locations, load_extra_group_locations
+from .locations import DOTA2Location, LocationDef, load_hero_locations, build_location_name_to_id, load_item_locations, load_game_stat_locations,load_static_hero_locations, load_victory_location, load_minigame_locations, load_challenge_locations, load_extra_group_locations, load_extra_stat_locations
 from .rules import set_dota_rules
 from .regions import create_regions_and_locations
 from .hero import Hero, get_starting_hero_pool, get_all_heroes
-from .challenges import resolve_disabled, resolve_values
+from .challenges import resolve_disabled, resolve_values, STATS, MAX_STAT_CHECKS, stat_check
 from Options import OptionError
 # For our game to display correctly on the website, we need to define a WebWorld subclass.
 class DOTA2WebWorld(WebWorld):
@@ -77,6 +77,7 @@ class DOTA2World(World):
             + load_minigame_locations()
             + load_challenge_locations()  # new locations go last, so the ids of older ones don't move
             + load_extra_group_locations()
+            + load_extra_stat_locations()
         )
 
     _item_defs = load_item_defs()
@@ -112,16 +113,19 @@ class DOTA2World(World):
             + load_minigame_locations()
             + load_challenge_locations()
             + load_extra_group_locations()
+            + load_extra_stat_locations()
         )
 
         exclude_minigames = self.options.crownfall == CrownFall.option_off
         disabled = resolve_disabled(self.options.disabled_checks.value)
         group_count = len(self.hero_groups)
+        values = resolve_values(self.options.check_values.value)
+        stat_counts = {stat_check(label, n): n <= len(values[label]) for label, _, _, _ in STATS for n in range(1, MAX_STAT_CHECKS + 1)}
 
         def location_type_valid(d: LocationDef) -> bool:
             if d.name.startswith("Win with Hero from Group "):
                 return int(d.name.removeprefix("Win with Hero from Group ")) <= group_count
-            if d.name in disabled:
+            if d.name in disabled or not stat_counts.get(d.name, True):
                 return False
             if d.type == "MINIGAME":
                 return not exclude_minigames

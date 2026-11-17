@@ -3,9 +3,10 @@ from __future__ import annotations
 import json
 from dataclasses import dataclass
 from importlib import resources
-from Options import Choice, Range, PerGameCommonOptions, OptionSet, OptionCounter
+from typing import Any
+from Options import Choice, Range, PerGameCommonOptions, OptionSet, OptionDict
 
-from .challenges import FAMILIES, DISABLEABLE_CHECKS, VALUES, STATS, stat_check, resolve_values
+from .challenges import FAMILIES, DISABLEABLE_CHECKS, VALUES, STATS, MAX_STAT_CHECKS
 from .constants import MAX_HERO_GROUPS
 
 class GoalType(Choice):
@@ -72,21 +73,22 @@ class DisabledChecks(OptionSet):
     Families: Attribute Wins, Attack Type Wins, Legs Wins, Role Wins, Kills, Assists, Dewards, Last Hits,
     Denies, Purchases, First Blood, Courier Kill, Runes, Buyback, Aegis, Positions, Short Win, Long Win,
     Roshan Win, Quests.
-    Example: ["Runes", "Legs Wins", "Divine Rapier"]
+    Example: ["Runes", "Legs Wins", "Divine Rapier", "Kills #2"]
     """
     display_name = "Disabled Checks"
     valid_keys = sorted(FAMILIES) + DISABLEABLE_CHECKS
 
 
-class CheckValues(OptionCounter):
+class CheckValues(OptionDict):
     """Change the values checks use. Only list the ones you want to change.
 
-    Stat tiers, in one match (each tier must be at least the one before):
-    - Kills Tier 1 / 2 / 3 (default 1 / 5 / 10, up to 50)
-    - Assists Tier 1 / 2 / 3 (default 5 / 10 / 20, up to 60)
-    - Dewards Tier 1 / 2 / 3 (default 1 / 3 / 7, up to 30)
-    - Last Hits Tier 1 / 2 / 3 (default 75 / 125 / 175, up to 800)
-    - Denies Tier 1 / 2 / 3 (default 8 / 16 / 32, up to 100)
+    Stats, in one match: one threshold for one check, or a list of up to 5 thresholds for one check each
+    (named #1, #2... by increasing threshold).
+    - Kills (default 5, up to 50)
+    - Assists (default 10, up to 60)
+    - Dewards (default 3, up to 30)
+    - Last Hits (default 125, up to 800)
+    - Denies (default 16, up to 100)
     Global challenges:
     - Short Win Minutes (default 30, 15 to 45): win faster than this, with no leaver or bot in the match.
     - Long Win Minutes (default 60, 40 to 90): win a match lasting at least this long.
@@ -95,20 +97,32 @@ class CheckValues(OptionCounter):
     - Camps Stacked (default 10, 1 to 100)
     - Wards Placed (default 15, 1 to 200): observer and sentry wards.
     - Building Damage (default 10000, 1000 to 200000)
-    Example: {"Kills Tier 3": 15, "Short Win Minutes": 25, "Wards Placed": 20}
+    Example: {"Kills": 8, "Last Hits": [75, 150, 250], "Short Win Minutes": 25}
     """
     display_name = "Check Values"
     valid_keys = list(VALUES)
 
-    def __init__(self, value: dict[str, int]) -> None:
+    def __init__(self, value: dict[str, Any]) -> None:
         super().__init__(value)
-        errors = [f"{key} must be between {VALUES[key][1]} and {VALUES[key][2]}, got {v}."
-                  for key, v in self.value.items() if key in VALUES and not VALUES[key][1] <= v <= VALUES[key][2]]
-        values = resolve_values(self.value)
-        for label, _, _, _ in STATS:
-            tiers = [values[stat_check(label, t)] for t in (1, 2, 3)]
-            if tiers != sorted(tiers):
-                errors.append(f"{label} tiers must go up: got {' / '.join(map(str, tiers))}.")
+        stats = {label for label, _, _, _ in STATS}
+        errors = []
+        for key, v in self.value.items():
+            if key not in VALUES:
+                continue  # unknown keys are reported by the key check
+            _, low, high = VALUES[key]
+            many = isinstance(v, (list, tuple))
+            if many and key not in stats:
+                errors.append(f"{key} takes a single number, got {v}.")
+                continue
+            numbers = list(v) if many else [v]
+            if not numbers or (many and len(numbers) > MAX_STAT_CHECKS):
+                errors.append(f"{key} takes 1 to {MAX_STAT_CHECKS} thresholds, got {len(numbers)}.")
+            elif any(not isinstance(n, int) or isinstance(n, bool) for n in numbers):
+                errors.append(f"{key} must be whole numbers, got {v}.")
+            elif any(not low <= n <= high for n in numbers):
+                errors.append(f"{key} must be between {low} and {high}, got {v}.")
+            elif len(set(numbers)) != len(numbers):
+                errors.append(f"{key} thresholds must be different, got {v}.")
         if errors:
             raise ValueError("\n".join([f"For option {self.__class__.__name__}:"] + errors))
 

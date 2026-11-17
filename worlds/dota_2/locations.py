@@ -10,7 +10,7 @@ from .hero import Hero, get_all_heroes,get_starting_hero_pool
 from BaseClasses import ItemClassification, Location
 
 from . import items
-from .challenges import CHALLENGE_CHECKS
+from .challenges import CHALLENGE_CHECKS, STATS, MAX_STAT_CHECKS, ORIGINAL_STAT_CHECKS, stat_check
 from .constants import MAX_HERO_GROUPS, ORIGINAL_HERO_GROUPS
 
 
@@ -156,6 +156,11 @@ def load_extra_group_locations() -> List[LocationDef]:
     """Wins with groups past the original 7, at the end so existing location ids don't move."""
     return [LocationDef(name=f"Win with Hero from Group {i}", type="HERO_WIN")
             for i in range(ORIGINAL_HERO_GROUPS + 1, MAX_HERO_GROUPS + 1)]
+
+def load_extra_stat_locations() -> List[LocationDef]:
+    """Stat checks past the original three per stat, at the end so existing location ids don't move."""
+    return [LocationDef(name=stat_check(label, n), type="GAME_STAT")
+            for label, _, _, _ in STATS for n in range(ORIGINAL_STAT_CHECKS + 1, MAX_STAT_CHECKS + 1)]
 
 def load_challenge_locations() -> List[LocationDef]:
     return [LocationDef(name=name, type="CHALLENGE") for name in CHALLENGE_CHECKS]

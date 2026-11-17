@@ -16,7 +16,8 @@ class DefaultSeed(Dota2TestBase):
     def test_all_challenges_in_seed(self) -> None:
         names = {loc.name for loc in self.multiworld.get_locations(self.player)}
         self.assertTrue(set(CHALLENGE_CHECKS) <= names)
-        self.assertIn("Kills Tier 3", names)
+        self.assertIn("Kills #1", names)
+        self.assertNotIn("Kills #2", names)
 
     def test_original_hero_pool(self) -> None:
         self.assertEqual(len(self.world.starting_hero_pool), 30)
@@ -27,7 +28,8 @@ class DefaultSeed(Dota2TestBase):
 
     def test_default_values_in_slot_data(self) -> None:
         values = self.world.fill_slot_data()["check_values"]
-        self.assertEqual(values, {name: default for name, (default, _, _) in VALUES.items()})
+        self.assertEqual(values, resolve_values({}))
+        self.assertEqual(values["Kills"], [5])
 
 
 class CustomSeed(Dota2TestBase):
@@ -35,7 +37,7 @@ class CustomSeed(Dota2TestBase):
         "starting_heroes": 50,
         "hero_groups": 12,
         "disabled_checks": ["Runes", "Kill a Courier", "Legs Wins", "Divine Rapier"],
-        "check_values": {"Short Win Minutes": 25, "Kills Tier 3": 15},
+        "check_values": {"Short Win Minutes": 25, "Kills": 8, "Last Hits": [250, 75, 150, 400, 600]},
     }
 
     def test_hero_pool(self) -> None:
@@ -59,8 +61,15 @@ class CustomSeed(Dota2TestBase):
     def test_changed_values_in_slot_data(self) -> None:
         values = self.world.fill_slot_data()["check_values"]
         self.assertEqual(values["Short Win Minutes"], 25)
-        self.assertEqual(values["Kills Tier 3"], 15)
+        self.assertEqual(values["Kills"], [8])
+        self.assertEqual(values["Last Hits"], [75, 150, 250, 400, 600])
         self.assertEqual(values["Long Win Minutes"], 60)
+
+    def test_stat_checks_in_seed(self) -> None:
+        names = {loc.name for loc in self.multiworld.get_locations(self.player)}
+        self.assertIn("Kills #1", names)
+        self.assertNotIn("Kills #2", names)
+        self.assertTrue({f"Last Hits #{n}" for n in range(1, 6)} <= names)
 
 
 class NoPurchases(Dota2TestBase):
@@ -75,15 +84,17 @@ class ChallengeRules(Dota2TestBase):
         with self.assertRaises(ValueError):
             CheckValues({"Short Win Minutes": 5})
 
-    def test_tiers_must_go_up(self) -> None:
-        with self.assertRaises(ValueError):
-            CheckValues({"Kills Tier 2": 12})  # above the default Tier 3 (10)
-        CheckValues({"Kills Tier 2": 12, "Kills Tier 3": 20})
+    def test_stat_values_checked(self) -> None:
+        CheckValues({"Kills": 8, "Assists": [5, 20]})
+        for bad in ({"Kills": 0}, {"Kills": [1, 2, 3, 4, 5, 6]}, {"Kills": [5, 5]}, {"Kills": []},
+                    {"Short Win Minutes": [20, 30]}, {"Kills": "lots"}):
+            with self.assertRaises(ValueError, msg=bad):
+                CheckValues(bad)
 
-    def test_stat_tiers(self) -> None:
-        values = resolve_values({"Kills Tier 3": 15})
+    def test_stat_checks(self) -> None:
+        values = resolve_values({"Kills": [15, 1, 5]})
         checks = stat_checks(sample_match(kills=12, last_hits=130), values)
-        self.assertEqual(checks, ["Kills Tier 1", "Kills Tier 2", "Last Hits Tier 1", "Last Hits Tier 2"])
+        self.assertEqual(checks, ["Kills #1", "Kills #2", "Last Hits #1"])
 
     def test_match_challenges(self) -> None:
         values = resolve_values({})

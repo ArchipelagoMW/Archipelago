@@ -6,7 +6,7 @@ A **Meta-progression randomizer** for DOTA 2. You play regular online matches an
 
 - **Heroes** - You are given a random pool of heroes to start (30 by default, option `starting_heroes`) and can unlock more by finding "Progressive Group Unlock" items. The other heroes are split evenly into groups (7 by default, option `hero_groups`). Wins with a hero from each group is a check. 
 
-- **Stats and Attributes** - Checks such as "Win as a Melee Hero", "Win as a Support Hero", and three tiers each of kills, assists, dewards, last hits and denies in a match ("Kills Tier 1" is 1 kill by default).
+- **Stats and Attributes** - Checks such as "Win as a Melee Hero", "Win as a Support Hero", and kills, assists, dewards, last hits and denies in a match: one check per stat by default ("Kills #1" is 5 kills), or one per threshold you list in the YAML.
 
 - **Shop Items** - While you can buy any item in a Dota 2 match, the checks for buying those items will be **locked** for the Archipelago until the right unlock items are found. All Consumable Items will start unlocked: Tangos, Salves, Wards etc. For an Item to be available **all Basic Components** of that item must be unlocked (Recipes not included). Example: the `"Unlock Ring of Protection"` item unlocks both the `"Ring of Protection"` check and the `"Buckler"` check (ring + recipe), however the `"Soul Ring"` check would require the `"Unlock Gauntlets of Strength"` item as well (ring + gauntlets + recipe). 
 
@@ -14,7 +14,7 @@ A **Meta-progression randomizer** for DOTA 2. You play regular online matches an
 
 - **Quests** - Checks that add up over the whole seed: stack camps, place wards (observers and sentries) and damage buildings. Each match counts once, even if parsed again. Type `/quests` in the client to see your progress.
 
-- **Customizing checks** - All checks are in the seed by default. In your YAML, `disabled_checks` removes families (such as Legs Wins, Purchases or Runes) or single checks, and `check_values` changes their values: stat tiers, short and long match lengths, Roshan kills, quest targets. Only list what you want to change; the options page lists every family and value with its default:
+- **Customizing checks** - All checks are in the seed by default. In your YAML, `disabled_checks` removes families (such as Legs Wins, Purchases or Runes) or single checks, and `check_values` changes their values: stat thresholds, short and long match lengths, Roshan kills, quest targets. Only list what you want to change; the options page lists every family and value with its default:
 
 ```yaml
 DOTA 2:
@@ -22,7 +22,8 @@ DOTA 2:
   hero_groups: 7
   disabled_checks: ["Runes", "Legs Wins", "Divine Rapier"]
   check_values:
-    Kills Tier 3: 15
+    Kills: 8
+    Last Hits: [75, 150, 250]
     Short Win Minutes: 25
     Wards Placed: 20
 ```

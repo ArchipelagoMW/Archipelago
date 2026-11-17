@@ -12,18 +12,22 @@ from typing import TYPE_CHECKING, Any
 if TYPE_CHECKING:
     from .dota_api import DotaMatchData
 
-# Stat checks have three tiers each: (label, DotaMatchData field, default tiers, maximum value)
+# Stat checks: one check per threshold set in the YAML, one threshold by default.
+# (label, DotaMatchData field, default threshold, maximum threshold)
 STATS = [
-    ("Kills", "kills", (1, 5, 10), 50),
-    ("Assists", "assists", (5, 10, 20), 60),
-    ("Dewards", "dewards", (1, 3, 7), 30),
-    ("Last Hits", "last_hits", (75, 125, 175), 800),
-    ("Denies", "denies", (8, 16, 32), 100),
+    ("Kills", "kills", 5, 50),
+    ("Assists", "assists", 10, 60),
+    ("Dewards", "dewards", 3, 30),
+    ("Last Hits", "last_hits", 125, 800),
+    ("Denies", "denies", 16, 100),
 ]
+MAX_STAT_CHECKS = 5  # thresholds per stat
+ORIGINAL_STAT_CHECKS = 3  # checks #1 to #3 reuse the locations of the original three thresholds
 
 
-def stat_check(label: str, tier: int) -> str:
-    return f"{label} Tier {tier}"
+def stat_check(label: str, n: int) -> str:
+    """Name of a stat's n-th check, by increasing threshold. Names can't hold the threshold, which depends on the YAML."""
+    return f"{label} #{n}"
 
 
 # OpenDota rune keys are the game's DOTA_RUNE values
@@ -72,16 +76,16 @@ FAMILIES: dict[str, list[str]] = {
     "Attack Type Wins": ["Win as a Melee Hero", "Win as a Ranged Hero"],
     "Legs Wins": ["Win as a 0 Legged Hero", "Win as a 2 Legged Hero", "Win as a 4+ Legged Hero"],
     "Role Wins": ["Win as a Carry Hero", "Win as a Support Hero"],
-    **{label: [stat_check(label, t) for t in (1, 2, 3)] for label, _, _, _ in STATS},
+    **{label: [stat_check(label, n) for n in range(1, MAX_STAT_CHECKS + 1)] for label, _, _, _ in STATS},
     "Purchases": _purchase_checks(),
     **CHALLENGE_FAMILIES,
 }
 DISABLEABLE_CHECKS = sorted({name for names in FAMILIES.values() for name in names})
 
-# Values players can change in their YAML: name -> (default, minimum, maximum)
+# Values players can change in their YAML: name -> (default, minimum, maximum).
+# Stats take one threshold, or a list of up to MAX_STAT_CHECKS thresholds (one check each).
 VALUES: dict[str, tuple[int, int, int]] = {
-    **{stat_check(label, t): (default, 1, maximum)
-       for label, _, defaults, maximum in STATS for t, default in enumerate(defaults, 1)},
+    **{label: (default, 1, maximum) for label, _, default, maximum in STATS},
     "Short Win Minutes": (30, 15, 45),
     "Long Win Minutes": (60, 40, 90),
     "Roshan Kills": (1, 1, 4),
@@ -96,9 +100,15 @@ def resolve_disabled(disabled: set[str]) -> set[str]:
     return {name for key in disabled for name in FAMILIES.get(key, [key])}
 
 
-def resolve_values(chosen: dict[str, int]) -> dict[str, int]:
-    """Defaults, overridden by what the YAML sets."""
-    return {name: int(chosen.get(name, default)) for name, (default, _, _) in VALUES.items()}
+def stat_thresholds(value: int | list[int]) -> list[int]:
+    return sorted({int(v) for v in value}) if isinstance(value, (list, tuple, set)) else [int(value)]
+
+
+def resolve_values(chosen: dict[str, Any]) -> dict[str, Any]:
+    """Defaults, overridden by what the YAML sets. Stats become sorted lists of thresholds."""
+    stats = {label for label, _, _, _ in STATS}
+    return {name: stat_thresholds(chosen.get(name, default)) if name in stats else int(chosen.get(name, default))
+            for name, (default, _, _) in VALUES.items()}
 
 
 def challenge_values(slot_data: dict[str, Any]) -> dict[str, int]:
@@ -106,10 +116,10 @@ def challenge_values(slot_data: dict[str, Any]) -> dict[str, int]:
     return resolve_values(slot_data.get("check_values") or {})
 
 
-def stat_checks(m: DotaMatchData, values: dict[str, int]) -> list[str]:
-    """Stat tiers reached in a match."""
-    return [stat_check(label, t) for label, field, _, _ in STATS for t in (1, 2, 3)
-            if getattr(m, field) >= values[stat_check(label, t)]]
+def stat_checks(m: DotaMatchData, values: dict[str, Any]) -> list[str]:
+    """Stat thresholds reached in a match."""
+    return [stat_check(label, n) for label, field, _, _ in STATS
+            for n, threshold in enumerate(values[label], 1) if getattr(m, field) >= threshold]
 
 
 def match_challenges(m: DotaMatchData, values: dict[str, int]) -> list[str]:
