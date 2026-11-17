@@ -5,7 +5,8 @@ from dataclasses import dataclass
 from importlib import resources
 from Options import Choice, Range, PerGameCommonOptions, OptionSet, OptionCounter
 
-from .challenges import FAMILIES, CHALLENGE_CHECKS, VALUES
+from .challenges import FAMILIES, DISABLEABLE_CHECKS, VALUES, STATS, stat_check, resolve_values
+from .constants import MAX_HERO_GROUPS
 
 class GoalType(Choice):
     """How game completion is determined.
@@ -47,27 +48,54 @@ class CrownFall(Choice):
     option_on = 1
     default = 0
 
-class DisabledChecks(OptionSet):
-    """Global checks to remove from the seed. All of them are in the seed by default.
+class StartingHeroes(Range):
+    """Number of heroes you can play from the start. The other heroes are split into groups to unlock."""
+    display_name = "Starting Heroes"
+    range_start = 5
+    range_end = 120
+    default = 30
 
-    List families or single checks. Families: First Blood, Courier Kill, Runes, Buyback, Aegis, Positions,
-    Short Win, Long Win, Roshan Win, Quests.
-    Example: ["Runes", "Kill a Courier"]
+
+class HeroGroups(Range):
+    """Number of hero groups to unlock, each with a "Progressive Group Unlock". The heroes left after the starting
+    pool are split evenly between them. There can't be more groups than heroes left."""
+    display_name = "Hero Groups"
+    range_start = 1
+    range_end = MAX_HERO_GROUPS
+    default = 7
+
+
+class DisabledChecks(OptionSet):
+    """Checks to remove from the seed. All checks are in the seed by default.
+
+    List families or single checks (by their name). Wins with a hero group and the goal can't be removed.
+    Families: Attribute Wins, Attack Type Wins, Legs Wins, Role Wins, Kills, Assists, Dewards, Last Hits,
+    Denies, Purchases, First Blood, Courier Kill, Runes, Buyback, Aegis, Positions, Short Win, Long Win,
+    Roshan Win, Quests.
+    Example: ["Runes", "Legs Wins", "Divine Rapier"]
     """
     display_name = "Disabled Checks"
-    valid_keys = sorted(FAMILIES) + CHALLENGE_CHECKS
+    valid_keys = sorted(FAMILIES) + DISABLEABLE_CHECKS
 
 
 class CheckValues(OptionCounter):
-    """Change the values used by global checks. Only list the ones you want to change.
+    """Change the values checks use. Only list the ones you want to change.
 
+    Stat tiers, in one match (each tier must be at least the one before):
+    - Kills Tier 1 / 2 / 3 (default 1 / 5 / 10, up to 50)
+    - Assists Tier 1 / 2 / 3 (default 5 / 10 / 20, up to 60)
+    - Dewards Tier 1 / 2 / 3 (default 1 / 3 / 7, up to 30)
+    - Last Hits Tier 1 / 2 / 3 (default 75 / 125 / 175, up to 800)
+    - Denies Tier 1 / 2 / 3 (default 8 / 16 / 32, up to 100)
+    Global challenges:
     - Short Win Minutes (default 30, 15 to 45): win faster than this, with no leaver or bot in the match.
     - Long Win Minutes (default 60, 40 to 90): win a match lasting at least this long.
     - Roshan Kills (default 1, 1 to 4): win a match where your team killed Roshan at least this many times.
-    - Camps Stacked (default 10, 1 to 100): camps to stack over the whole seed.
-    - Wards Placed (default 15, 1 to 200): observer and sentry wards to place over the whole seed.
-    - Building Damage (default 10000, 1000 to 200000): damage to deal to buildings over the whole seed.
-    Example: {"Short Win Minutes": 25, "Wards Placed": 20}
+    Quests, over the whole seed:
+    - Camps Stacked (default 10, 1 to 100)
+    - Wards Placed (default 15, 1 to 200): observer and sentry wards.
+    - Building Damage (default 10000, 1000 to 200000)
+    Example: {"Kills Tier 3": 15, "Short Win Minutes": 25, "Wards Placed": 20}
     """
     display_name = "Check Values"
     valid_keys = list(VALUES)
@@ -76,6 +104,11 @@ class CheckValues(OptionCounter):
         super().__init__(value)
         errors = [f"{key} must be between {VALUES[key][1]} and {VALUES[key][2]}, got {v}."
                   for key, v in self.value.items() if key in VALUES and not VALUES[key][1] <= v <= VALUES[key][2]]
+        values = resolve_values(self.value)
+        for label, _, _, _ in STATS:
+            tiers = [values[stat_check(label, t)] for t in (1, 2, 3)]
+            if tiers != sorted(tiers):
+                errors.append(f"{label} tiers must go up: got {' / '.join(map(str, tiers))}.")
         if errors:
             raise ValueError("\n".join([f"For option {self.__class__.__name__}:"] + errors))
 
@@ -117,6 +150,8 @@ class DOTA2Options(PerGameCommonOptions):
     total_wins_to_win: TotalWinsToWin
     primordial_fragments_to_win: PrimordialFragmentsToWin
     crownfall: CrownFall
+    starting_heroes: StartingHeroes
+    hero_groups: HeroGroups
     disabled_checks: DisabledChecks
     check_values: CheckValues
     #primordial_fragments_to_unlock_final: PrimordialFragmentsToUnlockFinal

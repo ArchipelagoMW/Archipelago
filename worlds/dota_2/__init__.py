@@ -14,11 +14,12 @@ from worlds.AutoWorld import World, WebWorld
 from .constants import DOTA2_BASE_ID
 from .options import (DOTA2Options, GoalType, CrownFall)
 from .items import DOTA2Item, ItemDef, load_hero_unlock_items, build_item_name_to_id, FILLER_ITEM_NAME,load_item_defs, load_shop_unlock_items, load_minigame_unlock_items
-from .locations import DOTA2Location, LocationDef, load_hero_locations, build_location_name_to_id, load_item_locations, load_game_stat_locations,load_static_hero_locations, load_victory_location, load_minigame_locations, load_challenge_locations
+from .locations import DOTA2Location, LocationDef, load_hero_locations, build_location_name_to_id, load_item_locations, load_game_stat_locations,load_static_hero_locations, load_victory_location, load_minigame_locations, load_challenge_locations, load_extra_group_locations
 from .rules import set_dota_rules
 from .regions import create_regions_and_locations
 from .hero import Hero, get_starting_hero_pool, get_all_heroes
-from .challenges import resolve_disabled, VALUES
+from .challenges import resolve_disabled, resolve_values
+from Options import OptionError
 # For our game to display correctly on the website, we need to define a WebWorld subclass.
 class DOTA2WebWorld(WebWorld):
     # We need to override the "game" field of the WebWorld superclass.
@@ -74,7 +75,8 @@ class DOTA2World(World):
             + load_game_stat_locations()
             + load_victory_location()
             + load_minigame_locations()
-            + load_challenge_locations()  # last, so the ids of older locations don't move
+            + load_challenge_locations()  # new locations go last, so the ids of older ones don't move
+            + load_extra_group_locations()
         )
 
     _item_defs = load_item_defs()
@@ -99,36 +101,52 @@ class DOTA2World(World):
     
 
     def generate_early(self) -> None:
-        self._location_defs = []
-        self._item_defs = []
-        self._location_defs.extend(load_hero_locations(self))
-        self._location_defs.extend(load_item_locations())
-        self._location_defs.extend(load_game_stat_locations())
-        self._location_defs.extend(load_victory_location())
-        self._location_defs.extend(load_minigame_locations())
-        self._location_defs.extend(load_challenge_locations())
+        load_hero_locations(self)  # draws the starting pool and the hero groups
 
-        self._item_defs.extend(load_hero_unlock_items(self))
-        self._item_defs.extend(load_shop_unlock_items())
-        self._item_defs.extend(load_minigame_unlock_items())
+        # Every possible location, in id order (same as the class-level list); this seed's choices filter them below
+        self._location_defs = (
+            load_static_hero_locations()
+            + load_item_locations()
+            + load_game_stat_locations()
+            + load_victory_location()
+            + load_minigame_locations()
+            + load_challenge_locations()
+            + load_extra_group_locations()
+        )
 
         exclude_minigames = self.options.crownfall == CrownFall.option_off
-        disabled_challenges = resolve_disabled(self.options.disabled_checks.value)
+        disabled = resolve_disabled(self.options.disabled_checks.value)
+        group_count = len(self.hero_groups)
 
-        # location_name_to_id is set per-instance in generate_early from filtered defs (see below).
         def location_type_valid(d: LocationDef) -> bool:
-            if d.type == "CHALLENGE":
-                return d.name not in disabled_challenges
-            if not exclude_minigames: 
-                return d.type == "HERO_WIN" or d.type ==  "ITEM_BUY" or d.type ==  "GAME_STAT" or d.type ==  "GOAL" or d.type ==  "MINIGAME"
-            if exclude_minigames:
-                 return d.type == "HERO_WIN" or d.type ==  "ITEM_BUY" or d.type ==  "GAME_STAT" or d.type ==  "GOAL"
-                
-    
+            if d.name.startswith("Win with Hero from Group "):
+                return int(d.name.removeprefix("Win with Hero from Group ")) <= group_count
+            if d.name in disabled:
+                return False
+            if d.type == "MINIGAME":
+                return not exclude_minigames
+            return d.type in ("HERO_WIN", "ITEM_BUY", "GAME_STAT", "GOAL", "CHALLENGE")
+
         self._filtered_location_defs = [d for d in self._location_defs if location_type_valid(d)]
         self.location_name_to_id = build_location_name_to_id(
             self.base_id + 10_000, self._location_defs, filter_fn=location_type_valid
         )
+
+        self._item_defs = []
+        self._item_defs.extend(load_hero_unlock_items(self))
+        # Component unlocks only matter for purchase checks
+        if any(d.type == "ITEM_BUY" for d in self._filtered_location_defs):
+            self._item_defs.extend(load_shop_unlock_items())
+        self._item_defs.extend(load_minigame_unlock_items())
+
+        # Turning off too many checks leaves no room for the items the seed needs
+        needed = sum(d.copies for d in self._item_defs if d.name != FILLER_ITEM_NAME)
+        room = len([d for d in self._filtered_location_defs if d.type != "GOAL"])
+        if needed > room:
+            raise OptionError(
+                f"{self.player_name}: only {room} checks are left for {needed} items. "
+                f"Turn fewer checks off in disabled_checks, or lower primordial_fragments_to_win."
+            )
 
     def create_regions(self) -> None:
         create_regions_and_locations(self, self._filtered_location_defs)
@@ -186,7 +204,7 @@ class DOTA2World(World):
             "progressive_hero_group_unlocks": self.progressive_hero_group_unlocks,
             "items_received_index": self.items_received_index,
             "item_name_to_id": self.item_id_to_name,
-            "check_values": {name: self.options.check_values.value.get(name, default) for name, (default, _, _) in VALUES.items()},
+            "check_values": resolve_values(self.options.check_values.value),
             # "game_mode": self.options.game_mode.value,
             # "exclude_hard_locations": self.options.exclude_hard_locations.value,
         }

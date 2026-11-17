@@ -15,39 +15,39 @@
     },
     {
       "id": 4,
-      "name": "Get 1 Kill(s)"
+      "name": "Kills Tier 1"
     },
     {
       "id": 5,
-      "name": "Get 5 Kill(s)"
+      "name": "Kills Tier 2"
     },
     {
       "id": 6,
-      "name": "Get 10 Kill(s)"
+      "name": "Kills Tier 3"
     },
     {
       "id": 7,
-      "name": "Get 5 Assists"
+      "name": "Assists Tier 1"
     },
     {
       "id": 8,
-      "name": "Get 10 Assists"
+      "name": "Assists Tier 2"
     },
     {
       "id": 10,
-      "name": "Get 20 Assists"
+      "name": "Assists Tier 3"
     },
     {
       "id": 11,
-      "name": "Get 1 Deward(s)"
+      "name": "Dewards Tier 1"
     },
     {
       "id": 12,
-      "name": "Get 3 Deward(s)"
+      "name": "Dewards Tier 2"
     },
     {
       "id": 13,
-      "name": "Get 7 Deward(s)"
+      "name": "Dewards Tier 3"
     },
     {
       "id": 14,
@@ -71,27 +71,27 @@
     },
     {
       "id": 19,
-      "name": "Get 75 Last Hits"
+      "name": "Last Hits Tier 1"
     },
     {
       "id": 20,
-      "name": "Get 125 Last Hits"
+      "name": "Last Hits Tier 2"
     },
     {
       "id": 21,
-      "name": "Get 175 Last Hits"
+      "name": "Last Hits Tier 3"
     },
     {
       "id": 22,
-      "name": "Get 8 Denies"
+      "name": "Denies Tier 1"
     },
     {
       "id": 23,
-      "name": "Get 16 Denies"
+      "name": "Denies Tier 2"
     },
     {
       "id": 24,
-      "name": "Get 32 Denies"
+      "name": "Denies Tier 3"
     },
     {
       "id": 25,
