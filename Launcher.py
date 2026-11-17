@@ -382,9 +382,11 @@ def run_gui(launch_components: list["Component"], args: Any) -> None:
 
         def on_stop(self):
             from worlds.LauncherComponents import Type
-            Utils.persistent_store("launcher", "favorites", self.favorites)
-            Utils.persistent_store("launcher", "filter", ", ".join(filter.name if isinstance(filter, Type) else filter
-                                                                   for filter in self.current_filter))
+            # Avoid saving favorites/filter before loading
+            if self.screen_manager.current != "loading":
+                Utils.persistent_store("launcher", "favorites", self.favorites)
+                Utils.persistent_store("launcher", "filter", ", ".join(filter.name if isinstance(filter, Type) else filter
+                                                                    for filter in self.current_filter))
             super().on_stop()
 
     Launcher(components=launch_components, args=args).run()
