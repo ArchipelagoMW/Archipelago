@@ -29,7 +29,7 @@ class DefaultSeed(Dota2TestBase):
     def test_default_values_in_slot_data(self) -> None:
         values = self.world.fill_slot_data()["check_values"]
         self.assertEqual(values, resolve_values({}))
-        self.assertEqual(values["Kills"], [10])
+        self.assertEqual(values["Kills"], [15])
 
 
 class CustomSeed(Dota2TestBase):
@@ -93,7 +93,7 @@ class ChallengeRules(Dota2TestBase):
 
     def test_stat_checks(self) -> None:
         values = resolve_values({"Kills": [15, 1, 5]})
-        checks = stat_checks(sample_match(kills=12, last_hits=260), values)
+        checks = stat_checks(sample_match(kills=12, last_hits=410), values)
         self.assertEqual(checks, ["Kills #1", "Kills #2", "Last Hits #1"])
 
     def test_match_challenges(self) -> None:
@@ -108,7 +108,7 @@ class ChallengeRules(Dota2TestBase):
         # Short but with a leaver or a bot: not a short win
         self.assertNotIn("Win a Short Match", checks)
         self.assertIn("Win a Match Where Your Team Took Roshan", checks)
-        self.assertEqual(completed_quests({"camps_stacked": 10, "wards_placed": 3}, values), ["Stack Camps"])
+        self.assertEqual(completed_quests({"camps_stacked": 20, "wards_placed": 3}, values), ["Stack Camps"])
 
 
 class TooManyChecksOff(Dota2TestBase):
