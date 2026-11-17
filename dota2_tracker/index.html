@@ -272,6 +272,7 @@ code { font: 500 13px var(--mono); overflow-wrap: anywhere; }
   </details>
 
   <p class="status" id="status" role="status" hidden></p>
+  <noscript><p class="status err">This tracker needs JavaScript: allow it for this site, then reload the page.</p></noscript>
 
   <div id="app" hidden>
   <div class="tabs" role="tablist" aria-label="Views">
@@ -348,7 +349,25 @@ code { font: 500 13px var(--mono); overflow-wrap: anywhere; }
   <span id="refresh-float-msg" role="status"></span>
 </div>
 
+<script>
+// If the tracker script can't start (old browser, blocked script), say so on the page instead of showing a dead page
+(function () {
+  var shown = false;
+  function fail(detail) {
+    if (shown || window.trackerStarted) return;
+    shown = true;
+    var s = document.getElementById("status");
+    s.hidden = false; s.className = "status err";
+    s.textContent = "The tracker couldn't start in this browser" + (detail ? " (" + detail + ")" : "")
+      + ". Try an up-to-date Chrome, Edge, Firefox or Safari, without extensions that block scripts.";
+  }
+  // Script errors only: a font or image that fails to load doesn't stop the tracker
+  window.addEventListener("error", function (e) { if (e.message) fail(e.message); });
+  window.addEventListener("load", function () { setTimeout(function () { fail(""); }, 1500); });
+})();
+</script>
 <script type="module">
+window.trackerStarted = true;
 // Game data comes straight from the apworld's data files, so the tracker follows the apworld's updates
 const DATA_URL = "https://raw.githubusercontent.com/CaptainBoscar/Archipelago-DOTA2/main/worlds/dota_2/data/";
 const CDN = "https://cdn.cloudflare.steamstatic.com";
@@ -555,7 +574,7 @@ function matchTriggers(game, d, hero, group, shopByKey) {
 // all its stat checks done means probably read (another match may have sent them)
 function readStatuses(games, triggers, done, submitted) {
   const sources = {};
-  games.forEach(g => (triggers[g.id]?.[1] || []).forEach(c => (sources[c] ||= new Set()).add(g.id)));
+  games.forEach(g => ((triggers[g.id] || [])[1] || []).forEach(c => (sources[c] = sources[c] || new Set()).add(g.id)));
   games.forEach(g => {
     if (!g.open) { g.read = "locked"; return; }
     if (submitted && g.win && submitted.has(g.id)) { g.read = "yes"; return; }
