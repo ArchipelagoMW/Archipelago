@@ -194,9 +194,6 @@ _speedups.html
 # pyenv
 .python-version
 
-#undertale stuff
-/Undertale/
-
 # OS General Files
 .DS_Store
 .AppleDouble
