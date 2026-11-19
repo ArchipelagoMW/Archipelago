@@ -2,10 +2,9 @@ from .bases import Dota2TestBase
 
 class BasicTestLogic(Dota2TestBase):
     options = {
-        "goal_type": 1,
-        "TotalWinsToWin": 3,
-        "PrimordialFragmentsToWin":5,
-        "PrimordialFragmentsToUnlockFinal":5
+        "goal_type": "standard",
+        "total_wins_to_win": 3,
+        "primordial_fragments_to_win": 10,
         # Options you don't specify will use their default values.
         # It is good practice to specify every option that has an impact on your test, even when it's the default value.
     }
@@ -18,4 +17,7 @@ class BasicTestLogic(Dota2TestBase):
             # Since access rules have a "state" argument, we must pass our current CollectionState.
             # Helpfully, since we're in a WorldTestBase, we can just use "self.multiworld.state".
             self.assertTrue(blood_grenade.can_reach(self.multiworld.state))
+            # Iron Branch needs its shop unlock
+            self.assertFalse(itron_branch.can_reach(self.multiworld.state))
+            self.collect_by_name("Unlock branches")
             self.assertTrue(itron_branch.can_reach(self.multiworld.state))

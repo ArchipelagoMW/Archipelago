@@ -191,8 +191,8 @@ class DOTA2World(World):
             for _ in range(d.copies):
                 pool.append(self.create_item(d.name))
 
-        # Pad pool so total items = locations
-        loc_count = len(self.multiworld.get_locations(self.player))
+        # Pad pool so total items = locations that take an item (Goal Complete already holds its locked event)
+        loc_count = len([loc for loc in self.multiworld.get_locations(self.player) if loc.address is not None])
         if len(pool) < loc_count:
             pool += [self.create_item(FILLER_ITEM_NAME) for _ in range(loc_count - len(pool))]
 
