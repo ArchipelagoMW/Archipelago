@@ -1,0 +1,1230 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Dota 2 Archipelago Tracker</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+/* Layout: header and settings, then tabs (tracker, components, matches) with a sticky filter bar */
+:root {
+  --bg: #f3f1ec; --panel: #fbfaf7; --fg: #1d1b18; --muted: #6f6a60; --line: #dcd6ca;
+  --gold: #9a6a12; --gold-soft: #f1e2bf; --ok: #2f7a3e; --ok-soft: #dcefdc; --lock: #b9b2a5;
+  --display: "Barlow Condensed", "Arial Narrow", sans-serif;
+  --body: "IBM Plex Sans", system-ui, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, monospace;
+  --c-str: #b8321f; --c-agi: #2e7d3a; --c-int: #1f68b0; --c-all: #8a4fb8;
+  --c-melee: #a2581a; --c-ranged: #17807a; --c-carry: #a8761a; --c-support: #4a6fa5; --c-legs: #6f6a60;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #141311; --panel: #1c1a17; --fg: #ece7dc; --muted: #9c958a; --line: #2f2c27;
+  --gold: #e0b04f; --gold-soft: #3a2f17; --ok: #7cc98a; --ok-soft: #1d3322; --lock: #4a463f; --c-str: #ec6f5a; --c-agi: #6cc77a; --c-int: #62a8ec; --c-all: #c08ae6;
+  --c-melee: #e09456; --c-ranged: #4cc2b9; --c-carry: #e0b04f; --c-support: #8eb0e0; --c-legs: #a8a194; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #141311; --panel: #1c1a17; --fg: #ece7dc; --muted: #9c958a; --line: #2f2c27;
+  --gold: #e0b04f; --gold-soft: #3a2f17; --ok: #7cc98a; --ok-soft: #1d3322; --lock: #4a463f; --c-str: #ec6f5a; --c-agi: #6cc77a; --c-int: #62a8ec; --c-all: #c08ae6;
+  --c-melee: #e09456; --c-ranged: #4cc2b9; --c-carry: #e0b04f; --c-support: #8eb0e0; --c-legs: #a8a194; color-scheme: dark }
+body { margin: 0; background: var(--bg); color: var(--fg); font: 15px/1.5 var(--body); }
+.wrap { max-width: 1080px; margin: 0 auto; padding-block: 24px 64px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  display: grid; gap: 36px; }
+h1, h2 { font-family: var(--display); font-weight: 700; letter-spacing: .01em; text-wrap: balance; margin: 0; line-height: 1.1; }
+h1 { font-size: clamp(30px, 6vw, 44px); overflow-wrap: anywhere; }
+h2 { font-size: 26px; }
+h3 { font: 600 13px/1.3 var(--body); text-transform: uppercase; letter-spacing: .08em; color: var(--muted); margin: 0; }
+.eyebrow { font: 500 12px var(--mono); color: var(--muted); letter-spacing: .04em; }
+header { display: flex; flex-wrap: wrap; gap: 12px 24px; align-items: start; justify-content: space-between; }
+header .title { display: grid; gap: 6px; min-width: 0; }
+.actions { display: grid; gap: 6px; justify-items: end; max-width: 320px; }
+.actions .row { display: flex; flex-wrap: wrap; gap: 6px; justify-content: end; }
+.btn { font: 600 14px var(--body); padding: 9px 16px; border-radius: 6px; border: 1px solid var(--line); background: var(--panel); color: var(--fg); cursor: pointer; }
+.btn.primary, #refresh { border-color: var(--fg); background: var(--fg); color: var(--bg); }
+.btn:disabled { opacity: .6; cursor: progress; }
+.btn:focus-visible, .tabs button:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+#refresh-msg { font-size: 12px; color: var(--muted); text-align: right; }
+#refresh-msg.err, #refresh-float-msg.err, .status.err { color: var(--c-str); }
+/* Copy of the refresh button, pinned top right once the header one scrolls out of view */
+.refresh-float { position: fixed; z-index: 20; display: grid; gap: 6px; justify-items: end; max-width: min(320px, calc(100vw - 32px));
+  right: max(16px, env(safe-area-inset-right, 0px)); top: calc(env(safe-area-inset-top, 0px) + 9px); }
+@media (max-width: 1440px) { body.float-on .filter { padding-right: 150px; } }
+.refresh-float[hidden] { display: none; }
+#refresh-float { font: 600 14px var(--body); padding: 10px 16px; border-radius: 99px; border: 1px solid var(--fg); background: var(--fg); color: var(--bg);
+  cursor: pointer; box-shadow: 0 4px 14px rgb(0 0 0 / .25); }
+#refresh-float:disabled { opacity: .7; cursor: progress; }
+#refresh-float:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+#refresh-float-msg { font-size: 12px; color: var(--muted); background: var(--panel); border: 1px solid var(--line); border-radius: 6px; padding: 6px 10px; text-align: right; }
+#refresh-float-msg:empty { display: none; }
+/* Settings */
+.setup { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 20px; display: grid; gap: 16px; }
+.setup[hidden] { display: none; }
+.fields { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px 20px; }
+.field { display: grid; gap: 4px; align-content: start; }
+.field label { font-weight: 600; font-size: 14px; }
+.field input { font: inherit; padding: 8px 10px; border: 1px solid var(--line); border-radius: 6px; background: var(--bg); color: var(--fg); min-width: 0; }
+.field input:focus-visible { outline: 2px solid var(--gold); outline-offset: 1px; }
+.field .hint { font-size: 12px; color: var(--muted); }
+.setup .row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.status { margin: 0; font-size: 14px; color: var(--muted); }
+.status[hidden] { display: none; }
+.tabs { display: flex; gap: 4px; border-bottom: 1px solid var(--line); margin-top: -12px; overflow-x: auto; }
+.tabs button { font: 700 18px var(--display); letter-spacing: .02em; padding: 8px 14px; background: none; border: 0; border-bottom: 3px solid transparent; color: var(--muted); cursor: pointer; margin-bottom: -1px; white-space: nowrap; }
+.tabs button[aria-selected="true"] { color: var(--fg); border-bottom-color: var(--gold); }
+#app { display: grid; gap: 36px; }
+#app[hidden] { display: none; }
+.panel { display: grid; gap: 36px; }
+.panel[hidden] { display: none; }
+.res { font-weight: 600; } .res.win { color: var(--ok); } .res.loss { color: var(--c-str); }
+td.sub.read-yes { color: var(--ok); } td.sub.read-no { color: var(--c-str); font-weight: 600; }
+td.sub[title] { cursor: help; }
+td.sub, .hero .sub, .chip .sub { color: var(--muted); font-size: 13px; font-weight: 400; }
+td a { color: inherit; }
+.log time { font: 500 12px var(--mono); color: var(--muted); margin-right: 10px; }
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 12px; }
+.statrows { display: grid; gap: 22px; }
+.statrow { display: grid; gap: 10px; }
+.stat { background: var(--panel); border: 1px solid var(--line); border-radius: 6px; padding: 14px 16px; display: grid; gap: 6px; align-content: start; }
+.stat b { font: 700 32px/1 var(--display); font-variant-numeric: tabular-nums; }
+.stat b small { font-size: 18px; color: var(--muted); font-weight: 500; }
+.bar { height: 4px; background: var(--line); border-radius: 2px; overflow: hidden; }
+.bar i { display: block; height: 100%; background: var(--gold); }
+.filter { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--bg); padding-block: 10px;
+  display: flex; flex-wrap: wrap; gap: 10px; align-items: center; border-block: 1px solid var(--line); }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--bg); }
+#q { flex: 1 1 220px; min-width: 0; font: inherit; padding: 8px 12px; border: 1px solid var(--line); border-radius: 6px; background: var(--panel); color: var(--fg); }
+#q:focus-visible, button:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+.toggle { display: flex; gap: 4px; }
+.toggle button { font: 500 13px var(--body); padding: 7px 12px; border-radius: 6px; border: 1px solid var(--line); background: var(--panel); color: var(--muted); cursor: pointer; }
+.toggle button[aria-pressed="true"] { background: var(--fg); color: var(--bg); border-color: var(--fg); }
+section { display: grid; gap: 14px; }
+.sec-head { display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: baseline; justify-content: space-between; }
+.note { color: var(--muted); font-size: 13px; max-width: 65ch; margin: 0; }
+.group { display: grid; gap: 8px; padding-block: 4px; }
+.group-head { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip { font-size: 14px; padding: 5px 10px; border-radius: 4px; border: 1px solid var(--line); background: var(--panel); }
+.chip.on { border-color: var(--ok); color: var(--fg); box-shadow: inset 3px 0 0 var(--ok); }
+.chip.off { color: var(--muted); background: transparent; border-style: dashed; border-color: var(--lock); }
+.chip.item { display: inline-flex; align-items: center; gap: 8px; padding: 4px 10px 4px 4px; }
+.chip.item img { width: 30px; height: 22px; border-radius: 3px; object-fit: cover; }
+.chip.item.off img { filter: grayscale(1); opacity: .45; }
+.chip.done { color: var(--ok); background: var(--ok-soft); border-color: color-mix(in srgb, var(--ok) 40%, transparent); }
+.chip.done::before { content: "✓ "; font-weight: 700; }
+button.chip { font: inherit; font-size: 14px; color: inherit; cursor: pointer; }
+button.chip.link:hover { border-color: var(--fg); }
+button.chip:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+.chip.ready { border-color: var(--gold); box-shadow: inset 3px 0 0 var(--gold); }
+.log { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line); }
+.log li { display: flex; flex-wrap: wrap; gap: 4px 12px; justify-content: space-between; padding: 9px 0; border-bottom: 1px solid var(--line); }
+.log li[hidden] { display: none; }
+.log .src { color: var(--muted); font-size: 13px; }
+.empty { color: var(--muted); font-style: italic; }
+.legend { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; font-size: 13px; color: var(--muted); }
+.hfilters { display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center; }
+.fgroup { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+.flabel { font-size: 13px; color: var(--muted); }
+.hfilters .toggle { flex-wrap: wrap; }
+.hfilters .toggle button { padding: 5px 10px; }
+.hfilters .clear { font: 500 13px var(--body); padding: 5px 10px; border-radius: 6px; border: 1px dashed var(--line); background: none; color: var(--muted); cursor: pointer; }
+.tablebox { overflow-x: auto; border: 1px solid var(--line); border-radius: 6px; background: var(--panel); }
+table { width: 100%; border-collapse: collapse; font-size: 14px; }
+th, td { padding: 7px 10px; text-align: left; border-bottom: 1px solid var(--line); white-space: nowrap; }
+tbody tr:last-child td { border-bottom: 0; }
+th { position: sticky; top: 0; background: var(--panel); font: 600 12px var(--body); text-transform: uppercase; letter-spacing: .06em; color: var(--muted); }
+th button { all: unset; cursor: pointer; display: inline-flex; gap: 4px; }
+/* Clickable trait pills: one colour per value (attributes use the game's colours) */
+td button.tag { all: unset; cursor: pointer; display: inline-block; font: 600 12px/1 var(--body); padding: 5px 10px; border-radius: 99px;
+  color: var(--c, var(--muted)); background: color-mix(in srgb, var(--c, var(--muted)) 16%, transparent);
+  border: 1px solid color-mix(in srgb, var(--c, var(--muted)) 35%, transparent); }
+td button.tag:hover { background: color-mix(in srgb, var(--c, var(--muted)) 28%, transparent); }
+td button.tag[aria-pressed="true"] { background: var(--c, var(--muted)); color: var(--panel); border-color: var(--c, var(--muted)); }
+td button.tag:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+.t-str { --c: var(--c-str); } .t-agi { --c: var(--c-agi); } .t-int { --c: var(--c-int); } .t-all { --c: var(--c-all); }
+.t-Melee { --c: var(--c-melee); } .t-Ranged { --c: var(--c-ranged); }
+.t-Carry { --c: var(--c-carry); } .t-Support { --c: var(--c-support); }
+.t-legs { --c: var(--c-legs); }
+.hero { display: flex; align-items: center; gap: 10px; font-weight: 700; }
+.hero img, .hero .noimg { width: 48px; height: 27px; border-radius: 4px; object-fit: cover; flex: none; background: var(--line); }
+th button:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+th[aria-sort="ascending"] button::after { content: "▲"; font-size: 9px; }
+th[aria-sort="descending"] button::after { content: "▼"; font-size: 9px; }
+th.num, td.num { font-variant-numeric: tabular-nums; text-align: right; }
+tr.locked td, tr.locked .res { color: var(--muted); }
+tr.locked img { filter: grayscale(1); opacity: .5; }
+td .won { color: var(--ok); font-weight: 600; }
+.banner { background: var(--gold-soft); border-radius: 6px; padding: 10px 14px; font-size: 14px; margin: 0; }
+.banner[hidden] { display: none; }
+code { font: 500 13px var(--mono); overflow-wrap: anywhere; }
+.field .hint a { color: var(--gold); }
+.help { border: 1px solid var(--line); border-radius: 8px; background: var(--panel); }
+.help summary { cursor: pointer; padding: 12px 16px; font-weight: 600; }
+.help summary:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+.help-body { display: grid; gap: 20px; padding: 4px 16px 18px; max-width: 75ch; }
+.help-body section { gap: 8px; }
+.help-body p, .help-body ul, .help-body ol { margin: 0; font-size: 14px; }
+.help-body ul, .help-body ol { padding-left: 20px; display: grid; gap: 4px; }
+.help-body .chip { font-size: 13px; padding: 1px 6px; }
+@media (prefers-reduced-motion: no-preference) { .bar i { transition: width .4s ease; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="title">
+      <span class="eyebrow" id="meta">Archipelago · Dota 2</span>
+      <h1 id="title">Dota 2 Archipelago Tracker</h1>
+      <p class="note" id="updated"></p>
+    </div>
+    <div class="actions">
+      <div class="row">
+        <button class="btn" id="open-settings" type="button" aria-controls="setup" aria-expanded="false">Settings</button>
+        <button class="btn" id="refresh" type="button" hidden>Refresh</button>
+      </div>
+      <span id="refresh-msg" role="status"></span>
+    </div>
+  </header>
+
+  <form class="setup" id="setup" hidden>
+    <div class="sec-head"><h2>Settings</h2></div>
+    <p class="note">Everything is read from your browser: the Archipelago server (as a read-only tracker, it never sends checks) and OpenDota. These settings stay in this browser, and the link below lets you open the tracker anywhere (without the password).</p>
+    <div class="fields">
+      <div class="field">
+        <label for="f-room">Room link or server</label>
+        <input id="f-room" name="room" required placeholder="https://archipelago.gg/room/…" autocomplete="off">
+        <span class="hint">The room page link on archipelago.gg (a sleeping room is woken up), or a server address like <code>host:port</code>.</span>
+      </div>
+      <div class="field">
+        <label for="f-slot">Slot name</label>
+        <input id="f-slot" name="slot" required list="slots" autocomplete="off">
+        <datalist id="slots"></datalist>
+        <span class="hint" id="slot-hint">Your player name in the multiworld.</span>
+      </div>
+      <div class="field">
+        <label for="f-password">Room password</label>
+        <input id="f-password" name="password" type="password" autocomplete="off">
+        <span class="hint">Only if the room has one. Kept in this browser, never in the link.</span>
+      </div>
+      <div class="field">
+        <label for="f-steam">Steam account ID</label>
+        <input id="f-steam" name="steam" inputmode="numeric" autocomplete="off" placeholder="123456789">
+        <span class="hint">The number you gave the client with /set_player_id (the 64-bit SteamID works too). Needed for your matches and progress. <a href="#help-steam" id="steam-help">Where to find it</a></span>
+      </div>
+      <div class="field">
+        <label for="f-since">Seed start date</label>
+        <input id="f-since" name="since" type="date">
+        <span class="hint">Matches before this date are not shown. Filled from the client save if you load it.</span>
+      </div>
+      <div class="field">
+        <label for="f-save">Client save (optional)</label>
+        <input id="f-save" type="file" accept=".json,application/json">
+        <span class="hint" id="save-hint">Exact wins and heroes won, instead of an estimate from OpenDota. File <code>DOTA2__&lt;seed&gt;__&lt;slot&gt;.json</code> in <code>Archipelago\saves\dota2</code>. Load it again to update.</span>
+      </div>
+    </div>
+    <div class="row">
+      <button class="btn primary" type="submit">Show my tracker</button>
+      <button class="btn" type="button" id="copy-link">Copy link</button>
+      <button class="btn" type="button" id="forget-save" hidden>Forget the loaded save</button>
+      <span class="status" id="setup-msg" role="status"></span>
+    </div>
+  </form>
+
+  <details class="help" id="help">
+    <summary>How to: Steam account ID, reading your matches, what the tracker shows</summary>
+    <div class="help-body">
+      <section id="help-steam">
+        <h3>Find your Steam account ID</h3>
+        <p>The client and this tracker need your Steam account ID, a number of 8 to 10 digits. Any of these official places shows it:</p>
+        <ul>
+          <li><b>In Dota 2:</b> open your profile (your avatar, top left). Your <b>Friend ID</b> is shown on your player card. That's the number.</li>
+          <li><b>In Steam:</b> Friends → Add a Friend. <b>Your Friend Code</b> is the same number.</li>
+          <li><b>On the Steam website:</b> your account details page (store.steampowered.com/account) shows your <b>Steam ID</b>, a 17-digit number starting with 7656. The tracker accepts it as is; for the client, use the Friend ID.</li>
+        </ul>
+        <p>Then, once, in the Dota 2 client of Archipelago: <code>/set_player_id 123456789</code> with your Friend ID.</p>
+      </section>
+      <section>
+        <h3>Make your matches visible</h3>
+        <p>Your matches can only be read if they are public:</p>
+        <ul>
+          <li>In Dota 2: Settings → Social → <b>Expose Public Match Data</b>, turned on.</li>
+          <li>In Steam: your profile → Edit Profile → Privacy Settings → <b>My Profile</b> set to Public.</li>
+        </ul>
+        <p>If your matches don't show up here or on OpenDota, check these two settings first. Matches played while they were off may stay hidden.</p>
+      </section>
+      <section>
+        <h3>After each match: /parse_recent_match</h3>
+        <p>The client doesn't watch your games: it only counts a match when you type <code>/parse_recent_match</code>. It reads your <b>most recent</b> match only, so run it after every match, win or loss, before starting the next one. A match you skip can't be read later.</p>
+        <p>Why it sometimes takes a while:</p>
+        <ol>
+          <li><b>The match has to reach OpenDota.</b> Valve publishes it a minute or so after the end. Before that, the command reads your previous match, which was already counted, and nothing happens: wait a little and run it again.</li>
+          <li><b>The replay has to be parsed.</b> Kills and wins are known right away, but purchases (and so item checks) are only in the replay. The command asks OpenDota to download and parse it, then waits, checking every 10 seconds. It usually takes one to a few minutes, longer when OpenDota is busy.</li>
+        </ol>
+        <p>Run <code>/goal</code> in the client to see your progress as the client counts it: it's the reference.</p>
+      </section>
+      <section>
+        <h3>What the tracker shows</h3>
+        <ul>
+          <li><b>Checks:</b> the server's state. <span class="chip ready">Gold</span> purchases have all their components unlocked, so buying them counts. <span class="chip done">Green</span> checks are already sent.</li>
+          <li><b>Challenges and quests</b> (apworlds that have them): challenges are done in one match, any hero. Quests add up over the seed; their progress comes from the client save, or is estimated from OpenDota.</li>
+          <li><b>Wins and heroes won:</b> only the client knows them. Without its save, the tracker estimates them from OpenDota (matches with an unlocked hero). Load the save in Settings for the exact numbers.</li>
+          <li><b>Read by the client</b> (Matches tab): deduced from the checks done on the server. "✗ not read" means a stat check of that match is still to do. "?" usually means OpenDota hasn't parsed that match yet: the tracker only reads OpenDota, it never asks for a parse.</li>
+          <li>The tracker connects to the server in read-only mode: it never sends checks and doesn't count as you playing.</li>
+        </ul>
+      </section>
+    </div>
+  </details>
+
+  <p class="status" id="status" role="status" hidden></p>
+  <noscript><p class="status err">This tracker needs JavaScript: allow it for this site, then reload the page.</p></noscript>
+
+  <div id="app" hidden>
+  <p class="banner" id="save-note" hidden></p>
+  <div class="tabs" role="tablist" aria-label="Views">
+    <button id="tab-tracker" type="button" role="tab" aria-selected="true" aria-controls="panel-tracker">Tracker</button>
+    <button id="tab-items" type="button" role="tab" aria-selected="false" aria-controls="panel-items">Components</button>
+    <button id="tab-games" type="button" role="tab" aria-selected="false" aria-controls="panel-games">Matches</button>
+  </div>
+
+  <div class="panel" id="panel-tracker" role="tabpanel" aria-labelledby="tab-tracker">
+
+  <div class="statrows">
+    <div class="statrow"><h3>Goal</h3><div class="stats" id="goal-stats"></div></div>
+    <div class="statrow"><h3>Progress</h3><div class="stats" id="stats"></div></div>
+  </div>
+
+  <section id="heroes">
+    <div class="sec-head"><h2>Heroes</h2><span class="eyebrow" id="heroes-count"></span></div>
+    <div class="hfilters" id="hfilters" role="group" aria-label="Hero filters"></div>
+    <div class="tablebox"><table>
+      <thead><tr id="hero-head"></tr></thead>
+      <tbody id="hero-rows"></tbody>
+    </table></div>
+  </section>
+
+  <div class="filter">
+    <input id="q" type="search" placeholder="Search a hero or a check…" aria-label="Search a hero or a check">
+    <div class="toggle" role="group" aria-label="Checks shown">
+      <button data-mode="all" type="button" aria-pressed="false" title="All checks">All</button>
+      <button data-mode="on" type="button" aria-pressed="false" title="Checks you can do now, done ones included">Unlocked</button>
+      <button data-mode="todo" type="button" aria-pressed="true" title="Checks you can do now, without the ones already sent">To do</button>
+    </div>
+  </div>
+
+  <section id="checks">
+    <div class="sec-head"><h2>Checks</h2><span class="eyebrow" id="checks-count"></span></div>
+    <div class="legend"><span class="chip ready">Gold</span> purchase you can make: all its components are unlocked <span class="chip done">Green</span> already sent</div>
+    <div id="check-groups" class="groups"></div>
+  </section>
+
+  <section id="log">
+    <div class="sec-head"><h2>Received</h2><span class="eyebrow" id="log-count"></span></div>
+    <p class="note" id="log-note"></p>
+    <ul class="log" id="received"></ul>
+    <div class="toggle"><button id="received-more" type="button" aria-expanded="false" aria-controls="received" hidden></button></div>
+  </section>
+  </div>
+
+  <div class="panel" id="panel-items" role="tabpanel" aria-labelledby="tab-items" hidden>
+    <section id="items">
+      <div class="sec-head"><h2>Components</h2><span class="eyebrow" id="items-count"></span></div>
+      <div class="chips" id="components"></div>
+    </section>
+  </div>
+
+  <div class="panel" id="panel-games" role="tabpanel" aria-labelledby="tab-games" hidden>
+    <div class="stats" id="game-stats"></div>
+    <section>
+      <div class="sec-head"><h2>Match history</h2><span class="eyebrow" id="games-count"></span></div>
+      <div class="tablebox"><table>
+        <thead><tr><th scope="col">Date</th><th scope="col">Hero</th><th scope="col">Result</th><th scope="col" class="num">K / D / A</th><th scope="col" class="num">Duration</th><th scope="col">Read by the client</th><th scope="col">Details</th></tr></thead>
+        <tbody id="game-rows"></tbody>
+      </table></div>
+    </section>
+  </div>
+  </div>
+</div>
+
+<div class="refresh-float" id="refresh-float-box" hidden>
+  <button id="refresh-float" type="button">↻ Refresh</button>
+  <span id="refresh-float-msg" role="status"></span>
+</div>
+
+<script>
+// If the tracker script can't start (old browser, blocked script), say so on the page instead of showing a dead page
+(function () {
+  var shown = false;
+  function fail(detail) {
+    if (shown || window.trackerStarted) return;
+    shown = true;
+    var s = document.getElementById("status");
+    s.hidden = false; s.className = "status err";
+    s.textContent = "The tracker couldn't start in this browser" + (detail ? " (" + detail + ")" : "")
+      + ". Try an up-to-date Chrome, Edge, Firefox or Safari, without extensions that block scripts.";
+  }
+  // Script errors only: a font or image that fails to load doesn't stop the tracker
+  window.addEventListener("error", function (e) { if (e.message) fail(e.message); });
+  window.addEventListener("load", function () { setTimeout(function () { fail(""); }, 1500); });
+})();
+</script>
+<script type="module">
+window.trackerStarted = true;
+// Game data comes straight from the apworld's data files, so the tracker follows the apworld's updates
+const DATA_URL = "https://raw.githubusercontent.com/CaptainBoscar/Archipelago-DOTA2/main/worlds/dota_2/data/";
+const CDN = "https://cdn.cloudflare.steamstatic.com";
+const OPENDOTA = "https://api.opendota.com/api";
+const AP_SITE = "https://archipelago.gg";
+const STEAM64_BASE = 76561197960265728n;
+
+const $ = id => document.getElementById(id);
+const el = (tag, cls, text) => { const e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; };
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+// Storage can be unavailable (private window, blocked site data): the page still works, it just forgets
+const store = {
+  get(k) { try { return JSON.parse(localStorage.getItem(k)); } catch (e) { return null; } },
+  set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} },
+  del(k) { try { localStorage.removeItem(k); } catch (e) {} },
+};
+async function getJSON(url, opts) {
+  const r = await fetch(url, opts);
+  if (!r.ok) throw new Error(`${url.split("?")[0]}: HTTP ${r.status}`);
+  return r.json();
+}
+
+// ---------- settings ----------
+
+const CONFIG_KEY = "dota-ap-tracker:config";
+const FIELDS = ["room", "slot", "steam", "since"];
+function readConfig() {
+  const params = new URLSearchParams(location.search);
+  const saved = store.get(CONFIG_KEY) || {};
+  // A shared link wins over what this browser remembered
+  const cfg = FIELDS.some(k => params.get(k)) ? Object.fromEntries(FIELDS.map(k => [k, params.get(k) || ""])) : saved;
+  cfg.password = (store.get(passwordKey(cfg)) || "");
+  return cfg;
+}
+const passwordKey = cfg => "dota-ap-tracker:password:" + (cfg.room || "") + ":" + (cfg.slot || "");
+const saveKey = cfg => "dota-ap-tracker:save:" + (cfg.room || "") + ":" + (cfg.slot || "");
+function shareLink(cfg) {
+  const u = new URL(location.href.split("?")[0].split("#")[0]);
+  FIELDS.forEach(k => { if (cfg[k]) u.searchParams.set(k, cfg[k]); });
+  return u.toString();
+}
+function steam32(v) {
+  const s = String(v || "").trim();
+  if (!/^\d+$/.test(s)) return null;
+  const n = BigInt(s);
+  return Number(n > STEAM64_BASE ? n - STEAM64_BASE : n);
+}
+const roomId = s => (String(s || "").match(/archipelago\.gg\/room\/([\w-]+)/) || [])[1] || null;
+
+function fillForm(cfg) {
+  FIELDS.forEach(k => { $("f-" + k).value = cfg[k] || ""; });
+  $("f-password").value = cfg.password || "";
+  const save = store.get(saveKey(cfg));
+  $("forget-save").hidden = !save;
+  if (save) $("save-hint").textContent = `Loaded: save of ${save.slot || "this slot"} for seed ${save.seed_name}. Load it again to update.`;
+}
+function formConfig() {
+  const cfg = Object.fromEntries(FIELDS.map(k => [k, $("f-" + k).value.trim()]));
+  cfg.password = $("f-password").value;
+  return cfg;
+}
+function showSettings(open) {
+  $("setup").hidden = !open;
+  $("open-settings").setAttribute("aria-expanded", String(open));
+  if (open) $("f-room").focus();
+}
+
+// Slots of a room on archipelago.gg, to suggest the Dota 2 ones
+async function suggestSlots() {
+  const id = roomId($("f-room").value);
+  if (!id) return;
+  try {
+    const st = await getJSON(`${AP_SITE}/api/room_status/${id}`);
+    const dota = st.players.filter(([, game]) => /dota/i.test(game)).map(([name]) => name);
+    $("slots").replaceChildren(...dota.map(n => { const o = el("option"); o.value = n; return o; }));
+    $("slot-hint").textContent = dota.length ? "Dota 2 slots in this room: " + dota.join(", ") + "." : "No Dota 2 slot found in this room.";
+    if (dota.length === 1 && !$("f-slot").value) $("f-slot").value = dota[0];
+  } catch (e) {
+    $("slot-hint").textContent = "Room not found on archipelago.gg: check the link.";
+  }
+}
+
+// ---------- Archipelago server ----------
+
+// Connects as a read-only tracker and returns room info, the game's data package, the Connected packet and received items
+function apFetch(host, cfg) {
+  return new Promise((resolve, reject) => {
+    let ws;
+    try { ws = new WebSocket((/^wss?:\/\//.test(host) ? "" : "wss://") + host); }
+    catch (e) { reject(Object.assign(new Error("Invalid server address."), { fatal: true })); return; }
+    const out = { received: [] };
+    let opened = false, done = false;
+    const finish = (err, val) => { if (done) return; done = true; clearTimeout(timer); try { ws.close(); } catch (e) {} err ? reject(err) : resolve(val); };
+    const timer = setTimeout(() => finish(new Error("The Archipelago server didn't answer in time.")), 25000);
+    const send = msg => ws.send(JSON.stringify([msg]));
+    ws.onopen = () => { opened = true; };
+    ws.onclose = () => finish(opened ? new Error("The Archipelago server closed the connection.") : Object.assign(new Error("unreachable"), { unreachable: true }));
+    ws.onmessage = e => {
+      for (const m of JSON.parse(e.data)) {
+        if (m.cmd === "RoomInfo") {
+          out.roomInfo = m;
+          send({ cmd: "Connect", game: "", name: cfg.slot, password: cfg.password || "", uuid: crypto.randomUUID(),
+                 version: { major: 0, minor: 6, build: 0, class: "Version" }, items_handling: 7, tags: ["Tracker", "TextOnly"], slot_data: true });
+        } else if (m.cmd === "ConnectionRefused") {
+          const why = { InvalidSlot: `No slot named "${cfg.slot}" in this room.`, InvalidPassword: "Wrong room password." };
+          finish(Object.assign(new Error((m.errors || []).map(x => why[x] || x).join(" ") || "Connection refused by the server."), { fatal: true }));
+        } else if (m.cmd === "Connected") {
+          out.connected = m;
+          out.game = m.slot_info[m.slot].game;
+          send({ cmd: "GetDataPackage", games: [out.game] });
+        } else if (m.cmd === "ReceivedItems") {
+          out.received.push(...m.items);
+        } else if (m.cmd === "DataPackage") {
+          out.datapackage = m.data.games[out.game];
+        }
+        // The server sends ReceivedItems right after Connected, so before the DataPackage we ask for then,
+        // and doesn't send it at all to a slot that has received nothing yet
+        if (out.connected && out.datapackage) finish(null, out);
+      }
+    };
+  });
+}
+
+// Reads the server; if it can't be reached, wakes the archipelago.gg room up and follows its new port
+async function readServer(cfg, say) {
+  const id = roomId(cfg.room);
+  if (!id) return { ...(await apFetch(cfg.room, cfg)), host: cfg.room };
+  let st = await getJSON(`${AP_SITE}/api/room_status/${id}`);
+  const host = port => "archipelago.gg:" + port;
+  if (st.last_port > 0) {
+    try { return { ...(await apFetch(host(st.last_port), cfg)), host: host(st.last_port) }; }
+    catch (e) { if (!e.unreachable) throw e; }
+  }
+  say("The room is asleep: waking it up on archipelago.gg…");
+  await fetch(`${AP_SITE}/room/${id}`, { mode: "no-cors" });  // opening the room page restarts it, often on a new port
+  for (let i = 0; i < 20; i++) {
+    await sleep(3000);
+    st = await getJSON(`${AP_SITE}/api/room_status/${id}`);
+    if (st.last_port > 0) {
+      try { return { ...(await apFetch(host(st.last_port), cfg)), host: host(st.last_port) }; }
+      catch (e) { if (!e.unreachable) throw e; }
+    }
+  }
+  throw new Error("The room didn't wake up. Open its page on archipelago.gg, then try again in a minute.");
+}
+
+// ---------- OpenDota ----------
+
+async function opendotaMatches(steam, since) {
+  const from = new Date(since + "T00:00:00").getTime() / 1000;
+  const days = Math.floor((Date.now() / 1000 - from) / 86400) + 2;
+  const fields = ["hero_id", "start_time", "duration", "radiant_win", "player_slot", "kills", "deaths", "assists"];
+  const matches = await getJSON(`${OPENDOTA}/players/${steam}/matches?date=${days}` + fields.map(f => "&project=" + f).join(""));
+  return matches.filter(m => m.start_time >= from).sort((a, b) => a.start_time - b.start_time);
+}
+
+// Stats, purchases and challenge data of each match, as the client reads them; kept once OpenDota has parsed the match
+const DETAILS_KEY = "dota-ap-tracker:matches:v4";
+const PENDING_KEY = "dota-ap-tracker:unparsed";
+async function matchDetails(ids, steam, damageTypes) {
+  const cache = store.get(DETAILS_KEY) || {};
+  // Matches OpenDota hasn't parsed yet often stay that way: retry them every 10 minutes, not on every load
+  const pending = store.get(PENDING_KEY) || {};
+  const todo = ids.filter(id => !cache[id] && !(Date.now() - (pending[id] || 0) < 10 * 60 * 1000));
+  // A few at a time, to stay under OpenDota's rate limit
+  for (let i = 0; i < todo.length; i += 4) {
+    await Promise.all(todo.slice(i, i + 4).map(async id => {
+      try {
+        const m = await getJSON(`${OPENDOTA}/matches/${id}`);
+        const me = (m.players || []).find(p => p.account_id === steam);
+        if (!me || me.purchase == null) { pending[id] = Date.now(); return; }  // not parsed by OpenDota yet
+        const objectives = m.objectives || [], players = m.players || [];
+        const myTeam = me.player_slot < 128 ? 2 : 3;  // objectives use 2 for Radiant, 3 for Dire
+        cache[id] = { kills: me.kills, assists: me.assists, last_hits: me.last_hits, denies: me.denies,
+                      dewards: (me.observer_kills || 0) + (me.sentry_kills || 0), purchase: Object.keys(me.purchase).sort(),
+                      // Same fields as challenge_data() in worlds/dota_2/dota_api.py
+                      first_blood: !!me.firstblood_claimed, courier_kills: me.courier_kills || 0,
+                      runes: Object.fromEntries(Object.entries(me.runes || {}).map(([k, v]) => [String(k), v])),
+                      buybacks: me.buyback_count || (me.buyback_log || []).length,
+                      aegis: objectives.some(o => o.type === "CHAT_MESSAGE_AEGIS" && o.player_slot === me.player_slot),
+                      position: me.position_est || 0, duration: m.duration || 0,
+                      all_players_stayed: m.human_players === 10 && players.length === 10 && players.every(p => !p.leaver_status),
+                      team_roshan_kills: objectives.filter(o => o.type === "CHAT_MESSAGE_ROSHAN_KILL" && o.team === myTeam).length,
+                      camps_stacked: me.camps_stacked || 0, wards_placed: (me.obs_placed || 0) + (me.sen_placed || 0),
+                      building_damage: me.tower_damage || 0, healing: me.hero_healing || 0, stun_time: Math.round(me.stuns || 0),
+                      ...damageByType(me, damageTypes) };
+        delete pending[id];
+      } catch (e) {}
+    }));
+  }
+  store.set(DETAILS_KEY, cache);
+  store.set(PENDING_KEY, pending);
+  return cache;
+}
+
+// Physical and magical damage to heroes, and the biggest hit of each type we can be sure of (damage_by_type() in
+// worlds/dota_2/dota_api.py): attacks are physical, pure damage magical, items neither; OpenDota keeps only the biggest
+// hit, so a type's biggest hit is that one, or the best average hit of a source of that type
+function damageByType(me, types) {
+  const kind = src => src == null || src === "null" ? "Physical" : types[src] === "Pure" ? "Magical" : types[src];
+  const inflictors = me.damage_inflictor || {}, hits = me.hero_hits || {};
+  const total = { Physical: 0, Magical: 0 }, best = { Physical: 0, Magical: 0 };
+  Object.entries(inflictors).forEach(([src, dmg]) => {
+    const t = kind(src);
+    if (!(t in total)) return;
+    total[t] += dmg;
+    if (hits[src]) best[t] = Math.max(best[t], Math.floor(dmg / hits[src]));
+  });
+  const big = me.max_hero_hit || {}, t = kind(big.inflictor);
+  if (t in best) best[t] = Math.max(best[t], big.value || 0);
+  return { physical_damage: total.Physical, magical_damage: total.Magical, physical_hit: best.Physical, magical_hit: best.Magical };
+}
+
+// The client's rules, as in worlds/dota_2/challenges.py. Stat and quest checks are named after their threshold
+// ("Get 450 Last Hits", "Stack 10 Camps"): the name templates give the threshold and the match field it's checked on.
+const STAT_NAMES = [["Get {} Kill(s)", "kills"], ["Get {} Assists", "assists"], ["Get {} Deward(s)", "dewards"],
+  ["Get {} Last Hits", "last_hits"], ["Get {} Denies", "denies"], ["Heal {} in a Match", "healing"],
+  ["Deal {} Physical Damage in a Match", "physical_damage"], ["Deal {} Magical Damage in a Match", "magical_damage"],
+  ["Land a {} Physical Hit", "physical_hit"], ["Land a {} Magical Hit", "magical_hit"], ["Stun Enemies for {}s in a Match", "stun_time"]];
+// Quests add up over the seed; the field is also the quest total's key
+const QUEST_NAMES = [["Stack {} Camps", "camps_stacked"], ["Place {} Wards", "wards_placed"], ["Deal {} Building Damage", "building_damage"],
+  ["Heal {} in Total", "healing"], ["Deal {} Physical Damage in Total", "physical_damage"],
+  ["Deal {} Magical Damage in Total", "magical_damage"], ["Stun Enemies for {}s in Total", "stun_time"]];
+const nameRegex = t => new RegExp("^" + t.replace(/[.*+?^$()|[\]\\]/g, "\\$&").replace("{}", "(\\d+)") + "$");
+const STAT_RES = STAT_NAMES.map(([t, field]) => [nameRegex(t), field]);
+const QUEST_RES = QUEST_NAMES.map(([t, field]) => [nameRegex(t), field]);
+// { field, threshold } of a stat or quest check, or null
+function scaleOf(name, res) {
+  for (const [re, field] of res) { const m = name.match(re); if (m) return { field, threshold: +m[1] }; }
+  return null;
+}
+const RUNES = { 0: "Double Damage", 1: "Haste", 2: "Illusion", 3: "Invisibility", 4: "Regeneration",
+  5: "Bounty", 6: "Arcane", 7: "Water", 8: "Wisdom", 9: "Shield" };
+const runeCheck = r => `Pick up ${/^[AEIOU]/.test(r) ? "an" : "a"} ${r} Rune`;
+// Values the win challenges use, from the seed's check_values
+const seedValues = sd => ({ "Short Win Minutes": 30, "Long Win Minutes": 60, "Roshan Kills": 1, ...(sd.check_values || {}) });
+
+// Checks a match sends whatever its result (stats and challenges), among the seed's checks
+function statAndChallengeChecks(d, seedChecks) {
+  const stats = [...seedChecks].filter(name => { const s = scaleOf(name, STAT_RES); return s && d[s.field] >= s.threshold; });
+  if (d.first_blood) stats.push("Get First Blood");
+  if (d.courier_kills > 0) stats.push("Kill a Courier");
+  Object.entries(d.runes || {}).forEach(([k, n]) => { if (n && RUNES[k]) stats.push(runeCheck(RUNES[k])); });
+  if (d.buybacks > 0) stats.push("Use a Buyback");
+  if (d.aegis) stats.push("Pick up the Aegis");
+  return stats;
+}
+function winChallenges(d, values) {
+  const out = [];
+  if (d.position >= 1 && d.position <= 5) out.push(`Win as Position ${d.position}`);
+  // A match ended early by a leaver or with bots doesn't count as a short win
+  if (d.all_players_stayed && d.duration < values["Short Win Minutes"] * 60) out.push("Win a Short Match");
+  if (d.duration >= values["Long Win Minutes"] * 60) out.push("Win a Long Match");
+  if (d.team_roshan_kills >= values["Roshan Kills"]) out.push("Win a Match Where Your Team Took Roshan");
+  return out;
+}
+const ATTR_CHECK = { str: "Win as a Strength Hero", agi: "Win as a Agility Hero", int: "Win as a Intelligence Hero", all: "Win as a Universal Hero" };
+
+// Checks /parse_recent_match would have sent for a match, among this seed's checks: [stats, everything].
+// Stats and challenges don't depend on any unlock; wins and purchases do, so they only serve as proof
+function matchTriggers(game, d, hero, group, shopByKey, values, seedChecks) {
+  const stats = statAndChallengeChecks(d, seedChecks).filter(c => seedChecks.has(c));
+  const extra = d.purchase.filter(k => k in shopByKey).map(k => shopByKey[k]);
+  if (game.win) extra.push(...winChallenges(d, values));
+  if (game.win && hero) {
+    extra.push(group === 0 ? "Win with hero from starting pool" : `Win with Hero from Group ${group}`);
+    extra.push(ATTR_CHECK[hero.attr] || "", `Win as a ${hero.attack} Hero`);
+    extra.push(hero.legs === 0 ? "Win as a 0 Legged Hero" : hero.legs === 2 ? "Win as a 2 Legged Hero" : "Win as a 4+ Legged Hero");
+    if (hero.roles.includes("Carry")) extra.push("Win as a Carry Hero");
+    else if (hero.roles.includes("Support")) extra.push("Win as a Support Hero");
+  }
+  return [stats, stats.concat(extra.filter(c => seedChecks.has(c)))];
+}
+
+// Whether /parse_recent_match read each match, from what it would have sent and the checks done:
+// a stat check still to do means not read (sure); a done check that only this match could send means read (sure);
+// all its stat checks done means probably read (another match may have sent them)
+function readStatuses(games, triggers, done, submitted) {
+  const sources = {};
+  games.forEach(g => ((triggers[g.id] || [])[1] || []).forEach(c => (sources[c] = sources[c] || new Set()).add(g.id)));
+  games.forEach(g => {
+    if (!g.open) { g.read = "locked"; return; }
+    if (submitted && g.win && submitted.has(g.id)) { g.read = "yes"; return; }
+    if (!triggers[g.id]) { Object.assign(g, { read: "unknown", why: "not parsed by OpenDota yet" }); return; }
+    const [stats, all] = triggers[g.id];
+    const missing = stats.filter(c => !done.has(c));
+    const proof = all.find(c => done.has(c) && sources[c].size === 1);
+    if (missing.length) Object.assign(g, { read: "no", why: "still to do: " + missing.join(", ") });
+    else if (submitted && g.win) Object.assign(g, { read: "no", why: "win missing from the client save" });
+    else if (proof) Object.assign(g, { read: "yes", why: `"${proof}" is done, and only this match could send it` });
+    else if (stats.length) Object.assign(g, { read: "probably", why: "its stat checks are done, but another match may have sent them" });
+    else Object.assign(g, { read: "unknown", why: "no check of this match can tell" });
+  });
+}
+
+// When this browser first saw each received item (the server doesn't say)
+function stampReceived(cfg, seed, count) {
+  const key = "dota-ap-tracker:journal:" + cfg.room + ":" + cfg.slot;
+  let j = store.get(key);
+  if (!j || j.seed !== seed) j = { seed, since: null, received: [] };
+  const now = new Date().toISOString();
+  if (j.since === null) { j.since = now; j.received = Array(count).fill(null); }
+  while (j.received.length < count) j.received.push(now);
+  store.set(key, j);
+  return [j.since, j.received.slice(0, count)];
+}
+
+// ---------- building the page data ----------
+
+async function loadStatic() {
+  const [heroes, shop, abilities] = await Promise.all([getJSON(DATA_URL + "heroes.json"), getJSON(DATA_URL + "dotaShopLocations.json"),
+    getJSON(OPENDOTA + "/constants/abilities").catch(() => ({}))]);
+  const damageTypes = Object.fromEntries(Object.entries(abilities).filter(([, a]) => ["Magical", "Physical", "Pure"].includes(a.dmg_type))
+    .map(([k, a]) => [k, a.dmg_type]));
+  const attrs = {};
+  heroes.dota_heroes.forEach(h => {
+    attrs[h.localized_name] = { id: h.id, key: h.name.replace("npc_dota_hero_", ""), attr: h.primary_attr, attack: h.attack_type, legs: h.legs, roles: h.roles };
+  });
+  // The image file name is the internal item name OpenDota reports purchases with
+  const items = {}, byKey = {};
+  Object.entries(shop).forEach(([key, it]) => {
+    if (!it.dname) return;
+    const img = (it.img || "").split("?")[0];
+    const internal = (img.match(/\/items\/([^/]+)\.png$/) || [])[1] || key;
+    items[it.dname] = { img: CDN + img, internal, req: it.requirements || [] };
+    byKey[key] = it.dname;
+  });
+  return { attrs, items, byKey, damageTypes };
+}
+
+async function build(cfg, say) {
+  say("Reading the Archipelago server…");
+  const [ap, S] = await Promise.all([readServer(cfg, say), loadStatic()]);
+  const c = ap.connected, sd = c.slot_data, dp = ap.datapackage;
+  const seed = ap.roomInfo.seed_name || "";
+  const itemNames = Object.fromEntries(Object.entries(dp.item_name_to_id).map(([k, v]) => [v, k]));
+  const locNames = Object.fromEntries(Object.entries(dp.location_name_to_id).map(([k, v]) => [v, k]));
+  const slots = c.slot_info;
+
+  const [journalSince, times] = stampReceived(cfg, seed, ap.received.length);
+  const received = ap.received.map((it, i) => {
+    const s = slots[it.player] || {};
+    return { item: itemNames[it.item] || String(it.item), from: s.name || "?", game: s.game || "?", self: it.player === c.slot, at: times[i] };
+  });
+  const names = received.map(r => r.item);
+  const unlockedKeys = new Set(names.filter(n => n.startsWith("Unlock ")).map(n => n.slice(7)));
+  const checked = new Set(c.checked_locations);
+  const allLocs = [...new Set([...c.missing_locations, ...c.checked_locations])].sort((a, b) => a - b);
+  const locKind = n => n.startsWith("Win with") ? "hero" : n in S.items ? "item" : scaleOf(n, QUEST_RES) ? "quest"
+    : n.startsWith("Win as a ") || scaleOf(n, STAT_RES) ? "match" : "challenge";
+  const values = seedValues(sd);
+  const seedChecks = new Set(allLocs.map(i => locNames[i]));
+
+  // The client save is the reference for progress; it must belong to this seed
+  let save = store.get(saveKey(cfg));
+  if (save && save.seed_name !== seed) save = null;
+  const progress = save ? {
+    source: "save", wins: save.wins_total || 0,
+    unique_won: (save.unique_heroes_won || []).map(h => h.localized_name || h.name).sort(),
+    unlocked: (save.heroes_unlocked || []).map(h => h.localized_name || h.name),
+    matches: (save.submitted_match_ids || []).length,
+    submitted: new Set((save.submitted_match_ids || []).map(Number)), steamid_set: !!save.steamid,
+  } : null;
+
+  const heroGroups = [sd.starting_hero_pool, ...sd.hero_groups];
+  const groupUnlocks = names.filter(n => n === "Progressive Group Unlock").length;
+  // Locked heroes don't get their group, so the page doesn't reveal closed groups.
+  // The client save is the reference; without it, each unlock opens the next group
+  const isOpen = progress?.unlocked.length ? (n => progress.unlocked.includes(n)) : ((n, gi) => gi <= groupUnlocks);
+  const blank = { key: "", attr: "?", attack: "?", legs: 0, roles: [] };
+  const heroes = heroGroups.flatMap((g, gi) => g.filter(n => isOpen(n, gi)).map(n => ({ name: n, group: gi, open: true, ...(S.attrs[n] || blank) })));
+  const lockedHeroes = heroGroups.flatMap((g, gi) => g.filter(n => !isOpen(n, gi)).map(n => ({ name: n, group: null, open: false, ...(S.attrs[n] || blank) })));
+
+  // Matches and progress estimate from OpenDota
+  const steam = steam32(cfg.steam || save?.steamid);
+  const since = cfg.since || save?.start_date_local?.slice(0, 10) || "";
+  let games = null, gamesError = null, prog = progress;
+  // Quest totals: the client save's, or an estimate from the matches with an unlocked hero
+  let questTotals = save?.quest_totals || null, questSource = questTotals ? "save" : null;
+  if (steam && since) {
+    say("Reading your matches on OpenDota…");
+    try {
+      const matches = await opendotaMatches(steam, since);
+      const byId = Object.fromEntries(Object.entries(S.attrs).map(([n, a]) => [a.id, [n, a.key]]));
+      const openNames = new Set(heroes.map(h => h.name));
+      games = matches.map(m => {
+        const [name, key] = byId[m.hero_id] || [`Hero ${m.hero_id}`, ""];
+        return { id: m.match_id, start: m.start_time, duration: m.duration, win: (m.player_slot < 128) === m.radiant_win,
+                 kda: [m.kills, m.deaths, m.assists], hero: name, img: key ? `${CDN}/apps/dota2/images/dota_react/heroes/${key}.png` : "", open: openNames.has(name) };
+      });
+      if (!prog) {
+        const wins = games.filter(g => g.open && g.win);
+        prog = { source: "opendota", since, wins: wins.length, matches: games.filter(g => g.open).length, unique_won: [...new Set(wins.map(g => g.hero))].sort() };
+      }
+      const details = await matchDetails(games.map(g => g.id), steam, S.damageTypes);
+      const groupOf = Object.fromEntries(heroes.map(h => [h.name, h.group]));
+      const shopByKey = Object.fromEntries(Object.entries(S.items).map(([n, it]) => [it.internal, n]));
+      const triggers = {};
+      games.forEach(g => { if (details[g.id]) triggers[g.id] = matchTriggers(g, details[g.id], S.attrs[g.hero], groupOf[g.hero], shopByKey, values, seedChecks); });
+      if (!questTotals) {
+        questTotals = {}; questSource = "opendota";
+        games.filter(g => g.open && details[g.id]).forEach(g => QUEST_NAMES.forEach(([, k]) => { questTotals[k] = (questTotals[k] || 0) + (details[g.id][k] || 0); }));
+      }
+      readStatuses(games, triggers, new Set([...checked].map(i => locNames[i])), progress?.submitted);
+    } catch (e) { gamesError = "OpenDota unreachable: " + e.message; games = null; }
+  }
+
+  const heroImg = h => h.key ? `${CDN}/apps/dota2/images/dota_react/heroes/${h.key}.png` : "";
+  // Wins that need a group or a kind of hero you can't play yet, like the apworld's logic (regions.py)
+  const TRAIT = {
+    "Strength": h => h.attr === "str", "Agility": h => h.attr === "agi", "Intelligence": h => h.attr === "int", "Universal": h => h.attr === "all",
+    "Melee": h => h.attack === "Melee", "Ranged": h => h.attack === "Ranged",
+    "0 Legged": h => h.legs === 0, "2 Legged": h => h.legs === 2, "4+ Legged": h => h.legs >= 4,
+    "Carry": h => h.roles.includes("Carry"), "Support": h => h.roles.includes("Support"),
+  };
+  const playable = name => {
+    const group = name.match(/^Win with Hero from Group (\d+)$/);
+    if (group) return heroes.some(h => h.group === +group[1]);
+    const trait = name.match(/^Win as a (.+) Hero$/);
+    if (trait && TRAIT[trait[1]]) return heroes.some(TRAIT[trait[1]]);
+    return true;
+  };
+  const check = (name, done) => {
+    const ck = { name, kind: locKind(name), done };
+    const it = S.items[name];
+    if (ck.kind === "item" && it) { ck.img = it.img; ck.ready = it.req.every(r => unlockedKeys.has(r)); }
+    else if (!playable(name)) ck.ready = false;
+    const quest = scaleOf(name, QUEST_RES);
+    if (quest && questTotals) ck.progress = [questTotals[quest.field] || 0, quest.threshold, questSource];
+    return ck;
+  };
+  const componentKeys = Object.keys(dp.item_name_to_id).filter(n => n.startsWith("Unlock ")).map(n => n.slice(7));
+  return {
+    slot: cfg.slot, server: ap.host, seed,
+    updated: new Date().toISOString(),
+    goal: { fragments: names.filter(n => n === "Primordial Fragment").length, fragments_to_win: sd.primordial_fragments_to_win,
+            unique_heroes_to_win: sd.unique_characters_to_win, wins_to_win: sd.total_wins_to_win },
+    group_unlocks: groupUnlocks, group_count: sd.hero_groups.length,
+    hero_total: heroGroups.reduce((n, g) => n + g.length, 0),
+    components: componentKeys.map(k => {
+      const name = S.byKey[k] || k;
+      return { key: k, name, unlocked: unlockedKeys.has(k), img: S.items[name]?.img || "" };
+    }).sort((a, b) => a.name.localeCompare(b.name)),
+    checks: allLocs.map(i => check(locNames[i], checked.has(i))),
+    received,
+    heroes: [...heroes, ...lockedHeroes].map(h => ({ ...h, img: heroImg(h) })).sort((a, b) => a.name.localeCompare(b.name)),
+    progress: prog, games, games_since: since, games_error: gamesError, has_steam: !!steam,
+    journal_since: journalSince,
+  };
+}
+
+// ---------- rendering ----------
+
+let D, H, P, playable, compOn, compByKey, doneChecks, unlockedGroups, unlockedAt;
+// Display: all = everything, on = unlocked only, todo = unlocked without the checks done
+let query = "", mode = "todo", onlyOn = true, hideDone = true;
+const norm = s => s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "");
+const match = n => !query || norm(n).includes(query);
+const ATTR = { str: "Strength", agi: "Agility", int: "Intelligence", all: "Universal" };
+const fmtTime = iso => new Date(iso).toLocaleString(undefined, { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" });
+const fmtDate = s => new Date(s + "T00:00:00").toLocaleDateString(undefined, { dateStyle: "medium" });
+
+function setData(data) {
+  D = data; P = D.progress;
+  const wonSet = new Set(P ? P.unique_won : []);
+  H = D.heroes.map(h => {
+    const role = h.roles.includes("Carry") ? "Carry" : h.roles.includes("Support") ? "Support" : "";
+    return { ...h, role, won: wonSet.has(h.name) };
+  });
+  playable = H.filter(h => h.open).length;
+  unlockedGroups = Math.min(D.group_unlocks, D.group_count);
+  compOn = D.components.filter(c => c.unlocked);
+  compByKey = Object.fromEntries(D.components.map(c => [c.key, c.name]));
+  doneChecks = D.checks.filter(c => c.done).length;
+  // When each component was unlocked (first "Unlock" received)
+  unlockedAt = {};
+  D.received.forEach(r => { if (r.item.startsWith("Unlock ") && !(r.item.slice(7) in unlockedAt)) unlockedAt[r.item.slice(7)] = r.at; });
+}
+
+function stat(label, val, max, extra) {
+  const s = el("div", "stat");
+  s.append(el("h3", null, label));
+  const b = el("b"); b.textContent = val; b.append(el("small", null, " / " + max)); s.append(b);
+  const bar = el("div", "bar"); const i = el("i"); i.style.width = (max ? Math.min(100, 100 * val / max) : 0) + "%"; bar.append(i); s.append(bar);
+  if (extra) s.append(el("span", "eyebrow", extra));
+  return s;
+}
+
+function renderStatic() {
+  document.title = D.slot + " · Dota 2 Archipelago";
+  $("title").textContent = D.slot + " · Dota 2";
+  $("meta").textContent = D.server + " · seed " + D.seed;
+  $("updated").textContent = "Server state on " + new Date(D.updated).toLocaleString(undefined, { dateStyle: "long", timeStyle: "short" }) + ".";
+  $("goal-stats").replaceChildren(
+    ...(P ? [stat("Unique heroes won", P.unique_won.length, D.goal.unique_heroes_to_win),
+             stat("Wins", P.wins, D.goal.wins_to_win, P.source === "save" ? P.matches + " won match(es) submitted"
+               : P.matches + " match(es) since " + fmtDate(P.since))] : []),
+    stat("Primordial Fragments", D.goal.fragments, D.goal.fragments_to_win)
+  );
+  $("stats").replaceChildren(
+    stat("Playable heroes", playable, D.hero_total, unlockedGroups + " of " + D.group_count + " group(s) unlocked"),
+    stat("Components", compOn.length, D.components.length),
+    stat("Checks sent", doneChecks, D.checks.length)
+  );
+  $("items-count").textContent = compOn.length + " unlocked";
+  $("tab-items").textContent = "Components (" + compOn.length + "/" + D.components.length + ")";
+  // Components tab: all of them, unlocked first (search and toggle don't apply)
+  const cc = $("components"); cc.replaceChildren();
+  [...D.components.filter(c => c.unlocked), ...D.components.filter(c => !c.unlocked)].forEach(c => {
+    const chip = el("span", "chip item " + (c.unlocked ? "on" : "off"));
+    if (c.unlocked) chip.title = unlockedAt[c.key] ? "Unlocked on " + fmtTime(unlockedAt[c.key]) : "Unlocked before this browser started tracking";
+    if (c.img) { const img = el("img"); img.src = c.img; img.alt = ""; img.loading = "lazy"; img.onerror = () => img.remove(); chip.append(img); }
+    chip.append(c.name); cc.append(chip);
+  });
+  $("checks-count").textContent = (D.checks.length - doneChecks) + " left";
+  const note = $("save-note"); note.hidden = true;
+  const say = text => { note.hidden = false; note.textContent = text; };
+  if (!D.has_steam) say("Add your Steam account ID in Settings to see your wins and matches.");
+  else if (!D.games_since) say("Add the seed start date in Settings (or load the client save) to see your wins and matches.");
+  else if (!P) say("Progress unavailable: " + (D.games_error || "OpenDota unreachable") + ".");
+  else if (P.source === "save" && !P.steamid_set) say("No Steam ID set in the client: run /set_player_id once so your matches count.");
+  $("log-count").textContent = D.received.length + " items";
+  if (D.journal_since) $("log-note").textContent = "When this browser saw the item arrive (to the nearest refresh). Items received before "
+    + fmtTime(D.journal_since) + " have no time.";
+  const ul = $("received"); ul.replaceChildren();
+  if (!D.received.length) ul.append(el("li", "empty", "Nothing received yet."));
+  // The last 10 received, the rest behind "Show more"
+  const SHOWN = 10;
+  [...D.received].reverse().forEach((r, i) => {
+    const li = el("li"); li.hidden = i >= SHOWN;
+    const key = r.item.startsWith("Unlock ") ? r.item.slice(7) : null;
+    const what = el("span");
+    const t = el("time", null, r.at ? fmtTime(r.at) : "—"); if (r.at) t.dateTime = r.at;
+    what.append(t, key ? "Component: " + (compByKey[key] || key) : r.item);
+    li.append(what, el("span", "src", r.self ? "found by you" : "from " + r.from + " (" + r.game + ")"));
+    ul.append(li);
+  });
+  const more = $("received-more"), rest = D.received.length - SHOWN;
+  more.hidden = rest <= 0;
+  more.textContent = "Show the " + rest + " others";
+  more.setAttribute("aria-expanded", "false");
+  more.onclick = () => {
+    const open = more.getAttribute("aria-expanded") !== "true";
+    [...ul.children].forEach((li, i) => { li.hidden = !open && i >= SHOWN; });
+    more.setAttribute("aria-expanded", String(open));
+    more.textContent = open ? "Show less" : "Show the " + rest + " others";
+  };
+}
+
+const COLS = [["name", "Hero"], ["group", "Group"], ["attr", "Attribute"], ["attack", "Attack"], ["legs", "Legs"], ["role", "Role"], ["won", "Won"]];
+let sortKey = "group", sortDir = 1;
+// Multiple-choice filters: values of one trait are OR-ed, traits are AND-ed.
+// Locked heroes form a last separate group, hidden until it is picked
+const LOCKED = "locked";
+let FILTERS = [];
+const F = { attr: new Set(), attack: new Set(), legs: new Set(), role: new Set(), group: new Set(), won: new Set() };
+function resetFilters(f = {}) { Object.keys(F).forEach(k => { F[k] = new Set(f[k] ? [f[k]] : []); }); }
+const HERO_VAL = {
+  attr: h => h.attr, attack: h => h.attack, legs: h => h.legs >= 4 ? "4" : String(h.legs),
+  role: h => h.role, group: h => h.open ? String(h.group) : LOCKED, won: h => h.won ? "yes" : "no",
+};
+const groupLabel = g => g === 0 ? "Starting" : "Group " + g;
+function renderFilters() {
+  FILTERS = [
+    ["attr", "Attribute", [["str", "Strength"], ["agi", "Agility"], ["int", "Intelligence"], ["all", "Universal"]]],
+    ["attack", "Attack", [["Melee", "Melee"], ["Ranged", "Ranged"]]],
+    ["legs", "Legs", [["0", "0"], ["2", "2"], ["4", "4+"]]],
+    ["role", "Role", [["Carry", "Carry"], ["Support", "Support"]]],
+    ["group", "Group", [...new Set(H.filter(h => h.open).map(h => h.group))].sort((a, b) => a - b)
+      .map(g => [String(g), groupLabel(g)]).concat([[LOCKED, "Locked"]])],
+    ["won", "Win", [["no", "Not won yet"], ["yes", "Already won"]]],
+  ];
+  const box = $("hfilters"); box.replaceChildren();
+  FILTERS.forEach(([k, label, opts]) => {
+    const g = el("div", "fgroup"), t = el("div", "toggle");
+    g.append(el("span", "flabel", label), t);
+    opts.forEach(([v, text]) => {
+      const b = el("button", null, text); b.type = "button";
+      b.setAttribute("aria-pressed", String(F[k].has(v)));
+      b.addEventListener("click", () => toggleFilter(k, v));
+      t.append(b);
+    });
+    box.append(g);
+  });
+  if (Object.values(F).some(f => f.size)) {
+    const c = el("button", "clear", "Clear filters"); c.type = "button";
+    c.addEventListener("click", () => { resetFilters(); renderHeroes(); });
+    box.append(c);
+  }
+}
+
+function renderHeroes() {
+  renderFilters();
+  const head = $("hero-head"); head.replaceChildren();
+  COLS.forEach(([k, label]) => {
+    const th = el("th"); th.scope = "col";
+    if (k === sortKey) th.setAttribute("aria-sort", sortDir > 0 ? "ascending" : "descending");
+    const b = el("button", null, label); b.type = "button";
+    b.addEventListener("click", () => { sortDir = sortKey === k ? -sortDir : (k === "won" ? -1 : 1); sortKey = k; renderHeroes(); });
+    th.append(b); head.append(th);
+  });
+  const rows = H.filter(h => match(h.name) && (h.open || F.group.has(LOCKED))
+    && Object.keys(F).every(k => !F[k].size || F[k].has(HERO_VAL[k](h))));
+  const val = h => sortKey === "won" ? +h.won : sortKey === "attr" ? ATTR[h.attr] : sortKey === "group" ? (h.open ? h.group : 99) : h[sortKey];
+  rows.sort((x, y) => { const a = val(x), b = val(y); return (a < b ? -1 : a > b ? 1 : 0) * sortDir || x.name.localeCompare(y.name); });
+  const body = $("hero-rows"); body.replaceChildren();
+  rows.forEach(h => {
+    const tr = el("tr", h.open ? "" : "locked");
+    const name = el("td"), hero = el("div", "hero"); name.append(hero);
+    if (h.img) { const img = el("img"); img.src = h.img; img.alt = ""; img.loading = "lazy"; img.onerror = () => img.replaceWith(el("span", "noimg")); hero.append(img); }
+    else hero.append(el("span", "noimg"));
+    hero.append(h.name);
+    const won = el("td"); if (h.won) won.append(el("span", "won", "✓"));
+    const role = h.role ? tagCell("role", h.role, h.role) : el("td", null, "—"); role.title = h.roles.join(", ");
+    tr.append(name, tagCell("group", HERO_VAL.group(h), h.open ? groupLabel(h.group) : "Locked"), tagCell("attr", h.attr, ATTR[h.attr] || h.attr),
+      tagCell("attack", h.attack, h.attack),
+      tagCell("legs", h.legs >= 4 ? "4" : String(h.legs), h.legs + (h.legs === 1 ? " leg" : " legs")), role, won);
+    body.append(tr);
+  });
+  if (!rows.length) { const tr = el("tr"); const td = el("td", "empty", query ? "No hero matches the search." : "No hero matches."); td.colSpan = COLS.length; tr.append(td); body.append(tr); }
+  $("heroes-count").textContent = rows.length + " shown of " + playable + " playable";
+}
+// Clicking a trait adds that value to the filter, or removes it if it's already there
+function toggleFilter(k, v) { F[k].has(v) ? F[k].delete(v) : F[k].add(v); renderHeroes(); }
+function tagCell(k, v, label) {
+  const td = el("td");
+  const b = el("button", "tag t-" + (k === "legs" ? "legs" : v), label); b.type = "button";
+  b.setAttribute("aria-pressed", String(F[k].has(v)));
+  b.title = F[k].has(v) ? "Remove this filter" : "Add to the filter";
+  b.addEventListener("click", () => toggleFilter(k, v));
+  td.append(b); return td;
+}
+
+// Match objectives in a readable order: wins by trait, then each stat from its lowest threshold up
+const MATCH_ORDER = ["Strength", "Agility", "Intelligence", "Universal", "Melee", "Ranged", "0 Legged", "2 Legged", "4+ Legged",
+  "Carry", "Support", "Kill", "Assist", "Deward", "Last Hit", "Denies", "Heal", "Physical Damage", "Magical Damage", "Physical Hit", "Magical Hit", "Stun"];
+function matchRank(name) {
+  const i = MATCH_ORDER.findIndex(w => name.includes(w));
+  const n = +(name.match(/\d+/g) || [0]).pop();
+  return [i < 0 ? MATCH_ORDER.length : i, i >= 6 && i <= 8 ? 0 : n];
+}
+function byMatchRank(a, b) {
+  const [x, y] = [matchRank(a.name), matchRank(b.name)];
+  return x[0] - y[0] || x[1] - y[1] || a.name.localeCompare(b.name);
+}
+
+function render() {
+  renderHeroes();
+  const kinds = [["hero", "Wins by group"], ["match", "Match objectives"], ["challenge", "Challenges"], ["quest", "Quests"], ["item", "Items to buy"]];
+  const cg = $("check-groups"); cg.replaceChildren();
+  kinds.forEach(([k, label]) => {
+    // "Unlocked": for purchases, only the ones you can make (and those already done)
+    // "Unlocked": purchases with all their components, and wins with a group or a kind of hero you can play
+    const list = D.checks.filter(c => c.kind === k && match(c.name) && !(hideDone && c.done) && (!onlyOn || c.done || (k === "item" ? c.ready : c.ready !== false)));
+    if (k === "match") list.sort(byMatchRank);
+    if (!list.length) return;
+    const g = el("div", "group"), h = el("div", "group-head");
+    h.append(el("h3", null, label), el("span", "eyebrow", list.filter(c => !c.done).length + " left"));
+    g.append(h);
+    const chips = el("div", "chips");
+    // Remaining checks first, the ones already sent last
+    [...list.filter(c => !c.done), ...list.filter(c => c.done)].forEach(c => {
+      const ready = k === "item" && !c.done && c.ready;
+      const filt = heroFilterFor(c.name);
+      const chip = el(filt ? "button" : "span", "chip" + (c.done ? " done" : "") + (ready ? " ready" : "") + (c.img ? " item" : "") + (filt ? " link" : ""));
+      if (filt) { chip.type = "button"; chip.title = "Show the heroes that complete this check"; chip.addEventListener("click", () => showHeroesFor(filt)); }
+      if (c.img) { const img = el("img"); img.src = c.img; img.alt = ""; img.loading = "lazy"; img.onerror = () => img.remove(); chip.append(img); }
+      chip.append(c.name);
+      if (c.progress && !c.done) {
+        const [have, need, source] = c.progress;
+        chip.append(el("span", "sub", ` ${have.toLocaleString()} / ${need.toLocaleString()}`));
+        chip.title = source === "save" ? "From the client save" : "Estimated from OpenDota (matches with an unlocked hero)";
+      }
+      chips.append(chip);
+    });
+    g.append(chips); cg.append(g);
+  });
+  if (!cg.children.length) cg.append(el("p", "empty", "No check matches."));
+}
+
+// Win checks -> filter of the heroes that would complete them
+const CHECK_FILTER = {
+  "Win as a Strength Hero": { attr: "str" }, "Win as a Agility Hero": { attr: "agi" },
+  "Win as a Intelligence Hero": { attr: "int" }, "Win as a Universal Hero": { attr: "all" },
+  "Win as a Melee Hero": { attack: "Melee" }, "Win as a Ranged Hero": { attack: "Ranged" },
+  "Win as a 0 Legged Hero": { legs: "0" }, "Win as a 2 Legged Hero": { legs: "2" }, "Win as a 4+ Legged Hero": { legs: "4" },
+  "Win as a Carry Hero": { role: "Carry" }, "Win as a Support Hero": { role: "Support" },
+  "Win with hero from starting pool": { group: "0" },
+};
+function heroFilterFor(name) {
+  const m = name.match(/^Win with Hero from Group (\d+)$/);
+  const f = m ? { group: m[1] } : CHECK_FILTER[name];
+  // A group not unlocked yet has no visible hero: no filter
+  return f && (!f.group || H.some(h => String(h.group) === f.group)) ? f : null;
+}
+function showHeroesFor(f) {
+  resetFilters(f); renderHeroes();
+  $("heroes").scrollIntoView({ behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
+}
+
+const READ_LABEL = { yes: "✓ read", probably: "✓ probably", no: "✗ not read", locked: "ignored", unknown: "?" };
+const fmtDuration = s => Math.floor(s / 60) + " min " + String(s % 60).padStart(2, "0");
+function renderGames() {
+  const G = D.games || [];
+  const wins = G.filter(g => g.win);
+  $("tab-games").textContent = "Matches (" + G.length + ")";
+  $("game-stats").replaceChildren(...(G.length ? [stat("Wins", wins.length, G.length, Math.round(100 * wins.length / G.length) + "% win rate")] : []));
+  $("games-count").textContent = D.games ? G.length + " match(es) since " + fmtDate(D.games_since) : "";
+  const body = $("game-rows"); body.replaceChildren();
+  [...G].reverse().forEach(g => {
+    const tr = el("tr", g.open ? "" : "locked");
+    if (!g.open) tr.title = "Hero not unlocked: the client ignores this match";
+    const date = el("td", null, new Date(g.start * 1000).toLocaleString(undefined, { weekday: "short", day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" }));
+    const name = el("td"), hero = el("div", "hero"); name.append(hero);
+    if (g.img) { const img = el("img"); img.src = g.img; img.alt = ""; img.loading = "lazy"; img.onerror = () => img.replaceWith(el("span", "noimg")); hero.append(img); }
+    else hero.append(el("span", "noimg"));
+    hero.append(g.hero);
+    const res = el("td"); res.append(el("span", "res " + (g.win ? "win" : "loss"), g.win ? "Win" : "Loss"));
+    const sub = el("td", "sub read-" + g.read, READ_LABEL[g.read] || "?");
+    if (g.why) sub.title = g.why;
+    const link = el("td"); const a = el("a", null, "OpenDota"); a.href = "https://www.opendota.com/matches/" + g.id; a.target = "_blank"; a.rel = "noopener"; link.append(a);
+    tr.append(date, name, res, el("td", "num", g.kda.join(" / ")), el("td", "num", fmtDuration(g.duration)), sub, link);
+    body.append(tr);
+  });
+  if (!G.length) {
+    const tr = el("tr");
+    const text = !D.has_steam ? "Add your Steam account ID in Settings." : !D.games_since ? "Add the seed start date in Settings."
+      : D.games_error || "No match since the seed start.";
+    const td = el("td", "empty", text); td.colSpan = 7; tr.append(td); body.append(tr);
+  }
+}
+
+$("q").addEventListener("input", e => { query = norm(e.target.value.trim()); render(); });
+const MODE_BTNS = document.querySelectorAll("[data-mode]");
+function applyMode(m) {
+  mode = m; onlyOn = m !== "all"; hideDone = m === "todo";
+  MODE_BTNS.forEach(b => b.setAttribute("aria-pressed", String(b.dataset.mode === m)));
+}
+MODE_BTNS.forEach(b => b.addEventListener("click", () => { applyMode(b.dataset.mode); render(); }));
+let tab = "tracker";
+function setTab(t) {
+  tab = t;
+  ["tracker", "items", "games"].forEach(k => { $("tab-" + k).setAttribute("aria-selected", String(k === t)); $("panel-" + k).hidden = k !== t; });
+}
+["tracker", "items", "games"].forEach(k => $("tab-" + k).addEventListener("click", () => setTab(k)));
+
+// Filters, sort, tab and search survive a refresh in the same tab
+const STATE_KEY = "dota-ap-tracker:view";
+function saveState() {
+  try { sessionStorage.setItem(STATE_KEY, JSON.stringify({ F: Object.fromEntries(Object.entries(F).map(([k, f]) => [k, [...f]])), sortKey, sortDir, mode, tab, q: $("q").value })); } catch (e) {}
+}
+function restoreState() {
+  let st = null;
+  try { st = JSON.parse(sessionStorage.getItem(STATE_KEY)); } catch (e) {}
+  if (!st) return;
+  Object.keys(F).forEach(k => { F[k] = new Set([].concat(st.F?.[k] || []).filter(Boolean)); });
+  sortKey = st.sortKey || sortKey; sortDir = st.sortDir || sortDir;
+  applyMode(st.mode ?? mode); setTab(st.tab || "tracker");
+  $("q").value = st.q || ""; query = norm($("q").value.trim());
+}
+addEventListener("pagehide", saveState);
+
+// ---------- loading ----------
+
+const BTNS = [[$("refresh"), $("refresh-msg"), "Refresh"], [$("refresh-float"), $("refresh-float-msg"), "↻ Refresh"]];
+function setRefresh(busy, text, err) {
+  BTNS.forEach(([btn, msg, label]) => {
+    btn.disabled = busy; btn.textContent = busy ? "Refreshing…" : label;
+    msg.className = err ? "err" : ""; msg.textContent = text || "";
+  });
+}
+function status(text, err) {
+  $("status").hidden = !text; $("status").textContent = text || ""; $("status").className = "status" + (err ? " err" : "");
+}
+
+let cfg = readConfig(), loading = false;
+async function load() {
+  if (loading) return;
+  if (!cfg.room || !cfg.slot) { fillForm(cfg); showSettings(true); return; }
+  loading = true;
+  const first = !D;
+  setRefresh(true, first ? "" : "Reading the server and OpenDota.");
+  try {
+    const data = await build(cfg, text => first ? status(text) : setRefresh(true, text));
+    setData(data);
+    renderStatic(); render(); renderGames();
+    $("app").hidden = false; $("refresh").hidden = false;
+    status(""); setRefresh(false, "");
+    floatBtn();
+  } catch (e) {
+    console.error(e);
+    if (first) { status(e.message, true); fillForm(cfg); showSettings(true); }
+    setRefresh(false, e.message, true);
+  } finally { loading = false; }
+}
+
+$("open-settings").addEventListener("click", () => { fillForm(cfg); showSettings($("setup").hidden); });
+$("steam-help").addEventListener("click", e => {
+  e.preventDefault();
+  $("help").open = true;
+  $("help-steam").scrollIntoView({ behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
+});
+$("f-room").addEventListener("change", suggestSlots);
+$("setup").addEventListener("submit", e => {
+  e.preventDefault();
+  const next = formConfig();
+  if (!next.room || !next.slot) return;
+  if (next.steam && steam32(next.steam) == null) { $("setup-msg").textContent = "The Steam account ID must be a number."; return; }
+  cfg = next;
+  store.set(CONFIG_KEY, Object.fromEntries(FIELDS.map(k => [k, cfg[k]])));
+  cfg.password ? store.set(passwordKey(cfg), cfg.password) : store.del(passwordKey(cfg));
+  // The address shows the settings, so the page can be bookmarked or shared
+  history.replaceState(null, "", shareLink(cfg));
+  $("setup-msg").textContent = "";
+  showSettings(false);
+  D = null; $("app").hidden = true;
+  load();
+});
+$("copy-link").addEventListener("click", async () => {
+  const link = shareLink(formConfig());
+  try { await navigator.clipboard.writeText(link); $("setup-msg").textContent = "Link copied (without the password)."; }
+  catch (e) { $("setup-msg").textContent = link; }
+});
+$("f-save").addEventListener("change", async e => {
+  const file = e.target.files[0];
+  if (!file) return;
+  try {
+    const save = JSON.parse(await file.text());
+    if (!("wins_total" in save) || !save.seed_name) throw new Error("not a Dota 2 client save");
+    const c = formConfig();
+    store.set(saveKey(c), { ...save, slot: c.slot });
+    if (!$("f-since").value && save.start_date_local) $("f-since").value = save.start_date_local.slice(0, 10);
+    if (!$("f-steam").value && save.steamid) $("f-steam").value = save.steamid;
+    fillForm({ ...c, since: $("f-since").value, steam: $("f-steam").value });
+    $("setup-msg").textContent = "Save loaded. Click \"Show my tracker\".";
+  } catch (err) { $("setup-msg").textContent = "This file isn't a Dota 2 client save (" + err.message + ")."; }
+  e.target.value = "";
+});
+$("forget-save").addEventListener("click", () => {
+  store.del(saveKey(formConfig()));
+  fillForm(formConfig());
+  $("save-hint").textContent = "Save forgotten.";
+});
+
+const refresh = () => load();
+$("refresh").addEventListener("click", refresh);
+$("refresh-float").addEventListener("click", refresh);
+// The floating button only shows once the header one is out of view
+const floatBtn = () => {
+  const show = !$("refresh").hidden && $("refresh").getBoundingClientRect().bottom <= 0;
+  $("refresh-float-box").hidden = !show; document.body.classList.toggle("float-on", show);
+};
+addEventListener("scroll", floatBtn, { passive: true });
+addEventListener("resize", floatBtn);
+
+restoreState();
+fillForm(cfg);
+if (cfg.room) suggestSlots();
+load();
+</script>
+</body>
+</html>
