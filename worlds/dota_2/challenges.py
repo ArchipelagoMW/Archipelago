@@ -54,14 +54,15 @@ STATS = [
     Scale("Physical Hit", "physical_hit", "Land a {} Physical Hit", (500,), 100, 3000, 100),
     Scale("Magical Hit", "magical_hit", "Land a {} Magical Hit", (500,), 100, 3000, 100),
     Scale("Stun Time", "stun_time", "Stun Enemies for {}s in a Match", (60,), 10, 300, 10),  # seconds
+    Scale("Camps Stacked", "camps_stacked", "Stack {} Camps in a Match", (5,), 5, 30, 5),
 ]
 
 # Quests add up over the whole seed, with a lower and a full target by default (about ten matches in the most
 # favourable position for the full one).
 QUESTS = [
-    Scale("Camps Stacked", "camps_stacked", "Stack {} Camps", (10, 20), 5, 100, 5),
-    Scale("Wards Placed", "wards_placed", "Place {} Wards", (50, 100), 10, 300, 10),
-    Scale("Building Damage", "building_damage", "Deal {} Building Damage", (25000, 50000), 5000, 200000, 5000),
+    Scale("Total Camps Stacked", "camps_stacked", "Stack {} Camps in Total", (10, 20), 5, 100, 5),
+    Scale("Total Wards Placed", "wards_placed", "Place {} Wards in Total", (50, 100), 10, 300, 10),
+    Scale("Total Building Damage", "building_damage", "Deal {} Building Damage in Total", (25000, 50000), 5000, 200000, 5000),
     Scale("Total Healing", "healing", "Heal {} in Total", (7500, 15000), 2500, 100000, 2500),
     Scale("Total Physical Damage", "physical_damage", "Deal {} Physical Damage in Total", (75000, 150000), 25000, 500000, 25000),
     Scale("Total Magical Damage", "magical_damage", "Deal {} Magical Damage in Total", (60000, 120000), 20000, 500000, 20000),

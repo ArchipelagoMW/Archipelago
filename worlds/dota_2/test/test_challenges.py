@@ -17,8 +17,10 @@ class DefaultSeed(Dota2TestBase):
         names = {loc.name for loc in self.multiworld.get_locations(self.player)}
         self.assertTrue({name for names in CHALLENGE_FAMILIES.values() for name in names} <= names)
         # Quests have a lower and a full target by default
-        self.assertTrue({"Stack 10 Camps", "Stack 20 Camps", "Heal 15000 in Total", "Deal 120000 Magical Damage in Total"} <= names)
-        self.assertNotIn("Stack 30 Camps", names)
+        self.assertTrue({"Stack 10 Camps in Total", "Stack 20 Camps in Total", "Heal 15000 in Total", "Deal 120000 Magical Damage in Total"} <= names)
+        self.assertNotIn("Stack 30 Camps in Total", names)
+        self.assertIn("Stack 5 Camps in a Match", names)
+        self.assertNotIn("Stack 10 Camps in a Match", names)
         self.assertTrue({"Heal 2000 in a Match", "Deal 25000 Physical Damage in a Match", "Land a 500 Magical Hit",
                          "Stun Enemies for 60s in a Match", "Stun Enemies for 400s in Total"} <= names)
         self.assertIn("Get 15 Kill(s)", names)
@@ -42,7 +44,7 @@ class CustomSeed(Dota2TestBase):
         "starting_heroes": 50,
         "hero_groups": 12,
         "disabled_checks": ["Runes", "Kill a Courier", "Legs Wins", "Divine Rapier"],
-        "check_values": {"Short Win Minutes": 25, "Kills": 8, "Last Hits": [250, 75, 150, 400, 600], "Camps Stacked": 30},
+        "check_values": {"Short Win Minutes": 25, "Kills": 8, "Last Hits": [250, 75, 150, 400, 600], "Total Camps Stacked": 30},
     }
 
     def test_hero_pool(self) -> None:
@@ -75,8 +77,8 @@ class CustomSeed(Dota2TestBase):
         self.assertIn("Get 8 Kill(s)", names)
         self.assertNotIn("Get 15 Kill(s)", names)
         self.assertTrue({f"Get {n} Last Hits" for n in (75, 150, 250, 400, 600)} <= names)
-        self.assertIn("Stack 30 Camps", names)
-        self.assertNotIn("Stack 10 Camps", names)
+        self.assertIn("Stack 30 Camps in Total", names)
+        self.assertNotIn("Stack 10 Camps in Total", names)
 
 
 class NoPurchases(Dota2TestBase):
@@ -94,14 +96,14 @@ class ChallengeRules(Dota2TestBase):
     def test_stat_values_checked(self) -> None:
         CheckValues({"Kills": 8, "Assists": [5, 20]})
         for bad in ({"Kills": 0}, {"Kills": [1, 2, 3, 4, 5, 6]}, {"Kills": [5, 5]}, {"Kills": []},
-                    {"Short Win Minutes": [20, 30]}, {"Kills": "lots"}, {"Last Hits": 460}, {"Camps Stacked": [10, 12]}):
+                    {"Short Win Minutes": [20, 30]}, {"Kills": "lots"}, {"Last Hits": 460}, {"Total Camps Stacked": [10, 12]}, {"Camps Stacked": 7}):
             with self.assertRaises(ValueError, msg=bad):
                 CheckValues(bad)
 
     def test_stat_checks(self) -> None:
         values = resolve_values({"Kills": [15, 1, 5]})
-        checks = stat_checks(sample_match(kills=12, last_hits=460), values)
-        self.assertEqual(checks, ["Get 1 Kill(s)", "Get 5 Kill(s)", "Get 450 Last Hits"])
+        checks = stat_checks(sample_match(kills=12, last_hits=460, camps_stacked=6), values)
+        self.assertEqual(checks, ["Get 1 Kill(s)", "Get 5 Kill(s)", "Get 450 Last Hits", "Stack 5 Camps in a Match"])
 
     def test_match_challenges(self) -> None:
         values = resolve_values({})
@@ -115,8 +117,8 @@ class ChallengeRules(Dota2TestBase):
         # Short but with a leaver or a bot: not a short win
         self.assertNotIn("Win a Short Match", checks)
         self.assertIn("Win a Match Where Your Team Took Roshan", checks)
-        self.assertEqual(completed_quests({"camps_stacked": 15, "wards_placed": 3}, values), ["Stack 10 Camps"])
-        self.assertEqual(completed_quests({"camps_stacked": 20}, resolve_values({"Camps Stacked": 30})), [])
+        self.assertEqual(completed_quests({"camps_stacked": 15, "wards_placed": 3}, values), ["Stack 10 Camps in Total"])
+        self.assertEqual(completed_quests({"camps_stacked": 20}, resolve_values({"Total Camps Stacked": 30})), [])
 
     def test_damage_by_type(self) -> None:
         me = {"damage_inflictor": {"null": 5000, "lina_laguna_blade": 3000, "juggernaut_omni_slash": 900,

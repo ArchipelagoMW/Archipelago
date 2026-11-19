@@ -580,13 +580,14 @@ function damageByType(me, types) {
 }
 
 // The client's rules, as in worlds/dota_2/challenges.py. Stat and quest checks are named after their threshold
-// ("Get 450 Last Hits", "Stack 10 Camps"): the name templates give the threshold and the match field it's checked on.
+// ("Get 450 Last Hits", "Stack 10 Camps in Total"): the name templates give the threshold and the match field it's checked on.
 const STAT_NAMES = [["Get {} Kill(s)", "kills"], ["Get {} Assists", "assists"], ["Get {} Deward(s)", "dewards"],
   ["Get {} Last Hits", "last_hits"], ["Get {} Denies", "denies"], ["Heal {} in a Match", "healing"],
   ["Deal {} Physical Damage in a Match", "physical_damage"], ["Deal {} Magical Damage in a Match", "magical_damage"],
-  ["Land a {} Physical Hit", "physical_hit"], ["Land a {} Magical Hit", "magical_hit"], ["Stun Enemies for {}s in a Match", "stun_time"]];
+  ["Land a {} Physical Hit", "physical_hit"], ["Land a {} Magical Hit", "magical_hit"], ["Stun Enemies for {}s in a Match", "stun_time"],
+  ["Stack {} Camps in a Match", "camps_stacked"]];
 // Quests add up over the seed; the field is also the quest total's key
-const QUEST_NAMES = [["Stack {} Camps", "camps_stacked"], ["Place {} Wards", "wards_placed"], ["Deal {} Building Damage", "building_damage"],
+const QUEST_NAMES = [["Stack {} Camps in Total", "camps_stacked"], ["Place {} Wards in Total", "wards_placed"], ["Deal {} Building Damage in Total", "building_damage"],
   ["Heal {} in Total", "healing"], ["Deal {} Physical Damage in Total", "physical_damage"],
   ["Deal {} Magical Damage in Total", "magical_damage"], ["Stun Enemies for {}s in Total", "stun_time"]];
 const nameRegex = t => new RegExp("^" + t.replace(/[.*+?^$()|[\]\\]/g, "\\$&").replace("{}", "(\\d+)") + "$");
@@ -1001,7 +1002,7 @@ function tagCell(k, v, label) {
 
 // Match objectives in a readable order: wins by trait, then each stat from its lowest threshold up
 const MATCH_ORDER = ["Strength", "Agility", "Intelligence", "Universal", "Melee", "Ranged", "0 Legged", "2 Legged", "4+ Legged",
-  "Carry", "Support", "Kill", "Assist", "Deward", "Last Hit", "Denies", "Heal", "Physical Damage", "Magical Damage", "Physical Hit", "Magical Hit", "Stun"];
+  "Carry", "Support", "Kill", "Assist", "Deward", "Last Hit", "Denies", "Heal", "Physical Damage", "Magical Damage", "Physical Hit", "Magical Hit", "Stun", "Stack"];
 function matchRank(name) {
   const i = MATCH_ORDER.findIndex(w => name.includes(w));
   const n = +(name.match(/\d+/g) || [0]).pop();
