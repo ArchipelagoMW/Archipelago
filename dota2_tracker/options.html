@@ -39,7 +39,7 @@ section { display: grid; gap: 14px; }
 .fields { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px 20px; }
 .field { display: grid; gap: 4px; align-content: start; }
 .field label { font-weight: 600; font-size: 14px; }
-input[type=text], input[type=number], select { font: inherit; padding: 7px 10px; border: 1px solid var(--line); border-radius: 6px; background: var(--bg); color: var(--fg); min-width: 0; }
+input[type=text], input[type=number], input[type=search], select { font: inherit; padding: 7px 10px; border: 1px solid var(--line); border-radius: 6px; background: var(--bg); color: var(--fg); min-width: 0; }
 .hint { font-size: 12px; color: var(--muted); }
 .err { font-size: 12px; color: var(--err); }
 .err:empty { display: none; }
@@ -67,10 +67,16 @@ td.value input { width: 100%; box-sizing: border-box; }
   tbody tr td:last-child { grid-column: 1 / -1; }
 }
 .count { font: 500 12px var(--mono); color: var(--muted); white-space: nowrap; }
-.tags { display: flex; flex-wrap: wrap; gap: 6px; }
-.tag { font-size: 13px; padding: 3px 4px 3px 10px; border-radius: 4px; border: 1px solid var(--line); background: var(--bg); display: inline-flex; gap: 6px; align-items: center; }
-.tag button { all: unset; cursor: pointer; padding: 0 6px; color: var(--muted); font-weight: 700; }
-.tag button:focus-visible { outline: 2px solid var(--gold); }
+/* Single checks: a search bar, the list of checks under it */
+#single { width: 100%; box-sizing: border-box; }
+.picklist { max-height: 320px; overflow-y: auto; border: 1px solid var(--line); border-radius: 6px; background: var(--bg); }
+.picklist h3 { position: sticky; top: 0; margin: 0; padding: 6px 12px; background: var(--panel); border-bottom: 1px solid var(--line);
+  font: 600 12px var(--body); text-transform: uppercase; letter-spacing: .06em; color: var(--muted); }
+.picklist h3[hidden], .picklist label[hidden] { display: none; }
+.picklist label { display: flex; gap: 10px; align-items: center; padding: 5px 12px; font-size: 14px; cursor: pointer; }
+.picklist label:hover { background: var(--panel); }
+.picklist label.na { color: var(--muted); cursor: default; }
+.picklist label .sub { margin-left: auto; font-size: 12px; color: var(--muted); }
 .row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
 .summary { font-size: 14px; margin: 0; }
 .summary.bad { color: var(--err); font-weight: 600; }
@@ -146,14 +152,15 @@ a { color: var(--gold); }
 
   <section class="box" aria-labelledby="h-single">
     <h2 id="h-single">Single checks to remove</h2>
-    <p class="note">Any check of a family you keep, such as an item you never buy (<em>Divine Rapier</em>) or a rune (<em>Pick up a Water Rune</em>).</p>
+    <p class="note">Tick any check of a family you keep, such as an item you never buy (<em>Divine Rapier</em>) or a rune (<em>Pick up a Water Rune</em>).</p>
+    <input type="search" id="single" placeholder="Search checks" autocomplete="off" aria-controls="picklist">
     <div class="row">
-      <input type="text" id="single" list="single-list" placeholder="Check name" autocomplete="off" style="flex: 1 1 260px">
-      <datalist id="single-list"></datalist>
-      <button class="btn" type="button" id="single-add">Remove this check</button>
+      <label class="hint"><input type="checkbox" id="removed-only"> Removed only</label>
+      <span class="hint" id="single-count"></span>
+      <button class="btn" type="button" id="single-clear">Keep all</button>
     </div>
-    <span class="err" id="single-err"></span>
-    <div class="tags" id="singles"></div>
+    <div class="picklist" id="picklist" role="group" aria-label="Checks to remove"></div>
+    <span class="hint" id="single-note"></span>
   </section>
 
   <section aria-labelledby="h-yaml">
@@ -327,33 +334,53 @@ function buildOptions() {
   $("crownfall").addEventListener("change", e => { state.crownfall = e.target.value; update(); });
 }
 
-function renderSingles() {
-  const box = $("singles");
-  box.replaceChildren(...state.singles.map(name => {
-    const tag = document.createElement("span");
-    tag.className = "tag";
-    tag.textContent = name;
-    const x = document.createElement("button");
-    x.type = "button";
-    x.textContent = "×";
-    x.setAttribute("aria-label", "Keep " + name);
-    x.addEventListener("click", () => { state.singles = state.singles.filter(n => n !== name); update(); });
-    tag.append(x);
-    return tag;
+// One checkbox per check of the families with fixed names; ticked = removed
+function buildPicklist() {
+  const list = $("picklist");
+  const groups = [...ROWS.filter(r => !r.scale && r.names).map(r => [r.label, r.key, r.names]), ["Purchases", "Purchases", purchaseNames]];
+  list.replaceChildren(...groups.flatMap(([label, key, names]) => {
+    if (!names.length) return [];
+    const h = document.createElement("h3");
+    h.textContent = label;
+    return [h, ...names.map(name => {
+      const l = document.createElement("label");
+      l.dataset.name = name.toLowerCase();
+      l.dataset.family = key;
+      l.innerHTML = `<input type="checkbox"><span></span><span class="sub"></span>`;
+      l.children[1].textContent = name;
+      const box = l.firstChild;
+      box.value = name;
+      box.checked = state.singles.includes(name);
+      box.addEventListener("change", () => {
+        state.singles = box.checked ? [...state.singles, name] : state.singles.filter(n => n !== name);
+        update();
+      });
+      return l;
+    })];
   }));
+  $("single-note").textContent = purchaseNames.length ? "" : "The item list didn't load: purchases can only be removed as a family.";
+  filterPicklist();
 }
-function singleNames() {
-  return [...ROWS.filter(r => !r.scale && r.names).flatMap(r => r.names), ...purchaseNames];
+function filterPicklist() {
+  const q = $("single").value.trim().toLowerCase(), removedOnly = $("removed-only").checked;
+  let heading = null, shown = false;
+  for (const el of $("picklist").children) {
+    if (el.tagName === "H3") { if (heading) heading.hidden = !shown; heading = el; shown = false; continue; }
+    el.hidden = (q && !el.dataset.name.includes(q)) || (removedOnly && !el.firstChild.checked);
+    shown ||= !el.hidden;
+  }
+  if (heading) heading.hidden = !shown;
 }
-function addSingle() {
-  const input = $("single"), name = input.value.trim();
-  const known = singleNames();
-  const match = known.find(n => n.toLowerCase() === name.toLowerCase());
-  $("single-err").textContent = !name ? "" : !match ? (purchaseNames.length ? "Not a check name: pick one from the list." : "Not a known check name (the item list didn't load).") : "";
-  if (!match) return;
-  if (!state.singles.includes(match)) state.singles.push(match);
-  input.value = "";
-  update();
+function refreshPicklist(off) {
+  for (const l of $("picklist").querySelectorAll("label")) {
+    const gone = off.has(l.dataset.family);
+    l.classList.toggle("na", gone);
+    l.firstChild.disabled = gone;
+    l.lastChild.textContent = gone ? "family removed" : "";
+  }
+  const inRemoved = state.singles.filter(n => [...$("picklist").querySelectorAll("label.na input")].some(b => b.value === n)).length;
+  $("single-count").textContent = `${state.singles.length - inRemoved} removed` + (inRemoved ? ` (${inRemoved} more in removed families)` : "");
+  $("single-clear").disabled = !state.singles.length;
 }
 
 function yamlString(s) { return JSON.stringify(s); }
@@ -372,9 +399,11 @@ function update() {
   }
   $("options-err").textContent = optErr;
   const groups = Math.min(o.hero_groups, TOTAL_HEROES - o.starting_heroes);
-  $("groups-hint").textContent = groups < o.hero_groups
-    ? `Only ${groups} groups fit with ${o.starting_heroes} starting heroes: the seed will have ${groups}.`
-    : "Groups to unlock; the other heroes are split between them. 1 to 30, 7 by default.";
+  // The other heroes are split evenly: the first groups get one more when it doesn't divide
+  const rest = TOTAL_HEROES - o.starting_heroes, size = Math.floor(rest / groups), extra = rest % groups;
+  const split = extra ? `${extra} of ${size + 1} heroes and ${groups - extra} of ${size}` : `${size} hero${size === 1 ? "" : "es"} each`;
+  $("groups-hint").textContent = (groups < o.hero_groups ? `Only ${groups} groups fit with ${o.starting_heroes} starting heroes. ` : "")
+    + `${rest} heroes to unlock in ${groups} group${groups === 1 ? "" : "s"}: ${groups === 1 ? `all ${rest}` : split}. 1 to 30, 7 by default.`;
   checks += groups;
   const name = state.name.trim();
   $("name-err").textContent = name ? (/[{}]/.test(name) ? "Braces { } are not allowed." : "") : "Needed by Archipelago.";
@@ -410,7 +439,7 @@ function update() {
   const purchases = !off.has("Purchases") && singles.filter(n => purchaseNames.includes(n)).length < PURCHASES;
   if (state.crownfall === "on") checks += MINIGAME_CHECKS;
   const items = groups + o.primordial_fragments_to_win + 10 + MINIGAME_ITEMS + (purchases ? SHOP_UNLOCKS : 0);
-  renderSingles();
+  refreshPicklist(off);
 
   // disabled_checks: whole quest list as "Quests" when every quest is off
   let disabled = state.off.filter(k => ROWS.some(r => r.key === k));
@@ -438,8 +467,14 @@ function update() {
   save();
 }
 
-$("single-add").addEventListener("click", addSingle);
-$("single").addEventListener("keydown", e => { if (e.key === "Enter") { e.preventDefault(); addSingle(); } });
+$("single").addEventListener("input", filterPicklist);
+$("removed-only").addEventListener("change", filterPicklist);
+$("single-clear").addEventListener("click", () => {
+  state.singles = [];
+  $("picklist").querySelectorAll("input").forEach(b => { b.checked = false; });
+  update();
+  filterPicklist();
+});
 $("copy").addEventListener("click", async () => {
   try { await navigator.clipboard.writeText($("yaml").textContent); $("copy-msg").textContent = "Copied."; }
   catch (e) { $("copy-msg").textContent = "Copy failed: select the text above instead."; }
@@ -460,14 +495,13 @@ $("reset").addEventListener("click", () => {
 
 buildOptions();
 buildTable();
+buildPicklist();
 update();
 fetch(DATA_URL + "dotaShopLocations.json").then(r => r.ok ? r.json() : Promise.reject(r.status)).then(shop => {
-  purchaseNames = Object.values(shop).map(i => i.dname).filter(Boolean);
-  $("single-list").replaceChildren(...singleNames().map(n => Object.assign(document.createElement("option"), { value: n })));
+  purchaseNames = Object.values(shop).map(i => i.dname).filter(Boolean).sort();
+  buildPicklist();
   update();
-}).catch(() => {
-  $("single-list").replaceChildren(...singleNames().map(n => Object.assign(document.createElement("option"), { value: n })));
-});
+}).catch(() => { $("single-note").textContent = "The item list didn't load: purchases can only be removed as a family."; });
 </script>
 </body>
 </html>
