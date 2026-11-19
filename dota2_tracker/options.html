@@ -1,0 +1,473 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Dota 2 YAML Options</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+/* Same look as the tracker (index.html): settings, check table, then the YAML */
+:root {
+  --bg: #f3f1ec; --panel: #fbfaf7; --fg: #1d1b18; --muted: #6f6a60; --line: #dcd6ca;
+  --gold: #9a6a12; --gold-soft: #f1e2bf; --ok: #2f7a3e; --err: #b8321f;
+  --display: "Barlow Condensed", "Arial Narrow", sans-serif;
+  --body: "IBM Plex Sans", system-ui, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #141311; --panel: #1c1a17; --fg: #ece7dc; --muted: #9c958a; --line: #2f2c27;
+  --gold: #e0b04f; --gold-soft: #3a2f17; --ok: #7cc98a; --err: #ec6f5a; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #141311; --panel: #1c1a17; --fg: #ece7dc; --muted: #9c958a; --line: #2f2c27;
+  --gold: #e0b04f; --gold-soft: #3a2f17; --ok: #7cc98a; --err: #ec6f5a; color-scheme: dark }
+body { margin: 0; background: var(--bg); color: var(--fg); font: 15px/1.5 var(--body); }
+.wrap { max-width: 1080px; margin: 0 auto; padding-block: 24px 64px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  display: grid; gap: 32px; }
+h1, h2 { font-family: var(--display); font-weight: 700; letter-spacing: .01em; text-wrap: balance; margin: 0; line-height: 1.1; }
+h1 { font-size: clamp(30px, 6vw, 44px); }
+h2 { font-size: 26px; }
+.eyebrow { font: 500 12px var(--mono); color: var(--muted); letter-spacing: .04em; }
+header { display: flex; flex-wrap: wrap; gap: 12px 24px; align-items: start; justify-content: space-between; }
+header .title { display: grid; gap: 6px; min-width: 0; }
+.note { color: var(--muted); font-size: 13px; max-width: 70ch; margin: 0; }
+.btn { font: 600 14px var(--body); padding: 9px 16px; border-radius: 6px; border: 1px solid var(--line); background: var(--panel); color: var(--fg); cursor: pointer; text-decoration: none; display: inline-block; }
+.btn.primary { border-color: var(--fg); background: var(--fg); color: var(--bg); }
+.btn:focus-visible, input:focus-visible, select:focus-visible, button:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+section { display: grid; gap: 14px; }
+.box { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 20px; display: grid; gap: 16px; }
+.fields { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px 20px; }
+.field { display: grid; gap: 4px; align-content: start; }
+.field label { font-weight: 600; font-size: 14px; }
+input[type=text], input[type=number], select { font: inherit; padding: 7px 10px; border: 1px solid var(--line); border-radius: 6px; background: var(--bg); color: var(--fg); min-width: 0; }
+.hint { font-size: 12px; color: var(--muted); }
+.err { font-size: 12px; color: var(--err); }
+.err:empty { display: none; }
+input.bad { border-color: var(--err); }
+.tablebox { overflow-x: auto; border: 1px solid var(--line); border-radius: 6px; background: var(--panel); }
+table { width: 100%; border-collapse: collapse; font-size: 14px; }
+th, td { padding: 8px 10px; text-align: left; border-bottom: 1px solid var(--line); vertical-align: top; }
+tbody tr:last-child td { border-bottom: 0; }
+th { font: 600 12px var(--body); text-transform: uppercase; letter-spacing: .06em; color: var(--muted); white-space: nowrap; }
+tr.group th { background: var(--bg); color: var(--fg); font: 700 17px var(--display); letter-spacing: .02em; text-transform: none; padding-top: 14px; }
+tr.off td:not(:first-child) { color: var(--muted); }
+tr.off .names { text-decoration: line-through; }
+td.check { width: 1%; }
+td.check label { display: flex; gap: 8px; align-items: center; font-weight: 600; white-space: nowrap; cursor: pointer; }
+td.value { width: 220px; min-width: 160px; }
+td.value input { width: 100%; box-sizing: border-box; }
+.names { font-size: 13px; color: var(--muted); }
+/* Narrow screens: each family on its own block, checks under the value */
+@media (max-width: 640px) {
+  thead { display: none; }
+  table, tbody, tr.group, tr.group th { display: block; }
+  tbody tr:not(.group) { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 6px 14px; padding: 10px; border-bottom: 1px solid var(--line); }
+  tbody tr:not(.group) td { border: 0; padding: 0; }
+  td.value { width: auto; min-width: 0; }
+  tbody tr td:last-child { grid-column: 1 / -1; }
+}
+.count { font: 500 12px var(--mono); color: var(--muted); white-space: nowrap; }
+.tags { display: flex; flex-wrap: wrap; gap: 6px; }
+.tag { font-size: 13px; padding: 3px 4px 3px 10px; border-radius: 4px; border: 1px solid var(--line); background: var(--bg); display: inline-flex; gap: 6px; align-items: center; }
+.tag button { all: unset; cursor: pointer; padding: 0 6px; color: var(--muted); font-weight: 700; }
+.tag button:focus-visible { outline: 2px solid var(--gold); }
+.row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.summary { font-size: 14px; margin: 0; }
+.summary.bad { color: var(--err); font-weight: 600; }
+pre { margin: 0; padding: 16px; background: var(--bg); border: 1px solid var(--line); border-radius: 6px; overflow-x: auto; font: 500 13px/1.6 var(--mono); }
+code { font: 500 13px var(--mono); }
+a { color: var(--gold); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="title">
+      <span class="eyebrow">Archipelago · Dota 2</span>
+      <h1>YAML Options</h1>
+      <p class="note">Pick your options and copy the YAML for your multiworld. Everything is on by default: only what you change is written. Nothing leaves your browser.</p>
+    </div>
+    <a class="btn" href="./">Tracker</a>
+  </header>
+
+  <section class="box" aria-labelledby="h-player">
+    <h2 id="h-player">Player and goal</h2>
+    <div class="fields">
+      <div class="field">
+        <label for="name">Player name</label>
+        <input type="text" id="name" maxlength="16" autocomplete="off">
+        <span class="hint">Your slot name in the multiworld, 16 characters at most.</span>
+        <span class="err" id="name-err"></span>
+      </div>
+      <div class="field">
+        <label for="unique_characters_to_win">Unique heroes to win</label>
+        <input type="number" id="unique_characters_to_win" data-option min="1" max="127" step="1">
+        <span class="hint">Different heroes you must win with. 1 to 127, 5 by default.</span>
+      </div>
+      <div class="field">
+        <label for="total_wins_to_win">Total wins</label>
+        <input type="number" id="total_wins_to_win" data-option min="1" max="127" step="1">
+        <span class="hint">1 to 127, 5 by default.</span>
+      </div>
+      <div class="field">
+        <label for="primordial_fragments_to_win">Primordial Fragments</label>
+        <input type="number" id="primordial_fragments_to_win" data-option min="10" max="50" step="1">
+        <span class="hint">Needed for the goal; the pool has 10 more. 10 to 50, 10 by default.</span>
+      </div>
+      <div class="field">
+        <label for="starting_heroes">Starting heroes</label>
+        <input type="number" id="starting_heroes" data-option min="5" max="120" step="1">
+        <span class="hint">Playable from the start. 5 to 120, 30 by default.</span>
+      </div>
+      <div class="field">
+        <label for="hero_groups">Hero groups</label>
+        <input type="number" id="hero_groups" data-option min="1" max="30" step="1">
+        <span class="hint" id="groups-hint">Groups to unlock; the other heroes are split between them. 1 to 30, 7 by default.</span>
+      </div>
+      <div class="field">
+        <label for="crownfall">Crownfall minigames</label>
+        <select id="crownfall"><option value="off">Off</option><option value="on">On</option></select>
+        <span class="hint">Adds the Crownfall minigames as checks, each with its own unlock.</span>
+      </div>
+    </div>
+    <span class="err" id="options-err"></span>
+  </section>
+
+  <section aria-labelledby="h-checks">
+    <h2 id="h-checks">Checks</h2>
+    <p class="note">Untick a family to remove its checks. Stats count in one match, quests over the whole seed. A stat or quest takes one threshold, or up to 5 separated by commas (one check each), on its steps: <code>300, 450</code> gives <em>Get 300 Last Hits</em> and <em>Get 450 Last Hits</em>.</p>
+    <div class="tablebox">
+      <table>
+        <thead><tr><th>Family</th><th>Value</th><th>Checks in the seed</th></tr></thead>
+        <tbody id="rows"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="box" aria-labelledby="h-single">
+    <h2 id="h-single">Single checks to remove</h2>
+    <p class="note">Any check of a family you keep, such as an item you never buy (<em>Divine Rapier</em>) or a rune (<em>Pick up a Water Rune</em>).</p>
+    <div class="row">
+      <input type="text" id="single" list="single-list" placeholder="Check name" autocomplete="off" style="flex: 1 1 260px">
+      <datalist id="single-list"></datalist>
+      <button class="btn" type="button" id="single-add">Remove this check</button>
+    </div>
+    <span class="err" id="single-err"></span>
+    <div class="tags" id="singles"></div>
+  </section>
+
+  <section aria-labelledby="h-yaml">
+    <h2 id="h-yaml">Your YAML</h2>
+    <p class="summary" id="summary"></p>
+    <pre id="yaml"></pre>
+    <div class="row">
+      <button class="btn primary" type="button" id="copy">Copy</button>
+      <button class="btn" type="button" id="download">Download</button>
+      <button class="btn" type="button" id="reset">Reset to defaults</button>
+      <span class="hint" id="copy-msg" role="status"></span>
+    </div>
+  </section>
+</div>
+
+<script>
+// The checks, as in worlds/dota_2/challenges.py and options.py: keep both in step.
+const DATA_URL = "https://raw.githubusercontent.com/CaptainBoscar/Archipelago-DOTA2/main/worlds/dota_2/data/";
+const TOTAL_HEROES = 127;
+const OPTIONS = { unique_characters_to_win: 5, total_wins_to_win: 5, primordial_fragments_to_win: 10, starting_heroes: 30, hero_groups: 7 };
+const RANGES = { unique_characters_to_win: [1, 127], total_wins_to_win: [1, 127], primordial_fragments_to_win: [10, 50], starting_heroes: [5, 120], hero_groups: [1, 30] };
+const MAX_THRESHOLDS = 5;
+const MINIGAME_CHECKS = 32, MINIGAME_ITEMS = 10, SHOP_UNLOCKS = 60, PURCHASES = 188;
+const RUNES = ["Double Damage", "Haste", "Illusion", "Invisibility", "Regeneration", "Bounty", "Arcane", "Water", "Wisdom", "Shield"];
+const runeCheck = r => `Pick up ${/^[AEIOU]/.test(r) ? "an" : "a"} ${r} Rune`;
+// Scale: [check_values key, label, name template, default thresholds, low, high, step]
+const scale = (key, label, pattern, def, low, high, step) => ({ key, label, pattern, def, low, high, step, scale: true });
+// Family: [disabled_checks key, label, check names, optional single value]
+const family = (key, label, names, value) => ({ key, label, names, value });
+const GROUPS = [
+  ["Wins by trait", [
+    family("Attribute Wins", "Attribute wins", ["Win as a Strength Hero", "Win as a Agility Hero", "Win as a Intelligence Hero", "Win as a Universal Hero"]),
+    family("Attack Type Wins", "Attack type wins", ["Win as a Melee Hero", "Win as a Ranged Hero"]),
+    family("Legs Wins", "Legs wins", ["Win as a 0 Legged Hero", "Win as a 2 Legged Hero", "Win as a 4+ Legged Hero"]),
+    family("Role Wins", "Role wins", ["Win as a Carry Hero", "Win as a Support Hero"]),
+  ]],
+  ["Stats, in one match", [
+    scale("Kills", "Kills", "Get {} Kill(s)", [15], 1, 50, 1),
+    scale("Assists", "Assists", "Get {} Assists", [30], 1, 60, 1),
+    scale("Dewards", "Dewards", "Get {} Deward(s)", [5], 1, 30, 1),
+    scale("Last Hits", "Last hits", "Get {} Last Hits", [450], 25, 800, 25),
+    scale("Denies", "Denies", "Get {} Denies", [20], 1, 60, 1),
+    scale("Healing", "Healing", "Heal {} in a Match", [2000], 500, 20000, 500),
+    scale("Physical Damage", "Physical damage", "Deal {} Physical Damage in a Match", [25000], 2500, 75000, 2500),
+    scale("Magical Damage", "Magical damage", "Deal {} Magical Damage in a Match", [20000], 2500, 75000, 2500),
+    scale("Physical Hit", "Physical hit", "Land a {} Physical Hit", [500], 100, 3000, 100),
+    scale("Magical Hit", "Magical hit", "Land a {} Magical Hit", [500], 100, 3000, 100),
+    scale("Stun Time", "Stun time (s)", "Stun Enemies for {}s in a Match", [60], 10, 300, 10),
+    scale("Camps Stacked", "Camps stacked", "Stack {} Camps in a Match", [5], 5, 30, 5),
+  ]],
+  ["Match challenges", [
+    family("First Blood", "First Blood", ["Get First Blood"]),
+    family("Courier Kill", "Courier kill", ["Kill a Courier"]),
+    family("Runes", "Runes", RUNES.map(runeCheck)),
+    family("Buyback", "Buyback", ["Use a Buyback"]),
+    family("Aegis", "Aegis", ["Pick up the Aegis"]),
+    family("Positions", "Positions", [1, 2, 3, 4, 5].map(i => `Win as Position ${i}`)),
+    family("Short Win", "Short win", ["Win a Short Match"], { key: "Short Win Minutes", def: 30, low: 15, high: 45, unit: "minutes at most, no leaver or bot" }),
+    family("Long Win", "Long win", ["Win a Long Match"], { key: "Long Win Minutes", def: 60, low: 40, high: 90, unit: "minutes at least" }),
+    family("Roshan Win", "Roshan win", ["Win a Match Where Your Team Took Roshan"], { key: "Roshan Kills", def: 1, low: 1, high: 4, unit: "Roshan kills by your team" }),
+  ]],
+  ["Quests, over the seed", [
+    scale("Total Camps Stacked", "Camps stacked", "Stack {} Camps in Total", [10, 20], 5, 100, 5),
+    scale("Total Wards Placed", "Wards placed", "Place {} Wards in Total", [50, 100], 10, 300, 10),
+    scale("Total Building Damage", "Building damage", "Deal {} Building Damage in Total", [25000, 50000], 5000, 200000, 5000),
+    scale("Total Healing", "Healing", "Heal {} in Total", [7500, 15000], 2500, 100000, 2500),
+    scale("Total Physical Damage", "Physical damage", "Deal {} Physical Damage in Total", [75000, 150000], 25000, 500000, 25000),
+    scale("Total Magical Damage", "Magical damage", "Deal {} Magical Damage in Total", [60000, 120000], 20000, 500000, 20000),
+    scale("Total Stun Time", "Stun time (s)", "Stun Enemies for {}s in Total", [200, 400], 50, 1000, 50),
+  ]],
+  ["Purchases", [
+    family("Purchases", "Buy each item", null),
+  ]],
+];
+const ROWS = GROUPS.flatMap(([, rows]) => rows);
+const QUEST_KEYS = GROUPS[3][1].map(r => r.key);
+let purchaseNames = [];  // from the apworld's shop data, for single checks
+
+const STORE = "dota2-yaml:v1";
+const state = { name: "", options: { ...OPTIONS }, crownfall: "off", off: [], values: {}, singles: [] };
+try { Object.assign(state, JSON.parse(localStorage.getItem(STORE)) || {}); } catch (e) {}
+function save() { try { localStorage.setItem(STORE, JSON.stringify(state)); } catch (e) {} }
+
+const $ = id => document.getElementById(id);
+const fmt = n => n.toLocaleString("en-US");
+const nameOf = (row, t) => row.pattern.replace("{}", t);
+
+// { nums, error } for the text of a value cell
+function parseValue(row, text) {
+  const spec = row.scale ? row : row.value;
+  const parts = String(text).split(",").map(s => s.trim()).filter(Boolean);
+  if (!parts.length) return { error: "Give a number." };
+  if (!row.scale && parts.length > 1) return { error: "One number only." };
+  if (parts.length > MAX_THRESHOLDS) return { error: `${MAX_THRESHOLDS} thresholds at most.` };
+  if (parts.some(p => !/^\d+$/.test(p))) return { error: "Whole numbers only." };
+  const nums = parts.map(Number);
+  if (nums.some(n => n < spec.low || n > spec.high)) return { error: `Between ${fmt(spec.low)} and ${fmt(spec.high)}.` };
+  if (new Set(nums).size !== nums.length) return { error: "Each threshold once." };
+  if (row.scale && nums.some(n => (n - row.low) % row.step)) return { error: `By steps of ${fmt(row.step)} from ${fmt(row.low)}.` };
+  return { nums: nums.sort((a, b) => a - b) };
+}
+const defaultText = row => row.scale ? row.def.join(", ") : row.value ? String(row.value.def) : "";
+const valueKey = row => row.scale ? row.key : row.value && row.value.key;
+const currentText = row => state.values[valueKey(row)] ?? defaultText(row);
+
+function rowChecks(row, parsed) {
+  if (row.key === "Purchases") return { count: PURCHASES, text: "One check per item, once its components are unlocked" };
+  if (row.scale) {
+    const names = parsed.nums ? parsed.nums.map(t => nameOf(row, t)) : [];
+    return { count: names.length, text: names.join(", ") };
+  }
+  return { count: row.names.length, text: row.names.join(", ") };
+}
+
+function buildTable() {
+  const body = $("rows");
+  GROUPS.forEach(([title, rows]) => {
+    const g = document.createElement("tr");
+    g.className = "group";
+    g.innerHTML = `<th colspan="3"></th>`;
+    g.firstChild.textContent = title;
+    body.append(g);
+    rows.forEach(row => {
+      const tr = document.createElement("tr");
+      tr.dataset.key = row.key;
+      const id = "on-" + row.key.replace(/\W+/g, "-");
+      tr.innerHTML = `<td class="check"><label><input type="checkbox" id="${id}"><span></span></label></td>
+        <td class="value"></td><td><div class="names"></div><span class="count"></span></td>`;
+      tr.querySelector("label span").textContent = row.label;
+      const box = tr.querySelector("input");
+      box.checked = !state.off.includes(row.key);
+      box.addEventListener("change", () => {
+        state.off = box.checked ? state.off.filter(k => k !== row.key) : [...state.off, row.key];
+        update();
+      });
+      const cell = tr.querySelector("td.value");
+      if (row.scale || row.value) {
+        const spec = row.scale ? row : row.value;
+        const input = document.createElement("input");
+        input.type = "text";
+        input.inputMode = "numeric";
+        input.value = currentText(row);
+        input.setAttribute("aria-label", row.label + " value");
+        const hint = document.createElement("div");
+        hint.className = "hint";
+        hint.textContent = row.scale ? `${fmt(spec.low)}–${fmt(spec.high)}, by ${fmt(spec.step)} · default ${defaultText(row)}`
+          : `${spec.unit} · ${spec.low}–${spec.high}, default ${spec.def}`;
+        const err = document.createElement("div");
+        err.className = "err";
+        input.addEventListener("input", () => {
+          const text = input.value.trim();
+          if (text === defaultText(row) || text === "") delete state.values[valueKey(row)];
+          else state.values[valueKey(row)] = text;
+          update();
+        });
+        cell.append(input, hint, err);
+      }
+      body.append(tr);
+    });
+  });
+}
+
+function buildOptions() {
+  $("name").value = state.name;
+  $("name").addEventListener("input", e => { state.name = e.target.value; update(); });
+  document.querySelectorAll("[data-option]").forEach(input => {
+    input.value = state.options[input.id] ?? OPTIONS[input.id];
+    input.addEventListener("input", () => { state.options[input.id] = input.value; update(); });
+  });
+  $("crownfall").value = state.crownfall;
+  $("crownfall").addEventListener("change", e => { state.crownfall = e.target.value; update(); });
+}
+
+function renderSingles() {
+  const box = $("singles");
+  box.replaceChildren(...state.singles.map(name => {
+    const tag = document.createElement("span");
+    tag.className = "tag";
+    tag.textContent = name;
+    const x = document.createElement("button");
+    x.type = "button";
+    x.textContent = "×";
+    x.setAttribute("aria-label", "Keep " + name);
+    x.addEventListener("click", () => { state.singles = state.singles.filter(n => n !== name); update(); });
+    tag.append(x);
+    return tag;
+  }));
+}
+function singleNames() {
+  return [...ROWS.filter(r => !r.scale && r.names).flatMap(r => r.names), ...purchaseNames];
+}
+function addSingle() {
+  const input = $("single"), name = input.value.trim();
+  const known = singleNames();
+  const match = known.find(n => n.toLowerCase() === name.toLowerCase());
+  $("single-err").textContent = !name ? "" : !match ? (purchaseNames.length ? "Not a check name: pick one from the list." : "Not a known check name (the item list didn't load).") : "";
+  if (!match) return;
+  if (!state.singles.includes(match)) state.singles.push(match);
+  input.value = "";
+  update();
+}
+
+function yamlString(s) { return JSON.stringify(s); }
+
+function update() {
+  let errors = 0, checks = 1;  // "Win with hero from starting pool"; the goal is not counted
+  const o = {};
+  // Goal and hero options
+  let optErr = "";
+  for (const [key, [low, high]] of Object.entries(RANGES)) {
+    const input = $(key), v = Number(input.value);
+    const bad = !/^\d+$/.test(String(input.value).trim()) || v < low || v > high;
+    input.classList.toggle("bad", bad);
+    if (bad) { errors++; optErr = `${input.previousElementSibling.textContent}: a whole number from ${low} to ${high}.`; }
+    o[key] = bad ? OPTIONS[key] : v;
+  }
+  $("options-err").textContent = optErr;
+  const groups = Math.min(o.hero_groups, TOTAL_HEROES - o.starting_heroes);
+  $("groups-hint").textContent = groups < o.hero_groups
+    ? `Only ${groups} groups fit with ${o.starting_heroes} starting heroes: the seed will have ${groups}.`
+    : "Groups to unlock; the other heroes are split between them. 1 to 30, 7 by default.";
+  checks += groups;
+  const name = state.name.trim();
+  $("name-err").textContent = name ? (/[{}]/.test(name) ? "Braces { } are not allowed." : "") : "Needed by Archipelago.";
+  if (!name || /[{}]/.test(name)) errors++;
+
+  // Checks
+  const off = new Set(state.off), values = {};
+  ROWS.forEach(row => {
+    const tr = document.querySelector(`tr[data-key="${CSS.escape(row.key)}"]`);
+    const on = !off.has(row.key);
+    tr.classList.toggle("off", !on);
+    const input = tr.querySelector("td.value input");
+    let parsed = { nums: [] };
+    if (input) {
+      parsed = parseValue(row, input.value);
+      // A removed family's value is not written, so its errors don't count
+      const bad = on && !!parsed.error;
+      input.classList.toggle("bad", bad);
+      tr.querySelector("td.value .err").textContent = bad ? parsed.error : "";
+      if (bad) errors++;
+      else if (input.value.trim() !== defaultText(row) && on) values[valueKey(row)] = row.scale && parsed.nums.length > 1 ? parsed.nums : parsed.nums[0];
+    }
+    const { count, text } = rowChecks(row, parsed);
+    tr.querySelector(".names").textContent = text;
+    tr.querySelector(".count").textContent = on ? `${count} check${count === 1 ? "" : "s"}` : "removed";
+    if (on) checks += count;
+  });
+  const singles = state.singles.filter(n => {
+    const row = ROWS.find(r => r.names && r.names.includes(n)) || (purchaseNames.includes(n) ? ROWS.find(r => r.key === "Purchases") : null);
+    return !row || !off.has(row.key);
+  });
+  checks -= singles.length;
+  const purchases = !off.has("Purchases") && singles.filter(n => purchaseNames.includes(n)).length < PURCHASES;
+  if (state.crownfall === "on") checks += MINIGAME_CHECKS;
+  const items = groups + o.primordial_fragments_to_win + 10 + MINIGAME_ITEMS + (purchases ? SHOP_UNLOCKS : 0);
+  renderSingles();
+
+  // disabled_checks: whole quest list as "Quests" when every quest is off
+  let disabled = state.off.filter(k => ROWS.some(r => r.key === k));
+  if (QUEST_KEYS.every(k => disabled.includes(k))) disabled = [...disabled.filter(k => !QUEST_KEYS.includes(k)), "Quests"];
+  disabled = [...disabled, ...singles];
+
+  const lines = [`name: ${yamlString(name || "Player")}`, `game: DOTA 2`, ``, `DOTA 2:`];
+  for (const key of Object.keys(RANGES)) lines.push(`  ${key}: ${o[key]}`);
+  lines.push(`  crownfall: "${state.crownfall}"`);
+  lines.push(`  disabled_checks: [${disabled.map(yamlString).join(", ")}]`);
+  const entries = Object.entries(values);
+  if (!entries.length) lines.push(`  check_values: {}`);
+  else {
+    lines.push(`  check_values:`);
+    entries.forEach(([k, v]) => lines.push(`    ${k}: ${Array.isArray(v) ? `[${v.join(", ")}]` : v}`));
+  }
+  $("yaml").textContent = lines.join("\n") + "\n";
+
+  const short = items > checks;
+  const summary = $("summary");
+  summary.className = "summary" + (short || errors ? " bad" : "");
+  summary.textContent = errors ? `Fix the ${errors === 1 ? "value" : "values"} in red: the YAML keeps the defaults for ${errors === 1 ? "it" : "them"}.`
+    : short ? `Only ${checks} checks for ${items} items: generation would stop. Turn fewer checks off or lower the fragments.`
+    : `${fmt(checks)} checks for ${items} items; the rest of the pool is filler.`;
+  save();
+}
+
+$("single-add").addEventListener("click", addSingle);
+$("single").addEventListener("keydown", e => { if (e.key === "Enter") { e.preventDefault(); addSingle(); } });
+$("copy").addEventListener("click", async () => {
+  try { await navigator.clipboard.writeText($("yaml").textContent); $("copy-msg").textContent = "Copied."; }
+  catch (e) { $("copy-msg").textContent = "Copy failed: select the text above instead."; }
+});
+$("download").addEventListener("click", () => {
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([$("yaml").textContent], { type: "text/yaml" }));
+  a.download = (state.name.trim() || "Player").replace(/[^\w-]+/g, "_") + ".yaml";
+  a.click();
+  setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+});
+$("reset").addEventListener("click", () => {
+  if (!confirm("Reset every option to its default? Your player name stays.")) return;
+  Object.assign(state, { options: { ...OPTIONS }, crownfall: "off", off: [], values: {}, singles: [] });
+  save();
+  location.reload();
+});
+
+buildOptions();
+buildTable();
+update();
+fetch(DATA_URL + "dotaShopLocations.json").then(r => r.ok ? r.json() : Promise.reject(r.status)).then(shop => {
+  purchaseNames = Object.values(shop).map(i => i.dname).filter(Boolean);
+  $("single-list").replaceChildren(...singleNames().map(n => Object.assign(document.createElement("option"), { value: n })));
+  update();
+}).catch(() => {
+  $("single-list").replaceChildren(...singleNames().map(n => Object.assign(document.createElement("option"), { value: n })));
+});
+</script>
+</body>
+</html>
