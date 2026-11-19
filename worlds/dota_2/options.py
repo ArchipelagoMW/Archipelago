@@ -68,9 +68,9 @@ class HeroGroups(Range):
 class DisabledChecks(OptionSet):
     """Checks to remove: families or check names. Hero group wins and the goal always stay.
     Families: Attribute Wins, Attack Type Wins, Legs Wins, Role Wins, Purchases, Kills, Assists, Dewards, Last Hits,
-    Denies, Healing, Physical Damage, Magical Damage, Physical Hit, Magical Hit, Stun Time, First Blood, Courier Kill, Runes,
-    Buyback, Aegis, Positions, Short Win, Long Win, Roshan Win, Quests, Stack Camps, Place Wards, Damage Buildings,
-    Heal Heroes, Deal Physical Damage, Deal Magical Damage, Stun Enemies"""
+    Denies, Healing, Physical Damage, Magical Damage, Physical Hit, Magical Hit, Stun Time, Camps Stacked, First Blood,
+    Courier Kill, Runes, Buyback, Aegis, Positions, Short Win, Long Win, Roshan Win, Quests, Total Camps Stacked,
+    Total Wards Placed, Total Building Damage, Total Healing, Total Physical Damage, Total Magical Damage, Total Stun Time"""
     display_name = "Disabled Checks"
     valid_keys = sorted(FAMILIES) + DISABLEABLE_CHECKS
 
