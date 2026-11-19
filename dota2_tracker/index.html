@@ -589,7 +589,8 @@ const STAT_NAMES = [["Get {} Kill(s)", "kills"], ["Get {} Assists", "assists"], 
 // Quests add up over the seed; the field is also the quest total's key
 const QUEST_NAMES = [["Stack {} Camps in Total", "camps_stacked"], ["Place {} Wards in Total", "wards_placed"], ["Deal {} Building Damage in Total", "building_damage"],
   ["Heal {} in Total", "healing"], ["Deal {} Physical Damage in Total", "physical_damage"],
-  ["Deal {} Magical Damage in Total", "magical_damage"], ["Stun Enemies for {}s in Total", "stun_time"]];
+  ["Deal {} Magical Damage in Total", "magical_damage"], ["Stun Enemies for {}s in Total", "stun_time"],
+  ["Pick up {} Runes in Total", "rune_pickups"]];
 const nameRegex = t => new RegExp("^" + t.replace(/[.*+?^$()|[\]\\]/g, "\\$&").replace("{}", "(\\d+)") + "$");
 const STAT_RES = STAT_NAMES.map(([t, field]) => [nameRegex(t), field]);
 const QUEST_RES = QUEST_NAMES.map(([t, field]) => [nameRegex(t), field]);
@@ -600,7 +601,11 @@ function scaleOf(name, res) {
 }
 const RUNES = { 0: "Double Damage", 1: "Haste", 2: "Illusion", 3: "Invisibility", 4: "Regeneration",
   5: "Bounty", 6: "Arcane", 7: "Water", 8: "Wisdom", 9: "Shield" };
-const runeCheck = r => `Pick up ${/^[AEIOU]/.test(r) ? "an" : "a"} ${r} Rune`;
+// Wisdom runes became Shrines of Wisdom in 7.38, still reported as rune 8
+const runeCheck = r => r === "Wisdom" ? "Use a Shrine of Wisdom" : `Pick up ${/^[AEIOU]/.test(r) ? "an" : "a"} ${r} Rune`;
+// What a match adds to a quest; runes are counted from the per-rune pickups, without Shrines of Wisdom
+const questAmount = (d, field) => field === "rune_pickups"
+  ? Object.entries(d.runes || {}).reduce((sum, [k, n]) => sum + (k === "8" ? 0 : n || 0), 0) : d[field] || 0;
 // Values the win challenges use, from the seed's check_values
 const seedValues = sd => ({ "Short Win Minutes": 30, "Long Win Minutes": 60, "Roshan Kills": 1, ...(sd.check_values || {}) });
 
@@ -768,7 +773,7 @@ async function build(cfg, say) {
       games.forEach(g => { if (details[g.id]) triggers[g.id] = matchTriggers(g, details[g.id], S.attrs[g.hero], groupOf[g.hero], shopByKey, values, seedChecks); });
       if (!questTotals) {
         questTotals = {}; questSource = "opendota";
-        games.filter(g => g.open && details[g.id]).forEach(g => QUEST_NAMES.forEach(([, k]) => { questTotals[k] = (questTotals[k] || 0) + (details[g.id][k] || 0); }));
+        games.filter(g => g.open && details[g.id]).forEach(g => QUEST_NAMES.forEach(([, k]) => { questTotals[k] = (questTotals[k] || 0) + questAmount(details[g.id], k); }));
       }
       readStatuses(games, triggers, new Set([...checked].map(i => locNames[i])), progress?.submitted);
     } catch (e) { gamesError = "OpenDota unreachable: " + e.message; games = null; }

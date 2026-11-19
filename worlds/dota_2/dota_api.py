@@ -38,6 +38,7 @@ class DotaMatchData:
     physical_hit: int = 0
     magical_hit: int = 0
     stun_time: int = 0
+    rune_pickups: int = 0
 
 
 api_logger = logging.getLogger("Client")
@@ -242,6 +243,7 @@ def challenge_data(match, me) -> dict:
         building_damage = me.get('tower_damage') or 0,
         healing = me.get('hero_healing') or 0,
         stun_time = round(me.get('stuns') or 0),
+        rune_pickups = sum(n or 0 for k, n in (me.get('runes') or {}).items() if str(k) != "8"),  # 8: Shrines of Wisdom
         **damage_by_type(me),
     )
 
