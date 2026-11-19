@@ -70,7 +70,7 @@ class DisabledChecks(OptionSet):
     Families: Attribute Wins, Attack Type Wins, Legs Wins, Role Wins, Purchases, Kills, Assists, Dewards, Last Hits,
     Denies, Healing, Physical Damage, Magical Damage, Physical Hit, Magical Hit, Stun Time, Camps Stacked, First Blood,
     Courier Kill, Runes, Buyback, Aegis, Positions, Short Win, Long Win, Roshan Win, Quests, Total Camps Stacked,
-    Total Wards Placed, Total Building Damage, Total Healing, Total Physical Damage, Total Magical Damage, Total Stun Time"""
+    Total Wards Placed, Total Building Damage, Total Healing, Total Physical Damage, Total Magical Damage, Total Stun Time, Total Runes"""
     display_name = "Disabled Checks"
     valid_keys = sorted(FAMILIES) + DISABLEABLE_CHECKS
 

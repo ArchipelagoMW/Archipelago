@@ -67,10 +67,12 @@ QUESTS = [
     Scale("Total Physical Damage", "physical_damage", "Deal {} Physical Damage in Total", (75000, 150000), 25000, 500000, 25000),
     Scale("Total Magical Damage", "magical_damage", "Deal {} Magical Damage in Total", (60000, 120000), 20000, 500000, 20000),
     Scale("Total Stun Time", "stun_time", "Stun Enemies for {}s in Total", (200, 400), 50, 1000, 50),
+    Scale("Total Runes", "rune_pickups", "Pick up {} Runes in Total", (20, 50), 10, 100, 5),  # Shrines of Wisdom not counted
 ]
 SCALES = {s.value: s for s in STATS + QUESTS}
 
-# OpenDota rune keys are the game's DOTA_RUNE values
+# OpenDota rune keys are the game's DOTA_RUNE values. Wisdom runes became Shrines of Wisdom in 7.38, still reported as key 8.
+WISDOM = "8"
 RUNES = {
     "0": "Double Damage", "1": "Haste", "2": "Illusion", "3": "Invisibility", "4": "Regeneration",
     "5": "Bounty", "6": "Arcane", "7": "Water", "8": "Wisdom", "9": "Shield",
@@ -78,6 +80,8 @@ RUNES = {
 
 
 def rune_check(rune: str) -> str:
+    if rune == RUNES[WISDOM]:
+        return "Use a Shrine of Wisdom"
     article = "an" if rune[0] in "AEIOU" else "a"
     return f"Pick up {article} {rune} Rune"
 
@@ -122,7 +126,7 @@ DISABLEABLE_CHECKS = sorted({name for names in FAMILIES.values() for name in nam
 # or a list of up to MAX_THRESHOLDS thresholds on their grid (one check each).
 VALUES: dict[str, tuple[Any, int, int]] = {
     **{s.value: (list(s.default) if len(s.default) > 1 else s.default[0], s.low, s.high) for s in STATS},
-    "Short Win Minutes": (30, 15, 45),
+    "Short Win Minutes": (30, 15, 40),  # at most Long Win Minutes' minimum
     "Long Win Minutes": (60, 40, 90),
     "Roshan Kills": (1, 1, 4),
     **{s.value: (list(s.default), s.low, s.high) for s in QUESTS},

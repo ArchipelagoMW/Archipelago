@@ -1,8 +1,8 @@
 from Options import OptionError
 
 from .bases import Dota2TestBase
-from ..challenges import CHALLENGE_FAMILIES, FAMILIES, VALUES, match_challenges, completed_quests, stat_checks, resolve_values, challenge_values
-from ..dota_api import DotaMatchData, damage_by_type
+from ..challenges import CHALLENGE_FAMILIES, FAMILIES, VALUES, rune_check, match_challenges, completed_quests, stat_checks, resolve_values, challenge_values
+from ..dota_api import DotaMatchData, challenge_data, damage_by_type
 from ..options import CheckValues
 
 
@@ -113,12 +113,18 @@ class ChallengeRules(Dota2TestBase):
         self.assertIn("Get First Blood", checks)
         self.assertIn("Pick up a Bounty Rune", checks)
         self.assertNotIn("Pick up a Water Rune", checks)
+        self.assertEqual(rune_check("Wisdom"), "Use a Shrine of Wisdom")
         self.assertIn("Win as Position 4", checks)
         # Short but with a leaver or a bot: not a short win
         self.assertNotIn("Win a Short Match", checks)
         self.assertIn("Win a Match Where Your Team Took Roshan", checks)
         self.assertEqual(completed_quests({"camps_stacked": 15, "wards_placed": 3}, values), ["Stack 10 Camps in Total"])
         self.assertEqual(completed_quests({"camps_stacked": 20}, resolve_values({"Total Camps Stacked": 30})), [])
+        self.assertEqual(completed_quests({"rune_pickups": 45}, values), ["Pick up 20 Runes in Total"])
+
+    def test_rune_pickups_skip_shrines(self) -> None:
+        me = {"player_slot": 0, "runes": {"5": 3, "8": 4, "1": 1}}
+        self.assertEqual(challenge_data({"players": [me]}, me)["rune_pickups"], 4)
 
     def test_damage_by_type(self) -> None:
         me = {"damage_inflictor": {"null": 5000, "lina_laguna_blade": 3000, "juggernaut_omni_slash": 900,
