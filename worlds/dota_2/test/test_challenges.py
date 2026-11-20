@@ -102,8 +102,9 @@ class ChallengeRules(Dota2TestBase):
 
     def test_stat_checks(self) -> None:
         values = resolve_values({"Kills": [15, 1, 5]})
-        checks = stat_checks(sample_match(kills=12, last_hits=460, camps_stacked=6), values)
-        self.assertEqual(checks, ["Get 1 Kill(s)", "Get 5 Kill(s)", "Get 450 Last Hits", "Stack 5 Camps in a Match"])
+        checks = stat_checks(sample_match(kills=12, last_hits=460, camps_stacked=6, net_worth=31000), values)
+        self.assertEqual(checks, ["Get 1 Kill(s)", "Get 5 Kill(s)", "Get 450 Last Hits", "Stack 5 Camps in a Match",
+                                  "Reach 30000 Net Worth in a Match"])
 
     def test_match_challenges(self) -> None:
         values = resolve_values({})
@@ -121,10 +122,12 @@ class ChallengeRules(Dota2TestBase):
         self.assertEqual(completed_quests({"camps_stacked": 15, "wards_placed": 3}, values), ["Stack 10 Camps in Total"])
         self.assertEqual(completed_quests({"camps_stacked": 20}, resolve_values({"Total Camps Stacked": 30})), [])
         self.assertEqual(completed_quests({"rune_pickups": 45}, values), ["Pick up 20 Runes in Total"])
+        self.assertEqual(completed_quests({"gold_earned": 130000}, values), ["Earn 125000 Gold in Total"])
 
     def test_rune_pickups_skip_shrines(self) -> None:
-        me = {"player_slot": 0, "runes": {"5": 3, "8": 4, "1": 1}}
-        self.assertEqual(challenge_data({"players": [me]}, me)["rune_pickups"], 4)
+        me = {"player_slot": 0, "runes": {"5": 3, "8": 4, "1": 1}, "net_worth": 21000, "total_gold": 23000}
+        data = challenge_data({"players": [me]}, me)
+        self.assertEqual((data["rune_pickups"], data["net_worth"], data["gold_earned"]), (4, 21000, 23000))
 
     def test_unparsed_match(self) -> None:
         me = {"player_slot": 0}

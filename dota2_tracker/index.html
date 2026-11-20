@@ -524,7 +524,7 @@ async function opendotaMatches(steam, since) {
 }
 
 // Stats, purchases and challenge data of each match, as the client reads them; kept once OpenDota has parsed the match
-const DETAILS_KEY = "dota-ap-tracker:matches:v4";
+const DETAILS_KEY = "dota-ap-tracker:matches:v5";
 const PENDING_KEY = "dota-ap-tracker:unparsed";
 async function matchDetails(ids, steam, damageTypes) {
   const cache = store.get(DETAILS_KEY) || {};
@@ -552,6 +552,7 @@ async function matchDetails(ids, steam, damageTypes) {
                       team_roshan_kills: objectives.filter(o => o.type === "CHAT_MESSAGE_ROSHAN_KILL" && o.team === myTeam).length,
                       camps_stacked: me.camps_stacked || 0, wards_placed: (me.obs_placed || 0) + (me.sen_placed || 0),
                       building_damage: me.tower_damage || 0, healing: me.hero_healing || 0, stun_time: Math.round(me.stuns || 0),
+                      net_worth: me.net_worth || 0, gold_earned: me.total_gold || 0,
                       ...damageByType(me, damageTypes) };
         delete pending[id];
       } catch (e) {}
@@ -591,12 +592,12 @@ const STAT_NAMES = [["Get {} Kill(s)", "kills"], ["Get {} Assists", "assists"], 
   ["Get {} Last Hits", "last_hits"], ["Get {} Denies", "denies"], ["Heal {} in a Match", "healing"],
   ["Deal {} Physical Damage in a Match", "physical_damage"], ["Deal {} Magical Damage in a Match", "magical_damage"],
   ["Land a {} Physical Hit", "physical_hit"], ["Land a {} Magical Hit", "magical_hit"], ["Stun Enemies for {}s in a Match", "stun_time"],
-  ["Stack {} Camps in a Match", "camps_stacked"]];
+  ["Stack {} Camps in a Match", "camps_stacked"], ["Reach {} Net Worth in a Match", "net_worth"]];
 // Quests add up over the seed; the field is also the quest total's key
 const QUEST_NAMES = [["Stack {} Camps in Total", "camps_stacked"], ["Place {} Wards in Total", "wards_placed"], ["Deal {} Building Damage in Total", "building_damage"],
   ["Heal {} in Total", "healing"], ["Deal {} Physical Damage in Total", "physical_damage"],
   ["Deal {} Magical Damage in Total", "magical_damage"], ["Stun Enemies for {}s in Total", "stun_time"],
-  ["Pick up {} Runes in Total", "rune_pickups"]];
+  ["Pick up {} Runes in Total", "rune_pickups"], ["Earn {} Gold in Total", "gold_earned"]];
 const nameRegex = t => new RegExp("^" + t.replace(/[.*+?^$()|[\]\\]/g, "\\$&").replace("{}", "(\\d+)") + "$");
 const STAT_RES = STAT_NAMES.map(([t, field]) => [nameRegex(t), field]);
 const QUEST_RES = QUEST_NAMES.map(([t, field]) => [nameRegex(t), field]);
@@ -1023,7 +1024,7 @@ function tagCell(k, v, label) {
 
 // Match objectives in a readable order: wins by trait, then each stat from its lowest threshold up
 const MATCH_ORDER = ["Strength", "Agility", "Intelligence", "Universal", "Melee", "Ranged", "0 Legged", "2 Legged", "4+ Legged",
-  "Carry", "Support", "Kill", "Assist", "Deward", "Last Hit", "Denies", "Heal", "Physical Damage", "Magical Damage", "Physical Hit", "Magical Hit", "Stun", "Stack"];
+  "Carry", "Support", "Kill", "Assist", "Deward", "Last Hit", "Denies", "Heal", "Physical Damage", "Magical Damage", "Physical Hit", "Magical Hit", "Stun", "Stack", "Net Worth"];
 function matchRank(name) {
   const i = MATCH_ORDER.findIndex(w => name.includes(w));
   const n = +(name.match(/\d+/g) || [0]).pop();
