@@ -12,12 +12,12 @@ class BasicTestLogic(Dota2TestBase):
     def test_basic_access(self) -> None:
         with self.subTest("Test checks accessible with nothing"):
             blood_grenade = self.world.get_location("Blood Grenade")
-            itron_branch = self.world.get_location("Iron Branch")
+            iron_branch = self.world.get_location("Iron Branch")
 
             # Since access rules have a "state" argument, we must pass our current CollectionState.
             # Helpfully, since we're in a WorldTestBase, we can just use "self.multiworld.state".
             self.assertTrue(blood_grenade.can_reach(self.multiworld.state))
             # Iron Branch needs its shop unlock
-            self.assertFalse(itron_branch.can_reach(self.multiworld.state))
+            self.assertFalse(iron_branch.can_reach(self.multiworld.state))
             self.collect_by_name("Unlock branches")
-            self.assertTrue(itron_branch.can_reach(self.multiworld.state))
+            self.assertTrue(iron_branch.can_reach(self.multiworld.state))
