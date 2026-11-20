@@ -6,7 +6,7 @@ A **Meta-progression randomizer** for DOTA 2. You play regular online matches an
 
 - **Heroes** - You are given a random pool of heroes to start (30 by default, option `starting_heroes`) and can unlock more by finding "Progressive Group Unlock" items. The other heroes are split evenly into groups (7 by default, option `hero_groups`). Wins with a hero from each group is a check. 
 
-- **Stats and Attributes** - Checks such as "Win as a Melee Hero", "Win as a Support Hero", and kills, assists, dewards, last hits, denies and camps stacked in a match: one check per stat by default ("Get 15 Kill(s)"), or one per threshold you list in the YAML. Thresholds go by steps (Last Hits by 25, damage by 2,500...), so that each one has its own check name.
+- **Stats and Attributes** - Checks such as "Win as a Melee Hero", "Win as a Support Hero", and kills, assists, dewards, last hits, denies, camps stacked and net worth in a match: one check per stat by default ("Get 15 Kill(s)"), or one per threshold you list in the YAML. Thresholds go by steps (Last Hits by 25, damage by 2,500...), so that each one has its own check name.
 
 - **Shop Items** - While you can buy any item in a Dota 2 match, the checks for buying those items will be **locked** for the Archipelago until the right unlock items are found. All Consumable Items will start unlocked: Tangos, Salves, Wards etc. For an Item to be available **all Basic Components** of that item must be unlocked (Recipes not included). Example: the `"Unlock Ring of Protection"` item unlocks both the `"Ring of Protection"` check and the `"Buckler"` check (ring + recipe), however the `"Soul Ring"` check would require the `"Unlock Gauntlets of Strength"` item as well (ring + gauntlets + recipe). 
 
@@ -14,7 +14,7 @@ A **Meta-progression randomizer** for DOTA 2. You play regular online matches an
 
 - **Healing and damage** - In a match: healing done to heroes, physical and magical damage to heroes, one big physical or magical hit on a hero, and seconds of stun on enemy heroes. Damage types come from the abilities (auto-attacks are physical, pure damage counts as magical, items as neither).
 
-- **Quests** - Checks that add up over the whole seed: stack camps, place wards (observers and sentries), damage buildings, heal heroes, deal physical or magical damage to heroes, stun enemies and pick up runes (Shrines of Wisdom not counted), each with a lower and a full target by default. Each match counts once, even if parsed again. Type `/quests` in the client to see your progress.
+- **Quests** - Checks that add up over the whole seed: stack camps, place wards (observers and sentries), damage buildings, heal heroes, deal physical or magical damage to heroes, stun enemies, pick up runes (Shrines of Wisdom not counted) and earn gold, each with a lower and a full target by default. Each match counts once, even if parsed again. Type `/quests` in the client to see your progress.
 
 - **Customizing checks** - All checks are in the seed by default. In your YAML, `disabled_checks` removes families (such as Legs Wins, Purchases or Runes) or single checks, and `check_values` changes their values: stat thresholds, short and long match lengths, Roshan kills, quest targets. Only list what you want to change; the options page lists every family and value with its default:
 

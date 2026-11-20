@@ -41,6 +41,8 @@ class DotaMatchData:
     magical_hit: int = 0
     stun_time: int = 0
     rune_pickups: int = 0
+    net_worth: int = 0
+    gold_earned: int = 0
     parsed: bool = True  # False until OpenDota has parsed the replay: quest fields are then missing
 
 
@@ -246,6 +248,8 @@ def challenge_data(match, me) -> dict:
         building_damage = me.get('tower_damage') or 0,
         healing = me.get('hero_healing') or 0,
         stun_time = round(me.get('stuns') or 0),
+        net_worth = me.get('net_worth') or 0,
+        gold_earned = me.get('total_gold') or 0,
         rune_pickups = sum(n or 0 for k, n in (me.get('runes') or {}).items() if str(k) != WISDOM),
         parsed = bool(match.get('version')),
         **damage_by_type(me),

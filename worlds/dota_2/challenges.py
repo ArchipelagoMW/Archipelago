@@ -54,6 +54,7 @@ STATS = [
     Scale("Magical Hit", "magical_hit", "Land a {} Magical Hit", (500,), 100, 3000, 100),
     Scale("Stun Time", "stun_time", "Stun Enemies for {}s in a Match", (60,), 10, 300, 10),  # seconds
     Scale("Camps Stacked", "camps_stacked", "Stack {} Camps in a Match", (5,), 5, 30, 5),
+    Scale("Net Worth", "net_worth", "Reach {} Net Worth in a Match", (30000,), 15000, 60000, 2500),
 ]
 
 # Quests add up over the whole seed, with a lower and a full target by default (about ten matches in the most
@@ -67,6 +68,7 @@ QUESTS = [
     Scale("Total Magical Damage", "magical_damage", "Deal {} Magical Damage in Total", (60000, 120000), 20000, 500000, 20000),
     Scale("Total Stun Time", "stun_time", "Stun Enemies for {}s in Total", (200, 400), 50, 1000, 50),
     Scale("Total Runes", "rune_pickups", "Pick up {} Runes in Total", (20, 50), 10, 100, 5),  # Shrines of Wisdom not counted
+    Scale("Total Gold", "gold_earned", "Earn {} Gold in Total", (125000, 250000), 50000, 500000, 25000),
 ]
 SCALES = {s.value: s for s in STATS + QUESTS}
 
