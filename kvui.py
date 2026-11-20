@@ -190,6 +190,15 @@ class LogtoLoadingScreen(logging.Handler):
 
 class LoadingScreen(MDScreen):
     label = ObjectProperty(None)
+    _previous_fps: int = 60
+
+    def on_pre_enter(self, *args):
+        # noinspection PyProtectedMember
+        self._previous_fps = Clock._max_fps  # noqa: SLF001
+        Clock._max_fps = min(30, self._previous_fps) if self._previous_fps > 0 else 30  # 0 -> unlimited
+
+    def on_pre_leave(self, *args):
+        Clock._max_fps = self._previous_fps
 
     def update_text(self, text):
         self.label.text = text
