@@ -198,7 +198,7 @@
         },
         {
             "id": 30,
-            "name": "Unlock javelin",
+            "name": "Unlock quarterstaff",
             "classification": "progression",
             "copies": 1,
             "include_in_filler": "False"
@@ -416,6 +416,13 @@
         {
             "id": 61,
             "name": "Unlock ultimate_orb",
+            "classification": "progression",
+            "copies": 1,
+            "include_in_filler": "False"
+        },
+        {
+            "id": 62,
+            "name": "Unlock blood_grenade",
             "classification": "progression",
             "copies": 1,
             "include_in_filler": "False"

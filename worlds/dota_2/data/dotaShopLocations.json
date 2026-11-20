@@ -217,12 +217,10 @@
     "created": false,
     "charges": false
   },
-  "javelin": {
-    
-    "hint": [],
-    "id": 7,
-    "img": "/apps/dota2/images/dota_react/items/javelin.png?t=1593393829403",
-    "dname": "Javelin",
+  "quarterstaff": {
+    "id": 10,
+    "img": "/apps/dota2/images/dota_react/items/quarterstaff.png?t=1593393829403",
+    "dname": "Quarterstaff",
     "qual": "component",
     "cost": 900,
     "notes": "",
@@ -230,10 +228,10 @@
     "mc": false,
     "hc": false,
     "cd": false,
-    "lore": "A rather typical spear that can sometimes pierce through an enemy's armor when used to attack.",
+    "lore": "A basic staff that allows you to strike quickly.",
     "components": null,
     "requirements": [
-      "javelin"
+      "quarterstaff"
     ],
     "created": false,
     "charges": false
@@ -1066,7 +1064,9 @@
     "cd": 10,
     "lore": "Both the hunter and the hunted must pay the blood price.",
     "components": null,
-    "requirements": null,
+    "requirements": [
+      "blood_grenade"
+    ],
     "created": false,
     "charges": 1
   },
@@ -1675,40 +1675,7 @@
     ],
     "created": true,
     "charges": false
-  },
-  "khanda": {
-    
-    "hint": [],
-    "id": 1808,
-    "img": "/apps/dota2/images/dota_react/items/angels_demise.png?t=1593393829403",
-    "dname": "Khanda",
-    "qual": "common",
-    "cost": 5600,
-    "dispellable": "Yes",
-    "target_team": "Enemy",
-    "target_type": "Hero",
-    "notes": "The slow debuff is dispellable.\nThe break debuff is not dispellable.",
-    
-    "mc": false,
-    "hc": false,
-    "cd": 9,
-    "lore": "A blade sharp enough to slice through magic itself.",
-    "components": [
-      "phylactery",
-      "soul_booster"
-    ],
-    "requirements": [
-      "ring_of_health",
-      "void_stone",
-      "diadem",
-      "point_booster",
-      "vitality_booster",
-      "energy_booster"
-    ],
-    "created": true,
-    "charges": false
-  },
-  
+  },  
   "hand_of_midas": {
     
     "hint": [],
@@ -1777,15 +1744,13 @@
     "lore": "A spiteful blade inadvertently possessed by the soul of its incautious creator.",
     "components": [
       "oblivion_staff",
-      "chainmail",
-      "orb_of_venom"
+      "chainmail"
     ],
     "requirements": [
       "blitz_knuckles",
       "robe",
       "sobi_mask",
-      "chainmail",
-      "orb_of_venom"
+      "chainmail"
     ], 
     "created": true,
     "charges": false
@@ -2205,15 +2170,13 @@
     "lore": "A reviled blade that bites deeper with each wriggle of its victim's final throes.",
     "components": [
       "orchid",
-      "oblivion_staff",
-      "javelin"
+      "oblivion_staff"
     ],
     "requirements": [
       "blitz_knuckles",
       "robe",
       "sobi_mask",
-      "claymore",
-      "javelin"
+      "claymore"
     ],
     "created": true,
     "charges": false
@@ -2671,7 +2634,7 @@
     "charges": false
   },
   
-  "assault_cuirass": {
+  "assault": {
     
     "hint": [],
     "id": 112,
@@ -3113,11 +3076,13 @@
     "lore": "A cuirass originally built to protect against the dreaded Year Beast.",
     "components": [
       "vanguard",
+      "buckler",
       "helm_of_iron_will"
     ],
     "requirements": [
       "vitality_booster",
       "ring_of_health",
+      "ring_of_protection",
       "helm_of_iron_will"
     ],
     "created": true,
@@ -3284,12 +3249,12 @@
     "components": [
       "demon_edge",
       "blitz_knuckles",
-      "javelin"
+      "quarterstaff"
     ],
     "requirements": [
       "demon_edge",
       "blitz_knuckles",
-      "javelin"
+      "quarterstaff"
     ],
     "created": true,
     "charges": false
@@ -3334,12 +3299,12 @@
     "lore": "Only the mightiest and most experienced of warriors can wield the Butterfly, but it provides incredible dexterity in combat.",
     "components": [
       "eagle",
-      "claymore",
+      "quarterstaff",
       "talisman_of_evasion"
     ],
     "requirements": [
        "eagle",
-      "claymore",
+      "quarterstaff",
       "talisman_of_evasion"
     ],
     "created": true,
@@ -3739,7 +3704,6 @@
     ],
     "requirements": [
       "mithril_hammer",
-      "javelin",
       "gloves",
       "hyperstone"
     ],
@@ -3825,36 +3789,6 @@
     "created": true,
     "charges": false
   },
-  
-  "helm_of_the_overlord": {
-    
-    "hint": [],
-    "id": 635,
-    "img": "/apps/dota2/images/dota_react/items/helm_of_the_overlord.png?t=1593393829403",
-    "dname": "Helm of the Overlord",
-    "qual": "artifact",
-    "cost": 5650,
-    "behavior": "Unit Target",
-    "target_team": "Enemy",
-    "target_type": [],
-    "notes": "Can also Dominate enemy lane creeps and summoned units.\nSelling will cause dominated units to die.",
-    
-    "mc": 50,
-    "hc": false,
-    "cd": 45,
-    "lore": "The powerful headpiece of an undead necromancer.",
-    "components": [
-      "helm_of_the_dominator",
-      "ultimate_orb"
-    ],
-    "requirements": [
-      "helm_of_iron_will",
-      "crown",
-      "ultimate_orb"
-    ],
-    "created": true,
-    "charges": false
-  },
   "maelstrom": {
     
     "hint": [],
@@ -3871,12 +3805,10 @@
     "lore": "A hammer forged for the gods themselves, Maelstrom allows its user to harness the power of lightning.",
     "components": [
       "mithril_hammer",
-      "javelin",
       "gloves"
     ],
     "requirements": [
       "mithril_hammer",
-      "javelin",
       "gloves"
     ],
     "created": true,
@@ -3993,11 +3925,11 @@
     "cd": 16,
     "lore": "Once this mask is worn, its bearer becomes an uncontrollable aggressive force.",
     "components": [
-      "broadsword",
+      "quarterstaff",
       "lifesteal"
     ],
     "requirements": [
-      "broadsword",
+      "quarterstaff",
       "lifesteal"
     ],
     "created": true,
@@ -4255,14 +4187,15 @@
     "cd": false,
     "lore": "Seepage from the wounds of a warrior deity, sealed in an arcanist's orb following a campaign of vicious slaughter.",
     "components": [
-      "boots_of_elves",
       "orb_of_frost",
-      "blight_stone"
+      "blight_stone",
+      "slippers",
+      "slippers"
     ],
     "requirements": [
-      "boots_of_elves",
       "orb_of_frost",
-      "blight_stone"
+      "blight_stone",
+      "slippers"
     ],
     "created": true,
     "charges": false
@@ -4351,7 +4284,7 @@
     "charges": false
   },
   
-  "drum_of_endurance": {
+  "ancient_janggo": {
     
     "hint": [],
     "id": 185,
@@ -4578,7 +4511,7 @@
     "charges": false
   },
   
-  "parasma": {
+  "devastator": {
     
     "hint": [],
     "id": 1806,
@@ -4602,7 +4535,6 @@
       "robe",
       "sobi_mask",
       "chainmail",
-      "orb_of_venom",
       "mystic_staff"
     ],
     "created": true,
@@ -4701,11 +4633,11 @@
     "lore": "The lost blade of the Commander of the Abyss, this edge cuts into an enemy's soul.",
     "components": [
       "basher",
-      "sange"
+      "dragon_lance"
     ],
     "requirements": [
       "mithril_hammer",
-      "ogre_axe",
+      "blade_of_alacrity",
       "belt_of_strength"
     ],
     "created": true,
@@ -4734,14 +4666,12 @@
     "cd": 16,
     "lore": "This halberd moves with the speed of a smaller weapon, allowing the bearer to win duels that a heavy edge would not.",
     "components": [
-      "talisman_of_evasion",
-      "splintmail",
-      "ring_of_health"
+      "ogre_axe",
+      "helm_of_iron_will"
     ],
     "requirements": [
-      "talisman_of_evasion",
-      "splintmail",
-      "ring_of_health"
+      "ogre_axe",
+      "helm_of_iron_will"
     ],
     "created": true,
     "charges": false
@@ -4860,13 +4790,14 @@
     "lore": "A perfect solution for the flight of foes.",
     "components": [
       "echo_sabre",
-      "diadem"
+      "dragon_lance"
     ],
     "requirements": [
       "ogre_axe",
       "broadsword",
       "void_stone",
-      "diadem"
+      "blade_of_alacrity",
+      "belt_of_strength"
     ],
     "created": true,
     "charges": false
@@ -4943,6 +4874,165 @@
       "chasm_stone"
     ],
     "created": false,
+    "charges": false
+  },
+  "bloodslinger": {
+    "id": 1942,
+    "img": "/apps/dota2/images/dota_react/items/bloodslinger.png?t=1593393829403",
+    "dname": "Bloodslinger",
+    "cost": 925,
+    "notes": "Shares a cooldown with Blood Grenade.",
+    
+    "mc": false,
+    "hc": 75,
+    "cd": 30,
+    "lore": "",
+    "components": [
+      "sobi_mask",
+      "mantle",
+      "mantle",
+      "blood_grenade"
+    ],
+    "requirements": [
+      "sobi_mask",
+      "mantle",
+      "blood_grenade"
+    ],
+    "created": true,
+    "charges": false
+  },
+  "caduceus": {
+    "id": 1955,
+    "img": "/apps/dota2/images/dota_react/items/caduceus.png?t=1593393829403",
+    "dname": "Caduceus",
+    "qual": "rare",
+    "cost": 5400,
+    "notes": "The enemy and ally halves of Empower Spell run on separate cooldowns of 8s and 8s.\nForce applies Empower Spell to its target whether or not that half's cooldown is ready, and does not put it on cooldown.\nForce doesn't interrupt the target's actions.\nForce has 850 cast range when cast on enemies.",
+
+    "mc": 150,
+    "hc": false,
+    "cd": 19,
+    "lore": "",
+    "components": [
+      "force_staff",
+      "phylactery"
+    ],
+    "requirements": [
+      "staff_of_wizardry",
+      "fluffy_hat",
+      "ring_of_health",
+      "void_stone",
+      "diadem"
+    ],
+    "created": true,
+    "charges": false
+  },
+  "ristuls_devotion": {
+    "id": 1944,
+    "img": "/apps/dota2/images/dota_react/items/ristuls_devotion.png?t=1593393829403",
+    "dname": "Ristul's Devotion",
+    "cost": 3800,
+    "notes": "Lifesteal on attacks against creeps is reduced to 12%.",
+    "mc": false,
+    "hc": false,
+    "cd": false,
+    "lore": "",
+    "components": [
+      "vladmir",
+      "splintmail",
+      "voodoo_mask"
+    ],
+    "requirements": [
+      "ring_of_protection",
+      "sobi_mask",
+      "lifesteal",
+      "blades_of_attack",
+      "splintmail",
+      "voodoo_mask"
+    ],
+    "created": true,
+    "charges": false
+  },
+  "berserkers_sabatons": {
+    
+    "id": 1953,
+    "img": "/apps/dota2/images/dota_react/items/berserkers_sabatons.png?t=1593393829403",
+    "dname": "Sabatons of Mordiggian",
+    "cost": 5950,
+    "behavior": "No Target",
+    "dispellable": "No",
+    "notes": "",
+
+    "mc": false,
+    "hc": false,
+    "cd": false,
+    "lore": "",
+    "components": [
+      "phase_boots",
+      "armlet"
+    ],
+    "requirements": [
+      "boots",
+      "chainmail",
+      "blades_of_attack",
+      "helm_of_iron_will",
+      "gloves"
+    ],
+    "created": true,
+    "charges": false
+  },
+  "skypiercer": {
+    "id": 1948,
+    "img": "/apps/dota2/images/dota_react/items/skypiercer.png?t=1593393829403",
+    "dname": "Skypiercer",
+    "cost": 6000,
+    
+    "notes": "Nearby illusions and nearby heroes in fog of war will activate Riposte.\nNearby invisible heroes will not activate Riposte.",
+    
+    "mc": 50,
+    "hc": false,
+    "cd": 15,
+    "lore": "",
+    "components": [
+      "heavens_halberd",
+      "sange",
+      "talisman_of_evasion"
+    ],
+    "requirements": [
+      "ogre_axe",
+      "helm_of_iron_will",
+      "belt_of_strength",
+      "talisman_of_evasion"
+    ],
+    "created": true,
+    "charges": false
+  },
+  "starforge": {
+    "id": 1946,
+    "img": "/apps/dota2/images/dota_react/items/starforge.png?t=1593393829403",
+    "dname": "Starforge",
+
+    "cost": 6000,
+    
+    "dmg_type": "Magical",
+    "bkbpierce": "No",
+    "notes": "Celestial Flare triggers from the following disables: Stun, Hex, Hypnosis, Cyclone, Taunt, Fear, Sleep, and Banish.",
+   
+    "mc": 175,
+    "hc": false,
+    "cd": 24,
+    "lore": "",
+    "components": [
+      "meteor_hammer",
+      "ultimate_orb"
+    ],
+    "requirements": [
+      "staff_of_wizardry",
+      "robe",
+      "crown",
+      "ultimate_orb"
+    ],
+    "created": true,
     "charges": false
   }
 }
