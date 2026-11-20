@@ -237,7 +237,7 @@ code { font: 500 13px var(--mono); overflow-wrap: anywhere; }
         <ul>
           <li><b>In Dota 2:</b> open your profile (your avatar, top left). Your <b>Friend ID</b> is shown on your player card. That's the number.</li>
           <li><b>In Steam:</b> Friends → Add a Friend. <b>Your Friend Code</b> is the same number.</li>
-          <li><b>On the Steam website:</b> your account details page (store.steampowered.com/account) shows your <b>Steam ID</b>, a 17-digit number starting with 7656. The tracker accepts it as is; for the client, use the Friend ID.</li>
+          <li><b>On the Steam website:</b> your account details page (store.steampowered.com/account) shows your <b>Steam ID</b>, a 17-digit number starting with 7656. The tracker accepts it as is; for the client, use the Friend ID, which is this number minus 76561197960265728.</li>
         </ul>
         <p>Then, once, in the Dota 2 client of Archipelago: <code>/set_player_id 123456789</code> with your Friend ID.</p>
       </section>
@@ -372,6 +372,7 @@ const DATA_URL = "https://raw.githubusercontent.com/CaptainBoscar/Archipelago-DO
 const CDN = "https://cdn.cloudflare.steamstatic.com";
 const OPENDOTA = "https://api.opendota.com/api";
 const AP_SITE = "https://archipelago.gg";
+// SteamID64 = this + the 32-bit account ID that Dota and OpenDota use (BigInt: too large for a JS number)
 const STEAM64_BASE = 76561197960265728n;
 
 const $ = id => document.getElementById(id);
