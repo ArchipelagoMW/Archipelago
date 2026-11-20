@@ -17,7 +17,7 @@ def set_rules(world, player, include_evolution_traps):
     # This is to prevent softlock from high prices or low chest drop
     default_exclude_locations = set()
     for store in ["Alpha Cache", "Beta Cache", "Gamma Cache"]:
-        for check_number in range(22, 25):
+        for check_number in range(20, 25):
             default_exclude_locations.add(f"{store} {check_number}")
     for check_number in range(19,25):
         default_exclude_locations.add(f"Reward Chest {check_number}")
