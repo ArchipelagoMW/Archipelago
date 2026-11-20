@@ -187,16 +187,16 @@ a { color: var(--gold); }
 <script>
 // The checks, as in worlds/dota_2/challenges.py and options.py: keep both in step.
 const DATA_URL = "https://raw.githubusercontent.com/CaptainBoscar/Archipelago-DOTA2/main/worlds/dota_2/data/";
-const TOTAL_HEROES = 127;
 const OPTIONS = { unique_characters_to_win: 5, total_wins_to_win: 5, primordial_fragments_to_win: 10, starting_heroes: 30, hero_groups: 7 };
 const RANGES = { unique_characters_to_win: [1, 127], total_wins_to_win: [1, 127], primordial_fragments_to_win: [10, 50], starting_heroes: [5, 120], hero_groups: [1, 30] };
 const MAX_THRESHOLDS = 5;
-const MINIGAME_CHECKS = 32, MINIGAME_ITEMS = 10, SHOP_UNLOCKS = 60, PURCHASES = 188;
+// Counted from the apworld's data once it loads; these are the current numbers until then
+const COUNTS = { heroes: 127, purchases: 188, shopUnlocks: 60, minigameChecks: 32, minigameItems: 10 };
 const RUNES = ["Double Damage", "Haste", "Illusion", "Invisibility", "Regeneration", "Bounty", "Arcane", "Water", "Wisdom", "Shield"];
 const runeCheck = r => r === "Wisdom" ? "Use a Shrine of Wisdom" : `Pick up ${/^[AEIOU]/.test(r) ? "an" : "a"} ${r} Rune`;
-// Scale: [check_values key, label, name template, default thresholds, low, high, step]
+// A stat or quest: check_values key, label, name template, default thresholds, low, high, step
 const scale = (key, label, pattern, def, low, high, step) => ({ key, label, pattern, def, low, high, step, scale: true });
-// Family: [disabled_checks key, label, check names, optional single value]
+// A family: disabled_checks key, label, check names, optional single value
 const family = (key, label, names, value) => ({ key, label, names, value });
 const GROUPS = [
   ["Wins by trait", [
@@ -276,7 +276,7 @@ const valueKey = row => row.scale ? row.key : row.value && row.value.key;
 const currentText = row => state.values[valueKey(row)] ?? defaultText(row);
 
 function rowChecks(row, parsed) {
-  if (row.key === "Purchases") return { count: PURCHASES, text: "One check per item, once its components are unlocked" };
+  if (row.key === "Purchases") return { count: COUNTS.purchases, text: "One check per item, once its components are unlocked" };
   if (row.scale) {
     const names = parsed.nums ? parsed.nums.map(t => nameOf(row, t)) : [];
     return { count: names.length, text: names.join(", ") };
@@ -414,12 +414,16 @@ function renderSingles(off) {
 }
 
 function yamlString(s) { return JSON.stringify(s); }
+async function getJSON(url) {
+  const r = await fetch(url);
+  if (!r.ok) throw new Error(`${url}: HTTP ${r.status}`);
+  return r.json();
+}
 
-function update() {
-  let errors = 0, checks = 1;  // "Win with hero from starting pool"; the goal is not counted
+// Goal and hero options, with their errors and the hero groups hint
+function readOptions() {
   const o = {};
-  // Goal and hero options
-  let optErr = "";
+  let errors = 0, optErr = "";
   for (const [key, [low, high]] of Object.entries(RANGES)) {
     const input = $(key), v = Number(input.value);
     const bad = !/^\d+$/.test(String(input.value).trim()) || v < low || v > high;
@@ -428,21 +432,28 @@ function update() {
     o[key] = bad ? OPTIONS[key] : v;
   }
   $("options-err").textContent = optErr;
-  const groups = Math.min(o.hero_groups, TOTAL_HEROES - o.starting_heroes);
+  const rest = COUNTS.heroes - o.starting_heroes, groups = Math.min(o.hero_groups, rest);
   // The other heroes are split evenly: the first groups get one more when it doesn't divide
-  const rest = TOTAL_HEROES - o.starting_heroes, size = Math.floor(rest / groups), extra = rest % groups;
+  const size = Math.floor(rest / groups), extra = rest % groups;
   const split = extra ? `${extra} of ${size + 1} heroes and ${groups - extra} of ${size}` : `${size} hero${size === 1 ? "" : "es"} each`;
   $("groups-hint").textContent = (groups < o.hero_groups ? `Only ${groups} groups fit with ${o.starting_heroes} starting heroes. ` : "")
     + `${rest} heroes to unlock in ${groups} group${groups === 1 ? "" : "s"}: ${groups === 1 ? `all ${rest}` : split}. 1 to 30, 7 by default.`;
-  checks += groups;
-  const name = state.name.trim();
-  // The name is reported apart from the values: the YAML writes "Player" until it's set
-  const nameIssue = !name ? "Add your player name: the YAML says \"Player\" until then." : /[{}]/.test(name) ? "Braces { } are not allowed in the player name." : "";
-  $("name-err").textContent = name && nameIssue ? "Braces { } are not allowed." : "";
-  $("name").classList.toggle("bad", !!name && !!nameIssue);
+  return { o, groups, errors };
+}
 
-  // Checks
-  const off = new Set(state.off), values = {};
+// The player name, reported apart from the values: the YAML writes "Player" until it's set
+function readName() {
+  const name = state.name.trim();
+  const issue = !name ? "Add your player name: the YAML says \"Player\" until then." : /[{}]/.test(name) ? "Braces { } are not allowed in the player name." : "";
+  $("name-err").textContent = name && issue ? "Braces { } are not allowed." : "";
+  $("name").classList.toggle("bad", !!name && !!issue);
+  return { name: name && !issue ? name : "Player", issue };
+}
+
+// Check rows: their counts and errors, and the values that differ from the defaults
+function readChecks(off) {
+  let checks = 0, errors = 0;
+  const values = {};
   ROWS.forEach(row => {
     const tr = document.querySelector(`tr[data-key="${CSS.escape(row.key)}"]`);
     const on = !off.has(row.key);
@@ -463,24 +474,19 @@ function update() {
     tr.querySelector(".count").textContent = on ? `${count} check${count === 1 ? "" : "s"}` : "removed";
     if (on) checks += count;
   });
-  const singles = state.singles.filter(n => {
-    const row = ROWS.find(r => r.names && r.names.includes(n)) || (purchaseNames.includes(n) ? ROWS.find(r => r.key === "Purchases") : null);
-    return !row || !off.has(row.key);
-  });
-  checks -= singles.length;
-  const purchases = !off.has("Purchases") && singles.filter(n => purchaseNames.includes(n)).length < PURCHASES;
-  if (state.crownfall === "on") checks += MINIGAME_CHECKS;
-  const items = groups + o.primordial_fragments_to_win + 10 + MINIGAME_ITEMS + (purchases ? SHOP_UNLOCKS : 0);
-  renderSingles(off);
+  return { checks, errors, values };
+}
 
-  // disabled_checks: whole quest list as "Quests" when every quest is off, a family's name when all its checks are removed
+// disabled_checks: "Quests" when every quest is off, a family's name when all its checks are removed one by one
+function disabledList(singles) {
   let disabled = state.off.filter(k => ROWS.some(r => r.key === k));
   if (QUEST_KEYS.every(k => disabled.includes(k))) disabled = [...disabled.filter(k => !QUEST_KEYS.includes(k)), "Quests"];
-  // A family whose checks are all removed one by one is written as the family
   const whole = singleGroups().filter(g => g.names.length && g.names.every(n => singles.includes(n)));
-  disabled = [...disabled, ...whole.map(g => g.key), ...singles.filter(n => !whole.some(g => g.names.includes(n)))];
+  return [...disabled, ...whole.map(g => g.key), ...singles.filter(n => !whole.some(g => g.names.includes(n)))];
+}
 
-  const lines = [`name: ${yamlString(name && !nameIssue ? name : "Player")}`, `game: DOTA 2`, ``, `DOTA 2:`];
+function yamlText(name, o, disabled, values) {
+  const lines = [`name: ${yamlString(name)}`, `game: DOTA 2`, ``, `DOTA 2:`];
   for (const key of Object.keys(RANGES)) lines.push(`  ${key}: ${o[key]}`);
   lines.push(`  crownfall: "${state.crownfall}"`);
   lines.push(`  disabled_checks: [${disabled.map(yamlString).join(", ")}]`);
@@ -490,9 +496,28 @@ function update() {
     lines.push(`  check_values:`);
     entries.forEach(([k, v]) => lines.push(`    ${k}: ${Array.isArray(v) ? `[${v.join(", ")}]` : v}`));
   }
-  $("yaml").textContent = lines.join("\n") + "\n";
+  return lines.join("\n") + "\n";
+}
 
-  const short = items > checks;
+function update() {
+  const { o, groups, errors: optErrors } = readOptions();
+  const { name, issue: nameIssue } = readName();
+  const off = new Set(state.off);
+  const rows = readChecks(off);
+  // Single checks inside a removed family are already gone
+  const singles = state.singles.filter(n => {
+    const row = ROWS.find(r => r.names && r.names.includes(n)) || (purchaseNames.includes(n) ? ROWS.find(r => r.key === "Purchases") : null);
+    return !row || !off.has(row.key);
+  });
+  renderSingles(off);
+
+  // "Win with hero from starting pool" and the group wins; the goal is not counted
+  const checks = 1 + groups + rows.checks - singles.length + (state.crownfall === "on" ? COUNTS.minigameChecks : 0);
+  const purchases = !off.has("Purchases") && singles.filter(n => purchaseNames.includes(n)).length < COUNTS.purchases;
+  const items = groups + o.primordial_fragments_to_win + 10 + COUNTS.minigameItems + (purchases ? COUNTS.shopUnlocks : 0);
+  $("yaml").textContent = yamlText(name, o, disabledList(singles), rows.values);
+
+  const errors = optErrors + rows.errors, short = items > checks;
   const summary = $("summary");
   summary.className = "summary" + (short || errors || nameIssue ? " bad" : "");
   summary.textContent = nameIssue && !errors ? nameIssue : errors ? `Fix the ${errors === 1 ? "value" : "values"} in red: the YAML keeps the defaults for ${errors === 1 ? "it" : "them"}.`
@@ -539,11 +564,19 @@ $("reset").addEventListener("click", () => {
 buildOptions();
 buildTable();
 update();
-fetch(DATA_URL + "dotaShopLocations.json").then(r => r.ok ? r.json() : Promise.reject(r.status)).then(shop => {
+const data = file => getJSON(DATA_URL + file);
+data("dotaShopLocations.json").then(shop => {
   purchaseNames = Object.values(shop).map(i => i.dname).filter(Boolean).sort();
+  COUNTS.purchases = purchaseNames.length;
   update();
   renderSuggest();
 }).catch(() => { $("single-note").textContent = "The item list didn't load: purchases can only be removed as a family."; });
+Promise.all([data("heroes.json"), data("unlockDotaShopItems.json"), data("minigameLocations.json"), data("minigameItems.json")])
+  .then(([heroes, unlocks, games, gameItems]) => {
+    Object.assign(COUNTS, { heroes: heroes.dota_heroes.length, shopUnlocks: unlocks.unlock_shop_items.length,
+      minigameChecks: Object.keys(games).length, minigameItems: gameItems.minigame_items.length });
+    update();
+  }).catch(() => {});  // the current numbers stay
 </script>
 </body>
 </html>
