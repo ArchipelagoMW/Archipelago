@@ -18,8 +18,7 @@ MAX_THRESHOLDS = 5  # checks per stat or quest, one per threshold
 
 @dataclass(frozen=True)
 class Scale:
-    """A stat (one match) or a quest (whole seed) checked against thresholds the YAML picks on a grid.
-    Every value of the grid has its own location name, declared up front since names can't depend on the YAML."""
+    """A stat (one match) or quest (whole seed) with thresholds on a grid, each grid value a location declared up front."""
     value: str  # key in check_values
     field: str  # DotaMatchData field, also the quest total key
     pattern: str  # location name, {} being the threshold
@@ -154,8 +153,8 @@ def scale_checks_in_seed(values: dict[str, Any]) -> set[str]:
 
 
 def challenge_values(slot_data: dict[str, Any], seed_checks: set[str] | None = None) -> dict[str, Any]:
-    """Values for this seed, as sent in slot_data. Given the seed's check names, stat and quest thresholds come from
-    them instead, so seeds from the original apworld (Get 1/5/10 Kill(s), no check_values) keep working."""
+    """Values for this seed from slot_data. Given the seed's check names, thresholds come from them instead, which
+    also covers seeds from the original apworld (no check_values)."""
     values = resolve_values(slot_data.get("check_values") or {})
     if seed_checks is not None:
         values.update({key: [t for t in s.grid if s.name(t) in seed_checks] for key, s in SCALES.items()})

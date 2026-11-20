@@ -14,7 +14,7 @@ from worlds.AutoWorld import World, WebWorld
 from .constants import DOTA2_BASE_ID
 from .options import (DOTA2Options, GoalType, CrownFall)
 from .items import DOTA2Item, ItemDef, load_hero_unlock_items, build_item_name_to_id, FILLER_ITEM_NAME,load_item_defs, load_shop_unlock_items, load_minigame_unlock_items
-from .locations import DOTA2Location, LocationDef, load_hero_locations, build_location_name_to_id, load_item_locations, load_game_stat_locations,load_static_hero_locations, load_victory_location, load_minigame_locations, load_challenge_locations, load_extra_group_locations, load_extra_stat_locations
+from .locations import DOTA2Location, LocationDef, draw_hero_pool, build_location_name_to_id, all_location_defs
 from .rules import set_dota_rules
 from .regions import create_regions_and_locations
 from .hero import Hero, get_starting_hero_pool, get_all_heroes
@@ -69,16 +69,7 @@ class DOTA2World(World):
     # Choose a stable, unique base_id range for your world.
     base_id = DOTA2_BASE_ID
 
-    _location_defs = (
-            load_static_hero_locations()
-            + load_item_locations()
-            + load_game_stat_locations()
-            + load_victory_location()
-            + load_minigame_locations()
-            + load_challenge_locations()  # new locations go last, so the ids of older ones don't move
-            + load_extra_group_locations()
-            + load_extra_stat_locations()
-        )
+    _location_defs = all_location_defs()
 
     _item_defs = load_item_defs()
 
@@ -102,19 +93,7 @@ class DOTA2World(World):
     
 
     def generate_early(self) -> None:
-        load_hero_locations(self)  # draws the starting pool and the hero groups
-
-        # Every possible location, in id order (same as the class-level list); this seed's choices filter them below
-        self._location_defs = (
-            load_static_hero_locations()
-            + load_item_locations()
-            + load_game_stat_locations()
-            + load_victory_location()
-            + load_minigame_locations()
-            + load_challenge_locations()
-            + load_extra_group_locations()
-            + load_extra_stat_locations()
-        )
+        draw_hero_pool(self)
 
         exclude_minigames = self.options.crownfall == CrownFall.option_off
         disabled = resolve_disabled(self.options.disabled_checks.value)
