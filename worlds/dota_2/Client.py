@@ -236,6 +236,7 @@ class Dota2Context(CommonContext):
         self.command_processor = Dota2CommandProcessor
         
         self.items_handling = 0b111
+        self.slot_data: dict = {}  # set on Connected
 
         self.save: Dota2Save = Dota2Save(seed_name=self.seed_name)
         self._save_path: Optional[Path] = None
@@ -417,8 +418,7 @@ class Dota2Context(CommonContext):
             self.output("Not connected. Connect to an Archipelago server to see your goal.")
             return
         self.ensure_seed_save_loaded()
-        slot_data = getattr(self, "slot_data", None) or {}
-        goal_type, unique_req, total_wins_req, fragment_req= _get_goal_options(slot_data)
+        goal_type, unique_req, total_wins_req, fragment_req= _get_goal_options(self.slot_data)
 
         if goal_type == GOAL_STANDARD:
             hero_wins = len(self.save.unique_heroes_won)
@@ -488,7 +488,7 @@ class Dota2Context(CommonContext):
         return {names[i] for i in set(self.missing_locations) | set(self.checked_locations) if i in names}
 
     def get_quests(self) -> None:
-        values = challenge_values(getattr(self, "slot_data", None) or {}, self.seed_check_names())
+        values = challenge_values(self.slot_data, self.seed_check_names())
         for quest in QUESTS:
             targets = " / ".join(str(t) for t in values[quest.value])
             self.output(f"{quest.pattern.replace('{}', '…')}: {self.save.quest_totals.get(quest.field, 0)} (targets: {targets})")
@@ -588,7 +588,7 @@ class Dota2Context(CommonContext):
 
         #all other game stat and buy checks, with this seed's tiers and values
         purchases = match_data.purchase
-        values = challenge_values(getattr(self, "slot_data", None) or {}, self.seed_check_names())
+        values = challenge_values(self.slot_data, self.seed_check_names())
         checks.extend(stat_checks(match_data, values))
 
         game_locations = self.location_names[self.game]
@@ -604,9 +604,9 @@ class Dota2Context(CommonContext):
     
         checks.extend(purchase_checks)
 
-        # Global challenges, and quests that add up over the seed (each match counted once)
+        # Global challenges, and quests that add up over the seed (each parsed match counted once)
         checks.extend(match_challenges(match_data, values))
-        if match_data.match_id not in self.save.quest_match_ids:
+        if match_data.parsed and match_data.match_id not in self.save.quest_match_ids:
             self.save.quest_match_ids.append(match_data.match_id)
             for key, amount in quest_amounts(match_data).items():
                 self.save.quest_totals[key] = self.save.quest_totals.get(key, 0) + amount

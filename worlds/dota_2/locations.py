@@ -25,9 +25,8 @@ class DOTA2Location(Location):
     game = "DOTA 2"
 
 
-def load_hero_locations(self) -> List[LocationDef]:
-    locs: List[LocationDef] = []
-
+def draw_hero_pool(self) -> None:
+    """Draws this seed's starting hero pool and hero groups."""
     all_heroes = get_all_heroes()
     starting_hero_pool = get_starting_hero_pool(self, self.options.starting_heroes.value, all_heroes)
     remaining_heroes =  [
@@ -49,13 +48,6 @@ def load_hero_locations(self) -> List[LocationDef]:
     
     self.unlocked_heroes = starting_hero_pool.copy()
     self.unique_heroes_won = []
-
-    locs.append(LocationDef(name = "Win with hero from starting pool", type = "HERO_WIN"))
-    for i, group in enumerate(hero_groups):
-        name = f"Win with Hero from Group {i+1}"
-        type = "HERO_WIN"
-        locs.append(LocationDef(name = name, type=type))
-    return locs
 
 def load_item_locations() -> List[LocationDef]:
     locs: List[LocationDef] = []
@@ -130,8 +122,6 @@ def build_location_name_to_id(base_id: int, location_defs: List[LocationDef], fi
 def load_static_hero_locations() -> List[LocationDef]:
     locs: List[LocationDef] = []
 
-    all_heroes = get_all_heroes()
-
     # Locations of the original 7 groups (30 starting heroes, groups of 14); more groups are in load_extra_group_locations
     group_count = ORIGINAL_HERO_GROUPS
 
@@ -180,3 +170,15 @@ def load_victory_location() -> List[LocationDef]:
     return locs
 
 
+def all_location_defs() -> List[LocationDef]:
+    """Every possible location, in id order: new locations go last, so the ids of older ones don't move."""
+    return (
+        load_static_hero_locations()
+        + load_item_locations()
+        + load_game_stat_locations()
+        + load_victory_location()
+        + load_minigame_locations()
+        + load_challenge_locations()
+        + load_extra_group_locations()
+        + load_extra_stat_locations()
+    )

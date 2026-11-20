@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import textwrap
 from dataclasses import dataclass
 from importlib import resources
 from typing import Any
@@ -66,19 +67,17 @@ class HeroGroups(Range):
 
 
 class DisabledChecks(OptionSet):
-    """Checks to remove: families or check names. Hero group wins and the goal always stay.
-    Families: Attribute Wins, Attack Type Wins, Legs Wins, Role Wins, Purchases, Kills, Assists, Dewards, Last Hits,
-    Denies, Healing, Physical Damage, Magical Damage, Physical Hit, Magical Hit, Stun Time, Camps Stacked, First Blood,
-    Courier Kill, Runes, Buyback, Aegis, Positions, Short Win, Long Win, Roshan Win, Quests, Total Camps Stacked,
-    Total Wards Placed, Total Building Damage, Total Healing, Total Physical Damage, Total Magical Damage, Total Stun Time, Total Runes"""
+    """Checks to remove: families or check names. Hero group wins and the goal always stay."""
     display_name = "Disabled Checks"
     valid_keys = sorted(FAMILIES) + DISABLEABLE_CHECKS
 
 
+DisabledChecks.__doc__ += "\n" + textwrap.fill("Families: " + ", ".join(FAMILIES), 116)
+
+
 class CheckValues(OptionDict):
-    """Numbers used by checks. Stats count in one match, quests over the whole seed; a list gives one check per number,
-    e.g. Last Hits: [300, 450], each on its grid (Last Hits by 25, damage by 2500...). Hits are one hit on a hero,
-    stun times are in seconds. Short Win needs no leaver or bot. Roshan Kills are your team's, in a win."""
+    """Numbers used by checks: stats in one match, quests over the seed. A list gives one check per number on the
+    stat's grid, e.g. Last Hits: [300, 450]. Stun times are in seconds. Short Win needs no leaver or bot; Roshan Kills are your team's."""
     display_name = "Check Values"
     valid_keys = list(VALUES)
     default = {name: default for name, (default, _, _) in VALUES.items()}

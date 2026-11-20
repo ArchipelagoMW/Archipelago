@@ -126,15 +126,21 @@ class ChallengeRules(Dota2TestBase):
         me = {"player_slot": 0, "runes": {"5": 3, "8": 4, "1": 1}}
         self.assertEqual(challenge_data({"players": [me]}, me)["rune_pickups"], 4)
 
+    def test_unparsed_match(self) -> None:
+        me = {"player_slot": 0}
+        self.assertFalse(challenge_data({"players": [me], "version": None}, me)["parsed"])
+        self.assertTrue(challenge_data({"players": [me], "version": 22}, me)["parsed"])
+
     def test_damage_by_type(self) -> None:
         me = {"damage_inflictor": {"null": 5000, "lina_laguna_blade": 3000, "juggernaut_omni_slash": 900,
-                                   "pudge_meat_hook": 700, "blade_mail": 400},
-              "hero_hits": {"null": 50, "lina_laguna_blade": 4, "juggernaut_omni_slash": 9, "pudge_meat_hook": 3},
+                                   "pudge_meat_hook": 700, "blade_mail": 400, "phantom_assassin_coup_de_grace": 600},
+              "hero_hits": {"null": 50, "lina_laguna_blade": 4, "juggernaut_omni_slash": 9, "pudge_meat_hook": 3,
+                            "phantom_assassin_coup_de_grace": 2},
               "max_hero_hit": {"value": 1200, "inflictor": "lina_laguna_blade"}}
         d = damage_by_type(me)
-        # Attacks and Omni Slash are physical; Laguna Blade and Meat Hook (pure) magical; items neither
-        self.assertEqual((d["physical_damage"], d["magical_damage"]), (5900, 3700))
-        self.assertEqual((d["physical_hit"], d["magical_hit"]), (100, 1200))
+        # Attacks, critical strikes and Omni Slash are physical; Laguna Blade and Meat Hook (pure) magical; items neither
+        self.assertEqual((d["physical_damage"], d["magical_damage"]), (6500, 3700))
+        self.assertEqual((d["physical_hit"], d["magical_hit"]), (300, 1200))
 
 
 class OriginalNames(Dota2TestBase):

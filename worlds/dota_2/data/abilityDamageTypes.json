@@ -1,5 +1,19 @@
 {
- "_source": "OpenDota /api/constants/abilities, dmg_type of each ability; auto-attacks are physical",
+ "_source": "OpenDota /api/constants/abilities, dmg_type of each ability; auto-attacks are physical; attack_effects, listed by hand, deal attack damage OpenDota gives no type to (physical)",
+ "attack_effects": [
+  "brewmaster_drunken_brawler",
+  "chaos_knight_chaos_strike",
+  "earthshaker_enchant_totem",
+  "juggernaut_blade_dance",
+  "legion_commander_moment_of_courage",
+  "luna_moon_glaive",
+  "magnataur_empower",
+  "medusa_split_shot",
+  "muerta_gunslinger",
+  "phantom_assassin_coup_de_grace",
+  "skeleton_king_mortal_strike",
+  "sven_great_cleave"
+ ],
  "ability_damage_types": {
   "abaddon_aphotic_shield": "Magical",
   "abaddon_death_coil": "Magical",
