@@ -508,11 +508,16 @@ class AtLeast(NestedRule[TWorld], game="Archipelago"):
         @override
         def _evaluate(self, state: CollectionState) -> bool:
             count = self.count
+            false_count = len(self.children) - count + 1
             for rule in self.children:
                 if rule(state):
                     if count == 1:
                         return True
                     count -= 1
+                else:
+                    if false_count == 1:
+                        return False
+                    false_count -= 1
             return False
 
         @override
