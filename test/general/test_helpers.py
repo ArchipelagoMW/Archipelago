@@ -1,7 +1,5 @@
 import unittest
-from typing import Any, Dict, Optional
-
-from typing_extensions import override
+from typing import Any, Dict, Optional, override
 
 from BaseClasses import CollectionRule, MultiWorld, Region
 from rule_builder.rules import Has, Rule

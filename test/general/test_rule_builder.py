@@ -1,8 +1,6 @@
 import unittest
 from dataclasses import dataclass, fields
-from typing import Any, ClassVar, cast
-
-from typing_extensions import override
+from typing import Any, ClassVar, cast, override
 
 from BaseClasses import CollectionState, Item, ItemClassification, Location, MultiWorld, Region
 from NetUtils import JSONMessagePart

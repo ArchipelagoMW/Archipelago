@@ -1,7 +1,6 @@
 import typing as t
+from typing import override
 from copy import deepcopy
-
-from typing_extensions import override
 
 from test.multiserver.test_gamespackage_cache import GamesPackageCacheTest
 
