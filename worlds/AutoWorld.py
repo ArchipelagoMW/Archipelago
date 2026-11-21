@@ -616,15 +616,21 @@ class World(metaclass=AutoWorldRegister):
         sorted_item_name_groups = {
             name: sorted(cls.item_name_groups[name]) for name in sorted(cls.item_name_groups)
         }
+        sorted_item_name_to_id = {
+            name: item_id for name, item_id in sorted(cls.item_name_to_id.items(), key=lambda item: item[1])
+        }
         sorted_location_name_groups = {
             name: sorted(cls.location_name_groups[name]) for name in sorted(cls.location_name_groups)
+        }
+        sorted_location_name_to_id = {
+            name: loc_id for name, loc_id in sorted(cls.location_name_to_id.items(), key=lambda item: item[1])
         }
         res: "GamesPackage" = {
             # sorted alphabetically
             "item_name_groups": sorted_item_name_groups,
-            "item_name_to_id": cls.item_name_to_id,
+            "item_name_to_id": sorted_item_name_to_id,
             "location_name_groups": sorted_location_name_groups,
-            "location_name_to_id": cls.location_name_to_id,
+            "location_name_to_id": sorted_location_name_to_id,
         }
         res["checksum"] = data_package_checksum(res)
         return res
