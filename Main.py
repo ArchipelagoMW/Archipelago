@@ -44,9 +44,6 @@ def main(args, seed=None, baked_server_options: dict[str, object] | None = None)
     multiworld.sprite_pool = args.sprite_pool.copy()
 
     multiworld.set_options(args)
-    if args.csv_output:
-        from Options import dump_player_options
-        dump_player_options(multiworld)
     multiworld.set_item_links()
     multiworld.state = CollectionState(multiworld)
     logger.info('Archipelago Version %s  -  Seed: %s\n', __version__, multiworld.seed)
@@ -74,6 +71,10 @@ def main(args, seed=None, baked_server_options: dict[str, object] | None = None)
         AutoWorld.call_stage(multiworld, "assert_generate")
 
     AutoWorld.call_all(multiworld, "generate_early")
+
+    if args.csv_output:
+        from Options import dump_player_options
+        dump_player_options(multiworld)
 
     logger.info('')
 
