@@ -523,7 +523,7 @@ async function opendotaMatches(steam, since) {
 }
 
 // Stats, purchases and challenge data of each match, as the client reads them; kept once OpenDota has parsed the match
-const DETAILS_KEY = "dota-ap-tracker:matches:v4";
+const DETAILS_KEY = "dota-ap-tracker:matches:v5";
 const PENDING_KEY = "dota-ap-tracker:unparsed";
 async function matchDetails(ids, steam, damageTypes) {
   const cache = store.get(DETAILS_KEY) || {};
@@ -551,6 +551,7 @@ async function matchDetails(ids, steam, damageTypes) {
                       team_roshan_kills: objectives.filter(o => o.type === "CHAT_MESSAGE_ROSHAN_KILL" && o.team === myTeam).length,
                       camps_stacked: me.camps_stacked || 0, wards_placed: (me.obs_placed || 0) + (me.sen_placed || 0),
                       building_damage: me.tower_damage || 0, healing: me.hero_healing || 0, stun_time: Math.round(me.stuns || 0),
+                      net_worth: me.net_worth || 0, gold_earned: me.total_gold || 0,
                       ...damageByType(me, damageTypes) };
         delete pending[id];
       } catch (e) {}
@@ -561,11 +562,16 @@ async function matchDetails(ids, steam, damageTypes) {
   return cache;
 }
 
-// Physical and magical damage to heroes, and the biggest hit of each type we can be sure of (damage_by_type() in
-// worlds/dota_2/dota_api.py): attacks are physical, pure damage magical, items neither; OpenDota keeps only the biggest
-// hit, so a type's biggest hit is that one, or the best average hit of a source of that type
+// Attacks are physical, pure damage counts as magical, items as neither (damage_kind() in worlds/dota_2/dota_api.py)
+function damageKind(src, types) {
+  if (src == null || src === "null") return "Physical";
+  return types[src] === "Pure" ? "Magical" : types[src];
+}
+
+// Physical and magical damage to heroes, and the biggest hit of each type we can be sure of (damage_by_type()).
+// OpenDota keeps only the match's biggest hit: other types get the best average hit of one of their sources.
 function damageByType(me, types) {
-  const kind = src => src == null || src === "null" ? "Physical" : types[src] === "Pure" ? "Magical" : types[src];
+  const kind = src => damageKind(src, types);
   const inflictors = me.damage_inflictor || {}, hits = me.hero_hits || {};
   const total = { Physical: 0, Magical: 0 }, best = { Physical: 0, Magical: 0 };
   Object.entries(inflictors).forEach(([src, dmg]) => {
@@ -580,15 +586,17 @@ function damageByType(me, types) {
 }
 
 // The client's rules, as in worlds/dota_2/challenges.py. Stat and quest checks are named after their threshold
-// ("Get 450 Last Hits", "Stack 10 Camps"): the name templates give the threshold and the match field it's checked on.
+// ("Get 450 Last Hits", "Stack 10 Camps in Total"): the name templates give the threshold and the match field it's checked on.
 const STAT_NAMES = [["Get {} Kill(s)", "kills"], ["Get {} Assists", "assists"], ["Get {} Deward(s)", "dewards"],
   ["Get {} Last Hits", "last_hits"], ["Get {} Denies", "denies"], ["Heal {} in a Match", "healing"],
   ["Deal {} Physical Damage in a Match", "physical_damage"], ["Deal {} Magical Damage in a Match", "magical_damage"],
-  ["Land a {} Physical Hit", "physical_hit"], ["Land a {} Magical Hit", "magical_hit"], ["Stun Enemies for {}s in a Match", "stun_time"]];
+  ["Land a {} Physical Hit", "physical_hit"], ["Land a {} Magical Hit", "magical_hit"], ["Stun Enemies for {}s in a Match", "stun_time"],
+  ["Stack {} Camps in a Match", "camps_stacked"], ["Reach {} Net Worth in a Match", "net_worth"]];
 // Quests add up over the seed; the field is also the quest total's key
-const QUEST_NAMES = [["Stack {} Camps", "camps_stacked"], ["Place {} Wards", "wards_placed"], ["Deal {} Building Damage", "building_damage"],
+const QUEST_NAMES = [["Stack {} Camps in Total", "camps_stacked"], ["Place {} Wards in Total", "wards_placed"], ["Deal {} Building Damage in Total", "building_damage"],
   ["Heal {} in Total", "healing"], ["Deal {} Physical Damage in Total", "physical_damage"],
-  ["Deal {} Magical Damage in Total", "magical_damage"], ["Stun Enemies for {}s in Total", "stun_time"]];
+  ["Deal {} Magical Damage in Total", "magical_damage"], ["Stun Enemies for {}s in Total", "stun_time"],
+  ["Pick up {} Runes in Total", "rune_pickups"], ["Earn {} Gold in Total", "gold_earned"]];
 const nameRegex = t => new RegExp("^" + t.replace(/[.*+?^$()|[\]\\]/g, "\\$&").replace("{}", "(\\d+)") + "$");
 const STAT_RES = STAT_NAMES.map(([t, field]) => [nameRegex(t), field]);
 const QUEST_RES = QUEST_NAMES.map(([t, field]) => [nameRegex(t), field]);
@@ -599,7 +607,11 @@ function scaleOf(name, res) {
 }
 const RUNES = { 0: "Double Damage", 1: "Haste", 2: "Illusion", 3: "Invisibility", 4: "Regeneration",
   5: "Bounty", 6: "Arcane", 7: "Water", 8: "Wisdom", 9: "Shield" };
-const runeCheck = r => `Pick up ${/^[AEIOU]/.test(r) ? "an" : "a"} ${r} Rune`;
+// Wisdom runes became Shrines of Wisdom in 7.38, still reported as rune 8
+const runeCheck = r => r === "Wisdom" ? "Use a Shrine of Wisdom" : `Pick up ${/^[AEIOU]/.test(r) ? "an" : "a"} ${r} Rune`;
+// What a match adds to a quest; runes are counted from the per-rune pickups, without Shrines of Wisdom
+const questAmount = (d, field) => field === "rune_pickups"
+  ? Object.entries(d.runes || {}).reduce((sum, [k, n]) => sum + (k === "8" ? 0 : n || 0), 0) : d[field] || 0;
 // Values the win challenges use, from the seed's check_values
 const seedValues = sd => ({ "Short Win Minutes": 30, "Long Win Minutes": 60, "Roshan Kills": 1, ...(sd.check_values || {}) });
 
@@ -675,11 +687,21 @@ function stampReceived(cfg, seed, count) {
 
 // ---------- building the page data ----------
 
+// The client's table of damage types (data/abilityDamageTypes.json), or OpenDota's constants if the file is missing
+async function loadDamageTypes() {
+  try {
+    const data = await getJSON(DATA_URL + "abilityDamageTypes.json");
+    return { ...data.ability_damage_types, ...Object.fromEntries(data.attack_effects.map(k => [k, "Physical"])) };
+  } catch (e) {
+    const abilities = await getJSON(OPENDOTA + "/constants/abilities").catch(() => ({}));
+    return Object.fromEntries(Object.entries(abilities).filter(([, a]) => ["Magical", "Physical", "Pure"].includes(a.dmg_type))
+      .map(([k, a]) => [k, a.dmg_type]));
+  }
+}
+
 async function loadStatic() {
-  const [heroes, shop, abilities] = await Promise.all([getJSON(DATA_URL + "heroes.json"), getJSON(DATA_URL + "dotaShopLocations.json"),
-    getJSON(OPENDOTA + "/constants/abilities").catch(() => ({}))]);
-  const damageTypes = Object.fromEntries(Object.entries(abilities).filter(([, a]) => ["Magical", "Physical", "Pure"].includes(a.dmg_type))
-    .map(([k, a]) => [k, a.dmg_type]));
+  const [heroes, shop, damageTypes] = await Promise.all([getJSON(DATA_URL + "heroes.json"), getJSON(DATA_URL + "dotaShopLocations.json"),
+    loadDamageTypes()]);
   const attrs = {};
   heroes.dota_heroes.forEach(h => {
     attrs[h.localized_name] = { id: h.id, key: h.name.replace("npc_dota_hero_", ""), attr: h.primary_attr, attack: h.attack_type, legs: h.legs, roles: h.roles };
@@ -767,7 +789,7 @@ async function build(cfg, say) {
       games.forEach(g => { if (details[g.id]) triggers[g.id] = matchTriggers(g, details[g.id], S.attrs[g.hero], groupOf[g.hero], shopByKey, values, seedChecks); });
       if (!questTotals) {
         questTotals = {}; questSource = "opendota";
-        games.filter(g => g.open && details[g.id]).forEach(g => QUEST_NAMES.forEach(([, k]) => { questTotals[k] = (questTotals[k] || 0) + (details[g.id][k] || 0); }));
+        games.filter(g => g.open && details[g.id]).forEach(g => QUEST_NAMES.forEach(([, k]) => { questTotals[k] = (questTotals[k] || 0) + questAmount(details[g.id], k); }));
       }
       readStatuses(games, triggers, new Set([...checked].map(i => locNames[i])), progress?.submitted);
     } catch (e) { gamesError = "OpenDota unreachable: " + e.message; games = null; }
@@ -1001,7 +1023,7 @@ function tagCell(k, v, label) {
 
 // Match objectives in a readable order: wins by trait, then each stat from its lowest threshold up
 const MATCH_ORDER = ["Strength", "Agility", "Intelligence", "Universal", "Melee", "Ranged", "0 Legged", "2 Legged", "4+ Legged",
-  "Carry", "Support", "Kill", "Assist", "Deward", "Last Hit", "Denies", "Heal", "Physical Damage", "Magical Damage", "Physical Hit", "Magical Hit", "Stun"];
+  "Carry", "Support", "Kill", "Assist", "Deward", "Last Hit", "Denies", "Heal", "Physical Damage", "Magical Damage", "Physical Hit", "Magical Hit", "Stun", "Stack", "Net Worth"];
 function matchRank(name) {
   const i = MATCH_ORDER.findIndex(w => name.includes(w));
   const n = +(name.match(/\d+/g) || [0]).pop();

@@ -9,7 +9,8 @@ from typing import Optional, Any
 from datetime import datetime
 
 from .constants import PROGRESSIVE_GROUP_UNLOCK_ID, PRIMORDIAL_FRAGMENT_ID, FILLER_ITEM_ID
-from .dota_api import parse_most_recent_match_data, get_recent_match_ids, DotaMatchData
+from .dota_api import parse_most_recent_match_data, DotaMatchData
+from .challenges import QUESTS, challenge_values, stat_checks, match_challenges, quest_amounts, completed_quests
 from .locations import LocationDef, load_item_locations, build_item_name_to_dname, load_minigame_locations
 from .hero import Hero, get_all_heroes, hero_from_dict
 
@@ -59,6 +60,10 @@ class Dota2CommandProcessor(ClientCommandProcessor):
         """View hero wins"""
         self.ctx.get_hero_wins()
 
+    def _cmd_quests(self) -> None:
+        """View your progress on the quests, which add up over the whole seed"""
+        self.ctx.get_quests()
+
     def _cmd_minigame(self, name: str ="", score: int = 0) -> None:
         """Submit Minigame scores when unlocked. /minigame {first world of name} {score} Ex. /minigame Nest 80000"""
         asyncio.create_task(self.ctx.cmd_minigame(name, score))
@@ -98,6 +103,10 @@ class Dota2Save:
     
     # Anti-duplicate
     submitted_match_ids: list[int] = field(default_factory=list)
+
+    # Quest totals over the seed, and the matches already added to them
+    quest_totals: dict[str, int] = field(default_factory=dict)
+    quest_match_ids: list[int] = field(default_factory=list)
 
     most_recent_game_time: int = 0
 
@@ -241,6 +250,7 @@ class Dota2Context(CommonContext):
         self.command_processor = Dota2CommandProcessor
         
         self.items_handling = 0b111
+        self.slot_data: dict = {}  # set on Connected
 
         self.save: Dota2Save = Dota2Save(seed_name=self.seed_name)
         self._save_path: Optional[Path] = None
@@ -422,8 +432,7 @@ class Dota2Context(CommonContext):
             self.output("Not connected. Connect to an Archipelago server to see your goal.")
             return
         self.ensure_seed_save_loaded()
-        slot_data = getattr(self, "slot_data", None) or {}
-        goal_type, unique_req, total_wins_req, fragment_req= _get_goal_options(slot_data)
+        goal_type, unique_req, total_wins_req, fragment_req= _get_goal_options(self.slot_data)
 
         if goal_type == GOAL_STANDARD:
             hero_wins = len(self.save.unique_heroes_won)
@@ -511,6 +520,17 @@ class Dota2Context(CommonContext):
 
             role = "Carry" if "Carry" in hero.roles else "Support"
             self.output(f"{hero.name} - {group_name} - {hero.primary_attr} - {hero.attack_type} - {hero.legs} legs - {role}")
+
+    def seed_check_names(self) -> set[str]:
+        """Names of this seed's checks, done or not."""
+        names = self.location_names[self.game]
+        return {names[i] for i in set(self.missing_locations) | set(self.checked_locations) if i in names}
+
+    def get_quests(self) -> None:
+        values = challenge_values(self.slot_data, self.seed_check_names())
+        for quest in QUESTS:
+            targets = " / ".join(str(t) for t in values[quest.value])
+            self.output(f"{quest.pattern.replace('{}', '…')}: {self.save.quest_totals.get(quest.field, 0)} (targets: {targets})")
 
     def get_hero_wins(self) -> None:
         self.output(f"Hero Wins: {len(self.save.unique_heroes_won)}")
@@ -612,35 +632,10 @@ class Dota2Context(CommonContext):
                 self.save_save()
 
 
-        #all other game stat and buy checks
-        dewards = match_data.dewards
-        kills = match_data.kills
-        assists = match_data.assists
-        last_hits = match_data.last_hits
-        denies = match_data.denies
+        #all other game stat and buy checks, with this seed's tiers and values
         purchases = match_data.purchase
-
-        KILL_THRESHOLDS = [1, 5, 10]
-        DEWARD_THRESHOLDS = [1, 3, 7]
-        ASSIST_THRESHOLDS = [5, 10, 20]
-        LASTHIT_THRESHOLDS = [75, 125, 175]
-        DENIES_THRESHOLDS = [8, 16, 32]
-
-        for threshold in KILL_THRESHOLDS:
-            if kills >= threshold:
-                checks.append(f"Get {threshold} Kill(s)")
-        for threshold in ASSIST_THRESHOLDS:
-            if assists >= threshold:
-                checks.append(f"Get {threshold} Assists")
-        for threshold in DEWARD_THRESHOLDS:
-            if dewards >= threshold:
-                checks.append(f"Get {threshold} Deward(s)")
-        for threshold in LASTHIT_THRESHOLDS:
-            if last_hits >= threshold:
-                checks.append(f"Get {threshold} Last Hits")
-        for threshold in DENIES_THRESHOLDS:
-            if denies >= threshold:
-                checks.append(f"Get {threshold} Denies")        
+        values = challenge_values(self.slot_data, self.seed_check_names())
+        checks.extend(stat_checks(match_data, values))
 
         game_locations = self.location_names[self.game]
 
@@ -654,6 +649,14 @@ class Dota2Context(CommonContext):
         purchase_checks = self.check_purchases(purchases, all_item_locations)
     
         checks.extend(purchase_checks)
+
+        # Global challenges, and quests that add up over the seed (each parsed match counted once)
+        checks.extend(match_challenges(match_data, values))
+        if match_data.parsed and match_data.match_id not in self.save.quest_match_ids:
+            self.save.quest_match_ids.append(match_data.match_id)
+            for key, amount in quest_amounts(match_data).items():
+                self.save.quest_totals[key] = self.save.quest_totals.get(key, 0) + amount
+        checks.extend(completed_quests(self.save.quest_totals, values))
        
         valid_location_ids = []
         for check in checks:

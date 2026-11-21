@@ -10,12 +10,14 @@ from .hero import Hero, get_all_heroes,get_starting_hero_pool
 from BaseClasses import ItemClassification, Location
 
 from . import items
+from .challenges import CHALLENGE_CHECKS, STATS, QUESTS
+from .constants import MAX_HERO_GROUPS, ORIGINAL_HERO_GROUPS
 
 
 @dataclass(frozen=True)
 class LocationDef:
     name: str
-    type: str = ""  # "HERO_WIN", "ITEM_BUY", "GAME_STAT", "GOAL", MINIGAME
+    type: str = ""  # "HERO_WIN", "ITEM_BUY", "GAME_STAT", "GOAL", MINIGAME, CHALLENGE
     requirements: list[str] = field(default_factory=list)
 
 
@@ -23,34 +25,29 @@ class DOTA2Location(Location):
     game = "DOTA 2"
 
 
-def load_hero_locations(self) -> List[LocationDef]:
-    locs: List[LocationDef] = []
-
+def draw_hero_pool(self) -> None:
+    """Draws this seed's starting hero pool and hero groups."""
     all_heroes = get_all_heroes()
-    starting_hero_pool = get_starting_hero_pool(self, 30, all_heroes)
+    starting_hero_pool = get_starting_hero_pool(self, self.options.starting_heroes.value, all_heroes)
     remaining_heroes =  [
         hero for hero in all_heroes
         if hero not in starting_hero_pool
     ]
 
     self.multiworld.random.shuffle(remaining_heroes)
-    hero_groups = [
-        remaining_heroes[i:i + 14]
-        for i in range(0, len(remaining_heroes), 14)
-    ]   
+    # Split evenly, larger groups first (30 starting heroes and 7 groups give the original groups of 14)
+    group_count = min(self.options.hero_groups.value, len(remaining_heroes))
+    size, extra = divmod(len(remaining_heroes), group_count)
+    hero_groups = []
+    for i in range(group_count):
+        start = i * size + min(i, extra)
+        hero_groups.append(remaining_heroes[start:start + size + (1 if i < extra else 0)])
 
     self.hero_groups = hero_groups
     self.starting_hero_pool = starting_hero_pool
     
     self.unlocked_heroes = starting_hero_pool.copy()
     self.unique_heroes_won = []
-
-    locs.append(LocationDef(name = "Win with hero from starting pool", type = "HERO_WIN"))
-    for i, group in enumerate(hero_groups):
-        name = f"Win with Hero from Group {i+1}"
-        type = "HERO_WIN"
-        locs.append(LocationDef(name = name, type=type))
-    return locs
 
 def load_item_locations() -> List[LocationDef]:
     locs: List[LocationDef] = []
@@ -125,12 +122,8 @@ def build_location_name_to_id(base_id: int, location_defs: List[LocationDef], fi
 def load_static_hero_locations() -> List[LocationDef]:
     locs: List[LocationDef] = []
 
-    all_heroes = get_all_heroes()
-
-    # Starting pool is always 30 heroes.
-    # The remaining heroes are divided into groups of 14.
-    remaining_count = max(0, len(all_heroes) - 30)
-    group_count = (remaining_count + 13) // 14
+    # Locations of the original 7 groups (30 starting heroes, groups of 14); more groups are in load_extra_group_locations
+    group_count = ORIGINAL_HERO_GROUPS
 
     locs.append(
         LocationDef(
@@ -149,6 +142,22 @@ def load_static_hero_locations() -> List[LocationDef]:
 
     return locs
 
+def load_extra_group_locations() -> List[LocationDef]:
+    """Wins with groups past the original 7, at the end so existing location ids don't move."""
+    return [LocationDef(name=f"Win with Hero from Group {i}", type="HERO_WIN")
+            for i in range(ORIGINAL_HERO_GROUPS + 1, MAX_HERO_GROUPS + 1)]
+
+def load_extra_stat_locations() -> List[LocationDef]:
+    """Every stat threshold's location but the original ones (gameStatLocations.json), at the end so existing
+    location ids don't move."""
+    original = {d.name for d in load_game_stat_locations()}
+    return [LocationDef(name=name, type="GAME_STAT") for s in STATS for name in s.names if name not in original]
+
+def load_challenge_locations() -> List[LocationDef]:
+    """Global challenges, then every quest threshold's location."""
+    return ([LocationDef(name=name, type="CHALLENGE") for name in CHALLENGE_CHECKS]
+            + [LocationDef(name=name, type="CHALLENGE") for s in QUESTS for name in s.names])
+
 def load_victory_location() -> List[LocationDef]:
     locs: List[LocationDef] = []
 
@@ -161,3 +170,15 @@ def load_victory_location() -> List[LocationDef]:
     return locs
 
 
+def all_location_defs() -> List[LocationDef]:
+    """Every possible location, in id order: new locations go last, so the ids of older ones don't move."""
+    return (
+        load_static_hero_locations()
+        + load_item_locations()
+        + load_game_stat_locations()
+        + load_victory_location()
+        + load_minigame_locations()
+        + load_challenge_locations()
+        + load_extra_group_locations()
+        + load_extra_stat_locations()
+    )
