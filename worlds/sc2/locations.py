@@ -12,7 +12,7 @@ from .options import (
 )
 from .mission_tables import SC2Mission, SC2Campaign
 
-from BaseClasses import Location
+from BaseClasses import DEFAULT_COLLECTION_RULE, Location
 from worlds.AutoWorld import World
 
 if TYPE_CHECKING:
@@ -66,7 +66,7 @@ class LocationData(NamedTuple):
     name: str
     code: int
     type: LocationType
-    rule: Callable[["CollectionState"], bool] = Location.access_rule
+    rule: Callable[["CollectionState"], bool] = DEFAULT_COLLECTION_RULE
     flags: LocationFlag = LocationFlag.NONE
     hard_rule: Optional[Callable[["CollectionState"], bool]] = None
 
@@ -76,7 +76,7 @@ def make_location_data(
     name: str,
     code: int,
     type: LocationType,
-    rule: Callable[["CollectionState"], bool] = Location.access_rule,
+    rule: Callable[["CollectionState"], bool] = DEFAULT_COLLECTION_RULE,
     flags: LocationFlag = LocationFlag.NONE,
     hard_rule: Optional[Callable[["CollectionState"], bool]] = None,
 ) -> LocationData:
