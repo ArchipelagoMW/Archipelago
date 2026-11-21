@@ -47,16 +47,31 @@ window.addEventListener('load', () => {
         },
         footerCallback: function (tfoot, data, start, end, display) {
             if (tfoot) {
-                const activityData = this.api().column('lastActivity:name').data().toArray().filter(x => !isNaN(x));
+                const statusColumn = this.api().column('.status', { search: 'applied' });
+                const gamesComplete = statusColumn
+                    .data()
+                    .filter(value => value == "Goal Completed")
+                    .count();
+                const totalGames = statusColumn.data().count();
+                Array.from(tfoot?.children).find(td => td.classList.contains('status')).innerText =
+                    gamesComplete + "/" + totalGames + " Complete";
+
+                const checks = this.api().column('.checks', { search: 'applied' })
+                    .data()
+                    .reduce((acc, fraction) => {
+                        const [checks, locations] = fraction.split("/", 2).map(Number);
+                        return [acc[0] + checks, acc[1] + locations];
+                    }, [0, 0]);
+                Array.from(tfoot?.children).find(td => td.classList.contains('checks')).innerText = checks.join("/");
+                Array.from(tfoot?.children).find(td => td.classList.contains('checks-percent')).innerText =
+                    (checks[1] == 0 ? 0 : checks[0] / checks[1] * 100).toFixed(2);
+
+                const activityData = this.api().column('.last-activity', { search: 'applied' }).data().toArray().filter(x => !isNaN(x))
                 Array.from(tfoot?.children).find(td => td.classList.contains('last-activity')).innerText =
                     (activityData.length) ? secondsToHours(Math.min(...activityData)) : 'None';
             }
         },
         columnDefs: [
-            {
-                targets: 'last-activity',
-                name: 'lastActivity'
-            },
             {
                 targets: 'hours',
                 render: function (data, type, row) {
