@@ -201,7 +201,6 @@ class Factorio(World):
         self.multiworld.regions.append(nauvis)
 
     def create_items(self) -> None:
-        self.custom_technologies = self.set_custom_technologies()
         self.set_custom_recipes()
 
         for trap_name in self.trap_names:
@@ -509,13 +508,6 @@ class Factorio(World):
 
         return Recipe(original.name, self.get_category(original.category, liquids_used), new_ingredients,
                       original.products, original.energy)
-
-    def set_custom_technologies(self):
-        custom_technologies = {}
-        allowed_packs = self.options.max_science_pack.get_allowed_packs()
-        for technology_name, technology in base_technology_table.items():
-            custom_technologies[technology_name] = technology.get_custom(self, allowed_packs, self.player)
-        return custom_technologies
 
     def set_custom_recipes(self):
         ingredients_offset = self.options.recipe_ingredients_offset
