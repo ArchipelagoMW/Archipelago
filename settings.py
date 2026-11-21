@@ -645,7 +645,7 @@ class GeneratorOptions(Group):
     class AllowQuantity(Bool):
         """
         allow players to set an individual quantity for their yaml settings
-        with 'false' any amounts from the players will be ignored and set to 1
+        with 'false' any amounts from the players will fail generation
         """
 
     class WeightsFilePath(str):
