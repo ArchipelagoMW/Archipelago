@@ -7,7 +7,6 @@ import hashlib
 import os
 import struct
 
-import settings
 from worlds.Files import APProcedurePatch, APTokenMixin, APTokenTypes, APPatchExtension
 from .aesthetics import get_palette_bytes, kirby_target_palettes, get_kirby_palette, gooey_target_palettes, \
     get_gooey_palette
@@ -313,7 +312,7 @@ def handle_level_sprites(stages: List[Tuple[int, ...]], sprites: List[bytearray]
 def write_heart_star_sprites(rom: RomData) -> None:
     compressed = rom.read_bytes(heart_star_address, heart_star_size)
     decompressed = hal_decompress(compressed)
-    patch = get_data(__name__, os.path.join("data", "APHeartStar.bsdiff4"))
+    patch = get_data(__name__, "data/APHeartStar.bsdiff4")
     patched = bytearray(bsdiff4.patch(decompressed, patch))
     rom.write_bytes(0x1AF7DF, patched)
     patched[0:0] = [0xE3, 0xFF]
@@ -327,10 +326,10 @@ def write_consumable_sprites(rom: RomData, consumables: bool, stars: bool) -> No
     decompressed = hal_decompress(compressed)
     patched = bytearray(decompressed)
     if consumables:
-        patch = get_data(__name__, os.path.join("data", "APConsumable.bsdiff4"))
+        patch = get_data(__name__, "data/APConsumable.bsdiff4")
         patched = bytearray(bsdiff4.patch(bytes(patched), patch))
     if stars:
-        patch = get_data(__name__, os.path.join("data", "APStars.bsdiff4"))
+        patch = get_data(__name__, "data/APStars.bsdiff4")
         patched = bytearray(bsdiff4.patch(bytes(patched), patch))
     patched[0:0] = [0xE3, 0xFF]
     patched.append(0xFF)
@@ -380,7 +379,7 @@ class KDL3ProcedurePatch(APProcedurePatch, APTokenMixin):
 
 def patch_rom(world: "KDL3World", patch: KDL3ProcedurePatch) -> None:
     patch.write_file("kdl3_basepatch.bsdiff4",
-                     get_data(__name__, os.path.join("data", "kdl3_basepatch.bsdiff4")))
+                     get_data(__name__, "data/kdl3_basepatch.bsdiff4"))
 
     # Write open world patch
     if world.options.open_world:
@@ -475,8 +474,7 @@ def patch_rom(world: "KDL3World", patch: KDL3ProcedurePatch) -> None:
     patch.write_token(APTokenTypes.WRITE, 0x3D016, world.options.ow_boss_requirement.value.to_bytes(2, "little"))
     patch.write_token(APTokenTypes.WRITE, 0x3D018, world.options.consumables.value.to_bytes(2, "little"))
     patch.write_token(APTokenTypes.WRITE, 0x3D01A, world.options.starsanity.value.to_bytes(2, "little"))
-    patch.write_token(APTokenTypes.WRITE, 0x3D01C, world.options.gifting.value.to_bytes(2, "little")
-                      if world.multiworld.players > 1 else bytes([0, 0]))
+    patch.write_token(APTokenTypes.WRITE, 0x3D01C, world.options.gifting.value.to_bytes(2, "little"))
     patch.write_token(APTokenTypes.WRITE, 0x3D01E, world.options.strict_bosses.value.to_bytes(2, "little"))
     # don't write gifting for solo game, since there's no one to send anything to
 
@@ -594,9 +592,9 @@ def get_base_rom_bytes() -> bytes:
 
 
 def get_base_rom_path(file_name: str = "") -> str:
-    options: settings.Settings = settings.get_settings()
+    from . import KDL3World
     if not file_name:
-        file_name = options["kdl3_options"]["rom_file"]
+        file_name = KDL3World.settings.rom_file
     if not os.path.exists(file_name):
         file_name = Utils.user_path(file_name)
     return file_name

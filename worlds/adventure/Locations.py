@@ -47,8 +47,6 @@ class LocationData:
         self.local_item: int = None
 
     def get_random_position(self, random):
-        x: int = None
-        y: int = None
         if self.world_positions is None or len(self.world_positions) == 0:
             if self.room_id is None:
                 return None

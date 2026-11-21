@@ -33,10 +33,10 @@ def process_rules(spot, access):
     add_rule(spot, lambda state: state.has_all(access, spot.player))
 
 
-def create_region(world: MultiWorld, player: int, name: str, room_id=None, locations=None, links=None):
+def create_region(multiworld: MultiWorld, player: int, name: str, room_id=None, locations=None, links=None):
     if links is None:
         links = []
-    ret = Region(name, player, world)
+    ret = Region(name, player, multiworld)
     if locations:
         for location in locations:
             location.parent_region = ret
@@ -155,6 +155,10 @@ def set_rules(self) -> None:
                             return True
             check_foresta(loc.parent_region)
 
+    if self.options.map_shuffle or self.options.crest_shuffle:
+        process_rules(self.multiworld.get_entrance("Subregion Frozen Fields to Subregion Aquaria", self.player),
+                      ["SummerAquaria"])
+
     if self.options.logic == "friendly":
         process_rules(self.multiworld.get_entrance("Overworld - Ice Pyramid", self.player),
                       ["MagicMirror"])
@@ -211,9 +215,12 @@ def stage_set_rules(multiworld):
     # If there's no enemies, there's no repeatable income sources
     no_enemies_players = [player for player in multiworld.get_game_players("Final Fantasy Mystic Quest")
                           if multiworld.worlds[player].options.enemies_density == "none"]
-    if (len([item for item in multiworld.itempool if item.classification in (ItemClassification.filler,
-            ItemClassification.trap)]) > len([player for player in no_enemies_players if
-                                              multiworld.worlds[player].options.accessibility == "minimal"]) * 3):
+    if (
+        len([item for item in multiworld.itempool if item.excludable]) >
+        len([player
+             for player in no_enemies_players
+             if multiworld.worlds[player].options.accessibility != "minimal"]) * 3
+    ):
         for player in no_enemies_players:
             for location in vendor_locations:
                 if multiworld.worlds[player].options.accessibility == "full":
@@ -221,11 +228,8 @@ def stage_set_rules(multiworld):
                 else:
                     multiworld.get_location(location, player).access_rule = lambda state: False
     else:
-        # There are not enough junk items to fill non-minimal players' vendors. Just set an item rule not allowing
-        # advancement items so that useful items can be placed.
-        for player in no_enemies_players:
-            for location in vendor_locations:
-                multiworld.get_location(location, player).item_rule = lambda item: not item.advancement
+        raise Exception(f"Not enough filler/trap items for FFMQ players with full and items accessibility. "
+                        f"Add more items or change the 'Enemies Density' option to something besides 'none'")
 
 
 class FFMQLocation(Location):

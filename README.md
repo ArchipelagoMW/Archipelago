@@ -7,28 +7,23 @@ Currently, the following games are supported:
 
 * The Legend of Zelda: A Link to the Past
 * Factorio
-* Minecraft
 * Subnautica
-* Slay the Spire
 * Risk of Rain 2
 * The Legend of Zelda: Ocarina of Time
 * Timespinner
 * Super Metroid
 * Secret of Evermore
 * Final Fantasy
-* Rogue Legacy
 * VVVVVV
 * Raft
 * Super Mario 64
 * Meritous
 * Super Metroid/Link to the Past combo randomizer (SMZ3)
 * ChecksFinder
-* ArchipIDLE
 * Hollow Knight
 * The Witness
 * Sonic Adventure 2: Battle
 * Starcraft 2
-* Donkey Kong Country 3
 * Dark Souls 3
 * Super Mario World
 * Pokémon Red and Blue
@@ -43,11 +38,9 @@ Currently, the following games are supported:
 * The Messenger
 * Kingdom Hearts 2
 * The Legend of Zelda: Link's Awakening DX
-* Clique
 * Adventure
 * DLC Quest
 * Noita
-* Undertale
 * Bumper Stickers
 * Mega Man Battle Network 3: Blue Version
 * Muse Dash
@@ -63,7 +56,6 @@ Currently, the following games are supported:
 * TUNIC
 * Kirby's Dream Land 3
 * Celeste 64
-* Zork Grand Inquisitor
 * Castlevania 64
 * A Short Hike
 * Yoshi's Island
@@ -76,6 +68,23 @@ Currently, the following games are supported:
 * Kingdom Hearts 1
 * Mega Man 2
 * Yacht Dice
+* Faxanadu
+* Saving Princess
+* Castlevania: Circle of the Moon
+* Inscryption
+* Civilization VI
+* The Legend of Zelda: The Wind Waker
+* Jak and Daxter: The Precursor Legacy
+* Super Mario Land 2: 6 Golden Coins
+* shapez
+* Paint
+* Celeste (Open World)
+* Choo-Choo Charles
+* APQuest
+* Satisfactory
+* EarthBound
+* Mega Man 3
+* Gauntlet Legends
 * Kingdom Hearts RE: Chain of Memories
 
 For setup and instructions check out our [tutorials page](https://archipelago.gg/tutorial/).

@@ -1,4 +1,4 @@
-from Options import PerGameCommonOptions, Choice, Toggle, DeathLink, DefaultOnToggle, StartInventoryPool
+from Options import PerGameCommonOptions, Range, Choice, Toggle, DeathLink, DefaultOnToggle, StartInventoryPool
 from dataclasses import dataclass
 
 
@@ -16,9 +16,9 @@ class Goal(Choice):
 
 class Difficulty(Choice):
     """
-    Choose the difficulty option. Those match DOOM's difficulty options.
-    baby (I'm too young to die.) double ammos, half damage, less monsters or strength.
-    easy (Hey, not too rough.) less monsters or strength.
+    Choose the game difficulty. These options match DOOM's skill levels.
+    baby (I'm too young to die.) Same as easy, with double ammo pickups and half damage taken.
+    easy (Hey, not too rough.) Less monsters or strength.
     medium (Hurt me plenty.) Default.
     hard (Ultra-Violence.) More monsters or strength.
     nightmare (Nightmare!) Monsters attack more rapidly and respawn.
@@ -29,6 +29,11 @@ class Difficulty(Choice):
     option_medium = 2
     option_hard = 3
     option_nightmare = 4
+    alias_itytd = 0
+    alias_hntr = 1
+    alias_hmp = 2
+    alias_uv = 3
+    alias_nm = 4
     default = 2
 
 
@@ -112,7 +117,7 @@ class StartWithComputerAreaMaps(Toggle):
 class ResetLevelOnDeath(DefaultOnToggle):
     """When dying, levels are reset and monsters respawned. But inventory and checks are kept.
     Turning this setting off is considered easy mode. Good for new players that don't know the levels well."""
-    display_name="Reset Level on Death"
+    display_name = "Reset Level on Death"
 
 
 class Episode1(DefaultOnToggle):
@@ -139,6 +144,84 @@ class Episode4(Toggle):
     display_name = "Episode 4"
 
 
+class SplitBackpack(Toggle):
+    """Split the Backpack into four individual items, each one increasing ammo capacity for one type of weapon only."""
+    display_name = "Split Backpack"
+
+
+class BackpackCount(Range):
+    """How many Backpacks will be available.
+    If Split Backpack is set, this will be the number of each capacity upgrade available."""
+    display_name = "Backpack Count"
+    range_start = 0
+    range_end = 10
+    default = 1
+
+
+class MaxAmmoBullets(Range):
+    """Set the starting ammo capacity for bullets."""
+    display_name = "Max Ammo - Bullets"
+    range_start = 200
+    range_end = 999
+    default = 200
+
+
+class MaxAmmoShells(Range):
+    """Set the starting ammo capacity for shotgun shells."""
+    display_name = "Max Ammo - Shells"
+    range_start = 50
+    range_end = 999
+    default = 50
+
+
+class MaxAmmoRockets(Range):
+    """Set the starting ammo capacity for rockets."""
+    display_name = "Max Ammo - Rockets"
+    range_start = 50
+    range_end = 999
+    default = 50
+
+
+class MaxAmmoEnergyCells(Range):
+    """Set the starting ammo capacity for energy cells."""
+    display_name = "Max Ammo - Energy Cells"
+    range_start = 300
+    range_end = 999
+    default = 300
+
+
+class AddedAmmoBullets(Range):
+    """Set the amount of bullet capacity added when collecting a backpack or capacity upgrade."""
+    display_name = "Added Ammo - Bullets"
+    range_start = 20
+    range_end = 999
+    default = 200
+
+
+class AddedAmmoShells(Range):
+    """Set the amount of shotgun shell capacity added when collecting a backpack or capacity upgrade."""
+    display_name = "Added Ammo - Shells"
+    range_start = 5
+    range_end = 999
+    default = 50
+
+
+class AddedAmmoRockets(Range):
+    """Set the amount of rocket capacity added when collecting a backpack or capacity upgrade."""
+    display_name = "Added Ammo - Rockets"
+    range_start = 5
+    range_end = 999
+    default = 50
+
+
+class AddedAmmoEnergyCells(Range):
+    """Set the amount of energy cell capacity added when collecting a backpack or capacity upgrade."""
+    display_name = "Added Ammo - Energy Cells"
+    range_start = 30
+    range_end = 999
+    default = 300
+
+
 @dataclass
 class DOOM1993Options(PerGameCommonOptions):
     start_inventory_from_pool: StartInventoryPool
@@ -157,4 +240,15 @@ class DOOM1993Options(PerGameCommonOptions):
     episode2: Episode2
     episode3: Episode3
     episode4: Episode4
+
+    split_backpack: SplitBackpack
+    backpack_count: BackpackCount
+    max_ammo_bullets: MaxAmmoBullets
+    max_ammo_shells: MaxAmmoShells
+    max_ammo_rockets: MaxAmmoRockets
+    max_ammo_energy_cells: MaxAmmoEnergyCells
+    added_ammo_bullets: AddedAmmoBullets
+    added_ammo_shells: AddedAmmoShells
+    added_ammo_rockets: AddedAmmoRockets
+    added_ammo_energy_cells: AddedAmmoEnergyCells
 

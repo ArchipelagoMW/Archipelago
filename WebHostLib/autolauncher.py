@@ -4,19 +4,20 @@ import json
 import logging
 import multiprocessing
 import typing
-from datetime import timedelta, datetime
+from datetime import timedelta
 from threading import Event, Thread
+from typing import Any
 from uuid import UUID
 
-from pony.orm import db_session, select, commit
+from pony.orm import db_session, select, commit, PrimaryKey, desc
 
-from Utils import restricted_loads
+from Utils import restricted_loads, utcnow
 from .locker import Locker, AlreadyRunningException
 
 _stop_event = Event()
 
 
-def stop():
+def stop() -> None:
     """Stops previously launched threads"""
     global _stop_event
     stop_event = _stop_event
@@ -35,16 +36,39 @@ def handle_generation_failure(result: BaseException):
         logging.exception(e)
 
 
-def launch_generator(pool: multiprocessing.pool.Pool, generation: Generation):
+def _mp_gen_game(
+    gen_options: dict,
+    meta: dict[str, Any] | None = None,
+    owner=None,
+    sid=None,
+    timeout: int|None = None,
+) -> PrimaryKey | None:
+    from setproctitle import setproctitle
+
+    setproctitle(f"Generator ({sid})")
+    try:
+        return gen_game(gen_options, meta=meta, owner=owner, sid=sid, timeout=timeout)
+    finally:
+        setproctitle(f"Generator (idle)")
+
+
+def launch_generator(pool: multiprocessing.pool.Pool, generation: Generation, timeout: int|None) -> None:
     try:
         meta = json.loads(generation.meta)
         options = restricted_loads(generation.options)
         logging.info(f"Generating {generation.id} for {len(options)} players")
-        pool.apply_async(gen_game, (options,),
-                         {"meta": meta,
-                          "sid": generation.id,
-                          "owner": generation.owner},
-                         handle_generation_success, handle_generation_failure)
+        pool.apply_async(
+            _mp_gen_game,
+            (options,),
+            {
+                "meta": meta,
+                "sid": generation.id,
+                "owner": generation.owner,
+                "timeout": timeout,
+            },
+            handle_generation_success,
+            handle_generation_failure,
+        )
     except Exception as e:
         generation.state = STATE_ERROR
         commit()
@@ -53,18 +77,41 @@ def launch_generator(pool: multiprocessing.pool.Pool, generation: Generation):
         generation.state = STATE_STARTED
 
 
-def init_db(pony_config: dict):
+def init_generator(config: dict[str, Any]) -> None:
+    from setproctitle import setproctitle
+
+    setproctitle("Generator (idle)")
+
+    try:
+        import resource
+    except ModuleNotFoundError:
+        pass  # unix only module
+    else:
+        # set soft limit for memory to from config (default 4GiB)
+        soft_limit = config["GENERATOR_MEMORY_LIMIT"]
+        old_limit, hard_limit = resource.getrlimit(resource.RLIMIT_AS)
+        if soft_limit != old_limit:
+            resource.setrlimit(resource.RLIMIT_AS, (soft_limit, hard_limit))
+            logging.debug(f"Changed AS mem limit {old_limit} -> {soft_limit}")
+        del resource, soft_limit, hard_limit
+
+    pony_config = config["PONY"]
     db.bind(**pony_config)
     db.generate_mapping()
 
 
-def cleanup():
-    """delete unowned user-content"""
+def cleanup(config: dict[str, Any]):
+    """delete unowned or old user-content"""
+    auto_delete: int = config.get("ROOM_AUTO_DELETE", 0)
     with db_session:
         # >>> bool(uuid.UUID(int=0))
         # True
         rooms = Room.select(lambda room: room.owner == UUID(int=0)).delete(bulk=True)
         seeds = Seed.select(lambda seed: seed.owner == UUID(int=0) and not seed.rooms).delete(bulk=True)
+        if auto_delete > 0:
+            cutoff = utcnow() - timedelta(days=auto_delete)
+            rooms += Room.select(lambda room: room.last_activity < cutoff).delete(bulk=True)
+            seeds += Seed.select(lambda seed: not seed.rooms and seed.creation_time < cutoff).delete(bulk=True)
         slots = Slot.select(lambda slot: not slot.seed).delete(bulk=True)
         # Command gets deleted by ponyorm Cascade Delete, as Room is Required
     if rooms or seeds or slots:
@@ -76,7 +123,7 @@ def autohost(config: dict):
         stop_event = _stop_event
         try:
             with Locker("autohost"):
-                cleanup()
+                cleanup(config)
                 hosters = []
                 for x in range(config["HOSTERS"]):
                     hoster = MultiworldInstance(config, x)
@@ -87,10 +134,11 @@ def autohost(config: dict):
                     with db_session:
                         rooms = select(
                             room for room in Room if
-                            room.last_activity >= datetime.utcnow() - timedelta(days=3))
+                            room.last_activity >= utcnow() - timedelta(
+                                seconds=config["MAX_ROOM_TIMEOUT"])).order_by(desc(Room.last_port))
                         for room in rooms:
                             # we have to filter twice, as the per-room timeout can't currently be PonyORM transpiled.
-                            if room.last_activity >= datetime.utcnow() - timedelta(seconds=room.timeout + 5):
+                            if room.last_activity >= utcnow() - timedelta(seconds=room.timeout + 5):
                                 hosters[room.id.int % len(hosters)].start_room(room.id)
 
         except AlreadyRunningException:
@@ -105,8 +153,9 @@ def autogen(config: dict):
         try:
             with Locker("autogen"):
 
-                with multiprocessing.Pool(config["GENERATORS"], initializer=init_db,
-                                          initargs=(config["PONY"],), maxtasksperchild=10) as generator_pool:
+                with multiprocessing.Pool(config["GENERATORS"], initializer=init_generator,
+                                          initargs=(config,), maxtasksperchild=10) as generator_pool:
+                    job_time = config["JOB_TIME"]
                     with db_session:
                         to_start = select(generation for generation in Generation if generation.state == STATE_STARTED)
 
@@ -117,7 +166,7 @@ def autogen(config: dict):
                                 if sid:
                                     generation.delete()
                                 else:
-                                    launch_generator(generator_pool, generation)
+                                    launch_generator(generator_pool, generation, timeout=job_time)
 
                             commit()
                         select(generation for generation in Generation if generation.state == STATE_ERROR).delete()
@@ -129,14 +178,11 @@ def autogen(config: dict):
                                 generation for generation in Generation
                                 if generation.state == STATE_QUEUED).for_update()
                             for generation in to_start:
-                                launch_generator(generator_pool, generation)
+                                launch_generator(generator_pool, generation, timeout=job_time)
         except AlreadyRunningException:
             logging.info("Autogen reports as already running, not starting another.")
 
     Thread(target=keep_running, name="AP_Autogen").start()
-
-
-multiworlds: typing.Dict[type(Room.id), MultiworldInstance] = {}
 
 
 class MultiworldInstance():
@@ -147,6 +193,7 @@ class MultiworldInstance():
         self.cert = config["SELFLAUNCHCERT"]
         self.key = config["SELFLAUNCHKEY"]
         self.host = config["HOST_ADDRESS"]
+        self.game_ports = config["GAME_PORTS"]
         self.rooms_to_start = multiprocessing.Queue()
         self.rooms_shutting_down = multiprocessing.Queue()
         self.name = f"MultiHoster{id}"
@@ -157,7 +204,7 @@ class MultiworldInstance():
 
         process = multiprocessing.Process(group=None, target=run_server_process,
                                           args=(self.name, self.ponyconfig, get_static_server_data(),
-                                                self.cert, self.key, self.host,
+                                                self.cert, self.key, self.host, self.game_ports,
                                                 self.rooms_to_start, self.rooms_shutting_down),
                                           name=self.name)
         process.start()

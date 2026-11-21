@@ -170,6 +170,8 @@ def process_pokemon_locations(self):
     encounter_slots = encounter_slots_master.copy()
 
     zone_mapping = {}
+    zone_placed_mons = {}
+    
     if self.options.randomize_wild_pokemon:
         mons_list = [pokemon for pokemon in poke_data.pokemon_data.keys() if pokemon not in poke_data.legendary_pokemon
                      or self.options.randomize_legendary_pokemon.value == 3]
@@ -180,11 +182,13 @@ def process_pokemon_locations(self):
             zone = " - ".join(location.name.split(" - ")[:-1])
             if zone not in zone_mapping:
                 zone_mapping[zone] = {}
+            if zone not in zone_placed_mons:
+                zone_placed_mons[zone] = []
             original_mon = slot.original_item
             if self.options.area_1_to_1_mapping and original_mon in zone_mapping[zone]:
                 mon = zone_mapping[zone][original_mon]
             else:
-                mon = randomize_pokemon(self, original_mon, mons_list,
+                mon = randomize_pokemon(self, original_mon, [m for m in mons_list if m not in zone_placed_mons[zone]],
                                         self.options.randomize_wild_pokemon.value, self.random)
             #
             while ("Pokemon Tower 6F" in slot.name and
@@ -201,6 +205,7 @@ def process_pokemon_locations(self):
             location.item.location = location
             locations.append(location)
             zone_mapping[zone][original_mon] = mon
+            zone_placed_mons[zone].append(mon)
 
         mons_to_add = []
         remaining_pokemon = [pokemon for pokemon in poke_data.pokemon_data.keys() if placed_mons[pokemon] == 0 and

@@ -19,7 +19,7 @@ class WitnessPlayerLocations:
     def __init__(self, world: "WitnessWorld", player_logic: WitnessPlayerLogic) -> None:
         """Defines locations AFTER logic changes due to options"""
 
-        self.PANEL_TYPES_TO_SHUFFLE = {"General", "Good Boi"}
+        self.PANEL_TYPES_TO_SHUFFLE = {"General", "Good Boi", "Easter Egg Total"}
         self.CHECK_LOCATIONS = static_witness_locations.GENERAL_LOCATIONS.copy()
 
         if world.options.shuffle_discarded_panels:
@@ -72,5 +72,5 @@ class WitnessPlayerLocations:
 
     def add_location_late(self, entity_name: str) -> None:
         entity_hex = static_witness_logic.ENTITIES_BY_NAME[entity_name]["entity_hex"]
-        self.CHECK_LOCATION_TABLE[entity_hex] = static_witness_locations.get_id(entity_hex)
+        self.CHECK_LOCATION_TABLE[entity_name] = static_witness_locations.get_id(entity_hex)
         self.CHECK_PANELHEX_TO_ID[entity_hex] = static_witness_locations.get_id(entity_hex)

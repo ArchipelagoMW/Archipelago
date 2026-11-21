@@ -1,12 +1,12 @@
 from BaseClasses import MultiWorld, Region, Entrance, LocationProgressType
 from Options import PerGameCommonOptions
-from .Locations import location_table, LocationData, AdventureLocation, dragon_room_to_region
+from .Locations import location_table, AdventureLocation, dragon_room_to_region
 
 
-def connect(world: MultiWorld, player: int, source: str, target: str, rule: callable = lambda state: True,
+def connect(multiworld: MultiWorld, player: int, source: str, target: str, rule: callable = lambda state: True,
             one_way=False, name=None):
-    source_region = world.get_region(source, player)
-    target_region = world.get_region(target, player)
+    source_region = multiworld.get_region(source, player)
+    target_region = multiworld.get_region(target, player)
 
     if name is None:
         name = source + " to " + target
@@ -22,7 +22,7 @@ def connect(world: MultiWorld, player: int, source: str, target: str, rule: call
     source_region.exits.append(connection)
     connection.connect(target_region)
     if not one_way:
-        connect(world, player, target, source, rule, True)
+        connect(multiworld, player, target, source, rule, True)
 
 
 def create_regions(options: PerGameCommonOptions, multiworld: MultiWorld, player: int, dragon_rooms: []) -> None:
@@ -76,10 +76,9 @@ def create_regions(options: PerGameCommonOptions, multiworld: MultiWorld, player
     multiworld.regions.append(credits_room_far_side)
 
     dragon_slay_check = options.dragon_slay_check.value
-    priority_locations = determine_priority_locations(multiworld, dragon_slay_check)
+    priority_locations = determine_priority_locations()
 
     for name, location_data in location_table.items():
-        require_sword = False
         if location_data.region == "Varies":
             if location_data.name == "Slay Yorgle":
                 if not dragon_slay_check:
@@ -154,6 +153,7 @@ def create_regions(options: PerGameCommonOptions, multiworld: MultiWorld, player
 
 
 # Placeholder for adding sets of priority locations at generation, possibly as an option in the future
-def determine_priority_locations(world: MultiWorld, dragon_slay_check: bool) -> {}:
+# def determine_priority_locations(multiworld: MultiWorld, dragon_slay_check: bool) -> {}:
+def determine_priority_locations() -> {}:
     priority_locations = {}
     return priority_locations

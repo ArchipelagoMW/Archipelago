@@ -11,19 +11,18 @@ class BeachSword(DroppedKey):
         super().__init__(0x0F2)
 
     def patch(self, rom: ROM, option: str, *, multiworld: Optional[int] = None) -> None:
-        if option != SWORD or multiworld is not None:
-            # Set the heart piece data
-            super().patch(rom, option, multiworld=multiworld)
+        # Set the heart piece data
+        super().patch(rom, option, multiworld=multiworld)
 
-            # Patch the room to contain a heart piece instead of the sword on the beach
-            re = RoomEditor(rom, 0x0F2)
-            re.removeEntities(0x31)  # remove sword
-            re.addEntity(5, 5, 0x35)  # add heart piece
-            re.store(rom)
+        # Patch the room to contain a heart piece instead of the sword on the beach
+        re = RoomEditor(rom, 0x0F2)
+        re.removeEntities(0x31)  # remove sword
+        re.addEntity(5, 5, 0x35)  # add heart piece
+        re.store(rom)
 
-            # Prevent shield drops from the like-like from turning into swords.
-            rom.patch(0x03, 0x1B9C, ASM("ld a, [$DB4E]"), ASM("ld a, $01"), fill_nop=True)
-            rom.patch(0x03, 0x244D, ASM("ld a, [$DB4E]"), ASM("ld a, $01"), fill_nop=True)
+        # Prevent shield drops from the like-like from turning into swords.
+        rom.patch(0x03, 0x1B9C, ASM("ld a, [$DB4E]"), ASM("ld a, $01"), fill_nop=True)
+        rom.patch(0x03, 0x244D, ASM("ld a, [$DB4E]"), ASM("ld a, $01"), fill_nop=True)
 
     def read(self, rom: ROM) -> str:
         re = RoomEditor(rom, 0x0F2)

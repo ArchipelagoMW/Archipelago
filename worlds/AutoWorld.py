@@ -5,24 +5,32 @@ import logging
 import pathlib
 import sys
 import time
+from collections.abc import Callable, Iterable, Mapping
 from random import Random
-from dataclasses import make_dataclass
-from typing import (Any, Callable, ClassVar, Dict, FrozenSet, List, Mapping, Optional, Set, TextIO, Tuple,
+from typing import (Any, ClassVar, Dict, FrozenSet, List, Optional, Self, Set, TextIO, Tuple,
                     TYPE_CHECKING, Type, Union)
 
 from Options import item_and_loc_options, ItemsAccessibility, OptionGroup, PerGameCommonOptions
-from BaseClasses import CollectionState
+from BaseClasses import CollectionState, Entrance
+from rule_builder.rules import CustomRuleRegister, Rule
+from Utils import Version
 
 if TYPE_CHECKING:
-    from BaseClasses import MultiWorld, Item, Location, Tutorial, Region, Entrance
-    from . import GamesPackage
+    from BaseClasses import CollectionRule, Item, Location, MultiWorld, Region, Tutorial
+    from NetUtils import GamesPackage, MultiData
     from settings import Group
 
 perf_logger = logging.getLogger("performance")
 
 
+class InvalidItemError(KeyError):
+    pass
+
+
 class AutoWorldRegister(type):
-    world_types: Dict[str, Type[World]] = {}
+    world_types: dict[str, Type[World]] = {}
+    testable_worlds: dict[str, Type[World]] = world_types
+    """worlds under test; scoped to AP_TEST_WORLDS by worlds/__init__"""
     __file__: str
     zip_path: Optional[str]
     settings_key: str
@@ -33,33 +41,40 @@ class AutoWorldRegister(type):
         # lazy loading + caching to minimize runtime cost
         if cls.__settings is None:
             from settings import get_settings
-            cls.__settings = get_settings()[cls.settings_key]
+            try:
+                cls.__settings = get_settings()[cls.settings_key]
+            except AttributeError:
+                return None
         return cls.__settings
 
     def __new__(mcs, name: str, bases: Tuple[type, ...], dct: Dict[str, Any]) -> AutoWorldRegister:
         if "web" in dct:
             assert isinstance(dct["web"], WebWorld), "WebWorld has to be instantiated."
-        # filter out any events
-        dct["item_name_to_id"] = {name: id for name, id in dct["item_name_to_id"].items() if id}
-        dct["location_name_to_id"] = {name: id for name, id in dct["location_name_to_id"].items() if id}
-        # build reverse lookups
-        dct["item_id_to_name"] = {code: name for name, code in dct["item_name_to_id"].items()}
-        dct["location_id_to_name"] = {code: name for name, code in dct["location_name_to_id"].items()}
 
-        # build rest
-        dct["item_names"] = frozenset(dct["item_name_to_id"])
-        dct["item_name_groups"] = {group_name: frozenset(group_set) for group_name, group_set
-                                   in dct.get("item_name_groups", {}).items()}
-        dct["item_name_groups"]["Everything"] = dct["item_names"]
-
-        dct["location_names"] = frozenset(dct["location_name_to_id"])
-        dct["location_name_groups"] = {group_name: frozenset(group_set) for group_name, group_set
-                                       in dct.get("location_name_groups", {}).items()}
-        dct["location_name_groups"]["Everywhere"] = dct["location_names"]
-        dct["all_item_and_group_names"] = frozenset(dct["item_names"] | set(dct.get("item_name_groups", {})))
-
-        # move away from get_required_client_version function
         if "game" in dct:
+            assert "item_name_to_id" in dct, f"{name}: item_name_to_id is required"
+            assert "location_name_to_id" in dct, f"{name}: location_name_to_id is required"
+
+            # filter out any events
+            dct["item_name_to_id"] = {name: id for name, id in dct["item_name_to_id"].items() if id}
+            dct["location_name_to_id"] = {name: id for name, id in dct["location_name_to_id"].items() if id}
+            # build reverse lookups
+            dct["item_id_to_name"] = {code: name for name, code in dct["item_name_to_id"].items()}
+            dct["location_id_to_name"] = {code: name for name, code in dct["location_name_to_id"].items()}
+
+            # build rest
+            dct["item_names"] = frozenset(dct["item_name_to_id"])
+            dct["item_name_groups"] = {group_name: frozenset(group_set) for group_name, group_set
+                                    in dct.get("item_name_groups", {}).items()}
+            dct["item_name_groups"]["Everything"] = dct["item_names"]
+
+            dct["location_names"] = frozenset(dct["location_name_to_id"])
+            dct["location_name_groups"] = {group_name: frozenset(group_set) for group_name, group_set
+                                        in dct.get("location_name_groups", {}).items()}
+            dct["location_name_groups"]["Everywhere"] = dct["location_names"]
+            dct["all_item_and_group_names"] = frozenset(dct["item_names"] | set(dct.get("item_name_groups", {})))
+
+            # move away from get_required_client_version function
             assert "get_required_client_version" not in dct, f"{name}: required_client_version is an attribute now"
         # set minimum required_client_version from bases
         if "required_client_version" in dct and bases:
@@ -67,24 +82,20 @@ class AutoWorldRegister(type):
                 if "required_client_version" in base.__dict__:
                     dct["required_client_version"] = max(dct["required_client_version"],
                                                          base.__dict__["required_client_version"])
-
-        # create missing options_dataclass from legacy option_definitions
-        # TODO - remove this once all worlds use options dataclasses
-        if "options_dataclass" not in dct and "option_definitions" in dct:
-            # TODO - switch to deprecate after a version
-            if __debug__:
-                logging.warning(f"{name} Assigned options through option_definitions which is now deprecated. "
-                                "Please use options_dataclass instead.")
-            dct["options_dataclass"] = make_dataclass(f"{name}Options", dct["option_definitions"].items(),
-                                                      bases=(PerGameCommonOptions,))
+        if "world_version" in dct:
+            if dct["world_version"] != Version(0, 0, 0):
+                raise RuntimeError(f"{name} is attempting to set 'world_version' from within the class. world_version "
+                                   f"can only be set from manifest.")
 
         # construct class
         new_class = super().__new__(mcs, name, bases, dct)
+        new_class.__file__ = sys.modules[new_class.__module__].__file__
         if "game" in dct:
             if dct["game"] in AutoWorldRegister.world_types:
-                raise RuntimeError(f"""Game {dct["game"]} already registered.""")
+                raise RuntimeError(f"""Game {dct["game"]} already registered in 
+                {AutoWorldRegister.world_types[dct["game"]].__file__} when attempting to register from
+                {new_class.__file__}.""")
             AutoWorldRegister.world_types[dct["game"]] = new_class
-        new_class.__file__ = sys.modules[new_class.__module__].__file__
         if ".apworld" in new_class.__file__:
             new_class.zip_path = pathlib.Path(new_class.__file__).parents[1]
         if "settings_key" not in dct:
@@ -107,6 +118,16 @@ class AutoLogicRegister(type):
             elif not item_name.startswith("__"):
                 if hasattr(CollectionState, item_name):
                     raise Exception(f"Name conflict on Logic Mixin {name} trying to overwrite {item_name}")
+
+                assert callable(function) or "init_mixin" in dct, (
+                    f"{name} defined class variable {item_name} without also having init_mixin.\n\n"
+                    "Explanation:\n"
+                    "Class variables that will be mutated need to be inintialized as instance variables in init_mixin.\n"
+                    "If your LogicMixin variables aren't actually mutable / you don't intend to mutate them, "
+                    "there is no point in using LogixMixin.\n"
+                    "LogicMixin exists to track custom state variables that change when items are collected/removed."
+                )
+
                 setattr(CollectionState, item_name, function)
         return new_class
 
@@ -159,7 +180,8 @@ def _timed_call(method: Callable[..., Any], *args: Any,
 
 
 def call_single(multiworld: "MultiWorld", method_name: str, player: int, *args: Any) -> Any:
-    method = getattr(multiworld.worlds[player], method_name)
+    world = multiworld.worlds[player]
+    method = getattr(world, method_name)
     try:
         ret = _timed_call(method, *args, multiworld=multiworld, player=player)
     except Exception as e:
@@ -170,6 +192,10 @@ def call_single(multiworld: "MultiWorld", method_name: str, player: int, *args: 
             logging.error(message)
         raise e
     else:
+        # Convenience for CachedRuleBuilderWorld users: Ensure that caching setup function is called
+        # Can be removed once dependency system is improved
+        if method_name == "set_rules" and hasattr(world, "register_rule_builder_dependencies"):
+            call_single(multiworld, "register_rule_builder_dependencies", player)
         return ret
 
 
@@ -210,7 +236,7 @@ class WebWorld(metaclass=WebWorldRegister):
     tutorials: List["Tutorial"]
     """docs folder will also be scanned for tutorial guides. Each Tutorial class is to be used for one guide."""
 
-    theme = "grass"
+    theme: str = "grass"
     """Choose a theme for you /game/* pages.
     Available: dirt, grass, grassFlowers, ice, jungle, ocean, partyTime, stone"""
 
@@ -327,17 +353,20 @@ class World(metaclass=AutoWorldRegister):
     """If loaded from a .apworld, this is the Path to it."""
     __file__: ClassVar[str]
     """path it was loaded from"""
+    world_version: ClassVar[Version] = Version(0, 0, 0)
+    """Optional world version loaded from archipelago.json"""
+    manifest: ClassVar[dict[str, Any]] = {}
+    """Mapping of the world's archipelago.json manifest. Use game and world_version attrs instead for those values."""
 
     def __init__(self, multiworld: "MultiWorld", player: int):
         assert multiworld is not None
         self.multiworld = multiworld
         self.player = player
         self.random = Random(multiworld.random.getrandbits(64))
-        multiworld.per_slot_randoms[player] = self.random
 
     def __getattr__(self, item: str) -> Any:
         if item == "settings":
-            return self.__class__.settings
+            return getattr(self.__class__, item)
         raise AttributeError
 
     # overridable methods that get called by Main.py, sorted by execution order
@@ -367,12 +396,16 @@ class World(metaclass=AutoWorldRegister):
     def create_items(self) -> None:
         """
         Method for creating and submitting items to the itempool. Items and Regions must *not* be created and submitted
-        to the MultiWorld after this step. If items need to be placed during pre_fill use `get_prefill_items`.
+        to the MultiWorld after this step. If items need to be placed during pre_fill use `get_pre_fill_items`.
         """
         pass
 
     def set_rules(self) -> None:
         """Method for setting the rules on the World's regions and locations."""
+        pass
+
+    def connect_entrances(self) -> None:
+        """Method to finalize the source and target regions of the World's entrances"""
         pass
 
     def generate_basic(self) -> None:
@@ -399,6 +432,23 @@ class World(metaclass=AutoWorldRegister):
         Optional Method that is called after regular fill. Can be used to do adjustments before output generation.
         This happens before progression balancing, so the items may not be in their final locations yet.
         """
+
+    def finalize_multiworld(self) -> None:
+        """
+        Optional Method that is called after fill and progression balancing.
+        This is the last stage of generation where worlds may change logically relevant data,
+        such as item placements and connections. To not break assumptions,
+        only ever increase accessibility, never decrease it.
+        """
+        pass
+
+    def pre_output(self):
+        """
+        Optional method that is called before output generation.
+        Items and connections are not meant to be moved anymore,
+        anything that would affect logical spheres is forbidden at this point.
+        """
+        pass
 
     def generate_output(self, output_directory: str) -> None:
         """
@@ -431,7 +481,7 @@ class World(metaclass=AutoWorldRegister):
         """
         pass
 
-    def modify_multidata(self, multidata: Dict[str, Any]) -> None:  # TODO: TypedDict for multidata?
+    def modify_multidata(self, multidata: "MultiData") -> None:
         """For deeper modification of server multidata."""
         pass
 
@@ -464,9 +514,18 @@ class World(metaclass=AutoWorldRegister):
         raise NotImplementedError
 
     def get_filler_item_name(self) -> str:
-        """Called when the item pool needs to be filled with additional items to match location count."""
+        """
+        If core AP removes an item from your item pool, this method is called to choose a replacement item
+        so item count and location count remain equal.
+        For example: plando, item_links and start_inventory_from_pool are features that may cause this.
+
+        Any returned item name must be for a "repeatable" item, i.e. one that it's okay to generate arbitrarily many of.
+        For most worlds this will be one or more of your filler items, but the classification of these items
+        does not need to be ItemClassification.filler.
+        The item name returned can be for a trap, useful, and/or progression item as long as it's repeatable.
+        """
         logging.warning(f"World {self} is generating a filler item without custom filler pool.")
-        return self.multiworld.random.choice(tuple(self.item_name_to_id.keys()))
+        return self.random.choice(tuple(self.item_name_to_id.keys()))
 
     @classmethod
     def create_group(cls, multiworld: "MultiWorld", new_player_id: int, players: Set[int]) -> World:
@@ -474,9 +533,6 @@ class World(metaclass=AutoWorldRegister):
         Creates a group, which is an instance of World that is responsible for multiple others.
         An example case is ItemLinks creating these.
         """
-        # TODO remove loop when worlds use options dataclass
-        for option_key, option in cls.options_dataclass.type_hints.items():
-            getattr(multiworld, option_key)[new_player_id] = option.from_any(option.default)
         group = cls(multiworld, new_player_id)
         group.options = cls.options_dataclass(**{option_key: option.from_any(option.default)
                                                  for option_key, option in cls.options_dataclass.type_hints.items()})
@@ -509,7 +565,7 @@ class World(metaclass=AutoWorldRegister):
         """Called when an item is collected in to state. Useful for things such as progressive items or currency."""
         name = self.collect_item(state, item)
         if name:
-            state.prog_items[self.player][name] += 1
+            state.add_item(name, self.player)
             return True
         return False
 
@@ -517,11 +573,13 @@ class World(metaclass=AutoWorldRegister):
         """Called when an item is removed from to state. Useful for things such as progressive items or currency."""
         name = self.collect_item(state, item, True)
         if name:
-            state.prog_items[self.player][name] -= 1
-            if state.prog_items[self.player][name] < 1:
-                del (state.prog_items[self.player][name])
+            state.remove_item(name, self.player)
             return True
         return False
+
+    def reached_region(self, state: "CollectionState", region: "Region") -> None:
+        """Called when a region is newly reachable by the state."""
+        pass
 
     # following methods should not need to be overridden.
     def create_filler(self) -> "Item":
@@ -531,11 +589,23 @@ class World(metaclass=AutoWorldRegister):
     def get_location(self, location_name: str) -> "Location":
         return self.multiworld.get_location(location_name, self.player)
 
+    def get_locations(self) -> "Iterable[Location]":
+        return self.multiworld.get_locations(self.player)
+
     def get_entrance(self, entrance_name: str) -> "Entrance":
         return self.multiworld.get_entrance(entrance_name, self.player)
 
+    def get_entrances(self) -> "Iterable[Entrance]":
+        return self.multiworld.get_entrances(self.player)
+
     def get_region(self, region_name: str) -> "Region":
         return self.multiworld.get_region(region_name, self.player)
+
+    def get_regions(self) -> "Iterable[Region]":
+        return self.multiworld.get_regions(self.player)
+
+    def push_precollected(self, item: Item) -> None:
+        self.multiworld.push_precollected(item)
 
     @property
     def player_name(self) -> str:
@@ -558,6 +628,64 @@ class World(metaclass=AutoWorldRegister):
         }
         res["checksum"] = data_package_checksum(res)
         return res
+
+    @classmethod
+    def get_rule_cls(cls, name: str) -> type[Rule[Self]]:
+        """Returns the world-registered or default rule with the given name"""
+        return CustomRuleRegister.get_rule_cls(cls.game, name)
+
+    @classmethod
+    def rule_from_dict(cls, data: Mapping[str, Any]) -> Rule[Self]:
+        """Create a rule instance from a serialized dict representation"""
+        name = data.get("rule", "")
+        rule_class = cls.get_rule_cls(name)
+        return rule_class.from_dict(data, cls)
+
+    def set_rule(self, spot: Location | Entrance, rule: CollectionRule | Rule[Any]) -> None:
+        """Sets an access rule for a location or entrance"""
+        if isinstance(rule, Rule):
+            rule = rule.resolve(self)
+            self.register_rule_dependencies(rule)
+            if isinstance(spot, Entrance):
+                self._register_rule_indirects(rule, spot)
+        spot.access_rule = rule
+
+    def set_completion_rule(self, rule: CollectionRule | Rule[Any]) -> None:
+        """Set the completion rule for this world"""
+        if isinstance(rule, Rule):
+            rule = rule.resolve(self)
+            self.register_rule_dependencies(rule)
+        self.multiworld.completion_condition[self.player] = rule
+
+    def create_entrance(
+        self,
+        from_region: Region,
+        to_region: Region,
+        rule: CollectionRule | Rule[Any] | None = None,
+        name: str | None = None,
+        force_creation: bool = False,
+    ) -> Entrance | None:
+        """Try to create an entrance between regions with the given rule,
+        skipping it if the rule resolves to False (unless force_creation is True)"""
+        if rule is not None and isinstance(rule, Rule):
+            rule = rule.resolve(self)
+            if rule.always_false and not force_creation:
+                return None
+            self.register_rule_dependencies(rule)
+
+        entrance = from_region.connect(to_region, name, rule=rule)
+        if rule and isinstance(rule, Rule.Resolved):
+            self._register_rule_indirects(rule, entrance)
+        return entrance
+
+    def register_rule_dependencies(self, resolved_rule: Rule.Resolved) -> None:
+        """Hook for registering dependencies when a rule is assigned for this world"""
+        pass
+
+    def _register_rule_indirects(self, resolved_rule: Rule.Resolved, entrance: Entrance) -> None:
+        if self.explicit_indirect_conditions:
+            for indirect_region in resolved_rule.region_dependencies().keys():
+                self.multiworld.register_indirect_condition(self.get_region(indirect_region), entrance)
 
 
 # any methods attached to this can be used as part of CollectionState,

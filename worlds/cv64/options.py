@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from Options import (OptionGroup, Choice, DefaultOnToggle, ItemsAccessibility, PerGameCommonOptions, Range, Toggle,
-                     StartInventoryPool)
+                     StartInventoryPool, DeathLink)
 
 
 class CharacterStages(Choice):
@@ -424,6 +424,7 @@ class PantherDash(Choice):
 class IncreaseShimmySpeed(Toggle):
     """
     Increases the speed at which characters shimmy left and right while hanging on ledges.
+    Hold Z to use the regular speed in case it's needed to do something.
     """
     display_name = "Increase Shimmy Speed"
 
@@ -506,12 +507,11 @@ class WindowColorA(Range):
     default = 8
 
 
-class DeathLink(Choice):
-    """
-    When you die, everyone dies. Of course the reverse is true too.
-    Explosive: Makes received DeathLinks kill you via the Magical Nitro explosion instead of the normal death animation.
-    """
-    display_name = "DeathLink"
+class CV64DeathLink(Choice):
+    __doc__ = (DeathLink.__doc__ + "\n\n    Explosive: Makes received death links kill you via the Magical Nitro " +
+               "explosion instead of the normal death animation.")
+
+    display_name = "Death Link"
     option_off = 0
     alias_no = 0
     alias_true = 1
@@ -574,7 +574,7 @@ class CV64Options(PerGameCommonOptions):
     map_lighting: MapLighting
     fall_guard: FallGuard
     cinematic_experience: CinematicExperience
-    death_link: DeathLink
+    death_link: CV64DeathLink
 
 
 cv64_option_groups = [
@@ -583,7 +583,7 @@ cv64_option_groups = [
         RenonFightCondition, VincentFightCondition, BadEndingCondition, IncreaseItemLimit, NerfHealingItems,
         LoadingZoneHeals, InvisibleItems, DropPreviousSubWeapon, PermanentPowerUps, IceTrapPercentage,
         IceTrapAppearance, DisableTimeRestrictions, SkipGondolas, SkipWaterwayBlocks, Countdown, BigToss, PantherDash,
-        IncreaseShimmySpeed, FallGuard, DeathLink
+        IncreaseShimmySpeed, FallGuard, CV64DeathLink
     ]),
     OptionGroup("cosmetics", [
         WindowColorR, WindowColorG, WindowColorB, WindowColorA, BackgroundMusic, MapLighting, CinematicExperience

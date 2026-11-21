@@ -69,6 +69,14 @@ cdef struct IndexEntry:
     size_t count
 
 
+if TYPE_CHECKING:
+    State = Dict[Tuple[int, int], Set[int]]
+else:
+    State = Union[Tuple[int, int], Set[int], defaultdict]
+
+T = TypeVar('T')
+
+
 @cython.auto_pickle(False)
 cdef class LocationStore:
     """Compact store for locations and their items in a MultiServer"""
@@ -137,15 +145,23 @@ cdef class LocationStore:
             warnings.warn("Game has no locations")
 
         # allocate the arrays and invalidate index (0xff...)
-        self.entries = <LocationEntry*>self._mem.alloc(count, sizeof(LocationEntry))
+        if count:
+            # leaving entries as NULL if there are none, makes potential memory errors more visible
+            self.entries = <LocationEntry*>self._mem.alloc(count, sizeof(LocationEntry))
         self.sender_index = <IndexEntry*>self._mem.alloc(max_sender + 1, sizeof(IndexEntry))
         self._raw_proxies = <PyObject**>self._mem.alloc(max_sender + 1, sizeof(PyObject*))
+
+        assert (not self.entries) == (not count)
+        assert self.sender_index
+        assert self._raw_proxies
 
         # build entries and index
         cdef size_t i = 0
         for sender, locations in sorted(locations_dict.items()):
             self.sender_index[sender].start = i
             self.sender_index[sender].count = 0
+            if not count:
+                continue  # scan-build doesn't see that the following loop can never be entered if count is 0
             # Sorting locations here makes it possible to write a faster lookup without an additional index.
             for location, data in sorted(locations.items()):
                 self.entries[i].sender = sender
@@ -189,8 +205,6 @@ cdef class LocationStore:
         if i < 1 or i >= self.sender_index_size:
             raise KeyError(key)
         return <object>self._raw_proxies[key]
-
-    T = TypeVar('T')
 
     def get(self, key: int, default: T) -> Union[PlayerLocationProxy, T]:
         # calling into self.__getitem__ here is slow, but this is not used in MultiServer
@@ -246,12 +260,11 @@ cdef class LocationStore:
                         all_locations[sender].add(entry.location)
         return all_locations
 
-    if TYPE_CHECKING:
-        State = Dict[Tuple[int, int], Set[int]]
-    else:
-        State = Union[Tuple[int, int], Set[int], defaultdict]
-
     def get_checked(self, state: State, team: int, slot: int) -> List[int]:
+        cdef ap_player_t sender = slot
+        if sender < 0 or sender >= self.sender_index_size:
+            raise KeyError(slot)
+
         # This used to validate checks actually exist. A remnant from the past.
         # If the order of locations becomes relevant at some point, we could not do sorted(set), so leaving it.
         cdef set checked = state[team, slot]
@@ -263,7 +276,6 @@ cdef class LocationStore:
 
         # Unless the set is close to empty, it's cheaper to use the python set directly, so we do that.
         cdef LocationEntry* entry
-        cdef ap_player_t sender = slot
         cdef size_t start = self.sender_index[sender].start
         cdef size_t count = self.sender_index[sender].count
         return [entry.location for
@@ -273,9 +285,11 @@ cdef class LocationStore:
     def get_missing(self, state: State, team: int, slot: int) -> List[int]:
         cdef LocationEntry* entry
         cdef ap_player_t sender = slot
+        if sender < 0 or sender >= self.sender_index_size:
+            raise KeyError(slot)
+        cdef set checked = state[team, slot]
         cdef size_t start = self.sender_index[sender].start
         cdef size_t count = self.sender_index[sender].count
-        cdef set checked = state[team, slot]
         if not len(checked):
             # Skip `in` if none have been checked.
             # This optimizes the case where everyone connects to a fresh game at the same time.
@@ -290,9 +304,11 @@ cdef class LocationStore:
     def get_remaining(self, state: State, team: int, slot: int) -> List[Tuple[int, int]]:
         cdef LocationEntry* entry
         cdef ap_player_t sender = slot
+        if sender < 0 or sender >= self.sender_index_size:
+            raise KeyError(slot)
+        cdef set checked = state[team, slot]
         cdef size_t start = self.sender_index[sender].start
         cdef size_t count = self.sender_index[sender].count
-        cdef set checked = state[team, slot]
         return sorted([(entry.receiver, entry.item) for
                         entry in self.entries[start:start+count] if
                         entry.location not in checked])
@@ -328,7 +344,8 @@ cdef class PlayerLocationProxy:
         cdef LocationEntry* entry = NULL
         # binary search
         cdef size_t l = self._store.sender_index[self._player].start
-        cdef size_t r = l + self._store.sender_index[self._player].count
+        cdef size_t e = l + self._store.sender_index[self._player].count
+        cdef size_t r = e
         cdef size_t m
         while l < r:
             m = (l + r) // 2
@@ -337,7 +354,7 @@ cdef class PlayerLocationProxy:
                 l = m + 1
             else:
                 r = m
-        if entry:  # count != 0
+        if l < e:
             entry = self._store.entries + l
             if entry.location == loc:
                 return entry
@@ -348,8 +365,6 @@ cdef class PlayerLocationProxy:
         if entry:
             return entry.item, entry.receiver, entry.flags
         raise KeyError(f"No location {key} for player {self._player}")
-
-    T = TypeVar('T')
 
     def get(self, key: int, default: T) -> Union[Tuple[int, int, int], T]:
         cdef LocationEntry* entry = self._get(key)
@@ -363,3 +378,27 @@ cdef class PlayerLocationProxy:
         count = self._store.sender_index[self._player].count
         for entry in self._store.entries[start:start+count]:
             yield entry.location, (entry.item, entry.receiver, entry.flags)
+
+
+cpdef void check_json_depth(s: str, limit: int = 16):
+    cdef Py_ssize_t depth = 1
+    cdef bool in_quotes = False
+    cdef bool escape = False
+    for c in s:
+        if c == "\\" and not escape:
+            escape = True
+            continue
+        if c == '"' and not escape:
+            in_quotes = not in_quotes
+            continue
+        if not in_quotes:
+            if c in "[{":
+                depth += 1
+                if depth > limit:
+                    raise ValueError("JSON document too complex")
+            elif c in "}]":
+                depth -= 1
+        escape = False
+
+    if depth != 1:  # free check
+        raise ValueError("JSON document malformed")

@@ -3,10 +3,10 @@ import threading
 import json
 
 from Utils import local_path, user_path
-from worlds.alttp.Rom import Sprite
 
 
 def update_sprites_lttp():
+    from worlds.alttp.Rom import Sprite
     from tkinter import Tk
     from LttPAdjuster import get_image_for_sprite
     from LttPAdjuster import BackgroundTaskProgress
@@ -14,7 +14,7 @@ def update_sprites_lttp():
     from LttPAdjuster import update_sprites
 
     # Target directories
-    input_dir = user_path("data", "sprites", "alttpr")
+    input_dir = user_path("data", "sprites", "alttp", "remote")
     output_dir = local_path("WebHostLib", "static", "generated")  # TODO: move to user_path
 
     os.makedirs(os.path.join(output_dir, "sprites"), exist_ok=True)

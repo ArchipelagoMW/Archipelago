@@ -9,7 +9,7 @@
 
 ## Installation Procedures
 
-1. Install Raft. The currently-supported Raft version is Version 1.0: The Final Chapter. Any minor version (such as 1.09) should be compatible.
+1. Install Raft. The currently-supported Raft version is Version 1.0: The Final Chapter. Any minor version (such as 1.09) should be compatible. On Steam, you will need to opt into the `1.09_precrossplayupdate` beta. To do so, right click Raft on Steam, select `Properties`, select `Game Versions & Betas` on the left, and select `1.09_precrossplayupdate`.
 
 2. Install RML.
 
@@ -45,7 +45,8 @@
 ## Multiplayer Raft
 
 You're able to have multiple Raft players on a single Raftipelago world. This will work, with a few notes:
-- Only the player that creates/loads the world can connect to Archipelago (this is the "host" of the Raft world). Other players do not need to connect; everything will be routed through the the host.
+- Every player that joins the Raft world must have the Raftipelago mod loaded.
+- Only the player that creates/loads the world can connect to Archipelago (this is the "host" of the Raft world). Other players do not need to run */connect*; everything will be routed through the the host.
 - Players other than the host will be labeled as a "Raft Player (Steam name)" when using ingame chat, which will be routed through Archipelago chat.
 - Ingame chat will only work when the host is connected to the Archipelago server.
 

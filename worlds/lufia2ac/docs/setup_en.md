@@ -56,7 +56,6 @@ If you would like to validate your config file to make sure it works, you may do
 4. You will be presented with a server page, from which you can download your patch file.
 5. Double-click on your patch file, and SNIClient will launch automatically, create your ROM from the patch file, and
    open your emulator for you.
-6. Since this is a single-player game, you will no longer need the client, so feel free to close it.
 
 ## Joining a MultiWorld Game
 
@@ -106,9 +105,8 @@ You only have to do these steps once. Note, RetroArch 1.9.x will not work as it 
 1. Enter the RetroArch main menu screen.
 2. Go to Settings --> User Interface. Set "Show Advanced Settings" to ON.
 3. Go to Settings --> Network. Set "Network Commands" to ON. (It is found below Request Device 16.) Leave the default
-   Network Command Port at 55355.
-
-![Screenshot of Network Commands setting](/static/generated/docs/A%20Link%20to%20the%20Past/retroarch-network-commands-en.png)
+   Network Command Port at 55355. \
+   ![Screenshot of Network Commands setting](../../generic/docs/retroarch-network-commands-en.png)
 4. Go to Main Menu --> Online Updater --> Core Downloader. Scroll down and select "Nintendo - SNES / SFC (bsnes-mercury
    Performance)".
 

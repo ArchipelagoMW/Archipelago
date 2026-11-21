@@ -53,7 +53,7 @@ class WorldAssertMixin(RuleAssertMixin, TestCase):
 
     def assert_can_reach_everything(self, multiworld: MultiWorld):
         for location in multiworld.get_locations():
-            self.assert_reach_location_true(location, multiworld.state)
+            self.assert_can_reach_location(location, multiworld.state)
 
     def assert_basic_checks(self, multiworld: MultiWorld):
         self.assert_same_number_items_locations(multiworld)

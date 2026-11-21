@@ -21,10 +21,23 @@ class IPS_Patch(object):
     def toDict(self):
         ret = {}
         for record in self.records:
-            if 'rle_count' in record:
-                ret[record['address']] = [int.from_bytes(record['data'],'little')]*record['rle_count']
+            if record['address'] in ret.keys():
+                if 'rle_count' in record:
+                    if len(ret[record['address']]) > record['rle_count']:
+                        ret[record['address']][:record['rle_count']] = [int.from_bytes(record['data'],'little')]*record['rle_count']
+                    else:
+                        ret[record['address']] = [int.from_bytes(record['data'],'little')]*record['rle_count']
+                else:
+                    size = len(record['data'])
+                    if len(ret[record['address']]) > size:
+                        ret[record['address']][:size] = [int(b) for b in record['data']]  
+                    else:
+                        ret[record['address']] = [int(b) for b in record['data']]            
             else:
-                ret[record['address']] = [int(b) for b in record['data']]
+                if 'rle_count' in record:
+                    ret[record['address']] = [int.from_bytes(record['data'],'little')]*record['rle_count']
+                else:
+                    ret[record['address']] = [int(b) for b in record['data']]
         return ret
 
     @staticmethod

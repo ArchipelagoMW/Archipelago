@@ -2,9 +2,9 @@ from math import ceil
 
 from . import MM2TestBase
 from ..options import bosses
+from ..rules import minimum_weakness_requirement
 
 
-# Need to figure out how this test should work
 def validate_wily_5(base: MM2TestBase) -> None:
     world = base.multiworld.worlds[base.player]
     weapon_damage = world.weapon_damage
@@ -67,38 +67,54 @@ def validate_wily_5(base: MM2TestBase) -> None:
                 weapon_weight.pop(wp)
 
 
-class StrictWeaknessTests(MM2TestBase):
+class WeaknessTests(MM2TestBase):
     options = {
-        "strict_weakness": True,
         "yoku_jumps": True,
-        "enable_lasers": True
+        "enable_lasers": True,
     }
-
     def test_that_every_boss_has_a_weakness(self) -> None:
         world = self.multiworld.worlds[self.player]
         weapon_damage = world.weapon_damage
         for boss in range(14):
-            if not any(weapon_damage[weapon][boss] for weapon in range(9)):
+            if not any(weapon_damage[weapon][boss] >= minimum_weakness_requirement[weapon] for weapon in range(9)):
                 self.fail(f"Boss {boss} generated without weakness! Seed: {self.multiworld.seed}")
 
     def test_wily_5(self) -> None:
         validate_wily_5(self)
 
 
-class RandomStrictWeaknessTests(MM2TestBase):
+class StrictWeaknessTests(WeaknessTests):
+    options = {
+        "strict_weakness": True,
+        **WeaknessTests.options
+    }
+
+
+class RandomWeaknessTests(WeaknessTests):
+    options = {
+        "random_weakness": "randomized",
+        **WeaknessTests.options
+    }
+
+
+class ShuffledWeaknessTests(WeaknessTests):
+    options = {
+        "random_weakness": "shuffled",
+        **WeaknessTests.options
+    }
+
+
+class RandomStrictWeaknessTests(WeaknessTests):
     options = {
         "strict_weakness": True,
         "random_weakness": "randomized",
-        "yoku_jumps": True,
-        "enable_lasers": True
+        **WeaknessTests.options
     }
 
-    def test_that_every_boss_has_a_weakness(self) -> None:
-        world = self.multiworld.worlds[self.player]
-        weapon_damage = world.weapon_damage
-        for boss in range(14):
-            if not any(weapon_damage[weapon][boss] for weapon in range(9)):
-                self.fail(f"Boss {boss} generated without weakness! Seed: {self.multiworld.seed}")
 
-    def test_wily_5(self) -> None:
-        validate_wily_5(self)
+class ShuffledStrictWeaknessTests(WeaknessTests):
+    options = {
+        "strict_weakness": True,
+        "random_weakness": "shuffled",
+        **WeaknessTests.options
+    }

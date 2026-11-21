@@ -1,4 +1,4 @@
-import sys, random, time
+import sys, time
 
 from ..utils import log
 from ..logic.logic import Logic
@@ -14,7 +14,7 @@ from ..utils.doorsmanager import DoorsManager
 
 # entry point for rando execution ("randomize" method)
 class RandoExec(object):
-    def __init__(self, seedName, vcr, randoSettings, graphSettings, player):
+    def __init__(self, seedName, vcr, randoSettings, graphSettings, player, random):
         self.errorMsg = ""
         self.seedName = seedName
         self.vcr = vcr
@@ -22,6 +22,7 @@ class RandoExec(object):
         self.graphSettings = graphSettings
         self.log = log.get('RandoExec')
         self.player = player
+        self.random = random
 
     # processes settings to :
     # - create Restrictions and GraphBuilder objects
@@ -31,7 +32,7 @@ class RandoExec(object):
         vcr = VCR(self.seedName, 'rando') if self.vcr == True else None
         self.errorMsg = ""
         split = self.randoSettings.restrictions['MajorMinor']
-        self.graphBuilder = GraphBuilder(self.graphSettings)
+        self.graphBuilder = GraphBuilder(self.graphSettings, self.random)
         container = None
         i = 0
         attempts = 500 if self.graphSettings.areaRando or self.graphSettings.doorsColorsRando or split == 'Scavenger' else 1
@@ -43,10 +44,10 @@ class RandoExec(object):
         while container is None and i < attempts and now <= endDate:
             self.restrictions = Restrictions(self.randoSettings)
             if self.graphSettings.doorsColorsRando == True:
-                DoorsManager.randomize(self.graphSettings.allowGreyDoors, self.player)
+                DoorsManager.randomize(self.graphSettings.allowGreyDoors, self.player, self.random)
             self.areaGraph = self.graphBuilder.createGraph(self.randoSettings.maxDiff)
-            services = RandoServices(self.areaGraph, self.restrictions)
-            setup = RandoSetup(self.graphSettings, Logic.locations[:], services, self.player)
+            services = RandoServices(self.areaGraph, self.restrictions, random=self.random)
+            setup = RandoSetup(self.graphSettings, Logic.locations[:], services, self.player, self.random)
             self.setup = setup
             container = setup.createItemLocContainer(endDate, vcr)
             if container is None:
@@ -78,7 +79,7 @@ class RandoExec(object):
                 n = nMaj
             elif split == 'Chozo':
                 n = nChozo
-            GraphUtils.updateLocClassesStart(startAP.GraphArea, split, possibleMajLocs, preserveMajLocs, n)
+            GraphUtils.updateLocClassesStart(startAP.GraphArea, split, possibleMajLocs, preserveMajLocs, n, self.random)
 
     def postProcessItemLocs(self, itemLocs, hide):
         # hide some items like in dessy's
@@ -89,7 +90,7 @@ class RandoExec(object):
                 if (item.Category != "Nothing"
                     and loc.CanHidden == True
                     and loc.Visibility == 'Visible'):
-                    if bool(random.getrandbits(1)) == True:
+                    if bool(self.random.getrandbits(1)) == True:
                         loc.Visibility = 'Hidden'
         # put nothing in unfilled locations
         filledLocNames = [il.Location.Name for il in itemLocs]

@@ -303,9 +303,6 @@ class KDL3World(World):
 
     def generate_basic(self) -> None:
         self.stage_shuffle_enabled = self.options.stage_shuffle > 0
-        goal = self.options.goal.value
-        goal_location = self.multiworld.get_location(location_name.goals[goal], self.player)
-        goal_location.place_locked_item(KDL3Item("Love-Love Rod", ItemClassification.progression, None, self.player))
         for level in range(1, 6):
             self.multiworld.get_location(f"Level {level} Boss - Defeated", self.player) \
                 .place_locked_item(
@@ -313,7 +310,6 @@ class KDL3World(World):
             self.multiworld.get_location(f"Level {level} Boss - Purified", self.player) \
                 .place_locked_item(
                 KDL3Item(f"Level {level} Boss Purified", ItemClassification.progression, None, self.player))
-        self.multiworld.completion_condition[self.player] = lambda state: state.has("Love-Love Rod", self.player)
         # this can technically be done at any point before generate_output
         if self.options.allow_bb:
             if self.options.allow_bb == self.options.allow_bb.option_enforced:

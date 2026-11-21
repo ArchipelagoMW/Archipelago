@@ -520,34 +520,34 @@ regions:List[RegionDict] = [
      "episode":3,
      "connections":[{"target":"The Chasm (E3M7) Yellow","pro":False}]},
 
-    # D'Sparil'S Keep (E3M8)
-    {"name":"D'Sparil'S Keep (E3M8) Main",
+    # D'Sparil's Keep (E3M8)
+    {"name":"D'Sparil's Keep (E3M8) Main",
      "connects_to_hub":True,
      "episode":3,
      "connections":[]},
 
-    # The Aquifier (E3M9)
-    {"name":"The Aquifier (E3M9) Main",
+    # The Aquifer (E3M9)
+    {"name":"The Aquifer (E3M9) Main",
      "connects_to_hub":True,
      "episode":3,
-     "connections":[{"target":"The Aquifier (E3M9) Yellow","pro":False}]},
-    {"name":"The Aquifier (E3M9) Blue",
+     "connections":[{"target":"The Aquifer (E3M9) Yellow","pro":False}]},
+    {"name":"The Aquifer (E3M9) Blue",
      "connects_to_hub":False,
      "episode":3,
      "connections":[]},
-    {"name":"The Aquifier (E3M9) Yellow",
+    {"name":"The Aquifer (E3M9) Yellow",
      "connects_to_hub":False,
      "episode":3,
      "connections":[
-        {"target":"The Aquifier (E3M9) Green","pro":False},
-        {"target":"The Aquifier (E3M9) Main","pro":False}]},
-    {"name":"The Aquifier (E3M9) Green",
+        {"target":"The Aquifer (E3M9) Green","pro":False},
+        {"target":"The Aquifer (E3M9) Main","pro":False}]},
+    {"name":"The Aquifer (E3M9) Green",
      "connects_to_hub":False,
      "episode":3,
      "connections":[
-        {"target":"The Aquifier (E3M9) Yellow","pro":False},
-        {"target":"The Aquifier (E3M9) Main","pro":False},
-        {"target":"The Aquifier (E3M9) Blue","pro":False}]},
+        {"target":"The Aquifer (E3M9) Yellow","pro":False},
+        {"target":"The Aquifer (E3M9) Main","pro":False},
+        {"target":"The Aquifer (E3M9) Blue","pro":False}]},
 
     # Catafalque (E4M1)
     {"name":"Catafalque (E4M1) Main",
@@ -795,16 +795,22 @@ regions:List[RegionDict] = [
      "connects_to_hub":True,
      "episode":5,
      "connections":[
-        {"target":"Courtyard (E5M4) Kakis","pro":False},
+        {"target":"Courtyard (E5M4) Yellow","pro":False},
         {"target":"Courtyard (E5M4) Blue","pro":False}]},
     {"name":"Courtyard (E5M4) Blue",
      "connects_to_hub":False,
      "episode":5,
      "connections":[{"target":"Courtyard (E5M4) Main","pro":False}]},
-    {"name":"Courtyard (E5M4) Kakis",
+    {"name":"Courtyard (E5M4) Yellow",
      "connects_to_hub":False,
      "episode":5,
-     "connections":[{"target":"Courtyard (E5M4) Main","pro":False}]},
+     "connections":[
+        {"target":"Courtyard (E5M4) Main","pro":False},
+        {"target":"Courtyard (E5M4) Green","pro":False}]},
+    {"name":"Courtyard (E5M4) Green",
+     "connects_to_hub":False,
+     "episode":5,
+     "connections":[{"target":"Courtyard (E5M4) Yellow","pro":False}]},
 
     # Hydratyr (E5M5)
     {"name":"Hydratyr (E5M5) Main",
