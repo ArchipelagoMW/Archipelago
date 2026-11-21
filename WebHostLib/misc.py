@@ -119,9 +119,12 @@ def tutorial_redirect(game: str, file: str, lang: str):
 @cache.cached()
 def tutorial_landing():
     tutorials = {}
-    worlds = AutoWorldRegister.world_types
-    for world_name, world_type in worlds.items():
+    worlds = {}
+    for world_name, world_type in AutoWorldRegister.world_types.items():
+        if world_type.hidden and world_name != "Archipelago":
+            continue
         current_world = tutorials[world_name] = {}
+        worlds[world_name] = world_type
         for tutorial in world_type.web.tutorials:
             current_tutorial = current_world.setdefault(tutorial.tutorial_name, {
                 "description": tutorial.description, "files": {}})
