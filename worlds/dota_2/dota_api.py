@@ -175,11 +175,25 @@ def get_most_recent_match_id(steamID):
     #print(f"DEBUG: {matches[0]['match_id']}")
     return matches[0]['match_id']
 
-async def request_match_parse(steamID):
-    match_id = get_most_recent_match_id(steamID)
+def get_recent_match_ids(steamID, count):
+    matches = OPEN_DOTA.get(f"/players/{steamID}/matches", params={"limit": count})
+    if not matches:
+        api_logger.warning("Could not retrieve player matches from OpenDota.")
+        return None
+    return [match['match_id'] for match in matches]
+
+async def request_match_parse(steamID, match_id=None):
+    if match_id is None:
+        match_id = get_most_recent_match_id(steamID)
 
     if match_id is None:
         return None
+
+    # No need to ask for a new parse when OpenDota already parsed the replay
+    match = OPEN_DOTA.get_match(match_id)
+    if match and match.get('version') is not None:
+        return match
+
     result = OPEN_DOTA.request_parse(match_id)
 
     job_id = result['job']["jobId"]
@@ -203,9 +217,12 @@ def get_my_player(players, steamID) -> dict:
 
     raise ValueError("Player not found in match")
 
-async def parse_most_recent_match_data(steamID):
+async def parse_most_recent_match_data(steamID, match_id=None):
+    """Parse the given match, or the most recent one, and return the player's data."""
     #print(f"DEBUG: Steam ID = {steamID}")
-    match = await request_match_parse(steamID)
+    match = await request_match_parse(steamID, match_id)
+    if match is None or not match.get('players'):
+        return None
     match_id = match['match_id']
     #print(f"{match_id}")
     players = match['players']

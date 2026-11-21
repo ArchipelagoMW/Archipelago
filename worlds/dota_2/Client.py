@@ -34,6 +34,20 @@ class Dota2CommandProcessor(ClientCommandProcessor):
         """try to parse the most recent match completed"""
         asyncio.create_task(self.ctx.cmd_parse_recent_match_data())
 
+    def _cmd_parse_match(self, match_id: str = "") -> None:
+        """Parse a match by its id. /parse_match 1234567890"""
+        if not match_id.strip().isdigit():
+            self.output("Usage: /parse_match 1234567890  (match id)")
+            return
+        asyncio.create_task(self.ctx.cmd_parse_recent_match_data(int(match_id)))
+
+    def _cmd_parse_last_matches(self, count: str = "") -> None:
+        """Parse your last matches, oldest first. /parse_last_matches 5"""
+        if not count.strip().isdigit() or not 1 <= int(count) <= 10:
+            self.output("Usage: /parse_last_matches 5  (between 1 and 10)")
+            return
+        asyncio.create_task(self.ctx.cmd_parse_last_matches(int(count)))
+
     def _cmd_game_complete(self) -> None:
         """function to run once goal is completed in case it doesn't release"""
         asyncio.create_task(self.ctx.game_complete())
@@ -444,7 +458,7 @@ class Dota2Context(CommonContext):
         self.save_save()
         self.output(f"SteamID set to {args[0].strip()} (saved locally).")
 
-    async def cmd_parse_recent_match_data(self) -> None:
+    async def cmd_parse_recent_match_data(self, match_id: Optional[int] = None) -> None:
         if not self.is_connected():
             self.output("Not connected. Connect to an Archipelago server to see your goal.")
             return
@@ -453,13 +467,38 @@ class Dota2Context(CommonContext):
             self.output("No Steam ID set")
             return
 
-        match_data = await parse_most_recent_match_data(int(self.save.steamid))
+        try:
+            match_data = await parse_most_recent_match_data(int(self.save.steamid), match_id)
+        except ValueError:
+            self.output(f"You did not play in match {match_id}.")
+            return
+        except Exception as e:
+            self.output(f"Could not get {'your most recent match' if match_id is None else f'match {match_id}'} from OpenDota: {e}")
+            return
         if match_data is None:
-            self.output("No recent match found.")
+            self.output("No recent match found." if match_id is None else f"Match {match_id} not found on OpenDota.")
             return
         
         await self.check_dota_goals_and_locations(match_data)
         self.save_save()
+
+    async def cmd_parse_last_matches(self, count: int) -> None:
+        if not self.is_connected():
+            self.output("Not connected. Connect to an Archipelago server to see your goal.")
+            return
+        self.ensure_seed_save_loaded()
+        if (not self.save.steamid):
+            self.output("No Steam ID set")
+            return
+
+        match_ids = get_recent_match_ids(int(self.save.steamid), count)
+        if not match_ids:
+            self.output("No recent match found.")
+            return
+        # Oldest first, so that checks and wins are counted in the order the matches were played
+        for match_id in reversed(match_ids):
+            self.output(f"Parsing match {match_id}")
+            await self.cmd_parse_recent_match_data(match_id)
 
     def get_unlocked_hero_by_id(self, hero_id: int) -> Optional[Hero]:
         for hero in self.save.heroes_unlocked:
@@ -525,6 +564,13 @@ class Dota2Context(CommonContext):
         if(match_data.match_id == self.save.last_valid_match_id):
             self.output(f"Match {match_data.match_id} already proccessed")
             return  
+
+        # Matches played before this seed's save was created can't count
+        if match_data.start_time and self.save.start_date_local:
+            seed_start = datetime.fromisoformat(self.save.start_date_local).timestamp()
+            if match_data.start_time < seed_start:
+                self.output(f"Match {match_data.match_id} was played before this seed started ({self.save.start_date_local}), ignored.")
+                return
               
         #first check if played hero is even unlocked
         hero_id = match_data.hero_id
