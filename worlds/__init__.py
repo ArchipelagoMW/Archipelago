@@ -14,7 +14,7 @@ from typing import List, Sequence
 from zipfile import ZipFile, BadZipFile
 
 from NetUtils import DataPackage
-from Utils import local_path, user_path, Version, version_tuple, tuplize_version, messagebox
+from Utils import local_path, user_path, Version, version_tuple, tuplize_version, messagebox, is_frozen
 from .Files import APWorldContainer
 
 local_folder = os.path.dirname(__file__)
@@ -60,7 +60,19 @@ class WorldSource:
     def load(self) -> bool:
         try:
             start = time.perf_counter()
-            importlib.import_module(f".{self.name}", "worlds")
+            if not self.is_zip and not self.relative:
+                if is_frozen():
+                    raise Exception("Refusing to load unpacked worlds from custom_worlds.  Please checkout the repository for world development.")
+                basename = os.path.basename(self.path)
+                spec = importlib.util.spec_from_file_location('worlds.' + basename, os.path.join(self.resolved_path, "__init__.py"))
+                mod = importlib.util.module_from_spec(spec)
+                sys.modules[mod.__name__] = mod
+
+                importer = mod.__loader__
+                if hasattr(importer, "exec_module"):
+                    importer.exec_module(mod)
+            else:
+                importlib.import_module(f".{self.name}", "worlds")
             self.time_taken = time.perf_counter()-start
             return True
 
