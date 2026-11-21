@@ -1,8 +1,8 @@
 from ..game_data.palettes_organized import map_palettes, nice_palettes, ugly_palettes, nonsense_palettes
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
-    from . import EarthBoundWorld
-    from .Rom import LocalRom
+    from .. import EarthBoundWorld
+    from ..Rom import LocalRom
 
 
 event_palettes = {
