@@ -172,8 +172,7 @@ class CCCharlesWorld(World):
         return "Scraps"
 
     def fill_slot_data(self) -> dict[str, Any]:
-        slot_data = {
+        return {
             # See world_version in archipelago.json: used to check mod compliance with apworld
             "world_version": self.world_version.as_simple_string()
         }
-        return slot_data
