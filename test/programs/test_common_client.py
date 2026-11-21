@@ -1,3 +1,4 @@
+import asyncio
 import unittest
 
 import NetUtils
@@ -93,3 +94,34 @@ class TestCommonContext(unittest.IsolatedAsyncioTestCase):
         assert self.ctx.item_names.lookup_in_slot(-1, 3) == "Nothing"
         assert self.ctx.item_names.lookup_in_game(-1, "__TestGame1") == "Nothing"
         assert self.ctx.item_names.lookup_in_game(-1, "__TestGame2") == "Nothing"
+
+    async def test_disconnect_cancels_pending_input(self):
+        class FakeSocket:
+            closed = False
+
+            async def close(self):
+                self.closed = True
+
+        class FakeServer:
+            def __init__(self):
+                self.socket = FakeSocket()
+
+        fake_server = FakeServer()
+        self.ctx.server = fake_server
+
+        async def server_loop_waiting_for_input():
+            try:
+                await self.ctx.console_input()
+            finally:
+                await self.ctx.connection_closed()
+
+        self.ctx.server_task = asyncio.create_task(server_loop_waiting_for_input())
+        await asyncio.sleep(0)
+        self.assertEqual(1, self.ctx.input_requests)
+
+        await asyncio.wait_for(self.ctx.disconnect(), timeout=1)
+
+        self.assertTrue(fake_server.socket.closed)
+        self.assertIsNone(self.ctx.server)
+        self.assertIsNone(self.ctx.server_task)
+        self.assertEqual(0, self.ctx.input_requests)
