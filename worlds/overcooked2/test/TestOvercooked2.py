@@ -71,14 +71,14 @@ class Overcooked2Test(unittest.TestCase):
 
         # Test uniqueness
         for seed in range(0, 5):
-            levels = level_shuffle_factory(Random(seed), True, False, True, {x for x in Overcooked2Dlc}, "test")
+            levels = level_shuffle_factory(Random(seed), True, False, True, set(Overcooked2Dlc), "test")
             self.assertEqual(len(levels), 44)
 
             self.assertNotIn((levels[5], levels[15]), previous_runs)
             previous_runs.add((levels[5], levels[15]))
 
         # Test kevin = false
-        levels = level_shuffle_factory(Random(123), False, True, False, {x for x in Overcooked2Dlc}, "test")
+        levels = level_shuffle_factory(Random(123), False, True, False, set(Overcooked2Dlc), "test")
         self.assertEqual(len(levels), 36)
 
     def testLevelNameRepresentation(self):
@@ -106,7 +106,7 @@ class Overcooked2Test(unittest.TestCase):
         for level_name in level_logic.keys():
             logic = level_logic[level_name]
             self.assertEqual(len(logic), 3, "Levels must provide logic for 1, 2, and 3 stars")
-            
+
             for l in logic:
                 self.assertEqual(len(l), 2)
                 (exclusive, additive) = l
@@ -134,7 +134,7 @@ class Overcooked2Test(unittest.TestCase):
             freq = item_frequencies[item_name]
             self.assertGreaterEqual(freq, 0)
             number_of_items += freq
-        
+
         for item_name in item_table:
             if item_name not in item_frequencies.keys():
                 number_of_items += 1
@@ -148,24 +148,24 @@ class Overcooked2Test(unittest.TestCase):
     def testLevelCounts(self):
         for dlc in Overcooked2Dlc:
             level_id_range = range(dlc.start_level_id, dlc.end_level_id)
-            
+
             for level_id in dlc.excluded_levels():
                 self.assertIn(level_id, level_id_range, f"Excluded level {dlc.name} - {level_id} out of range")
-            
+
             for level_id in dlc.horde_levels():
                 self.assertIn(level_id, level_id_range, f"Horde level {dlc.name} - {level_id} out of range")
-            
+
             for level_id in dlc.prep_levels():
                 self.assertIn(level_id, level_id_range, f"Prep level {dlc.name} - {level_id} out of range")
 
             for level_id in level_id_range:
                 self.assertIn((dlc, level_id), level_id_to_shortname, "A valid level is not represented in level directory")
-            
+
             count = 0
             for (dlc_key, _) in level_id_to_shortname:
                 if dlc == dlc_key:
                     count += 1
-            
+
             self.assertEqual(count, len(level_id_range), f"Number of levels in {dlc.name} has discrepancy between level_id range and directory")
 
     def testOverworldRegion(self):
@@ -174,10 +174,10 @@ class Overcooked2Test(unittest.TestCase):
         # overworld_region_logic
 
         # Test for duplicates
-        regions_list = [x for x in OverworldRegion]
+        regions_list = list(OverworldRegion)
         regions_set = set(regions_list)
-        self.assertEqual(len(regions_list), len(regions_set), f"Duplicate values in OverworldRegion")
-        
+        self.assertEqual(len(regions_list), len(regions_set), "Duplicate values in OverworldRegion")
+
         # Test all levels represented
         shortnames = [level.as_generic_level.shortname for level in Overcooked2Level()]
         for shortname in shortnames:
@@ -205,5 +205,5 @@ class Overcooked2Test(unittest.TestCase):
         # Test region logic
         for logic in overworld_region_logic.values():
             for allow_tricks in [False, True]:
-                result = logic(state, 1, allow_tricks, list())
+                result = logic(state, 1, allow_tricks, [])
                 self.assertIn(result, [False, True])
