@@ -1,7 +1,8 @@
 from typing import List
 
-from worlds.stardew_valley.strings.animal_product_names import AnimalProduct
-from worlds.stardew_valley.strings.forageable_names import Forageable
+from ..strings.animal_product_names import AnimalProduct
+from ..strings.forageable_names import Forageable
+from ..strings.material_names import Material
 
 all_shirts = []
 all_considered_shirts = []
@@ -29,5 +30,6 @@ def shirt(name: str, items: str | List[str], consider_in_logic: bool = True) -> 
 
 
 class Shirts:
+    basic_shirt = shirt("Shirt", Material.clay)
     vacation = shirt("Vacation Shirt", Forageable.coconut)
     green_jacket = shirt("Green Jacket Shirt", AnimalProduct.duck_egg)

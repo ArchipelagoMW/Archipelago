@@ -132,6 +132,8 @@ magma_sprite = create_monster(Monster.magma_sprite, MonsterCategory.magma_sprite
 magma_sparker = create_monster(Monster.magma_sparker, MonsterCategory.magma_sprites, volcano_high, Performance.galaxy)
 
 haunted_skull = create_monster(Monster.haunted_skull, MonsterCategory.none, quarry_mine, Performance.great)
+squid_kid = create_monster(Monster.squid_kid, MonsterCategory.none, mines_floor_100, Performance.good)
+ghost = create_monster(Monster.ghost, MonsterCategory.none, mines_floor_60, Performance.good)
 
 register_monster_modification(ModNames.sve, shadow_brute_dangerous, update_monster_locations)
 register_monster_modification(ModNames.sve, shadow_sniper, update_monster_locations)

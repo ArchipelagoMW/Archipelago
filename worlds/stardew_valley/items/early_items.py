@@ -3,7 +3,7 @@ from random import Random
 from .. import options as stardew_options
 from ..content import StardewContent
 from ..content.vanilla.ginger_island import ginger_island_content_pack
-from ..strings.ap_names.ap_option_names import ChefsanityOptionName, StartWithoutOptionName
+from ..strings.ap_names.ap_option_names import ChefsanityOptionName, EntranceRandomizationBehaviorOptionName, StartWithoutOptionName
 from ..strings.ap_names.ap_weapon_names import APWeapon
 from ..strings.ap_names.transport_names import Transportation
 from ..strings.building_names import Building
@@ -80,6 +80,18 @@ def setup_early_items(multiworld, options: stardew_options.StardewValleyOptions,
         early_candidates.append("Wizard Invitation")
 
     early_forced.extend(random.sample(early_candidates, len(early_candidates) // early_candidate_rate))
+
+    # When the farmhouse is shuffled too much, the odds of a tiny sphere 1 become large,
+    # which means the early_items are likely to lead to fill errors.
+    # But the chance is very small, so if there are more than a handful of players, even if they all pick these options,
+    # the chance of at least one having a decent sphere 1 is close to 100%
+    minimum_players_to_expect_big_sphere_1 = 5
+    shuffled_farmhouse = EntranceRandomizationBehaviorOptionName.shuffle_farmhouse in options.entrance_randomization_behavior
+    shuffled_buildings = options.entrance_randomization.value >= options.entrance_randomization.option_buildings
+    shuffled_farmhouse_anywhere = EntranceRandomizationBehaviorOptionName.shuffle_farmhouse_anywhere in options.entrance_randomization_behavior
+    has_chance_of_tiny_sphere_1 = (shuffled_farmhouse and shuffled_buildings) or shuffled_farmhouse_anywhere
+    if has_chance_of_tiny_sphere_1 and len(multiworld.worlds) < minimum_players_to_expect_big_sphere_1:
+        early_forced = []
 
     for item_name in early_forced:
         if item_name in multiworld.early_items[player]:

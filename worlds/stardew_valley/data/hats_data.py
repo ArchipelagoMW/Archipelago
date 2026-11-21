@@ -2,7 +2,7 @@ from dataclasses import dataclass
 from functools import cached_property
 from typing import List
 
-from worlds.stardew_valley.strings.ap_names.ap_option_names import HatsanityOptionName
+from ..strings.ap_names.ap_option_names import HatsanityOptionName
 
 hat_clarifier = " (Hat)"
 

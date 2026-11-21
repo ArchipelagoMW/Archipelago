@@ -2,11 +2,11 @@ from collections import Counter
 from random import Random
 from unittest.mock import patch
 
+from ... import StardewLogic, StardewRule, options
+from ...logic.museum_logic import MuseumLogic
+from ...stardew_rule import LiteralStardewRule, true_
 from ..bases import SVTestBase
 from ..options import presets
-from ... import options, StardewLogic, StardewRule
-from ...logic.museum_logic import MuseumLogic
-from ...stardew_rule import true_, LiteralStardewRule
 
 
 class TestMuseumMilestones(SVTestBase):
@@ -56,7 +56,7 @@ class TestMuseumsanityDisabledExcludesMuseumDonationsFromOtherLocations(SVTestBa
             museum_logic.has_all_gems.return_value = true_
 
             regions = {region.name for region in self.multiworld.regions}
-            self.world.logic = StardewLogic(self.player, self.world.options, self.world.content, regions)
+            self.world.logic = StardewLogic(self.player, self.world.options, self.world.content, regions, self.world.help_wanted_quests)
             self.world.set_rules()
 
             self.collect_everything()
