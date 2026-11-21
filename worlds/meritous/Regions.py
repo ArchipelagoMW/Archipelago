@@ -24,11 +24,15 @@ def create_regions(multiworld: MultiWorld, player: int):
             insidename = "Menu"
 
         region = Region(insidename, player, multiworld)
-        for store in ["Alpha Cache", "Beta Cache", "Gamma Cache", "Reward Chest"]:
-            for y in range(1, 7):
-                loc_name = f"{store} {(x * 6) + y}"
+        region_caches = [8, 5, 3, 8]
+        region_start_cache = [1 + sum(region_caches[:x]) for x in range(0,4)]
+        for y in range(1, 7):
+            loc_name = f"Reward Chest {(x * 6) + y}"
+            region.locations += [MeritousLocation(player, loc_name, location_table[loc_name], region)]
+        for store in ["Alpha Cache", "Beta Cache", "Gamma Cache"]:
+            for y in range(region_start_cache[x], region_start_cache[x] + region_caches[x]):
+                loc_name = f"{store} {y}"
                 region.locations += [MeritousLocation(player, loc_name, location_table[loc_name], region)]
-
         if x < 3:
             storage_loc = f"PSI Key Storage {x + 1}"
             region.locations += [MeritousLocation(player, storage_loc, location_table[storage_loc], region)]
@@ -67,7 +71,9 @@ def create_regions(multiworld: MultiWorld, player: int):
         "To Meridian": {
             "to": "Meridian",
             "rule": lambda state: state.has_group("PSI Keys", player, 1) and
-                                  state.has_group("Important Artifacts", player, 1)
+                                  state.has_group("Important Artifacts", player, 1) and
+                                  state.has_group("Upgrades", player, 16) and
+                                  state.has("Reflect Shield upgrade", player)
         },
         "To Second Quarter": {
             "to": "Second Quarter",
@@ -76,7 +82,8 @@ def create_regions(multiworld: MultiWorld, player: int):
         "To Ataraxia": {
             "to": "Ataraxia",
             "rule": lambda state: state.has_group("PSI Keys", player, 2) and
-                                  state.has_group("Important Artifacts", player, 2)
+                                  state.has_group("Important Artifacts", player, 2) and
+                                  state.has_group("Upgrades", player, 24)
         },
         "To Third Quarter": {
             "to": "Third Quarter",
@@ -85,7 +92,9 @@ def create_regions(multiworld: MultiWorld, player: int):
         "To Merodach": {
             "to": "Merodach",
             "rule": lambda state: state.has_group("PSI Keys", player, 3) and
-                                  state.has_group("Important Artifacts", player, 3)
+                                  state.has_group("Important Artifacts", player, 3) and
+                                  state.has_group("Upgrades", player, 45) and
+                                  state.has("Shield Boost", player)
         },
         "To Last Quarter": {
             "to": "Last Quarter",
