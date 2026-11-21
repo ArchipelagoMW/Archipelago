@@ -94,8 +94,17 @@ class AssembleOptions(abc.ABCMeta):
         attrs["name_lookup"].update({option_id: name for name, option_id in new_options.items()})
         options.update(new_options)
         # apply aliases, without name_lookup
-        aliases = attrs["aliases"] = {name[6:].lower(): option_id for name, option_id in attrs.items() if
-                                      name.startswith("alias_")}
+        # merge parent class aliases, like options above, so subclasses inherit them. An alias inherited from a
+        # base is dropped when this class turns that name into a real option (e.g. ItemsAccessibility defines
+        # `items`, so Accessibility's `items` alias must not shadow it); this class's own aliases apply last.
+        aliases = attrs["aliases"] = {}
+        for base in bases:
+            if getattr(base, "aliases", None):
+                aliases.update(base.aliases)
+        for option_name in new_options:
+            aliases.pop(option_name, None)
+        aliases.update({name[6:].lower(): option_id for name, option_id in attrs.items() if
+                        name.startswith("alias_")})
 
         assert (
             name in {"Option", "VerifyKeys"} or  # base abstract classes don't need default
