@@ -1217,7 +1217,7 @@ class OOTWorld(World):
             "no_epona_race", "skip_some_minigame_phases", "complete_mask_quest", "free_scarecrow", "plant_beans",
             "chicken_count", "big_poe_count", "fae_torch_count", "blue_fire_arrows",
             "damage_multiplier", "deadly_bonks", "starting_tod", "junk_ice_traps",
-            "start_with_consumables", "adult_trade_start", "plando_connections"
+            "start_with_consumables", "adult_trade_start", "plando_connections", "exclude_locations"
             )
         )
         return slot_data
