@@ -37,7 +37,7 @@ header { display: flex; flex-wrap: wrap; gap: 12px 24px; align-items: start; jus
 header .title { display: grid; gap: 6px; min-width: 0; }
 .actions { display: grid; gap: 6px; justify-items: end; max-width: 320px; }
 .actions .row { display: flex; flex-wrap: wrap; gap: 6px; justify-content: end; }
-.btn { font: 600 14px var(--body); padding: 9px 16px; border-radius: 6px; border: 1px solid var(--line); background: var(--panel); color: var(--fg); cursor: pointer; }
+.btn { font: 600 14px var(--body); padding: 9px 16px; border-radius: 6px; border: 1px solid var(--line); background: var(--panel); color: var(--fg); cursor: pointer; text-decoration: none; }
 .btn.primary, #refresh { border-color: var(--fg); background: var(--fg); color: var(--bg); }
 .btn:disabled { opacity: .6; cursor: progress; }
 .btn:focus-visible, .tabs button:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
@@ -176,6 +176,7 @@ code { font: 500 13px var(--mono); overflow-wrap: anywhere; }
     </div>
     <div class="actions">
       <div class="row">
+        <a class="btn" href="options.html">YAML options</a>
         <button class="btn" id="open-settings" type="button" aria-controls="setup" aria-expanded="false">Settings</button>
         <button class="btn" id="refresh" type="button" hidden>Refresh</button>
       </div>
