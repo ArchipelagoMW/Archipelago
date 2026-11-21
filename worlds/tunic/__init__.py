@@ -2,7 +2,7 @@ from dataclasses import fields
 from logging import warning
 from typing import Any, TypedDict, ClassVar, TextIO
 
-from BaseClasses import Location, Item, Tutorial, ItemClassification, MultiWorld, CollectionState
+from BaseClasses import Location, Item, Tutorial, ItemClassification, MultiWorld, CollectionState, Entrance, Region
 from Options import PlandoConnection, OptionError, PerGameCommonOptions, Range, Removed
 from settings import Group, Bool, FilePath
 from worlds.AutoWorld import WebWorld, World
@@ -10,6 +10,8 @@ from worlds.AutoWorld import WebWorld, World
 from .bells import bell_location_groups, bell_location_name_to_id
 from .breakables import breakable_location_name_to_id, breakable_location_groups, breakable_location_table
 from .combat_logic import area_data, CombatState
+from .enemy_drops import (EnemyType, enemy_location_groups, enemy_location_name_to_id, enemy_location_table,
+                          enemy_item_fill_quantities)
 from .er_data import portal_mapping, RegionInfo, tunic_er_regions
 from .er_rules import set_er_location_rules
 from .er_scripts import create_er_regions, verify_plando_directions
@@ -21,25 +23,32 @@ from .locations import location_table, location_name_groups, standard_location_n
 from .logic_helpers import randomize_ability_unlocks, gold_hexagon
 from .options import (TunicOptions, EntranceRando, tunic_option_groups, tunic_option_presets, TunicPlandoConnections,
                       LaurelsLocation, LaurelsZips, IceGrappling, LadderStorage, EntranceLayout,
-                      check_options, LocalFill, get_hexagons_in_pool, HexagonQuestAbilityUnlockType)
+                      check_options, LocalFill, get_hexagons_in_pool, HexagonQuestAbilityUnlockType, ShuffleEnemyDrops)
 from . import ut_stuff
+from . import launcher
 
 
 class TunicSettings(Group):
     class DisableLocalSpoiler(Bool):
         """Disallows the TUNIC client from creating a local spoiler log."""
 
-    class LimitGrassRando(Bool):
-        """Limits the impact of Grass Randomizer on the multiworld by disallowing local_fill percentages below 95."""
+    class LimitLocalFill(Bool):
+        """Limits the impact of Grass Randomizer and other options that add large amounts of filler on the multiworld by disallowing local_fill percentages below 95."""
 
     class UTPoptrackerPath(FilePath):
         """Path to the user's TUNIC Poptracker Pack."""
         description = "TUNIC Poptracker Pack zip file"
         required = False
 
+    class GamePath(FilePath):
+        """Name of the TUNIC executable file."""
+        description = "TUNIC Game Executable"
+        is_exe = True
+
     disable_local_spoiler: DisableLocalSpoiler | bool = False
-    limit_grass_rando: LimitGrassRando | bool = True
+    limit_local_fill: LimitLocalFill | bool = True
     ut_poptracker_path: UTPoptrackerPath | str = UTPoptrackerPath()
+    game_path: GamePath = GamePath(["Tunic.exe", "Secret Legend.exe"])
 
 
 class TunicWeb(WebWorld):
@@ -87,13 +96,13 @@ class TunicWorld(World):
     """
     game = "TUNIC"
     web = TunicWeb()
-    author: str = "SilentSR & ScipioWright"
+    author: str = "silent-destroyer & ScipioWright"
 
     options: TunicOptions
     options_dataclass = TunicOptions
     settings: ClassVar[TunicSettings]
     item_name_groups = item_name_groups
-    # grass, breakables, fuses, and bells are separated out into their own files
+    # grass, breakables, fuses, bells, and enemy drops are separated out into their own files
     # this makes for easier organization, at the cost of stuff like what's directly below here
     location_name_groups = location_name_groups
     for group_name, members in grass_location_name_groups.items():
@@ -104,6 +113,8 @@ class TunicWorld(World):
         location_name_groups.setdefault(group_name, set()).update(members)
     for group_name, members in bell_location_groups.items():
         location_name_groups.setdefault(group_name, set()).update(members)
+    for group_name, members in enemy_location_groups.items():
+        location_name_groups.setdefault(group_name, set()).update(members)
 
     item_name_to_id = item_name_to_id
     location_name_to_id = standard_location_name_to_id.copy()
@@ -111,6 +122,7 @@ class TunicWorld(World):
     location_name_to_id.update(breakable_location_name_to_id)
     location_name_to_id.update(fuse_location_name_to_id)
     location_name_to_id.update(bell_location_name_to_id)
+    location_name_to_id.update(enemy_location_name_to_id)
 
     player_location_table: dict[str, int]
     ability_unlocks: dict[str, int]
@@ -136,6 +148,8 @@ class TunicWorld(World):
     passthrough: dict[str, Any]
     ut_can_gen_without_yaml = True  # class var that tells it to ignore the player yaml
     tracker_world: ClassVar = ut_stuff.tracker_world
+    disconnected_entrances: dict[Entrance, Region]
+    found_entrances_datastorage_key: list[str]
 
     def generate_early(self) -> None:
         # if you have multiple APWorlds, we want it to fail here instead of at the end of gen
@@ -201,25 +215,35 @@ class TunicWorld(World):
         # setup our defaults for the local_fill option
         if self.options.local_fill == -1:
             if self.options.grass_randomizer:
-                if self.options.breakable_shuffle:
+                if self.options.breakable_shuffle or self.options.shuffle_enemy_drops:
                     self.options.local_fill.value = 96
                 else:
                     self.options.local_fill.value = 95
+            elif self.options.shuffle_enemy_drops:
+                if self.options.breakable_shuffle:
+                    self.options.local_fill.value = 73
+                else:
+                    self.options.local_fill.value = 65
             elif self.options.breakable_shuffle:
                 self.options.local_fill.value = 40
             else:
                 self.options.local_fill.value = 0
-
-        if self.options.local_fill > 0 and self.settings.limit_grass_rando:
-            # discard grass from non_local if it's meant to be limited
-            self.options.non_local_items.value.discard("Grass")
+        else:
+            if self.options.local_fill > 0:
+                # discard grass from non_local if it's meant to be limited
+                self.options.non_local_items.value.discard("Grass")
+            if self.settings.limit_local_fill and self.multiworld.players > 1:
+                limit = -1
+                if self.options.grass_randomizer:
+                    limit = 95
+                elif self.options.shuffle_enemy_drops:
+                    limit = 40 if self.options.breakable_shuffle else 30
+                if self.options.local_fill < limit:
+                    raise OptionError(f"TUNIC: Player {self.player_name} has their Local Fill option set too low. "
+                                      f"They must either bring it above {limit}% or the host needs to disable "
+                                      f"limit_local_fill in their host.yaml settings.")
 
         if self.options.grass_randomizer:
-            if self.settings.limit_grass_rando and self.options.local_fill < 95 and self.multiworld.players > 1:
-                raise OptionError(f"TUNIC: Player {self.player_name} has their Local Fill option set too low. "
-                                  f"They must either bring it above 95% or the host needs to disable limit_grass_rando "
-                                  f"in their host.yaml settings")
-
             self.player_location_table.update(grass_location_name_to_id)
 
         if self.options.breakable_shuffle:
@@ -234,6 +258,10 @@ class TunicWorld(World):
 
         if self.options.shuffle_bells:
             self.player_location_table.update(bell_location_name_to_id)
+
+        if self.options.shuffle_enemy_drops:
+            self.player_location_table.update({name: num for name, num in enemy_location_name_to_id.items()
+                                               if not enemy_location_table[name].is_extra_enemy or self.options.shuffle_enemy_drops == ShuffleEnemyDrops.option_extra})
 
     @classmethod
     def stage_generate_early(cls, multiworld: MultiWorld) -> None:
@@ -348,6 +376,17 @@ class TunicWorld(World):
                                              if name == "Shield" and self.options.ladder_storage
                                              and not self.options.ladder_storage_without_items else None)
                                          or item_data.classification)
+        # if there's 6 or less in the pool, then I could see them landing on priority locations being desireable
+        if name == "Gold Questagon" and self.options.hexagon_goal > 6:
+            itemclass = itemclass | ItemClassification.deprioritized
+        # remove deprioritized from Fairies and Coins if Laurels are there
+        if name == "Fairy" and self.options.laurels_location == LaurelsLocation.option_10_fairies:
+            itemclass = ItemClassification.progression
+        if (name == "Golden Coin" and self.options.laurels_location in
+                (LaurelsLocation.option_10_coins, LaurelsLocation.option_6_coins)):
+            itemclass = ItemClassification.progression
+        if name == "ATT Offering" and self.options.shuffle_enemy_drops:
+            itemclass = ItemClassification.progression
         return TunicItem(name, itemclass, self.item_name_to_id[name], self.player)
 
     def create_items(self) -> None:
@@ -370,6 +409,22 @@ class TunicWorld(World):
                 if not self.options.entrance_rando and loc_data.er_region == "Purgatory":
                     continue
                 items_to_create[f"Money x{self.random.randint(1, 5)}"] += 1
+
+        if self.options.shuffle_enemy_drops:
+            enemy_locations_to_fill = len([enemy_location for enemy_location in enemy_location_table.values()
+                                           if not enemy_location.is_extra_enemy
+                                           or self.options.shuffle_enemy_drops == ShuffleEnemyDrops.option_extra])
+            if self.options.shuffle_enemy_souls:
+                for soul in item_name_groups["Enemy Souls"]:
+                    items_to_create[soul] += 1
+                enemy_locations_to_fill -= len(item_name_groups["Enemy Souls"])
+            for item, quantity in enemy_item_fill_quantities.items():
+                items_to_create[item] += quantity
+                enemy_locations_to_fill -= quantity
+            # fill any leftover locations with random small money
+            while enemy_locations_to_fill > 0:
+                items_to_create[f"Money x{self.random.randint(1, 5)}"] += 1
+                enemy_locations_to_fill -= 1
 
         if self.options.start_with_sword:
             self.multiworld.push_precollected(self.create_item("Sword"))
@@ -579,15 +634,15 @@ class TunicWorld(World):
                         else:
                             out_of_spec_worlds.add(multiworld.worlds[loc_to_fill.item.player].game)
                     else:
-                        raise Exception("TUNIC: Could not fulfill local_filler option. This issue is caused by another "
+                        raise Exception("TUNIC: Could not fulfill local_fill option. This issue is caused by another "
                                         "world filling TUNIC locations during pre_fill.\n"
                                         "Archipelago does not allow us to place items into the item pool after "
                                         "create_items, so we cannot recover from this issue.\n"
                                         f"This is likely caused by the following world(s): {out_of_spec_worlds}.\n"
                                         f"Please let the world dev(s) for the listed world(s) know that there is an "
                                         f"issue there.\n"
-                                        "As a workaround, you can try setting the local_filler option lower for "
-                                        "TUNIC slots with Breakable Shuffle or Grass Rando enabled. You may be able to "
+                                        "As a workaround, you can try setting the local_fill option lower for "
+                                        "TUNIC slots with Grass Rando, Shuffled Enemy Drops, or Breakable Shuffle enabled. You may be able to "
                                         "try generating again, as it may not happen every generation.")
 
             for filler_item in non_grass_fill:
@@ -603,15 +658,15 @@ class TunicWorld(World):
                         else:
                             out_of_spec_worlds.add(multiworld.worlds[loc_to_fill.item.player].game)
                     else:
-                        raise Exception("TUNIC: Could not fulfill local_filler option. This issue is caused by another "
+                        raise Exception("TUNIC: Could not fulfill local_fill option. This issue is caused by another "
                                         "world filling TUNIC locations during pre_fill.\n"
                                         "Archipelago does not allow us to place items into the item pool after "
                                         "create_items, so we cannot recover from this issue.\n"
                                         f"This is likely caused by the following world(s): {out_of_spec_worlds}.\n"
                                         f"Please let the world dev(s) for the listed world(s) know that there is an "
                                         f"issue there.\n"
-                                        "As a workaround, you can try setting the local_filler option lower for "
-                                        "TUNIC slots with Breakable Shuffle or Grass Rando enabled. You may be able to "
+                                        "As a workaround, you can try setting the local_fill option lower for "
+                                        "TUNIC slots with Grass Rando, Shuffled Enemy Drops, or Breakable Shuffle enabled. You may be able to "
                                         "try generating again, as it may not happen every generation.")
             if out_of_spec_worlds:
                 warning("TUNIC: At least one other world has filled TUNIC locations during pre_fill. This may "
@@ -639,6 +694,18 @@ class TunicWorld(World):
     def set_rules(self) -> None:
         set_er_location_rules(self)
 
+    def connect_entrances(self) -> None:
+        if (self.options.entrance_rando and self.using_ut
+                and self.multiworld.enforce_deferred_connections in ("on", "default")):
+            ut_stuff.disconnect_entrances(self)
+            ut_stuff.setup_found_entrances_datastorage(self)
+
+    def reconnect_found_entrances(self, key: str, value: Any) -> None:
+        if not value:
+            return
+        else:
+            ut_stuff.reconnect_found_entrance(self, key.split(":")[-1])
+
     def get_filler_item_name(self) -> str:
         return self.random.choice(filler_items)
 
@@ -663,25 +730,29 @@ class TunicWorld(World):
                 # Remove parentheses for better readability
                 spoiler_handle.write(f'{ability[ability.find("(")+1:ability.find(")")]}: {self.ability_unlocks[ability]} Gold Questagons\n')
 
-    def extend_hint_information(self, hint_data: dict[int, dict[int, str]]) -> None:
-        if self.options.entrance_rando:
-            hint_data.update({self.player: {}})
-            # all state seems to have efficient paths
-            all_state = self.multiworld.get_all_state(True)
-            all_state.update_reachable_regions(self.player)
-            paths = all_state.path
-            portal_names = {portal.name for portal in portal_mapping}.union({f"Shop Portal {i + 1}" for i in range(500)})
-            for location in self.multiworld.get_locations(self.player):
-                # skipping event locations
-                if not location.address:
+    @classmethod
+    def stage_extend_hint_information(cls, multiworld: MultiWorld, hint_data: dict[int, dict[int, str]]) -> None:
+        tunic_er_worlds: list[TunicWorld] = [world for world in multiworld.get_game_worlds("TUNIC")
+                                             if world.options.entrance_rando]
+        if not tunic_er_worlds:
+            return
+
+        hint_data.update({world.player: {} for world in tunic_er_worlds})
+        all_state = multiworld.get_all_state()
+        paths = all_state.path
+        portal_names = {portal.name for portal in portal_mapping}.union({f"Shop Portal {i + 1}" for i in range(500)})
+        for world in tunic_er_worlds:
+            all_state.update_reachable_regions(world.player)
+            for region in world.get_regions():
+                if region.name == "Menu":
                     continue
-                path_to_loc = []
+                path_to_region = []
                 previous_name = "placeholder"
                 try:
-                    name, connection = paths[location.parent_region]
+                    name, connection = paths[region]
                 except KeyError:
                     # logic bug, proceed with warning since it takes a long time to update AP
-                    warning(f"{location.name} is not logically accessible for {self.player_name}. "
+                    warning(f"{region.name} is not logically accessible for {world.player_name}. "
                             "Creating entrance hint Inaccessible. Please report this to the TUNIC rando devs. "
                             "If you are using Plando Items (excluding early locations), then this is likely the cause.")
                     hint_text = "Inaccessible"
@@ -694,11 +765,14 @@ class TunicWorld(World):
                         # was getting some cases like Library Grave -> Library Grave -> other place
                         if name in portal_names and name != previous_name:
                             previous_name = name
-                            path_to_loc.append(name)
-                    hint_text = " -> ".join(reversed(path_to_loc))
+                            path_to_region.append(name)
+                    hint_text = " -> ".join(reversed(path_to_region))
 
                 if hint_text:
-                    hint_data[self.player][location.address] = hint_text
+                    for location in region.get_locations():
+                        if location.address is None:
+                            continue
+                        hint_data[world.player][location.address] = hint_text
 
     def get_real_location(self, location: Location) -> tuple[str, int]:
         # if it's not in a group, it's not in an item link
@@ -742,6 +816,8 @@ class TunicWorld(World):
             "Entrance Rando": self.tunic_portal_pairs,
             "disable_local_spoiler": int(self.settings.disable_local_spoiler or self.multiworld.is_race),
             "breakable_shuffle": self.options.breakable_shuffle.value,
+            "shuffle_enemy_drops": self.options.shuffle_enemy_drops.value,
+            "shuffle_enemy_souls": self.options.shuffle_enemy_souls.value,
         }
 
         # this would be in a stage if there was an appropriate stage for it

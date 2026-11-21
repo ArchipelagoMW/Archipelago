@@ -9,11 +9,12 @@ from flask import request, redirect, url_for, render_template, Response, session
 from pony.orm import count, commit, db_session
 from werkzeug.utils import secure_filename
 
+
 from worlds.AutoWorld import AutoWorldRegister, World
 from . import app, cache
 from .markdown import render_markdown
 from .models import Seed, Room, Command, UUID, uuid4
-from Utils import title_sorted
+from Utils import title_sorted, utcnow
 
 class WebWorldTheme(StrEnum):
     DIRT = "dirt"
@@ -233,11 +234,12 @@ def host_room(room: UUID):
     if room is None:
         return abort(404)
 
-    now = datetime.datetime.utcnow()
+    now = utcnow()
     # indicate that the page should reload to get the assigned port
-    should_refresh = ((not room.last_port and now - room.creation_time < datetime.timedelta(seconds=3))
-                      or room.last_activity < now - datetime.timedelta(seconds=room.timeout))
-
+    should_refresh = (
+        (not room.last_port and now - room.creation_time < datetime.timedelta(seconds=3))
+        or room.last_activity < now - datetime.timedelta(seconds=room.timeout)
+    )
     if now - room.last_activity > datetime.timedelta(minutes=1):
         # we only set last_activity if needed, otherwise parallel access on /room will cause an internal server error
         # due to "pony.orm.core.OptimisticCheckError: Object Room was updated outside of current transaction"

@@ -1281,7 +1281,7 @@ exclusion_table = {
         LocationName.HadesCupTrophyParadoxCups,
         LocationName.MusicalOrichalcumPlus,
     ],
-    "HitlistCasual":          {
+    "HitlistCasual":          [
         LocationName.FuturePete,
         LocationName.BetwixtandBetweenBondofFlame,
         LocationName.GrimReaper2,
@@ -1299,7 +1299,7 @@ exclusion_table = {
         LocationName.MCP,
         LocationName.Lvl50,
         LocationName.Lvl99
-    },
+    ],
     "Cups":          {
         LocationName.ProtectBeltPainandPanicCup,
         LocationName.SerenityGemPainandPanicCup,
@@ -1370,6 +1370,73 @@ exclusion_table = {
         location for location, data in all_locations.items() if location not in event_location_to_item.keys() and location not in popups_set and location != LocationName.StationofSerenityPotion and data.yml == "Chest"
     }
 }
+
+FightLogicRegions = [
+    RegionName.ShanYu,
+    RegionName.AnsemRiku,
+    RegionName.StormRider,
+    RegionName.DataXigbar,
+    RegionName.TwinLords,
+    RegionName.GenieJafar,
+    RegionName.DataLexaeus,
+    RegionName.OldPete,
+    RegionName.FuturePete,
+    RegionName.Terra,
+    RegionName.DataMarluxia,
+    RegionName.PrMinute,
+    RegionName.Barbosa,
+    RegionName.GrimReaper1,
+    RegionName.GrimReaper2,
+    RegionName.DataLuxord,
+    RegionName.Cerberus,
+    RegionName.OlympusPete,
+    RegionName.Hydra,
+    RegionName.Hades,
+    RegionName.DataZexion,
+    RegionName.OcPainAndPanicCup,
+    RegionName.OcCerberusCup,
+    RegionName.Oc2TitanCup,
+    RegionName.Oc2GofCup,
+    RegionName.HadesCups,
+    RegionName.Thresholder,
+    RegionName.Beast,
+    RegionName.DarkThorn,
+    RegionName.Xaldin,
+    RegionName.DataXaldin,
+    RegionName.HostileProgram,
+    RegionName.Mcp,
+    RegionName.DataLarxene,
+    RegionName.PrisonKeeper,
+    RegionName.OogieBoogie,
+    RegionName.Experiment,
+    RegionName.DataVexen,
+    RegionName.Hb2Corridors,
+    RegionName.HBDemyx,
+    RegionName.ThousandHeartless,
+    RegionName.DataDemyx,
+    RegionName.Sephi,
+    RegionName.CorFirstFight,
+    RegionName.CorSecondFight,
+    RegionName.Transport,
+    RegionName.Scar,
+    RegionName.GroundShaker,
+    RegionName.DataSaix,
+    RegionName.TwilightThorn,
+    RegionName.Axel1,
+    RegionName.Axel2,
+    RegionName.DataRoxas,
+    RegionName.DataAxel,
+    RegionName.Roxas,
+    RegionName.Xigbar,
+    RegionName.Luxord,
+    RegionName.Saix,
+    RegionName.Xemnas,
+    RegionName.ArmoredXemnas,
+    RegionName.ArmoredXemnas2,
+    RegionName.FinalXemnas,
+    RegionName.DataXemnas
+]
+
 
 location_groups: typing.Dict[str, list]
 location_groups = {

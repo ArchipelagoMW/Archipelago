@@ -37,7 +37,7 @@ class FactorioWeb(WebWorld):
         "English",
         "setup_en.md",
         "setup/en",
-        ["Berserker, Farrak Kilhn"]
+        ["Berserker", "Farrak Kilhn"]
     )]
     option_groups = option_groups
 

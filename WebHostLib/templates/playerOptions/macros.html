@@ -55,6 +55,9 @@
     {{ OptionTitle(option_name, option) }}
     <div class="named-range-container">
         <select id="{{ option_name }}-select" name="{{ option_name }}" data-option-name="{{ option_name }}" {{ "disabled" if option.default == "random" }}>
+            {% if option.default not in option.special_range_names.values() %}
+                <option value="{{ option.default }}" selected>Default ({{ option.default }})</option>
+            {% endif %}
             {% for key, val in option.special_range_names.items() %}
                 {% if option.default == val %}
                     <option value="{{ val }}" selected>{{ key|replace("_", " ")|title }} ({{ val }})</option>
@@ -94,6 +97,9 @@
     <div class="text-choice-container">
         <div class="text-choice-wrapper">
             <select id="{{ option_name }}" name="{{ option_name }}" {{ "disabled" if option.default == "random" }}>
+            {% if option.default not in option.options.values()  %}
+                <option value="{{ option.default }}" selected>Default ({{ option.default }})</option>
+            {% endif %}
             {% for id, name in option.name_lookup.items()|sort %}
                 {% if name != "random" %}
                     {% if option.default == id %}

@@ -330,8 +330,8 @@ all_doors: dict[str, Door] = {
     "2a_end_2_north-east": Door("2a_end_2_north-east", "2a_end_2", DoorDirection.right, False, False),
     "2a_end_2_east": Door("2a_end_2_east", "2a_end_2", DoorDirection.right, False, False),
 
-    "2a_end_3_north-west": Door("2a_end_3_north-west", "2a_end_3", DoorDirection.left, False, True),
-    "2a_end_3_west": Door("2a_end_3_west", "2a_end_3", DoorDirection.left, False, True),
+    "2a_end_3_north-west": Door("2a_end_3_north-west", "2a_end_3", DoorDirection.left, False, False),
+    "2a_end_3_west": Door("2a_end_3_west", "2a_end_3", DoorDirection.left, False, False),
     "2a_end_3_east": Door("2a_end_3_east", "2a_end_3", DoorDirection.right, False, False),
 
     "2a_end_4_west": Door("2a_end_4_west", "2a_end_4", DoorDirection.left, False, False),
@@ -1434,7 +1434,7 @@ all_doors: dict[str, Door] = {
     "6a_20_west": Door("6a_20_west", "6a_20", DoorDirection.left, False, False),
     "6a_20_east": Door("6a_20_east", "6a_20", DoorDirection.right, False, False),
 
-    "6a_b-00_west": Door("6a_b-00_west", "6a_b-00", DoorDirection.left, False, True),
+    "6a_b-00_west": Door("6a_b-00_west", "6a_b-00", DoorDirection.left, False, False),
     "6a_b-00_top": Door("6a_b-00_top", "6a_b-00", DoorDirection.up, False, False),
     "6a_b-00_east": Door("6a_b-00_east", "6a_b-00", DoorDirection.right, False, False),
 
@@ -1543,7 +1543,7 @@ all_doors: dict[str, Door] = {
     "6b_a-06_west": Door("6b_a-06_west", "6b_a-06", DoorDirection.left, False, False),
     "6b_a-06_east": Door("6b_a-06_east", "6b_a-06", DoorDirection.right, False, False),
 
-    "6b_b-00_west": Door("6b_b-00_west", "6b_b-00", DoorDirection.left, False, True),
+    "6b_b-00_west": Door("6b_b-00_west", "6b_b-00", DoorDirection.left, False, False),
     "6b_b-00_east": Door("6b_b-00_east", "6b_b-00", DoorDirection.down, False, False),
 
     "6b_b-01_top": Door("6b_b-01_top", "6b_b-01", DoorDirection.up, False, False),
@@ -5127,7 +5127,7 @@ all_locations: dict[str, LevelLocation] = {
     "4a_d-07_strawberry": LevelLocation("4a_d-07_strawberry", "Golden Ridge A - Room d-07 Strawberry", "4a_d-07_west", LocationType.strawberry, [[ItemName.blue_boosters, ], ]),
     "4a_d-09_strawberry": LevelLocation("4a_d-09_strawberry", "Golden Ridge A - Room d-09 Strawberry", "4a_d-09_west", LocationType.strawberry, [[ItemName.blue_boosters, ], ]),
     "4a_d-10_clear": LevelLocation("4a_d-10_clear", "Golden Ridge A - Level Clear", "4a_d-10_goal", LocationType.level_clear, []),
-    "4a_d-10_golden": LevelLocation("4a_d-10_golden", "Golden Ridge A - Golden Strawberry", "4a_d-10_goal", LocationType.golden_strawberry, [[ItemName.blue_clouds, ItemName.pink_clouds, ItemName.blue_boosters, ItemName.move_blocks, ItemName.dash_refills, ItemName.springs, ItemName.coins, ], ]),
+    "4a_d-10_golden": LevelLocation("4a_d-10_golden", "Golden Ridge A - Golden Strawberry", "4a_d-10_goal", LocationType.golden_strawberry, [[ItemName.blue_clouds, ItemName.pink_clouds, ItemName.blue_boosters, ItemName.move_blocks, ItemName.moving_platforms, ItemName.dash_refills, ItemName.springs, ItemName.coins, ], ]),
 
     "4b_b-02_binoculars": LevelLocation("4b_b-02_binoculars", "Golden Ridge B - Room b-02 Binoculars", "4b_b-02_bottom", LocationType.binoculars, []),
     "4b_c-03_binoculars": LevelLocation("4b_c-03_binoculars", "Golden Ridge B - Room c-03 Binoculars", "4b_c-03_bottom", LocationType.binoculars, []),
@@ -5155,14 +5155,14 @@ all_locations: dict[str, LevelLocation] = {
     "5a_a-15_strawberry": LevelLocation("5a_a-15_strawberry", "Mirror Temple A - Room a-15 Strawberry", "5a_a-15_south", LocationType.strawberry, [[ItemName.coins, ItemName.red_boosters, ], ]),
     "5a_a-14_strawberry": LevelLocation("5a_a-14_strawberry", "Mirror Temple A - Room a-14 Strawberry", "5a_a-14_south", LocationType.strawberry, [[ItemName.swap_blocks, ItemName.dash_refills, ], ]),
     "5a_b-18_strawberry": LevelLocation("5a_b-18_strawberry", "Mirror Temple A - Room b-18 Strawberry", "5a_b-18_south", LocationType.strawberry, [[ItemName.red_boosters, ], ]),
-    "5a_b-01c_strawberry": LevelLocation("5a_b-01c_strawberry", "Mirror Temple A - Room b-01c Strawberry", "5a_b-01c_east", LocationType.strawberry, [[ItemName.red_boosters, ], ]),
+    "5a_b-01c_strawberry": LevelLocation("5a_b-01c_strawberry", "Mirror Temple A - Room b-01c Strawberry", "5a_b-01c_east", LocationType.strawberry, []),
     "5a_b-20_strawberry_1": LevelLocation("5a_b-20_strawberry_1", "Mirror Temple A - Room b-20 Strawberry 1", "5a_b-20_south", LocationType.strawberry, []),
     "5a_b-20_strawberry_2": LevelLocation("5a_b-20_strawberry_2", "Mirror Temple A - Room b-20 Strawberry 2", "5a_b-20_east", LocationType.strawberry, [[ItemName.swap_blocks, ], ]),
     "5a_b-21_strawberry": LevelLocation("5a_b-21_strawberry", "Mirror Temple A - Room b-21 Strawberry", "5a_b-21_east", LocationType.strawberry, [[ItemName.red_boosters, ItemName.dash_refills, ], ]),
     "5a_b-03_strawberry": LevelLocation("5a_b-03_strawberry", "Mirror Temple A - Room b-03 Strawberry", "5a_b-03_east", LocationType.strawberry, [[ItemName.red_boosters, ], ]),
     "5a_b-05_strawberry": LevelLocation("5a_b-05_strawberry", "Mirror Temple A - Room b-05 Strawberry", "5a_b-05_west", LocationType.strawberry, [[ItemName.red_boosters, ItemName.dash_refills, ], ]),
     "5a_b-04_key_2": LevelLocation("5a_b-04_key_2", "Mirror Temple A - Depths Key", "5a_b-04_east", LocationType.key, []),
-    "5a_b-10_strawberry": LevelLocation("5a_b-10_strawberry", "Mirror Temple A - Room b-10 Strawberry", "5a_b-10_east", LocationType.strawberry, [[ItemName.red_boosters, ], ]),
+    "5a_b-10_strawberry": LevelLocation("5a_b-10_strawberry", "Mirror Temple A - Room b-10 Strawberry", "5a_b-10_east", LocationType.strawberry, []),
     "5a_b-12_strawberry": LevelLocation("5a_b-12_strawberry", "Mirror Temple A - Room b-12 Strawberry", "5a_b-12_east", LocationType.strawberry, [[ItemName.red_boosters, ], ]),
     "5a_b-17_strawberry_2": LevelLocation("5a_b-17_strawberry_2", "Mirror Temple A - Room b-17 Strawberry 2", "5a_b-17_west", LocationType.strawberry, [[ItemName.strawberry_seeds, ItemName.springs, ], ]),
     "5a_b-17_strawberry_1": LevelLocation("5a_b-17_strawberry_1", "Mirror Temple A - Room b-17 Strawberry 1", "5a_b-17_north-west", LocationType.strawberry, []),
@@ -5181,7 +5181,7 @@ all_locations: dict[str, LevelLocation] = {
     "5a_d-19_strawberry": LevelLocation("5a_d-19_strawberry", "Mirror Temple A - Room d-19 Strawberry", "5a_d-19_east", LocationType.strawberry, [["Mirror Temple A - Search Key 3", ], ]),
     "5a_e-06_strawberry": LevelLocation("5a_e-06_strawberry", "Mirror Temple A - Room e-06 Strawberry", "5a_e-06_east", LocationType.strawberry, [[ItemName.dash_switches, ], ]),
     "5a_e-11_clear": LevelLocation("5a_e-11_clear", "Mirror Temple A - Level Clear", "5a_e-11_goal", LocationType.level_clear, []),
-    "5a_e-11_golden": LevelLocation("5a_e-11_golden", "Mirror Temple A - Golden Strawberry", "5a_e-11_goal", LocationType.golden_strawberry, [[ItemName.red_boosters, ItemName.swap_blocks, ItemName.dash_switches, "Mirror Temple A - Entrance Key", "Mirror Temple A - Depths Key", "Mirror Temple A - Search Key 1", "Mirror Temple A - Search Key 2", ItemName.seekers, ItemName.coins, ItemName.theo_crystal, ], ]),
+    "5a_e-11_golden": LevelLocation("5a_e-11_golden", "Mirror Temple A - Golden Strawberry", "5a_e-11_goal", LocationType.golden_strawberry, [[ItemName.red_boosters, ItemName.swap_blocks, ItemName.dash_switches, ItemName.dash_refills, "Mirror Temple A - Entrance Key", "Mirror Temple A - Depths Key", "Mirror Temple A - Search Key 1", "Mirror Temple A - Search Key 2", ItemName.seekers, ItemName.coins, ItemName.theo_crystal, ], ]),
 
     "5b_b-02_key_1": LevelLocation("5b_b-02_key_1", "Mirror Temple B - Central Chamber Key 1", "5b_b-02_south-west", LocationType.key, []),
     "5b_b-02_key_2": LevelLocation("5b_b-02_key_2", "Mirror Temple B - Central Chamber Key 2", "5b_b-02_south-east", LocationType.key, []),
@@ -5310,8 +5310,8 @@ all_locations: dict[str, LevelLocation] = {
     "10a_d-00_binoculars": LevelLocation("10a_d-00_binoculars", "Farewell - Room d-00 Binoculars", "10a_d-00_south", LocationType.binoculars, []),
     "10a_d-04_binoculars": LevelLocation("10a_d-04_binoculars", "Farewell - Room d-04 Binoculars", "10a_d-04_west", LocationType.binoculars, []),
     "10a_d-04_key_1": LevelLocation("10a_d-04_key_1", "Farewell - Power Source Key 1", "10a_d-04_west", LocationType.key, [[ItemName.double_dash_refills, ItemName.jellyfish, ], ]),
-    "10a_d-03_binoculars": LevelLocation("10a_d-03_binoculars", "Farewell - Room d-03 Binoculars", "10a_d-03_west", LocationType.binoculars, [[ItemName.breaker_boxes, ], ]),
-    "10a_d-03_key_2": LevelLocation("10a_d-03_key_2", "Farewell - Power Source Key 2", "10a_d-03_west", LocationType.key, [[ItemName.breaker_boxes, ItemName.double_dash_refills, ItemName.jellyfish, ], ]),
+    "10a_d-03_binoculars": LevelLocation("10a_d-03_binoculars", "Farewell - Room d-03 Binoculars", "10a_d-03_west", LocationType.binoculars, [[ItemName.breaker_boxes, ItemName.double_dash_refills, ItemName.dash_switches, ], ]),
+    "10a_d-03_key_2": LevelLocation("10a_d-03_key_2", "Farewell - Power Source Key 2", "10a_d-03_west", LocationType.key, [[ItemName.breaker_boxes, ItemName.double_dash_refills, ItemName.dash_switches, ItemName.jellyfish, ], ]),
     "10a_d-01_binoculars": LevelLocation("10a_d-01_binoculars", "Farewell - Room d-01 Binoculars", "10a_d-01_east", LocationType.binoculars, []),
     "10a_d-01_key_3": LevelLocation("10a_d-01_key_3", "Farewell - Power Source Key 3", "10a_d-01_east", LocationType.key, [[ItemName.dash_refills, ItemName.dash_switches, ItemName.jellyfish, ], ]),
     "10a_d-02_binoculars": LevelLocation("10a_d-02_binoculars", "Farewell - Room d-02 Binoculars", "10a_d-02_bottom", LocationType.binoculars, [[ItemName.breaker_boxes, ], ]),
