@@ -1,5 +1,6 @@
 from .bases import SM64TestBase
-from .. import Options
+from .. import Options, filler_item_options_lambda
+from ..Items import filler_item_data_table
 from ..Locations import loc100Coin_table, location_table
 from ..Regions import sm64_entrances_to_level, sm64_level_to_paintings, sm64_level_to_secrets, \
     valid_move_randomizer_start_courses
@@ -277,6 +278,12 @@ class AllEntrancesMoveTestBase(SM64TestBase):
         bitfs_level_id = sm64_entrances_to_level["Bowser in the Fire Sea"]
         if self.world.area_connections[bitfs_level_id] == sm64_entrances_to_level["Hazy Maze Cave"]:
             self.assertIsNot(self.world.area_connections[cotmc_level_id], sm64_entrances_to_level["Dire, Dire Docks"])
+
+
+# Validate we don't mismatch our options and filler items
+class FillerItemMapsMatchKeys(SM64TestBase):
+    def test_filler_options_keys_match(self):
+        self.assertEqual(filler_item_data_table.keys(), filler_item_options_lambda.keys())
 
 
 # No Strict Requirements
