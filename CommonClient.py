@@ -9,7 +9,6 @@ import sys
 import typing
 import time
 import functools
-import warnings
 
 import ModuleUpdate
 ModuleUpdate.update()
@@ -24,8 +23,8 @@ if __name__ == "__main__":
 from MultiServer import CommandProcessor, mark_raw
 from NetUtils import (Endpoint, decode, NetworkItem, encode, JSONtoTextParser, ClientStatus, Permission, NetworkSlot,
                       RawJSONtoTextParser, add_json_text, add_json_location, add_json_item, JSONTypes, HintStatus, SlotType)
-from Utils import gui_enabled, Version, stream_input, async_start
-from worlds import network_data_package, AutoWorldRegister
+from Utils import gui_enabled, Version, async_start, get_file_safe_name, input_console
+from worlds import network_data_package
 import os
 import ssl
 
@@ -343,6 +342,8 @@ class CommonContext:
     """Seed name that will be validated on opening a socket if present"""
     server_seed_name: str | None
     """Actual seed_name reported by the server in RoomInfo"""
+    server_tags: set[str] | None
+    """Tags reported by the server in RoomInfo"""
     connected_identity: tuple[str, int, int] | None
     """(server_seed_name, team, slot) of the last successful connection, used to detect a session switch"""
 
@@ -406,6 +407,7 @@ class CommonContext:
         self.auth = None
         self.seed_name = None
         self.server_seed_name = None
+        self.server_tags = None
         self.connected_identity = None
         # decouple from the class-level mutable set so tag changes (e.g. DeathLink) don't leak across instances
         self.tags = set(type(self).tags)
@@ -472,6 +474,7 @@ class CommonContext:
         self.locations_info = {}
         self.pending_locations = set()
         self.server_seed_name = None
+        self.server_tags = None
         self.server_version = Version(0, 0, 0)
         self.generator_version = Version(0, 0, 0)
         self.server = None
@@ -955,6 +958,7 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
         raise
     if cmd == 'RoomInfo':
         ctx.server_seed_name = args["seed_name"]
+        ctx.server_tags = args["tags"]
         if ctx.seed_name and ctx.seed_name != args["seed_name"]:
             msg = "The server is running a different multiworld than your client is. (invalid seed_name)"
             logger.info(msg, extra={'compact_gui': True})
@@ -1167,21 +1171,26 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
 async def console_loop(ctx: CommonContext):
     commandprocessor = ctx.command_processor(ctx)
     queue = asyncio.Queue()
-    stream_input(sys.stdin, queue)
-    while not ctx.exit_event.is_set():
-        try:
-            input_text = await queue.get()
-            queue.task_done()
+    history_name = "".join(get_file_safe_name(ctx.game or "common").lower().split()) + "client"
+    _, console_exit = input_console(sys.stdin, queue, history_name, ctx)
+    try:
+        while not ctx.exit_event.is_set():
+            try:
+                input_text = await queue.get()
+                queue.task_done()
 
-            if ctx.input_requests > 0:
-                ctx.input_requests -= 1
-                ctx.input_queue.put_nowait(input_text)
-                continue
+                if ctx.input_requests > 0:
+                    ctx.input_requests -= 1
+                    ctx.input_queue.put_nowait(input_text)
+                    continue
 
-            if input_text:
-                commandprocessor(input_text)
-        except Exception as e:
-            logger.exception(e)
+                if input_text:
+                    commandprocessor(input_text)
+            except Exception as e:
+                logger.exception(e)
+    finally:
+        if console_exit:
+            console_exit.set()
 
 
 def get_base_parser(description: typing.Optional[str] = None):
