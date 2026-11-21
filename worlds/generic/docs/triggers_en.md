@@ -32,13 +32,8 @@ Each trigger consists of four parts:
     - Example: `15`
     - Each trigger must be used for exactly one option result. If you would like the same thing to occur with multiple
       results, you would need multiple triggers for this.
-    - The trigger compares this against the YAML selection at trigger time. A scalar `random` matches the literal
-      string `random`. The game option resolves that string after the comparison, so an `option_result` of `true`
-      misses the scalar even when the option later resolves it to `true`.
-    - Replace a scalar `random` with an equally weighted mapping of the explicit values to trigger on one resolved
-      result. The generator stores the selected value, and the comparison and the game option use that same roll.
-    - Write the mapping keys and `option_result` with the same YAML scalar type. Unquoted `true` and `false` are
-      booleans, and a quoted `true` is a string.
+    - Triggers do not work on an option set to `random`. A trigger looking for `true` will not fire, even if the
+      option ends up as `true`. See "Triggers and random options" below for what to do instead.
 - `options` is where you define what will happen when the trigger activates. This can be something as simple as ensuring
   another option also gets selected or placing an item in a certain location. It is possible to have multiple things
   happen in this section.
@@ -89,9 +84,10 @@ For example:
 
 In this example, if your world happens to roll SpecificKeycards, then your game will also start in inverted.
 
-shapez requires achievements when belts and extractors are locked. With the lock set to the scalar `random`, the
-trigger compares that string to `true` and leaves `include_achievements` at `false` for either value the lock resolves
-to afterward:
+### Triggers and random options
+
+If an option is set to `random`, a trigger on that option never fires. In this shapez example, achievements stay off
+even when belts and extractors end up locked:
 
   ```yaml
   shapez:
@@ -106,8 +102,7 @@ to afterward:
             include_achievements: true
   ```
 
-List the explicit values at equal weight instead. The generator stores the selected boolean and uses it for the game
-option as well. The mapping keys and `option_result` are the same YAML scalar type, unquoted booleans:
+To get a random result that triggers still see, give each value the same weight instead of writing `random`:
 
   ```yaml
   shapez:
@@ -124,8 +119,7 @@ option as well. The mapping keys and `option_result` are the same YAML scalar ty
             include_achievements: true
   ```
 
-Selecting `true` sets `include_achievements` to `true`. Selecting `false` leaves the original `include_achievements`
-value of `false` in place.
+Now, whenever belts and extractors are locked, achievements are turned on too.
 
 It is also possible to use imaginary values in options to trigger specific settings. You can use these made-up values in
 either your main options or to trigger from another trigger. Currently, this is the only way to trigger on "setting 1
