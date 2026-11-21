@@ -169,7 +169,7 @@ def gen_game(gen_options: dict, meta: dict[str, Any] | None = None, owner=None, 
             args.name[player] = handle_name(args.name[player], player, name_counter)
         if len(set(args.name.values())) != len(args.name):
             raise Exception(f"Names have to be unique. Names: {Counter(args.name.values())}")
-        ERmain(args, seed, baked_server_options=meta["server_options"])
+        ERmain(args, seed, baked_server_options=meta["server_options"], is_webhost_gen=True)
 
         return upload_to_db(target.name, sid, owner, race)
 
