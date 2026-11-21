@@ -788,16 +788,35 @@ def validate_world(ootworld, entrance_placed, locations_to_ensure_reachable, all
     multiworld = ootworld.multiworld
     player = ootworld.player
 
-    all_state = all_state_orig.copy()
-    none_state = none_state_orig.copy()
+    # States are created lazily because they can be expensive to create and are not always needed.
+    lazy_all_state = None
+    lazy_none_state = None
+    lazy_time_travel_state = None
 
-    all_state.sweep_for_advancements(locations=ootworld.get_locations())
-    none_state.sweep_for_advancements(locations=ootworld.get_locations())
+    def get_all_state() -> CollectionState:
+        nonlocal lazy_all_state
+        if lazy_all_state is None:
+            lazy_all_state = all_state_orig.copy()
+            lazy_all_state.sweep_for_advancements(locations=ootworld.get_locations())
+        return lazy_all_state
 
-    if ootworld.shuffle_interior_entrances or ootworld.shuffle_overworld_entrances or ootworld.spawn_positions:
-        time_travel_state = none_state.copy()
-        time_travel_state.collect(ootworld.create_item('Time Travel'), prevent_sweep=True)
-        time_travel_state._oot_update_age_reachable_regions(player)
+    def get_none_state() -> CollectionState:
+        nonlocal lazy_none_state
+        if lazy_none_state is None:
+            lazy_none_state = none_state_orig.copy()
+            lazy_none_state.sweep_for_advancements(locations=ootworld.get_locations())
+        return lazy_none_state
+
+    def get_time_travel_state() -> CollectionState:
+        nonlocal lazy_time_travel_state
+        if lazy_time_travel_state is None:
+            lazy_time_travel_state = get_none_state().copy()
+            lazy_time_travel_state.collect(ootworld.create_item('Time Travel'), prevent_sweep=True)
+            lazy_time_travel_state._oot_update_age_reachable_regions(player)
+        return lazy_time_travel_state
+
+    # The validation checks are ordered such that the most performance intensive checks are run last, skipping those
+    # checks entirely if an earlier check determines the world to be invalid.
 
     # Unless entrances are decoupled, we don't want the player to end up through certain entrances as the wrong age
     # This means we need to hard check that none of the relevant entrances are ever reachable as that age
@@ -818,12 +837,6 @@ def validate_world(ootworld, entrance_placed, locations_to_ensure_reachable, all
                     raise EntranceShuffleError(f'{entrance.name} potentially accessible as child')
                 if entrance.name in ADULT_FORBIDDEN and not entrance_unreachable_as(entrance, 'adult', already_checked=[entrance.reverse]):
                     raise EntranceShuffleError(f'{entrance.name} potentially accessible as adult')
-
-    # Check if all locations are reachable if not NL
-    if locations_to_ensure_reachable:
-        for loc in locations_to_ensure_reachable:
-            if not all_state.can_reach(loc, 'Location', player):
-                raise EntranceShuffleError(f'{loc} is unreachable')
 
     if ootworld.shuffle_interior_entrances and (ootworld.misc_hints or ootworld.hints != 'none') and \
         (entrance_placed == None or entrance_placed.type in ['Interior', 'SpecialInterior']):
@@ -852,10 +865,13 @@ def validate_world(ootworld, entrance_placed, locations_to_ensure_reachable, all
     # Check basic refills, time passing, return to ToT
     if (ootworld.shuffle_special_interior_entrances or ootworld.shuffle_overworld_entrances or ootworld.spawn_positions) and \
         (entrance_placed == None or entrance_placed.type in ['SpecialInterior', 'Overworld', 'Spawn', 'WarpSong', 'OwlDrop']):
-        
+
+        none_state = get_none_state()
         valid_starting_regions = {'Kokiri Forest', 'Kakariko Village'}
         if not any(region for region in valid_starting_regions if none_state.can_reach(region, 'Region', player)):
             raise EntranceShuffleError('Invalid starting area')
+
+        time_travel_state = get_time_travel_state()
 
         if not (any(region for region in time_travel_state.child_reachable_regions[player] if region.time_passes) and
                 any(region for region in time_travel_state.adult_reachable_regions[player] if region.time_passes)):
@@ -868,19 +884,33 @@ def validate_world(ootworld, entrance_placed, locations_to_ensure_reachable, all
 
     if (ootworld.shuffle_interior_entrances or ootworld.shuffle_overworld_entrances) and \
         (entrance_placed == None or entrance_placed.type in ['Interior', 'SpecialInterior', 'Overworld', 'Spawn', 'WarpSong', 'OwlDrop']):
+
+        if ootworld.open_forest == 'closed':
+            none_state = get_none_state()
+            # Ensure that Kokiri Shop is reachable as child with no items
+            if multiworld.get_region('KF Kokiri Shop', player) not in none_state.child_reachable_regions[player]:
+                raise EntranceShuffleError('Kokiri Forest Shop not accessible as child in closed forest')
+
+        time_travel_state = get_time_travel_state()
+
         # Ensure big poe shop is always reachable as adult
         if multiworld.get_region('Market Guard House', player) not in time_travel_state.adult_reachable_regions[player]:
             raise EntranceShuffleError('Big Poe Shop access not guaranteed as adult')
+
         if ootworld.shopsanity == 'off':
+            all_state = get_all_state()
             # Ensure that Goron and Zora shops are accessible as adult
             if multiworld.get_region('GC Shop', player) not in all_state.adult_reachable_regions[player]:
                 raise EntranceShuffleError('Goron City Shop not accessible as adult')
             if multiworld.get_region('ZD Shop', player) not in all_state.adult_reachable_regions[player]:
                 raise EntranceShuffleError('Zora\'s Domain Shop not accessible as adult')
-        if ootworld.open_forest == 'closed':
-            # Ensure that Kokiri Shop is reachable as child with no items
-            if multiworld.get_region('KF Kokiri Shop', player) not in none_state.child_reachable_regions[player]:
-                raise EntranceShuffleError('Kokiri Forest Shop not accessible as child in closed forest')
+
+    # Check if all locations are reachable if not NL
+    if locations_to_ensure_reachable:
+        all_state = get_all_state()
+        for loc in locations_to_ensure_reachable:
+            if not all_state.can_reach(loc, 'Location', player):
+                raise EntranceShuffleError(f'{loc} is unreachable')
 
 
 
