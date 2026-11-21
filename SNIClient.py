@@ -28,7 +28,9 @@ if __name__ == "__main__":
     Utils.init_logging("SNIClient", exception_logger="Client")
 
 import colorama
-from websockets.client import connect as websockets_connect, WebSocketClientProtocol
+import websockets
+from websockets.asyncio.client import connect as websockets_connect
+from websockets.asyncio.client import ClientConnection as WebSocketClientProtocol
 from websockets.exceptions import WebSocketException, ConnectionClosed
 
 snes_logger = logging.getLogger("SNES")
@@ -87,7 +89,7 @@ class SNIClientCommandProcessor(ClientCommandProcessor):
         self.ctx.snes_reconnect_address = None
         self.ctx.cancel_snes_autoreconnect()
         self.ctx.snes_state = SNESState.SNES_DISCONNECTED
-        if self.ctx.snes_socket and not self.ctx.snes_socket.closed:
+        if self.ctx.snes_socket:
             async_start(self.ctx.snes_socket.close())
             return True
         else:
@@ -171,7 +173,7 @@ class SNIContext(CommonContext):
         self.awaiting_rom = False
 
     def event_invalid_slot(self) -> typing.NoReturn:
-        if self.snes_socket is not None and not self.snes_socket.closed:
+        if self.snes_socket is not None:
             async_start(self.snes_socket.close())
         raise Exception("Invalid ROM detected, "
                         "please verify that you have loaded the correct rom and reconnect your snes (/snes)")
@@ -452,12 +454,10 @@ async def snes_connect(ctx: SNIContext, address: str, deviceIndex: int = -1) -> 
     except Exception as e:
         ctx.snes_state = SNESState.SNES_DISCONNECTED
         if task_alive(recv_task):
-            if not ctx.snes_socket.closed:
-                await ctx.snes_socket.close()
+            await ctx.snes_socket.close()  
         else:
             if ctx.snes_socket is not None:
-                if not ctx.snes_socket.closed:
-                    await ctx.snes_socket.close()
+                await ctx.snes_socket.close()
                 ctx.snes_socket = None
         snes_logger.error(f"Error connecting to snes ({e}), retrying in {_global_snes_reconnect_delay} seconds")
         ctx.snes_autoreconnect_task = asyncio.create_task(snes_autoreconnect(ctx), name="snes auto-reconnect")
@@ -469,8 +469,7 @@ async def snes_connect(ctx: SNIContext, address: str, deviceIndex: int = -1) -> 
 
 async def snes_disconnect(ctx: SNIContext) -> None:
     if ctx.snes_socket:
-        if not ctx.snes_socket.closed:
-            await ctx.snes_socket.close()
+        await ctx.snes_socket.close()
         ctx.snes_socket = None
 
 
@@ -500,7 +499,7 @@ async def snes_recv_loop(ctx: SNIContext) -> None:
         snes_logger.error("Lost connection to the snes, type /snes to reconnect")
     finally:
         socket, ctx.snes_socket = ctx.snes_socket, None
-        if socket is not None and not socket.closed:
+        if socket is not None:
             await socket.close()
 
         ctx.snes_state = SNESState.SNES_DISCONNECTED
@@ -522,8 +521,7 @@ async def snes_read(ctx: SNIContext, address: int, size: int) -> typing.Optional
         if (
             ctx.snes_state != SNESState.SNES_ATTACHED or
             ctx.snes_socket is None or
-            not ctx.snes_socket.open or
-            ctx.snes_socket.closed
+            ctx.snes_socket.state != websockets.protocol.State.OPEN
         ):
             return None
 
@@ -549,7 +547,7 @@ async def snes_read(ctx: SNIContext, address: int, size: int) -> typing.Optional
             if len(data):
                 snes_logger.error(str(data))
                 snes_logger.warning('Communication Failure with SNI')
-            if ctx.snes_socket is not None and not ctx.snes_socket.closed:
+            if ctx.snes_socket is not None:
                 await ctx.snes_socket.close()
             return None
 
@@ -563,7 +561,7 @@ async def snes_write(ctx: SNIContext, write_list: typing.List[typing.Tuple[int, 
         await ctx.snes_request_lock.acquire()
 
         if ctx.snes_state != SNESState.SNES_ATTACHED or ctx.snes_socket is None or \
-                not ctx.snes_socket.open or ctx.snes_socket.closed:
+                not ctx.snes_socket.state == websockets.protocol.State.OPEN:
             return False
 
         PutAddress_Request: SNESRequest = {"Opcode": "PutAddress", "Operands": [], 'Space': 'SNES'}
@@ -728,7 +726,7 @@ async def main() -> None:
 
     ctx.server_address = None
     ctx.snes_reconnect_address = None
-    if ctx.snes_socket is not None and not ctx.snes_socket.closed:
+    if ctx.snes_socket is not None:
         await ctx.snes_socket.close()
     await watcher_task
     await ctx.shutdown()

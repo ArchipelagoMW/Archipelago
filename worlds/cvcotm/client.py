@@ -178,7 +178,7 @@ class CastlevaniaCotMClient(BizHawkClient):
             self.death_causes += [cause]
 
     async def game_watcher(self, ctx: "BizHawkClientContext") -> None:
-        if ctx.server is None or ctx.server.socket.closed or ctx.slot_data is None or ctx.slot is None:
+        if ctx.server is None or ctx.slot_data is None or ctx.slot is None:
             return
 
         try:
