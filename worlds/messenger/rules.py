@@ -1,7 +1,8 @@
 from typing import TYPE_CHECKING
 
-from BaseClasses import CollectionState
-from worlds.generic.Rules import CollectionRule, add_rule, allow_self_locking_items
+from BaseClasses import CollectionRule, CollectionState, Region
+from worlds.generic.Rules import add_rule, allow_self_locking_items
+
 from .constants import NOTES, PHOBEKINS
 from .options import MessengerAccessibility
 
@@ -13,6 +14,7 @@ class MessengerRules:
     player: int
     world: "MessengerWorld"
     connection_rules: dict[str, CollectionRule]
+    indirect_conditions: dict[str, list[Region]]
     region_rules: dict[str, CollectionRule]
     location_rules: dict[str, CollectionRule]
     maximum_price: int
@@ -29,6 +31,7 @@ class MessengerRules:
         self.required_seals = world.required_seals
 
         # dict of connection names and requirements to traverse the exit
+        # fmt: off
         self.connection_rules = {
             # from ToTHQ
             "Artificer's Portal":
@@ -108,17 +111,18 @@ class MessengerRules:
             "Searing Crags - Right -> Searing Crags - Portal":
                 lambda state: self.has_tabi(state) and self.has_wingsuit(state),
             "Searing Crags - Colossuses Shop -> Searing Crags - Key of Strength Shop":
-                lambda state: state.has("Power Thistle", self.player)
-                              and (self.has_dart(state)
-                                   or (self.has_wingsuit(state)
-                                       and self.can_destroy_projectiles(state))),
+                lambda state: state.has("Power Thistle", self.player),
+            "Searing Crags - Key of Strength Shop -> Searing Crags - Key of Strength Room":
+                lambda state: self.has_dart(state)
+                              or (self.has_wingsuit(state)
+                                  and self.can_destroy_projectiles(state)),
             "Searing Crags - Falling Rocks Shop -> Searing Crags - Searing Mega Shard Shop":
                 self.has_dart,
             "Searing Crags - Searing Mega Shard Shop -> Searing Crags - Before Final Climb Shop":
                 lambda state: self.has_dart(state) or self.can_destroy_projectiles(state),
             "Searing Crags - Searing Mega Shard Shop -> Searing Crags - Falling Rocks Shop":
                 self.has_dart,
-            "Searing Crags - Searing Mega Shard Shop -> Searing Crags - Key of Strength Shop":
+            "Searing Crags - Searing Mega Shard Shop -> Searing Crags - Key of Strength Room":
                 self.false,
             "Searing Crags - Before Final Climb Shop -> Searing Crags - Colossuses Shop":
                 self.has_dart,
@@ -129,7 +133,7 @@ class MessengerRules:
                 lambda state: state.has("Magic Firefly", self.player)
                               and state.multiworld.get_location("Quillshroom Marsh - Queen of Quills", self.player)
                               .can_reach(state),
-            "Glacial Peak - Tower Entrance Shop -> Glacial Peak - Top":
+            "Glacial Peak - Top -> Cloud Ruins - Left":
                 lambda state: state.has("Ruxxtin's Amulet", self.player),
             "Glacial Peak - Projectile Spike Pit Checkpoint -> Glacial Peak - Left":
                 lambda state: self.has_dart(state) or (self.can_dboost(state) and self.has_wingsuit(state)),
@@ -171,7 +175,7 @@ class MessengerRules:
                 lambda state: self.has_wingsuit(state) and self.can_dboost(state),
             # Underworld
             "Underworld - Left -> Underworld - Left Shop":
-                self.has_tabi,
+                lambda state: self.has_tabi(state) or self.has_vertical(state),
             "Underworld - Left Shop -> Underworld - Left":
                 self.has_tabi,
             "Underworld - Hot Dip Checkpoint -> Underworld - Lava Run Checkpoint":
@@ -192,7 +196,7 @@ class MessengerRules:
                               or (self.has_dart(state) and self.has_wingsuit(state)),
             # Dark Cave
             "Dark Cave - Right -> Dark Cave - Left":
-                lambda state: state.has("Candle", self.player) and self.has_dart(state),
+                lambda state: state.has("Candle", self.player) and self.has_dart(state) and self.has_wingsuit(state),
             # Riviere Turquoise
             "Riviere Turquoise - Waterfall Shop -> Riviere Turquoise - Flower Flight Checkpoint":
                 lambda state: self.has_dart(state) or (
@@ -206,6 +210,10 @@ class MessengerRules:
                 self.has_wingsuit,
             "Elemental Skylands - Air Intro Shop -> Elemental Skylands - Air Generator Shop":
                 self.has_wingsuit,
+            "Elemental Skylands - Earth Intro Shop -> Elemental Skylands - Earth Generator Shop":
+                self.has_dart,
+            "Elemental Skylands - Water Generator Shop -> Elemental Skylands - Water Intro Shop":
+                self.can_destroy_projectiles,
             # Sunken Shrine
             "Sunken Shrine - Portal -> Sunken Shrine - Sun Path Shop":
                 self.has_tabi,
@@ -218,7 +226,19 @@ class MessengerRules:
             "Sunken Shrine - Tabi Gauntlet Shop -> Sunken Shrine - Sun Path Shop":
                 lambda state: self.can_dboost(state) or self.has_dart(state),
         }
+        # fmt: on
 
+        # dict of connection names and the regions checked in the requirements to traverse the exit
+        self.indirect_conditions = {
+            "Howling Grotto - Breezy Crushers Checkpoint -> Howling Grotto - Crushing Pits Shop": [
+                self.world.get_region("Howling Grotto - Emerald Golem Shop")
+            ],
+            "Glacial Peak - Left -> Elemental Skylands - Air Shmup": [
+                self.world.get_location("Quillshroom Marsh - Queen of Quills").parent_region
+            ],
+        }
+
+        # fmt: off
         self.location_rules = {
             # hq
             "Money Wrench": self.can_shop,
@@ -249,7 +269,7 @@ class MessengerRules:
             "Howling Grotto Seal - Windy Saws and Balls":
                 self.has_wingsuit,
             "Howling Grotto Seal - Crushing Pits":
-                lambda state: self.has_wingsuit(state) and self.has_dart(state),
+                self.has_dart,
             "Howling Grotto - Emerald Golem":
                 self.has_wingsuit,
             # searing crags
@@ -268,7 +288,8 @@ class MessengerRules:
             "Tower of Time Seal - Time Waster":
                 self.has_dart,
             # corrupted future
-            "Corrupted Future - Key of Courage": lambda state: state.has("Magic Firefly", self.player),
+            "Corrupted Future - Key of Courage":
+                lambda state: state.has("Magic Firefly", self.player),
             # cloud ruins
             "Time Warp Mega Shard":
                 lambda state: self.has_vertical(state) or self.can_dboost(state),
@@ -300,21 +321,18 @@ class MessengerRules:
             "Riviere Turquoise Seal - Bounces and Balls":
                 self.can_dboost,
             "Riviere Turquoise Seal - Launch of Faith":
-                lambda state: self.has_vertical(state),
+                self.has_vertical,
             # elemental skylands
-            "Elemental Skylands - Key of Symbiosis":
-                self.has_dart,
             "Elemental Skylands Seal - Air":
                 self.has_wingsuit,
             "Elemental Skylands Seal - Water":
-                lambda state: self.has_dart(state) and state.has("Currents Master", self.player),
+                lambda state: state.has("Currents Master", self.player),
             "Elemental Skylands Seal - Fire":
-                lambda state: self.has_dart(state) and self.can_destroy_projectiles(state) and self.is_aerobatic(state),
+                lambda state: self.can_destroy_projectiles(state) and self.is_aerobatic(state),
             "Earth Mega Shard":
                 self.has_dart,
-            "Water Mega Shard":
-                self.has_dart,
         }
+        # fmt: on
 
         if self.required_seals:
             self.connection_rules["Shrink Down"] = self.has_enough_seals
@@ -364,6 +382,8 @@ class MessengerRules:
         for entrance_name, rule in self.connection_rules.items():
             entrance = multiworld.get_entrance(entrance_name, self.player)
             entrance.access_rule = rule
+            for region in self.indirect_conditions.get(entrance_name, ()):
+                multiworld.register_indirect_condition(region, entrance)
         for loc in multiworld.get_locations(self.player):
             if loc.name in self.location_rules:
                 loc.access_rule = self.location_rules[loc.name]
@@ -379,6 +399,7 @@ class MessengerHardRules(MessengerRules):
     def __init__(self, world: "MessengerWorld") -> None:
         super().__init__(world)
 
+        # fmt: off
         self.connection_rules.update(
             {
                 # Autumn Hills
@@ -406,7 +427,7 @@ class MessengerHardRules(MessengerRules):
                     lambda state: self.has_dart(state) or
                                   (self.can_destroy_projectiles(state) and
                                    (self.has_wingsuit(state) or self.can_dboost(state))),
-                "Searing Crags - Searing Mega Shard Shop -> Searing Crags - Key of Strength Shop":
+                "Searing Crags - Searing Mega Shard Shop -> Searing Crags - Key of Strength Room":
                     lambda state: self.can_leash(state) or self.has_windmill(state),
                 "Searing Crags - Before Final Climb Shop -> Searing Crags - Colossuses Shop":
                     self.true,
@@ -425,6 +446,8 @@ class MessengerHardRules(MessengerRules):
                 # Elemental Skylands
                 "Elemental Skylands - Air Intro Shop -> Elemental Skylands - Air Generator Shop":
                     self.true,
+                "Elemental Skylands - Earth Intro Shop -> Elemental Skylands - Earth Generator Shop":
+                    self.true,
                 # Riviere Turquoise
                 "Riviere Turquoise - Waterfall Shop -> Riviere Turquoise - Flower Flight Checkpoint":
                     self.true,
@@ -434,29 +457,31 @@ class MessengerHardRules(MessengerRules):
                     self.can_double_dboost,
             }
         )
+        # fmt: on
 
+        # fmt: off
         self.location_rules.update(
             {
                 "Autumn Hills Seal - Spike Ball Darts":
-                    lambda state: self.has_vertical(state) and self.has_windmill(state) or self.is_aerobatic(state),
+                    lambda state: (self.has_vertical(state) and self.has_windmill(state)) or self.is_aerobatic(state),
                 "Autumn Hills Seal - Double Swing Saws":
                     lambda state: self.has_vertical(state) or self.can_destroy_projectiles(state),
                 "Bamboo Creek - Claustro":
                     self.has_wingsuit,
                 "Bamboo Creek Seal - Spike Ball Pits":
                     self.true,
+                "Above Entrance Mega Shard": # Just reset to the menu and you can get it with full health
+                    self.true,
                 "Howling Grotto Seal - Windy Saws and Balls":
                     self.true,
+                "Howling Grotto Seal - Crushing Pits":
+                    self.has_vertical,
                 "Searing Crags Seal - Triple Ball Spinner":
                     self.true,
                 "Glacial Peak Seal - Ice Climbers":
                     lambda state: self.has_vertical(state) or self.can_dboost(state),
                 "Glacial Peak Seal - Projectile Spike Pit":
                     lambda state: self.can_dboost(state) or self.can_destroy_projectiles(state),
-                "Glacial Peak Seal - Glacial Air Swag":
-                    lambda state: self.has_windmill(state) or self.has_vertical(state),
-                "Glacial Peak Mega Shard":
-                    lambda state: self.has_windmill(state) or self.has_vertical(state),
                 "Cloud Ruins Seal - Ghost Pit":
                     self.true,
                 "Cloud Ruins Seal - Toothbrush Alley":
@@ -469,26 +494,22 @@ class MessengerHardRules(MessengerRules):
                     self.true,
                 "Riviere Turquoise Seal - Launch of Faith":
                     lambda state: self.can_dboost(state) or self.has_vertical(state),
-                "Elemental Skylands - Key of Symbiosis":
-                    lambda state: self.has_dart(state) or self.can_dboost(state) or self.has_windmill(state),
                 "Elemental Skylands Seal - Water":
-                    lambda state: self.has_dart(state) or self.can_dboost(state) or self.has_windmill(state),
+                    self.true,
                 "Elemental Skylands Seal - Fire":
-                    lambda state: (self.has_dart(state) or self.can_dboost(state) or self.has_windmill(state))
-                                  and self.can_destroy_projectiles(state),
+                    self.can_destroy_projectiles,
                 "Earth Mega Shard":
-                    lambda state: self.has_dart(state) or self.can_dboost(state) or self.has_windmill(state),
-                "Water Mega Shard":
                     lambda state: self.has_dart(state) or self.can_dboost(state) or self.has_windmill(state),
             }
         )
+        # fmt: on
 
     def has_windmill(self, state: CollectionState) -> bool:
         return state.has("Windmill Shuriken", self.player)
 
     def can_dboost(self, state: CollectionState) -> bool:
         return state.has("Second Wind", self.player)  # who really needs meditation
-    
+
     def can_destroy_projectiles(self, state: CollectionState) -> bool:
         return super().can_destroy_projectiles(state) or self.has_windmill(state)
 
@@ -512,7 +533,6 @@ class MessengerOOBRules(MessengerRules):
 
         self.location_rules = {
             "Bamboo Creek - Claustro": self.has_wingsuit,
-            "Searing Crags - Key of Strength": self.has_wingsuit,
             "Sunken Shrine - Key of Love": lambda state: state.has_all({"Sun Crest", "Moon Crest"}, self.player),
             "Searing Crags - Pyro": self.has_tabi,
             "Underworld - Key of Chaos": self.has_tabi,

@@ -11,6 +11,7 @@ from pony.flask import Pony
 from werkzeug.routing import BaseConverter
 
 from Utils import title_sorted, get_file_safe_name
+from .cli import CLI
 
 UPLOAD_FOLDER = os.path.relpath('uploads')
 LOGS_FOLDER = os.path.relpath('logs')
@@ -41,10 +42,15 @@ app.config["SELFLAUNCH"] = True  # application process is in charge of launching
 app.config["SELFLAUNCHCERT"] = None  # can point to a SSL Certificate to encrypt Room websocket connections
 app.config["SELFLAUNCHKEY"] = None  # can point to a SSL Certificate Key to encrypt Room websocket connections
 app.config["SELFGEN"] = True  # application process is in charge of scheduling Generations.
+app.config["GAME_PORTS"] = ["49152-65535", 0]
 # at what amount of worlds should scheduling be used, instead of rolling in the web-thread
 app.config["JOB_THRESHOLD"] = 1
 # after what time in seconds should generation be aborted, freeing the queue slot. Can be set to None to disable.
 app.config["JOB_TIME"] = 600
+# maximum time in seconds since last activity for a room to be hosted
+app.config["MAX_ROOM_TIMEOUT"] = 259200
+# minimum time in days since last activity for a room to be deleted. 0 to disable.
+app.config["ROOM_AUTO_DELETE"] = 0
 # memory limit for generator processes in bytes
 app.config["GENERATOR_MEMORY_LIMIT"] = 4294967296
 
@@ -64,10 +70,13 @@ app.config["ASSET_RIGHTS"] = False
 
 cache = Cache()
 Compress(app)
+CLI(app)
 
 
 def to_python(value: str) -> uuid.UUID:
-    return uuid.UUID(bytes=base64.urlsafe_b64decode(value + '=='))
+    if "=" in value or any(c.isspace() for c in value):
+        raise ValueError("Invalid UUID format")
+    return uuid.UUID(bytes=base64.urlsafe_b64decode(value + '=' * (-len(value) % 4)))
 
 
 def to_url(value: uuid.UUID) -> str:

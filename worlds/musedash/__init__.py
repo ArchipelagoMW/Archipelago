@@ -3,6 +3,7 @@ from BaseClasses import Region, Item, ItemClassification, Tutorial
 from typing import List, ClassVar, Type, Set
 from math import floor
 from Options import PerGameCommonOptions, OptionError
+from rule_builder.rules import Has
 
 from .Options import MuseDashOptions, md_option_groups
 from .Items import MuseDashSongItem, MuseDashFixedItem
@@ -33,7 +34,16 @@ class MuseDashWebWorld(WebWorld):
         ["Shiny"]
     )
 
-    tutorials = [setup_en, setup_es]
+    setup_it = Tutorial(
+        setup_en.tutorial_name,
+        setup_en.description,
+        "Italiano",
+        "setup_it.md",
+        "setup/it",
+        ["UCSA"]
+    )
+
+    tutorials = [setup_en, setup_es, setup_it]
     options_presets = MuseDashPresets
     option_groups = md_option_groups
 
@@ -124,7 +134,8 @@ class MuseDashWorld(World):
 
         self.starting_songs = [s for s in start_items if s in song_items]
         self.starting_songs = self.md_collection.filter_songs_to_dlc(self.starting_songs, dlc_songs)
-        self.included_songs = [s for s in include_songs if s in song_items and s not in self.starting_songs]
+        # Sort first for deterministic iteration order.
+        self.included_songs = [s for s in sorted(include_songs) if s in song_items and s not in self.starting_songs]
         self.included_songs = self.md_collection.filter_songs_to_dlc(self.included_songs, dlc_songs)
 
         # Making sure songs chosen for goal are allowed by DLC and remove the chosen from being added to the pool.
@@ -283,17 +294,17 @@ class MuseDashWorld(World):
         # Adds 2 item locations per song/album to the menu region.
         for i in range(0, len(all_selected_locations)):
             name = all_selected_locations[i]
+            rule = Has(name)            
             loc1 = MuseDashLocation(self.player,  name + "-0", self.md_collection.song_locations[name + "-0"], menu_region)
-            loc1.access_rule = lambda state, place=name: state.has(place, self.player)
+            self.set_rule(loc1, rule)
             menu_region.locations.append(loc1)
 
             loc2 = MuseDashLocation(self.player,  name + "-1", self.md_collection.song_locations[name + "-1"], menu_region)
-            loc2.access_rule = lambda state, place=name: state.has(place, self.player)
+            self.set_rule(loc2, rule)
             menu_region.locations.append(loc2)
 
     def set_rules(self) -> None:
-        self.multiworld.completion_condition[self.player] = lambda state: \
-            state.has(self.md_collection.MUSIC_SHEET_NAME, self.player, self.get_music_sheet_win_count())
+        self.set_completion_rule(Has(self.md_collection.MUSIC_SHEET_NAME, self.get_music_sheet_win_count()))
 
     def get_available_traps(self) -> List[str]:
         full_trap_list = self.md_collection.trap_items.keys()

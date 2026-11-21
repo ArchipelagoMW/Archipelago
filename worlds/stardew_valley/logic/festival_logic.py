@@ -3,15 +3,16 @@ from ..options import FestivalLocations
 from ..stardew_rule import StardewRule
 from ..strings.animal_product_names import AnimalProduct
 from ..strings.book_names import Book
-from ..strings.craftable_names import Fishing
 from ..strings.crop_names import Fruit, Vegetable
 from ..strings.festival_check_names import FestivalCheck
 from ..strings.fish_names import Fish
 from ..strings.forageable_names import Forageable
 from ..strings.generic_names import Generic
+from ..strings.gift_names import Gift
 from ..strings.machine_names import Machine
 from ..strings.monster_names import Monster
 from ..strings.region_names import Region
+from ..strings.season_names import Season
 
 
 class FestivalLogicMixin(BaseLogicMixin):
@@ -42,7 +43,7 @@ class FestivalLogic(BaseLogic):
             FestivalCheck.rarecrow_2: self.logic.money.can_spend(5000),
             FestivalCheck.fishing_competition: self.logic.festival.can_win_fishing_competition(),
             FestivalCheck.rarecrow_4: self.logic.money.can_spend(5000),
-            FestivalCheck.mermaid_pearl: self.logic.has(Forageable.secret_note),
+            FestivalCheck.mermaid_show: self.logic.true_,
             FestivalCheck.cone_hat: self.logic.money.can_spend(2500),
             FestivalCheck.iridium_fireplace: self.logic.money.can_spend(15000),
             FestivalCheck.rarecrow_7: self.logic.money.can_spend(5000) & self.logic.museum.can_donate_museum_artifacts(20),
@@ -94,25 +95,24 @@ class FestivalLogic(BaseLogic):
             FestivalCheck.willy_challenge: self.logic.fishing.can_catch_fish(self.content.fishes[Fish.scorpion_carp]),
             FestivalCheck.desert_scholar: self.logic.true_,
             FestivalCheck.squidfest_day_1_copper: self.logic.fishing.can_catch_fish(self.content.fishes[Fish.squid]),
-            FestivalCheck.squidfest_day_1_iron: self.logic.fishing.can_catch_fish(self.content.fishes[Fish.squid]) & self.logic.has(Fishing.bait),
-            FestivalCheck.squidfest_day_1_gold: self.logic.fishing.can_catch_fish(self.content.fishes[Fish.squid]) & self.logic.has(Fishing.deluxe_bait),
-            FestivalCheck.squidfest_day_1_iridium: self.logic.festival.can_squidfest_day_1_iridium_reward(),
+            FestivalCheck.squidfest_day_1_iron: self.logic.fishing.can_catch_fish(self.content.fishes[Fish.squid]) & self.logic.fishing.can_use_any_bait(),
+            FestivalCheck.squidfest_day_1_gold: self.logic.festival.can_squidfest_iridium_reward(),
+            FestivalCheck.squidfest_day_1_iridium: self.logic.festival.can_squidfest_iridium_reward(),
             FestivalCheck.squidfest_day_2_copper: self.logic.fishing.can_catch_fish(self.content.fishes[Fish.squid]),
-            FestivalCheck.squidfest_day_2_iron: self.logic.fishing.can_catch_fish(self.content.fishes[Fish.squid]) & self.logic.has(Fishing.bait),
-            FestivalCheck.squidfest_day_2_gold: self.logic.fishing.can_catch_fish(self.content.fishes[Fish.squid]) & self.logic.has(Fishing.deluxe_bait),
-            FestivalCheck.squidfest_day_2_iridium: self.logic.fishing.can_catch_fish(self.content.fishes[Fish.squid]) &
-                                                   self.logic.fishing.has_specific_bait(self.content.fishes[Fish.squid]),
+            FestivalCheck.squidfest_day_2_iron: self.logic.fishing.can_catch_fish(self.content.fishes[Fish.squid]) & self.logic.fishing.can_use_any_bait(),
+            FestivalCheck.squidfest_day_2_gold: self.logic.festival.can_squidfest_iridium_reward(),
+            FestivalCheck.squidfest_day_2_iridium: self.logic.festival.can_squidfest_iridium_reward(),
         })
         for i in range(1, 11):
             check_name = f"{FestivalCheck.trout_derby_reward_pattern}{i}"
             self.registry.festival_rules[check_name] = self.logic.fishing.can_catch_fish(self.content.fishes[Fish.rainbow_trout])
 
-    def can_squidfest_day_1_iridium_reward(self) -> StardewRule:
-        return self.logic.fishing.can_catch_fish(self.content.fishes[Fish.squid]) & self.logic.fishing.has_specific_bait(self.content.fishes[Fish.squid])
+    def can_squidfest_iridium_reward(self) -> StardewRule:
+        return self.logic.fishing.can_catch_fish(self.content.fishes[Fish.squid]) & self.logic.fishing.can_use_specific_bait(Fish.squid)
 
     def has_squidfest_day_1_iridium_reward(self) -> StardewRule:
         if self.options.festival_locations == FestivalLocations.option_disabled:
-            return self.logic.festival.can_squidfest_day_1_iridium_reward()
+            return self.logic.festival.can_squidfest_iridium_reward()
         else:
             return self.logic.received(f"Book: {Book.the_art_o_crabbing}")
 
@@ -122,6 +122,9 @@ class FestivalLogic(BaseLogic):
     def can_succeed_luau_soup(self) -> StardewRule:
         if self.options.festival_locations != FestivalLocations.option_hard:
             return self.logic.true_
+        return self.can_get_luau_soup_delight()
+
+    def can_get_luau_soup_delight(self) -> StardewRule:
         eligible_fish = (Fish.blobfish, Fish.crimsonfish, Fish.ice_pip, Fish.lava_eel, Fish.legend, Fish.angler, Fish.catfish, Fish.glacierfish,
                          Fish.mutant_carp, Fish.spookfish, Fish.stingray, Fish.sturgeon, Fish.super_cucumber)
         fish_rule = self.logic.has_any(*(f for f in eligible_fish if f in self.content.fishes))  # To filter stingray
@@ -137,7 +140,9 @@ class FestivalLogic(BaseLogic):
     def can_succeed_grange_display(self) -> StardewRule:
         if self.options.festival_locations != FestivalLocations.option_hard:
             return self.logic.true_
+        return self.can_get_grange_display_max_score()
 
+    def can_get_grange_display_max_score(self) -> StardewRule:
         # Other animal products are not counted in the animal product category
         good_animal_products = [
             AnimalProduct.duck_egg, AnimalProduct.duck_feather, AnimalProduct.egg, AnimalProduct.goat_milk, AnimalProduct.golden_egg, AnimalProduct.large_egg,
@@ -157,7 +162,7 @@ class FestivalLogic(BaseLogic):
         fish_rule = self.logic.fishing.can_fish_anywhere(50)
 
         # Hazelnut always available since the grange display is in fall
-        forage_rule = self.logic.region.can_reach_any((Region.forest, Region.backwoods))
+        forage_rule = self.logic.region.can_reach_any(Region.forest, Region.backwoods)
 
         # More than half the minerals are good enough
         mineral_rule = self.logic.action.can_open_geode(Generic.any)
@@ -186,3 +191,8 @@ class FestivalLogic(BaseLogic):
         for rarecrow_number in range(1, 9):
             rules.append(self.logic.received(f"Rarecrow #{rarecrow_number}"))
         return self.logic.and_(*rules)
+
+    def has_golden_pumpkin(self) -> StardewRule:
+        if self.options.festival_locations == FestivalLocations.option_disabled:
+            return self.logic.season.has(Season.fall)
+        return self.logic.received(Gift.golden_pumpkin) & self.logic.season.has(Season.fall)

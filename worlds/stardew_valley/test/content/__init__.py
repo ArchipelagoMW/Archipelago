@@ -10,8 +10,10 @@ default_features = StardewFeatures(
     feature.cropsanity.CropsanityDisabled(),
     feature.fishsanity.FishsanityNone(),
     feature.friendsanity.FriendsanityNone(),
+    feature.hatsanity.HatsanityNone(),
+    feature.museumsanity.MuseumsanityNone(),
     feature.skill_progression.SkillProgressionVanilla(),
-    feature.tool_progression.ToolProgressionVanilla()
+    feature.tool_progression.ToolProgressionVanilla(),
 )
 
 
