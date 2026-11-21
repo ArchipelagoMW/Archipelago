@@ -305,7 +305,7 @@ class SC2World(World):
                 item_names.PROGRESSIVE_PROTOSS_WEAPON_ARMOR_UPGRADE
             ]
             def state_with_kerrigan_levels() -> CollectionState:
-                state: CollectionState = self.multiworld.get_all_state(False)
+                state: CollectionState = self.multiworld.get_all_state()
                 # Ignore dead ends caused by Kerrigan -> solve those in the next stage
                 state.collect(self.create_item(item_names.KERRIGAN_LEVELS_70))
                 state.update_reachable_regions(self.player)
@@ -317,7 +317,7 @@ class SC2World(World):
             and self.options.required_tactics != RequiredTactics.option_no_logic
         ):
             # Attempt to solve being locked by Kerrigan level requirements
-            self._fill_needed_items(lambda: self.multiworld.get_all_state(False), [item_names.KERRIGAN_LEVELS_1], 70)
+            self._fill_needed_items(lambda: self.multiworld.get_all_state(), [item_names.KERRIGAN_LEVELS_1], 70)
 
 
     def _fill_needed_items(self, all_state_getter: Callable[[],CollectionState], items_to_use: List[str], max_attempts: int) -> None:
