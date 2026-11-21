@@ -231,7 +231,11 @@ def output_path(*path: str) -> str:
     return path
 
 
-def open_file(filename: typing.Union[str, "pathlib.Path"]) -> None:
+def open_file(filename: str | pathlib.Path) -> None:
+    """
+    Opens the given file in the default program for its filetype.
+    If given a path to a folder, opens it inside of a file browser instead.
+    """
     if is_windows:
         os.startfile(filename)  # type: ignore
     else:
@@ -240,7 +244,7 @@ def open_file(filename: typing.Union[str, "pathlib.Path"]) -> None:
         assert open_command, "Didn't find program for open_file! Please report this together with system details."
 
         env = env_cleared_lib_path()
-        subprocess.call([open_command, filename], env=env)
+        subprocess.Popen([open_command, filename], env=env)
 
 
 # from https://gist.github.com/pypt/94d747fe5180851196eb#gistcomment-4015118 with some changes
