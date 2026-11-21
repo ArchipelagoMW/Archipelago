@@ -32,6 +32,13 @@ Each trigger consists of four parts:
     - Example: `15`
     - Each trigger must be used for exactly one option result. If you would like the same thing to occur with multiple
       results, you would need multiple triggers for this.
+    - The trigger compares this against the YAML selection at trigger time. A scalar `random` matches the literal
+      string `random`. The game option resolves that string after the comparison, so an `option_result` of `true`
+      misses the scalar even when the option later resolves it to `true`.
+    - Replace a scalar `random` with an equally weighted mapping of the explicit values to trigger on one resolved
+      result. The generator stores the selected value, and the comparison and the game option use that same roll.
+    - Write the mapping keys and `option_result` with the same YAML scalar type. Unquoted `true` and `false` are
+      booleans, and a quoted `true` is a string.
 - `options` is where you define what will happen when the trigger activates. This can be something as simple as ensuring
   another option also gets selected or placing an item in a certain location. It is possible to have multiple things
   happen in this section.
@@ -81,6 +88,44 @@ For example:
   ```
 
 In this example, if your world happens to roll SpecificKeycards, then your game will also start in inverted.
+
+shapez requires achievements when belts and extractors are locked. With the lock set to the scalar `random`, the
+trigger compares that string to `true` and leaves `include_achievements` at `false` for either value the lock resolves
+to afterward:
+
+  ```yaml
+  shapez:
+    lock_belt_and_extractor: random
+    include_achievements: false
+    triggers:
+      - option_category: shapez
+        option_name: lock_belt_and_extractor
+        option_result: true
+        options:
+          shapez:
+            include_achievements: true
+  ```
+
+List the explicit values at equal weight instead. The generator stores the selected boolean and uses it for the game
+option as well. The mapping keys and `option_result` are the same YAML scalar type, unquoted booleans:
+
+  ```yaml
+  shapez:
+    lock_belt_and_extractor:
+      true: 50
+      false: 50
+    include_achievements: false
+    triggers:
+      - option_category: shapez
+        option_name: lock_belt_and_extractor
+        option_result: true
+        options:
+          shapez:
+            include_achievements: true
+  ```
+
+Selecting `true` sets `include_achievements` to `true`. Selecting `false` leaves the original `include_achievements`
+value of `false` in place.
 
 It is also possible to use imaginary values in options to trigger specific settings. You can use these made-up values in
 either your main options or to trigger from another trigger. Currently, this is the only way to trigger on "setting 1
