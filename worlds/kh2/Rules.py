@@ -58,7 +58,7 @@ class KH2Rules:
         return state.has(ItemName.NamineSketches, self.player, Amount)
 
     def dc_unlocked(self, state: CollectionState, Amount) -> bool:
-        return state.has(ItemName.CastleKey, self.player, Amount)  # Using Dummy 13 for this
+        return state.has(ItemName.RoyalSummons, self.player, Amount)  # Using Dummy 13 for this
 
     def hb_unlocked(self, state: CollectionState, Amount) -> bool:
         return state.has(ItemName.MembershipCard, self.player, Amount)

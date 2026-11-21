@@ -13,10 +13,6 @@ KH2REGIONS: typing.Dict[str, typing.List[str]] = {
         LocationName.GardenofAssemblageMap,
         LocationName.GoALostIllusion,
         LocationName.ProofofNonexistence,
-        # LocationName.DonaldStarting1,
-        # LocationName.DonaldStarting2,
-        # LocationName.GoofyStarting1,
-        # LocationName.GoofyStarting2
     ],
     RegionName.LoD:                [
         LocationName.BambooGroveDarkShard,
