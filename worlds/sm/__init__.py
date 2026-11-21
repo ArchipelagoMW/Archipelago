@@ -52,7 +52,7 @@ class SMCollectionState(metaclass=AutoLogicRegister):
         if hasattr(parent, "state"):
             self.smbm = {player: SMBoolManager(player, parent.state.smbm[player].maxDiff,
                                     parent.state.smbm[player].onlyBossLeft) for player in
-                                        parent.get_game_players("Super Metroid")}
+                                        parent.get_game_players("Super Metroid") if player in parent.state.smbm}
             for player, group in parent.groups.items():
                 if (group["game"] == "Super Metroid"):
                     self.smbm[player] = SMBoolManager(player)
