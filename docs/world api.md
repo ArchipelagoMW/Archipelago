@@ -8,6 +8,7 @@ yours, and the following documents:
 
 * [network protocol.md](https://github.com/ArchipelagoMW/Archipelago/blob/main/docs/network%20protocol.md)
 * [adding games.md](https://github.com/ArchipelagoMW/Archipelago/blob/main/docs/adding%20games.md)
+* [community-supported libraries](client_libraries.md)
 
 Archipelago will be abbreviated as "AP" from now on.
 
