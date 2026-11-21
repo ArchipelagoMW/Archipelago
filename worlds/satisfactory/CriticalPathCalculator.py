@@ -10,6 +10,7 @@ class CriticalPathCalculator:
     random: Random
     final_elevator_phase: int
     randomize_starter_recipes: bool
+    ficsmas: bool
 
     required_parts: set[str]
     required_buildings: set[str]
@@ -31,10 +32,12 @@ class CriticalPathCalculator:
         self.random = Random(seed)
         self.final_elevator_phase = options.final_elevator_phase.value
         self.randomize_starter_recipes = bool(options.randomize_starter_recipes.value)
+        self.ficsmas = "Erect a FICSMAS Tree" in options.goal_selection
 
     def calculate(self) -> None:
         self.required_parts = set[str]()
         self.required_buildings = set[str]()
+        self.required_item_names = set[str]()
         self.required_power_level: int = 1
 
         self.__potential_required_belt_speed = 1
@@ -44,7 +47,10 @@ class CriticalPathCalculator:
         self.select_minimal_required_parts_for(
             self.logic.space_elevator_phases[self.final_elevator_phase-1].keys())
 
-        for tree in self.logic.man_trees.values():
+        for tree_name, tree in self.logic.man_trees.items():
+            if tree_name == "Ficsmas" and not self.ficsmas:
+                continue
+
             self.select_minimal_required_parts_for(tree.access_items)
 
             for node in tree.nodes:
@@ -52,6 +58,9 @@ class CriticalPathCalculator:
                     continue
 
                 self.select_minimal_required_parts_for(node.unlock_cost)
+
+                if node.requires_items:
+                    self.required_item_names.update(node.requires_items)
 
         self.select_minimal_required_parts_for_building("MAM")
         self.select_minimal_required_parts_for_building("AWESOME Sink")
@@ -69,6 +78,9 @@ class CriticalPathCalculator:
         self.select_minimal_required_parts_for_building("Pipeline Pump Mk.1")
         self.select_minimal_required_parts_for_building("Pipeline Pump Mk.2")
 
+        if self.ficsmas:
+            self.select_minimal_required_parts_for(("FICSMAS Wonder Star", ))
+
         if self.logic.recipes["Uranium"][0].minimal_phase <= self.final_elevator_phase:
             self.select_minimal_required_parts_for(("Hazmat Suit", "Iodine-Infused Filter"))
 
@@ -80,16 +92,17 @@ class CriticalPathCalculator:
             self.select_minimal_required_parts_for(power_recipe.inputs)
             self.select_minimal_required_parts_for_building(power_recipe.building)
 
-        self.required_item_names = {
+        self.select_starter_recipes()
+
+        self.required_item_names.update({
             recipe.name
             for part in self.required_parts
             for recipe in self.logic.recipes[part]
             if recipe.minimal_phase <= self.final_elevator_phase
-        }
+        })
         self.required_item_names.update({"Building: " + building for building in self.required_buildings})
 
         self.calculate_excluded_things()
-        self.select_starter_recipes()
 
     def select_minimal_required_parts_for_building(self, building: str) -> None:
         self.select_minimal_required_parts_for(self.logic.buildings[building].inputs)

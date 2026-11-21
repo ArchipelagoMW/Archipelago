@@ -196,8 +196,12 @@ class Items:
         "Bundle of Four: Somersloops": ItemData(G.Parts, 1338194),
         "Bundle of Three: Hard Drives": ItemData(G.Parts, 1338195),
 #
-        # 1338196 - 1338199 Reserved for future equipment/ammo
-
+# Ficsmas
+        "FICSMAS Data Cartridge Day 1": ItemData(G.Ammo | G.Ficsmas, 1338196, C.progression, 0), # removed
+        "FICSMAS Data Cartridge Day 4": ItemData(G.Ammo | G.Ficsmas, 1338197, C.progression),
+        "FICSMAS Data Cartridge Day 8": ItemData(G.Ammo | G.Ficsmas, 1338198, C.progression),
+        "FICSMAS Data Cartridge Day 14": ItemData(G.Ammo | G.Ficsmas, 1338199, C.progression),
+#
         # 1338200+ Recipes / buildings / schematics
         "Recipe: Reinforced Iron Plate": ItemData(G.Recipe, 1338200, C.progression),
         "Recipe: Adhered Iron Plate": ItemData(G.Recipe, 1338201, C.progression),
@@ -386,7 +390,7 @@ class Items:
         "Recipe: Empty Fluid Tank": ItemData(G.Recipe, 1338384, C.progression),
         "Recipe: Packaged Alumina Solution": ItemData(G.Recipe, 1338385, C.progression),
         "Recipe: Packaged Fuel": ItemData(G.Recipe, 1338386, C.progression),
-        # "Recipe: Diluted Packaged Fuel": ItemData(G.Recipe, 1338387, C.progression),  # Duplicated
+        "Recipe: Candy Cane Basher": ItemData(G.Recipe | G.Ficsmas, 1338387),  # ficsmas filling the gap
         "Recipe: Packaged Heavy Oil Residue": ItemData(G.Recipe, 1338388, C.progression),
         "Recipe: Packaged Liquid Biofuel": ItemData(G.Recipe, 1338389, C.progression),
         "Recipe: Packaged Nitric Acid": ItemData(G.Recipe, 1338390, C.progression),
@@ -474,8 +478,25 @@ class Items:
 # 
         "Recipe: Dark Matter Residue": ItemData(G.Recipe, 1338467, C.progression),
 
-        # 1338468 - 1338599 Reserved for future recipes
-        # 1338400 - 1338899 buildings / others
+        # Ficsmas
+        "Recipe: FICSMAS Tree Branch": ItemData(G.Recipe | G.Ficsmas, 1338468, C.progression),
+        "Recipe: Blue FICSMAS Ornament": ItemData(G.Recipe | G.Ficsmas, 1338469, C.progression),
+        "Recipe: Red FICSMAS Ornament": ItemData(G.Recipe | G.Ficsmas, 1338470, C.progression),
+        "Recipe: Iron FICSMAS Ornament": ItemData(G.Recipe | G.Ficsmas, 1338471, C.progression),
+        "Recipe: Copper FICSMAS Ornament": ItemData(G.Recipe | G.Ficsmas, 1338472, C.progression),
+        "Recipe: Candy Cane": ItemData(G.Recipe | G.Ficsmas, 1338473, C.progression),
+        "Recipe: FICSMAS Actual Snow": ItemData(G.Recipe | G.Ficsmas, 1338474, C.progression),
+        "Recipe: FICSMAS Bow": ItemData(G.Recipe | G.Ficsmas, 1338475, C.progression),
+        "Recipe: FICSMAS Ornament Bundle": ItemData(G.Recipe | G.Ficsmas, 1338476, C.progression),
+        "Recipe: FICSMAS Wreath": ItemData(G.Recipe | G.Ficsmas, 1338477, C.progression),
+        "Recipe: FICSMAS Wonder Star": ItemData(G.Recipe | G.Ficsmas, 1338478, C.progression),
+        "Recipe: Sweet Fireworks": ItemData(G.Recipe | G.Ficsmas, 1338479, C.useful),
+        "Recipe: Fancy Fireworks": ItemData(G.Recipe | G.Ficsmas, 1338480, C.useful),
+        "Recipe: Sparkly Fireworks": ItemData(G.Recipe | G.Ficsmas, 1338481, C.useful),
+#
+
+        # 1338479 - 1338599 Reserved for future recipes
+        # 1338600 - 1338799 buildings / others
         "Building: Constructor": ItemData(G.Building, 1338600, C.progression),  # unlocked by default
         "Building: Assembler": ItemData(G.Building, 1338601, C.progression),
         "Building: Manufacturer": ItemData(G.Building, 1338602, C.progression),
@@ -606,8 +627,19 @@ class Items:
         "Building: Basic Shelf Unit": ItemData(G.Building, 1338732, C.useful, 0),
         "Building: Beam Expansion Pack": ItemData(G.Beams, 1338733, C.filler, 0),
         "Building: Ventilation Bundle": ItemData(G.Building, 1338734, C.filler, 0),
+
+### Ficsmas
+        "Building: FICSMAS Candy Cane": ItemData(G.Building | G.Ficsmas, 1338735, count=0),
+        "Building: FICSMAS Decoration": ItemData(G.Building | G.Ficsmas, 1338736, count=0),
+        "Building: FICSMAS Gift Tree": ItemData(G.Building | G.Ficsmas, 1338737, count=0),
+        "Building: FICSMAS Power Light": ItemData(G.Building | G.Ficsmas, 1338738, count=0),
+        "Building: FICSMAS Snow Cannon": ItemData(G.Building | G.Ficsmas, 1338739, count=0),
+        "Building: FICSMAS Snow Dispenser": ItemData(G.Building | G.Ficsmas, 1338740, count=0),
+        "Building: FICSMAS Snowman": ItemData(G.Building | G.Ficsmas, 1338741, count=0),
+        "Building: Giant FICSMAS Tree": ItemData(G.Building | G.Ficsmas, 1338742, count=0),
 ###
-        # 1338729 - 1338749 Reserved for buildings
+###
+        # 1338735 - 1338749 Reserved for buildings
         "Customizer: Asphalt Foundation Material": ItemData(G.Customizer | G.Foundations, 1338750, C.filler, 0),
         "Customizer: Concrete Foundation Material": ItemData(G.Customizer | G.Foundations, 1338751, C.filler, 0),
         "Customizer: Concrete Wall Material": ItemData(G.Customizer | G.Walls, 1338752, C.filler, 0),
@@ -632,10 +664,15 @@ class Items:
         "Customizer: Chrome Paint Finish": ItemData(G.Customizer, 1338771, C.filler, 0), 
         "Customizer: Carbon Steel Finish": ItemData(G.Customizer, 1338772, C.filler, 0), 
         "Customizer: Caterium Paint Finish": ItemData(G.Customizer, 1338773, C.filler, 0), 
+        ### ficsmas
+        "Customizer: Basic FICSMAS Skins": ItemData(G.Customizer | G.Ficsmas, 1338774, C.filler, 0), 
+        "Customizer: Premium FICSMAS Skins": ItemData(G.Customizer | G.Ficsmas, 1338775, C.filler, 0), 
+        ###
+
 
         # 1338776 - 1338799 Reserved for Cosmetics
 
-        # Transports 1338800 - 1338899
+        # Transports 1338800 - 1338819
         # Drones (including Drone)
         "Transport: Drones": ItemData(G.Transport, 1338800, C.useful),
         # Trains (including Empty Platform, rails, station, locomotive, train stop)  # 1.1
@@ -655,6 +692,23 @@ class Items:
         "Transport: Hypertube Wall Hole": ItemData(G.Transport | G.HyperTubes, 1338812, C.filler),
         # Personal Elevator (including additional floors)
         "Transport: Personal Elevator": ItemData(G.Transport, 1338813, C.useful),  # 1.1
+        
+        # 1338820 - 1338899 more parts / equipment / ammo
+        "Bundle: FICSMAS Tree Branch": ItemData(G.Parts | G.Ficsmas, 1338820),
+        "Bundle: Blue FICSMAS Ornament": ItemData(G.Parts | G.Ficsmas, 1338821),
+        "Bundle: Red FICSMAS Ornament": ItemData(G.Parts | G.Ficsmas, 1338822),
+        "Bundle: Iron FICSMAS Ornament": ItemData(G.Parts | G.Ficsmas, 1338823),
+        "Bundle: Copper FICSMAS Ornament": ItemData(G.Parts | G.Ficsmas, 1338824),
+        "Bundle: Candy Cane": ItemData(G.Parts | G.Ficsmas, 1338825),
+        "Bundle: FICSMAS Actual Snow": ItemData(G.Parts | G.Ficsmas, 1338826),
+        "Bundle: FICSMAS Bow": ItemData(G.Parts | G.Ficsmas, 1338827),
+        "Bundle: FICSMAS Ornament Bundle": ItemData(G.Parts | G.Ficsmas, 1338828),
+        "Bundle: FICSMAS Wreath": ItemData(G.Parts | G.Ficsmas, 1338829),
+        "Bundle: FICSMAS Wonder Star": ItemData(G.Parts | G.Ficsmas, 1338830),
+        "Bundle: Candy Cane Basher": ItemData(G.Equipment | G.Ficsmas, 1338831, count=0),
+        "Bundle: Fancy Fireworks": ItemData(G.Ammo | G.Ficsmas, 1338832, count=0),
+        "Bundle: Sparkly Fireworks": ItemData(G.Ammo | G.Ficsmas, 133883, count=0),
+        "Bundle: Sweet Fireworks": ItemData(G.Ammo | G.Ficsmas, 1338834, count=0),
 
         # 1338900 - 1338998 Handled by trap system (includes a few non-trap things)
         # Regenerate via /Script/Blutility.EditorUtilityWidgetBlueprint'/Archipelago/Debug/EU_GenerateTrapIds.EU_GenerateTrapIds'
@@ -857,7 +911,24 @@ class Items:
         "Single: Xeno-Zapper": ItemData(G.Equipment, 1339184, C.useful),
         "Single: Zipline": ItemData(G.Equipment, 1339185, C.useful),
         "Single: Portable Miner": ItemData(G.Equipment, 1339186),
-        "Single: Gas Filter": ItemData(G.Equipment, 1339187, count=0)
+        "Single: Gas Filter": ItemData(G.Equipment, 1339187, count=0),
+
+        # 1339820 - 1339899 more parts
+        "Single: FICSMAS Tree Branch": ItemData(G.Parts | G.Ficsmas, 1339820),
+        "Single: Blue FICSMAS Ornament": ItemData(G.Parts | G.Ficsmas, 1339821),
+        "Single: Red FICSMAS Ornament": ItemData(G.Parts | G.Ficsmas, 1339822),
+        "Single: Iron FICSMAS Ornament": ItemData(G.Parts | G.Ficsmas, 1339823),
+        "Single: Copper FICSMAS Ornament": ItemData(G.Parts | G.Ficsmas, 1339824),
+        "Single: Candy Cane": ItemData(G.Parts | G.Ficsmas, 1339825),
+        "Single: FICSMAS Actual Snow": ItemData(G.Parts | G.Ficsmas, 1339826),
+        "Single: FICSMAS Bow": ItemData(G.Parts | G.Ficsmas, 1339827),
+        "Single: FICSMAS Ornament Bundle": ItemData(G.Parts | G.Ficsmas, 1339828),
+        "Single: FICSMAS Wreath": ItemData(G.Parts | G.Ficsmas, 1339829),
+        "Single: FICSMAS Wonder Star": ItemData(G.Parts | G.Ficsmas, 1339830),
+        "Single: Candy Cane Basher": ItemData(G.Equipment | G.Ficsmas, 1339831, count=0),
+        "Single: Fancy Fireworks": ItemData(G.Ammo | G.Ficsmas, 1339832, count=0),
+        "Single: Sparkly Fireworks": ItemData(G.Ammo | G.Ficsmas, 1339833, count=0),
+        "Single: Sweet Fireworks": ItemData(G.Ammo | G.Ficsmas, 1339834, count=0)
     }
 
     item_names_and_ids: ClassVar[dict[str, int]] = {name: data.code for name, data in item_data.items()}
@@ -916,7 +987,7 @@ class Items:
         item_type = data.type
 
         if item_type == C.progression \
-            and (data.category & (G.Recipe | G.Building)) and not (data.category & G.NeverExclude) \
+            and (data.category & (G.Recipe | G.Building | G.Ficsmas)) and not (data.category & G.NeverExclude) \
                 and self.critical_path.required_item_names and name not in self.critical_path.required_item_names:
             item_type = C.useful
 
@@ -960,22 +1031,25 @@ class Items:
             if data.category & (G.Parts | G.Equipment | G.Ammo | G.Trap | G.Upgrades)
         }
 
+        if not "Erect a FICSMAS Tree" in self.options.goal_selection:
+            excluded_items.update({
+                item_name
+                for item_name, data in self.item_data.items()
+                if data.category & G.Ficsmas
+            })
+
         return excluded_items
 
     def build_item_pool(self, random: Random, precollected_items: list[Item], number_of_locations: int) -> list[Item]:
         excluded_from_pool: set[str] = self.get_excluded_items(precollected_items)
 
-        pool_items: list[Item] = [
+        pool: list[Item] = [
             self.create_item(name, self.player)
             for name, data in self.item_data.items()
             for _ in range(data.count)
             if data.category & (G.Recipe | G.Building | G.Equipment | G.Ammo | G.Transport | G.Upgrades)
-            and name not in excluded_from_pool
-        ]
-        pool: list[Item] = [
-            item 
-            for item in pool_items 
-            if item.classification != C.filler or self.item_data[item.name].category & (G.Equipment | G.Ammo)
+                and (data.type != C.filler or data.category & (G.Equipment | G.Ammo))
+                and name not in excluded_from_pool
         ]
 
         free_space: int = number_of_locations - len(pool)

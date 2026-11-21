@@ -33,6 +33,7 @@ class ItemGroups(IntFlag):
     Customizer = 1 << 27
     ConveyorMk6 = 1 << 28
     NeverExclude = 1 << 29
+    Ficsmas = 1 < 30
 
 
 @dataclass
