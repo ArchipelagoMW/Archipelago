@@ -618,7 +618,7 @@ def create_regions(multiworld: MultiWorld, world: World, player: int, active_loc
         grand_prix_region = create_region(multiworld, player, active_locations, LocationName.grand_prix_region,
                                           grand_prix_region_locations)
         conditional_regions += [grand_prix_region]
-    elif world.options.goal in [0, 2, 4, 5, 6, 8]:
+    elif world.options.goal in [0, 2, 4, 5, 6, 8, 9]:
         biolizard_region_locations = [
             LocationName.finalhazard,
         ]
@@ -638,15 +638,15 @@ def create_regions(multiworld: MultiWorld, world: World, player: int, active_loc
             LocationName.green_hill,
             LocationName.green_hill_chao_1,
             #LocationName.green_hill_animal_1,
-            LocationName.green_hill_itembox_1, 
-            LocationName.green_hill_itembox_2, 
-            LocationName.green_hill_itembox_3, 
-            LocationName.green_hill_itembox_4, 
-            LocationName.green_hill_itembox_5, 
-            LocationName.green_hill_itembox_6, 
-            LocationName.green_hill_itembox_7, 
-            LocationName.green_hill_itembox_8, 
-            LocationName.green_hill_itembox_9, 
+            LocationName.green_hill_itembox_1,
+            LocationName.green_hill_itembox_2,
+            LocationName.green_hill_itembox_3,
+            LocationName.green_hill_itembox_4,
+            LocationName.green_hill_itembox_5,
+            LocationName.green_hill_itembox_6,
+            LocationName.green_hill_itembox_7,
+            LocationName.green_hill_itembox_8,
+            LocationName.green_hill_itembox_9,
             LocationName.green_hill_itembox_10,
             LocationName.green_hill_itembox_11,
         ]
@@ -777,6 +777,23 @@ def connect_regions(multiworld: MultiWorld, world: World, player: int, gates: ty
         trap_item_mapping = { minigame: world.options.minigame_madness_requirement.value for minigame in minigame_trap_table.keys() }
         connect(multiworld, player, names, LocationName.gate_0_region, LocationName.biolizard_region,
                 lambda state: (state.has_all_counts(trap_item_mapping, player)))
+    elif world.options.goal == 9:
+        required_mission_name = first_cannons_core_mission
+
+        if world.options.required_cannons_core_missions.value == 1:
+            required_mission_name = final_cannons_core_mission
+
+        connect(multiworld, player, names, LocationName.cannon_core_region, LocationName.biolizard_region,
+                lambda state: (state.can_reach(required_mission_name, "Location", player) and
+                               state.has_all((
+                                   ItemName.white_emerald,
+                                   ItemName.red_emerald,
+                                   ItemName.cyan_emerald,
+                                   ItemName.purple_emerald,
+                                   ItemName.green_emerald,
+                                   ItemName.yellow_emerald,
+                                   ItemName.blue_emerald
+                               ), player)))
 
     for i in range(len(gates[0].gate_levels)):
         connect(multiworld, player, names, LocationName.gate_0_region, shuffleable_regions[gates[0].gate_levels[i]])
