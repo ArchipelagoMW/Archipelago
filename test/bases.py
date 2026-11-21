@@ -4,12 +4,13 @@ import typing
 import unittest
 from argparse import Namespace
 
+from BaseClasses import CollectionState, Item, Location, MultiWorld
 from Generate import get_seed_name
+from rule_builder.optimise_rules import OptimisedRuleBuilderWorldMixin
 from test.general import gen_steps
 from worlds import AutoWorld
+from worlds.apquest import world
 from worlds.AutoWorld import World, call_all
-
-from BaseClasses import Location, MultiWorld, CollectionState, Item
 
 
 class WorldTestBase(unittest.TestCase):
@@ -78,6 +79,8 @@ class WorldTestBase(unittest.TestCase):
         self.multiworld.set_options(args)
         self.multiworld.state = CollectionState(self.multiworld)
         self.world = self.multiworld.worlds[self.player]
+        if isinstance(world, OptimisedRuleBuilderWorldMixin):
+            world.debug_rule_builder=True
         for step in gen_steps:
             call_all(self.multiworld, step)
 
