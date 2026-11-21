@@ -1,0 +1,416 @@
+{
+  "schema": "apmw_contract",
+  "version": {
+    "major": 2,
+    "minor": 0
+  },
+  "manifest_sha256": "f1456e916285bf79dd4be6f4c8c6e5798ed7bb1eebd2f6e1f81075f39e8ffc15",
+  "minimum_client_version": "0.4.0",
+  "minor_compatibility": "same-or-older",
+  "itemization_modes": [
+    "legacy",
+    "fundamental"
+  ],
+  "ordering_modes": [
+    "stable",
+    "chaos"
+  ],
+  "mode_combinations": [
+    {
+      "itemization": "legacy",
+      "ordering": "stable",
+      "semantic_id": "stable-legacy",
+      "permanent": true,
+      "semantic_snapshot_deterministic": true,
+      "experiential_prefix_stable": false,
+      "semantic_series_isolated": true,
+      "aggregate_semantics_presentation_independent": true,
+      "planned_series_prefix_stable": true
+    },
+    {
+      "itemization": "legacy",
+      "ordering": "chaos",
+      "semantic_id": "chaos-legacy",
+      "permanent": true,
+      "semantic_snapshot_deterministic": true,
+      "experiential_prefix_stable": false,
+      "semantic_series_isolated": true,
+      "aggregate_semantics_presentation_independent": true,
+      "planned_series_prefix_stable": false
+    },
+    {
+      "itemization": "fundamental",
+      "ordering": "stable",
+      "semantic_id": "stable-fundamental",
+      "permanent": true,
+      "semantic_snapshot_deterministic": true,
+      "experiential_prefix_stable": false,
+      "semantic_series_isolated": true,
+      "aggregate_semantics_presentation_independent": true,
+      "planned_series_prefix_stable": false
+    }
+  ],
+  "geometry": {
+    "base": {
+      "files": 8,
+      "ranks": 8
+    },
+    "file_ladder": [
+      8,
+      10,
+      12
+    ],
+    "rank_ladder": [
+      8,
+      10,
+      12
+    ],
+    "stage_order": [
+      "8x8",
+      "10x8",
+      "10x10",
+      "12x10",
+      "12x12"
+    ],
+    "valid_pairs": [
+      {
+        "stage_id": "8x8",
+        "files": 8,
+        "ranks": 8,
+        "deployment_depth": 5,
+        "combined_non_primary_capacity": 39,
+        "forwardness_capacity": 24,
+        "non_pawn_capacity": 15,
+        "cpu_pawn_count": 8,
+        "cpu_non_king_count": 7,
+        "all_tactics_locations": 71,
+        "turns_locations": 65,
+        "no_tactics_locations": 61,
+        "gross_pawn_capacity": 32
+      },
+      {
+        "stage_id": "10x8",
+        "files": 10,
+        "ranks": 8,
+        "deployment_depth": 5,
+        "combined_non_primary_capacity": 49,
+        "forwardness_capacity": 30,
+        "non_pawn_capacity": 19,
+        "cpu_pawn_count": 10,
+        "cpu_non_king_count": 9,
+        "all_tactics_locations": 86,
+        "turns_locations": 80,
+        "no_tactics_locations": 76,
+        "gross_pawn_capacity": 40
+      },
+      {
+        "stage_id": "10x10",
+        "files": 10,
+        "ranks": 10,
+        "deployment_depth": 7,
+        "combined_non_primary_capacity": 69,
+        "forwardness_capacity": 50,
+        "non_pawn_capacity": 39,
+        "cpu_pawn_count": 10,
+        "cpu_non_king_count": 9,
+        "all_tactics_locations": 87,
+        "turns_locations": 81,
+        "no_tactics_locations": 77,
+        "gross_pawn_capacity": 60
+      },
+      {
+        "stage_id": "12x10",
+        "files": 12,
+        "ranks": 10,
+        "deployment_depth": 7,
+        "combined_non_primary_capacity": 83,
+        "forwardness_capacity": 60,
+        "non_pawn_capacity": 47,
+        "cpu_pawn_count": 12,
+        "cpu_non_king_count": 11,
+        "all_tactics_locations": 102,
+        "turns_locations": 96,
+        "no_tactics_locations": 92,
+        "gross_pawn_capacity": 72
+      },
+      {
+        "stage_id": "12x12",
+        "files": 12,
+        "ranks": 12,
+        "deployment_depth": 9,
+        "combined_non_primary_capacity": 107,
+        "forwardness_capacity": 84,
+        "non_pawn_capacity": 71,
+        "cpu_pawn_count": 12,
+        "cpu_non_king_count": 11,
+        "all_tactics_locations": 103,
+        "turns_locations": 97,
+        "no_tactics_locations": 93,
+        "gross_pawn_capacity": 96
+      }
+    ],
+    "unlocks": {
+      "roles": [
+        {
+          "role_id": "board-file-unlock",
+          "base": 8,
+          "increment": 2,
+          "maximum": 12
+        },
+        {
+          "role_id": "board-rank-unlock",
+          "base": 8,
+          "increment": 2,
+          "maximum": 12
+        }
+      ],
+      "selection_policy": "largest-componentwise-unlocked-valid-pair"
+    },
+    "pawn_capacity_formula": {
+      "gross_pawn_capacity_algorithm": "width-times-ranks-minus-four-v1",
+      "non_pawns_beyond_back_algorithm": "max-zero-n-minus-width-minus-one-v1",
+      "active_pawn_capacity_algorithm": "gross-minus-non-pawns-beyond-back-v1",
+      "back_rank_primary_royal_slots": 1
+    }
+  },
+  "algorithms": {
+    "capacity": "expanded-formation-v2",
+    "projection": "placement-role-material-v2",
+    "overflow": "material-first-reserve-v2",
+    "ordering": "independent-semantic-series-v1",
+    "series_prf": "sha256-counter-v1"
+  },
+  "expected_material": {
+    "weak": 75,
+    "pawn": 100,
+    "minor": 300,
+    "major": 485,
+    "castler": 500,
+    "jack": 700,
+    "queen": 900,
+    "amazon": 1300,
+    "material_item": 400,
+    "play_as_white": 50,
+    "pocket": 110,
+    "consul": 325,
+    "king_promotion": 425
+  },
+  "source_roles": [
+    "primary-royal",
+    "additional-royal",
+    "locked-castler",
+    "jack-slot",
+    "major-slot",
+    "minor-slot",
+    "pawn-slot"
+  ],
+  "upgrade_dag": {
+    "final_families": [
+      "pawn",
+      "minor",
+      "major",
+      "jack",
+      "queen",
+      "amazon"
+    ],
+    "pawn_creation_actions": [
+      "new-pawn",
+      "more-pawn"
+    ],
+    "pawn_creation_source_role": "pawn-slot",
+    "transitions": [
+      {
+        "action": "better-pawn",
+        "from_family": "pawn",
+        "to_family": "pawn",
+        "allowed_source_roles": [
+          "pawn-slot"
+        ],
+        "source_role_rule": "preserve"
+      },
+      {
+        "action": "pool-pawn-upgrade",
+        "from_family": "pawn",
+        "to_family": "pawn",
+        "allowed_source_roles": [
+          "pawn-slot"
+        ],
+        "source_role_rule": "preserve"
+      },
+      {
+        "action": "pawn-to-minor",
+        "from_family": "pawn",
+        "to_family": "minor",
+        "allowed_source_roles": [
+          "pawn-slot"
+        ],
+        "source_role_rule": "establish-minor-slot"
+      },
+      {
+        "action": "pawn-to-major",
+        "from_family": "pawn",
+        "to_family": "major",
+        "allowed_source_roles": [
+          "pawn-slot"
+        ],
+        "source_role_rule": "establish-major-slot"
+      },
+      {
+        "action": "minor-to-major",
+        "from_family": "minor",
+        "to_family": "major",
+        "allowed_source_roles": [
+          "minor-slot"
+        ],
+        "source_role_rule": "preserve"
+      },
+      {
+        "action": "minor-to-jack",
+        "from_family": "minor",
+        "to_family": "jack",
+        "allowed_source_roles": [
+          "minor-slot"
+        ],
+        "source_role_rule": "preserve"
+      },
+      {
+        "action": "major-to-jack",
+        "from_family": "major",
+        "to_family": "jack",
+        "allowed_source_roles": [
+          "major-slot",
+          "minor-slot"
+        ],
+        "source_role_rule": "preserve"
+      },
+      {
+        "action": "major-to-queen",
+        "from_family": "major",
+        "to_family": "queen",
+        "allowed_source_roles": [
+          "major-slot",
+          "minor-slot"
+        ],
+        "source_role_rule": "preserve"
+      },
+      {
+        "action": "jack-to-queen",
+        "from_family": "jack",
+        "to_family": "queen",
+        "allowed_source_roles": [
+          "jack-slot",
+          "major-slot",
+          "minor-slot"
+        ],
+        "source_role_rule": "preserve"
+      },
+      {
+        "action": "queen-to-amazon",
+        "from_family": "queen",
+        "to_family": "amazon",
+        "allowed_source_roles": [
+          "jack-slot",
+          "major-slot",
+          "minor-slot"
+        ],
+        "source_role_rule": "preserve"
+      }
+    ]
+  },
+  "castler": {
+    "source_role": "locked-castler",
+    "reclassifies_existing_chessman": true,
+    "source_role_immutable": true,
+    "normalized_material": 500,
+    "normalized_cost": 500,
+    "maximum": 2,
+    "adds_chessman": false,
+    "requires_existing_chessman": true,
+    "occupies_board_slot": true,
+    "target_families": [
+      "major",
+      "jack"
+    ],
+    "upgrade_ceiling": "jack",
+    "protected_from_higher_upgrades": true,
+    "ordinary_omission_protection": "after-additional-royals-within-back-rank-capacity",
+    "castling_eligibility": "any-active-home-rank-major-or-jack"
+  },
+  "semantic_series_ids": [
+    "fundamental.wave.tie.{priority}",
+    "fundamental.gateway.role",
+    "fundamental.omission.{source-role}",
+    "upgrade-source.{action}"
+  ],
+  "presentation_series_ids": [
+    "placement.{source-role}.{formation-band}",
+    "piece-type.{final-family}",
+    "upgrade-target.{action}",
+    "pocket.choice"
+  ],
+  "overflow_policy": {
+    "id": "material-first-reserve-v2",
+    "role_priority": [
+      "primary-royal",
+      "additional-royal",
+      "locked-castler",
+      "jack-slot",
+      "major-slot",
+      "minor-slot",
+      "pawn-slot"
+    ],
+    "within_role_activation_order": [
+      "final-expected-material-descending",
+      "ap-granted-material-descending",
+      "source-ordinal-ascending"
+    ],
+    "reserve_entry_order": [
+      "final-expected-material-ascending",
+      "ap-granted-material-ascending",
+      "source-ordinal-descending"
+    ],
+    "missing_material_accounting": "normalized-ap-granted-material-per-reserve-slot-exactly-once",
+    "material_first_activation": true,
+    "larger_geometry_reactivates_reserves": true,
+    "ordinary_omission_protected_roles": [
+      "primary-royal",
+      "additional-royal",
+      "locked-castler"
+    ],
+    "aggregate_semantics_ignore_presentation": true,
+    "chaos_nonce_scope": "presentation-only"
+  },
+  "cpu_profiles": {
+    "layout_version": "apmw-cpu-layout-v1",
+    "location_profile_version": "apmw-location-profile-v1",
+    "army_ids": [
+      "standard",
+      "colourbound-clobberers",
+      "remarkable-rookies",
+      "nutty-knights"
+    ]
+  },
+  "effective_item_maxima": {
+    "common": {
+      "Play as White": 1,
+      "Progressive AI Intelligence Malus": 5,
+      "Progressive Pocket": 12,
+      "Progressive Pocket Range": 6,
+      "Progressive King Promotion": 2,
+      "Progressive Consul": 2
+    },
+    "legacy": {
+      "Progressive Pawn": 60,
+      "Progressive Pawn Forwardness": 13,
+      "Progressive Minor Piece": 15,
+      "Progressive Major Piece": 11,
+      "Progressive Major To Queen": 9,
+      "Progressive Jack": 9
+    },
+    "fundamental": {
+      "Chessmen": 107,
+      "Material": 321,
+      "Castler": 2
+    }
+  }
+}
