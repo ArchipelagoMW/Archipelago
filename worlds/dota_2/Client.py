@@ -9,7 +9,7 @@ from typing import Optional, Any
 from datetime import datetime
 
 from .constants import PROGRESSIVE_GROUP_UNLOCK_ID, PRIMORDIAL_FRAGMENT_ID, FILLER_ITEM_ID
-from .dota_api import parse_most_recent_match_data, DotaMatchData
+from .dota_api import parse_most_recent_match_data, get_recent_match_ids, DotaMatchData
 from .challenges import QUESTS, challenge_values, stat_checks, match_challenges, quest_amounts, completed_quests
 from .locations import LocationDef, load_item_locations, build_item_name_to_dname, load_minigame_locations
 from .hero import Hero, get_all_heroes, hero_from_dict
