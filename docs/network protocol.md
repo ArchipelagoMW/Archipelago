@@ -179,6 +179,7 @@ Sent to clients purely to display a message to the player. While various message
 | receiving | int | ItemSend, ItemCheat, Hint | Destination player's ID |
 | item | [NetworkItem](#NetworkItem) | ItemSend, ItemCheat, Hint | Source player's ID, location ID, item ID and item flags |
 | found | bool | Hint | Whether the location hinted for was checked |
+| hint_status | [HintStatus](#HintStatus) | The status of the hint. |
 | team | int | Join, Part, Chat, TagsChanged, Goal, Release, Collect, ItemCheat | Team of the triggering player |
 | slot | int | Join, Part, Chat, TagsChanged, Goal, Release, Collect | Slot of the triggering player |
 | message | str | Chat, ServerChat | Original chat message without sender prefix |
