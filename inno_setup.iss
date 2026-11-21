@@ -46,7 +46,6 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 
 [Tasks]
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}";
-Name: "deletelib"; Description: "Clean existing /lib folder and subfolders including /worlds (leave checked if unsure)"; Check: ShouldShowDeleteLibTask
 
 [Types]
 Name: "full"; Description: "Full installation"
@@ -253,16 +252,11 @@ begin
   end;
 end;
 
-function ShouldShowDeleteLibTask: Boolean;
-begin
-  Result := DirExists(ExpandConstant('{app}\lib'));
-end;
-
 procedure CurStepChanged(CurStep: TSetupStep);
 begin
   if CurStep = ssInstall then
   begin
-    if WizardIsTaskSelected('deletelib') then
+    if DirExists(ExpandConstant('{app}\lib')) then
       DelTree(ExpandConstant('{app}\lib'), True, True, True);
   end;
 end;
