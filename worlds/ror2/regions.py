@@ -1,7 +1,9 @@
-from typing import Dict, List, NamedTuple, Optional, TYPE_CHECKING
+from typing import TYPE_CHECKING, Dict, List, NamedTuple, Optional
 
-from BaseClasses import Region, Entrance, MultiWorld
-from .locations import location_table, RiskOfRainLocation, get_classic_item_pickups
+from BaseClasses import Entrance, MultiWorld, Region
+
+from .locations import RiskOfRainLocation, get_classic_item_pickups, location_table
+from .ror2environments import environments_without_newt_altars
 
 if TYPE_CHECKING:
     from . import RiskOfRainWorld
@@ -33,27 +35,32 @@ def create_explore_regions(ror2_world: "RiskOfRainWorld") -> None:
         "Sky Meadow":                           RoRRegionData([], ["Hidden Realm: Bulwark's Ambry", "OrderedStage_5"]),
     }
     non_dlc_variant_regions: Dict[str, RoRRegionData] = {
-        "Distant Roost (2)": RoRRegionData([], ["OrderedStage_1"]),
-        "Titanic Plains (2)": RoRRegionData([], ["OrderedStage_1"]),
+        "Distant Roost (2)":                    RoRRegionData([], ["OrderedStage_1"]),
+        "Titanic Plains (2)":                   RoRRegionData([], ["OrderedStage_1"]),
     }
     # SOTV Regions
     dlc_sotv_regions: Dict[str, RoRRegionData] = {
         "Siphoned Forest":                      RoRRegionData([], ["OrderedStage_1"]),
         "Aphelian Sanctuary":                   RoRRegionData([], ["OrderedStage_2"]),
-        "Sulfur Pools":                         RoRRegionData([], ["OrderedStage_3"])
+        "Sulfur Pools":                         RoRRegionData([], ["OrderedStage_3"]),
+    }
+
+    dlc_sotv_other_regions: Dict[str, RoRRegionData] = {
+        "The Planetarium":                      RoRRegionData(None, ["Victory", "Petrichor V"]),
+        "Void Locus":                           RoRRegionData(None, ["The Planetarium"]),
     }
 
     dlc_sost_regions: Dict[str, RoRRegionData] = {
         "Shattered Abodes":                     RoRRegionData([], ["OrderedStage_1"]),
-        "Reformed Altar":                      RoRRegionData([], ["OrderedStage_2", "Treeborn Colony"]),
+        "Reformed Altar":                       RoRRegionData([], ["OrderedStage_2", "Treeborn Colony"]),
         "Treeborn Colony":                      RoRRegionData([], ["OrderedStage_3", "Prime Meridian"]),
         "Helminth Hatchery":                    RoRRegionData([], ["Hidden Realm: Bulwark's Ambry", "OrderedStage_5"]),
     }
 
     dlc_sots_variant_regions: Dict[str, RoRRegionData] = {
-        "Viscous Falls": RoRRegionData([], ["OrderedStage_1"]),
-        "Disturbed Impact": RoRRegionData([], ["OrderedStage_1"]),
-        "Golden Dieback": RoRRegionData([], ["OrderedStage_3", "Prime Meridian"]),
+        "Viscous Falls":                        RoRRegionData([], ["OrderedStage_1"]),
+        "Disturbed Impact":                     RoRRegionData([], ["OrderedStage_1"]),
+        "Golden Dieback":                       RoRRegionData([], ["OrderedStage_3", "Prime Meridian"]),
     }
 
     other_regions: Dict[str, RoRRegionData] = {
@@ -76,13 +83,26 @@ def create_explore_regions(ror2_world: "RiskOfRainWorld") -> None:
         "Hidden Realm: Bazaar Between Time":    RoRRegionData(None, ["Void Fields"]),
         "Hidden Realm: Gilded Coast":           RoRRegionData(None, None)
     }
-    dlc_sotv_other_regions: Dict[str, RoRRegionData] = {
-        "The Planetarium":                      RoRRegionData(None, ["Victory", "Petrichor V"]),
-        "Void Locus":                           RoRRegionData(None, ["The Planetarium"])
-    }
 
     dlc_sost_other_regions: Dict[str, RoRRegionData] = {
         "Prime Meridian":                       RoRRegionData(None, ["Victory", "Petrichor V"]),
+    }
+
+    dlc_alloyed_regions: Dict[str, RoRRegionData] = {
+        "Pretender's Precipice":                RoRRegionData([], ["OrderedStage_2"]),
+        "Iron Alluvium":                        RoRRegionData([], ["OrderedStage_3", "Conduit Canyon"]),
+        "Conduit Canyon":                       RoRRegionData([], ["OrderedStage_4", "Solutional Haunt"]),
+        "Repurposed Crater":                    RoRRegionData([], ["OrderedStage_4"]),
+    }
+
+    dlc_alloyed_variant_regions: Dict[str, RoRRegionData] = {
+        "Iron Auroras":                         RoRRegionData([], ["OrderedStage_3", "Conduit Canyon"]),
+    }
+
+    dlc_alloyed_other_regions: Dict[str, RoRRegionData] = {
+        "Solutional Haunt":                     RoRRegionData(None, ["Computational Exchange"]),
+        "Computational Exchange":               RoRRegionData(None, ["Neural Sanctum"]),
+        "Neural Sanctum":                       RoRRegionData(None, ["Victory", "Petrichor V"]),
     }
 
     # Totals of each item
@@ -100,6 +120,10 @@ def create_explore_regions(ror2_world: "RiskOfRainWorld") -> None:
         all_location_regions.update(dlc_sost_regions)
     if ror2_options.dlc_sots and ror2_options.stage_variants:
         all_location_regions.update(dlc_sots_variant_regions)
+    if ror2_options.dlc_alloyed:
+        all_location_regions.update(dlc_alloyed_regions)
+    if ror2_options.dlc_alloyed and ror2_options.stage_variants:
+        all_location_regions.update(dlc_alloyed_variant_regions)
 
     # Locations
     for key in all_location_regions:
@@ -119,17 +143,17 @@ def create_explore_regions(ror2_world: "RiskOfRainWorld") -> None:
         if scanners > 0:
             for i in range(0, scanners):
                 all_location_regions[key].locations.append(f"{key}: Radio Scanner {i + 1}")
-        # Newt Altars
-        if newt > 0:
+        # Newt Altars exclude stages that don't have newt altars (like Conduit Canyon)
+        if newt > 0 and key not in environments_without_newt_altars:
             for i in range(0, newt):
                 all_location_regions[key].locations.append(f"{key}: Newt Altar {i + 1}")
     regions_pool: Dict = {**all_location_regions, **other_regions}
 
-    # Non DLC Variant Locations
+    # Non DLC Variant Exits
     if ror2_options.stage_variants:
         non_dlc_regions["Menu"].region_exits.append("Distant Roost (2)")
         non_dlc_regions["Menu"].region_exits.append("Titanic Plains (2)")
-    # SOTV DLC Locations
+    # SOTV DLC Exits
     if ror2_options.dlc_sotv:
         non_dlc_regions["Menu"].region_exits.append("Siphoned Forest")
         other_regions["OrderedStage_1"].region_exits.append("Aphelian Sanctuary")
@@ -137,40 +161,65 @@ def create_explore_regions(ror2_world: "RiskOfRainWorld") -> None:
         other_regions["Void Fields"].region_exits.append("Void Locus")
         other_regions["Commencement"].region_exits.append("The Planetarium")
 
-    # SOTS DLC Locations
+    # SOTS DLC Exits
     if ror2_options.dlc_sots:
         non_dlc_regions["Menu"].region_exits.append("Shattered Abodes")
         other_regions["OrderedStage_1"].region_exits.append("Reformed Altar")
         other_regions["OrderedStage_4"].region_exits.append("Helminth Hatchery")
 
-    # SOTS Variant Locations
+    # SOTS Variant Exits
     if ror2_options.dlc_sots and ror2_options.stage_variants:
         non_dlc_regions["Menu"].region_exits.append("Viscous Falls")
         non_dlc_regions["Menu"].region_exits.append("Disturbed Impact")
         dlc_sost_regions["Reformed Altar"].region_exits.append("Golden Dieback")
 
+    # ALLOYED DLC Exits
+    if ror2_options.dlc_alloyed:
+        other_regions["OrderedStage_1"].region_exits.append("Pretender's Precipice")
+        other_regions["OrderedStage_2"].region_exits.append("Iron Alluvium")
+        other_regions["OrderedStage_3"].region_exits.append("Repurposed Crater")
+        # Conduit Canyon special handling since not all OrderStage_3 stages can access this.
+        non_dlc_regions["Rallypoint Delta"].region_exits.append("Conduit Canyon")
+        non_dlc_regions["Scorched Acres"].region_exits.append("Conduit Canyon")
+        if ror2_options.dlc_sotv:
+            dlc_sotv_regions["Sulfur Pools"].region_exits.append("Conduit Canyon")
+    if ror2_options.dlc_alloyed and ror2_options.stage_variants:
+        other_regions["OrderedStage_2"].region_exits.append("Iron Auroras")
+
+    # Update region pool with dlc regions.
     if ror2_options.dlc_sotv:
         regions_pool.update(dlc_sotv_other_regions)
     if ror2_options.dlc_sots:
         regions_pool.update(dlc_sost_other_regions)
+    if ror2_options.dlc_alloyed:
+        regions_pool.update(dlc_alloyed_other_regions)
 
     # Check to see if Victory needs to be removed from regions
     if ror2_options.victory == "mithrix":
         other_regions["Hidden Realm: A Moment, Whole"].region_exits.pop(0)
         dlc_sotv_other_regions["The Planetarium"].region_exits.pop(0)
         dlc_sost_other_regions["Prime Meridian"].region_exits.pop(0)
+        dlc_alloyed_other_regions["Neural Sanctum"].region_exits.pop(0)
     elif ror2_options.victory == "voidling":
         other_regions["Commencement"].region_exits.pop(0)
         other_regions["Hidden Realm: A Moment, Whole"].region_exits.pop(0)
         dlc_sost_other_regions["Prime Meridian"].region_exits.pop(0)
+        dlc_alloyed_other_regions["Neural Sanctum"].region_exits.pop(0)
     elif ror2_options.victory == "limbo":
         other_regions["Commencement"].region_exits.pop(0)
         dlc_sotv_other_regions["The Planetarium"].region_exits.pop(0)
         dlc_sost_other_regions["Prime Meridian"].region_exits.pop(0)
+        dlc_alloyed_other_regions["Neural Sanctum"].region_exits.pop(0)
     elif ror2_options.victory == "falseson":
         other_regions["Commencement"].region_exits.pop(0)
         other_regions["Hidden Realm: A Moment, Whole"].region_exits.pop(0)
         dlc_sotv_other_regions["The Planetarium"].region_exits.pop(0)
+        dlc_alloyed_other_regions["Neural Sanctum"].region_exits.pop(0)
+    elif ror2_options.victory == "solus_heart":
+        other_regions["Commencement"].region_exits.pop(0)
+        other_regions["Hidden Realm: A Moment, Whole"].region_exits.pop(0)
+        dlc_sotv_other_regions["The Planetarium"].region_exits.pop(0)
+        dlc_sost_other_regions["Prime Meridian"].region_exits.pop(0)
 
     # Create all the regions
     for name, data in regions_pool.items():
@@ -208,8 +257,9 @@ def create_classic_regions(ror2_world: "RiskOfRainWorld") -> None:
     #   which can then determine the availability of the victory.
     victory_region = create_classic_region(multiworld, player, "Victory")
     multiworld.regions.append(victory_region)
-    petrichor = create_classic_region(multiworld, player, "Petrichor V",
-                                      get_classic_item_pickups(ror2_options.total_locations.value))
+    petrichor = create_classic_region(
+        multiworld, player, "Petrichor V", get_classic_item_pickups(ror2_options.total_locations.value)
+    )
     multiworld.regions.append(petrichor)
 
     # classic mode can get to victory from the beginning of the game
