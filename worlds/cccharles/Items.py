@@ -121,9 +121,9 @@ item_groups = {
 # All items excepted the duplications (no item amount)
 unique_item_dict = {**optional_items, **useless_items, **progression_items}
 
-# All 691 items to add to the item pool
+# All 692 items to add to the item pool
 full_item_list = []
-full_item_list += ["Scraps"] * 637 # 636 + 1 as Scrap Reward (from Ronny)
+full_item_list += ["Scraps"] * 638 # 637 + 1 as Scrap Reward (from Ronny)
 full_item_list += ["30 Scraps Reward"] * 3
 full_item_list += ["25 Scraps Reward"] * 1
 full_item_list += ["35 Scraps Reward"] * 2
