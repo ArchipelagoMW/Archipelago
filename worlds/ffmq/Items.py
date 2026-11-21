@@ -1,7 +1,6 @@
 from BaseClasses import ItemClassification, Item
 
-fillers = {"Cure Potion": 61, "Heal Potion": 52, "Refresher": 17, "Seed": 2, "Bomb Refill": 19,
-           "Projectile Refill": 50}
+fillers = {"Cure Potion": 61, "Heal Potion": 52, "Seed": 2, "Bomb Refill": 19, "Projectile Refill": 50}
 
 
 class ItemData:
@@ -115,79 +114,80 @@ item_table = {
     "Projectile Refill": ItemData(222, ItemClassification.filler, ["Refills"]),
     #"None": ItemData(255, ItemClassification.progression, []),
 
-    "Kaeli 1": ItemData(None, ItemClassification.progression),
-    "Kaeli 2": ItemData(None, ItemClassification.progression),
-    "Tristam": ItemData(None, ItemClassification.progression),
-    "Phoebe 1": ItemData(None, ItemClassification.progression),
-    "Reuben 1": ItemData(None, ItemClassification.progression),
-    "Reuben Dad Saved": ItemData(None, ItemClassification.progression),
-    "Otto": ItemData(None, ItemClassification.progression),
-    "Captain Mac": ItemData(None, ItemClassification.progression),
-    "Ship Steering Wheel": ItemData(None, ItemClassification.progression),
-    "Minotaur": ItemData(None, ItemClassification.progression),
-    "Flamerus Rex": ItemData(None, ItemClassification.progression),
-    "Phanquid": ItemData(None, ItemClassification.progression),
-    "Freezer Crab": ItemData(None, ItemClassification.progression),
-    "Ice Golem": ItemData(None, ItemClassification.progression),
-    "Jinn": ItemData(None, ItemClassification.progression),
-    "Medusa": ItemData(None, ItemClassification.progression),
-    "Dualhead Hydra": ItemData(None, ItemClassification.progression),
-    "Gidrah": ItemData(None, ItemClassification.progression),
-    "Dullahan": ItemData(None, ItemClassification.progression),
-    "Pazuzu": ItemData(None, ItemClassification.progression),
-    "Aquaria Plaza": ItemData(None, ItemClassification.progression),
-    "Summer Aquaria": ItemData(None, ItemClassification.progression),
-    "Reuben Mine": ItemData(None, ItemClassification.progression),
-    "Alive Forest": ItemData(None, ItemClassification.progression),
-    "Rainbow Bridge": ItemData(None, ItemClassification.progression),
-    "Collapse Spencer's Cave": ItemData(None, ItemClassification.progression),
-    "Ship Liberated": ItemData(None, ItemClassification.progression),
-    "Ship Loaned": ItemData(None, ItemClassification.progression),
-    "Ship Dock Access": ItemData(None, ItemClassification.progression),
-    "Stone Golem": ItemData(None, ItemClassification.progression),
-    "Twinhead Wyvern": ItemData(None, ItemClassification.progression),
-    "Zuh": ItemData(None, ItemClassification.progression),
+    # "Kaeli": ItemData(None, ItemClassification.progression),
+    # "Tristam": ItemData(None, ItemClassification.progression),
+    # "Phoebe": ItemData(None, ItemClassification.progression),
+    # "Reuben": ItemData(None, ItemClassification.progression),
+    # "Tree Wither Person": ItemData(None, ItemClassification.progression),
+    # "Healed Person": ItemData(None, ItemClassification.progression),
+    # "Reuben Dad Saved": ItemData(None, ItemClassification.progression),
+    # "Otto": ItemData(None, ItemClassification.progression),
+    # "Captain Mac": ItemData(None, ItemClassification.progression),
+    # "Ship Steering Wheel": ItemData(None, ItemClassification.progression),
+    # "Minotaur": ItemData(None, ItemClassification.progression),
+    # "Flamerus Rex": ItemData(None, ItemClassification.progression),
+    # "Phanquid": ItemData(None, ItemClassification.progression),
+    # "Freezer Crab": ItemData(None, ItemClassification.progression),
+    # "Ice Golem": ItemData(None, ItemClassification.progression),
+    # "Jinn": ItemData(None, ItemClassification.progression),
+    # "Medusa": ItemData(None, ItemClassification.progression),
+    # "Dualhead Hydra": ItemData(None, ItemClassification.progression),
+    # "Gidrah": ItemData(None, ItemClassification.progression),
+    # "Dullahan": ItemData(None, ItemClassification.progression),
+    # "Pazuzu": ItemData(None, ItemClassification.progression),
+    # "Aquaria Plaza": ItemData(None, ItemClassification.progression),
+    # "Summer Aquaria": ItemData(None, ItemClassification.progression),
+    # "Reuben Mine": ItemData(None, ItemClassification.progression),
+    # "Alive Forest": ItemData(None, ItemClassification.progression),
+    # "Rainbow Bridge": ItemData(None, ItemClassification.progression),
+    # "Collapse Spencer's Cave": ItemData(None, ItemClassification.progression),
+    # "Ship Liberated": ItemData(None, ItemClassification.progression),
+    # "Ship Loaned": ItemData(None, ItemClassification.progression),
+    # "Ship Dock Access": ItemData(None, ItemClassification.progression),
+    # "Stone Golem": ItemData(None, ItemClassification.progression),
+    # "Twinhead Wyvern": ItemData(None, ItemClassification.progression),
+    # "Zuh": ItemData(None, ItemClassification.progression),
 
-    "Libra Temple Crest Tile": ItemData(None, ItemClassification.progression),
-    "Life Temple Crest Tile": ItemData(None, ItemClassification.progression),
-    "Aquaria Vendor Crest Tile": ItemData(None, ItemClassification.progression),
-    "Fireburg Vendor Crest Tile": ItemData(None, ItemClassification.progression),
-    "Fireburg Grenademan Crest Tile": ItemData(None, ItemClassification.progression),
-    "Sealed Temple Crest Tile": ItemData(None, ItemClassification.progression),
-    "Wintry Temple Crest Tile": ItemData(None, ItemClassification.progression),
-    "Kaidge Temple Crest Tile": ItemData(None, ItemClassification.progression),
-    "Light Temple Crest Tile": ItemData(None, ItemClassification.progression),
-    "Windia Kids Crest Tile": ItemData(None, ItemClassification.progression),
-    "Windia Dock Crest Tile": ItemData(None, ItemClassification.progression),
-    "Ship Dock Crest Tile": ItemData(None, ItemClassification.progression),
-    "Alive Forest Libra Crest Tile": ItemData(None, ItemClassification.progression),
-    "Alive Forest Gemini Crest Tile": ItemData(None, ItemClassification.progression),
-    "Alive Forest Mobius Crest Tile": ItemData(None, ItemClassification.progression),
-    "Wood House Libra Crest Tile": ItemData(None, ItemClassification.progression),
-    "Wood House Gemini Crest Tile": ItemData(None, ItemClassification.progression),
-    "Wood House Mobius Crest Tile": ItemData(None, ItemClassification.progression),
-    "Barrel Pushed": ItemData(None, ItemClassification.progression),
-    "Long Spine Bombed": ItemData(None, ItemClassification.progression),
-    "Short Spine Bombed": ItemData(None, ItemClassification.progression),
-    "Skull 1 Bombed": ItemData(None, ItemClassification.progression),
-    "Skull 2 Bombed": ItemData(None, ItemClassification.progression),
-    "Ice Pyramid 1F Statue": ItemData(None, ItemClassification.progression),
-    "Ice Pyramid 3F Statue": ItemData(None, ItemClassification.progression),
-    "Ice Pyramid 4F Statue": ItemData(None, ItemClassification.progression),
-    "Ice Pyramid 5F Statue": ItemData(None, ItemClassification.progression),
-    "Spencer Cave Libra Block Bombed": ItemData(None, ItemClassification.progression),
-    "Lava Dome Plate": ItemData(None, ItemClassification.progression),
-    "Pazuzu 2F Lock": ItemData(None, ItemClassification.progression),
-    "Pazuzu 4F Lock": ItemData(None, ItemClassification.progression),
-    "Pazuzu 6F Lock": ItemData(None, ItemClassification.progression),
-    "Pazuzu 1F": ItemData(None, ItemClassification.progression),
-    "Pazuzu 2F": ItemData(None, ItemClassification.progression),
-    "Pazuzu 3F": ItemData(None, ItemClassification.progression),
-    "Pazuzu 4F": ItemData(None, ItemClassification.progression),
-    "Pazuzu 5F": ItemData(None, ItemClassification.progression),
-    "Pazuzu 6F": ItemData(None, ItemClassification.progression),
-    "Dark King": ItemData(None, ItemClassification.progression),
-    "Tristam Bone Item Given": ItemData(None, ItemClassification.progression),
+    # "Libra Temple Crest Tile": ItemData(None, ItemClassification.progression),
+    # "Life Temple Crest Tile": ItemData(None, ItemClassification.progression),
+    # "Aquaria Vendor Crest Tile": ItemData(None, ItemClassification.progression),
+    # "Fireburg Vendor Crest Tile": ItemData(None, ItemClassification.progression),
+    # "Fireburg Grenademan Crest Tile": ItemData(None, ItemClassification.progression),
+    # "Sealed Temple Crest Tile": ItemData(None, ItemClassification.progression),
+    # "Wintry Temple Crest Tile": ItemData(None, ItemClassification.progression),
+    # "Kaidge Temple Crest Tile": ItemData(None, ItemClassification.progression),
+    # "Light Temple Crest Tile": ItemData(None, ItemClassification.progression),
+    # "Windia Kids Crest Tile": ItemData(None, ItemClassification.progression),
+    # "Windia Dock Crest Tile": ItemData(None, ItemClassification.progression),
+    # "Ship Dock Crest Tile": ItemData(None, ItemClassification.progression),
+    # "Alive Forest Libra Crest Tile": ItemData(None, ItemClassification.progression),
+    # "Alive Forest Gemini Crest Tile": ItemData(None, ItemClassification.progression),
+    # "Alive Forest Mobius Crest Tile": ItemData(None, ItemClassification.progression),
+    # "Wood House Libra Crest Tile": ItemData(None, ItemClassification.progression),
+    # "Wood House Gemini Crest Tile": ItemData(None, ItemClassification.progression),
+    # "Wood House Mobius Crest Tile": ItemData(None, ItemClassification.progression),
+    # "Barrel Pushed": ItemData(None, ItemClassification.progression),
+    # "Long Spine Bombed": ItemData(None, ItemClassification.progression),
+    # "Short Spine Bombed": ItemData(None, ItemClassification.progression),
+    # "Skull 1 Bombed": ItemData(None, ItemClassification.progression),
+    # "Skull 2 Bombed": ItemData(None, ItemClassification.progression),
+    # "Ice Pyramid 1F Statue": ItemData(None, ItemClassification.progression),
+    # "Ice Pyramid 3F Statue": ItemData(None, ItemClassification.progression),
+    # "Ice Pyramid 4F Statue": ItemData(None, ItemClassification.progression),
+    # "Ice Pyramid 5F Statue": ItemData(None, ItemClassification.progression),
+    # "Spencer Cave Libra Block Bombed": ItemData(None, ItemClassification.progression),
+    # "Lava Dome Plate": ItemData(None, ItemClassification.progression),
+    # "Pazuzu 2F Lock": ItemData(None, ItemClassification.progression),
+    # "Pazuzu 4F Lock": ItemData(None, ItemClassification.progression),
+    # "Pazuzu 6F Lock": ItemData(None, ItemClassification.progression),
+    # "Pazuzu 1F": ItemData(None, ItemClassification.progression),
+    # "Pazuzu 2F": ItemData(None, ItemClassification.progression),
+    # "Pazuzu 3F": ItemData(None, ItemClassification.progression),
+    # "Pazuzu 4F": ItemData(None, ItemClassification.progression),
+    # "Pazuzu 5F": ItemData(None, ItemClassification.progression),
+    # "Pazuzu 6F": ItemData(None, ItemClassification.progression),
+    # "Dark King": ItemData(None, ItemClassification.progression),
+    # "Tristam Bone Item Given": ItemData(None, ItemClassification.progression),
     #"Barred": ItemData(None, ItemClassification.progression),
 
 }
@@ -222,24 +222,30 @@ for item, data in item_table.items():
 
 def create_items(self) -> None:
     items = []
+    filler_counts = fillers.copy()
+    filler_counts["Projectile Refill"] -= 1  # Re-added if starting with Steel Armor
+
     starting_weapon = self.options.starting_weapon.current_key.title().replace("_", " ")
+    if self.options.progressive_gear:
+        starting_weapon = {"Steel Sword": "Progressive Sword",
+                           "Axe": "Progressive Axe",
+                           "Bomb": "Progressive Bomb",
+                           "Cat Claw": "Progressive Claw"}[starting_weapon]
+        if not self.options.shuffle_steel_armor:
+            self.multiworld.push_precollected(self.create_item("Progressive Armor"))
+    elif not self.options.shuffle_steel_armor:
+        self.multiworld.push_precollected(self.create_item("Steel Armor"))
     self.multiworld.push_precollected(self.create_item(starting_weapon))
-    self.multiworld.push_precollected(self.create_item("Steel Armor"))
     if self.options.sky_coin_mode == "start_with":
         self.multiworld.push_precollected(self.create_item("Sky Coin"))
 
-    precollected_item_names = {item.name for item in self.multiworld.precollected_items[self.player]}
+    precollected_item_names = [item.name for item in self.multiworld.precollected_items[self.player]]
+
+    skipped_one_filler_item = False
 
     def add_item(item_name):
-        if item_name in ["Steel Armor", "Sky Fragment"] or "Progressive" in item_name:
+        if item_name == "Sky Fragment" or "Progressive" in item_name:
             return
-        if item_name.lower().replace(" ", "_") == self.options.starting_weapon.current_key:
-            return
-        if self.options.progressive_gear:
-            for item_group in prog_map:
-                if item_name in self.item_name_groups[item_group]:
-                    item_name = prog_map[item_group]
-                    break
         if item_name == "Sky Coin":
             if self.options.sky_coin_mode == "shattered_sky_coin":
                 for _ in range(40):
@@ -248,9 +254,30 @@ def create_items(self) -> None:
             elif self.options.sky_coin_mode == "save_the_crystals":
                 items.append(self.create_filler())
                 return
-        if item_name in precollected_item_names:
-            items.append(self.create_filler())
+
+        def check_precollected():
+            nonlocal skipped_one_filler_item
+            if item_name in precollected_item_names:
+                if skipped_one_filler_item:
+                    if item_name == "Steel Armor":
+                        items.append(self.create_item("Projectile Refill"))
+                    items.append(self.create_filler())
+                else:
+                    skipped_one_filler_item = True
+                precollected_item_names.remove(item_name)
+                return True
+            return False
+
+        if check_precollected():
             return
+        if self.options.progressive_gear:
+            for item_group in prog_map:
+                if item_name in self.item_name_groups[item_group]:
+                    item_name = prog_map[item_group]
+                    break
+        if check_precollected():
+            return
+
         i = self.create_item(item_name)
         if self.options.logic != "friendly" and item_name in ("Magic Mirror", "Mask"):
             i.classification = ItemClassification.useful
@@ -264,14 +291,22 @@ def create_items(self) -> None:
         for item in sorted(self.item_name_groups[item_group]):
             add_item(item)
 
-    if self.options.brown_boxes == "include":
-        filler_items = []
-        for item, count in fillers.items():
-            filler_items += [self.create_item(item) for _ in range(count)]
-        if self.options.sky_coin_mode == "shattered_sky_coin":
-            self.multiworld.random.shuffle(filler_items)
-            filler_items = filler_items[39:]
-        items += filler_items
+    while filler_counts["Seed"] < self.options.world_seed_supply.value:
+        filler_counts["Seed"] += 1
+        filler_counts[self.random.choice(["Cure Potion", "Heal Potion", "Bomb Refill", "Projectile Refill"])] -= 1
+    while filler_counts["Seed"] > self.options.world_seed_supply.value:
+        filler_counts["Seed"] -= 1
+        filler_counts[self.random.choice(["Cure Potion", "Heal Potion", "Bomb Refill", "Projectile Refill"])] += 1
+
+    filler_items = []
+    for item, count in filler_counts.items():
+        filler_items += [self.create_item(item) for _ in range(count)]
+
+    self.random.shuffle(filler_items)
+    if self.options.sky_coin_mode == "shattered_sky_coin":
+        filler_items = filler_items[39:]
+
+    items += filler_items + [self.create_item("Refresher") for _ in range(17)]
 
     self.multiworld.itempool += items
 
@@ -286,7 +321,7 @@ class FFMQItem(Item):
     type = None
 
     def __init__(self, name, player: int = None):
-        item_data = item_table[name]
+        item_data = item_table.get(name, ItemData(None, ItemClassification.progression))
         super(FFMQItem, self).__init__(
             name,
             item_data.classification,

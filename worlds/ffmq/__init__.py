@@ -1,26 +1,15 @@
-import Utils
-import settings
+import random
+
 import base64
 import threading
-import requests
 from worlds.AutoWorld import World, WebWorld
 from BaseClasses import Tutorial
-from .Regions import create_regions, location_table, set_rules, stage_set_rules, rooms, non_dead_end_crest_rooms,\
-    non_dead_end_crest_warps
+from .Regions import create_regions, location_table, set_rules, rooms
 from .Items import item_table, item_groups, create_items, FFMQItem, fillers
 from .Output import generate_output
 from .Options import FFMQOptions
 from .Client import FFMQClient
-
-
-# removed until lists are supported
-# class FFMQSettings(settings.Group):
-#     class APIUrls(list):
-#         """A list of API URLs to get map shuffle, crest shuffle, and battlefield reward shuffle data from."""
-#     api_urls: APIUrls = [
-#         "https://api.ffmqrando.net/",
-#         "http://ffmqr.jalchavware.com:5271/"
-#     ]
+from .RoomsGenerator import generate_rooms
 
 
 class FFMQWebWorld(WebWorld):
@@ -67,86 +56,57 @@ class FFMQWorld(World):
     create_items = create_items
     create_regions = create_regions
     set_rules = set_rules
-    stage_set_rules = stage_set_rules
     
     web = FFMQWebWorld()
     # settings: FFMQSettings
+
+    ut_can_gen_without_yaml = True
+    glitches_item_name = "ut_glitch"
 
     def __init__(self, world, player: int):
         self.rom_name_available_event = threading.Event()
         self.rom_name = None
         self.rooms = None
+        self.hint_data = []
+        self.ut = False
+        self.finished_hint_data_collection = threading.Event()
+        self.map_shuffle_seed = None
         super().__init__(world, player)
 
     def generate_early(self):
-        if self.options.sky_coin_mode == "shattered_sky_coin":
-            self.options.brown_boxes.value = 1
         if self.options.enemies_scaling_lower.value > self.options.enemies_scaling_upper.value:
             self.options.enemies_scaling_lower.value, self.options.enemies_scaling_upper.value = \
                 self.options.enemies_scaling_upper.value, self.options.enemies_scaling_lower.value
         if self.options.bosses_scaling_lower.value > self.options.bosses_scaling_upper.value:
             self.options.bosses_scaling_lower.value, self.options.bosses_scaling_upper.value = \
                 self.options.bosses_scaling_upper.value, self.options.bosses_scaling_lower.value
+        if hasattr(self.multiworld, "re_gen_passthrough") and self.game in self.multiworld.re_gen_passthrough:
+            self.ut = True
+            for key, value in self.multiworld.re_gen_passthrough[self.game].items():
+                if hasattr(self.options, key):
+                    getattr(self.options, key).value = value
+            self.map_shuffle_seed = self.multiworld.re_gen_passthrough[self.game]["map_shuffle_seed"]
+        else:
+            if self.options.map_shuffle_seed.value.isdigit():
+                self.map_shuffle_seed = self.options.map_shuffle_seed.value
+            elif self.options.map_shuffle_seed.value != "random":
+                self.map_shuffle_seed = int(hash(self.options.map_shuffle_seed.value)) + int(self.multiworld.seed)
+            else:
+                self.map_shuffle_seed = self.random.randint(0, 0xFFFFFFFF)
 
     @classmethod
     def stage_generate_early(cls, multiworld):
-
-        # api_urls = Utils.get_options()["ffmq_options"].get("api_urls", None)
-        api_urls = [
-            "https://api.ffmqrando.net/",
-            "http://ffmqr.jalchavware.com:5271/"
-        ]
-
-        rooms_data = {}
-
         for world in multiworld.get_game_worlds("Final Fantasy Mystic Quest"):
-            if (world.options.map_shuffle or world.options.crest_shuffle or world.options.shuffle_battlefield_rewards
-                    or world.options.companions_locations):
-                if world.options.map_shuffle_seed.value.isdigit():
-                    multiworld.random.seed(int(world.options.map_shuffle_seed.value))
-                elif world.options.map_shuffle_seed.value != "random":
-                    multiworld.random.seed(int(hash(world.options.map_shuffle_seed.value))
-                                           + int(world.multiworld.seed))
-
-                seed = hex(multiworld.random.randint(0, 0xFFFFFFFF)).split("0x")[1].upper()
-                map_shuffle = world.options.map_shuffle.value
-                crest_shuffle = world.options.crest_shuffle.current_key
-                battlefield_shuffle = world.options.shuffle_battlefield_rewards.current_key
-                companion_shuffle = world.options.companions_locations.value
-                kaeli_mom = world.options.kaelis_mom_fight_minotaur.current_key
-
-                query = f"s={seed}&m={map_shuffle}&c={crest_shuffle}&b={battlefield_shuffle}&cs={companion_shuffle}&km={kaeli_mom}"
-
-                if query in rooms_data:
-                    world.rooms = rooms_data[query]
-                    continue
-
-                if not api_urls:
-                    raise Exception("No FFMQR API URLs specified in host.yaml")
-
-                errors = []
-                for api_url in api_urls.copy():
-                    try:
-                        response = requests.get(f"{api_url}GenerateRooms?{query}")
-                    except (ConnectionError, requests.exceptions.HTTPError, requests.exceptions.ConnectionError,
-                            requests.exceptions.RequestException) as err:
-                        api_urls.remove(api_url)
-                        errors.append([api_url, err])
-                    else:
-                        if response.ok:
-                            world.rooms = rooms_data[query] = Utils.parse_yaml(response.text)
-                            break
-                        else:
-                            api_urls.remove(api_url)
-                            errors.append([api_url, response])
-                else:
-                    error_text = f"Failed to fetch map shuffle data for FFMQ player {world.player}"
-                    for error in errors:
-                        error_text += f"\n{error[0]} - got error {error[1].status_code} {error[1].reason} {error[1].text}"
-                    raise Exception(error_text)
-                api_urls.append(api_urls.pop(0))
-            else:
-                world.rooms = rooms
+            shuffle_random = random.Random()
+            shuffle_random.seed(world.map_shuffle_seed)
+            map_shuffle = world.options.map_shuffle.value
+            crest_shuffle = world.options.crest_shuffle.value
+            battlefield_shuffle = world.options.shuffle_battlefield_rewards.value
+            companion_shuffle = world.options.companions_locations.value
+            kaeli_mom = world.options.kaelis_mom_fight_minotaur.value
+            overworld_shuffle = world.options.overworld_shuffle.value
+            world.rooms = generate_rooms(shuffle_random, map_shuffle, crest_shuffle, battlefield_shuffle,
+                                         companion_shuffle, kaeli_mom, overworld_shuffle)
 
     def create_item(self, name: str):
         return FFMQItem(name, self.player)
@@ -171,6 +131,18 @@ class FFMQWorld(World):
                 return self.item_id_to_name[i+1]
             return self.item_id_to_name[i]
         return item.name
+
+    @classmethod
+    def stage_generate_output(cls, multiworld, output_directory):
+        for location in multiworld.get_filled_locations():
+            # The externalplacements.yaml file is only supposed to contain items placed outside the player's game,
+            # and checking that items are non-local takes care of filtering out events.
+            if (location.item.game == "Final Fantasy Mystic Quest"
+                    and location.player != location.item.player and location.item.name not in fillers):
+                multiworld.worlds[location.item.player].hint_data.append(location)
+
+        for world in multiworld.get_game_worlds("Final Fantasy Mystic Quest"):
+            world.finished_hint_data_collection.set()
 
     def modify_multidata(self, multidata):
         # wait for self.rom_name to be available.
@@ -199,7 +171,7 @@ class FFMQWorld(World):
                               "Subregion Doom Castle"]:
                 region = self.multiworld.get_region(subregion, self.player)
                 for location in region.locations:
-                    if location.address and self.options.map_shuffle != "dungeons":
+                    if location.address and self.options.overworld_shuffle:
                         hint_data[self.player][location.address] = (subregion.split("Subregion ")[-1]
                                                                     + (" Region" if subregion not in
                                                                        single_location_regions else ""))
@@ -219,10 +191,10 @@ class FFMQWorld(World):
                             for location in exit_check.connected_region.locations:
                                 if location.address:
                                     hint = []
-                                    if self.options.map_shuffle != "dungeons":
+                                    if self.options.overworld_shuffle:
                                         hint.append((subregion.split("Subregion ")[-1] + (" Region" if subregion not
                                                     in single_location_regions else "")))
-                                    if self.options.map_shuffle != "overworld":
+                                    if self.options.map_shuffle:
                                         hint.append(overworld_spot.name.split("Overworld - ")[-1].replace("Pazuzu",
                                             "Pazuzu's"))
                                     hint = " - ".join(hint).replace(" - Mac Ship", "")
@@ -230,3 +202,14 @@ class FFMQWorld(World):
                                         hint_data[self.player][location.address] += f"/{hint}"
                                     else:
                                         hint_data[self.player][location.address] = hint
+
+    def fill_slot_data(self):
+        ret = self.options.as_dict("logic", "sky_coin_mode", "shattered_sky_coin_quantity", "map_shuffle",
+                                   "overworld_shuffle", "crest_shuffle", "shuffle_battlefield_rewards",
+                                   "companions_locations", "kaelis_mom_fight_minotaur")
+        ret["map_shuffle_seed"] = self.map_shuffle_seed
+        return ret
+
+    @staticmethod
+    def interpret_slot_data(slot_data):
+        return slot_data
