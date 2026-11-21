@@ -154,7 +154,7 @@ window.addEventListener('load', () => {
                             $(old_table.table).find("tfoot").html(footer_tr);
                         }
                         old_table.rows.add(new_trs);
-                        old_table.draw();
+                        old_table.draw(false);
                         $(old_table.settings()[0].nScrollBody).scrollTop(topscroll);
                         $(old_table.settings()[0].nScrollBody).scrollLeft(leftscroll);
                     });
@@ -169,9 +169,14 @@ window.addEventListener('load', () => {
     }
     let updater = setTimeout(update, getSleepTimeSeconds() * 1000);
 
+    let resizeFrame = null;
     window.addEventListener('resize', () => {
-        adjustTableHeight();
-        tables.draw();
+        if (resizeFrame !== null)
+            cancelAnimationFrame(resizeFrame);
+        resizeFrame = requestAnimationFrame(() => {
+            adjustTableHeight();
+            tables.draw();
+        });
     });
 
     window.addEventListener('visibilitychange', () => {
