@@ -1,6 +1,6 @@
 # DOTA 2 - Setup Guide
 
-Follow these steps to play Deadlock with Archipelago
+Follow these steps to play Dota 2 with Archipelago
 
 ---
 
@@ -43,6 +43,10 @@ Follow these steps to play Deadlock with Archipelago
 
 `/parse_recent_match` - Tries to parse your most recent match data and get stats for checks. **May take a minute after the game for data to be available and may take several minutes for the api to parse all the game stats once method is called**.
 
+`/parse_match` - Parses match by provided match id /parse_match {id}. **Games with a timestamp from before start of the randomizer are not valid and will not be parsed**.
+
+`/parse_last_matches` - Parses last number of games provided a number /parse_last_matches {number}. **parses the last X matches from oldest to newest**.
+
 `/goal` - See your goal and progress towards completing the goal.
 
 `/heroes` - See which heroes are unlocked and which progressive unlock pool they belong to.
@@ -50,6 +54,8 @@ Follow these steps to play Deadlock with Archipelago
 `/game_complete` - extra method to check if game is completed in case of no release. nothing will happen if goal is not complete.
 
 `/hero_wins` - tells you number of unique hero wins and which heroes you have won with.
+
+`/quests` - shows the state of all quests checks and if they are unlocked or not
 
 `/minigame` - sending in minigame score checks. command should be typed like /minigame {first world of minigame} {score}. Example /minigame Nest 100000 or /minigame gone 5000 
     minigame keywords are as follows [gone, bat, oasis, sand, sleet, dragon, zaug's, spoon, spleen, nest].
