@@ -311,7 +311,7 @@ code { font: 500 13px var(--mono); overflow-wrap: anywhere; }
 
   <section id="checks">
     <div class="sec-head"><h2>Checks</h2><span class="eyebrow" id="checks-count"></span></div>
-    <div class="legend"><span class="chip ready">Gold</span> purchase you can make: all its components are unlocked <span class="chip done">Green</span> already sent</div>
+    <div class="legend"><span class="chip ready">Gold</span> purchase you can make: all its components are unlocked <span class="chip done">Green</span> already sent <span class="chip off">Dashed</span> waiting for its unlock item</div>
     <div id="check-groups" class="groups"></div>
   </section>
 
@@ -742,6 +742,9 @@ async function build(cfg, say) {
     : n.startsWith("Win as a ") || scaleOf(n, STAT_RES) ? "match" : "challenge";
   const values = seedValues(sd);
   const seedChecks = new Set(allLocs.map(i => locNames[i]));
+  // Stats, challenges and quests waiting for their unlock item (check_unlocks in slot_data): check name -> item
+  const lockedBy = {};
+  Object.entries(sd.check_unlocks || {}).forEach(([item, checks]) => { if (!names.includes(item)) checks.forEach(n => { lockedBy[n] = item; }); });
 
   // The client save is the reference for progress; it must belong to this seed
   let save = store.get(saveKey(cfg));
@@ -788,7 +791,8 @@ async function build(cfg, say) {
       const groupOf = Object.fromEntries(heroes.map(h => [h.name, h.group]));
       const shopByKey = Object.fromEntries(Object.entries(S.items).map(([n, it]) => [it.internal, n]));
       const triggers = {};
-      games.forEach(g => { if (details[g.id]) triggers[g.id] = matchTriggers(g, details[g.id], S.attrs[g.hero], groupOf[g.hero], shopByKey, values, seedChecks); });
+      const sendable = new Set([...seedChecks].filter(n => !(n in lockedBy)));  // locked checks aren't sent
+      games.forEach(g => { if (details[g.id]) triggers[g.id] = matchTriggers(g, details[g.id], S.attrs[g.hero], groupOf[g.hero], shopByKey, values, sendable); });
       if (!questTotals) {
         questTotals = {}; questSource = "opendota";
         games.filter(g => g.open && details[g.id]).forEach(g => QUEST_NAMES.forEach(([, k]) => { questTotals[k] = (questTotals[k] || 0) + questAmount(details[g.id], k); }));
@@ -817,6 +821,7 @@ async function build(cfg, say) {
     const it = S.items[name];
     if (ck.kind === "item" && it) { ck.img = it.img; ck.ready = it.req.every(r => unlockedKeys.has(r)); }
     else if (!playable(name)) ck.ready = false;
+    if (lockedBy[name]) { ck.ready = false; ck.lockedBy = lockedBy[name]; }
     const quest = scaleOf(name, QUEST_RES);
     if (quest && questTotals) ck.progress = [questTotals[quest.field] || 0, quest.threshold, questSource];
     return ck;
@@ -1054,7 +1059,8 @@ function render() {
     [...list.filter(c => !c.done), ...list.filter(c => c.done)].forEach(c => {
       const ready = k === "item" && !c.done && c.ready;
       const filt = heroFilterFor(c.name);
-      const chip = el(filt ? "button" : "span", "chip" + (c.done ? " done" : "") + (ready ? " ready" : "") + (c.img ? " item" : "") + (filt ? " link" : ""));
+      const locked = !c.done && c.lockedBy;
+      const chip = el(filt ? "button" : "span", "chip" + (c.done ? " done" : "") + (ready ? " ready" : "") + (locked ? " off" : "") + (c.img ? " item" : "") + (filt ? " link" : ""));
       if (filt) { chip.type = "button"; chip.title = "Show the heroes that complete this check"; chip.addEventListener("click", () => showHeroesFor(filt)); }
       if (c.img) { const img = el("img"); img.src = c.img; img.alt = ""; img.loading = "lazy"; img.onerror = () => img.remove(); chip.append(img); }
       chip.append(c.name);
@@ -1063,6 +1069,7 @@ function render() {
         chip.append(el("span", "sub", ` ${have.toLocaleString()} / ${need.toLocaleString()}`));
         chip.title = source === "save" ? "From the client save" : "Estimated from OpenDota (matches with an unlocked hero)";
       }
+      if (locked) chip.title = `Needs ${c.lockedBy}` + (chip.title ? ". " + chip.title : "");
       chips.append(chip);
     });
     g.append(chips); cg.append(g);

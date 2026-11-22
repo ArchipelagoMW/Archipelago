@@ -142,6 +142,16 @@ a { color: var(--gold); }
         <select id="crownfall"><option value="off">Off</option><option value="on">On</option></select>
         <span class="hint">Adds the Crownfall minigames as checks, each with its own unlock.</span>
       </div>
+      <div class="field">
+        <label for="check_unlocks">Check unlocks</label>
+        <select id="check_unlocks"><option value="by_family">By family</option><option value="individual">Individual</option><option value="off">Off</option></select>
+        <span class="hint">Stats, challenges and quests need an item first, like hero groups: one per stat, quest and challenge family, or one per challenge. Quest progress counts from the start.</span>
+      </div>
+      <div class="field">
+        <label for="starting_check_unlocks">Starting check unlocks</label>
+        <input type="number" id="starting_check_unlocks" data-option min="0" max="44" step="1">
+        <span class="hint">Unlocked from the start, picked at random. 0 to 44, 5 by default.</span>
+      </div>
     </div>
     <span class="err" id="options-err"></span>
   </section>
@@ -187,8 +197,8 @@ a { color: var(--gold); }
 <script>
 // The checks, as in worlds/dota_2/challenges.py and options.py: keep both in step.
 const DATA_URL = "https://raw.githubusercontent.com/CaptainBoscar/Archipelago-DOTA2/main/worlds/dota_2/data/";
-const OPTIONS = { unique_characters_to_win: 5, total_wins_to_win: 5, primordial_fragments_to_win: 10, starting_heroes: 30, hero_groups: 7 };
-const RANGES = { unique_characters_to_win: [1, 127], total_wins_to_win: [1, 127], primordial_fragments_to_win: [10, 50], starting_heroes: [5, 120], hero_groups: [1, 30] };
+const OPTIONS = { unique_characters_to_win: 5, total_wins_to_win: 5, primordial_fragments_to_win: 10, starting_heroes: 30, hero_groups: 7, starting_check_unlocks: 5 };
+const RANGES = { unique_characters_to_win: [1, 127], total_wins_to_win: [1, 127], primordial_fragments_to_win: [10, 50], starting_heroes: [5, 120], hero_groups: [1, 30], starting_check_unlocks: [0, 44] };
 const MAX_THRESHOLDS = 5;
 // Counted from the apworld's data once it loads; these are the current numbers until then
 const COUNTS = { heroes: 127, purchases: 188, shopUnlocks: 60, minigameChecks: 32, minigameItems: 10 };
@@ -248,10 +258,13 @@ const GROUPS = [
 ];
 const ROWS = GROUPS.flatMap(([, rows]) => rows);
 const QUEST_KEYS = GROUPS[3][1].map(r => r.key);
+// Rows whose checks need an unlock item (check_unlocks): stats, match challenges and quests
+const UNLOCK_ROWS = new Set([1, 2, 3].flatMap(i => GROUPS[i][1]));
+const CHALLENGE_ROWS = new Set(GROUPS[2][1]);
 let purchaseNames = [];  // from the apworld's shop data, for single checks
 
 const STORE = "dota2-yaml:v1";
-const state = { name: "", options: { ...OPTIONS }, crownfall: "off", off: [], values: {}, singles: [] };
+const state = { name: "", options: { ...OPTIONS }, crownfall: "off", check_unlocks: "by_family", off: [], values: {}, singles: [] };
 try { Object.assign(state, JSON.parse(localStorage.getItem(STORE)) || {}); } catch (e) {}
 function save() { try { localStorage.setItem(STORE, JSON.stringify(state)); } catch (e) {} }
 
@@ -343,6 +356,8 @@ function buildOptions() {
   });
   $("crownfall").value = state.crownfall;
   $("crownfall").addEventListener("change", e => { state.crownfall = e.target.value; update(); });
+  $("check_unlocks").value = state.check_unlocks;
+  $("check_unlocks").addEventListener("change", e => { state.check_unlocks = e.target.value; update(); });
 }
 
 // Checks that can be removed one by one: those of the families with fixed names, and purchases
@@ -455,7 +470,7 @@ function readName() {
 // Check rows: their counts and errors, and the values that differ from the defaults
 function readChecks(off) {
   let checks = 0, errors = 0;
-  const values = {};
+  const values = {}, names = new Map();  // row -> its check names in the seed
   ROWS.forEach(row => {
     const tr = document.querySelector(`tr[data-key="${CSS.escape(row.key)}"]`);
     const on = !off.has(row.key);
@@ -475,8 +490,9 @@ function readChecks(off) {
     tr.querySelector(".names").textContent = text;
     tr.querySelector(".count").textContent = on ? `${count} check${count === 1 ? "" : "s"}` : "removed";
     if (on) checks += count;
+    if (on && row.key !== "Purchases") names.set(row, row.scale ? (parsed.nums || []).map(t => nameOf(row, t)) : row.names);
   });
-  return { checks, errors, values };
+  return { checks, errors, values, names };
 }
 
 // disabled_checks: "Quests" when every quest is off, a family's name when all its checks are removed one by one
@@ -487,9 +503,21 @@ function disabledList(singles) {
   return [...disabled, ...whole.map(g => g.key), ...singles.filter(n => !whole.some(g => g.names.includes(n)))];
 }
 
+// Unlock items in the pool: one per stat, quest and challenge family (or challenge) left in the seed, minus the starting ones
+function unlockItems(names, singles, starting) {
+  if (state.check_unlocks === "off") return 0;
+  let units = 0;
+  names.forEach((list, row) => {
+    const left = list.filter(n => !singles.includes(n)).length;
+    if (UNLOCK_ROWS.has(row) && left) units += state.check_unlocks === "individual" && CHALLENGE_ROWS.has(row) ? left : 1;
+  });
+  return units - Math.min(starting, units);
+}
+
 function yamlText(name, o, disabled, values) {
   const lines = [`name: ${yamlString(name)}`, `game: DOTA 2`, ``, `DOTA 2:`];
   for (const key of Object.keys(RANGES)) lines.push(`  ${key}: ${o[key]}`);
+  lines.push(`  check_unlocks: "${state.check_unlocks}"`);
   lines.push(`  crownfall: "${state.crownfall}"`);
   lines.push(`  disabled_checks: [${disabled.map(yamlString).join(", ")}]`);
   const entries = Object.entries(values);
@@ -516,14 +544,15 @@ function update() {
   // "Win with hero from starting pool" and the group wins; the goal is not counted
   const checks = 1 + groups + rows.checks - singles.length + (state.crownfall === "on" ? COUNTS.minigameChecks : 0);
   const purchases = !off.has("Purchases") && singles.filter(n => purchaseNames.includes(n)).length < COUNTS.purchases;
-  const items = groups + o.primordial_fragments_to_win + 10 + COUNTS.minigameItems + (purchases ? COUNTS.shopUnlocks : 0);
+  const items = groups + o.primordial_fragments_to_win + 10 + COUNTS.minigameItems + (purchases ? COUNTS.shopUnlocks : 0)
+    + unlockItems(rows.names, singles, o.starting_check_unlocks);
   $("yaml").textContent = yamlText(name, o, disabledList(singles), rows.values);
 
   const errors = optErrors + rows.errors, short = items > checks;
   const summary = $("summary");
   summary.className = "summary" + (short || errors || nameIssue ? " bad" : "");
   summary.textContent = nameIssue && !errors ? nameIssue : errors ? `Fix the ${errors === 1 ? "value" : "values"} in red: the YAML keeps the defaults for ${errors === 1 ? "it" : "them"}.`
-    : short ? `Only ${checks} checks for ${items} items: generation would stop. Turn fewer checks off or lower the fragments.`
+    : short ? `Only ${checks} checks for ${items} items: generation would stop. Turn fewer checks off, lower the fragments or start with more check unlocks.`
     : `${fmt(checks)} checks for ${items} items; the rest of the pool is filler.`;
   save();
 }
@@ -558,7 +587,7 @@ $("download").addEventListener("click", () => {
 });
 $("reset").addEventListener("click", () => {
   if (!confirm("Reset every option to its default? Your player name stays.")) return;
-  Object.assign(state, { options: { ...OPTIONS }, crownfall: "off", off: [], values: {}, singles: [] });
+  Object.assign(state, { options: { ...OPTIONS }, crownfall: "off", check_unlocks: "by_family", off: [], values: {}, singles: [] });
   save();
   location.reload();
 });
