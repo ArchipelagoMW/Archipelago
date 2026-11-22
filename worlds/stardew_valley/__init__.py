@@ -529,7 +529,7 @@ class StardewValleyWorld(World):
         def get_parent_region(exit: Entrance):
             if exit.parent_region:
                 return exit.parent_region
-            from worlds.stardew_valley.data.regions.model import connector_keyword
+            from .data.regions.model import connector_keyword
             exit_name = exit.name
             parent_region_name = exit_name.split(connector_keyword)[0]
             print(f"{exit_name} ({parent_region_name})")
