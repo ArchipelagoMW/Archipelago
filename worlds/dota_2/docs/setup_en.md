@@ -54,5 +54,8 @@ Follow these steps to play Deadlock with Archipelago
 `/minigame` - sending in minigame score checks. command should be typed like /minigame {first world of minigame} {score}. Example /minigame Nest 100000 or /minigame gone 5000 
     minigame keywords are as follows [gone, bat, oasis, sand, sleet, dragon, zaug's, spoon, spleen, nest].
 
+---
 
+## Help
 
+Ask on the [DOTA 2 Archipelago Discord](https://discord.gg/Xzrx7DcDvm) if something doesn't work.

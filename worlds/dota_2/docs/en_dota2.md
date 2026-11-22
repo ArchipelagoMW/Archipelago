@@ -37,3 +37,7 @@ DOTA 2:
 - **Goal** - Have the number of Unique Hero Wins, Total Wins, and Primordial Fragments set by the YAML
 
 see the **Setup Guide** in setup_en.md for setup and custome client instructions
+
+## Community
+
+Questions, bug reports and ideas are welcome on the [DOTA 2 Archipelago Discord](https://discord.gg/Xzrx7DcDvm).

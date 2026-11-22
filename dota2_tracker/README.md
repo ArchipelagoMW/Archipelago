@@ -51,3 +51,7 @@ Any static host works. GitHub Pages only serves a branch's root or its `docs` fo
 - Progress: estimated from OpenDota by default, or exact from the client save.
 
 Settings stay in the browser. The YAML page keeps your choices in the browser too.
+
+## Help
+
+Questions and bug reports: the [DOTA 2 Archipelago Discord](https://discord.gg/Xzrx7DcDvm).
