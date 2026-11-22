@@ -33,6 +33,9 @@ def load(name: str):
 
 
 def save(name: str, data, indent: int) -> None:
+    """Writes a data file, only when its content changed (files edited by hand keep their layout)."""
+    if load(name) == data:
+        return
     with open(DATA / name, "w", encoding="utf-8") as f:
         json.dump(data, f, indent=indent, ensure_ascii=False)
         f.write("\n")
