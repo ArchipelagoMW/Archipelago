@@ -107,6 +107,30 @@ def _purchase_checks() -> list[str]:
         return [item["dname"] for item in json.load(f).values() if item.get("dname")]
 
 
+# Items that unlock stats, challenges and quests (check_unlocks), like hero groups: a stat or a quest has one item
+# for all its thresholds, a challenge family one item ("by_family") or each challenge its own ("individual").
+CHECK_UNLOCKS_OFF, CHECK_UNLOCKS_BY_FAMILY, CHECK_UNLOCKS_INDIVIDUAL = 0, 1, 2
+STAT_UNLOCKS = {f"Stat: {s.value}": s.names for s in STATS}
+QUEST_UNLOCKS = {f"Quest: {s.value}": s.names for s in QUESTS}
+CHALLENGE_FAMILY_UNLOCKS = {f"Challenge: {family}": names for family, names in CHALLENGE_FAMILIES.items()}
+CHALLENGE_UNLOCKS = {f"Challenge: {name}": [name] for name in CHALLENGE_CHECKS}
+UNLOCK_ITEMS = [*STAT_UNLOCKS, *QUEST_UNLOCKS, *CHALLENGE_FAMILY_UNLOCKS, *CHALLENGE_UNLOCKS]  # in item id order
+
+
+def unlock_groups(mode: int) -> dict[str, list[str]]:
+    """Unlock item -> the check names it unlocks, for a check_unlocks mode."""
+    if mode == CHECK_UNLOCKS_OFF:
+        return {}
+    challenges = CHALLENGE_UNLOCKS if mode == CHECK_UNLOCKS_INDIVIDUAL else CHALLENGE_FAMILY_UNLOCKS
+    return {**STAT_UNLOCKS, **QUEST_UNLOCKS, **challenges}
+
+
+def locked_checks(slot_data: dict[str, Any], received: set[str]) -> set[str]:
+    """Check names whose unlock item hasn't been received (starting unlocks aren't in check_unlocks)."""
+    return {name for item, names in (slot_data.get("check_unlocks") or {}).items() if item not in received
+            for name in names}
+
+
 # Families a YAML can turn off. Hero group wins and the goal stay, since the seed's progression relies on them.
 # A stat or quest is turned off as a whole: which of its names are in the seed comes from check_values.
 FAMILIES: dict[str, list[str]] = {

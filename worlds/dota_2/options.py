@@ -7,7 +7,7 @@ from importlib import resources
 from typing import Any
 from Options import Choice, Range, PerGameCommonOptions, OptionSet, OptionDict
 
-from .challenges import FAMILIES, DISABLEABLE_CHECKS, VALUES, SCALES, MAX_THRESHOLDS
+from .challenges import FAMILIES, DISABLEABLE_CHECKS, VALUES, SCALES, MAX_THRESHOLDS, STATS, QUESTS, CHALLENGE_CHECKS
 from .constants import MAX_HERO_GROUPS
 
 class GoalType(Choice):
@@ -66,6 +66,25 @@ class HeroGroups(Range):
     default = 7
 
 
+class CheckUnlocks(Choice):
+    """Stats, match challenges and quests need an item before they count, like hero groups. A stat or a quest has one
+    item for all its thresholds; challenges have one item per family (Runes, Positions...) or one each.
+    Quest progress adds up from the start of the seed, even before the quest is unlocked."""
+    display_name = "Check Unlocks"
+    option_off = 0
+    option_by_family = 1
+    option_individual = 2
+    default = 1
+
+
+class StartingCheckUnlocks(Range):
+    """How many of these unlocks you start with, picked at random, like the starting heroes."""
+    display_name = "Starting Check Unlocks"
+    range_start = 0
+    range_end = len(STATS) + len(QUESTS) + len(CHALLENGE_CHECKS)
+    default = 5
+
+
 class DisabledChecks(OptionSet):
     """Checks to remove: families or check names. Hero group wins and the goal always stay."""
     display_name = "Disabled Checks"
@@ -118,6 +137,8 @@ class DOTA2Options(PerGameCommonOptions):
     crownfall: CrownFall
     starting_heroes: StartingHeroes
     hero_groups: HeroGroups
+    check_unlocks: CheckUnlocks
+    starting_check_unlocks: StartingCheckUnlocks
     disabled_checks: DisabledChecks
     check_values: CheckValues
 

@@ -10,7 +10,7 @@ from datetime import datetime
 
 from .constants import PROGRESSIVE_GROUP_UNLOCK_ID, PRIMORDIAL_FRAGMENT_ID, FILLER_ITEM_ID
 from .dota_api import parse_match_data, get_recent_match_ids, DotaMatchData
-from .challenges import QUESTS, challenge_values, stat_checks, match_challenges, quest_amounts, completed_quests
+from .challenges import QUESTS, challenge_values, stat_checks, match_challenges, quest_amounts, completed_quests, locked_checks
 from .locations import LocationDef, load_item_locations, build_item_name_to_dname, load_minigame_locations
 from .hero import Hero, get_all_heroes, hero_from_dict
 
@@ -346,6 +346,7 @@ class Dota2Context(CommonContext):
         # Primordial Fragments (MacGuffin) goal can be met by receiving items; check after each batch
             if async_start:
                 async_start(_check_goal_and_send_if_met(self), name="check_goal")
+                async_start(self.send_unlocked_quests(), name="send_unlocked_quests")
 
         super().on_package(cmd, args)
 
@@ -526,11 +527,34 @@ class Dota2Context(CommonContext):
         names = self.location_names[self.game]
         return {names[i] for i in set(self.missing_locations) | set(self.checked_locations) if i in names}
 
+    def received_item_names(self) -> set[str]:
+        id_to_name = {item_id: name for name, item_id in self.save.item_name_to_id.items()}
+        return {id_to_name.get(item.item) for item in self.items_received} - {None}
+
+    def locked_checks(self) -> set[str]:
+        """This seed's stat, challenge and quest checks still waiting for their unlock item."""
+        return locked_checks(self.slot_data, self.received_item_names())
+
+    async def send_unlocked_quests(self) -> None:
+        """Quests whose total was reached before their unlock item came: sent as soon as it does."""
+        try:
+            name_to_id = {name: loc_id for loc_id, name in self.location_names[self.game].items()}
+        except (KeyError, TypeError):
+            return
+        values = challenge_values(self.slot_data, self.seed_check_names())
+        locked = self.locked_checks()
+        ids = [name_to_id[name] for name in completed_quests(self.save.quest_totals, values)
+               if name not in locked and name_to_id.get(name) in self.missing_locations]
+        if ids:
+            await self.check_locations(ids)
+
     def get_quests(self) -> None:
         values = challenge_values(self.slot_data, self.seed_check_names())
+        locked = self.locked_checks()
         for quest in QUESTS:
             targets = " / ".join(str(t) for t in values[quest.value])
-            self.output(f"{quest.pattern.replace('{}', '…')}: {self.save.quest_totals.get(quest.field, 0)} (targets: {targets})")
+            waiting = " - locked" if any(quest.name(t) in locked for t in values[quest.value]) else ""
+            self.output(f"{quest.pattern.replace('{}', '…')}: {self.save.quest_totals.get(quest.field, 0)} (targets: {targets}){waiting}")
 
     def get_hero_wins(self) -> None:
         self.output(f"Hero Wins: {len(self.save.unique_heroes_won)}")
@@ -659,6 +683,9 @@ class Dota2Context(CommonContext):
             for key, amount in quest_amounts(match_data).items():
                 self.save.quest_totals[key] = self.save.quest_totals.get(key, 0) + amount
         checks.extend(completed_quests(self.save.quest_totals, values))
+        # Stats, challenges and quests count only once unlocked (quest totals keep adding up meanwhile)
+        locked = self.locked_checks()
+        checks = [check for check in checks if check not in locked]
        
         valid_location_ids = []
         for check in checks:

@@ -16,6 +16,8 @@ A **Meta-progression randomizer** for DOTA 2. You play regular online matches an
 
 - **Quests** - Checks that add up over the whole seed: stack camps, place wards (observers and sentries), damage buildings, heal heroes, deal physical or magical damage to heroes, stun enemies, pick up runes (Shrines of Wisdom not counted) and earn gold, each with a lower and a full target by default. Each match counts once, even if parsed again. Type `/quests` in the client to see your progress.
 
+- **Check unlocks** - Stats, match challenges and quests need an item before they count, like hero groups: "Stat: Kills" for every kills threshold, "Quest: Total Runes" for every runes target, "Challenge: Runes" for the ten rune checks. With `check_unlocks: individual`, each challenge has its own item ("Challenge: Pick up a Bounty Rune"); with `off`, nothing is locked. You start with a few of them, picked at random (5 by default, option `starting_check_unlocks`). Quest progress adds up from the start of the seed: a quest already reached is sent as soon as its item arrives.
+
 - **Customizing checks** - All checks are in the seed by default. In your YAML, `disabled_checks` removes families (such as Legs Wins, Purchases or Runes) or single checks, and `check_values` changes their values: stat thresholds, short and long match lengths, Roshan kills, quest targets. Only list what you want to change; the options page lists every family and value with its default:
 
 ```yaml
