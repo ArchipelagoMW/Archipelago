@@ -5,10 +5,10 @@ from ..items import Group, item_table
 from ..items.item_data import FILLER_GROUPS
 from .bases import SVTestBase
 from .options.presets import (
-    default_7_x_x,
+    default_8_x_x,
     get_minsanity_options,
-    maxsanity_mods_7_x_x,
-    maxsanity_no_mods_7_x_x,
+    maxsanity_mods_8_x_x,
+    maxsanity_no_mods_8_x_x,
     minimal_locations_maximal_items,
     minimal_locations_maximal_items_with_island,
 )
@@ -72,7 +72,7 @@ class TestMinSanityHasAllExpectedLocations(SVTestBase):
 
 
 class TestDefaultSettingsHasAllExpectedLocations(SVTestBase):
-    options = default_7_x_x()
+    options = default_8_x_x()
 
     def test_default_settings_has_exactly_locations(self):
         expected_locations = 491
@@ -87,7 +87,7 @@ class TestDefaultSettingsHasAllExpectedLocations(SVTestBase):
 
 
 class TestAllSanitySettingsHasAllExpectedLocations(SVTestBase):
-    options = maxsanity_no_mods_7_x_x()
+    options = maxsanity_no_mods_8_x_x()
 
     def test_maxsanity_without_mods_has_at_least_locations(self):
         expected_locations = 2873
@@ -103,7 +103,7 @@ class TestAllSanitySettingsHasAllExpectedLocations(SVTestBase):
 
 
 class TestAllSanityWithModsSettingsHasAllExpectedLocations(SVTestBase):
-    options = maxsanity_mods_7_x_x()
+    options = maxsanity_mods_8_x_x()
 
     def test_maxsanity_with_mods_has_at_least_locations(self):
         expected_locations = 3251

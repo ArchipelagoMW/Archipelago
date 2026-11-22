@@ -187,6 +187,118 @@ def maxsanity_mods_7_x_x():
     return maxsanity
 
 
+def default_8_x_x():
+    return {
+        options.BackpackProgression.internal_name: options.BackpackProgression.default,
+        options.BackpackSize.internal_name: options.BackpackSize.default,
+        options.Booksanity.internal_name: options.Booksanity.default,
+        options.BuildingProgression.internal_name: options.BuildingProgression.default,
+        options.BundlePerRoom.internal_name: options.BundlePerRoom.default,
+        options.BundlePrice.internal_name: options.BundlePrice.default,
+        options.BundleRandomization.internal_name: options.BundleRandomization.default,
+        options.Chefsanity.internal_name: options.Chefsanity.default,
+        options.Cooksanity.internal_name: options.Cooksanity.default,
+        options.Craftsanity.internal_name: options.Craftsanity.default,
+        options.Cropsanity.internal_name: options.Cropsanity.default,
+        options.CustomLogic.internal_name: options.CustomLogic.default,
+        options.DataRandomization.internal_name: options.DataRandomization.default,
+        options.DataRandomizationBehavior.internal_name: options.DataRandomizationBehavior.default,
+        options.DebrisMultiplier.internal_name: options.DebrisMultiplier.default,
+        options.Eatsanity.internal_name: options.Eatsanity.default,
+        options.ElevatorProgression.internal_name: options.ElevatorProgression.default,
+        options.EnabledFillerBuffs.internal_name: options.EnabledFillerBuffs.default,
+        options.EntranceRandomization.internal_name: options.EntranceRandomization.default,
+        options.EntranceRandomizationBehavior.internal_name: options.EntranceRandomizationBehavior.default,
+        options.ExcludeGingerIsland.internal_name: options.ExcludeGingerIsland.default,
+        options.ExperienceMultiplier.internal_name: options.ExperienceMultiplier.default,
+        options.FarmType.internal_name: options.FarmType.default,
+        options.FestivalLocations.internal_name: options.FestivalLocations.default,
+        options.Fishsanity.internal_name: options.Fishsanity.default,
+        options.Friendsanity.internal_name: options.Friendsanity.default,
+        options.FriendsanityHeartSize.internal_name: options.FriendsanityHeartSize.default,
+        options.FriendshipMultiplier.internal_name: options.FriendshipMultiplier.default,
+        options.Goal.internal_name: options.Goal.default,
+        options.Hatsanity.internal_name: options.Hatsanity.default,
+        options.IncludeEndgameLocations.internal_name: options.IncludeEndgameLocations.default,
+        options.JourneyOfThePrairieKing.internal_name: options.JourneyOfThePrairieKing.default,
+        options.JunimoKart.internal_name: options.JunimoKart.default,
+        options.Mods.internal_name: options.Mods.default,
+        options.Monstersanity.internal_name: options.Monstersanity.default,
+        options.Moviesanity.internal_name: options.Moviesanity.default,
+        options.Museumsanity.internal_name: options.Museumsanity.default,
+        options.NumberOfMovementBuffs.internal_name: options.NumberOfMovementBuffs.default,
+        options.ProfitMargin.internal_name: options.ProfitMargin.default,
+        options.QuestLocations.internal_name: options.QuestLocations.default,
+        options.QuickStart.internal_name: options.QuickStart.default,
+        options.SeasonRandomization.internal_name: options.SeasonRandomization.default,
+        options.Secretsanity.internal_name: options.Secretsanity.default,
+        options.Shipsanity.internal_name: options.Shipsanity.default,
+        options.SkillProgression.internal_name: options.SkillProgression.default,
+        options.SpecialOrderLocations.internal_name: options.SpecialOrderLocations.default,
+        options.StartWithout.internal_name: options.StartWithout.default,
+        options.StartingMoney.internal_name: options.StartingMoney.default,
+        options.ToolProgression.internal_name: options.ToolProgression.default,
+        options.TrapDifficulty.internal_name: options.TrapDifficulty.default,
+        options.Walnutsanity.internal_name: options.Walnutsanity.default,
+    }
+
+
+def maxsanity_no_mods_8_x_x():
+    return {
+        options.BackpackProgression.internal_name: options.BackpackProgression.option_progressive,
+        options.BackpackSize.internal_name: options.BackpackSize.option_1,
+        options.Booksanity.internal_name: options.Booksanity.option_all,
+        options.BuildingProgression.internal_name: options.BuildingProgression.option_progressive,
+        options.BundlePerRoom.internal_name: options.BundlePerRoom.option_two_extra,
+        options.BundlePrice.internal_name: options.BundlePrice.option_expensive,
+        options.BundleRandomization.internal_name: options.BundleRandomization.option_thematic,
+        options.Chefsanity.internal_name: options.Chefsanity.preset_all,
+        options.Cooksanity.internal_name: options.Cooksanity.option_all,
+        options.Craftsanity.internal_name: options.Craftsanity.option_all,
+        options.Cropsanity.internal_name: options.Cropsanity.option_enabled,
+        options.CustomLogic.internal_name: frozenset(options.CustomLogic.valid_keys),
+        options.DataRandomization.internal_name: frozenset(options.DataRandomization.valid_keys),
+        options.DataRandomizationBehavior.internal_name: options.DataRandomizationBehavior.option_range_randomized,
+        options.Eatsanity.internal_name: options.Eatsanity.preset_all,
+        options.ElevatorProgression.internal_name: options.ElevatorProgression.option_progressive,
+        options.EnabledFillerBuffs.internal_name: options.EnabledFillerBuffs.preset_all,
+        options.EntranceRandomization.internal_name: options.EntranceRandomization.option_disabled,
+        options.EntranceRandomizationBehavior.internal_name: frozenset(options.EntranceRandomizationBehavior.valid_keys),
+        options.ExcludeGingerIsland.internal_name: options.ExcludeGingerIsland.option_false,
+        options.FarmType.internal_name: options.FarmType.option_beach,  # There is one extra fishing secret on the beach farm
+        options.FestivalLocations.internal_name: options.FestivalLocations.option_hard,
+        options.Fishsanity.internal_name: options.Fishsanity.option_all,
+        options.Friendsanity.internal_name: options.Friendsanity.option_all_with_marriage,
+        options.FriendsanityHeartSize.internal_name: 1,
+        options.Goal.internal_name: options.Goal.option_perfection,
+        options.Hatsanity.internal_name: options.Hatsanity.preset_all,
+        options.IncludeEndgameLocations.internal_name: options.IncludeEndgameLocations.option_true,
+        options.JourneyOfThePrairieKing.internal_name: options.JourneyOfThePrairieKing.option_full_shuffle,
+        options.JunimoKart.internal_name: options.JunimoKart.option_full_shuffle,
+        options.Mods.internal_name: frozenset(),
+        options.Monstersanity.internal_name: options.Monstersanity.option_progressive_goals,
+        options.Moviesanity.internal_name: options.Moviesanity.option_all_movies_and_all_loved_snacks,
+        options.Museumsanity.internal_name: options.Museumsanity.option_all,
+        options.NumberOfMovementBuffs.internal_name: 12,
+        options.QuestLocations.internal_name: 56,
+        options.SeasonRandomization.internal_name: options.SeasonRandomization.option_randomized,
+        options.Secretsanity.internal_name: options.Secretsanity.preset_all,
+        options.Shipsanity.internal_name: options.Shipsanity.option_everything,
+        options.SkillProgression.internal_name: options.SkillProgression.option_progressive_with_masteries,
+        options.SpecialOrderLocations.internal_name: options.SpecialOrderLocations.option_board_qi,
+        options.StartWithout.internal_name: options.StartWithout.preset_all,
+        options.ToolProgression.internal_name: options.ToolProgression.option_progressive,
+        options.TrapDifficulty.internal_name: options.TrapDifficulty.option_nightmare,
+        options.Walnutsanity.internal_name: options.Walnutsanity.preset_all,
+    }
+
+
+def maxsanity_mods_8_x_x():
+    maxsanity = maxsanity_no_mods_8_x_x()
+    maxsanity.update({options.Mods.internal_name: frozenset(ModNames.enabled_mods_except_invalid_combinations())})
+    return maxsanity
+
+
 def get_minsanity_options():
     return {
         options.BackpackProgression.internal_name: options.BackpackProgression.option_vanilla,

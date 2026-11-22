@@ -1,5 +1,5 @@
 from ..bases import SVTestBase
-from ..options.presets import maxsanity_mods_7_x_x
+from ..options.presets import maxsanity_mods_8_x_x
 from ... import StardewItem, locations_by_tag
 from ...content.feature.hatsanity import to_location_name
 from ...data.hats_data import Hats
@@ -82,7 +82,7 @@ class TestNoHatsLogic(SVTestBase):
 
 
 class TestHatLocations(SVTestBase):
-    options = maxsanity_mods_7_x_x()
+    options = maxsanity_mods_8_x_x()
 
     def test_all_hat_locations_are_added(self):
         location_names = [location.name for location in self.multiworld.get_locations()]
