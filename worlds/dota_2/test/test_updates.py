@@ -58,3 +58,29 @@ class WorldVersion(Dota2TestBase):
         with resources.files("worlds.dota_2").joinpath("archipelago.json").open(encoding="utf-8") as f:
             version = json.load(f)["world_version"]
         self.assertEqual(self.world.fill_slot_data()["world_version"], version)
+
+
+class DataUpdate(TestCase):
+    def test_requirements(self) -> None:
+        from ..tools.update_data import requirements
+        items = {"dagon": {"components": ["crown", "recipe_dagon", ""]}, "dagon_2": {"components": None},
+                 "crown": {"components": None}, "tango": {"components": None},
+                 "travel_boots": {"components": ["boots", "recipe_travel_boots"]}, "boots": {}}
+        self.assertEqual(requirements("dagon", items, {"tango"}), ["crown"])
+        self.assertEqual(requirements("dagon_2", items, {"tango"}), ["crown"])  # bought from level 1
+        self.assertEqual(requirements("travel_boots", items, {"tango"}), ["boots"])
+        self.assertEqual(requirements("tango", items, {"tango"}), [])
+
+    def test_new_names_go_last(self) -> None:
+        from ..tools.update_ids import add_names
+        ids = {"A": 10, "B": 11}
+        self.assertEqual(add_names(ids, ["B", "C", "A", "D", "C"]), ["C", "D"])
+        self.assertEqual(ids, {"A": 10, "B": 11, "C": 12, "D": 13})
+
+    def test_overrides_match_the_shop(self) -> None:
+        with resources.files("worlds.dota_2").joinpath("data/shopOverrides.json").open(encoding="utf-8") as f:
+            overrides = json.load(f)
+        with resources.files("worlds.dota_2").joinpath("data/dotaShopLocations.json").open(encoding="utf-8") as f:
+            shop = json.load(f)
+        self.assertFalse(set(overrides["exclude"]) & set(shop))
+        self.assertEqual(set(overrides["free"]), {k for k, v in shop.items() if not v.get("requirements")})

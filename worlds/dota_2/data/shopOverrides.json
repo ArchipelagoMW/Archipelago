@@ -1,0 +1,63 @@
+{
+ "_about": "Choices the data update (tools/update_data.py) can't make from OpenDota. exclude: OpenDota items that aren't shop purchases here (Roshan drops, couriers, items Valve removed, which OpenDota keeps). free: items bought without any unlock. requirements: components set by hand where OpenDota's recipe is missing or out of date.",
+ "exclude": [
+  "aghanims_shard_roshan",
+  "angels_demise",
+  "cheese",
+  "cornucopia",
+  "courier",
+  "diffusal_blade_2",
+  "eternal_shroud",
+  "flying_courier",
+  "helm_of_the_overlord",
+  "javelin",
+  "khanda",
+  "necronomicon",
+  "necronomicon_2",
+  "necronomicon_3",
+  "pocket_roshan",
+  "refresher_shard",
+  "royale_with_cheese",
+  "stout_shield",
+  "tango_single",
+  "tome_of_knowledge",
+  "trident",
+  "ultimate_scepter_roshan",
+  "ward_dispenser",
+  "wraith_pact"
+ ],
+ "free": [
+  "aghanims_shard",
+  "bottle",
+  "clarity",
+  "dust",
+  "enchanted_mango",
+  "faerie_fire",
+  "flask",
+  "infused_raindrop",
+  "smoke_of_deceit",
+  "tango",
+  "tpscroll",
+  "ward_observer",
+  "ward_sentry"
+ ],
+ "requirements": {
+  "boots_of_bearing": [
+   "boots",
+   "belt_of_strength",
+   "wind_lace",
+   "ring_of_tarrasque"
+  ],
+  "mage_slayer": [
+   "ring_of_health",
+   "void_stone",
+   "blades_of_attack",
+   "orb_of_venom"
+  ],
+  "revenants_brooch": [
+   "claymore",
+   "blades_of_attack",
+   "voodoo_mask"
+  ]
+ }
+}
