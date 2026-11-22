@@ -206,7 +206,7 @@ class StardewValleyWorld(World):
             logger.warning(f"World was generated before Universal Tracker support. Tracker might not be accurate.")
         for option_name in slot_data:
             if option_name in self.options_dataclass.type_hints:
-                logger.warning(f"{option_name} in type_hints")
+                logger.debug(f"{option_name} in type_hints")
                 option_value = slot_data[option_name]
                 option_type = self.options_dataclass.type_hints[option_name]
                 if isinstance(option_value, option_type):
