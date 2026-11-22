@@ -11,15 +11,15 @@ Two web pages for Dota 2 in Archipelago, which run in your browser:
 
 If someone already hosts the tracker online, just open their link: there is nothing to install. Otherwise, the tracker runs on your computer in a few steps. You only do steps 1 and 2 once.
 
-**1. Install Python** (a free program the tracker uses to show its pages in your browser)
+**1. Install Python** (the tracker uses it to show its pages in your browser)
 
-- **Windows**: download the installer from https://www.python.org/downloads/ (the big yellow "Download Python" button) and open it. On its first screen, tick **"Add python.exe to PATH"**, then click **Install Now**.
+- **Windows**: download the installer from https://www.python.org/downloads/ and open it. On its first screen, tick **"Add python.exe to PATH"**, then click **Install Now**.
 - **Mac**: download the installer from https://www.python.org/downloads/ and open it, then follow its steps.
 - **Linux**: Python is usually already there. If not, install the `python3` package from your distribution's software center.
 
 **2. Download the tracker**
 
-On this repository's GitHub page, click the green **Code** button, then **Download ZIP**. Unzip the file (right-click → Extract All on Windows, double-click on Mac). The tracker is in its `dota2_tracker` folder.
+On this repository's GitHub page, click the green **Code** button, then **Download ZIP**, and unzip it. The tracker is in its `dota2_tracker` folder.
 
 **3. Start it**
 
