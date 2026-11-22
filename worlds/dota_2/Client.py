@@ -561,8 +561,9 @@ class Dota2Context(CommonContext):
 
     async def check_dota_goals_and_locations(self, match_data:DotaMatchData ) -> None:
         #self.output("inside the check method")
-        if(match_data.match_id < self.save.last_valid_match_id):
-            self.output(f"Match {match_data.match_id} already proccessed or match is from before your previous game")
+        # Older matches can still count (/parse_match, /parse_last_matches): wins, quests and checks are only counted once
+        if(match_data.match_id == self.save.last_valid_match_id):
+            self.output(f"Match {match_data.match_id} already proccessed")
             return  
 
         # Matches played before this seed's save was created can't count
