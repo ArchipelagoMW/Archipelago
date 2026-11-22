@@ -218,7 +218,7 @@ def get_my_player(players, steamID) -> dict:
 
     raise ValueError("Player not found in match")
 
-async def parse_most_recent_match_data(steamID, match_id=None):
+async def parse_match_data(steamID, match_id=None):
     """Parse the given match, or the most recent one, and return the player's data."""
     #print(f"DEBUG: Steam ID = {steamID}")
     match = await request_match_parse(steamID, match_id)
