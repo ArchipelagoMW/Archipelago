@@ -1,6 +1,6 @@
 # Dota 2 Archipelago tracker
 
-Two static web pages for Dota 2 in Archipelago, with nothing to install:
+Two web pages for Dota 2 in Archipelago, which run in your browser:
 
 - `index.html`, the tracker: follows a Dota 2 slot in a multiworld.
 - `options.html`, the YAML page: builds a player YAML, with the number of checks and items the seed will have.
@@ -9,17 +9,40 @@ Two static web pages for Dota 2 in Archipelago, with nothing to install:
 
 ### Run it on your computer
 
-You need Python 3. From the repository root:
+If someone already hosts the tracker online, just open their link: there is nothing to install. Otherwise, the tracker runs on your computer in a few steps. You only do steps 1 and 2 once.
 
-```
-python -m http.server 8000 --directory dota2_tracker
-```
+**1. Install Python** (a free program the tracker uses to show its pages in your browser)
 
-(`py` instead of `python` on Windows), then open http://localhost:8000 for the tracker, or http://localhost:8000/options.html for the YAML page. Stop the server with Ctrl+C.
+- **Windows**: download the installer from https://www.python.org/downloads/ (the big yellow "Download Python" button) and open it. On its first screen, tick **"Add python.exe to PATH"**, then click **Install Now**.
+- **Mac**: download the installer from https://www.python.org/downloads/ and open it, then follow its steps.
+- **Linux**: Python is usually already there. If not, install the `python3` package from your distribution's software center.
 
-Serve the folder over HTTP like this rather than opening the files directly: the pages load the game data and OpenDota with web requests.
+**2. Download the tracker**
 
-### Host your own copy
+On this repository's GitHub page, click the green **Code** button, then **Download ZIP**. Unzip the file (right-click → Extract All on Windows, double-click on Mac). The tracker is in its `dota2_tracker` folder.
+
+**3. Start it**
+
+Open a terminal in the `dota2_tracker` folder:
+
+- **Windows**: open the folder in the File Explorer, click the address bar at the top, type `cmd` and press Enter.
+- **Mac**: open the **Terminal** app (search "Terminal" with Spotlight, ⌘ Space), type `cd ` with a space after it, drag the `dota2_tracker` folder onto the Terminal window, and press Enter.
+- **Linux**: right-click inside the folder and choose **Open in Terminal**.
+
+Then type this command and press Enter:
+
+- **Windows**: `py -m http.server 8000`
+- **Mac and Linux**: `python3 -m http.server 8000`
+
+**4. Open it in your browser**
+
+Go to http://localhost:8000 for the tracker, or http://localhost:8000/options.html for the YAML page.
+
+Keep the terminal window open while you use the tracker; close it (or press Ctrl+C in it) to stop. Next time, only steps 3 and 4 are needed.
+
+Opening `index.html` directly with a double-click may not work: the page is meant to be served like this to load the game data and your matches.
+
+### Host your own copy (for developers)
 
 Any static host works. GitHub Pages only serves a branch's root or its `docs` folder, so put `index.html` and `options.html` at the root of the branch Pages serves (with an empty `.nojekyll` file), then choose that branch in the repository's Settings > Pages.
 
