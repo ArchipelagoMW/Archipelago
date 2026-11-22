@@ -560,17 +560,17 @@ class Dota2Context(CommonContext):
             
 
     async def check_dota_goals_and_locations(self, match_data:DotaMatchData ) -> None:
-        self.output("inside the check method")
-        if(match_data.match_id == self.save.last_valid_match_id):
-            self.output(f"Match {match_data.match_id} already proccessed")
+        #self.output("inside the check method")
+        if(match_data.match_id < self.save.last_valid_match_id):
+            self.output(f"Match {match_data.match_id} already proccessed or match is from before your previous game")
             return  
 
         # Matches played before this seed's save was created can't count
-        if match_data.start_time and self.save.start_date_local:
-            seed_start = datetime.fromisoformat(self.save.start_date_local).timestamp()
-            if match_data.start_time < seed_start:
-                self.output(f"Match {match_data.match_id} was played before this seed started ({self.save.start_date_local}), ignored.")
-                return
+        # if match_data.start_time and self.save.start_date_local:
+        #     seed_start = datetime.fromisoformat(self.save.start_date_local).timestamp()
+        #     if match_data.start_time < seed_start:
+        #         self.output(f"Match {match_data.match_id} was played before this seed started ({self.save.start_date_local}), ignored.")
+        #         return
               
         #first check if played hero is even unlocked
         hero_id = match_data.hero_id
@@ -585,10 +585,11 @@ class Dota2Context(CommonContext):
         win = False
         if(match_data.win == 1 and not match_data.match_id in self.save.submitted_match_ids):
             self.save.wins_total += 1
-            self.save.submitted_match_ids.append(match_data.match_id)
+            win = True
+        elif (match_data.win == 1 and match_data.match_id in self.save.submitted_match_ids):
             win = True
 
-        self.output(win)
+        #self.output(win)
 
         checks = []
         #hero win checks
@@ -673,6 +674,11 @@ class Dota2Context(CommonContext):
 
         if valid_location_ids:
             await self.check_locations(valid_location_ids)
+
+        if(not match_data.match_id in self.save.submitted_match_ids):
+            self.save.submitted_match_ids.append(match_data.match_id)
+        self.save.last_valid_match_id = match_data.match_id
+        self.save_save()
 
         await _check_goal_and_send_if_met(self)
 

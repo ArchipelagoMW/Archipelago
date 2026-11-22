@@ -108,35 +108,6 @@ class CheckValues(OptionDict):
             raise ValueError("\n".join([f"For option {self.__class__.__name__}:"] + errors))
 
 
-# class PrimordialFragmentsToUnlockFinal(Range):
-#     """Number of Primordial Fragments (MacGuffin) you must collect to unlock your final character (Win with Character goal).
-
-#     The world caps this below the usual Primordial Fragments max by three: the final hero's three win checks require
-#     this many Primordial Fragments first and may themselves contain Primordial Fragments, so the threshold must be reachable using
-#     other locations only.
-#     """
-#     display_name = "Spirits to Unlock Final Character"
-#     range_start = 1
-#     range_end = 10
-#     default = 5
-
-# _FINAL_CHARACTER_NAMES: list[str] = _load_hero_names()
-
-# def _hero_name_to_option_key(name: str) -> str:
-#     return name.lower().replace(" ", "_").replace("&", "and")
-
-# Build FinalCharacter with all option_* in the class namespace at creation time so the
-# Choice metaclass (AssembleOptions) sees them and populates .options / .name_lookup.
-# _final_char_attrs: dict = {
-#     "__module__": __name__,
-#     "display_name": "Final Character (Win With)",
-#     "default": 0,
-# }
-# for _i, _name in enumerate(_FINAL_CHARACTER_NAMES):
-#     _final_char_attrs[f"option_{_hero_name_to_option_key(_name)}"] = _i
-
-# FinalCharacter = type("FinalCharacter", (Choice,), _final_char_attrs)
-
 
 @dataclass
 class DOTA2Options(PerGameCommonOptions):
@@ -149,8 +120,5 @@ class DOTA2Options(PerGameCommonOptions):
     hero_groups: HeroGroups
     disabled_checks: DisabledChecks
     check_values: CheckValues
-    #primordial_fragments_to_unlock_final: PrimordialFragmentsToUnlockFinal
-    #final_character: FinalCharacter
-    # game_mode: GameMode
-    # exclude_hard_locations: ExcludeHardLocations
+
 

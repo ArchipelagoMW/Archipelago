@@ -44,6 +44,7 @@ class DotaMatchData:
     net_worth: int = 0
     gold_earned: int = 0
     parsed: bool = True  # False until OpenDota has parsed the replay: quest fields are then missing
+    
 
 
 api_logger = logging.getLogger("Client")
