@@ -21,6 +21,7 @@ class DotaMatchData:
     win: int
     dewards: int
     rosh: int
+    start_time: int = 0  # unix time, to ignore matches from before the seed
     # Global challenges and quests (see challenges.py)
     first_blood: bool = False
     courier_kills: int = 0
@@ -44,7 +45,6 @@ class DotaMatchData:
     net_worth: int = 0
     gold_earned: int = 0
     parsed: bool = True  # False until OpenDota has parsed the replay: quest fields are then missing
-    
 
 
 api_logger = logging.getLogger("Client")
@@ -218,7 +218,7 @@ def get_my_player(players, steamID) -> dict:
 
     raise ValueError("Player not found in match")
 
-async def parse_most_recent_match_data(steamID, match_id=None):
+async def parse_match_data(steamID, match_id=None):
     """Parse the given match, or the most recent one, and return the player's data."""
     #print(f"DEBUG: Steam ID = {steamID}")
     match = await request_match_parse(steamID, match_id)
@@ -242,6 +242,7 @@ async def parse_most_recent_match_data(steamID, match_id=None):
         win = my_player['win'],
         dewards = my_player['observer_kills'] + my_player['sentry_kills'],
         rosh = my_player['roshan_kills'],
+        start_time = match.get('start_time') or 0,
         **challenge_data(match, my_player),
     )
 

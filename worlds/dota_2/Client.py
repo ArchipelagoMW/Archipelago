@@ -9,7 +9,7 @@ from typing import Optional, Any
 from datetime import datetime
 
 from .constants import PROGRESSIVE_GROUP_UNLOCK_ID, PRIMORDIAL_FRAGMENT_ID, FILLER_ITEM_ID
-from .dota_api import parse_most_recent_match_data, get_recent_match_ids, DotaMatchData
+from .dota_api import parse_match_data, get_recent_match_ids, DotaMatchData
 from .challenges import QUESTS, challenge_values, stat_checks, match_challenges, quest_amounts, completed_quests
 from .locations import LocationDef, load_item_locations, build_item_name_to_dname, load_minigame_locations
 from .hero import Hero, get_all_heroes, hero_from_dict
@@ -468,7 +468,7 @@ class Dota2Context(CommonContext):
             return
 
         try:
-            match_data = await parse_most_recent_match_data(int(self.save.steamid), match_id)
+            match_data = await parse_match_data(int(self.save.steamid), match_id)
         except ValueError:
             self.output(f"You did not play in match {match_id}.")
             return
@@ -561,16 +561,17 @@ class Dota2Context(CommonContext):
 
     async def check_dota_goals_and_locations(self, match_data:DotaMatchData ) -> None:
         #self.output("inside the check method")
-        if(match_data.match_id < self.save.last_valid_match_id):
-            self.output(f"Match {match_data.match_id} already proccessed or match is from before your previous game")
+        # Older matches can still count (/parse_match, /parse_last_matches): wins, quests and checks are only counted once
+        if(match_data.match_id == self.save.last_valid_match_id):
+            self.output(f"Match {match_data.match_id} already proccessed")
             return  
 
         # Matches played before this seed's save was created can't count
-        # if match_data.start_time and self.save.start_date_local:
-        #     seed_start = datetime.fromisoformat(self.save.start_date_local).timestamp()
-        #     if match_data.start_time < seed_start:
-        #         self.output(f"Match {match_data.match_id} was played before this seed started ({self.save.start_date_local}), ignored.")
-        #         return
+        if match_data.start_time and self.save.start_date_local:
+            seed_start = datetime.fromisoformat(self.save.start_date_local).timestamp()
+            if match_data.start_time < seed_start:
+                self.output(f"Match {match_data.match_id} was played before this seed started ({self.save.start_date_local}), ignored.")
+                return
               
         #first check if played hero is even unlocked
         hero_id = match_data.hero_id
