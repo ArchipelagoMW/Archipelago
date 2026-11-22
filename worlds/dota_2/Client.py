@@ -114,7 +114,7 @@ class Dota2Save:
 
     progressive_hero_group_unlocks: int = 0
 
-    items_received_index: int = 0
+    items_received_index: int = 0 
 
     item_name_to_dname: dict = field(default_factory=dict)
 
@@ -603,10 +603,6 @@ class Dota2Context(CommonContext):
 
     async def check_dota_goals_and_locations(self, match_data:DotaMatchData ) -> None:
         #self.output("inside the check method")
-        # Older matches can still count (/parse_match, /parse_last_matches): wins, quests and checks are only counted once
-        if(match_data.match_id == self.save.last_valid_match_id):
-            self.output(f"Match {match_data.match_id} already proccessed")
-            return  
 
         # Matches played before this seed's save was created can't count
         if match_data.start_time and self.save.start_date_local:
@@ -723,7 +719,6 @@ class Dota2Context(CommonContext):
 
         if(not match_data.match_id in self.save.submitted_match_ids):
             self.save.submitted_match_ids.append(match_data.match_id)
-        self.save.last_valid_match_id = match_data.match_id
         self.save_save()
 
         await _check_goal_and_send_if_met(self)
