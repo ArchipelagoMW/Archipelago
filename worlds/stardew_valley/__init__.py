@@ -29,7 +29,7 @@ from .content import StardewContent, create_content
 from .content.feature.special_order_locations import get_qi_gem_amount
 from .content.feature.walnutsanity import get_walnut_amount
 from .data.regions import reverse_connection_name
-from .data_randomization.randomized_data_writer import add_randomized_data_to_spoiler_log, prepare_randomized_data
+from .data_randomization.randomized_data_writer import prepare_randomized_data
 from .items import (
     Group,
     ItemData,
@@ -64,6 +64,7 @@ from .options.settings import StardewSettings
 from .options.worlds_group import apply_most_restrictive_options
 from .regions import create_regions, get_target_groups, prepare_mod_data
 from .rules import set_rules
+from .spoiler.spoiler import write_spoiler_header, write_spoiler_middle
 from .stardew_rule import StardewRule
 from .stardew_rule.rule_explain import RuleExplanation
 from .strings.ap_names.ap_option_names import EntranceRandomizationBehaviorOptionName, StartWithoutOptionName
@@ -616,47 +617,12 @@ class StardewValleyWorld(World):
     def write_spoiler_header(self, spoiler_handle: TextIO) -> None:
         """Write to the spoiler header. If individual it's right at the end of that player's options,
         if as stage it's right under the common header before per-player options."""
-        self.add_entrances_to_spoiler_log()
+        write_spoiler_header(spoiler_handle, self.player, self.options, self.randomized_entrances, self.multiworld.spoiler)
 
     def write_spoiler(self, spoiler_handle: TextIO) -> None:
         """Write to the spoiler "middle", this is after the per-player options and before locations,
         meant for useful or interesting info."""
-        self.add_bundles_to_spoiler_log(spoiler_handle)
-        self.add_help_wanted_to_spoiler_log(spoiler_handle)
-        add_randomized_data_to_spoiler_log(spoiler_handle, self.multiworld.get_player_name(self.player), self.content, self.options)
-
-    def add_bundles_to_spoiler_log(self, spoiler_handle: TextIO):
-        if self.options.bundle_randomization == BundleRandomization.option_vanilla:
-            return
-        player_name = self.multiworld.get_player_name(self.player)
-        spoiler_handle.write(f"\n\nCommunity Center ({player_name}):\n")
-        for room in self.modified_bundles:
-            for bundle in room.bundles:
-                spoiler_handle.write(f"\t[{room.name}] {bundle.name} ({bundle.number_required} required):\n")
-                for i, item in enumerate(bundle.items):
-                    if "Basic" in item.quality:
-                        quality = ""
-                    else:
-                        quality = f" ({item.quality.split(' ')[0]})"
-                    spoiler_handle.write(f"\t\t{item.amount}x {item.get_item()}{quality}\n")
-
-    def add_help_wanted_to_spoiler_log(self, spoiler_handle: TextIO):
-        if self.options.quest_locations <= 0 or len(self.help_wanted_quests) <= 0:
-            return
-        player_name = self.multiworld.get_player_name(self.player)
-        spoiler_handle.write(f"\n\nHelp Wanted Quests ({player_name}):\n")
-        for quest_name in self.help_wanted_quests:
-            spoiler_handle.write(f"\t{quest_name}: {self.help_wanted_quests[quest_name]}\n")
-
-    def add_entrances_to_spoiler_log(self):
-        if self.options.entrance_randomization == EntranceRandomization.option_disabled:
-            return
-        if self.randomized_entrances is None:
-            # there were no randomized_entrances created in the randomize_entrances call
-            # so no replaced entrances either
-            self.randomized_entrances = {}
-        for original_entrance, replaced_entrance in self.randomized_entrances.items():
-            self.multiworld.spoiler.set_entrance(original_entrance, replaced_entrance, "entrance", self.player)
+        write_spoiler_middle(spoiler_handle, self.multiworld.get_player_name(self.player), self.content, self.options, self.modified_bundles, self.help_wanted_quests)
 
     def fill_slot_data(self) -> Dict[str, Any]:
         bundles = dict()
