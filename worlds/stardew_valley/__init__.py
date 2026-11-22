@@ -110,7 +110,7 @@ class StardewWebWorld(WebWorld):
         "English",
         "setup_en.md",
         "setup/en",
-        ["Kaito Kid", "Jouramie", "Witchybun (Mod Support)", "Exempt-Medic (Proofreading)", "itepastra"],
+        ["Kaito Kid", "Jouramie"],
     )
 
     setup_fr = Tutorial(
@@ -119,7 +119,7 @@ class StardewWebWorld(WebWorld):
         "Français",
         "setup_fr.md",
         "setup/fr",
-        ["Eindall"],
+        ["Eindall", "Kaito Kid"],
     )
 
     tutorials = [setup_en, setup_fr]
