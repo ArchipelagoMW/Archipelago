@@ -8,10 +8,10 @@ from pathlib import Path
 from typing import Optional, Any
 from datetime import datetime
 
-from .constants import PROGRESSIVE_GROUP_UNLOCK_ID, PRIMORDIAL_FRAGMENT_ID, FILLER_ITEM_ID
+from .constants import PROGRESSIVE_GROUP_UNLOCK_ID, PRIMORDIAL_FRAGMENT_ID, FILLER_ITEM_ID, world_version
 from .dota_api import parse_match_data, get_recent_match_ids, DotaMatchData
 from .challenges import QUESTS, challenge_values, stat_checks, match_challenges, quest_amounts, completed_quests, locked_checks
-from .locations import LocationDef, load_item_locations, build_item_name_to_dname, load_minigame_locations
+from .locations import LocationDef, load_item_locations, build_item_name_to_dname, load_minigame_locations, retired_location_names
 from .hero import Hero, get_all_heroes, hero_from_dict
 
 from CommonClient import CommonContext, gui_enabled, server_loop, console_loop, ClientCommandProcessor
@@ -325,6 +325,12 @@ class Dota2Context(CommonContext):
             raw_item_id_to_name = self.slot_data.get("item_name_to_id", {})
             self.save.item_name_to_id = {name: int(item_id) for item_id, name in raw_item_id_to_name.items()}
             super().on_package(cmd, args)
+            seed_version = self.slot_data.get("world_version")
+            if seed_version and seed_version != world_version():
+                self.output(f"This seed was made with version {seed_version} of the DOTA 2 apworld, you have {world_version()}: "
+                            f"checks the game no longer has are sent for you, and heroes added since aren't in this seed.")
+            if async_start:
+                async_start(self.send_retired_locations(), name="send_retired_locations")
             return
         elif cmd == "ReceivedItems":
            #check for items being sent for progressive hero unlock
@@ -534,6 +540,18 @@ class Dota2Context(CommonContext):
     def locked_checks(self) -> set[str]:
         """This seed's stat, challenge and quest checks still waiting for their unlock item."""
         return locked_checks(self.slot_data, self.received_item_names())
+
+    async def send_retired_locations(self) -> None:
+        """Checks of items the game no longer has (seeds from before a game update) can't be done: sent for the player."""
+        try:
+            names = self.location_names[self.game]
+        except (KeyError, TypeError):
+            return
+        retired = retired_location_names()
+        ids = [loc_id for loc_id in self.missing_locations if names.get(loc_id) in retired]
+        if ids:
+            self.output("No longer in the game, sent for you: " + ", ".join(sorted(names[i] for i in ids)))
+            await self.check_locations(ids)
 
     async def send_unlocked_quests(self) -> None:
         """Quests whose total was reached before their unlock item came: sent as soon as it does."""
@@ -745,7 +763,7 @@ class Dota2Context(CommonContext):
             item_id = self.save.item_name_to_id.get(item_name)
 
             if item_id is None:
-                return False
+                continue  # a component unlock added by a later game update: this seed doesn't have it
 
             if item_id not in received_item_ids:
                 return False

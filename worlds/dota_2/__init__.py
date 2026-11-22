@@ -11,7 +11,7 @@ from BaseClasses import Tutorial
 from worlds.AutoWorld import World, WebWorld
 
 # Imports of your world's files must be relative.
-from .constants import DOTA2_BASE_ID
+from .constants import DOTA2_BASE_ID, world_version
 from .options import (DOTA2Options, GoalType, CrownFall)
 from .items import DOTA2Item, ItemDef, load_hero_unlock_items, build_item_name_to_id, FILLER_ITEM_NAME,load_item_defs, load_shop_unlock_items, load_minigame_unlock_items
 from .locations import DOTA2Location, LocationDef, draw_hero_pool, build_location_name_to_id, all_location_defs
@@ -66,15 +66,15 @@ class DOTA2World(World):
     items_received_index: int = 0 
     
 
-    # Choose a stable, unique base_id range for your world.
+    # Ids come from data/ids.json (ids.py); base_id is the range they started from
     base_id = DOTA2_BASE_ID
 
     _location_defs = all_location_defs()
 
     _item_defs = load_item_defs()
 
-    location_name_to_id: Dict[str, int] = build_location_name_to_id(base_id + 10_000, _location_defs,)
-    item_name_to_id: Dict[str, int] =  build_item_name_to_id(base_id, _item_defs)
+    location_name_to_id: Dict[str, int] = build_location_name_to_id(_location_defs)
+    item_name_to_id: Dict[str, int] =  build_item_name_to_id(_item_defs)
 
     def create_item(self, name: str) -> DOTA2Item:
         # Determine classification from defs or fallback for special items.
@@ -112,7 +112,7 @@ class DOTA2World(World):
 
         self._filtered_location_defs = [d for d in self._location_defs if location_type_valid(d)]
         self.location_name_to_id = build_location_name_to_id(
-            self.base_id + 10_000, self._location_defs, filter_fn=location_type_valid
+            self._location_defs, filter_fn=location_type_valid
         )
 
         self._item_defs = []
@@ -200,6 +200,7 @@ class DOTA2World(World):
             "check_values": resolve_values(self.options.check_values.value),
             "check_unlocks": self.check_unlocks,
             "starting_check_unlocks": self.starting_check_unlocks,
+            "world_version": world_version(),
             # "game_mode": self.options.game_mode.value,
             # "exclude_hard_locations": self.options.exclude_hard_locations.value,
         }

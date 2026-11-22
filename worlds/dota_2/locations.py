@@ -12,6 +12,7 @@ from BaseClasses import ItemClassification, Location
 from . import items
 from .challenges import CHALLENGE_CHECKS, STATS, QUESTS
 from .constants import MAX_HERO_GROUPS, ORIGINAL_HERO_GROUPS
+from .ids import LOCATION_IDS, id_of
 
 
 @dataclass(frozen=True)
@@ -112,12 +113,15 @@ def load_game_stat_locations() -> List[LocationDef]:
 
     return locs
 
-def build_location_name_to_id(base_id: int, location_defs: List[LocationDef], filter_fn: typing.Callable[[LocationDef], bool] | None = None,
+def build_location_name_to_id(location_defs: List[LocationDef], filter_fn: typing.Callable[[LocationDef], bool] | None = None,
     ) -> Dict[str, int]:
-    """Build name -> id. If filter_fn is set, only include defs that pass it; IDs use index in full list."""
-    if filter_fn is None:
-        return {d.name: base_id + i for i, d in enumerate(location_defs)}
-    return {d.name: base_id + i for i, d in enumerate(location_defs) if filter_fn(d)}
+    """Build name -> id from data/ids.json. If filter_fn is set, only include defs that pass it."""
+    return {d.name: id_of(LOCATION_IDS, d.name) for d in location_defs if filter_fn is None or filter_fn(d)}
+
+
+def retired_location_names() -> set[str]:
+    """Locations of older versions the game no longer has (items Valve removed): seeds from then may still have them."""
+    return set(LOCATION_IDS) - {d.name for d in all_location_defs()}
 
 def load_static_hero_locations() -> List[LocationDef]:
     locs: List[LocationDef] = []
