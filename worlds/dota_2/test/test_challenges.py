@@ -1,7 +1,7 @@
 from Options import OptionError
 
 from .bases import Dota2TestBase
-from ..challenges import CHALLENGE_FAMILIES, FAMILIES, VALUES, rune_check, match_challenges, completed_quests, stat_checks, resolve_values, challenge_values
+from ..challenges import CHALLENGE_CHECKS, CHALLENGE_FAMILIES, FAMILIES, QUESTS, STATS, VALUES, locked_checks, rune_check, match_challenges, completed_quests, stat_checks, resolve_values, challenge_values
 from ..dota_api import DotaMatchData, challenge_data, damage_by_type
 from ..options import CheckValues
 
@@ -174,3 +174,45 @@ class SeedThresholds(Dota2TestBase):
         self.assertEqual(values["Assists"], [])
         checks = stat_checks(sample_match(kills=6, last_hits=200), values)
         self.assertEqual(checks, ["Get 1 Kill(s)", "Get 5 Kill(s)", "Get 75 Last Hits", "Get 125 Last Hits"])
+
+
+class CheckUnlocksByFamily(Dota2TestBase):
+    def test_unlock_items(self) -> None:
+        # One item per stat, per quest and per challenge family (9), 5 of them unlocked from the start
+        self.assertEqual(len(self.world.starting_check_unlocks), 5)
+        self.assertEqual(len(self.world.check_unlocks), len(STATS) + len(QUESTS) + 9 - 5)
+        pool = {item.name for item in self.multiworld.itempool}
+        self.assertTrue(set(self.world.check_unlocks) <= pool)
+        self.assertFalse(set(self.world.starting_check_unlocks) & pool)
+
+    def test_locked_until_unlocked(self) -> None:
+        item, names = next(iter(self.world.check_unlocks.items()))
+        location = self.world.get_location(names[0])
+        self.assertFalse(location.can_reach(self.multiworld.state))
+        self.collect_by_name(item)
+        self.assertTrue(location.can_reach(self.multiworld.state))
+
+    def test_locked_checks(self) -> None:
+        slot_data = self.world.fill_slot_data()
+        item, names = next(iter(self.world.check_unlocks.items()))
+        self.assertTrue(set(names) <= locked_checks(slot_data, set()))
+        self.assertFalse(set(names) & locked_checks(slot_data, {item}))
+        self.assertEqual(locked_checks({}, set()), set())  # seeds from before check_unlocks
+
+
+class CheckUnlocksIndividual(Dota2TestBase):
+    options = {"check_unlocks": "individual", "starting_check_unlocks": 0}
+
+    def test_one_item_per_challenge(self) -> None:
+        self.assertIn("Challenge: Pick up a Bounty Rune", self.world.check_unlocks)
+        self.assertNotIn("Challenge: Runes", self.world.check_unlocks)
+        self.assertEqual(self.world.check_unlocks["Quest: Total Runes"], ["Pick up 20 Runes in Total", "Pick up 50 Runes in Total"])
+        self.assertEqual(len(self.world.check_unlocks), len(STATS) + len(QUESTS) + len(CHALLENGE_CHECKS))
+
+
+class CheckUnlocksOff(Dota2TestBase):
+    options = {"check_unlocks": "off"}
+
+    def test_no_unlock_items(self) -> None:
+        self.assertEqual(self.world.check_unlocks, {})
+        self.assertFalse(any(item.name.startswith(("Stat: ", "Quest: ", "Challenge: ")) for item in self.multiworld.itempool))

@@ -6,6 +6,8 @@ from dataclasses import dataclass
 
 from BaseClasses import Item, ItemClassification
 
+from .challenges import UNLOCK_ITEMS
+
 FILLER_ITEM_NAME = "Madstone"
 
 class DOTA2Item(Item):
@@ -124,5 +126,8 @@ def load_item_defs() -> list[ItemDef]:
         ))
     items.extend(load_shop_unlock_items())
     items.extend(load_minigame_unlock_items())
+    # Stat, quest and challenge unlocks go last, so the ids of older items don't move
+    items.extend(ItemDef(name=name, classification=ItemClassification.progression, copies=0, include_in_filler=False)
+                 for name in UNLOCK_ITEMS)
 
     return items

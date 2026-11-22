@@ -20,6 +20,7 @@ def create_regions_and_locations(world: DOTA2World, location_defs: list[Location
     multiworld.regions += [menu, main]
     menu.connect(main)
 
+    unlock_of = {name: item for item, names in world.check_unlocks.items() for name in names}
     for d in location_defs:
         loc_id = world.location_name_to_id[d.name]
         location = DOTA2Location(player, d.name, loc_id, main)
@@ -27,6 +28,8 @@ def create_regions_and_locations(world: DOTA2World, location_defs: list[Location
             print("Found Game Complete:", d.name, d.type)
             location.address = None
             location.place_locked_item(Item("Complete",ItemClassification.progression, None, player)) 
+        elif d.name in unlock_of:
+            location.access_rule = lambda state, item=unlock_of[d.name]: state.has(item, player)
         elif(d.name.startswith("Win with Hero from Group ")):
             group_number = int(d.name.removeprefix("Win with Hero from Group "))
             required_unlocks = group_number
