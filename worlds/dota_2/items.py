@@ -7,6 +7,7 @@ from dataclasses import dataclass
 from BaseClasses import Item, ItemClassification
 
 from .challenges import UNLOCK_ITEMS
+from .ids import ITEM_IDS, id_of
 
 FILLER_ITEM_NAME = "Madstone"
 
@@ -96,14 +97,14 @@ def load_minigame_unlock_items() -> List[ItemDef]:
 # Internal filler item used to pad itempool to location count when needed.
 FILLER_ITEM_NAME = "Madstone"
 
-def build_item_name_to_id(base_id: int, item_defs: list[ItemDef]) -> dict[str, int]:
+def build_item_name_to_id(item_defs: list[ItemDef]) -> dict[str, int]:
     names = [d.name for d in item_defs]
 
     if FILLER_ITEM_NAME not in names:
         names.append(FILLER_ITEM_NAME)
 
 
-    return {name: i for i, name in enumerate(names, base_id)}
+    return {name: id_of(ITEM_IDS, name) for name in names}
 
 def load_item_defs() -> list[ItemDef]:
     items: List[ItemDef] = []

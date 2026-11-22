@@ -66,15 +66,15 @@ class DOTA2World(World):
     items_received_index: int = 0 
     
 
-    # Choose a stable, unique base_id range for your world.
+    # Ids come from data/ids.json (ids.py); base_id is the range they started from
     base_id = DOTA2_BASE_ID
 
     _location_defs = all_location_defs()
 
     _item_defs = load_item_defs()
 
-    location_name_to_id: Dict[str, int] = build_location_name_to_id(base_id + 10_000, _location_defs,)
-    item_name_to_id: Dict[str, int] =  build_item_name_to_id(base_id, _item_defs)
+    location_name_to_id: Dict[str, int] = build_location_name_to_id(_location_defs)
+    item_name_to_id: Dict[str, int] =  build_item_name_to_id(_item_defs)
 
     def create_item(self, name: str) -> DOTA2Item:
         # Determine classification from defs or fallback for special items.
@@ -112,7 +112,7 @@ class DOTA2World(World):
 
         self._filtered_location_defs = [d for d in self._location_defs if location_type_valid(d)]
         self.location_name_to_id = build_location_name_to_id(
-            self.base_id + 10_000, self._location_defs, filter_fn=location_type_valid
+            self._location_defs, filter_fn=location_type_valid
         )
 
         self._item_defs = []
