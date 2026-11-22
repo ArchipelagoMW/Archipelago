@@ -11,7 +11,7 @@ from BaseClasses import Tutorial
 from worlds.AutoWorld import World, WebWorld
 
 # Imports of your world's files must be relative.
-from .constants import DOTA2_BASE_ID
+from .constants import DOTA2_BASE_ID, world_version
 from .options import (DOTA2Options, GoalType, CrownFall)
 from .items import DOTA2Item, ItemDef, load_hero_unlock_items, build_item_name_to_id, FILLER_ITEM_NAME,load_item_defs, load_shop_unlock_items, load_minigame_unlock_items
 from .locations import DOTA2Location, LocationDef, draw_hero_pool, build_location_name_to_id, all_location_defs
@@ -200,6 +200,7 @@ class DOTA2World(World):
             "check_values": resolve_values(self.options.check_values.value),
             "check_unlocks": self.check_unlocks,
             "starting_check_unlocks": self.starting_check_unlocks,
+            "world_version": world_version(),
             # "game_mode": self.options.game_mode.value,
             # "exclude_hard_locations": self.options.exclude_hard_locations.value,
         }
