@@ -48,7 +48,7 @@ class L2ACWorld(World):
     """
     The Ancient Cave is a roguelike dungeon crawling game built into
     the RGP Lufia II. Face 99 floors of ever harder to beat monsters,
-    random items and find new companions on the way to face the Royal
+    random items and find new companions on the way to face the Master
     Jelly in the end. Can you beat it?
     """
     game: ClassVar[str] = "Lufia II Ancient Cave"

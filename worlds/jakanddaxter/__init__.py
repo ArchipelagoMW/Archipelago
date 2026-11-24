@@ -232,6 +232,9 @@ class JakAndDaxterWorld(World):
     power_cell_thresholds_minus_one: list[int]
     trap_weights: tuple[list[str], list[int]]
 
+    # UT Yaml-less flag
+    ut_can_gen_without_yaml = True
+
     # Store these dictionaries for speed improvements.
     level_to_regions: dict[str, list[JakAndDaxterRegion]]  # Contains all levels and regions.
     level_to_orb_regions: dict[str, list[JakAndDaxterRegion]]  # Contains only regions which contain orbs.
@@ -242,6 +245,15 @@ class JakAndDaxterWorld(World):
         # Initialize the level-region dictionary.
         self.level_to_regions = defaultdict(list)
         self.level_to_orb_regions = defaultdict(list)
+
+        # Implement Universal Tracker support - reset all options to those from UT's gen if applicable.
+        if hasattr(self.multiworld, "re_gen_passthrough"):
+            if jak1_name in self.multiworld.re_gen_passthrough:
+                for key, val in self.multiworld.re_gen_passthrough[jak1_name].items():
+                    try:
+                        getattr(self.options, key).value = val
+                    except AttributeError:
+                        pass
 
         # Cache the power cell threshold values for quicker reference.
         self.power_cell_thresholds = [

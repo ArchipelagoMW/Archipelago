@@ -80,7 +80,7 @@ def load_item_data():
             if door.item_group is not None:
                 ITEMS_BY_GROUP.setdefault(door.item_group, []).append(door.item_name)
 
-    for group in door_groups:
+    for group in sorted(door_groups):
         ALL_ITEM_TABLE[group] = ItemData(get_door_group_item_id(group), get_prog_item_classification(group),
                                          ItemType.NORMAL, True, [])
         ITEMS_BY_GROUP.setdefault("Doors", []).append(group)
@@ -96,7 +96,7 @@ def load_item_data():
                                                             ItemType.NORMAL, False, [])
             ITEMS_BY_GROUP.setdefault("Panels", []).append(panel_door.item_name)
 
-    for group in panel_groups:
+    for group in sorted(panel_groups):
         ALL_ITEM_TABLE[group] = ItemData(get_panel_group_item_id(group), get_prog_item_classification(group),
                                          ItemType.NORMAL, False, [])
         ITEMS_BY_GROUP.setdefault("Panels", []).append(group)

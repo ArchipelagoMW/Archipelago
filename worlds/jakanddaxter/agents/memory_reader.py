@@ -4,10 +4,12 @@ import struct
 import sys
 from typing import ByteString, Callable
 import json
-from PyMemoryEditor import OpenProcess, ProcessNotFoundError, ProcessIDNotExistsError, ClosedProcess
+from PyMemoryEditor import OpenProcess, PyMemoryEditorError
+
 from dataclasses import dataclass
 
 import Utils
+from .utils import user_data_path
 from ..game_id import jak1_gk
 from ..locs import (orb_locations as orbs,
                     cell_locations as cells,
@@ -228,10 +230,8 @@ class JakAndDaxterMemoryReader:
 
         if self.connected:
             try:
-                # TODO - When PyMemoryEditor issue #15 is resolved, swap out this line for the commented one.
-                # self.gk_process.read_process_memory(0, bytes, 1)  # Ping to see if it's alive.
-                OpenProcess(process_name=jak1_gk)
-            except (ProcessNotFoundError, ProcessIDNotExistsError, ClosedProcess):
+                OpenProcess(name=jak1_gk)  # Ping to see if it's alive.
+            except PyMemoryEditorError as e:
                 msg = (f"Error reading game memory! (Did the game crash?)\n"
                        f"Please close all open windows and reopen the Jak and Daxter Client "
                        f"from the Archipelago Launcher.\n"
@@ -241,6 +241,7 @@ class JakAndDaxterMemoryReader:
                        f"   Then click Advanced > Open REPL.\n"
                        f"   Then close and reopen the Jak and Daxter Client from the Archipelago Launcher.")
                 self.log_error(logger, msg)
+                logger.error(e)
                 self.connected = False
         else:
             return
@@ -275,10 +276,11 @@ class JakAndDaxterMemoryReader:
 
     async def connect(self):
         try:
-            self.gk_process = OpenProcess(process_name=jak1_gk)  # The GOAL Kernel
+            self.gk_process = OpenProcess(name=jak1_gk)  # The GOAL Kernel
             logger.debug(f"Found the gk process: {self.gk_process.pid}")
-        except ProcessNotFoundError:
+        except PyMemoryEditorError as e:
             self.log_error(logger, "Could not find the game process.")
+            logger.error(e)
             self.connected = False
             return
 
@@ -320,7 +322,7 @@ class JakAndDaxterMemoryReader:
                 self.connected = True
             else:
                 raise Exception(memory_version_offset, sizeof_uint32)
-        except (ProcessNotFoundError, ProcessIDNotExistsError, ClosedProcess, Exception):
+        except Exception as e:
             if memory_version is None:
                 msg = (f"Could not find a version number in the OpenGOAL memory structure!\n"
                        f"   Expected Version: {str(expected_memory_version)}\n"
@@ -343,6 +345,7 @@ class JakAndDaxterMemoryReader:
                        f"   Click Versions and verify the latest version is marked 'Active'.\n"
                        f"   Close all launchers, games, clients, and console windows, then restart Archipelago.")
             self.log_error(logger, msg)
+            logger.error(e)
             self.connected = False
 
     async def print_status(self):
@@ -461,7 +464,7 @@ class JakAndDaxterMemoryReader:
                 self.finished_game = True
                 self.log_success(logger, "Congratulations! You finished the game!")
 
-        except (ProcessNotFoundError, ProcessIDNotExistsError, ClosedProcess):
+        except (PyMemoryEditorError, OSError) as e:
             msg = (f"Error reading game memory! (Did the game crash?)\n"
                    f"Please close all open windows and reopen the Jak and Daxter Client "
                    f"from the Archipelago Launcher.\n"
@@ -471,6 +474,7 @@ class JakAndDaxterMemoryReader:
                    f"   Then click Advanced > Open REPL.\n"
                    f"   Then close and reopen the Jak and Daxter Client from the Archipelago Launcher.")
             self.log_error(logger, msg)
+            logger.error(e)
             self.connected = False
 
         return self.location_outbox
@@ -482,7 +486,7 @@ class JakAndDaxterMemoryReader:
             signed=False)
 
     def save_data(self):
-        with open("jakanddaxter_location_outbox.json", "w+") as f:
+        with open(user_data_path("jakanddaxter_location_outbox.json"), "w+") as f:
             dump = {
                 "outbox_index": self.outbox_index,
                 "location_outbox": self.location_outbox
@@ -491,7 +495,7 @@ class JakAndDaxterMemoryReader:
 
     def load_data(self):
         try:
-            with open("jakanddaxter_location_outbox.json", "r") as f:
+            with open(user_data_path("jakanddaxter_location_outbox.json"), "r") as f:
                 load = json.load(f)
                 self.outbox_index = load["outbox_index"]
                 self.location_outbox = load["location_outbox"]

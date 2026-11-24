@@ -28,7 +28,9 @@ class InvalidItemError(KeyError):
 
 
 class AutoWorldRegister(type):
-    world_types: Dict[str, Type[World]] = {}
+    world_types: dict[str, Type[World]] = {}
+    testable_worlds: dict[str, Type[World]] = world_types
+    """worlds under test; scoped to AP_TEST_WORLDS by worlds/__init__"""
     __file__: str
     zip_path: Optional[str]
     settings_key: str
@@ -353,13 +355,14 @@ class World(metaclass=AutoWorldRegister):
     """path it was loaded from"""
     world_version: ClassVar[Version] = Version(0, 0, 0)
     """Optional world version loaded from archipelago.json"""
+    manifest: ClassVar[dict[str, Any]] = {}
+    """Mapping of the world's archipelago.json manifest. Use game and world_version attrs instead for those values."""
 
     def __init__(self, multiworld: "MultiWorld", player: int):
         assert multiworld is not None
         self.multiworld = multiworld
         self.player = player
         self.random = Random(multiworld.random.getrandbits(64))
-        multiworld.per_slot_randoms[player] = self.random
 
     def __getattr__(self, item: str) -> Any:
         if item == "settings":
@@ -512,7 +515,9 @@ class World(metaclass=AutoWorldRegister):
 
     def get_filler_item_name(self) -> str:
         """
-        Called when the item pool needs to be filled with additional items to match location count.
+        If core AP removes an item from your item pool, this method is called to choose a replacement item
+        so item count and location count remain equal.
+        For example: plando, item_links and start_inventory_from_pool are features that may cause this.
 
         Any returned item name must be for a "repeatable" item, i.e. one that it's okay to generate arbitrarily many of.
         For most worlds this will be one or more of your filler items, but the classification of these items

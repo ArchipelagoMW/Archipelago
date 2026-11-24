@@ -99,7 +99,7 @@ case-sensitive. You can also use item groups and location groups that are define
 
 ## Item Plando Examples
 ```yaml
- plando_items:
+  plando_items:
     # Example block - Pokémon Red and Blue
     - items:
         Potion: 3

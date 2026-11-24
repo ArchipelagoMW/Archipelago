@@ -7,7 +7,7 @@ use that version. These steps are for developers or platforms without compiled r
 ## General
 
 What you'll need:
- * [Python 3.11.9 or newer but less than 3.14](https://www.python.org/downloads/), not the Windows Store version
+ * [Python 3.12.10 or newer but less than 3.14](https://www.python.org/downloads/), not the Windows Store version
    * On Windows, please consider only using the latest supported version in production environments since security
      updates for older versions are not easily available.
  * pip: included in downloads from python.org, separate in many Linux distributions
@@ -78,16 +78,6 @@ first generate the binary distribution and then run `python setup.py bdist_appim
 put an `appimagetool` into the directory you run the command from, rename it to `appimagetool` and make it executable.
 
 
-## Optional: A Link to the Past Enemizer
-
-Only required to generate seeds that include A Link to the Past with certain options enabled. You will receive an
-error if it is required.
-
-You can get the latest Enemizer release at [Enemizer Github releases](https://github.com/Ijwu/Enemizer/releases).
-It should be dropped as "EnemizerCLI" into the root folder of the project. Alternatively, you can point the Enemizer
-setting in host.yaml at your Enemizer executable.
-
-
 ## Optional: SNI
 
 [SNI](https://github.com/alttpo/sni/blob/main/README.md) is required to use SNIClient. If not integrated into the project, it has to be started manually.
@@ -107,7 +97,7 @@ It is also generally recommended to have Git installed and understand how to use
 You can download the latest release of Git at [The downloads page on the Git website](https://git-scm.com/downloads).
 
 Beyond that, there are also graphical interfaces for Git that make it more accessible.
-For repositories on Github (such as this one), [Github Desktop](https://desktop.github.com) is one such option.
+For repositories on GitHub (such as this one), [GitHub Desktop](https://desktop.github.com) is one such option.
 PyCharm has a built-in version control integration that supports Git.
 
 ## Running tests

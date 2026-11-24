@@ -41,7 +41,6 @@ Currently, the following games are supported:
 * Adventure
 * DLC Quest
 * Noita
-* Undertale
 * Bumper Stickers
 * Mega Man Battle Network 3: Blue Version
 * Muse Dash
@@ -85,6 +84,7 @@ Currently, the following games are supported:
 * Satisfactory
 * EarthBound
 * Mega Man 3
+* Gauntlet Legends
 
 For setup and instructions check out our [tutorials page](https://archipelago.gg/tutorial/).
 Downloads can be found at [Releases](https://github.com/ArchipelagoMW/Archipelago/releases), including compiled

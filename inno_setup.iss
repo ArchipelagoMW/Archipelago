@@ -57,9 +57,8 @@ Name: "custom"; Description: "Custom installation"; Flags: iscustom
 NAME: "{app}"; Flags: setntfscompression; Permissions: everyone-modify users-modify authusers-modify;
 
 [Files]
-Source: "{#source_path}\*"; Excludes: "*.sfc, *.log, data\sprites\alttpr, SNI, EnemizerCLI"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "{#source_path}\*"; Excludes: "*.sfc, *.log, data\sprites\alttpr, SNI"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "{#source_path}\SNI\*"; Excludes: "*.sfc, *.log"; DestDir: "{app}\SNI"; Flags: ignoreversion recursesubdirs createallsubdirs;
-Source: "{#source_path}\EnemizerCLI\*"; Excludes: "*.sfc, *.log"; DestDir: "{app}\EnemizerCLI"; Flags: ignoreversion recursesubdirs createallsubdirs;
 Source: "vc_redist.x64.exe"; DestDir: {tmp}; Flags: deleteafterinstall
 
 [Icons]
@@ -83,7 +82,6 @@ Type: files; Name: "{app}\*.exe"
 Type: files; Name: "{app}\data\lua\connector_pkmn_rb.lua"
 Type: files; Name: "{app}\data\lua\connector_ff1.lua"
 Type: filesandordirs; Name: "{app}\SNI\lua*"
-Type: filesandordirs; Name: "{app}\EnemizerCLI*"
 #include "installdelete.iss"
 
 [Registry]
@@ -208,10 +206,16 @@ Root: HKCR; Subkey: "{#MyAppName}ebpatch";                     ValueData: "Archi
 Root: HKCR; Subkey: "{#MyAppName}ebpatch\DefaultIcon";         ValueData: "{app}\ArchipelagoSNIClient.exe,0";                           ValueType: string;  ValueName: "";
 Root: HKCR; Subkey: "{#MyAppName}ebpatch\shell\open\command";  ValueData: """{app}\ArchipelagoSNIClient.exe"" ""%1""";                  ValueType: string;  ValueName: "";
 
+
 Root: HKCR; Subkey: ".apmm3";                                   ValueData: "{#MyAppName}mm3patch";                               Flags: uninsdeletevalue; ValueType: string; ValueName: "";
 Root: HKCR; Subkey: "{#MyAppName}mm3patch";                     ValueData: "Archipelago Mega Man 3 Patch";                    Flags: uninsdeletekey;   ValueType: string; ValueName: "";
 Root: HKCR; Subkey: "{#MyAppName}mm3patch\DefaultIcon";         ValueData: "{app}\ArchipelagoBizHawkClient.exe,0";                                          ValueType: string; ValueName: "";
 Root: HKCR; Subkey: "{#MyAppName}mm3patch\shell\open\command";  ValueData: """{app}\ArchipelagoBizHawkClient.exe"" ""%1""";                                 ValueType: string; ValueName: "";
+
+Root: HKCR; Subkey: ".apgl";                                   ValueData: "{#MyAppName}glpatch";        Flags: uninsdeletevalue; ValueType: string;  ValueName: "";
+Root: HKCR; Subkey: "{#MyAppName}glpatch";                     ValueData: "Archipelago Gauntlet Legends Patch"; Flags: uninsdeletekey;   ValueType: string;  ValueName: "";
+Root: HKCR; Subkey: "{#MyAppName}glpatch\DefaultIcon";         ValueData: "{app}\ArchipelagoLauncher.exe,0";                           ValueType: string;  ValueName: "";
+Root: HKCR; Subkey: "{#MyAppName}glpatch\shell\open\command";  ValueData: """{app}\ArchipelagoLauncher.exe"" ""%1""";                  ValueType: string;  ValueName: "";
 
 Root: HKCR; Subkey: ".archipelago";                              ValueData: "{#MyAppName}multidata";        Flags: uninsdeletevalue; ValueType: string;  ValueName: "";
 Root: HKCR; Subkey: "{#MyAppName}multidata";                     ValueData: "Archipelago Server Data";      Flags: uninsdeletekey;   ValueType: string;  ValueName: "";
