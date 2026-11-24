@@ -91,8 +91,8 @@ class ShuffleLevelOrder(OC2OnToggle):
 class DLCOptionSet(OptionSet):
     """Which DLCs should be included when 'Shuffle Level Order' is enabled?'"""
     display_name = "Enabled DLC"
-    default: ClassVar = {"Story", "Seasonal"}
-    valid_keys: ClassVar = [dlc.value for dlc in Overcooked2Dlc]
+    default: ClassVar[set[str]] = {"Story", "Seasonal"}
+    valid_keys: ClassVar[list[str]] = [dlc.value for dlc in Overcooked2Dlc]
 
 
 class IncludeHordeLevels(OC2OnToggle):
