@@ -13,7 +13,7 @@ PANEL_DOORS_BY_ROOM: Dict[str, Dict[str, PanelDoor]] = {}
 PAINTINGS: Dict[str, Painting] = {}
 WARPS_BY_ROOM: Dict[str, Dict[str, Warp]] = {}
 
-PROGRESSIVE_ITEMS: Set[str] = set()
+PROGRESSIVE_ITEMS: List[str] = []
 PROGRESSIVE_DOORS_BY_ROOM: Dict[str, Dict[str, Progression]] = {}
 PROGRESSIVE_PANELS_BY_ROOM: Dict[str, Dict[str, Progression]] = {}
 
@@ -126,7 +126,7 @@ def load_static_data_from_file():
     PANELS_BY_ROOM.update(pickdata["PANELS_BY_ROOM"])
     PANEL_DOORS_BY_ROOM.update(pickdata["PANEL_DOORS_BY_ROOM"])
     WARPS_BY_ROOM.update(pickdata["WARPS_BY_ROOM"])
-    PROGRESSIVE_ITEMS.update(pickdata["PROGRESSIVE_ITEMS"])
+    PROGRESSIVE_ITEMS.extend(pickdata["PROGRESSIVE_ITEMS"])
     PROGRESSIVE_DOORS_BY_ROOM.update(pickdata["PROGRESSIVE_DOORS_BY_ROOM"])
     PROGRESSIVE_PANELS_BY_ROOM.update(pickdata["PROGRESSIVE_PANELS_BY_ROOM"])
     PAINTING_ENTRANCES = pickdata["PAINTING_ENTRANCES"]

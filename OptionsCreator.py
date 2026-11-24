@@ -5,7 +5,7 @@ if __name__ == "__main__":
 
 
 from kvui import (ThemedApp, ScrollBox, MainLayout, ContainerLayout, dp, Widget, MDBoxLayout, TooltipLabel, MDLabel,
-                  ToggleButton, MarkupDropdown, ResizableTextField)
+                  ToggleButton, MarkupDropdown)
 from kivy.clock import Clock
 from kivy.uix.behaviors.button import ButtonBehavior
 from kivymd.uix.behaviors import RotateBehavior
@@ -17,6 +17,7 @@ from kivymd.uix.snackbar import MDSnackbar, MDSnackbarText
 from kivymd.uix.menu import MDDropdownMenu
 from kivymd.uix.button import MDButton, MDButtonText, MDIconButton
 from kivymd.uix.dialog import MDDialog
+from kivymd.uix.textfield import MDTextField
 from kivy.core.text.markup import MarkupLabel
 from kivy.utils import escape_markup
 from kivy.lang.builder import Builder
@@ -118,7 +119,7 @@ class VisualNamedRange(MDBoxLayout):
         self.add_widget(self.range)
 
 
-class VisualFreeText(ResizableTextField):
+class VisualFreeText(MDTextField):
     option: typing.Type[FreeText] | typing.Type[TextChoice]
     name: str
 
@@ -156,7 +157,7 @@ class VisualToggle(MDBoxLayout):
         super().__init__(*args, **kwargs)
 
 
-class CounterItemValue(ResizableTextField):
+class CounterItemValue(MDTextField):
     pat = re.compile('[^0-9]')
 
     def insert_text(self, substring, from_undo=False):
@@ -169,7 +170,7 @@ class VisualListSetCounter(MDDialog):
     scrollbox: ScrollBox = ObjectProperty(None)
     add: MDIconButton = ObjectProperty(None)
     save: MDButton = ObjectProperty(None)
-    input: ResizableTextField = ObjectProperty(None)
+    input: MDTextField = ObjectProperty(None)
     dropdown: MDDropdownMenu
     valid_keys: typing.Iterable[str]
 
@@ -258,7 +259,7 @@ class OptionsCreator(ThemedApp):
     main_panel: MainLayout
     player_options: MainLayout
     option_layout: MainLayout
-    name_input: ResizableTextField
+    name_input: MDTextField
     game_label: MDLabel
     current_game: str
     options: typing.Dict[str, typing.Any]
@@ -618,21 +619,18 @@ class OptionsCreator(ThemedApp):
                                                                                            item=group_item:
                                                                                            self.tap_expansion_chevron(
                                                                                                item, x)),
-                                                                 md_bg_color=self.theme_cls.surfaceContainerLowestColor,
+                                                                 md_bg_color=self.theme_cls.surfaceVariantColor,
                                                                  theme_bg_color="Custom",
                                                                  on_release=lambda x, item=group_item:
                                                                  self.tap_expansion_chevron(item, x)))
                 group_content = MDExpansionPanelContent(orientation="vertical", theme_bg_color="Custom",
-                                                        md_bg_color=self.theme_cls.surfaceContainerLowestColor,
+                                                        md_bg_color=self.theme_cls.surfaceContainerColor,
                                                         padding=[dp(12), dp(100), dp(12), 0],
                                                         spacing=dp(3))
                 group_item.add_widget(group_header)
-                group_item.add_widget(group_content)
-                group_box = ScrollBox()
-                group_box.layout.orientation = "vertical"
-                group_box.layout.spacing = dp(3)
                 for name, option in options:
                     group_content.add_widget(self.create_option(option, name, cls))
+                group_item.add_widget(group_content) # must be added *after* the contents have been added
                 expansion_box.layout.add_widget(group_item)
             self.option_layout.add_widget(expansion_box)
         self.game_label.text = f"Game: {self.current_game}"

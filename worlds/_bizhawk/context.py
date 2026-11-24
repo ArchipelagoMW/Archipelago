@@ -350,8 +350,9 @@ def launch(*launch_args: str) -> None:
 
         if args.patch_file != "":
             metadata = _patch_and_run_game(args.patch_file)
-            if "server" in metadata:
-                args.connect = metadata["server"]
+            server = metadata.get("server")
+            if server:  # ignore missing and empty string servers
+                args.connect = server
 
         ctx = BizHawkClientContext(args.connect, args.password)
         ctx.server_task = asyncio.create_task(server_loop(ctx), name="ServerLoop")
