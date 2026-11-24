@@ -16,7 +16,9 @@ where to obtain a config file for StarCraft 2.
 Archipelago installer.
    - Linux users should also follow the instructions found at the bottom of this page 
      (["Running in Linux"](#running-in-linux)).
-2. Run ArchipelagoStarcraft2Client.exe.
+2. Run the client.
+   - You can do this from the main ArchipelagoLauncher.exe by searching for "Starcraft 2"
+   - You can launch directly into the Starcraft 2 client on the command line by running `ArchipelagoLauncher.exe "Starcraft 2 Client"`
    - macOS users should instead follow the instructions found at ["Running in macOS"](#running-in-macos) for this step 
    only.
 3. Type the command `/download_data`. 
@@ -222,7 +224,7 @@ You will only need to do this once.
 
 To run StarCraft 2 through Archipelago in macOS, you will need to run the client via source as seen here: 
 [macOS Guide](/tutorial/Archipelago/mac/en). 
-Note: to launch the client, you will need to run the command `python3 Starcraft2Client.py`.
+Note: to launch the client, you will need to run the command `python3 Launcher.py "Starcraft 2 Client"`.
 
 ## Running in Linux
 
