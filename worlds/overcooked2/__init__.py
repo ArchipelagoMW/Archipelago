@@ -26,7 +26,7 @@ class Overcooked2Web(WebWorld):
         ["toasterparty"]
     )
 
-    tutorials: ClassVar = [setup_en]
+    tutorials: ClassVar[list[Tutorial]] = [setup_en]
 
 
 class PrepLevelMode(IntEnum):
