@@ -209,7 +209,8 @@ class LingoPlayerLogic:
         for room_name, room_data in DOORS_BY_ROOM.items():
             for door_name, door_data in room_data.items():
                 if door_data.type == DoorType.PANEL_HUNT:
-                    self.set_door_item(room_name, door_name, "Panel Hunt Complete")
+                    if world.options.level_2_requirement > 1:
+                        self.set_door_item(room_name, door_name, "Panel Hunt Complete")
                 elif door_data.skip_item is False and door_data.event is False:
                     if door_data.type == DoorType.NORMAL and door_shuffle == ShuffleDoors.option_doors:
                         if door_data.door_group is not None and world.options.group_doors:
