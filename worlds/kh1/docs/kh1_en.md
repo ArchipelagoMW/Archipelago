@@ -23,7 +23,7 @@
 - When prompted, install Panacea, then click `Next`.
 - When prompted, check KH1 plus any other AP game you want to play, and click `Install and configure Lua backend`, then click `Next`.
 - Extract the data for KH1.
-- Click `Finish`
+- Click `Finish`.
 
 ### Kingdom Hearts 1FM Randomizer Software
 
