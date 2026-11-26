@@ -42,6 +42,7 @@ mentioned_panel_doors = Set[]
 mentioned_sunwarp_entrances = Set[]
 mentioned_sunwarp_exits = Set[]
 mentioned_paintings = Set[]
+mentioned_door_ids = Set[]
 
 door_groups = {}
 panel_groups = {}
@@ -193,6 +194,12 @@ config.each do |room_name, room|
         unless doors.include? door_id then
           puts "#{room_name} - #{door_name} :::: Invalid Door ID #{door_id}"
         end
+
+        if mentioned_door_ids.include? door_id then
+          puts "#{room_name} - #{door_name} :::: Door ID Already Used #{door_id}"
+        end
+
+        mentioned_door_ids.add(door_id)
       end
     end
 

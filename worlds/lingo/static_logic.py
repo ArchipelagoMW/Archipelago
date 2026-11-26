@@ -29,6 +29,7 @@ SPECIAL_ITEM_IDS: Dict[str, int] = {}
 PANEL_LOCATION_IDS: Dict[str, Dict[str, int]] = {}
 DOOR_LOCATION_IDS: Dict[str, Dict[str, int]] = {}
 DOOR_ITEM_IDS: Dict[str, Dict[str, int]] = {}
+DOOR_GENERAL_IDS: Dict[str, Dict[str, int]] = {}
 DOOR_GROUP_ITEM_IDS: Dict[str, int] = {}
 PANEL_DOOR_ITEM_IDS: Dict[str, Dict[str, int]] = {}
 PANEL_GROUP_ITEM_IDS: Dict[str, int] = {}
@@ -63,6 +64,13 @@ def get_door_item_id(room: str, name: str):
         raise Exception(f"Item ID for door {room} - {name} not found in ids.yaml.")
 
     return DOOR_ITEM_IDS[room][name]
+
+
+def get_door_general_id(room: str, name: str):
+    if room not in DOOR_GENERAL_IDS or name not in DOOR_GENERAL_IDS[room]:
+        raise Exception(f"General ID for door {room} - {name} not found in ids.yaml.")
+
+    return DOOR_GENERAL_IDS[room][name]
 
 
 def get_door_group_item_id(name: str):
@@ -130,6 +138,7 @@ def load_static_data_from_file():
     PANEL_LOCATION_IDS.update(pickdata["PANEL_LOCATION_IDS"])
     DOOR_LOCATION_IDS.update(pickdata["DOOR_LOCATION_IDS"])
     DOOR_ITEM_IDS.update(pickdata["DOOR_ITEM_IDS"])
+    DOOR_GENERAL_IDS.update(pickdata["DOOR_GENERAL_IDS"])
     DOOR_GROUP_ITEM_IDS.update(pickdata["DOOR_GROUP_ITEM_IDS"])
     PANEL_DOOR_ITEM_IDS.update(pickdata["PANEL_DOOR_ITEM_IDS"])
     PANEL_GROUP_ITEM_IDS.update(pickdata["PANEL_GROUP_ITEM_IDS"])
