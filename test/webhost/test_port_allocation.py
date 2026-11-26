@@ -1,5 +1,7 @@
 import os
 import unittest
+from types import SimpleNamespace
+from unittest.mock import patch
 from socket import socket as Socket  # noqa: N812
 
 from Utils import is_macos
@@ -87,3 +89,15 @@ class TestPortAllocating(unittest.TestCase):
 
         for s in sockets:
             s.close()
+
+    def test_get_active_net_connections_by_host(self) -> None:
+        """Ensure active connections are filtered according to the bind host."""
+        mock_conns = [
+            SimpleNamespace(laddr=SimpleNamespace(ip="127.0.0.1", port=8080)),
+            SimpleNamespace(laddr=SimpleNamespace(ip="0.0.0.0", port=8081)),
+            SimpleNamespace(laddr=SimpleNamespace(ip="10.1.2.3", port=8082)),
+        ]
+        with patch("psutil.net_connections", return_value=mock_conns):
+            self.assertCountEqual(RandomPortSocketCreator._get_active_net_connections(""), [8080, 8081, 8082])
+            self.assertCountEqual(RandomPortSocketCreator._get_active_net_connections("127.0.0.1"), [8080, 8081])
+            self.assertCountEqual(RandomPortSocketCreator._get_active_net_connections("10.1.2.3"), [8081, 8082])

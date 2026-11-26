@@ -43,6 +43,7 @@ app.config["SELFLAUNCHCERT"] = None  # can point to a SSL Certificate to encrypt
 app.config["SELFLAUNCHKEY"] = None  # can point to a SSL Certificate Key to encrypt Room websocket connections
 app.config["SELFGEN"] = True  # application process is in charge of scheduling Generations.
 app.config["GAME_PORTS"] = ["49152-65535", 0]
+app.config["GAME_BIND_ADDRESS"] = ""  # local IP address to bind hosted game servers to
 # at what amount of worlds should scheduling be used, instead of rolling in the web-thread
 app.config["JOB_THRESHOLD"] = 1
 # after what time in seconds should generation be aborted, freeing the queue slot. Can be set to None to disable.

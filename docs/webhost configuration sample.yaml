@@ -23,6 +23,10 @@
 # If ports within the range(s) are already in use, the WebHost will fallback to the default [49152-65535, 0] range.
 #GAME_PORTS: [49152-65535, 0]
 
+# Network interface IP address for hosted game rooms to bind to (e.g., "127.0.0.1" when behind a reverse proxy).
+# Leave empty ("") to listen on all available interfaces. Does not affect the public address shown to players (HOST_ADDRESS).
+#GAME_BIND_ADDRESS: ""
+
 # Place where uploads go.
 #UPLOAD_FOLDER: uploads
 
