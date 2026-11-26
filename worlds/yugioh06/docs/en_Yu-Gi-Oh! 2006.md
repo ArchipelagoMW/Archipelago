@@ -17,7 +17,7 @@ You can change how much money you receive and how much booster packs cost.
 
 ## What is the goal of Yu-Gi-Oh! 2006 when randomized?
 
-Defeat a certain amount of Limited/Theme Duels to Unlock the final Campaign Opponent and beat it.
+Defeat a certain amount of Limited/Theme Duels and Campaign Opponents to Unlock the final Campaign Opponent and beat it.
 
 ## What items and locations get shuffled?
 
@@ -37,7 +37,6 @@ Items that are shuffled:
 Certain Key Items are kept in their original locations:
 - Duel Puzzles
 - Survival Mode
-- Booster Pack Contents
 
 ## Which items can be in another player's world?
 
