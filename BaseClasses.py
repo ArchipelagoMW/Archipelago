@@ -555,12 +555,15 @@ class MultiWorld():
     def has_beaten_game(self, state: CollectionState, player: Optional[int] = None) -> bool:
         if player:
             return self.completion_condition[player](state)
-        else:
-            return all((self.has_beaten_game(state, p) for p in range(1, self.players + 1)))
+        for p in range(1, self.players + 1):
+            if not self.completion_condition[p](state):
+                return False
+        return True
 
     def can_beat_game(self,
                       starting_state: Optional[CollectionState] = None,
-                      locations: Optional[Iterable[Location]] = None) -> bool:
+                      locations: Optional[Iterable[Location]] = None,
+                      all_are_advancements: bool = False) -> bool:
         if starting_state:
             if self.has_beaten_game(starting_state):
                 return True
@@ -572,7 +575,8 @@ class MultiWorld():
 
         for _ in state.sweep_for_advancements(locations,
                                               yield_each_sweep=True,
-                                              checked_locations=state.locations_checked):
+                                              checked_locations=state.locations_checked,
+                                              all_are_advancements=all_are_advancements):
             if self.has_beaten_game(state):
                 return True
 
@@ -938,15 +942,19 @@ class CollectionState():
     @overload
     def sweep_for_advancements(self, locations: Optional[Iterable[Location]] = None, *,
                                yield_each_sweep: Literal[True],
-                               checked_locations: Optional[Set[Location]] = None) -> Iterator[None]: ...
+                               checked_locations: Optional[Set[Location]] = None,
+                               all_are_advancements: bool = False) -> Iterator[None]: ...
 
     @overload
     def sweep_for_advancements(self, locations: Optional[Iterable[Location]] = None,
                                yield_each_sweep: Literal[False] = False,
-                               checked_locations: Optional[Set[Location]] = None) -> None: ...
+                               checked_locations: Optional[Set[Location]] = None,
+                               all_are_advancements: bool = False) -> None: ...
 
-    def sweep_for_advancements(self, locations: Optional[Iterable[Location]] = None, yield_each_sweep: bool = False,
-                               checked_locations: Optional[Set[Location]] = None) -> Optional[Iterator[None]]:
+    def sweep_for_advancements(self, locations: Optional[Iterable[Location]] = None,
+                               yield_each_sweep: bool = False,
+                               checked_locations: Optional[Set[Location]] = None,
+                               all_are_advancements: bool = False) -> Optional[Iterator[None]]:
         """
         Sweep through the locations that contain uncollected advancement items, collecting the items into the state
         until there are no more reachable locations that contain uncollected advancement items.
@@ -973,9 +981,14 @@ class CollectionState():
         else:
             # Filter and separate the locations into a list for each player.
             advancements_per_player_dict: Dict[int, List[Location]] = defaultdict(list)
-            for location in locations:
-                if location.advancement and location not in checked_locations:
-                    advancements_per_player_dict[location.player].append(location)
+            if all_are_advancements:
+                for location in locations:
+                    if location not in checked_locations:
+                        advancements_per_player_dict[location.player].append(location)
+            else:
+                for location in locations:
+                    if location.advancement and location not in checked_locations:
+                        advancements_per_player_dict[location.player].append(location)
             # Convert to a list of tuples.
             advancements_per_player = list(advancements_per_player_dict.items())
             del advancements_per_player_dict
@@ -992,7 +1005,7 @@ class CollectionState():
 
     # item name related
     def has(self, item: str, player: int, count: int = 1) -> bool:
-        return self.prog_items[player][item] >= count
+        return self.prog_items[player].get(item, 0) >= count
 
     # for loops are specifically used in all/any/count methods, instead of all()/any()/sum(), to avoid the overhead of
     # creating and iterating generator instances. In `return all(player_prog_items[item] for item in items)`, the
@@ -1030,7 +1043,7 @@ class CollectionState():
         return False
 
     def count(self, item: str, player: int) -> int:
-        return self.prog_items[player][item]
+        return self.prog_items[player].get(item, 0)
 
     def has_from_list(self, items: Iterable[str], player: int, count: int) -> bool:
         """Returns True if the state contains at least `count` items matching any of the item names from a list."""
@@ -1755,7 +1768,7 @@ class Spoiler:
                 logging.debug('Checking if %s (Player %d) is required to beat the game.', location.item.name,
                               location.item.player)
                 required_locations.remove(location)
-                if multiworld.can_beat_game(state_cache[num], required_locations):
+                if multiworld.can_beat_game(state_cache[num], required_locations, all_are_advancements=True):
                     to_delete.add(location)
                 else:
                     # still required, got to keep it around
@@ -1776,7 +1789,7 @@ class Spoiler:
                 logging.debug('Checking if %s (Player %d) is required to beat the game.', item.name, item.player)
                 precollected_items.remove(item)
                 multiworld.state.remove(item)
-                if not multiworld.can_beat_game(multiworld.state, required_locations):
+                if not multiworld.can_beat_game(multiworld.state, required_locations, all_are_advancements=True):
                     # Add the item back into `precollected_items` and collect it into `multiworld.state`.
                     multiworld.push_precollected(item)
                 else:
