@@ -580,7 +580,7 @@ class KH1World(World):
     
     def get_ap_costs(self):
         if self.ap_costs is None:
-            ap_costs = VANILLA_ABILITY_AP_COSTS.copy()
+            ap_costs = [ap_cost.copy() for ap_cost in VANILLA_ABILITY_AP_COSTS]
             if self.options.randomize_ap_costs.current_key == "shuffle":
                 possible_costs = []
                 for ap_cost in VANILLA_ABILITY_AP_COSTS:
