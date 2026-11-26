@@ -436,7 +436,7 @@ class OSRSWorld(World):
             for item_req in location_row.items:
                 add_rule(location, lambda state, item_req=item_req: state.has(item_req, self.player))
             if location_row.qp:
-                add_rule(location, lambda state, location_row=location_row: self.quest_points(state) > location_row.qp)
+                add_rule(location, lambda state, location_row=location_row: self.quest_points(state) >= location_row.qp)
 
     def create_region(self, name: str) -> "Region":
         region = Region(name, self.player, self.multiworld)
