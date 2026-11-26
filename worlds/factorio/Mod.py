@@ -125,7 +125,6 @@ def generate_mod(world: "Factorio", output_directory: str):
         "tech_to_progressive_lookup": tech_to_progressive_lookup,
         "mod_name": mod_name,
         "allowed_science_packs": world.options.max_science_pack.get_allowed_packs(),
-        "custom_technologies": world.custom_technologies,
         "tech_tree_layout_prerequisites": world.tech_tree_layout_prerequisites,
         "slot_name": world.player_name,
         "seed_name": multiworld.seed_name,
