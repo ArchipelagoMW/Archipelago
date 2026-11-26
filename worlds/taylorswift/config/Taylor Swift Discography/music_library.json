@@ -1,0 +1,1781 @@
+{
+  "artist": "Taylor Swift",
+  "bonus_locations": [
+    "First Listen",
+    "Encore"
+  ],
+  "albums": [
+    {
+      "name": "Taylor Swift",
+      "type": "standard",
+      "full_album_unlock": true,
+      "songs": [
+        {
+          "title": "Tim McGraw",
+          "location": "Tim McGraw",
+          "type": "normal"
+        },
+        {
+          "title": "Picture to Burn",
+          "location": "Picture to Burn",
+          "type": "normal"
+        },
+        {
+          "title": "Teardrops on My Guitar",
+          "location": "Teardrops on My Guitar",
+          "type": "normal"
+        },
+        {
+          "title": "A Place in This World",
+          "location": "A Place in This World",
+          "type": "normal"
+        },
+        {
+          "title": "Cold as You",
+          "location": "Cold as You",
+          "type": "normal"
+        },
+        {
+          "title": "The Outside",
+          "location": "The Outside",
+          "type": "normal"
+        },
+        {
+          "title": "Tied Together with a Smile",
+          "location": "Tied Together with a Smile",
+          "type": "normal"
+        },
+        {
+          "title": "Stay Beautiful",
+          "location": "Stay Beautiful",
+          "type": "normal"
+        },
+        {
+          "title": "Should've Said No",
+          "location": "Should've Said No",
+          "type": "normal"
+        },
+        {
+          "title": "Mary's Song (Oh My My My)",
+          "location": "Mary's Song (Oh My My My)",
+          "type": "normal"
+        },
+        {
+          "title": "Our Song",
+          "location": "Our Song",
+          "type": "normal"
+        },
+        {
+          "title": "I'm Only Me When I'm With You",
+          "location": "I'm Only Me When I'm With You",
+          "type": "normal"
+        },
+        {
+          "title": "Invisible",
+          "location": "Invisible",
+          "type": "normal"
+        },
+        {
+          "title": "A Perfectly Good Heart",
+          "location": "A Perfectly Good Heart",
+          "type": "normal"
+        },
+        {
+          "title": "Teardrops on My Guitar - Pop Version",
+          "location": "Teardrops on My Guitar - Pop Version",
+          "type": "normal"
+        }
+      ]
+    },
+    {
+      "name": "Fearless",
+      "type": "standard",
+      "full_album_unlock": true,
+      "songs": [
+        {
+          "title": "Fearless",
+          "location": "Fearless",
+          "type": "normal"
+        },
+        {
+          "title": "Fifteen",
+          "location": "Fifteen",
+          "type": "normal"
+        },
+        {
+          "title": "Love Story",
+          "location": "Love Story",
+          "type": "normal"
+        },
+        {
+          "title": "Hey Stephen",
+          "location": "Hey Stephen",
+          "type": "normal"
+        },
+        {
+          "title": "White Horse",
+          "location": "White Horse",
+          "type": "normal"
+        },
+        {
+          "title": "You Belong With Me",
+          "location": "You Belong With Me",
+          "type": "normal"
+        },
+        {
+          "title": "Breathe (feat. Colbie Caillat)",
+          "location": "Breathe (feat. Colbie Caillat)",
+          "type": "normal"
+        },
+        {
+          "title": "Tell Me Why",
+          "location": "Tell Me Why",
+          "type": "normal"
+        },
+        {
+          "title": "You're Not Sorry",
+          "location": "You're Not Sorry",
+          "type": "normal"
+        },
+        {
+          "title": "The Way I Loved You",
+          "location": "The Way I Loved You",
+          "type": "normal"
+        },
+        {
+          "title": "Forever & Always",
+          "location": "Forever & Always",
+          "type": "normal"
+        },
+        {
+          "title": "The Best Day",
+          "location": "The Best Day",
+          "type": "normal"
+        },
+        {
+          "title": "Change",
+          "location": "Change",
+          "type": "normal"
+        },
+        {
+          "title": "Jump Then Fall",
+          "location": "Jump Then Fall",
+          "type": "deluxe"
+        },
+        {
+          "title": "Untouchable",
+          "location": "Untouchable",
+          "type": "deluxe"
+        },
+        {
+          "title": "Forever & Always (Piano Version)",
+          "location": "Forever & Always (Piano Version)",
+          "type": "deluxe"
+        },
+        {
+          "title": "Come In With The Rain",
+          "location": "Come In With The Rain",
+          "type": "deluxe"
+        },
+        {
+          "title": "Superstar",
+          "location": "Superstar",
+          "type": "deluxe"
+        },
+        {
+          "title": "The Other Side of the Door",
+          "location": "The Other Side of the Door",
+          "type": "deluxe"
+        }
+      ]
+    },
+    {
+      "name": "Fearless (Taylor's Version)",
+      "type": "re-recording",
+      "full_album_unlock": true,
+      "songs": [
+        {
+          "title": "Fearless (Taylor's Version)",
+          "location": "Fearless (Taylor's Version)",
+          "type": "re-recording"
+        },
+        {
+          "title": "Fifteen (Taylor's Version)",
+          "location": "Fifteen (Taylor's Version)",
+          "type": "re-recording"
+        },
+        {
+          "title": "Love Story (Taylor's Version)",
+          "location": "Love Story (Taylor's Version)",
+          "type": "re-recording"
+        },
+        {
+          "title": "Hey Stephen (Taylor's Version)",
+          "location": "Hey Stephen (Taylor's Version)",
+          "type": "re-recording"
+        },
+        {
+          "title": "White Horse (Taylor's Version)",
+          "location": "White Horse (Taylor's Version)",
+          "type": "re-recording"
+        },
+        {
+          "title": "You Belong With Me (Taylor's Version)",
+          "location": "You Belong With Me (Taylor's Version)",
+          "type": "re-recording"
+        },
+        {
+          "title": "Breathe (feat. Colbie Caillat) (Taylor's Version)",
+          "location": "Breathe (feat. Colbie Caillat) (Taylor's Version)",
+          "type": "re-recording"
+        },
+        {
+          "title": "Tell Me Why (Taylor's Version)",
+          "location": "Tell Me Why (Taylor's Version)",
+          "type": "re-recording"
+        },
+        {
+          "title": "You're Not Sorry (Taylor's Version)",
+          "location": "You're Not Sorry (Taylor's Version)",
+          "type": "re-recording"
+        },
+        {
+          "title": "The Way I Loved You (Taylor's Version)",
+          "location": "The Way I Loved You (Taylor's Version)",
+          "type": "re-recording"
+        },
+        {
+          "title": "Forever & Always (Taylor's Version)",
+          "location": "Forever & Always (Taylor's Version)",
+          "type": "re-recording"
+        },
+        {
+          "title": "The Best Day (Taylor's Version)",
+          "location": "The Best Day (Taylor's Version)",
+          "type": "re-recording"
+        },
+        {
+          "title": "Change (Taylor's Version)",
+          "location": "Change (Taylor's Version)",
+          "type": "re-recording"
+        },
+        {
+          "title": "Jump Then Fall (Taylor's Version)",
+          "location": "Jump Then Fall (Taylor's Version)",
+          "type": "re-recording"
+        },
+        {
+          "title": "Untouchable (Taylor's Version)",
+          "location": "Untouchable (Taylor's Version)",
+          "type": "re-recording"
+        },
+        {
+          "title": "Forever & Always (Piano Version) (Taylor's Version)",
+          "location": "Forever & Always (Piano Version) (Taylor's Version)",
+          "type": "re-recording"
+        },
+        {
+          "title": "Come In With The Rain (Taylor's Version)",
+          "location": "Come In With The Rain (Taylor's Version)",
+          "type": "re-recording"
+        },
+        {
+          "title": "Superstar (Taylor's Version)",
+          "location": "Superstar (Taylor's Version)",
+          "type": "re-recording"
+        },
+        {
+          "title": "The Other Side of the Door (Taylor's Version)",
+          "location": "The Other Side of the Door (Taylor's Version)",
+          "type": "re-recording"
+        },
+        {
+          "title": "Today Was a Fairytale (Taylor's Version)",
+          "location": "Today Was a Fairytale (Taylor's Version)",
+          "type": "re-recording"
+        },
+        {
+          "title": "You All Over Me (feat. Maren Morris) (Taylor's Version) (From The Vault)",
+          "location": "You All Over Me (feat. Maren Morris) (Taylor's Version) (From The Vault)",
+          "type": "vault"
+        },
+        {
+          "title": "Mr. Perfectly Fine (Taylor's Version) (From The Vault)",
+          "location": "Mr. Perfectly Fine (Taylor's Version) (From The Vault)",
+          "type": "vault"
+        },
+        {
+          "title": "We Were Happy (Taylor's Version) (From The Vault)",
+          "location": "We Were Happy (Taylor's Version) (From The Vault)",
+          "type": "vault"
+        },
+        {
+          "title": "That's When (Taylor's Version) (From The Vault) (Featuring Keith Urban)",
+          "location": "That's When (Taylor's Version) (From The Vault) (Featuring Keith Urban)",
+          "type": "vault"
+        },
+        {
+          "title": "Don't You (Taylor's Version) (From The Vault)",
+          "location": "Don't You (Taylor's Version) (From The Vault)",
+          "type": "vault"
+        },
+        {
+          "title": "Bye Bye Baby (Taylor's Version) (From The Vault)",
+          "location": "Bye Bye Baby (Taylor's Version) (From The Vault)",
+          "type": "vault"
+        }
+      ]
+    },
+    {
+      "name": "Speak Now",
+      "type": "standard",
+      "full_album_unlock": true,
+      "songs": [
+        {
+          "title": "Mine",
+          "location": "Mine",
+          "type": "normal"
+        },
+        {
+          "title": "Sparks Fly",
+          "location": "Sparks Fly",
+          "type": "normal"
+        },
+        {
+          "title": "Back to December",
+          "location": "Back to December",
+          "type": "normal"
+        },
+        {
+          "title": "Speak Now",
+          "location": "Speak Now",
+          "type": "normal"
+        },
+        {
+          "title": "Dear John",
+          "location": "Dear John",
+          "type": "normal"
+        },
+        {
+          "title": "Mean",
+          "location": "Mean",
+          "type": "normal"
+        },
+        {
+          "title": "The Story of Us",
+          "location": "The Story of Us",
+          "type": "normal"
+        },
+        {
+          "title": "Never Grow Up",
+          "location": "Never Grow Up",
+          "type": "normal"
+        },
+        {
+          "title": "Enchanted",
+          "location": "Enchanted",
+          "type": "normal"
+        },
+        {
+          "title": "Better Than Revenge",
+          "location": "Better Than Revenge",
+          "type": "normal"
+        },
+        {
+          "title": "Innocent",
+          "location": "Innocent",
+          "type": "normal"
+        },
+        {
+          "title": "Haunted",
+          "location": "Haunted",
+          "type": "normal"
+        },
+        {
+          "title": "Last Kiss",
+          "location": "Last Kiss",
+          "type": "normal"
+        },
+        {
+          "title": "Long Live",
+          "location": "Long Live",
+          "type": "normal"
+        },
+        {
+          "title": "Ours",
+          "location": "Ours",
+          "type": "deluxe"
+        },
+        {
+          "title": "If This Was A Movie",
+          "location": "If This Was A Movie",
+          "type": "deluxe"
+        },
+        {
+          "title": "Superman",
+          "location": "Superman",
+          "type": "deluxe"
+        },
+        {
+          "title": "Back To December - Acoustic",
+          "location": "Back To December - Acoustic",
+          "type": "deluxe"
+        },
+        {
+          "title": "Haunted - Acoustic Version",
+          "location": "Haunted - Acoustic Version",
+          "type": "deluxe"
+        },
+        {
+          "title": "Mine - POP Mix",
+          "location": "Mine - POP Mix",
+          "type": "deluxe"
+        }
+      ]
+    },
+    {
+      "name": "Speak Now (Taylor's Version)",
+      "type": "re-recording",
+      "full_album_unlock": true,
+      "songs": [
+        {
+          "title": "Mine (Taylor's Version)",
+          "location": "Mine (Taylor's Version)",
+          "type": "re-recording"
+        },
+        {
+          "title": "Sparks Fly (Taylor's Version)",
+          "location": "Sparks Fly (Taylor's Version)",
+          "type": "re-recording"
+        },
+        {
+          "title": "Back to December (Taylor's Version)",
+          "location": "Back to December (Taylor's Version)",
+          "type": "re-recording"
+        },
+        {
+          "title": "Speak Now (Taylor's Version)",
+          "location": "Speak Now (Taylor's Version)",
+          "type": "re-recording"
+        },
+        {
+          "title": "Dear John (Taylor's Version)",
+          "location": "Dear John (Taylor's Version)",
+          "type": "re-recording"
+        },
+        {
+          "title": "Mean (Taylor's Version)",
+          "location": "Mean (Taylor's Version)",
+          "type": "re-recording"
+        },
+        {
+          "title": "The Story of Us (Taylor's Version)",
+          "location": "The Story of Us (Taylor's Version)",
+          "type": "re-recording"
+        },
+        {
+          "title": "Never Grow Up (Taylor's Version)",
+          "location": "Never Grow Up (Taylor's Version)",
+          "type": "re-recording"
+        },
+        {
+          "title": "Enchanted (Taylor's Version)",
+          "location": "Enchanted (Taylor's Version)",
+          "type": "re-recording"
+        },
+        {
+          "title": "Better Than Revenge (Taylor's Version)",
+          "location": "Better Than Revenge (Taylor's Version)",
+          "type": "re-recording"
+        },
+        {
+          "title": "Innocent (Taylor's Version)",
+          "location": "Innocent (Taylor's Version)",
+          "type": "re-recording"
+        },
+        {
+          "title": "Haunted (Taylor's Version)",
+          "location": "Haunted (Taylor's Version)",
+          "type": "re-recording"
+        },
+        {
+          "title": "Last Kiss (Taylor's Version)",
+          "location": "Last Kiss (Taylor's Version)",
+          "type": "re-recording"
+        },
+        {
+          "title": "Ours (Taylor's Version)",
+          "location": "Ours (Taylor's Version)",
+          "type": "re-recording"
+        },
+        {
+          "title": "Superman (Taylor's Version)",
+          "location": "Superman (Taylor's Version)",
+          "type": "re-recording"
+        },
+        {
+          "title": "Long Live (Taylor's Version)",
+          "location": "Long Live (Taylor's Version)",
+          "type": "re-recording"
+        },
+        {
+          "title": "Electric Touch (feat. Fall Out Boy) (Taylor's Version) (From The Vault)",
+          "location": "Electric Touch (feat. Fall Out Boy) (Taylor's Version) (From The Vault)",
+          "type": "vault"
+        },
+        {
+          "title": "When Emma Falls in Love (Taylor's Version) (From The Vault)",
+          "location": "When Emma Falls in Love (Taylor's Version) (From The Vault)",
+          "type": "vault"
+        },
+        {
+          "title": "I Can See You (Taylor's Version) (From The Vault)",
+          "location": "I Can See You (Taylor's Version) (From The Vault)",
+          "type": "vault"
+        },
+        {
+          "title": "Castles Crumbling (feat. Hayley Williams) (Taylor's Version) (From The Vault)",
+          "location": "Castles Crumbling (feat. Hayley Williams) (Taylor's Version) (From The Vault)",
+          "type": "vault"
+        },
+        {
+          "title": "Foolish One (Taylor's Version) (From The Vault)",
+          "location": "Foolish One (Taylor's Version) (From The Vault)",
+          "type": "vault"
+        },
+        {
+          "title": "Timeless (Taylor's Version) (From The Vault)",
+          "location": "Timeless (Taylor's Version) (From The Vault)",
+          "type": "vault"
+        }
+      ]
+    },
+    {
+      "name": "Red",
+      "type": "standard",
+      "full_album_unlock": true,
+      "songs": [
+        {
+          "title": "State of Grace",
+          "location": "State of Grace",
+          "type": "normal"
+        },
+        {
+          "title": "Red",
+          "location": "Red",
+          "type": "normal"
+        },
+        {
+          "title": "Treacherous",
+          "location": "Treacherous",
+          "type": "normal"
+        },
+        {
+          "title": "I Knew You Were Trouble.",
+          "location": "I Knew You Were Trouble.",
+          "type": "normal"
+        },
+        {
+          "title": "All Too Well",
+          "location": "All Too Well",
+          "type": "normal"
+        },
+        {
+          "title": "22",
+          "location": "Red - 22",
+          "type": "normal"
+        },
+        {
+          "title": "I Almost Do",
+          "location": "I Almost Do",
+          "type": "normal"
+        },
+        {
+          "title": "We Are Never Ever Getting Back Together",
+          "location": "We Are Never Ever Getting Back Together",
+          "type": "normal"
+        },
+        {
+          "title": "Stay Stay Stay",
+          "location": "Stay Stay Stay",
+          "type": "normal"
+        },
+        {
+          "title": "The Last Time (feat. Gary Lightbody)",
+          "location": "The Last Time (feat. Gary Lightbody)",
+          "type": "normal"
+        },
+        {
+          "title": "Holy Ground",
+          "location": "Holy Ground",
+          "type": "normal"
+        },
+        {
+          "title": "Sad Beautiful Tragic",
+          "location": "Sad Beautiful Tragic",
+          "type": "normal"
+        },
+        {
+          "title": "The Lucky One",
+          "location": "The Lucky One",
+          "type": "normal"
+        },
+        {
+          "title": "Everything Has Changed (feat. Ed Sheeran)",
+          "location": "Everything Has Changed (feat. Ed Sheeran)",
+          "type": "normal"
+        },
+        {
+          "title": "Starlight",
+          "location": "Starlight",
+          "type": "normal"
+        },
+        {
+          "title": "Begin Again",
+          "location": "Begin Again",
+          "type": "normal"
+        },
+        {
+          "title": "The Moment I Knew",
+          "location": "The Moment I Knew",
+          "type": "deluxe"
+        },
+        {
+          "title": "Come Back... Be Here",
+          "location": "Come Back... Be Here",
+          "type": "deluxe"
+        },
+        {
+          "title": "Girl at Home",
+          "location": "Girl at Home",
+          "type": "deluxe"
+        },
+        {
+          "title": "Treacherous (original demo recording)",
+          "location": "Treacherous (original demo recording)",
+          "type": "extra"
+        },
+        {
+          "title": "Red (original demo recording)",
+          "location": "Red (original demo recording)",
+          "type": "extra"
+        },
+        {
+          "title": "State of Grace (acoustic version)",
+          "location": "State of Grace (acoustic version)",
+          "type": "deluxe"
+        }
+      ]
+    },
+    {
+      "name": "Red (Taylor's Version)",
+      "type": "re-recording",
+      "full_album_unlock": true,
+      "songs": [
+        {
+          "title": "State of Grace (Taylor's Version)",
+          "location": "State of Grace (Taylor's Version)",
+          "type": "re-recording"
+        },
+        {
+          "title": "Red (Taylor's Version)",
+          "location": "Red (Taylor's Version)",
+          "type": "re-recording"
+        },
+        {
+          "title": "Treacherous (Taylor's Version)",
+          "location": "Treacherous (Taylor's Version)",
+          "type": "re-recording"
+        },
+        {
+          "title": "I Knew You Were Trouble (Taylor's Version)",
+          "location": "I Knew You Were Trouble (Taylor's Version)",
+          "type": "re-recording"
+        },
+        {
+          "title": "All Too Well (Taylor's Version)",
+          "location": "All Too Well (Taylor's Version)",
+          "type": "re-recording"
+        },
+        {
+          "title": "22 (Taylor's Version)",
+          "location": "22 (Taylor's Version)",
+          "type": "re-recording"
+        },
+        {
+          "title": "I Almost Do (Taylor's Version)",
+          "location": "I Almost Do (Taylor's Version)",
+          "type": "re-recording"
+        },
+        {
+          "title": "We Are Never Ever Getting Back Together (Taylor's Version)",
+          "location": "We Are Never Ever Getting Back Together (Taylor's Version)",
+          "type": "re-recording"
+        },
+        {
+          "title": "Stay Stay Stay (Taylor's Version)",
+          "location": "Stay Stay Stay (Taylor's Version)",
+          "type": "re-recording"
+        },
+        {
+          "title": "The Last Time (feat. Gary Lightbody) (Taylor's Version)",
+          "location": "The Last Time (feat. Gary Lightbody) (Taylor's Version)",
+          "type": "re-recording"
+        },
+        {
+          "title": "Holy Ground (Taylor's Version)",
+          "location": "Holy Ground (Taylor's Version)",
+          "type": "re-recording"
+        },
+        {
+          "title": "Sad Beautiful Tragic (Taylor's Version)",
+          "location": "Sad Beautiful Tragic (Taylor's Version)",
+          "type": "re-recording"
+        },
+        {
+          "title": "The Lucky One (Taylor's Version)",
+          "location": "The Lucky One (Taylor's Version)",
+          "type": "re-recording"
+        },
+        {
+          "title": "Everything Has Changed (feat. Ed Sheeran) (Taylor's Version)",
+          "location": "Everything Has Changed (feat. Ed Sheeran) (Taylor's Version)",
+          "type": "re-recording"
+        },
+        {
+          "title": "Starlight (Taylor's Version)",
+          "location": "Starlight (Taylor's Version)",
+          "type": "re-recording"
+        },
+        {
+          "title": "Begin Again (Taylor's Version)",
+          "location": "Begin Again (Taylor's Version)",
+          "type": "re-recording"
+        },
+        {
+          "title": "The Moment I Knew (Taylor's Version)",
+          "location": "The Moment I Knew (Taylor's Version)",
+          "type": "re-recording"
+        },
+        {
+          "title": "Come Back... Be Here (Taylor's Version)",
+          "location": "Come Back... Be Here (Taylor's Version)",
+          "type": "re-recording"
+        },
+        {
+          "title": "Girl at Home (Taylor's Version)",
+          "location": "Girl at Home (Taylor's Version)",
+          "type": "re-recording"
+        },
+        {
+          "title": "State of Grace (Acoustic Version) (Taylor's Version)",
+          "location": "State of Grace (Acoustic Version) (Taylor's Version)",
+          "type": "re-recording"
+        },
+        {
+          "title": "Ronan (Taylor's Version)",
+          "location": "Ronan (Taylor's Version)",
+          "type": "re-recording"
+        },
+        {
+          "title": "Better Man (Taylor's Version) (From The Vault)",
+          "location": "Better Man (Taylor's Version) (From The Vault)",
+          "type": "vault"
+        },
+        {
+          "title": "Nothing New (feat. Phoebe Bridgers) (Taylor's Version) (From The Vault)",
+          "location": "Nothing New (feat. Phoebe Bridgers) (Taylor's Version) (From The Vault)",
+          "type": "vault"
+        },
+        {
+          "title": "Babe (Taylor's Version) (From The Vault)",
+          "location": "Babe (Taylor's Version) (From The Vault)",
+          "type": "vault"
+        },
+        {
+          "title": "Message In A Bottle (Taylor's Version) (From The Vault)",
+          "location": "Message In A Bottle (Taylor's Version) (From The Vault)",
+          "type": "vault"
+        },
+        {
+          "title": "I Bet You Think About Me (feat. Chris Stapleton) (Taylor's Version) (From The Vault)",
+          "location": "I Bet You Think About Me (feat. Chris Stapleton) (Taylor's Version) (From The Vault)",
+          "type": "vault"
+        },
+        {
+          "title": "Forever Winter (Taylor's Version) (From The Vault)",
+          "location": "Forever Winter (Taylor's Version) (From The Vault)",
+          "type": "vault"
+        },
+        {
+          "title": "Run (feat. Ed Sheeran) (Taylor's Version) (From The Vault)",
+          "location": "Run (feat. Ed Sheeran) (Taylor's Version) (From The Vault)",
+          "type": "vault"
+        },
+        {
+          "title": "The Very First Night (Taylor's Version) (From The Vault)",
+          "location": "The Very First Night (Taylor's Version) (From The Vault)",
+          "type": "vault"
+        },
+        {
+          "title": "All Too Well (10 Minute Version) (Taylor's Version) (From The Vault)",
+          "location": "All Too Well (10 Minute Version) (Taylor's Version) (From The Vault)",
+          "type": "vault"
+        }
+      ]
+    },
+    {
+      "name": "1989",
+      "type": "standard",
+      "full_album_unlock": true,
+      "songs": [
+        {
+          "title": "Welcome to New York",
+          "location": "Welcome to New York",
+          "type": "normal"
+        },
+        {
+          "title": "Blank Space",
+          "location": "Blank Space",
+          "type": "normal"
+        },
+        {
+          "title": "Style",
+          "location": "Style",
+          "type": "normal"
+        },
+        {
+          "title": "Out of the Woods",
+          "location": "Out of the Woods",
+          "type": "normal"
+        },
+        {
+          "title": "All You Had to Do Was Stay",
+          "location": "All You Had to Do Was Stay",
+          "type": "normal"
+        },
+        {
+          "title": "Shake It Off",
+          "location": "Shake It Off",
+          "type": "normal"
+        },
+        {
+          "title": "I Wish You Would",
+          "location": "I Wish You Would",
+          "type": "normal"
+        },
+        {
+          "title": "Bad Blood",
+          "location": "Bad Blood",
+          "type": "normal"
+        },
+        {
+          "title": "Wildest Dreams",
+          "location": "Wildest Dreams",
+          "type": "normal"
+        },
+        {
+          "title": "How You Get the Girl",
+          "location": "How You Get the Girl",
+          "type": "normal"
+        },
+        {
+          "title": "This Love",
+          "location": "This Love",
+          "type": "normal"
+        },
+        {
+          "title": "I Know Places",
+          "location": "I Know Places",
+          "type": "normal"
+        },
+        {
+          "title": "Clean",
+          "location": "Clean",
+          "type": "normal"
+        },
+        {
+          "title": "Wonderland",
+          "location": "Wonderland",
+          "type": "deluxe"
+        },
+        {
+          "title": "You Are in Love",
+          "location": "You Are in Love",
+          "type": "deluxe"
+        },
+        {
+          "title": "New Romantics",
+          "location": "New Romantics",
+          "type": "deluxe"
+        },
+        {
+          "title": "I Know Places - Voice Memo",
+          "location": "I Know Places - Voice Memo",
+          "type": "extra"
+        },
+        {
+          "title": "I Wish You Would - Voice Memo",
+          "location": "I Wish You Would - Voice Memo",
+          "type": "extra"
+        },
+        {
+          "title": "Blank Space - Voice Memo",
+          "location": "Blank Space - Voice Memo",
+          "type": "extra"
+        }
+      ]
+    },
+    {
+      "name": "1989 (Taylor's Version)",
+      "type": "re-recording",
+      "full_album_unlock": true,
+      "songs": [
+        {
+          "title": "Welcome to New York (Taylor's Version)",
+          "location": "Welcome to New York (Taylor's Version)",
+          "type": "re-recording"
+        },
+        {
+          "title": "Blank Space (Taylor's Version)",
+          "location": "Blank Space (Taylor's Version)",
+          "type": "re-recording"
+        },
+        {
+          "title": "Style (Taylor's Version)",
+          "location": "Style (Taylor's Version)",
+          "type": "re-recording"
+        },
+        {
+          "title": "Out of the Woods (Taylor's Version)",
+          "location": "Out of the Woods (Taylor's Version)",
+          "type": "re-recording"
+        },
+        {
+          "title": "All You Had to Do Was Stay (Taylor's Version)",
+          "location": "All You Had to Do Was Stay (Taylor's Version)",
+          "type": "re-recording"
+        },
+        {
+          "title": "Shake It Off (Taylor's Version)",
+          "location": "Shake It Off (Taylor's Version)",
+          "type": "re-recording"
+        },
+        {
+          "title": "I Wish You Would (Taylor's Version)",
+          "location": "I Wish You Would (Taylor's Version)",
+          "type": "re-recording"
+        },
+        {
+          "title": "Bad Blood (Taylor's Version)",
+          "location": "Bad Blood (Taylor's Version)",
+          "type": "re-recording"
+        },
+        {
+          "title": "Wildest Dreams (Taylor's Version)",
+          "location": "Wildest Dreams (Taylor's Version)",
+          "type": "re-recording"
+        },
+        {
+          "title": "How You Get the Girl (Taylor's Version)",
+          "location": "How You Get the Girl (Taylor's Version)",
+          "type": "re-recording"
+        },
+        {
+          "title": "This Love (Taylor's Version)",
+          "location": "This Love (Taylor's Version)",
+          "type": "re-recording"
+        },
+        {
+          "title": "I Know Places (Taylor's Version)",
+          "location": "I Know Places (Taylor's Version)",
+          "type": "re-recording"
+        },
+        {
+          "title": "Clean (Taylor's Version)",
+          "location": "Clean (Taylor's Version)",
+          "type": "re-recording"
+        },
+        {
+          "title": "Wonderland (Taylor's Version)",
+          "location": "Wonderland (Taylor's Version)",
+          "type": "re-recording"
+        },
+        {
+          "title": "You Are in Love (Taylor's Version)",
+          "location": "You Are in Love (Taylor's Version)",
+          "type": "re-recording"
+        },
+        {
+          "title": "New Romantics (Taylor's Version)",
+          "location": "New Romantics (Taylor's Version)",
+          "type": "re-recording"
+        },
+        {
+          "title": "\"Slut!\" (Taylor's Version) (From The Vault)",
+          "location": "\"Slut!\" (Taylor's Version) (From The Vault)",
+          "type": "vault"
+        },
+        {
+          "title": "Say Don't Go (Taylor's Version) (From The Vault)",
+          "location": "Say Don't Go (Taylor's Version) (From The Vault)",
+          "type": "vault"
+        },
+        {
+          "title": "Now That We Don't Talk (Taylor's Version) (From The Vault)",
+          "location": "Now That We Don't Talk (Taylor's Version) (From The Vault)",
+          "type": "vault"
+        },
+        {
+          "title": "Suburban Legends (Taylor's Version) (From The Vault)",
+          "location": "Suburban Legends (Taylor's Version) (From The Vault)",
+          "type": "vault"
+        },
+        {
+          "title": "Is It Over Now? (Taylor's Version) (From The Vault)",
+          "location": "Is It Over Now? (Taylor's Version) (From The Vault)",
+          "type": "vault"
+        },
+        {
+          "title": "Bad Blood (feat. Kendrick Lamar) (Taylor's Version)",
+          "location": "Bad Blood (feat. Kendrick Lamar) (Taylor's Version)",
+          "type": "re-recording"
+        }
+      ]
+    },
+    {
+      "name": "Reputation",
+      "type": "standard",
+      "full_album_unlock": true,
+      "songs": [
+        {
+          "title": "...Ready for It?",
+          "location": "...Ready for It?",
+          "type": "normal"
+        },
+        {
+          "title": "End Game (feat. Ed Sheeran & Future)",
+          "location": "End Game (feat. Ed Sheeran & Future)",
+          "type": "normal"
+        },
+        {
+          "title": "I Did Something Bad",
+          "location": "I Did Something Bad",
+          "type": "normal"
+        },
+        {
+          "title": "Don't Blame Me",
+          "location": "Don't Blame Me",
+          "type": "normal"
+        },
+        {
+          "title": "Delicate",
+          "location": "Delicate",
+          "type": "normal"
+        },
+        {
+          "title": "Look What You Made Me Do",
+          "location": "Look What You Made Me Do",
+          "type": "normal"
+        },
+        {
+          "title": "So It Goes...",
+          "location": "So It Goes...",
+          "type": "normal"
+        },
+        {
+          "title": "Gorgeous",
+          "location": "Gorgeous",
+          "type": "normal"
+        },
+        {
+          "title": "Getaway Car",
+          "location": "Getaway Car",
+          "type": "normal"
+        },
+        {
+          "title": "King of My Heart",
+          "location": "King of My Heart",
+          "type": "normal"
+        },
+        {
+          "title": "Dancing with Our Hands Tied",
+          "location": "Dancing with Our Hands Tied",
+          "type": "normal"
+        },
+        {
+          "title": "Dress",
+          "location": "Dress",
+          "type": "normal"
+        },
+        {
+          "title": "This Is Why We Can't Have Nice Things",
+          "location": "This Is Why We Can't Have Nice Things",
+          "type": "normal"
+        },
+        {
+          "title": "Call It What You Want",
+          "location": "Call It What You Want",
+          "type": "normal"
+        },
+        {
+          "title": "New Year's Day",
+          "location": "New Year's Day",
+          "type": "normal"
+        }
+      ]
+    },
+    {
+      "name": "Lover",
+      "type": "standard",
+      "full_album_unlock": true,
+      "songs": [
+        {
+          "title": "I Forgot That You Existed",
+          "location": "I Forgot That You Existed",
+          "type": "normal"
+        },
+        {
+          "title": "Cruel Summer",
+          "location": "Cruel Summer",
+          "type": "normal"
+        },
+        {
+          "title": "Lover",
+          "location": "Lover",
+          "type": "normal"
+        },
+        {
+          "title": "The Man",
+          "location": "The Man",
+          "type": "normal"
+        },
+        {
+          "title": "The Archer",
+          "location": "The Archer",
+          "type": "normal"
+        },
+        {
+          "title": "I Think He Knows",
+          "location": "I Think He Knows",
+          "type": "normal"
+        },
+        {
+          "title": "Miss Americana & The Heartbreak Prince",
+          "location": "Miss Americana & The Heartbreak Prince",
+          "type": "normal"
+        },
+        {
+          "title": "Paper Rings",
+          "location": "Paper Rings",
+          "type": "normal"
+        },
+        {
+          "title": "Cornelia Street",
+          "location": "Cornelia Street",
+          "type": "normal"
+        },
+        {
+          "title": "Death By A Thousand Cuts",
+          "location": "Death By A Thousand Cuts",
+          "type": "normal"
+        },
+        {
+          "title": "London Boy",
+          "location": "London Boy",
+          "type": "normal"
+        },
+        {
+          "title": "Soon You'll Get Better (feat. Dixie Chicks)",
+          "location": "Soon You'll Get Better (feat. Dixie Chicks)",
+          "type": "normal"
+        },
+        {
+          "title": "False God",
+          "location": "False God",
+          "type": "normal"
+        },
+        {
+          "title": "You Need to Calm Down",
+          "location": "You Need to Calm Down",
+          "type": "normal"
+        },
+        {
+          "title": "Afterglow",
+          "location": "Afterglow",
+          "type": "normal"
+        },
+        {
+          "title": "ME! (feat. Brendon Urie)",
+          "location": "ME! (feat. Brendon Urie)",
+          "type": "normal"
+        },
+        {
+          "title": "It's Nice to Have a Friend",
+          "location": "It's Nice to Have a Friend",
+          "type": "normal"
+        },
+        {
+          "title": "Daylight",
+          "location": "Daylight",
+          "type": "normal"
+        }
+      ]
+    },
+    {
+      "name": "Folklore",
+      "type": "standard",
+      "full_album_unlock": true,
+      "songs": [
+        {
+          "title": "the 1",
+          "location": "the 1",
+          "type": "normal"
+        },
+        {
+          "title": "cardigan",
+          "location": "cardigan",
+          "type": "normal"
+        },
+        {
+          "title": "the last great american dynasty",
+          "location": "the last great american dynasty",
+          "type": "normal"
+        },
+        {
+          "title": "exile (feat. Bon Iver)",
+          "location": "exile (feat. Bon Iver)",
+          "type": "normal"
+        },
+        {
+          "title": "my tears ricochet",
+          "location": "my tears ricochet",
+          "type": "normal"
+        },
+        {
+          "title": "mirrorball",
+          "location": "mirrorball",
+          "type": "normal"
+        },
+        {
+          "title": "seven",
+          "location": "seven",
+          "type": "normal"
+        },
+        {
+          "title": "august",
+          "location": "august",
+          "type": "normal"
+        },
+        {
+          "title": "this is me trying",
+          "location": "this is me trying",
+          "type": "normal"
+        },
+        {
+          "title": "illicit affairs",
+          "location": "illicit affairs",
+          "type": "normal"
+        },
+        {
+          "title": "invisible string",
+          "location": "invisible string",
+          "type": "normal"
+        },
+        {
+          "title": "mad woman",
+          "location": "mad woman",
+          "type": "normal"
+        },
+        {
+          "title": "epiphany",
+          "location": "epiphany",
+          "type": "normal"
+        },
+        {
+          "title": "betty",
+          "location": "betty",
+          "type": "normal"
+        },
+        {
+          "title": "peace",
+          "location": "peace",
+          "type": "normal"
+        },
+        {
+          "title": "hoax",
+          "location": "hoax",
+          "type": "normal"
+        },
+        {
+          "title": "the lakes (bonus track)",
+          "location": "the lakes (bonus track)",
+          "type": "deluxe"
+        }
+      ]
+    },
+    {
+      "name": "Evermore",
+      "type": "standard",
+      "full_album_unlock": true,
+      "songs": [
+        {
+          "title": "willow",
+          "location": "willow",
+          "type": "normal"
+        },
+        {
+          "title": "champagne problems",
+          "location": "champagne problems",
+          "type": "normal"
+        },
+        {
+          "title": "gold rush",
+          "location": "gold rush",
+          "type": "normal"
+        },
+        {
+          "title": "'tis the damn season",
+          "location": "'tis the damn season",
+          "type": "normal"
+        },
+        {
+          "title": "tolerate it",
+          "location": "tolerate it",
+          "type": "normal"
+        },
+        {
+          "title": "no body, no crime (feat. HAIM)",
+          "location": "no body, no crime (feat. HAIM)",
+          "type": "normal"
+        },
+        {
+          "title": "happiness",
+          "location": "happiness",
+          "type": "normal"
+        },
+        {
+          "title": "dorothea",
+          "location": "dorothea",
+          "type": "normal"
+        },
+        {
+          "title": "coney island (feat. The National)",
+          "location": "coney island (feat. The National)",
+          "type": "normal"
+        },
+        {
+          "title": "ivy",
+          "location": "ivy",
+          "type": "normal"
+        },
+        {
+          "title": "cowboy like me",
+          "location": "cowboy like me",
+          "type": "normal"
+        },
+        {
+          "title": "long story short",
+          "location": "long story short",
+          "type": "normal"
+        },
+        {
+          "title": "marjorie",
+          "location": "marjorie",
+          "type": "normal"
+        },
+        {
+          "title": "closure",
+          "location": "closure",
+          "type": "normal"
+        },
+        {
+          "title": "evermore (feat. Bon Iver)",
+          "location": "evermore (feat. Bon Iver)",
+          "type": "normal"
+        },
+        {
+          "title": "right where you left me (bonus track)",
+          "location": "right where you left me (bonus track)",
+          "type": "deluxe"
+        },
+        {
+          "title": "it's time to go (bonus track)",
+          "location": "it's time to go (bonus track)",
+          "type": "deluxe"
+        }
+      ]
+    },
+    {
+      "name": "Midnights",
+      "type": "standard",
+      "full_album_unlock": true,
+      "songs": [
+        {
+          "title": "Lavender Haze",
+          "location": "Lavender Haze",
+          "type": "normal"
+        },
+        {
+          "title": "Maroon",
+          "location": "Maroon",
+          "type": "normal"
+        },
+        {
+          "title": "Anti-Hero",
+          "location": "Anti-Hero",
+          "type": "normal"
+        },
+        {
+          "title": "Snow On The Beach (feat. Lana Del Rey)",
+          "location": "Snow On The Beach (feat. Lana Del Rey)",
+          "type": "normal"
+        },
+        {
+          "title": "You're On Your Own, Kid",
+          "location": "You're On Your Own, Kid",
+          "type": "normal"
+        },
+        {
+          "title": "Midnight Rain",
+          "location": "Midnight Rain",
+          "type": "normal"
+        },
+        {
+          "title": "Question...?",
+          "location": "Question...?",
+          "type": "normal"
+        },
+        {
+          "title": "Vigilante Shit",
+          "location": "Vigilante Shit",
+          "type": "normal"
+        },
+        {
+          "title": "Bejeweled",
+          "location": "Bejeweled",
+          "type": "normal"
+        },
+        {
+          "title": "Labyrinth",
+          "location": "Labyrinth",
+          "type": "normal"
+        },
+        {
+          "title": "Karma",
+          "location": "Karma",
+          "type": "normal"
+        },
+        {
+          "title": "Sweet Nothing",
+          "location": "Sweet Nothing",
+          "type": "normal"
+        },
+        {
+          "title": "Mastermind",
+          "location": "Mastermind",
+          "type": "normal"
+        },
+        {
+          "title": "The Great War",
+          "location": "The Great War",
+          "type": "deluxe"
+        },
+        {
+          "title": "Bigger Than The Whole Sky",
+          "location": "Bigger Than The Whole Sky",
+          "type": "deluxe"
+        },
+        {
+          "title": "Paris",
+          "location": "Paris",
+          "type": "deluxe"
+        },
+        {
+          "title": "High Infidelity",
+          "location": "High Infidelity",
+          "type": "deluxe"
+        },
+        {
+          "title": "Glitch",
+          "location": "Glitch",
+          "type": "deluxe"
+        },
+        {
+          "title": "Would've, Could've, Should've",
+          "location": "Would've, Could've, Should've",
+          "type": "deluxe"
+        },
+        {
+          "title": "Dear Reader",
+          "location": "Dear Reader",
+          "type": "deluxe"
+        },
+        {
+          "title": "Hits Different",
+          "location": "Hits Different",
+          "type": "deluxe"
+        },
+        {
+          "title": "Snow On The Beach (feat. More Lana Del Rey)",
+          "location": "Snow On The Beach (feat. More Lana Del Rey)",
+          "type": "deluxe"
+        },
+        {
+          "title": "Karma (feat. Ice Spice)",
+          "location": "Karma (feat. Ice Spice)",
+          "type": "deluxe"
+        }
+      ]
+    },
+    {
+      "name": "The Tortured Poets Department",
+      "type": "standard",
+      "full_album_unlock": true,
+      "songs": [
+        {
+          "title": "Fortnight (feat. Post Malone)",
+          "location": "Fortnight (feat. Post Malone)",
+          "type": "normal"
+        },
+        {
+          "title": "The Tortured Poets Department",
+          "location": "The Tortured Poets Department",
+          "type": "normal"
+        },
+        {
+          "title": "My Boy Only Breaks His Favorite Toys",
+          "location": "My Boy Only Breaks His Favorite Toys",
+          "type": "normal"
+        },
+        {
+          "title": "Down Bad",
+          "location": "Down Bad",
+          "type": "normal"
+        },
+        {
+          "title": "So Long, London",
+          "location": "So Long, London",
+          "type": "normal"
+        },
+        {
+          "title": "But Daddy I Love Him",
+          "location": "But Daddy I Love Him",
+          "type": "normal"
+        },
+        {
+          "title": "Fresh Out the Slammer",
+          "location": "Fresh Out the Slammer",
+          "type": "normal"
+        },
+        {
+          "title": "Florida!!! (feat. Florence + The Machine)",
+          "location": "Florida!!! (feat. Florence + The Machine)",
+          "type": "normal"
+        },
+        {
+          "title": "Guilty as Sin?",
+          "location": "Guilty as Sin?",
+          "type": "normal"
+        },
+        {
+          "title": "Who's Afraid of Little Old Me?",
+          "location": "Who's Afraid of Little Old Me?",
+          "type": "normal"
+        },
+        {
+          "title": "I Can Fix Him (No Really I Can)",
+          "location": "I Can Fix Him (No Really I Can)",
+          "type": "normal"
+        },
+        {
+          "title": "loml",
+          "location": "loml",
+          "type": "normal"
+        },
+        {
+          "title": "I Can Do It With a Broken Heart",
+          "location": "I Can Do It With a Broken Heart",
+          "type": "normal"
+        },
+        {
+          "title": "The Smallest Man Who Ever Lived",
+          "location": "The Smallest Man Who Ever Lived",
+          "type": "normal"
+        },
+        {
+          "title": "The Alchemy",
+          "location": "The Alchemy",
+          "type": "normal"
+        },
+        {
+          "title": "Clara Bow",
+          "location": "Clara Bow",
+          "type": "normal"
+        },
+        {
+          "title": "The Black Dog",
+          "location": "The Black Dog",
+          "type": "deluxe"
+        },
+        {
+          "title": "imgonnagetyouback",
+          "location": "imgonnagetyouback",
+          "type": "deluxe"
+        },
+        {
+          "title": "The Albatross",
+          "location": "The Albatross",
+          "type": "deluxe"
+        },
+        {
+          "title": "Chloe or Sam or Sophia or Marcus",
+          "location": "Chloe or Sam or Sophia or Marcus",
+          "type": "deluxe"
+        },
+        {
+          "title": "How Did It End?",
+          "location": "How Did It End?",
+          "type": "deluxe"
+        },
+        {
+          "title": "So High School",
+          "location": "So High School",
+          "type": "deluxe"
+        },
+        {
+          "title": "I Hate It Here",
+          "location": "I Hate It Here",
+          "type": "deluxe"
+        },
+        {
+          "title": "thanK you aIMee",
+          "location": "thanK you aIMee",
+          "type": "deluxe"
+        },
+        {
+          "title": "I Look in People's Windows",
+          "location": "I Look in People's Windows",
+          "type": "deluxe"
+        },
+        {
+          "title": "The Prophecy",
+          "location": "The Prophecy",
+          "type": "deluxe"
+        },
+        {
+          "title": "Cassandra",
+          "location": "Cassandra",
+          "type": "deluxe"
+        },
+        {
+          "title": "Peter",
+          "location": "Peter",
+          "type": "deluxe"
+        },
+        {
+          "title": "The Bolter",
+          "location": "The Bolter",
+          "type": "deluxe"
+        },
+        {
+          "title": "Robin",
+          "location": "Robin",
+          "type": "deluxe"
+        },
+        {
+          "title": "The Manuscript",
+          "location": "The Manuscript",
+          "type": "deluxe"
+        }
+      ]
+    },
+    {
+      "name": "The Life of a Showgirl",
+      "type": "standard",
+      "full_album_unlock": true,
+      "songs": [
+        {
+          "title": "The Fate of Ophelia",
+          "location": "The Fate of Ophelia",
+          "type": "normal"
+        },
+        {
+          "title": "Elizabeth Taylor",
+          "location": "Elizabeth Taylor",
+          "type": "normal"
+        },
+        {
+          "title": "Opalite",
+          "location": "Opalite",
+          "type": "normal"
+        },
+        {
+          "title": "Father Figure",
+          "location": "Father Figure",
+          "type": "normal"
+        },
+        {
+          "title": "Eldest Daughter",
+          "location": "Eldest Daughter",
+          "type": "normal"
+        },
+        {
+          "title": "Ruin The Friendship",
+          "location": "Ruin The Friendship",
+          "type": "normal"
+        },
+        {
+          "title": "Actually Romantic",
+          "location": "Actually Romantic",
+          "type": "normal"
+        },
+        {
+          "title": "Wi$h Li$t",
+          "location": "Wi$h Li$t",
+          "type": "normal"
+        },
+        {
+          "title": "Wood",
+          "location": "Wood",
+          "type": "normal"
+        },
+        {
+          "title": "CANCELLED!",
+          "location": "CANCELLED!",
+          "type": "normal"
+        },
+        {
+          "title": "Honey",
+          "location": "Honey",
+          "type": "normal"
+        },
+        {
+          "title": "The Life of a Showgirl (feat. Sabrina Carpenter)",
+          "location": "The Life of a Showgirl (feat. Sabrina Carpenter)",
+          "type": "normal"
+        },
+        {
+          "title": "Patient Zero",
+          "location": "Patient Zero",
+          "type": "deluxe"
+        },
+        {
+          "title": "Cleveland!",
+          "location": "Cleveland!",
+          "type": "deluxe"
+        },
+        {
+          "title": "Pink Clouding",
+          "location": "Pink Clouding",
+          "type": "deluxe"
+        },
+        {
+          "title": "Babylon",
+          "location": "Babylon",
+          "type": "deluxe"
+        }
+      ]
+    }
+  ]
+}
