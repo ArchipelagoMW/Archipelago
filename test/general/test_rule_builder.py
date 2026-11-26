@@ -437,6 +437,194 @@ class TestFilteredResolution(RuleBuilderTestCase):
             [OptionFilter(ToggleOption, 1)] | (Has("A") | Has("B")),
             Or(Or(Has("A"), Has("B")), True_(options=[OptionFilter(ToggleOption, 1)])),
         ),
+        (
+            (
+                Has("A", options=[OptionFilter(ToggleOption, 0)], filtered_resolution=True)
+                | Or(Has("B"), options=[OptionFilter(ToggleOption, 0)], filtered_resolution=True)
+            ),
+            Or(
+                Has("A", options=[OptionFilter(ToggleOption, 0)], filtered_resolution=True),
+                Has("B"),
+                options=[OptionFilter(ToggleOption, 0)], filtered_resolution=True
+            ),
+        ),
+        (
+            (
+                Or(Has("B"), options=[OptionFilter(ToggleOption, 0)], filtered_resolution=True)
+                | Has("A", options=[OptionFilter(ToggleOption, 0)], filtered_resolution=True)
+            ),
+            Or(
+                Has("B"),
+                Has("A", options=[OptionFilter(ToggleOption, 0)], filtered_resolution=True),
+                options=[OptionFilter(ToggleOption, 0)], filtered_resolution=True
+            ),
+        ),
+        (
+            (
+                Or(Has("A"), options=[OptionFilter(ToggleOption, 0)], filtered_resolution=True)
+                | Or(Has("B"), options=[OptionFilter(ToggleOption, 0)], filtered_resolution=True)
+            ),
+            Or(
+                Has("A"),
+                Has("B"),
+                options=[OptionFilter(ToggleOption, 0)], filtered_resolution=True
+            ),
+        ),
+        (
+            (
+                Has("A", options=[OptionFilter(ToggleOption, 0)], filtered_resolution=False)
+                | Or(Has("B"), options=[OptionFilter(ToggleOption, 0)], filtered_resolution=False)
+            ),
+            Or(
+                Has("A", options=[OptionFilter(ToggleOption, 0)], filtered_resolution=False),
+                Has("B"),
+                options=[OptionFilter(ToggleOption, 0)], filtered_resolution=False
+            ),
+        ),
+        (
+            (
+                Or(Has("B"), options=[OptionFilter(ToggleOption, 0)], filtered_resolution=False)
+                | Has("A", options=[OptionFilter(ToggleOption, 0)], filtered_resolution=False)
+            ),
+            Or(
+                Has("B"),
+                Has("A", options=[OptionFilter(ToggleOption, 0)], filtered_resolution=False),
+                options=[OptionFilter(ToggleOption, 0)], filtered_resolution=False
+            ),
+        ),
+        (
+            (
+                Or(Has("A"), options=[OptionFilter(ToggleOption, 0)], filtered_resolution=False)
+                | Or(Has("B"), options=[OptionFilter(ToggleOption, 0)], filtered_resolution=False)
+            ),
+            Or(
+                Has("A"),
+                Has("B"),
+                options=[OptionFilter(ToggleOption, 0)], filtered_resolution=False
+            ),
+        ),
+        (
+            (
+                Has("A", options=[OptionFilter(ToggleOption, 0)], filtered_resolution=True)
+                | Or(Has("B"), options=[OptionFilter(ToggleOption, 0)], filtered_resolution=False)
+            ),
+            Or(
+                Has("A", options=[OptionFilter(ToggleOption, 0)], filtered_resolution=True),
+                Has("B"),
+                options=[OptionFilter(ToggleOption, 0)], filtered_resolution=True
+            ),
+        ),
+        (
+            (
+                Or(Has("B"), options=[OptionFilter(ToggleOption, 0)], filtered_resolution=False)
+                | Has("A", options=[OptionFilter(ToggleOption, 0)], filtered_resolution=True)),
+            Or(
+                Has("B"),
+                Has("A", options=[OptionFilter(ToggleOption, 0)], filtered_resolution=True),
+                options=[OptionFilter(ToggleOption, 0)], filtered_resolution=True
+            ),
+        ),
+        (
+            (
+                Or(Has("A"), options=[OptionFilter(ToggleOption, 0)], filtered_resolution=True)
+                | Or(Has("B"), options=[OptionFilter(ToggleOption, 0)], filtered_resolution=False)
+            ),
+            Or(Has("A"), Has("B"), options=[OptionFilter(ToggleOption, 0)], filtered_resolution=True),
+        ),
+        (
+            (
+                Has("A", options=[OptionFilter(ToggleOption, 0)], filtered_resolution=True)
+                & And(Has("B"), options=[OptionFilter(ToggleOption, 0)], filtered_resolution=True)
+            ),
+            And(
+                Has("A", options=[OptionFilter(ToggleOption, 0)], filtered_resolution=True),
+                Has("B"),
+                options=[OptionFilter(ToggleOption, 0)], filtered_resolution=True
+            ),
+        ),
+        (
+            (
+                And(Has("B"), options=[OptionFilter(ToggleOption, 0)], filtered_resolution=True)
+                & Has("A", options=[OptionFilter(ToggleOption, 0)], filtered_resolution=True)
+            ),
+            And(
+                Has("B"),
+                Has("A", options=[OptionFilter(ToggleOption, 0)], filtered_resolution=True),
+                options=[OptionFilter(ToggleOption, 0)], filtered_resolution=True
+            ),
+        ),
+        (
+            (
+                And(Has("A"), options=[OptionFilter(ToggleOption, 0)], filtered_resolution=True)
+                & And(Has("B"), options=[OptionFilter(ToggleOption, 0)], filtered_resolution=True)
+            ),
+            And(
+                Has("A"),
+                Has("B"),
+                options=[OptionFilter(ToggleOption, 0)], filtered_resolution=True
+            ),
+        ),
+        (
+            (
+                Has("A", options=[OptionFilter(ToggleOption, 0)], filtered_resolution=False)
+                & And(Has("B"), options=[OptionFilter(ToggleOption, 0)], filtered_resolution=False)
+            ),
+            And(
+                Has("A", options=[OptionFilter(ToggleOption, 0)], filtered_resolution=False),
+                Has("B"),
+                options=[OptionFilter(ToggleOption, 0)], filtered_resolution=False
+            ),
+        ),
+        (
+            (
+                And(Has("B"), options=[OptionFilter(ToggleOption, 0)], filtered_resolution=False)
+                & Has("A", options=[OptionFilter(ToggleOption, 0)], filtered_resolution=False)
+            ),
+            And(
+                Has("B"),
+                Has("A", options=[OptionFilter(ToggleOption, 0)], filtered_resolution=False),
+                options=[OptionFilter(ToggleOption, 0)], filtered_resolution=False
+            ),
+        ),
+        (
+            (
+                And(Has("A"), options=[OptionFilter(ToggleOption, 0)], filtered_resolution=False)
+                & And(Has("B"), options=[OptionFilter(ToggleOption, 0)], filtered_resolution=False)
+            ),
+            And(
+                Has("A"),
+                Has("B"),
+                options=[OptionFilter(ToggleOption, 0)], filtered_resolution=False
+            ),
+        ),
+        (
+            (
+                Has("A", options=[OptionFilter(ToggleOption, 0)], filtered_resolution=True)
+                & And(Has("B"), options=[OptionFilter(ToggleOption, 0)], filtered_resolution=False)
+            ),
+            And(
+                Has("A", options=[OptionFilter(ToggleOption, 0)], filtered_resolution=True),
+                Has("B"),
+                options=[OptionFilter(ToggleOption, 0)], filtered_resolution=False
+            ),
+        ),
+        (
+            (
+                And(Has("B"), options=[OptionFilter(ToggleOption, 0)], filtered_resolution=False)
+                & Has("A", options=[OptionFilter(ToggleOption, 0)], filtered_resolution=True)),
+            And(
+                Has("B"),
+                Has("A", options=[OptionFilter(ToggleOption, 0)], filtered_resolution=True),
+                options=[OptionFilter(ToggleOption, 0)], filtered_resolution=False
+            ),
+        ),
+        (
+            (
+                And(Has("A"), options=[OptionFilter(ToggleOption, 0)], filtered_resolution=True)
+                & And(Has("B"), options=[OptionFilter(ToggleOption, 0)], filtered_resolution=False)
+            ),
+            And(Has("A"), Has("B"), options=[OptionFilter(ToggleOption, 0)], filtered_resolution=False),
+        ),
     )
 )
 class TestComposition(unittest.TestCase):

@@ -150,12 +150,14 @@ class Rule(Generic[TWorld]):
                 return self
             return Filtered(self, options=other)
         if self.options == other.options:
+            filtered_resolution = self.filtered_resolution and other.filtered_resolution
             if isinstance(self, And):
                 if isinstance(other, And):
-                    return And(*self.children, *other.children, options=self.options)
-                return And(*self.children, other, options=self.options)
+                    return And(*self.children, *other.children, options=self.options,
+                               filtered_resolution=filtered_resolution)
+                return And(*self.children, other, options=self.options, filtered_resolution=filtered_resolution)
             if isinstance(other, And):
-                return And(self, *other.children, options=other.options)
+                return And(self, *other.children, options=other.options,filtered_resolution=filtered_resolution)
         return And(self, other)
 
     def __rand__(self, other: "Rule[Any] | Iterable[OptionFilter] | OptionFilter") -> "Rule[TWorld]":
@@ -170,12 +172,14 @@ class Rule(Generic[TWorld]):
                 return self
             return Or(self, True_(options=other))
         if self.options == other.options:
+            filtered_resolution = self.filtered_resolution or other.filtered_resolution
             if isinstance(self, Or):
                 if isinstance(other, Or):
-                    return Or(*self.children, *other.children, options=self.options)
-                return Or(*self.children, other, options=self.options)
+                    return Or(*self.children, *other.children, options=self.options,
+                              filtered_resolution=filtered_resolution)
+                return Or(*self.children, other, options=self.options, filtered_resolution=filtered_resolution)
             if isinstance(other, Or):
-                return Or(self, *other.children, options=self.options)
+                return Or(self, *other.children, options=self.options, filtered_resolution=filtered_resolution)
         return Or(self, other)
 
     def __ror__(self, other: "Rule[Any] | Iterable[OptionFilter] | OptionFilter") -> "Rule[TWorld]":
