@@ -78,11 +78,12 @@ class WebHostContext(Context):
             static_server_data: StaticServerData,
             games_package_cache: DBGamesPackageCache,
             logger: logging.Logger,
+            host: str = "",
     ) -> None:
         # static server data is used during _load_game_data to load required data,
         # without needing to import worlds system, which takes quite a bit of memory
         super(WebHostContext, self).__init__(
-            "",
+            host,
             0,
             "",
             "",
@@ -212,42 +213,46 @@ class RandomPortSocketCreator:
         return GameRangePorts(valid_ports, ephemeral_allowed)
 
     @staticmethod
-    def _try_conns_per_process(p: psutil.Process) -> Iterable[int]:
-        """ Get ports from a single process's connections. """
+    def _try_conns_per_process(p: psutil.Process, host: str = "") -> Iterable[int]:
+        """ Get ports from a single process's connections matching the given host. """
         try:
-            return (c.laddr.port for c in p.net_connections("tcp4") if c.laddr)
+            if not host or host == "0.0.0.0":
+                return (c.laddr.port for c in p.net_connections("tcp4") if c.laddr)
+            return (c.laddr.port for c in p.net_connections("tcp4") if c.laddr and c.laddr.ip in (host, "0.0.0.0"))
         except psutil.AccessDenied:
             return ()
 
     @staticmethod
-    def _get_active_net_connections() -> Iterable[int]:
-        """ Get all active TCP4 connections on the system. """
+    def _get_active_net_connections(host: str = "") -> Iterable[int]:
+        """ Get active TCP4 ports on the system matching the given host (or all if empty/0.0.0.0). """
         # Don't even try to check if system using AIX
         if psutil.AIX:
             return ()
 
         try:
-            return (c.laddr.port for c in psutil.net_connections("tcp4") if c.laddr)
+            if not host or host == "0.0.0.0":
+                return (c.laddr.port for c in psutil.net_connections("tcp4") if c.laddr)
+            return (c.laddr.port for c in psutil.net_connections("tcp4") if c.laddr and c.laddr.ip in (host, "0.0.0.0"))
         # raises AccessDenied when done on macOS
         except psutil.AccessDenied:
             # flatten the list of iterables
-            return itertools.chain.from_iterable(map(
-                RandomPortSocketCreator._try_conns_per_process,
-                psutil.process_iter(["net_connections"])
-            ))
+            return itertools.chain.from_iterable(
+                RandomPortSocketCreator._try_conns_per_process(p, host)
+                for p in psutil.process_iter(["net_connections"])
+            )
 
-    def _get_used_ports(self) -> frozenset[int]:
+    def _get_used_ports(self, host: str = "") -> frozenset[int]:
         """ Get currently used ports with 90-second caching. """
         t_hash = round(time.monotonic() / 90)
         if self._used_ports_cache is None or self._used_ports_cache[1] != t_hash:
-            self._used_ports_cache = (frozenset(self._get_active_net_connections()), t_hash)
+            self._used_ports_cache = (frozenset(self._get_active_net_connections(host)), t_hash)
 
         return self._used_ports_cache[0]
 
     def create(self, host: str) -> socket.socket:
         """ Create a server socket on an available port. """
         valid_ports, ephemeral_allowed = self._parsed_ports
-        used_ports = self._get_used_ports()
+        used_ports = self._get_used_ports(host)
 
         next_index = self._next_port_index
         for i, port in enumerate(itertools.chain(valid_ports[next_index:], valid_ports[:next_index])):
@@ -326,6 +331,7 @@ def run_server_process(
         cert_key_file: str | None,
         host: str,
         game_ports: Iterable[str | int],
+        game_bind_address: str,
         rooms_to_run: multiprocessing.Queue,
         rooms_shutting_down: multiprocessing.Queue,
 ) -> None:
@@ -381,7 +387,7 @@ def run_server_process(
         with Locker(f"RoomLocker {room_id}"):
             try:
                 logger = set_up_logging(room_id)
-                ctx = WebHostContext(static_server_data, games_package_cache, logger)
+                ctx = WebHostContext(static_server_data, games_package_cache, logger, game_bind_address)
                 ctx.load(room_id)
                 ctx.init_save()
                 assert ctx.server is None
