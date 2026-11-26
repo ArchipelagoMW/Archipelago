@@ -1366,14 +1366,25 @@ class DaemonThreadPoolExecutor(concurrent.futures.ThreadPoolExecutor):
         num_threads = len(self._threads)
         if num_threads < self._max_workers:
             thread_name = f"{self._thread_name_prefix or self}_{num_threads}"
-            t = threading.Thread(
-                name=thread_name,
-                target=_worker,
-                args=(
+
+            if sys.version_info >= (3, 14, 0):
+                args = (
                     weakref.ref(self, weakref_cb),
                     self._create_worker_context(),
                     self._work_queue,
-                ),
+                )
+            else:
+                args = (
+                    weakref.ref(self, weakref_cb),
+                    self._work_queue,
+                    self._initializer,
+                    self._initargs,
+                )
+
+            t = threading.Thread(
+                name=thread_name,
+                target=_worker,
+                args=args,
                 daemon=True,
             )
             t.start()
