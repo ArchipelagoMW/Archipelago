@@ -73,6 +73,8 @@ class FFMQClient(SNIClient):
         ctx.rom = rom_name
         ctx.game = self.game
         ctx.items_handling = 0b001
+        ctx.want_slot_data = False
+
         return True
 
     async def game_watcher(self, ctx):
