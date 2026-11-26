@@ -183,7 +183,7 @@ def reduceMessageLengths(rom, rnd):
     lines = pkgutil.get_data(__name__, "marin.txt").splitlines(keepends=True)
     while lines and lines[-1].strip() == b'':
         lines.pop(-1)
-    rom.texts[0x01] = formatText(rnd.choice(lines).strip().decode("unicode_escape"))
+    rom.texts[0x01] = formatText(rnd.choice(lines).strip().decode("unicode_escape"), skip_names=True)
 
     # Reduce length of a bunch of common texts
     rom.texts[0xEA] = formatText("You've got a Guardian Acorn!")
