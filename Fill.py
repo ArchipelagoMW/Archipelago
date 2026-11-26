@@ -961,6 +961,15 @@ def fill_restrictive(multiworld: MultiWorld, base_state: CollectionState, locati
                 location.progress_type = location.progress_type.DEFAULT
             fill_restrictive(multiworld, base_state, excluded_locations, unplaced_items, single_player_placement, lock,
                              swap, on_place, allow_partial, False)
+            i = 0
+            location_count = len(locations)
+            while i < location_count:
+                location = locations[i]
+                if location.item is not None:
+                    del locations[i]
+                    location_count -= 1
+                    continue
+                i += 1
             for location in excluded_locations:
                 if not location.item:
                     location.progress_type = location.progress_type.EXCLUDED
