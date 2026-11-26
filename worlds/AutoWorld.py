@@ -92,7 +92,7 @@ class AutoWorldRegister(type):
         new_class.__file__ = sys.modules[new_class.__module__].__file__
         if "game" in dct:
             if dct["game"] in AutoWorldRegister.world_types:
-                raise RuntimeError(f"""Game {dct["game"]} already registered in 
+                raise RuntimeError(f"""Game {dct["game"]} already registered in
                 {AutoWorldRegister.world_types[dct["game"]].__file__} when attempting to register from
                 {new_class.__file__}.""")
             AutoWorldRegister.world_types[dct["game"]] = new_class
@@ -323,7 +323,7 @@ class World(metaclass=AutoWorldRegister):
 
     explicit_indirect_conditions: bool = True
     """If True, the world implementation is supposed to use MultiWorld.register_indirect_condition() correctly.
-    If False, everything is rechecked at every step, which is slower computationally, 
+    If False, everything is rechecked at every step, which is slower computationally,
     but may be desirable in complex/dynamic worlds."""
 
     multiworld: "MultiWorld"
@@ -613,18 +613,29 @@ class World(metaclass=AutoWorldRegister):
 
     @classmethod
     def get_data_package_data(cls) -> "GamesPackage":
-        sorted_item_name_groups = {
-            name: sorted(cls.item_name_groups[name]) for name in sorted(cls.item_name_groups)
-        }
-        sorted_location_name_groups = {
-            name: sorted(cls.location_name_groups[name]) for name in sorted(cls.location_name_groups)
-        }
+        """
+        Returns the item/location name to id mappings as well as item/location groups.
+        The groups are sorted alphabetically and all names are upcast to strings as necessary.
+        """
+        def sanitize_name(name: str) -> str:
+            if not isinstance(name, str):
+                raise ValueError(f"All item/location names must be strings. {type(name)} does not qualify.")
+            else:
+                return str(name) # Effectively upcasts inherited classes like StrEnum so they can be serialized.
+        def sort_and_sanitize_name_groups(name_groups: dict[str, list[str]]) -> dict[str, list[str]]:
+            return {
+                sanitize_name(group_name): [
+                    sanitize_name(individual_name) for individual_name in sorted(name_groups[group_name])
+                ] for group_name in sorted(name_groups)
+            }
+        def sanitize_name_to_id(name_to_id: dict[str, int]):
+            return {sanitize_name(name): id for name, id in name_to_id.items()}
+
         res: "GamesPackage" = {
-            # sorted alphabetically
-            "item_name_groups": sorted_item_name_groups,
-            "item_name_to_id": cls.item_name_to_id,
-            "location_name_groups": sorted_location_name_groups,
-            "location_name_to_id": cls.location_name_to_id,
+            "item_name_groups": sort_and_sanitize_name_groups(cls.item_name_groups),
+            "item_name_to_id": sanitize_name_to_id(cls.item_name_to_id),
+            "location_name_groups": sort_and_sanitize_name_groups(cls.location_name_groups),
+            "location_name_to_id": sanitize_name_to_id(cls.location_name_to_id),
         }
         res["checksum"] = data_package_checksum(res)
         return res
