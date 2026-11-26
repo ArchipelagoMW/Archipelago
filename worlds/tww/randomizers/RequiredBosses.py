@@ -29,6 +29,7 @@ class RequiredBossesRandomizer:
         self.banned_locations: set[str] = set()
         self.banned_dungeons: set[str] = set()
         self.banned_bosses: list[str] = []
+        self.skip_randomization = False
 
     def validate_boss_options(self, options: TWWOptions) -> None:
         """
@@ -51,6 +52,10 @@ class RequiredBossesRandomizer:
 
         :raises OptionError: If the randomization fails to meet user-defined constraints.
         """
+        # Skip randomization if required bosses were already restored from Universal Tracker
+        if self.skip_randomization:
+            return
+
         options = self.world.options
 
         # Validate constraints on required bosses options.
