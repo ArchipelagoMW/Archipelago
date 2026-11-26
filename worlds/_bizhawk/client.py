@@ -19,7 +19,7 @@ def launch_client(*args) -> None:
 
 
 component = Component("BizHawk Client", "BizHawkClient", component_type=Type.CLIENT, func=launch_client,
-                      file_identifier=SuffixIdentifier(),
+                      file_identifier=SuffixIdentifier(), supports_uri=True,
                       description="Open the BizHawk client, to play games using the Bizhawk emulator.")
 components.append(component)
 
@@ -38,6 +38,7 @@ class AutoBizHawkClientRegister(abc.ABCMeta):
 
             if "game" in namespace:
                 AutoBizHawkClientRegister.game_handlers[systems][namespace["game"]] = new_class()
+                component.game_name.append(namespace["game"])
 
         # Update launcher component's suffixes
         if "patch_suffix" in namespace:
