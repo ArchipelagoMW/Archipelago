@@ -6,6 +6,7 @@ import sys
 import webbrowser
 from enum import Enum
 from typing import Optional, Callable, Iterable, Sequence
+from typing_extensions import deprecated
 
 from Launcher import launch as launch_exe
 from Utils import local_path, open_filename, is_frozen, is_kivy_running, open_file, user_path, read_apignore, \
@@ -284,24 +285,11 @@ def identify(path: None | str) -> tuple[None | str, None | Component]:
 
 def open_host_yaml():
     import settings
-    import subprocess
-    from shutil import which
-    from Utils import is_linux, is_macos, env_cleared_lib_path
     s = settings.get_settings()
     file = s.filename
     s.save()
     assert file, "host.yaml missing"
-    if is_linux:
-        exe = which('sensible-editor') or which('gedit') or \
-              which('xdg-open') or which('gnome-open') or which('kde-open')
-    elif is_macos:
-        exe = which("open")
-    else:
-        webbrowser.open(file)
-        return
-
-    env = env_cleared_lib_path()
-    subprocess.Popen([exe, file], env=env)
+    open_file(file)
 
 def generate_yamls(*args):
     import argparse
@@ -315,31 +303,16 @@ def generate_yamls(*args):
     target = user_path("Players", "Templates")
     generate_yaml_templates(target, False)
     if not args.skip_open_folder:
-        open_folder(target)
+        open_file(target)
 
 
 def browse_files():
-    open_folder(user_path())
+    open_file(user_path())
 
 
+@deprecated("open_folder is deprecated in favor of Utils.open_file and will be removed in a future version.")
 def open_folder(folder_path):
-    import subprocess
-    from shutil import which
-    from Utils import is_linux, is_macos, env_cleared_lib_path
-
-    if is_linux:
-        exe = which('xdg-open') or which('gnome-open') or which('kde-open')
-    elif is_macos:
-        exe = which("open")
-    else:
-        webbrowser.open(folder_path)
-        return
-
-    if exe:
-        env = env_cleared_lib_path()
-        subprocess.Popen([exe, folder_path], env=env)
-    else:
-        logging.warning(f"No file browser available to open {folder_path}")
+    open_file(folder_path)
 
 
 components: list[Component] = [
@@ -464,7 +437,7 @@ if not is_frozen():
                 zf.writestr(apworld.manifest_path, json.dumps(manifest))
 
         if not args.skip_open_folder:
-            open_folder(apworlds_folder)
+            open_file(apworlds_folder)
 
     components.append(Component("Build APWorlds", func=_build_apworlds, cli=True,
                                 description="Build APWorlds from loose-file world folders."))

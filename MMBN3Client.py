@@ -294,8 +294,7 @@ async def run_game(romfile):
     from worlds.mmbn3 import MMBN3World
     auto_start = MMBN3World.settings.rom_start
     if auto_start is True:
-        import webbrowser
-        webbrowser.open(romfile)
+        Utils.open_file(romfile)
     elif os.path.isfile(auto_start):
         subprocess.Popen([auto_start, romfile],
                          stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
