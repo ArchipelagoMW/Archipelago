@@ -148,11 +148,11 @@ location_description = {  # TODO change keys to global strings
                      "windmill.",
 }
 
-shapesanity_simple: dict[str, str] = {}
-shapesanity_1_4: dict[str, str] = {}
-shapesanity_two_sided: dict[str, str] = {}
-shapesanity_three_parts: dict[str, str] = {}
-shapesanity_four_parts: dict[str, str] = {}
+shapesanity_simple: tuple[tuple[str, str], ...] = ()
+shapesanity_1_4: tuple[tuple[str, str], ...] = ()
+shapesanity_two_sided: tuple[tuple[str, str], ...] = ()
+shapesanity_three_parts: tuple[tuple[str, str], ...] = ()
+shapesanity_four_parts: tuple[tuple[str, str], ...] = ()
 
 level_locations: list[str] = ([LOCATIONS.level(1, 1), LOCATIONS.level(20, 1), LOCATIONS.level(20, 2)]
                               + [LOCATIONS.level(x) for x in range(1, max_levels_and_upgrades)])
@@ -177,12 +177,13 @@ shapesanity_locations: list[str] = [LOCATIONS.shapesanity(x) for x in range(1, m
 
 def init_shapesanity_pool() -> None:
     """Imports the pregenerated shapesanity pool."""
+    global shapesanity_simple, shapesanity_1_4, shapesanity_two_sided, shapesanity_three_parts, shapesanity_four_parts
     from .data import shapesanity_pool
-    shapesanity_simple.update(shapesanity_pool.shapesanity_simple)
-    shapesanity_1_4.update(shapesanity_pool.shapesanity_1_4)
-    shapesanity_two_sided.update(shapesanity_pool.shapesanity_two_sided)
-    shapesanity_three_parts.update(shapesanity_pool.shapesanity_three_parts)
-    shapesanity_four_parts.update(shapesanity_pool.shapesanity_four_parts)
+    shapesanity_simple = shapesanity_pool.shapesanity_simple
+    shapesanity_1_4 = shapesanity_pool.shapesanity_1_4
+    shapesanity_two_sided = shapesanity_pool.shapesanity_two_sided
+    shapesanity_three_parts = shapesanity_pool.shapesanity_three_parts
+    shapesanity_four_parts = shapesanity_pool.shapesanity_four_parts
 
 
 def addlevels(maxlevel: int, logictype: str,
@@ -484,7 +485,7 @@ def addshapesanity(amount: int, random: Random, append_shapesanity: Callable[[st
         add_alias(name, alias)
 
     # Always have at least 4 shapesanity checks because of sphere 1 usefulls + both hardcore logic
-    shapes_list = list(shapesanity_simple.items())
+    shapes_list = list(shapesanity_simple)
     f(LOCATIONS.shapesanity(1), REGIONS.sanity(REGIONS.full, REGIONS.uncol),
       SHAPESANITY.full(SHAPESANITY.uncolored, SHAPESANITY.circle))
     f(LOCATIONS.shapesanity(2), REGIONS.sanity(REGIONS.full, REGIONS.uncol),
@@ -498,16 +499,16 @@ def addshapesanity(amount: int, random: Random, append_shapesanity: Callable[[st
     switched = 0
     for counting in range(4, amount):
         if switched == 0 and (len(shapes_list) == 0 or counting == amount//2):
-            shapes_list = list(shapesanity_1_4.items())
+            shapes_list = list(shapesanity_1_4)
             switched = 1
         elif switched == 1 and (len(shapes_list) == 0 or counting == amount*7//12):
-            shapes_list = list(shapesanity_two_sided.items())
+            shapes_list = list(shapesanity_two_sided)
             switched = 2
         elif switched == 2 and (len(shapes_list) == 0 or counting == amount*5//6):
-            shapes_list = list(shapesanity_three_parts.items())
+            shapes_list = list(shapesanity_three_parts)
             switched = 3
         elif switched == 3 and (len(shapes_list) == 0 or counting == amount*11//12):
-            shapes_list = list(shapesanity_four_parts.items())
+            shapes_list = list(shapesanity_four_parts)
             switched = 4
         x = random.randint(0, len(shapes_list)-1)
         next_shape = shapes_list.pop(x)
@@ -523,14 +524,14 @@ def addshapesanity_ut(shapesanity_names: list[str], add_alias: Callable[[str, st
     """Returns the same information as addshapesanity but will add specific values based on a UT rebuild."""
 
     included_shapes: dict[str, tuple[str, LocationProgressType]] = {}
+    all_shapesanity: dict[str, str] = {
+        shape: region for option in (shapesanity_simple, shapesanity_1_4, shapesanity_two_sided,
+                                     shapesanity_three_parts, shapesanity_four_parts) for shape, region in option
+    }
 
     for name in shapesanity_names:
-        for options in [shapesanity_simple, shapesanity_1_4, shapesanity_two_sided, shapesanity_three_parts,
-                        shapesanity_four_parts]:
-            if name in options:
-                next_shape = options[name]
-                break
-        else:
+        next_shape = all_shapesanity.get(name, None)
+        if next_shape is None:
             raise ValueError(f"Could not find shapesanity name {name}")
         included_shapes[LOCATIONS.shapesanity(len(included_shapes)+1)] = (next_shape, LocationProgressType.DEFAULT)
         add_alias(LOCATIONS.shapesanity(len(included_shapes)), name)
