@@ -6,8 +6,8 @@ class Overcooked2Location(Location):
     game: str = "Overcooked! 2"
 
 
-oc2_location_name_to_id = dict()
-oc2_location_id_to_name = dict()
+oc2_location_name_to_id = {}
+oc2_location_id_to_name = {}
 for level in Overcooked2Level():
     if level.level_id == 36:
         continue  # level 6-6 does not have an item location

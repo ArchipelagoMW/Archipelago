@@ -1,5 +1,5 @@
 from BaseClasses import Item
-from typing import NamedTuple, Dict
+from typing import NamedTuple
 from .Overcooked2Levels import Overcooked2Dlc
 
 class ItemData(NamedTuple):
@@ -12,7 +12,7 @@ class Overcooked2Item(Item):
 
 oc2_base_id = 213700
 
-item_table: Dict[str, ItemData] = {
+item_table: dict[str, ItemData] = {
     "Wood"                          : ItemData(oc2_base_id + 1 ),
     "Coal Bucket"                   : ItemData(oc2_base_id + 2 ),
     "Spare Plate"                   : ItemData(oc2_base_id + 3 ),
@@ -145,11 +145,11 @@ vanilla_values = {
     "DisablePurpleRampButton" : False,
 }
 
-item_id_to_name: Dict[int, str] = {
+item_id_to_name: dict[int, str] = {
     data.code: item_name for item_name, data in item_table.items() if data.code
 }
 
-item_name_to_id: Dict[str, int] = {
+item_name_to_id: dict[str, int] = {
     item_name: data.code for item_name, data in item_table.items() if data.code
 }
 
@@ -158,12 +158,12 @@ def is_progression(item_name: str) -> bool:
     return not item_name.endswith("Emote")
 
 
-def item_to_unlock_event(item_name: str) -> Dict[str, str]:
+def item_to_unlock_event(item_name: str) -> dict[str, str]:
     message = f"{item_name} Acquired!"
     action = ""
     payload = ""
     if item_name.startswith("Kevin"):
-        kevin_num = int(item_name.split("-")[-1])
+        kevin_num = int(item_name.rsplit("-", maxsplit=1)[-1])
         action = "UNLOCK_LEVEL"
         payload = str(kevin_num + 36)
     elif item_name == "Emote Wheel":
