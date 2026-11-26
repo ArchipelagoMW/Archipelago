@@ -23,7 +23,11 @@ from worlds.generic.Rules import exclusion_rules, locality_rules
 __all__ = ["main"]
 
 
-def main(args, seed=None, baked_server_options: dict[str, object] | None = None):
+def main(args,
+         seed: int | None = None,
+         baked_server_options: dict[str, object] | None = None,
+         is_webhost_gen: bool = False,
+         ):
     if not baked_server_options:
         baked_server_options = get_settings().server_options.as_dict()
     assert isinstance(baked_server_options, dict)
@@ -220,7 +224,7 @@ def main(args, seed=None, baked_server_options: dict[str, object] | None = None)
         return multiworld
 
     logger.info(f'Beginning output...')
-    outfilebase = 'AP_' + multiworld.seed_name
+    outfilebase = "AP_" + multiworld.seed_name
 
     if args.spoiler_only:
         if args.spoiler > 1:
@@ -344,7 +348,7 @@ def main(args, seed=None, baked_server_options: dict[str, object] | None = None)
                     "version": (version_tuple.major, version_tuple.minor, version_tuple.build),
                     "tags": ["AP"],
                     "minimum_versions": minimum_versions,
-                    "seed_name": multiworld.seed_name,
+                    "seed_name": ("AP_W" if is_webhost_gen else "AP_") + multiworld.seed_name,
                     "spheres": spheres,
                     "datapackage": data_package,
                     "race_mode": int(multiworld.is_race),
