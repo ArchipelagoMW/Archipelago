@@ -579,8 +579,8 @@ bonk_addresses = [0x4CF6C, 0x4CFBA, 0x4CFE0, 0x4CFFB, 0x4D018, 0x4D01B, 0x4D028,
                   0x4D504, 0x4D507, 0x4D55E, 0x4D56A]
 
 
-def get_nonnative_item_sprite(code: int) -> int:
-    if 84173 >= code >= 84007:  # LttP item in SMZ3
+def get_nonnative_item_sprite(code: int, game: str) -> int:
+    if game == "SMZ3" and 84173 >= code >= 84007:  # LttP item in SMZ3
         return code - 84000
     return 0x6B  # set all non-native sprites to Power Star as per 13 to 2 vote at
     # https://discord.com/channels/731205301247803413/827141303330406408/852102450822905886
@@ -609,7 +609,7 @@ def patch_rom(multiworld: MultiWorld, rom: LocalRom, player: int):
                     if location.item.trap:
                         itemid = 0x5A  # Nothing, which disguises
                     else:
-                        itemid = get_nonnative_item_sprite(location.item.code)
+                        itemid = get_nonnative_item_sprite(location.item.code, location.item.game)
                 # Keys in their native dungeon should use the orignal item code for keys
                 elif location.parent_region.dungeon:
                     if location.parent_region.dungeon.is_dungeon_item(location.item):
@@ -1683,7 +1683,10 @@ def write_custom_shops(rom: LocalRom, multiworld: MultiWorld, player: int):
             replacement_price_data = get_price_data(item['replacement_price'], item['replacement_price_type'])
             slot = 0 if shop.type == ShopType.TakeAny else index
             if item['player'] and multiworld.game[item['player']] != "A Link to the Past":  # item not native to ALTTP
-                item_code = get_nonnative_item_sprite(multiworld.worlds[item['player']].item_name_to_id[item['item']])
+                item_code = get_nonnative_item_sprite(
+                    multiworld.worlds[item['player']].item_name_to_id[item['item']],
+                    multiworld.game[item['player']],
+                )
             else:
                 item_code = item_table[item["item"]].item_code
                 if item['item'] == 'Single Arrow' and item['player'] == 0 and multiworld.worlds[player].options.retro_bow:
