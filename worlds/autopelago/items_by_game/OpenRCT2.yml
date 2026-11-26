@@ -1,0 +1,6 @@
+- [['Cheese Stall', 'Spider Stall'], [well_fed]]
+- ['Mouse Convention', [startled, distracted]]
+- ['Wooden Wild Rat Coaster', [distracted]]
+- [['Allow Brie Removal', 'Allow Spiderweb Removal'], []]
+- name: '1 Rat Guest'
+  rat_count: 1
