@@ -6,7 +6,7 @@ class TestDesertPalace(TestDungeon):
     def testDesertPalace(self):
         self.starting_regions = ['Desert Palace North', 'Desert Palace Main (Inner)', 'Desert Palace Main (Outer)']
         self.run_tests([
-            ["Desert Palace - Map Chest", True, []],
+            ["Desert Palace - Wide Room Chest", True, []],
 
             ["Desert Palace - Big Chest", False, []],
             ["Desert Palace - Big Chest", False, [], ['Big Key (Desert Palace)']],
@@ -16,17 +16,17 @@ class TestDesertPalace(TestDungeon):
             ["Desert Palace - Torch", False, [], ['Pegasus Boots']],
             ["Desert Palace - Torch", True, ['Pegasus Boots']],
 
-            ["Desert Palace - Compass Chest", False, []],
-            ["Desert Palace - Compass Chest", False, [], ['Small Key (Desert Palace)']],
-            ["Desert Palace - Compass Chest", False, ['Progressive Sword', 'Hammer', 'Fire Rod', 'Ice Rod', 'Progressive Bow', 'Cane of Somaria', 'Cane of Byrna']],
-            ["Desert Palace - Compass Chest", True, ['Small Key (Desert Palace)', 'Small Key (Desert Palace)', 'Small Key (Desert Palace)', 'Small Key (Desert Palace)']],
-            ["Desert Palace - Compass Chest", True, ['Progressive Sword', 'Small Key (Desert Palace)', 'Small Key (Desert Palace)', 'Small Key (Desert Palace)', 'Small Key (Desert Palace)']],
+            ["Desert Palace - Pre-Cannonball Chest", False, []],
+            ["Desert Palace - Pre-Cannonball Chest", False, [], ['Small Key (Desert Palace)']],
+            ["Desert Palace - Pre-Cannonball Chest", False, ['Progressive Sword', 'Hammer', 'Fire Rod', 'Ice Rod', 'Progressive Bow', 'Cane of Somaria', 'Cane of Byrna']],
+            ["Desert Palace - Pre-Cannonball Chest", True, ['Small Key (Desert Palace)', 'Small Key (Desert Palace)', 'Small Key (Desert Palace)', 'Small Key (Desert Palace)']],
+            ["Desert Palace - Pre-Cannonball Chest", True, ['Progressive Sword', 'Small Key (Desert Palace)', 'Small Key (Desert Palace)', 'Small Key (Desert Palace)', 'Small Key (Desert Palace)']],
 
-            ["Desert Palace - Big Key Chest", False, []],
-            ["Desert Palace - Big Key Chest", False, [], ['Small Key (Desert Palace)']],
-            ["Desert Palace - Big Key Chest", False, ['Progressive Sword', 'Hammer', 'Fire Rod', 'Ice Rod', 'Progressive Bow', 'Cane of Somaria', 'Cane of Byrna']],
-            ["Desert Palace - Big Key Chest", False, ['Small Key (Desert Palace)', 'Small Key (Desert Palace)', 'Small Key (Desert Palace)', 'Small Key (Desert Palace)']],
-            ["Desert Palace - Big Key Chest", True, ['Progressive Sword', 'Small Key (Desert Palace)', 'Small Key (Desert Palace)', 'Small Key (Desert Palace)', 'Small Key (Desert Palace)']],
+            ["Desert Palace - Post-Cannonball Chest", False, []],
+            ["Desert Palace - Post-Cannonball Chest", False, [], ['Small Key (Desert Palace)']],
+            ["Desert Palace - Post-Cannonball Chest", False, ['Progressive Sword', 'Hammer', 'Fire Rod', 'Ice Rod', 'Progressive Bow', 'Cane of Somaria', 'Cane of Byrna']],
+            ["Desert Palace - Post-Cannonball Chest", False, ['Small Key (Desert Palace)', 'Small Key (Desert Palace)', 'Small Key (Desert Palace)', 'Small Key (Desert Palace)']],
+            ["Desert Palace - Post-Cannonball Chest", True, ['Progressive Sword', 'Small Key (Desert Palace)', 'Small Key (Desert Palace)', 'Small Key (Desert Palace)', 'Small Key (Desert Palace)']],
 
             ["Desert Palace - Desert Tiles 1 Pot Key", True, []],
 
