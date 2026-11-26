@@ -9,10 +9,10 @@ from json import JSONEncoder, JSONDecoder
 if typing.TYPE_CHECKING:
     from websockets import WebSocketServerProtocol as ServerConnection
 
-from Utils import ByValue, Version
+from Utils import Version
 
 
-class HintStatus(ByValue, enum.IntEnum):
+class HintStatus(enum.IntEnum):
     HINT_UNSPECIFIED = 0
     HINT_NO_PRIORITY = 10
     HINT_AVOID = 20
@@ -33,7 +33,7 @@ class JSONMessagePart(typing.TypedDict, total=False):
     hint_status: HintStatus
 
 
-class ClientStatus(ByValue, enum.IntEnum):
+class ClientStatus(enum.IntEnum):
     CLIENT_UNKNOWN = 0
     CLIENT_CONNECTED = 5
     CLIENT_READY = 10
@@ -41,7 +41,7 @@ class ClientStatus(ByValue, enum.IntEnum):
     CLIENT_GOAL = 30
 
 
-class SlotType(ByValue, enum.IntFlag):
+class SlotType(enum.IntFlag):
     spectator = 0b00
     player = 0b01
     group = 0b10
@@ -52,7 +52,7 @@ class SlotType(ByValue, enum.IntFlag):
         return self.value != 0b01
 
 
-class Permission(ByValue, enum.IntFlag):
+class Permission(enum.IntFlag):
     disabled = 0b000  # 0, completely disables access
     enabled = 0b001  # 1, allows manual use
     goal = 0b010  # 2, allows manual use after goal completion
