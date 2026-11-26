@@ -2,6 +2,9 @@ from ..game_data.local_data import item_id_table
 import random
 from typing import Any
 
+# In case any other game is SOMEHOW gifting a Key Item,
+# don't convert into an EB key item
+# The only one I could realistically see happening is 'Diamond'
 gift_exclusions = [
     "Franklin Badge",
     "Pak of Bubble Gum",
