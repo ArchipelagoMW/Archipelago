@@ -504,10 +504,21 @@ class CommonContext:
             self.disconnected_intentionally = True
             if self.cancel_autoreconnect():
                 logger.info("Cancelled auto-reconnect.")
-        if self.server and not self.server.socket.closed:
-            await self.server.socket.close()
-        if self.server_task is not None:
-            await self.server_task
+        server_task = self.server_task
+        if server_task is not None and self.input_requests > 0 and server_task is not asyncio.current_task():
+            cancel_pending_input = True
+            self.input_requests = 0
+            server_task.cancel()
+        else:
+            cancel_pending_input = False
+            if self.server and not self.server.socket.closed:
+                await self.server.socket.close()
+        if server_task is not None:
+            try:
+                await server_task
+            except asyncio.CancelledError:
+                if not cancel_pending_input:
+                    raise
         if self.ui:
             self.ui.update_hints()
 
