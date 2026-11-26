@@ -47,7 +47,7 @@ jobs:
           - python: {version: '3.13'}  # current
             os: windows-latest
           - python: {version: '3.13'}  # current
-            os: macos-latest
+            os: macos-26-intel
 
     steps:
     - uses: actions/checkout@v6.0.2
