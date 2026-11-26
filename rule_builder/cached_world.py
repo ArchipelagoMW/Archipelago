@@ -80,12 +80,8 @@ class CachedRuleBuilderWorld(World):
     def collect(self, state: CollectionState, item: Item) -> bool:
         changed = super().collect(state, item)
         if changed and self.rule_item_dependencies:
-            player_results = cast(dict[int, bool], state.rule_builder_cache[self.player])  # pyright: ignore[reportAttributeAccessIssue, reportUnknownMemberType]
-            mapped_name = self.item_mapping.get(item.name, "")
-            rule_ids = self.rule_item_dependencies[item.name] | self.rule_item_dependencies[mapped_name]
-            for rule_id in rule_ids:
-                if player_results.get(rule_id, None) is False:
-                    del player_results[rule_id]
+            state.rule_builder_deferred_item_dependency_updates[self.player].add(item.name)  # pyright: ignore[reportAttributeAccessIssue, reportUnknownMemberType]
+            return True
 
         return changed
 
@@ -134,13 +130,19 @@ class CachedRuleBuilderWorld(World):
 class CachedRuleBuilderLogicMixin(LogicMixin):
     multiworld: MultiWorld  # pyright: ignore[reportUninitializedInstanceVariable]
     rule_builder_cache: dict[int, dict[int, bool]]  # pyright: ignore[reportUninitializedInstanceVariable]
+    rule_builder_deferred_item_dependency_updates: dict[int, set[str]]  # pyright: ignore[reportUninitializedInstanceVariable]
 
     def init_mixin(self, multiworld: "MultiWorld") -> None:
         players = multiworld.get_all_ids()
         self.rule_builder_cache = {player: {} for player in players}
+        self.rule_builder_deferred_item_dependency_updates = {player: set() for player in players}
 
     def copy_mixin(self, new_state: "CachedRuleBuilderLogicMixin") -> "CachedRuleBuilderLogicMixin":
         new_state.rule_builder_cache = {
             player: player_results.copy() for player, player_results in self.rule_builder_cache.items()
+        }
+        new_state.rule_builder_deferred_item_dependency_updates = {
+            player: pending_updates.copy()
+            for player, pending_updates in self.rule_builder_deferred_item_dependency_updates.items()
         }
         return new_state
