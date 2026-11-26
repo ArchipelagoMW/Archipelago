@@ -236,10 +236,7 @@ class MyGameClient(BizHawkClient):
 
             # Check locations
             if save_data[2] & 0x04:
-                await ctx.send_msgs([{
-                    "cmd": "LocationChecks",
-                    "locations": [23]
-                }])
+                await ctx.check_locations([23])
 
             # Send game clear
             if not ctx.finished_game and (save_data[5] & 0x01):
