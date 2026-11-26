@@ -1,7 +1,7 @@
 import argparse
 import os
-import multiprocessing
 import logging
+import multiprocessing
 import typing
 
 import ModuleUpdate
@@ -12,7 +12,6 @@ ModuleUpdate.update()
 # in case app gets imported by something like gunicorn
 import Utils
 import settings
-from Utils import get_file_safe_name
 
 if typing.TYPE_CHECKING:
     from flask import Flask

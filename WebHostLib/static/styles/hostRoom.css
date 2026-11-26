@@ -59,6 +59,23 @@
     max-height: 400px;
 }
 
+#command-form{
+    max-width: 100%;
+}
+
+#color-console{
+    font-size: 14px;
+    width: 60%;
+    background-color: #222535;
+    border-radius: 6px;
+    float: left;
+    margin-bottom: 4px;
+    padding-left: 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    flex-grow: 0;
+}
+
 .loader{
   display: inline-block;
   visibility: hidden;

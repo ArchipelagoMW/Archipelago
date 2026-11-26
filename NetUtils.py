@@ -1,13 +1,19 @@
 from __future__ import annotations
 
-from collections.abc import Mapping, Sequence
-import typing
 import enum
+import shlex
+import typing
 import warnings
+from collections.abc import Mapping, Sequence
+from dataclasses import dataclass
+import inspect
+from colorsys import hls_to_rgb, rgb_to_hls
+from itertools import chain, repeat
 from json import JSONEncoder, JSONDecoder
 
 if typing.TYPE_CHECKING:
     from websockets import WebSocketServerProtocol as ServerConnection
+    from CommonClient import CommonContext
 
 from Utils import ByValue, Version
 
@@ -254,22 +260,24 @@ class JSONTypes(str, enum.Enum):
     hint_status = "hint_status"
 
 
+color_rgb = {
+    # not exact color names, close enough but decent looking
+    "black": "000000",
+    "red": "EE0000",
+    "green": "00FF7F",
+    "yellow": "FAFA40",
+    "blue": "6495ED",
+    "magenta": "EE00EE",
+    "cyan": "00EEEE",
+    "slateblue": "6D8BE8",
+    "plum": "AF99EF",
+    "salmon": "FA8072",
+    "white": "FFFFFF",
+    "orange": "FF7700",
+}
+
 class JSONtoTextParser(metaclass=HandlerMeta):
-    color_codes = {
-        # not exact color names, close enough but decent looking
-        "black": "000000",
-        "red": "EE0000",
-        "green": "00FF7F",
-        "yellow": "FAFAD2",
-        "blue": "6495ED",
-        "magenta": "EE00EE",
-        "cyan": "00EEEE",
-        "slateblue": "6D8BE8",
-        "plum": "AF99EF",
-        "salmon": "FA8072",
-        "white": "FFFFFF",
-        "orange": "FF7700",
-    }
+    color_codes = color_rgb
 
     def __init__(self, ctx):
         self.ctx = ctx
@@ -284,6 +292,10 @@ class JSONtoTextParser(metaclass=HandlerMeta):
 
     def _handle_color(self, node: JSONMessagePart):
         codes = node["color"].split(";")
+        for i, code in enumerate(codes):
+            if code.endswith("_dark"):
+                codes[i] = "gray"
+
         buffer = "".join(color_code(code) for code in codes if code in color_codes)
         return buffer + self._handle_text(node) + color_code("reset")
 
@@ -338,15 +350,29 @@ class JSONtoTextParser(metaclass=HandlerMeta):
         return self._handle_color(node)
 
 
+def get_dark_color(color: str, color_codes: dict[str, str]) -> str | None:
+    color_code = color_codes.get(color)
+    if color_code:
+        r, g, b = [int(part, 16) / 255 for part in (color_code[:2], color_code[2:4], color_code[4:])]
+        h, l, s = rgb_to_hls(r, g, b)
+        color_code = "".join(f"{int(255 * part):02X}" for part in hls_to_rgb(h, l / 1.8, s / 2.5))
+
+    return color_code
+
+
 class RawJSONtoTextParser(JSONtoTextParser):
     def _handle_color(self, node: JSONMessagePart):
         return self._handle_text(node)
 
 
-color_codes = {'reset': 0, 'bold': 1, 'underline': 4, 'black': 30, 'red': 31, 'green': 32, 'yellow': 33, 'blue': 34,
-               'magenta': 35, 'cyan': 36, 'white': 37, 'black_bg': 40, 'red_bg': 41, 'green_bg': 42, 'yellow_bg': 43,
-               'blue_bg': 44, 'magenta_bg': 45, 'cyan_bg': 46, 'white_bg': 47,
-               'plum': 35, 'slateblue': 34, 'salmon': 31,}  # convert ui colors to terminal colors
+color_codes: dict[str, str] = {
+    "reset": "0", "bold": "1", "underline": "4", "black": "30", "red": "31", "green": "32", "yellow": "33",
+    "blue": "34", "magenta": "35", "cyan": "36", "white": "37", "black_bg": "40", "red_bg": "41", "green_bg": "42",
+    "yellow_bg": "43", "blue_bg": "44", "magenta_bg": "45", "cyan_bg": "46", "white_bg": "47",
+    # convert ui colors to terminal colors
+    "plum": "38;5;147", "slateblue": "38;5;68", "orange": "38;5;208", "salmon": "38;5;210",
+    "gray": "38;5;241",  # for grayed out text
+}
 
 
 def color_code(*args):
@@ -367,6 +393,297 @@ def add_json_item(parts: list, item_id: int, player: int = 0, item_flags: int = 
 
 def add_json_location(parts: list, location_id: int, player: int = 0, **kwargs) -> None:
     parts.append({"text": str(location_id), "player": player, "type": JSONTypes.location_id, **kwargs})
+
+
+def add_json_color(parts: list, text: typing.Any, color: str | None, **kwargs) -> None:
+    if color:
+        parts.append({"text": str(text), "type": "color", "color": color, **kwargs})
+    else:
+        add_json_text(parts, text, **kwargs)
+
+
+class CommandType(enum.IntEnum):
+    server_console = 0
+    client_connected = 1
+    client_always = 2
+
+
+@dataclass(frozen=True)
+class CommandData:
+    command: str
+    arg_types: Sequence[str | None]  # Specifies type for colors, or special value of "$int" for an integer
+    raw: bool
+    command_type: CommandType
+    vararg_type: str | None = "error"  # Type for after all arg_types are exhausted
+    starting_server_version: Version = Version(0, 6, 0)
+    required_tags: frozenset[str] = frozenset({"AP"})
+
+COMMAND_FORMS: tuple[CommandData, ...] = (
+    CommandData("!help", (), False, CommandType.client_connected),
+    CommandData("!license", (), False, CommandType.client_connected),
+    CommandData("!options", (), False, CommandType.client_connected),
+    CommandData("!admin", (), True, CommandType.client_connected),  # Special cased for forms and for following command
+    CommandData("!players", (), False, CommandType.client_connected),
+    CommandData("!status", (None,), False, CommandType.client_connected),
+    CommandData("!release", (), False, CommandType.client_connected),
+    CommandData("!collect", (), False, CommandType.client_connected),
+    CommandData("!countdown", ("$int",), False, CommandType.client_connected),
+    CommandData("!remaining", (), False, CommandType.client_connected),
+    CommandData("!missing", (None,), True, CommandType.client_connected),
+    CommandData("!checked", (None,), True, CommandType.client_connected),
+    CommandData("!alias", (None,), True, CommandType.client_connected),
+    CommandData("!getitem", ("item",), True, CommandType.client_connected),
+    CommandData("!hint", ("item",), True, CommandType.client_connected),
+    CommandData("!hint_location", ("location",), True, CommandType.client_connected),
+
+    CommandData("/help", (), False, CommandType.server_console),
+    CommandData("/license", (), False, CommandType.server_console),
+    CommandData("/options", (), False, CommandType.server_console),
+    CommandData("/save", (), False, CommandType.server_console),
+    CommandData("/players", (), False, CommandType.server_console),
+    CommandData("/status", (None,), False, CommandType.server_console),
+    CommandData("/exit", (), False, CommandType.server_console),
+    CommandData("/alias", (), True, CommandType.server_console),  # Special cased for taking a single arg then splitting
+    CommandData("/collect", ("player",), True, CommandType.server_console),
+    CommandData("/countdown", ("$int",), False, CommandType.server_console),
+    CommandData("/release", ("player",), True, CommandType.server_console),
+    CommandData("/allow_release", ("player",), True, CommandType.server_console),
+    CommandData("/forbid_release", ("player",), True, CommandType.server_console),
+    CommandData("/send_multiple", ("$int", "player"), False, CommandType.server_console, vararg_type="item"),
+    CommandData("/send", ("player",), False, CommandType.server_console, vararg_type="item"),
+    CommandData("/send_location", ("player",), False, CommandType.server_console, vararg_type="location"),
+    CommandData("/send_multiple", ("$int", "player"), True, CommandType.server_console, vararg_type="item"),
+    CommandData("/hint", ("player",), False, CommandType.server_console, vararg_type="item"),
+    CommandData("/hint_location", ("player",), False, CommandType.server_console, vararg_type="location"),
+    # Has special handling of available options
+    CommandData("/option", ("command", None), False, CommandType.server_console),
+    CommandData("/datastore", (), False, CommandType.server_console),
+
+    CommandData("/help", (), False, CommandType.client_always),
+    CommandData("/license", (), False, CommandType.client_always),
+    CommandData("/exit", (), False, CommandType.client_always),
+    CommandData("/connect", (None,), False, CommandType.client_always),
+    CommandData("/disconnect", (), False, CommandType.client_always),
+    CommandData("/received", (), False, CommandType.client_always),
+    CommandData("/missing", (None,), False, CommandType.client_always),
+    CommandData("/items", (), False, CommandType.client_always),
+    CommandData("/locations", (), False, CommandType.client_always),
+    CommandData("/item_groups", ("item",), True, CommandType.client_always),
+    CommandData("/location_groups", ("location",), True, CommandType.client_always),
+    CommandData("/ready", (), False, CommandType.client_always),
+
+    # Customserver-specific command
+    CommandData("!video", (None, None), False, CommandType.client_connected, required_tags=frozenset({"WebHost"})),
+)
+"""
+List of recognized commands and metadata for highlighting.
+Commands with mutliple version variants should be stored from newest to oldest.
+"""
+
+
+@dataclass(frozen=True)
+class OptionData:
+    option: str
+    val_type: str | None | tuple[str, ...]  # Either a single value like arg_type or a tuple listing possible values
+    starting_server_version: Version = Version(0, 6, 0)
+
+SERVER_OPTIONS = (
+    OptionData("hint_cost", "$int"),
+    OptionData("location_check_points", "$int"),
+    OptionData("server_password", None),
+    OptionData("password", None),
+    OptionData("release_mode", ("disabled", "enabled", "auto", "auto_enabled", "goal")),
+    OptionData("remaining_mode", ("disabled", "enabled", "goal")),
+    OptionData("collect_mode", ("disabled", "enabled", "auto", "auto_enabled", "goal")),
+    # countdown_mode first added in https://github.com/ArchipelagoMW/Archipelago/pull/5465
+    OptionData("countdown_mode", ("disabled", "enabled", "auto"), starting_server_version=Version(0, 6, 4)),
+    OptionData("item_cheat", None),
+    OptionData("compatibility", "$int"),
+)
+
+
+def _extract_matching_runs(text: str, args: list[str]) -> list[list[str]]:
+    # Annoyingly, shlex does not seem to provide a way to give information about the removed whitespace or escape chars,
+    # so run a comparison to the original text to extract them
+    subpart_list = [[] for _ in range(len(args))]
+    plain_index = 0
+    split_index = 0
+    tok_start = 0  # text[tok_start:plain_index] represents the current token being matched
+    cur_arg = 0
+    while plain_index < len(text):
+        if split_index >= len(args[cur_arg]):
+            # Hit end of arg, push token. Empty args can give a whitespace only token here
+            subpart_list[cur_arg].append((text[tok_start:plain_index], args[cur_arg] != ""))
+
+            # Check for any non-matching chars up until next whitespace
+            tok_start = plain_index
+            while not text[plain_index] in " \t\r\n":  # Default shlex whitespace
+                plain_index += 1
+                if plain_index == len(text):
+                    break
+            if plain_index > tok_start:
+                subpart_list[cur_arg].append((text[tok_start:plain_index], False))
+
+            tok_start = plain_index
+            cur_arg += 1
+            split_index = 0
+            # Now done after processing
+            if plain_index == len(text) or cur_arg == len(args):
+                break
+
+        if split_index >= len(args[cur_arg]) or text[plain_index] != args[cur_arg][split_index]:
+            # Hit a non-matching part that should be grayed out, push current token and parse rest of non-matching part
+            if plain_index > tok_start:
+                subpart_list[cur_arg].append((text[tok_start:plain_index], True))
+
+            tok_start = plain_index
+            while split_index < len(args[cur_arg]) and text[plain_index] != args[cur_arg][split_index]:
+                plain_index += 1
+            if plain_index > tok_start:
+                subpart_list[cur_arg].append((text[tok_start:plain_index], False))
+            tok_start = plain_index
+
+        split_index += 1
+        plain_index += 1
+    # Check for if there's a final token to be pushed
+    if plain_index > tok_start:
+        subpart_list[-1].append((text[tok_start:plain_index], True))
+
+    return subpart_list
+
+
+_basic_arg_colors = {
+    "item": "cyan", "location": "green", "player": "yellow",
+    "command": "orange", "unrecognized": "red", "error": "underline;red"
+}
+
+def get_arg_type_color(arg_type: str | None, arg_val: str = "") -> str | None:
+    if arg_type == "$int":
+        try:
+            int(arg_val)
+            return None
+        except ValueError:
+            return get_arg_type_color("error")
+
+    if arg_type:
+        return _basic_arg_colors.get(arg_type)
+
+
+def colorize_input(text: str, ctx: CommonContext | None = None,
+                   server_version: Version | None = None) -> list[JSONMessagePart]:
+    if not server_version and ctx:
+        server_version = ctx.server_version
+
+    try:
+        args = shlex.split(text)
+    except ValueError:
+        args = text.split()
+
+    if not args:
+        return []
+
+    parts = []
+    if ctx and ctx.input_requests > 0:
+        add_json_text(parts, text)
+        return parts
+
+    def command_form_matches(form: CommandData):
+        if form.command != args[0]:
+            return False
+        # Check if command type is usable here
+        if ctx:
+            if form.command_type == CommandType.server_console:
+                return False
+            if form.command_type == CommandType.client_connected:
+                if not ctx.server_tags:
+                    return False
+                assert server_version
+                # Check server compatibility
+                if form.starting_server_version > server_version:
+                    return False
+                if not form.required_tags.issubset(ctx.server_tags):
+                    return False
+
+        else:
+            if form.command_type != CommandType.server_console:
+                return False
+
+        return True
+
+    data = next((form for form in COMMAND_FORMS if command_form_matches(form)), None)
+
+    # Try searching CommandProcessor for additional defined commands there
+    if not data and ctx:
+        for name, func in ctx.command_processor.commands.items():
+            command = ctx.command_processor.marker + name
+            raw = getattr(func, "raw_text", False)
+            if command == args[0]:
+                try:
+                    sig = inspect.signature(func)
+
+                    pos_types = (inspect.Parameter.POSITIONAL_ONLY, inspect.Parameter.POSITIONAL_OR_KEYWORD)
+                    pos_args = len([param for param in sig.parameters.values() if param.kind in pos_types]) - 1
+                    vararg = any(param.kind == inspect.Parameter.VAR_POSITIONAL for param in sig.parameters.values())
+
+                    data = CommandData(
+                        command, (None,) * pos_args, raw, CommandType.client_always,
+                        vararg_type="error" if not vararg else None
+                    )
+                except ValueError:
+                    data = CommandData(command, (), raw, CommandType.client_always, vararg_type=None)
+
+    if not data:
+        add_json_text(parts, text)
+        return parts
+
+    if data.raw:
+        first_split = text.split(maxsplit=1)
+        if len(first_split) > 1:
+            add_json_color(parts, text[:-len(first_split[1])], get_arg_type_color("command"))
+
+            if ctx and args[0] == "!admin":
+                if first_split[1].strip().startswith("login "):
+                    add_json_color(parts, "login ", get_arg_type_color("command"))
+                    add_json_text(parts, first_split[1][6:])
+                elif first_split[1] == "logout":
+                    add_json_color(parts, "logout", get_arg_type_color("command"))
+                else:
+                    # Strip context so it's treated as from server, but use the server's reported version
+                    parts.extend(colorize_input(first_split[1], server_version=server_version))
+            elif args[0] == "/alias":
+                player_name, sp, alias = first_split[1].partition(" ")
+                add_json_color(parts, player_name, get_arg_type_color("player"))
+                add_json_text(parts, sp + alias)
+            else:
+                arg_type = data.arg_types[0] if data.arg_types else data.vararg_type
+                arg_color = get_arg_type_color(arg_type, first_split[1])
+                add_json_color(parts, first_split[1], arg_color)
+        else:
+            add_json_color(parts, text, get_arg_type_color("command"))
+        return parts
+
+    subpart_list = _extract_matching_runs(text, args)
+
+    arg_types = ["command"] + list(data.arg_types)
+    if not ctx and args[0] == "/option" and len(args) > 1:
+        matching_option = next((data for data in SERVER_OPTIONS if data.option == args[1]
+                                and (not server_version or data.starting_server_version <= server_version)), None)
+        if matching_option:
+            if len(args) > 2:
+                if isinstance(matching_option.val_type, tuple):
+                    arg_types[2] = "unrecognized" if args[2] not in matching_option.val_type else None
+                else:
+                    arg_types[2] = matching_option.val_type
+        else:
+            arg_types[1] = "unrecognized"
+
+    for subparts, arg_type in zip(subpart_list, chain(arg_types, repeat(data.vararg_type))):
+        arg_color = get_arg_type_color(arg_type, "".join(subpart for subpart, _ in subparts))
+
+        for (subpart, highlight) in subparts:
+            add_json_color(parts, subpart, arg_color if highlight else f"{arg_color}_dark")
+
+    return parts
 
 
 status_names: typing.Dict[HintStatus, str] = {
