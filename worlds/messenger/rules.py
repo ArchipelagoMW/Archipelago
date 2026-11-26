@@ -200,7 +200,7 @@ class MessengerRules:
             # Riviere Turquoise
             "Riviere Turquoise - Waterfall Shop -> Riviere Turquoise - Flower Flight Checkpoint":
                 lambda state: self.has_dart(state) or (
-                            self.has_wingsuit(state) and self.can_destroy_projectiles(state)),
+                        self.has_wingsuit(state) and self.can_destroy_projectiles(state)),
             "Riviere Turquoise - Launch of Faith Shop -> Riviere Turquoise - Flower Flight Checkpoint":
                 lambda state: self.has_dart(state) and self.can_dboost(state),
             "Riviere Turquoise - Flower Flight Checkpoint -> Riviere Turquoise - Waterfall Shop":
@@ -210,10 +210,18 @@ class MessengerRules:
                 self.has_wingsuit,
             "Elemental Skylands - Air Intro Shop -> Elemental Skylands - Air Generator Shop":
                 self.has_wingsuit,
+            "Elemental Skylands - Air Generator Shop -> Elemental Skylands - Air Intro Shop":
+                lambda state: self.has_wingsuit(state) and self.has_progressive_generator_shutdown(state),
             "Elemental Skylands - Earth Intro Shop -> Elemental Skylands - Earth Generator Shop":
                 self.has_dart,
             "Elemental Skylands - Water Generator Shop -> Elemental Skylands - Water Intro Shop":
                 self.can_destroy_projectiles,
+            "Elemental Skylands - Fire Generator Shop -> Elemental Skylands - Fire Intro Shop":
+                self.false,
+            "Elemental Skylands - Fire Intro Shop -> Elemental Skylands - Fire Generator Shop":
+                (lambda state: self.has_progressive_generator_shutdown(state, count=4))
+                if bool(world.options.shuffle_skylands_generators)
+                else self.true,
             # Sunken Shrine
             "Sunken Shrine - Portal -> Sunken Shrine - Sun Path Shop":
                 self.has_tabi,
@@ -365,6 +373,9 @@ class MessengerRules:
     def is_aerobatic(self, state: CollectionState) -> bool:
         return self.has_wingsuit(state) and state.has("Aerobatics Warrior", self.player)
 
+    def has_progressive_generator_shutdown(self, state: CollectionState, count: int = 1) -> bool:
+        return state.has("Progressive Generator Shutdown", self.player, count)
+
     def true(self, state: CollectionState) -> bool:
         """I know this is stupid, but it's easier to read in the dicts."""
         return True
@@ -446,8 +457,12 @@ class MessengerHardRules(MessengerRules):
                 # Elemental Skylands
                 "Elemental Skylands - Air Intro Shop -> Elemental Skylands - Air Generator Shop":
                     self.true,
+                "Elemental Skylands - Air Generator Shop -> Elemental Skylands - Air Intro Shop":
+                    self.has_progressive_generator_shutdown,
                 "Elemental Skylands - Earth Intro Shop -> Elemental Skylands - Earth Generator Shop":
                     self.true,
+                "Elemental Skylands - Fire Generator Shop -> Elemental Skylands - Fire Intro Shop":
+                    lambda state: self.has_progressive_generator_shutdown(state, count=4),
                 # Riviere Turquoise
                 "Riviere Turquoise - Waterfall Shop -> Riviere Turquoise - Flower Flight Checkpoint":
                     self.true,
