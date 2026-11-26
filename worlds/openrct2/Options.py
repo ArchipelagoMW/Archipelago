@@ -891,7 +891,7 @@ class ConstructionRightsDiscounts(Range):
     range_end = 50
     default = 0
     rich_text_doc = True
-class Fireworks(DefaultOnToggle):
+class Fireworks(Toggle):
     """Have an explosive firework display on victory! Strongly discouraged if you intend to keep playing after victory or if you expect to have a huge park."""
     display_name = "Fireworks"
     rich_text_doc = True
