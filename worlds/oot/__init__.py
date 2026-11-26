@@ -35,6 +35,24 @@ from Options import Range, Toggle, VerifyKeys, Accessibility, PlandoConnections,
 from Fill import fill_restrictive, fast_fill, FillError
 from worlds.generic.Rules import exclusion_rules, add_item_rule
 from worlds.AutoWorld import World, AutoLogicRegister, WebWorld
+from worlds.LauncherComponents import Component, SuffixIdentifier, components, launch as launch_component
+
+
+def launch_client(*args: str):
+    from .Client import launch
+    launch_component(launch, name="OoTClient", args=args)
+
+
+def launch_adjuster(*args: str):
+    from .Adjuster import launch
+    launch_component(launch, name="OoTAdjuster", args=args)
+
+
+components.extend([
+    Component('OoT Client', func=launch_client, game_name="Ocarina of Time",
+              file_identifier=SuffixIdentifier('.apz5')),
+    Component('OoT Adjuster', func=launch_adjuster),
+])
 
 # OoT's generate_output doesn't benefit from more than 2 threads, instead it uses a lot of memory.
 i_o_limiter = threading.Semaphore(2)

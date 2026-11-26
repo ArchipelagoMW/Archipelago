@@ -1,14 +1,54 @@
 import io, re, json
 import os, sys
+import atexit
+import shutil
 import subprocess
+import tempfile
+import threading
 import Utils
 from functools import lru_cache
+from importlib.resources import files
 
 __version__ = '7.1.0'
 
+_data_lock = threading.Lock()
+
+
+def _copy_data(source, target):
+    os.makedirs(target, exist_ok=True)
+    for resource in source.iterdir():
+        path = os.path.join(target, resource.name)
+        if resource.is_dir():
+            _copy_data(resource, path)
+        else:
+            with resource.open('rb') as source_file, open(path, 'wb') as target_file:
+                shutil.copyfileobj(source_file, target_file)
+
+
+@lru_cache(maxsize=1)
+def _data_root():
+    path = os.path.join(os.path.dirname(__file__), 'data')
+    if os.path.isdir(path):
+        return path
+
+    directory = tempfile.TemporaryDirectory(prefix='oot-apworld-data-')
+    try:
+        _copy_data(files(__package__).joinpath('data'), directory.name)
+        for tool in ('Compress', 'Decompress'):
+            for suffix in ('', '_ARM64', '.out', '.exe'):
+                executable = os.path.join(directory.name, tool, tool + suffix)
+                if os.path.isfile(executable):
+                    os.chmod(executable, 0o755)
+    except BaseException:
+        directory.cleanup()
+        raise
+    atexit.register(directory.cleanup)
+    return directory.name
+
 
 def data_path(*args):
-    return os.path.join(os.path.dirname(__file__), 'data', *args)
+    with _data_lock:
+        return os.path.join(_data_root(), *args)
 
 
 @lru_cache

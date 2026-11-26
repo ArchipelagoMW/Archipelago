@@ -374,10 +374,6 @@ components: list[Component] = [
     Component("Browse Files", func=browse_files,
               description="Open the Archipelago installation folder in your file browser."),
     Component('LttP Adjuster', 'LttPAdjuster'),
-    # Ocarina of Time
-    Component('OoT Client', 'OoTClient',
-              file_identifier=SuffixIdentifier('.apz5')),
-    Component('OoT Adjuster', 'OoTAdjuster'),
     # TLoZ
     Component('Zelda 1 Client', 'Zelda1Client', file_identifier=SuffixIdentifier('.aptloz')),
     # ChecksFinder
