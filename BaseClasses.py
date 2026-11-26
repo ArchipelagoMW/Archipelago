@@ -1262,10 +1262,12 @@ class Region:
 
     class Register(MutableSequence):
         region_manager: MultiWorld.RegionManager
+        region: Region
 
-        def __init__(self, region_manager: MultiWorld.RegionManager):
+        def __init__(self, region_manager: MultiWorld.RegionManager, region: Region):
             self._list = []
             self.region_manager = region_manager
+            self.region = region
 
         def __getitem__(self, index: int) -> Location:
             return self._list[index]
@@ -1295,6 +1297,10 @@ class Region:
         def insert(self, index: int, value: Location) -> None:
             assert value.name not in self.region_manager.location_cache[value.player], \
                 f"{value.name} already exists in the location cache."
+            if value.parent_region is None:
+                value.parent_region = self.region
+            else:
+                assert value.parent_region == self.region, f"{value} is already associated with another region"
             self._list.insert(index, value)
             self.region_manager.location_cache[value.player][value.name] = value
 
@@ -1307,6 +1313,10 @@ class Region:
         def insert(self, index: int, value: Entrance) -> None:
             assert value.name not in self.region_manager.entrance_cache[value.player], \
                 f"{value.name} already exists in the entrance cache."
+            if value.parent_region is None:
+                value.parent_region = self.region
+            else:
+                assert value.parent_region == self.region, f"{value} is already associated with another region"
             self._list.insert(index, value)
             self.region_manager.entrance_cache[value.player][value.name] = value
 
@@ -1316,8 +1326,8 @@ class Region:
     def __init__(self, name: str, player: int, multiworld: MultiWorld, hint: Optional[str] = None):
         self.name = name
         self.entrances = []
-        self._exits = self.EntranceRegister(multiworld.regions)
-        self._locations = self.LocationRegister(multiworld.regions)
+        self._exits = self.EntranceRegister(multiworld.regions, self)
+        self._locations = self.LocationRegister(multiworld.regions, self)
         self.multiworld = multiworld
         self._hint_text = hint
         self.player = player
