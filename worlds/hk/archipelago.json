@@ -1,1 +1,5 @@
-{"game": "Hollow Knight", "world_version": "0.0.0"}
+{
+    "game": "Hollow Knight",
+    "world_version": "1.1.4",
+    "minimum_ap_version": "0.6.7"
+}

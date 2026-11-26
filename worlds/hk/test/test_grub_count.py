@@ -1,15 +1,17 @@
-from test.bases import WorldTestBase
+import typing
+
 from Options import ItemLinks
-from . import linkedTestHK
+
+from .bases import HKGoalBase, LinkedTestHK
 
 
-class test_grubcount_limited(linkedTestHK, WorldTestBase):
-    options = {
+class TestGrubcountLimited(LinkedTestHK, HKGoalBase):
+    options: typing.ClassVar[dict[str, typing.Any]] = {
         "RandomizeGrubs": True,
         "GrubHuntGoal": 20,
         "Goal": "any",
     }
-    item_link_group = [{
+    item_link_group: typing.ClassVar[list[dict[str, typing.Any]]] = [{
         "name": "ItemLinkTest",
         "item_pool": ["Grub"],
         "link_replacement": True,
@@ -18,12 +20,12 @@ class test_grubcount_limited(linkedTestHK, WorldTestBase):
     expected_grubs = 20
 
 
-class test_grubcount_default(linkedTestHK, WorldTestBase):
-    options = {
+class TestGrubcountDefault(LinkedTestHK, HKGoalBase):
+    options: typing.ClassVar[dict[str, typing.Any]] = {
         "RandomizeGrubs": True,
         "Goal": "any",
     }
-    item_link_group = [{
+    item_link_group: typing.ClassVar[list[dict[str, typing.Any]]] = [{
         "name": "ItemLinkTest",
         "item_pool": ["Grub"],
         "link_replacement": True,
@@ -32,23 +34,23 @@ class test_grubcount_default(linkedTestHK, WorldTestBase):
     expected_grubs = 46
 
 
-class test_grubcount_all_unlinked(linkedTestHK, WorldTestBase):
-    options = {
+class TestGrubcountAllUnlinked(LinkedTestHK, HKGoalBase):
+    options: typing.ClassVar[dict[str, typing.Any]] = {
         "RandomizeGrubs": True,
         "GrubHuntGoal": "all",
         "Goal": "any",
     }
-    item_link_group = []
+    item_link_group: typing.ClassVar[list[dict[str, typing.Any]]] = []
     expected_grubs = 46
 
 
-class test_grubcount_all_linked(linkedTestHK, WorldTestBase):
-    options = {
+class TestGrubcountAllLinked(LinkedTestHK, HKGoalBase):
+    options: typing.ClassVar[dict[str, typing.Any]] = {
         "RandomizeGrubs": True,
         "GrubHuntGoal": "all",
         "Goal": "any",
     }
-    item_link_group = [{
+    item_link_group: typing.ClassVar[list[dict[str, typing.Any]]] = [{
         "name": "ItemLinkTest",
         "item_pool": ["Grub"],
         "link_replacement": True,
@@ -57,8 +59,8 @@ class test_grubcount_all_linked(linkedTestHK, WorldTestBase):
     expected_grubs = 46 + 23
 
 
-class test_replacement_only(linkedTestHK, WorldTestBase):
-    options = {
+class TestReplacementOnly(LinkedTestHK, HKGoalBase):
+    options: typing.ClassVar[dict[str, typing.Any]] = {
         "RandomizeGrubs": True,
         "GrubHuntGoal": "all",
         "Goal": "any",
@@ -66,26 +68,25 @@ class test_replacement_only(linkedTestHK, WorldTestBase):
     expected_grubs = 46 + 18  # the count of grubs + skills removed from item links
 
     def setup_item_links(self, args):
-        setattr(args, "item_links",
-                {
-                    1: ItemLinks.from_any([{
-                        "name": "ItemLinkTest",
-                        "item_pool": ["Skills"],
-                        "link_replacement": True,
-                        "replacement_item": "Grub",
-                    }]),
-                    2: ItemLinks.from_any([{
-                        "name": "ItemLinkTest",
-                        "item_pool": ["Skills"],
-                        "link_replacement": True,
-                        "replacement_item": "Grub",
-                    }])
-                })
+        args.item_links = {
+            1: ItemLinks.from_any([{
+                "name": "ItemLinkTest",
+                "item_pool": ["Skills"],
+                "link_replacement": True,
+                "replacement_item": "Grub",
+            }]),
+            2: ItemLinks.from_any([{
+                "name": "ItemLinkTest",
+                "item_pool": ["Skills"],
+                "link_replacement": True,
+                "replacement_item": "Grub",
+            }])
+        }
         return args
 
 
-class test_replacement_only_unlinked(linkedTestHK, WorldTestBase):
-    options = {
+class TestReplacementOnlyUnlinked(LinkedTestHK, HKGoalBase):
+    options: typing.ClassVar[dict[str, typing.Any]] = {
         "RandomizeGrubs": True,
         "GrubHuntGoal": "all",
         "Goal": "any",
@@ -93,26 +94,25 @@ class test_replacement_only_unlinked(linkedTestHK, WorldTestBase):
     expected_grubs = 46 + 9  # Player1s replacement Grubs
 
     def setup_item_links(self, args):
-        setattr(args, "item_links",
-                {
-                    1: ItemLinks.from_any([{
-                        "name": "ItemLinkTest",
-                        "item_pool": ["Skills"],
-                        "link_replacement": False,
-                        "replacement_item": "Grub",
-                    }]),
-                    2: ItemLinks.from_any([{
-                        "name": "ItemLinkTest",
-                        "item_pool": ["Skills"],
-                        "link_replacement": False,
-                        "replacement_item": "Grub",
-                    }])
-                })
+        args.item_links = {
+            1: ItemLinks.from_any([{
+                "name": "ItemLinkTest",
+                "item_pool": ["Skills"],
+                "link_replacement": False,
+                "replacement_item": "Grub",
+            }]),
+            2: ItemLinks.from_any([{
+                "name": "ItemLinkTest",
+                "item_pool": ["Skills"],
+                "link_replacement": False,
+                "replacement_item": "Grub",
+            }])
+        }
         return args
 
 
-class test_ignore_others(linkedTestHK, WorldTestBase):
-    options = {
+class TestIgnoreOthers(LinkedTestHK, HKGoalBase):
+    options: typing.ClassVar[dict[str, typing.Any]] = {
         "RandomizeGrubs": True,
         "GrubHuntGoal": "all",
         "Goal": "any",
@@ -121,26 +121,25 @@ class test_ignore_others(linkedTestHK, WorldTestBase):
     expected_grubs = 46
 
     def setup_item_links(self, args):
-        setattr(args, "item_links",
-                {
-                    1: ItemLinks.from_any([{
-                        "name": "ItemLinkTest",
-                        "item_pool": ["Skills"],
-                        "link_replacement": False,
-                        "replacement_item": "One_Geo",
-                    }]),
-                    2: ItemLinks.from_any([{
-                        "name": "ItemLinkTest",
-                        "item_pool": ["Skills"],
-                        "link_replacement": False,
-                        "replacement_item": "Grub",
-                    }])
-                })
+        args.item_links = {
+            1: ItemLinks.from_any([{
+                "name": "ItemLinkTest",
+                "item_pool": ["Skills"],
+                "link_replacement": False,
+                "replacement_item": "One_Geo",
+            }]),
+            2: ItemLinks.from_any([{
+                "name": "ItemLinkTest",
+                "item_pool": ["Skills"],
+                "link_replacement": False,
+                "replacement_item": "Grub",
+            }])
+        }
         return args
 
 
-class test_replacement_only_linked(linkedTestHK, WorldTestBase):
-    options = {
+class TestReplacementOnlyLinked(LinkedTestHK, HKGoalBase):
+    options: typing.ClassVar[dict[str, typing.Any]] = {
         "RandomizeGrubs": True,
         "GrubHuntGoal": "all",
         "Goal": "any",
@@ -148,19 +147,18 @@ class test_replacement_only_linked(linkedTestHK, WorldTestBase):
     expected_grubs = 46 + 9  # Player2s linkreplacement grubs
 
     def setup_item_links(self, args):
-        setattr(args, "item_links",
-                {
-                    1: ItemLinks.from_any([{
-                        "name": "ItemLinkTest",
-                        "item_pool": ["Skills"],
-                        "link_replacement": True,
-                        "replacement_item": "One_Geo",
-                    }]),
-                    2: ItemLinks.from_any([{
-                        "name": "ItemLinkTest",
-                        "item_pool": ["Skills"],
-                        "link_replacement": True,
-                        "replacement_item": "Grub",
-                    }])
-                })
+        args.item_links = {
+            1: ItemLinks.from_any([{
+                "name": "ItemLinkTest",
+                "item_pool": ["Skills"],
+                "link_replacement": True,
+                "replacement_item": "One_Geo",
+            }]),
+            2: ItemLinks.from_any([{
+                "name": "ItemLinkTest",
+                "item_pool": ["Skills"],
+                "link_replacement": True,
+                "replacement_item": "Grub",
+            }])
+        }
         return args
