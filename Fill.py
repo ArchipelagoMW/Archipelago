@@ -8,9 +8,6 @@ from typing import Callable, Literal, ClassVar
 from BaseClasses import CollectionState, Item, Location, LocationProgressType, MultiWorld, PlandoItemBlock
 from Options import Accessibility
 
-from worlds.AutoWorld import call_all
-from worlds.generic.Rules import add_item_rule
-
 
 class FillError(RuntimeError):
     def __init__(self, *args: str | object, **kwargs: object) -> None:
@@ -1126,6 +1123,7 @@ def accessibility_corrections(multiworld: MultiWorld,
 
 
 def inaccessible_location_rules(multiworld: MultiWorld, state: CollectionState, locations: Iterable[Location]) -> None:
+    from worlds.generic.Rules import add_item_rule
     maximum_exploration_state = sweep_from_pool(state)
     unreachable_locations = [location for location in locations if not location.can_reach(maximum_exploration_state)]
     if unreachable_locations:
@@ -1232,6 +1230,7 @@ def distribute_items_restrictive(multiworld: MultiWorld,
         "there are items in the multiworld itempool that are already placed on locations:\n"
         f"{[(item.location, item) for item in multiworld.itempool if item.location is not None]}"
     )
+    from worlds.AutoWorld import call_all
 
     fill_locations = sorted(multiworld.get_unfilled_locations())
     multiworld.random.shuffle(fill_locations)
