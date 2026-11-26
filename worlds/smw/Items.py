@@ -8,8 +8,7 @@ class ItemData(typing.NamedTuple):
     code: typing.Optional[int]
     progression: bool
     trap: bool = False
-    quantity: int = 1
-    event: bool = False
+    useful: bool = False
 
 
 class SMWItem(Item):
@@ -57,6 +56,11 @@ trap_table = {
     ItemName.timer_trap:            ItemData(0xBC0016, False, True),
     ItemName.reverse_controls_trap: ItemData(0xBC001C, False, True),
     ItemName.thwimp_trap:           ItemData(0xBC001D, False, True),
+    ItemName.dry_trap:              ItemData(0xBC0021, False, True),
+
+    ItemName.ice_untrap:              ItemData(0xBC001E, False, True, True),
+    ItemName.timer_untrap:            ItemData(0xBC001F, False, True, True),
+    ItemName.reverse_controls_untrap: ItemData(0xBC0020, False, True, True),
 }
 
 event_table = {
@@ -84,6 +88,7 @@ trap_value_to_name: typing.Dict[int, str] = {
     0xBC0016: ItemName.timer_trap,
     0xBC001C: ItemName.reverse_controls_trap,
     0xBC001D: ItemName.thwimp_trap,
+    0xBC0021: ItemName.dry_trap,
 }
 
 trap_name_to_value: typing.Dict[str, int] = {
@@ -94,6 +99,7 @@ trap_name_to_value: typing.Dict[str, int] = {
     ItemName.timer_trap:            0xBC0016,
     ItemName.reverse_controls_trap: 0xBC001C,
     ItemName.thwimp_trap:           0xBC001D,
+    ItemName.dry_trap:              0xBC0021,
 
     # Common other trap names
     "Chaos Control Trap": 0xBC0014,  # Stun Trap
@@ -120,4 +126,20 @@ trap_name_to_value: typing.Dict[str, int] = {
     "Fast Trap":          0xBC0016,  # Timer Trap
     "Nut Trap":           0xBC001D,  # Thwimp Trap
     "Army Trap":          0xBC001D,  # Thwimp Trap
+
+    "Bubble Trap":        0xBC0014,  # Stun Trap
+    "Depletion Trap":     0xBC0021,  # Dry Trap
+    "Flip Trap":          0xBC001C,  # Reverse Trap
+    "Get Out Trap":       0xBC001D,  # Thwimp Trap
+    "Iron Boots Trap":    0xBC0014,  # Stun Trap
+    "Meteor Trap":        0xBC001D,  # Thwimp Trap
+    "No Vac Trap":        0xBC0021,  # Dry Trap
+    "Phone Trap":         0xBC0015,  # Literature Trap
+    "Squash Trap":        0xBC001D,  # Thwimp Trap
+    "Tutorial Trap":      0xBC0015,  # Literature Trap
+
+    "Mirror Trap":        0xBC001C,  # Reverse Trap
+    "No Stocks":          0xBC0021,  # Dry Trap
+    "Time Limit":         0xBC0016,  # Timer Trap
+    "Time Warp Trap":     0xBC0016,  # Timer Trap
 }
