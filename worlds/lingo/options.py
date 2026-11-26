@@ -70,6 +70,13 @@ class LocationChecks(Choice):
     option_insanity = 2
 
 
+class Warpsanity(Toggle):
+    """If enabled, a location will be created for every regular warp on the map.
+    Using a warp will check the location. Sunwarps and paintings are not
+    included. Both sides of a two-way warp count as a single location."""
+    display_name = "Warpsanity"
+
+
 class ShuffleColors(DefaultOnToggle):
     """If on, an item is added to the pool for every puzzle color (besides White).
 
@@ -282,6 +289,7 @@ class LingoOptions(PerGameCommonOptions):
     progressive_orange_tower: ProgressiveOrangeTower
     progressive_colorful: ProgressiveColorful
     location_checks: LocationChecks
+    warpsanity: Warpsanity
     shuffle_colors: ShuffleColors
     shuffle_panels: ShufflePanels
     shuffle_paintings: ShufflePaintings

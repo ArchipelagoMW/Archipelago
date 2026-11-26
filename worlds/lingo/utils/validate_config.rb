@@ -14,6 +14,7 @@ mappath = ARGV[2]
 panels = Set["Countdown Panels/Panel_1234567890_wanderlust"]
 doors = Set["Naps Room Doors/Door_hider_new1", "Tower Room Area Doors/Door_wanderer_entrance"]
 paintings = Set[]
+warps = Set[]
 
 File.readlines(mappath).each do |line|
   line.match(/node name=\"(.*)\" parent=\"Panels\/(.*)\" instance/) do |m|
@@ -27,6 +28,9 @@ File.readlines(mappath).each do |line|
   end
   line.match(/node name=\"(.*)\" parent=\"Decorations\/EndPanel\" instance/) do |m|
     panels.add("EndPanel/" + m[1])
+  end
+  line.match(/node name=\"(.*)\" type=\"Area\" parent=\"Warps\/(.*)\"/) do |m|
+    warps.add(m[2] + "/" + m[1])
   end
 end
 
@@ -46,11 +50,12 @@ mentioned_paintings = Set[]
 door_groups = {}
 panel_groups = {}
 
-directives = Set["entrances", "panels", "doors", "panel_doors", "paintings", "sunwarps", "progression"]
+directives = Set["entrances", "panels", "doors", "panel_doors", "paintings", "sunwarps", "progression", "warps"]
 panel_directives = Set["id", "required_room", "required_door", "required_panel", "colors", "check", "exclude_reduce", "tag", "link", "subtag", "achievement", "copy_to_sign", "non_counting", "hunt", "location_name"]
 door_directives = Set["id", "painting_id", "panels", "item_name", "item_group", "location_name", "skip_location", "skip_item", "door_group", "include_reduce", "event", "warp_id"]
 panel_door_directives = Set["panels", "item_name", "panel_group"]
 painting_directives = Set["id", "display_name", "enter_only", "exit_only", "orientation", "required_door", "required", "required_when_no_doors", "move", "req_blocked", "req_blocked_when_no_doors"]
+warp_directives = Set["id", "required_door", "location_name", "display_name"]
 
 non_counting = 0
 
@@ -225,8 +230,8 @@ config.each do |room_name, room|
           mentioned_panels.add("#{room_name} - #{panel}")
         end
       end
-    elsif not door["skip_location"]
-      puts "#{room_name} - #{door_name} :::: Should be marked skip_location if there are no panels"
+    elsif not door["skip_location"] and not door["event"]
+      puts "#{room_name} - #{door_name} :::: Should be marked event or skip_location if there are no panels"
     end
 
     if door.include?("group")
@@ -395,6 +400,42 @@ config.each do |room_name, room|
 
     unless ids.include?("progression") and ids["progression"].include?(progression_name)
       puts "#{room_name} - #{progression_name} :::: Progression is missing an item ID"
+    end
+  end
+
+  (room["warps"] || {}).each do |warp_name, warp|
+    if warp.include?("id")
+      warp_ids = []
+      if warp["id"].kind_of? Array
+        warp_ids = warp["id"]
+      else
+        warp_ids = [warp["id"]]
+      end
+
+      warp_ids.each do |warp_id|
+        unless warps.include? warp_id then
+          puts "#{room_name} - #{warp_name} :::: Invalid Warp ID #{warp_id}"
+        end
+      end
+    end
+
+    if warp.include?("required_door")
+      other_room = warp["required_door"].include?("room") ? warp["required_door"]["room"] : room_name
+      mentioned_doors.add("#{other_room} - #{warp["required_door"]["door"]}")
+    end
+
+    bad_subdirectives = []
+    warp.keys.each do |key|
+      unless warp_directives.include?(key) then
+        bad_subdirectives << key
+      end
+    end
+    unless bad_subdirectives.empty? then
+      puts "#{room_name} - #{warp_name} :::: Warp has the following invalid subdirectives: #{bad_subdirectives.join(", ")}"
+    end
+
+    unless ids.include?("warps") and ids["warps"].include?(room_name) and ids["warps"][room_name].include?(warp_name)
+      puts "#{room_name} - #{warp_name} :::: Warp is missing a location ID"
     end
   end
 end

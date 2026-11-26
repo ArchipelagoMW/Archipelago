@@ -1,9 +1,10 @@
 from enum import Flag, auto
-from typing import Dict, List, NamedTuple
+from typing import Dict, List, NamedTuple, Optional
 
 from BaseClasses import Location
-from .datatypes import RoomAndPanel
-from .static_logic import DOORS_BY_ROOM, PANELS_BY_ROOM, get_door_location_id, get_panel_location_id
+from .datatypes import RoomAndPanel, RoomAndWarp
+from .static_logic import DOORS_BY_ROOM, PANELS_BY_ROOM, get_door_location_id, get_panel_location_id, WARPS_BY_ROOM, \
+    get_warp_location_id
 
 
 class LocationClassification(Flag):
@@ -11,6 +12,7 @@ class LocationClassification(Flag):
     reduced = auto()
     insanity = auto()
     small_sphere_one = auto()
+    warp = auto()
 
 
 class LocationData(NamedTuple):
@@ -20,6 +22,7 @@ class LocationData(NamedTuple):
     code: int
     room: str
     panels: List[RoomAndPanel]
+    warp: Optional[RoomAndWarp]
     classification: LocationClassification
 
 
@@ -51,7 +54,7 @@ def load_location_data():
 
             ALL_LOCATION_TABLE[location_name] = \
                 LocationData(get_panel_location_id(room_name, panel_name), room_name,
-                             [RoomAndPanel(None, panel_name)], classification)
+                             [RoomAndPanel(None, panel_name)], None, classification)
 
             if panel.achievement:
                 LOCATIONS_BY_GROUP.setdefault("Achievements", []).append(location_name)
@@ -72,7 +75,15 @@ def load_location_data():
             else:
                 new_id = get_door_location_id(room_name, door_name)
 
-            ALL_LOCATION_TABLE[location_name] = LocationData(new_id, room_name, door.panels, classification)
+            ALL_LOCATION_TABLE[location_name] = LocationData(new_id, room_name, door.panels, None, classification)
+
+    for room_name, warps in WARPS_BY_ROOM.items():
+        for warp_name, warp in warps.items():
+            location_name = (warp.location_name or f"{room_name} - {warp_name}") + " (Warp)"
+
+            ALL_LOCATION_TABLE[location_name] = LocationData(get_warp_location_id(room_name, warp_name), room_name, [],
+                                                             RoomAndWarp(room_name, warp_name),
+                                                             LocationClassification.warp)
 
 
 # Initialize location data on the module scope.

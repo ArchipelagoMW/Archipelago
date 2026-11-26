@@ -96,6 +96,15 @@ if old_generated.include? "progression" then
     end
   end
 end
+if old_generated.include? "warps" then
+  old_generated["warps"].each do |room, warps|
+    warps.each do |name, id|
+      if id >= next_location_id then
+        next_location_id = id + 1
+      end
+    end
+  end
+end
 
 door_groups = Set[]
 panel_groups = Set[]
@@ -210,6 +219,18 @@ config.each do |room_name, room_data|
         old_generated["progression"][progression_name] = next_item_id
 
         next_item_id += 1
+      end
+    end
+  end
+
+  if room_data.include? "warps"
+    room_data["warps"].each do |warp_name, warp|
+      unless old_generated.include? "warps" and old_generated["warps"].include? room_name and old_generated["warps"][room_name].include? warp_name then
+        old_generated["warps"] ||= {}
+        old_generated["warps"][room_name] ||= {}
+        old_generated["warps"][room_name][warp_name] = next_location_id
+
+        next_location_id += 1
       end
     end
   end

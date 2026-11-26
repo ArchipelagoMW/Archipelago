@@ -17,6 +17,11 @@ class RoomAndPanelDoor(NamedTuple):
     panel_door: str
 
 
+class RoomAndWarp(NamedTuple):
+    room: Optional[str]
+    warp: str
+
+
 class EntranceType(Flag):
     NORMAL = auto()
     PAINTING = auto()
@@ -41,6 +46,7 @@ class DoorType(Enum):
     NORMAL = 1
     SUNWARP = 2
     SUN_PAINTING = 3
+    PANEL_HUNT = 4
 
 
 class Door(NamedTuple):
@@ -94,3 +100,10 @@ class Painting(NamedTuple):
 class Progression(NamedTuple):
     item_name: str
     index: int
+
+
+class Warp(NamedTuple):
+    name: str
+    ids: List[str]
+    required_doors: List[RoomAndDoor]
+    location_name: Optional[str]
