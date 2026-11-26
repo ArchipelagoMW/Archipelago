@@ -14,6 +14,15 @@ class DeathLinkAmnesty(Range):
     range_end = 30
     default = 10
 
+class TrapLink(Toggle):
+    """
+    Whether your received traps are linked to other players
+
+    You will also receive any linked traps from other players with Trap Link enabled,
+    if you have a weight above "none" set for that trap
+    """
+    display_name = "Trap Link"
+
 class TotalStrawberries(Range):
     """
     How many Strawberries exist
@@ -56,6 +65,12 @@ class MoveShuffle(Toggle):
     """
     display_name = "Move Shuffle"
 
+class CassetteShuffle(Toggle):
+    """
+    Whether the cassette levels are shuffled
+    """
+    display_name = "Cassette Shuffle"
+
 
 class Friendsanity(Toggle):
     """
@@ -82,6 +97,109 @@ class Checkpointsanity(Toggle):
     Activating this will also shuffle items into the pool which allow usage and warping to each Checkpoint
     """
     display_name = "Checkpointsanity"
+
+
+class TrapFillPercentage(Range):
+    """
+    Replace a percentage of junk items in the item pool with random traps
+    """
+    display_name = "Trap Fill Percentage"
+    range_start = 0
+    range_end = 100
+    default = 0
+
+class TrapExpirationAmount(Range):
+    """
+    The amount of deaths that must occur for the trap to wear off
+    """
+    display_name = "Trap Expiration Amount"
+    range_start = 1
+    range_end = 100
+    default = 3
+
+class BaseTrapWeight(Choice):
+    """
+    Base Class for Trap Weights
+    """
+    option_none = 0
+    option_low = 1
+    option_medium = 2
+    option_high = 4
+    default = 2
+
+class BaldTrapWeight(BaseTrapWeight):
+    """
+    Likelihood of receiving a trap which makes Maddy bald
+    """
+    display_name = "Bald Trap Weight"
+
+class BubbleTrapWeight(BaseTrapWeight):
+    """
+    Likelihood of receiving a trap which makes Maddy float away in a bubble
+    """
+    display_name = "Bubble Trap Weight"
+
+class HiccupTrapWeight(BaseTrapWeight):
+    """
+    Likelihood of a receiving a trap which causes Maddy to hiccup uncontrollably
+    """
+    display_name = "Hiccup Trap Weight"
+
+class IceTrapWeight(BaseTrapWeight):
+    """
+    Likelihood of a receiving a trap which causes the level to become slippery
+    """
+    display_name = "Ice Trap Weight"
+
+class InvisibleTrapWeight(BaseTrapWeight):
+    """
+    Likelihood of a receiving a trap which turns Maddy invisible
+    """
+    display_name = "Invisible Trap Weight"
+
+class LiteratureTrapWeight(BaseTrapWeight):
+    """
+    Likelihood of a receiving a trap which causes the player to read literature
+    """
+    display_name = "Literature Trap Weight"
+
+class ReverseTrapWeight(BaseTrapWeight):
+    """
+    Likelihood of a receiving a trap which causes the controls to be reversed
+    """
+    display_name = "Reverse Trap Weight"
+
+class StunTrapWeight(BaseTrapWeight):
+    """
+    Likelihood of a receiving a trap which briefly stuns Maddy
+    """
+    display_name = "Stun Trap Weight"
+
+class ZoomInTrapWeight(BaseTrapWeight):
+    """
+    Likelihood of a receiving a trap which causes the camera to zoom in
+    """
+    display_name = "Zoom In Trap Weight"
+
+class ZoomOutTrapWeight(BaseTrapWeight):
+    """
+    Likelihood of a receiving a trap which causes the camera to zoom out
+    """
+    display_name = "Zoom Out Trap Weight"
+
+
+class MadelineHairLength(Choice):
+    """
+    How long Madeline's hair is
+    """
+    display_name = "Madeline Hair Length"
+    option_very_short = 1
+    option_short = 5
+    option_default = 10
+    option_long = 15
+    option_very_long = 30
+    option_absurd = 60
+    default = 10
 
 
 class ColorChoice(TextChoice):
@@ -210,7 +328,22 @@ celeste_64_option_groups = [
         Carsanity,
         Checkpointsanity,
     ]),
+    OptionGroup("Junk and Traps", [
+        TrapFillPercentage,
+        TrapExpirationAmount,
+        BaldTrapWeight,
+        BubbleTrapWeight,
+        HiccupTrapWeight,
+        IceTrapWeight,
+        InvisibleTrapWeight,
+        LiteratureTrapWeight,
+        ReverseTrapWeight,
+        StunTrapWeight,
+        ZoomInTrapWeight,
+        ZoomOutTrapWeight,
+    ]),
     OptionGroup("Aesthetic Options", [
+        MadelineHairLength,
         MadelineOneDashHairColor,
         MadelineTwoDashHairColor,
         MadelineNoDashHairColor,
@@ -228,18 +361,34 @@ celeste_64_option_groups = [
 class Celeste64Options(PerGameCommonOptions):
     death_link: DeathLink
     death_link_amnesty: DeathLinkAmnesty
+    trap_link: TrapLink
 
     total_strawberries: TotalStrawberries
     strawberries_required_percentage: StrawberriesRequiredPercentage
 
     logic_difficulty: LogicDifficulty
     move_shuffle: MoveShuffle
+    cassette_shuffle: CassetteShuffle
 
     friendsanity: Friendsanity
     signsanity: Signsanity
     carsanity: Carsanity
     checkpointsanity: Checkpointsanity
 
+    trap_fill_percentage: TrapFillPercentage
+    trap_expiration_amount: TrapExpirationAmount
+    bald_trap_weight: BaldTrapWeight
+    bubble_trap_weight: BubbleTrapWeight
+    hiccup_trap_weight: HiccupTrapWeight
+    ice_trap_weight: IceTrapWeight
+    invisible_trap_weight: InvisibleTrapWeight
+    literature_trap_weight: LiteratureTrapWeight
+    reverse_trap_weight: ReverseTrapWeight
+    stun_trap_weight: StunTrapWeight
+    zoom_in_trap_weight: ZoomInTrapWeight
+    zoom_out_trap_weight: ZoomOutTrapWeight
+
+    madeline_hair_length: MadelineHairLength
     madeline_one_dash_hair_color: MadelineOneDashHairColor
     madeline_two_dash_hair_color: MadelineTwoDashHairColor
     madeline_no_dash_hair_color: MadelineNoDashHairColor
