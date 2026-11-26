@@ -1,9 +1,16 @@
 from worlds.generic.Rules import set_rule, add_rule
 from BaseClasses import MultiWorld
 from .locations import get_locations
-from .ror2environments import environment_vanilla_orderedstages_table, environment_sotv_orderedstages_table, \
-    environment_sost_orderedstages_table, environment_vanilla_variant_orderedstages_table, \
-    environment_sots_variants_orderedstages_table
+from .ror2environments import (
+    environment_alloyed_orderedstages_table,
+    environment_alloyed_variants_orderedstages_table,
+    environment_sost_orderedstages_table,
+    environment_sots_variants_orderedstages_table,
+    environment_sotv_orderedstages_table,
+    environment_vanilla_orderedstages_table,
+    environment_vanilla_variant_orderedstages_table,
+    environments_without_newt_altars,
+)
 from typing import Set, TYPE_CHECKING
 
 if TYPE_CHECKING:
@@ -11,15 +18,16 @@ if TYPE_CHECKING:
 
 
 # Rule to see if it has access to the previous stage
-def has_entrance_access_rule(multiworld: MultiWorld, stage: str, region: str, player: int) -> None:
-    rule = lambda state: state.has(region, player) and state.has(stage, player)
+def has_entrance_access_rule(multiworld: MultiWorld, item: str, region: str, player: int) -> None:
+    rule = lambda state: state.has(region, player) and state.has(item, player)
     for entrance in multiworld.get_region(region, player).entrances:
         entrance.access_rule = rule
 
 
 def has_stage_access_rule(multiworld: MultiWorld, stage: str, amount: int, region: str, player: int) -> None:
-    rule = lambda state: state.has(region, player) and \
-        (state.has(stage, player) or state.count("Progressive Stage", player) >= amount)
+    rule = lambda state: (
+        state.has(region, player) and (state.has(stage, player) or state.count("Progressive Stage", player) >= amount)
+    )
     for entrance in multiworld.get_region(region, player).entrances:
         entrance.access_rule = rule
 
@@ -31,19 +39,21 @@ def has_all_items(multiworld: MultiWorld, items: Set[str], region: str, player: 
 
 
 # Checks to see if chest/shrine are accessible
-def has_location_access_rule(multiworld: MultiWorld, environment: str, player: int, item_number: int, item_type: str)\
-        -> None:
+def has_location_access_rule(
+    multiworld: MultiWorld, environment: str, player: int, item_number: int, item_type: str
+) -> None:
     location_name = f"{environment}: {item_type} {item_number}"
     if item_type == "Scavenger":
         #  scavengers need to be locked till after a full loop since that is when they are capable of spawning.
         # (While technically the requirement is just beating 5 stages, this will ensure that the player will have
         #  a long enough run to have enough director credits for scavengers and
         #  help prevent being stuck in the same stages until that point).
-        multiworld.get_location(location_name, player).access_rule = \
-            lambda state: state.has(environment, player) and state.has("Stage 5", player)
+        multiworld.get_location(location_name, player).access_rule = lambda state: (
+            state.has(environment, player) and state.has("Stage 5", player)
+        )
     else:
-        multiworld.get_location(location_name, player).access_rule = \
-            lambda state: state.has(environment, player)
+        multiworld.get_location(location_name, player).access_rule = lambda state: state.has(environment, player)
+
 
 def explore_environment_location_rules(table, multiworld, player, chests, shrines, newts, scavengers, scanners):
     for i in range(len(table)):
@@ -57,7 +67,7 @@ def explore_environment_location_rules(table, multiworld, player, chests, shrine
                 has_location_access_rule(multiworld, environment_name, player, chest, "Chest")
             for shrine in range(1, shrines + 1):
                 has_location_access_rule(multiworld, environment_name, player, shrine, "Shrine")
-            if newts > 0:
+            if newts > 0 and environment_name not in environments_without_newt_altars:
                 for newt in range(1, newts + 1):
                     has_location_access_rule(multiworld, environment_name, player, newt, "Newt Altar")
             if i > 0:
@@ -82,7 +92,8 @@ def set_rules(ror2_world: "RiskOfRainWorld") -> None:
                 altars=ror2_options.altars_per_stage.value,
                 dlc_sotv=bool(ror2_options.dlc_sotv.value),
                 dlc_sots=bool(ror2_options.dlc_sots.value),
-                stage_variants=bool(ror2_options.stage_variants)
+                dlc_alloyed=bool(ror2_options.dlc_alloyed.value),
+                stage_variants=bool(ror2_options.stage_variants),
             )
         )
 
@@ -96,25 +107,35 @@ def set_rules(ror2_world: "RiskOfRainWorld") -> None:
             for i in range(1, divisions + 1):  # since divisions is the floor of total_locations / 25
                 if i * event_location_step != total_locations:
                     event_loc = multiworld.get_location(f"Pickup{i * event_location_step}", player)
-                    set_rule(event_loc,
-                             lambda state, i=i: state.can_reach(f"ItemPickup{i * event_location_step - 1}",
-                                                                "Location", player))
+                    set_rule(
+                        event_loc,
+                        lambda state, i=i: state.can_reach(
+                            f"ItemPickup{i * event_location_step - 1}", "Location", player
+                        ),
+                    )
                     # we want to create a rule for each of the 25 locations per division
                 for n in range(i * event_location_step, (i + 1) * event_location_step + 1):
                     if n > total_locations:
                         break
                     if n == i * event_location_step:
-                        set_rule(multiworld.get_location(f"ItemPickup{n}", player),
-                                 lambda state, event_item=event_loc.item.name: state.has(event_item, player))
+                        set_rule(
+                            multiworld.get_location(f"ItemPickup{n}", player),
+                            lambda state, event_item=event_loc.item.name: state.has(event_item, player),
+                        )
                     else:
-                        set_rule(multiworld.get_location(f"ItemPickup{n}", player),
-                                 lambda state, n=n: state.can_reach(f"ItemPickup{n - 1}", "Location", player))
-        set_rule(multiworld.get_location("Victory", player),
-                 lambda state: state.can_reach(f"ItemPickup{total_locations}", "Location", player))
+                        set_rule(
+                            multiworld.get_location(f"ItemPickup{n}", player),
+                            lambda state, n=n: state.can_reach(f"ItemPickup{n - 1}", "Location", player),
+                        )
+        set_rule(
+            multiworld.get_location("Victory", player),
+            lambda state: state.can_reach(f"ItemPickup{total_locations}", "Location", player),
+        )
         if total_revivals or ror2_options.start_with_revive.value:
-            add_rule(multiworld.get_location("Victory", player),
-                     lambda state: state.has("Dio's Best Friend", player,
-                                             total_revivals + ror2_options.start_with_revive))
+            add_rule(
+                multiworld.get_location("Victory", player),
+                lambda state: state.has("Dio's Best Friend", player, total_revivals + ror2_options.start_with_revive),
+            )
 
     else:
         # explore mode
@@ -124,26 +145,70 @@ def set_rules(ror2_world: "RiskOfRainWorld") -> None:
         scavengers = ror2_options.scavengers_per_stage.value
         scanners = ror2_options.scanner_per_stage.value
         # Vanilla stages
-        explore_environment_location_rules(environment_vanilla_orderedstages_table, multiworld, player, chests, shrines, newts,
-                                           scavengers, scanners)
+        explore_environment_location_rules(
+            environment_vanilla_orderedstages_table, multiworld, player, chests, shrines, newts, scavengers, scanners
+        )
         # Vanilla Variant stages
         if ror2_options.stage_variants:
-            explore_environment_location_rules(environment_vanilla_variant_orderedstages_table, multiworld, player, chests, shrines, newts,
-                                               scavengers, scanners)
+            explore_environment_location_rules(
+                environment_vanilla_variant_orderedstages_table,
+                multiworld,
+                player,
+                chests,
+                shrines,
+                newts,
+                scavengers,
+                scanners,
+            )
         # SoTv stages
         if ror2_options.dlc_sotv:
-            explore_environment_location_rules(environment_sotv_orderedstages_table, multiworld, player, chests, shrines,
-                                               newts, scavengers, scanners)
+            explore_environment_location_rules(
+                environment_sotv_orderedstages_table, multiworld, player, chests, shrines, newts, scavengers, scanners
+            )
         # SoTS stages
         if ror2_options.dlc_sots:
-            explore_environment_location_rules(environment_sost_orderedstages_table, multiworld, player, chests, shrines,
-                                               newts, scavengers, scanners)
+            explore_environment_location_rules(
+                environment_sost_orderedstages_table, multiworld, player, chests, shrines, newts, scavengers, scanners
+            )
         if ror2_options.dlc_sots and ror2_options.stage_variants:
-            explore_environment_location_rules(environment_sots_variants_orderedstages_table, multiworld, player, chests, shrines,
-                                               newts, scavengers, scanners)
+            explore_environment_location_rules(
+                environment_sots_variants_orderedstages_table,
+                multiworld,
+                player,
+                chests,
+                shrines,
+                newts,
+                scavengers,
+                scanners,
+            )
+        # Alloyed stages
+        if ror2_options.dlc_alloyed:
+            explore_environment_location_rules(
+                environment_alloyed_orderedstages_table,
+                multiworld,
+                player,
+                chests,
+                shrines,
+                newts,
+                scavengers,
+                scanners,
+            )
+        if ror2_options.dlc_alloyed and ror2_options.stage_variants:
+            explore_environment_location_rules(
+                environment_alloyed_variants_orderedstages_table,
+                multiworld,
+                player,
+                chests,
+                shrines,
+                newts,
+                scavengers,
+                scanners,
+            )
 
-        has_entrance_access_rule(multiworld, "Hidden Realm: A Moment, Fractured", "Hidden Realm: A Moment, Whole",
-                                 player)
+        # Entrance Rules
+        has_entrance_access_rule(
+            multiworld, "Hidden Realm: A Moment, Fractured", "Hidden Realm: A Moment, Whole", player
+        )
         has_stage_access_rule(multiworld, "Stage 1", 1, "Hidden Realm: Bazaar Between Time", player)
         has_entrance_access_rule(multiworld, "Hidden Realm: Bazaar Between Time", "Void Fields", player)
         has_entrance_access_rule(multiworld, "Stage 5", "Commencement", player)
@@ -156,6 +221,11 @@ def set_rules(ror2_world: "RiskOfRainWorld") -> None:
                 has_all_items(multiworld, {"Stage 5", "The Planetarium"}, "Commencement", player)
         if ror2_options.dlc_sots:
             has_entrance_access_rule(multiworld, "Stage 5", "Prime Meridian", player)
+        if ror2_options.dlc_alloyed:
+            has_entrance_access_rule(multiworld, "Solutional Haunt", "Computational Exchange", player)
+            has_entrance_access_rule(multiworld, "Computational Exchange", "Neural Sanctum", player)
+            has_entrance_access_rule(multiworld, "Stage 5", "Neural Sanctum", player)
+            # TODO: Are the items that drop in Solutional Haunt and Conduit Canyon Guaranteed to unlock final boss or do they need to be added to the item pool?
 
     # Win Condition
     multiworld.completion_condition[player] = lambda state: state.has("Victory", player)
