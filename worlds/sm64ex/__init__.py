@@ -9,6 +9,20 @@ from .Regions import create_regions, sm64_level_to_entrances, SM64Levels
 from BaseClasses import Item, Tutorial, ItemClassification, Region
 from ..AutoWorld import World, WebWorld
 
+filler_item_options_lambda = {
+    "1Up Mushroom": lambda options: options.one_up_filler_percentage,
+    "Health Restore 1 Pip": lambda options: options.one_health_pip_filler_percentage,
+    "Health Restore 2 Pip": lambda options: options.two_health_pip_filler_percentage,
+    "Health Restore 3 Pip": lambda options: options.three_health_pip_filler_percentage,
+    "Health Restore 4 Pip": lambda options: options.four_health_pip_filler_percentage,
+    "Health Full Restore": lambda options: options.full_restore_filler_percentage,
+    "Bonk Trap": lambda options: options.bonk_trap_filler_percentage,
+    "Fire Trap": lambda options: options.fire_trap_filler_percentage,
+    "Amp Trap": lambda options: options.amp_trap_filler_percentage,
+    "Chuckya Trap": lambda options: options.chuckya_trap_filler_percentage,
+    "Spin Trap": lambda options: options.spin_trap_filler_percentage,
+    "Gust Trap": lambda options: options.gust_trap_filler_percentage,
+}
 
 class SM64Web(WebWorld):
     tutorials = [Tutorial(
@@ -108,9 +122,18 @@ class SM64World(World):
 
         return item
 
+    def build_filler_list(self, num_items=None):
+        if num_items is None or num_items < 0:
+            num_items = 1
+        filler_item_percentage_map = {key: val(self.options) for key, val in filler_item_options_lambda.items()}
+        filler_item_names = list(filler_item_percentage_map.keys())
+        filler_weights = [filler_item_percentage_map[k] for k in filler_item_names]
+        filler_items = self.random.choices(filler_item_names, weights=filler_weights, k=num_items)
+        return filler_items
+
     def create_items(self):
-        # 1Up Mushrooms
-        self.multiworld.itempool += [self.create_item("1Up Mushroom") for i in range(0,self.filler_count)]
+        # Filler
+        self.multiworld.itempool += [self.create_item(filler_name) for filler_name in self.build_filler_list(num_items=self.filler_count)]
         # Power Stars
         star_range = self.number_of_stars
         # Vanilla 100 Coin stars have to removed from the pool if other max star increasing options are active.
@@ -200,7 +223,7 @@ class SM64World(World):
             self.multiworld.get_location("RR: 100 Coins", self.player).place_locked_item(self.create_item("Power Star"))
 
     def get_filler_item_name(self) -> str:
-        return "1Up Mushroom"
+        return self.build_filler_list(num_items=1)[0]
 
     def fill_slot_data(self):
         return {
