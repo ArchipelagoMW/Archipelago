@@ -1,7 +1,7 @@
 from math import floor
 from typing import TYPE_CHECKING, Set, Optional, Callable, Dict, Tuple, Iterable
 
-from BaseClasses import CollectionState, Location
+from BaseClasses import DEFAULT_COLLECTION_RULE, CollectionState, Location
 from .item.item_groups import kerrigan_non_ulimates, kerrigan_logic_active_abilities
 from .item.item_names import PROGRESSIVE_PROTOSS_AIR_WEAPON, PROGRESSIVE_PROTOSS_AIR_ARMOR, PROGRESSIVE_PROTOSS_SHIELDS
 from .options import (
@@ -658,7 +658,7 @@ class SC2Logic:
 
     def nova_escape_assist(self, state: CollectionState) -> bool:
         return state.has_any({item_names.NOVA_BLINK, item_names.NOVA_HOLO_DECOY, item_names.NOVA_IONIC_FORCE_FIELD}, self.player)
-    
+
     def nova_beat_stone(self, state: CollectionState) -> bool:
         """
         Used for any units logic for beating Stone. Shotgun may not be possible; may need feedback.
@@ -2387,7 +2387,7 @@ class SC2Logic:
             # Tested by THE EV, "facetank with Kerrigan and stutter step to the end with >10s left"
             # > have to lure the first group of Zerg in the 2nd timed section into the first room of the second area
             # > (with the heal box) so you can kill them before the timer starts.
-            # 
+            #
             # phaneros: Technically possible without the levels, but adding them in for safety margin and to hopefully
             # make generation force this branch less often
             or (state.has_any((item_names.KERRIGAN_HEROIC_FORTITUDE, item_names.KERRIGAN_INFEST_BROODLINGS), self.player)
@@ -2747,7 +2747,7 @@ class SC2Logic:
             and (self.take_over_ai_allies or (self.zerg_competent_comp(state) and self.zerg_big_monsters(state)))
             and self.zerg_power_rating(state) >= 6
         )
-    
+
     def protoss_unsealing_the_past_ledge_requirement(self, state: CollectionState) -> bool:
         return (
             state.has_any((item_names.COLOSSUS, item_names.WRATHWALKER), self.player)
@@ -3682,7 +3682,7 @@ class SC2Logic:
 
     def has_race_units(self, target: int, race: SC2Race) -> Callable[["CollectionState"], bool]:
         if target == 0 or race == SC2Race.ANY:
-            return Location.access_rule
+            return DEFAULT_COLLECTION_RULE
         result = self.unit_count_functions.get((race, target))
         if result is not None:
             return result

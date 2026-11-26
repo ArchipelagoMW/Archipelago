@@ -5,7 +5,7 @@ from dataclasses import dataclass, field
 from functools import cached_property, singledispatch
 from typing import Iterable, Set, Tuple, List, Optional
 
-from BaseClasses import CollectionState, Location, Entrance
+from BaseClasses import DEFAULT_COLLECTION_RULE, CollectionState, Location, Entrance
 from worlds.generic.Rules import CollectionRule
 from . import StardewRule, AggregatingStardewRule, Count, Has, TotalReceived, Received, Reach, true_
 
@@ -198,7 +198,7 @@ def _(rule: Reach, state: CollectionState, expected: bool | None, mode: ExplainM
                 access_rules = [Reach(spot.parent_region.name, "Region", rule.player)]
             else:
                 access_rules = [spot.access_rule, Reach(spot.parent_region.name, "Region", rule.player)]
-        elif spot.access_rule == Location.access_rule:
+        elif spot.access_rule == DEFAULT_COLLECTION_RULE:
             # Sometime locations just don't have an access rule and all the relevant logic is in the parent region.
             access_rules = [Reach(spot.parent_region.name, "Region", rule.player)]
 
@@ -215,7 +215,7 @@ def _(rule: Reach, state: CollectionState, expected: bool | None, mode: ExplainM
                 access_rules = [Reach(spot.parent_region.name, "Region", rule.player)]
             else:
                 access_rules = [spot.access_rule, Reach(spot.parent_region.name, "Region", rule.player)]
-        elif spot.access_rule == Entrance.access_rule:
+        elif spot.access_rule == DEFAULT_COLLECTION_RULE:
             # Sometime entrances just don't have an access rule and all the relevant logic is in the parent region.
             access_rules = [Reach(spot.parent_region.name, "Region", rule.player)]
 
