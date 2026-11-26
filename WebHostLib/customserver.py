@@ -241,7 +241,7 @@ class RandomPortSocketCreator:
                 for p in psutil.process_iter(["net_connections"])
             )
 
-    def _get_used_ports(self, host: str) -> frozenset[int]:
+    def _get_used_ports(self, host: str = "") -> frozenset[int]:
         """ Get currently used ports with 90-second caching. """
         t_hash = round(time.monotonic() / 90)
         if self._used_ports_cache is None or self._used_ports_cache[1] != t_hash:
