@@ -79,6 +79,13 @@ def get_seed_name(random_source) -> str:
     return f"{random_source.randint(0, pow(10, seeddigits) - 1)}".zfill(seeddigits)
 
 
+def expand_yaml_quantity(yaml: dict[str, Any], quantity: int) -> list[dict[str, Any]]:
+    """Expand a player YAML into independent entries for each requested player."""
+    weights = [yaml]
+    weights.extend(copy.deepcopy(yaml) for _ in range(quantity - 1))
+    return weights
+
+
 def main(args=None) -> tuple[argparse.Namespace, int]:
     # __name__ == "__main__" check so unittests that already imported worlds don't trip this.
     if __name__ == "__main__" and "worlds" in sys.modules:
@@ -143,8 +150,7 @@ def main(args=None) -> tuple[argparse.Namespace, int]:
                         if not allow_quantity and quantity > 1:
                             raise ValueError("Quantity greater than 1 is deactivated by host settings.")
 
-                        for _ in range(quantity):
-                            weights_for_file.append(yaml)
+                        weights_for_file.extend(expand_yaml_quantity(yaml, quantity))
                 weights_cache[fname] = tuple(weights_for_file)
 
             except Exception as e:
