@@ -1558,6 +1558,9 @@ def patch_rom(multiworld: MultiWorld, rom: LocalRom, player: int):
         from .PotShuffle import apply_pot_shuffle
 
         enemizer_patches.apply_enemizer_base_patch(rom)
+        enemy_shuffle_state = getattr(local_world, "enemy_shuffle_state", None)
+        combat_model = getattr(enemy_shuffle_state, "combat_model", None)
+        enemizer_patches.apply_enemy_combat_data(rom, combat_model or enemizer_patches.VANILLA_COMBAT_MODEL)
 
         enemy_shuffle_enabled = bool(local_world.options.enemy_shuffle)
         bush_shuffle_enabled = bool(local_world.options.bush_shuffle)
@@ -1604,7 +1607,6 @@ def patch_rom(multiworld: MultiWorld, rom: LocalRom, player: int):
                 allow_zero_damage=True,
             )
 
-        enemy_shuffle_state = getattr(local_world, "enemy_shuffle_state", None)
         if local_world.options.enemy_shuffle and enemy_shuffle_state is not None:
             apply_enemy_shuffle(rom, enemy_shuffle_state)
 

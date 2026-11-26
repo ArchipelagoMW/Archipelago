@@ -55,8 +55,8 @@ class TestDungeons(TestInvertedOWG):
             ["Swamp Palace - Entrance", False, []],
             ["Swamp Palace - Entrance", False, [], ['Magic Mirror']],
             ["Swamp Palace - Entrance", False, [], ['Flippers']],
-            ["Swamp Palace - Entrance", True, ['Magic Mirror', 'Flippers', 'Pegasus Boots']],
-            ["Swamp Palace - Entrance", True, ['Magic Mirror', 'Flippers', 'Beat Agahnim 1']],
+            ["Swamp Palace - Entrance", True, ['Magic Mirror', 'Flippers', 'Pegasus Boots', 'Fighter Sword']],
+            ["Swamp Palace - Entrance", True, ['Magic Mirror', 'Flippers', 'Beat Agahnim 1', 'Fighter Sword']],
 
             ["Skull Woods - Compass Chest", True, []],
 

@@ -20,6 +20,8 @@ from worlds.alttp.EnemizerPatches import (
     TRINEXX_ICE_FLOOR_ROUTINE_ADDRESS,
     TRINEXX_ICE_PROJECTILE_TILE_ADDRESS,
     VANILLA_HIDDEN_ENEMY_CHANCE_POOL,
+    SPRITE_DAMAGE_SUBCLASS_TABLE_ADDRESS,
+    apply_enemy_combat_data,
     _apply_killable_thief,
     _apply_randomized_tile_trap_floor_tile,
     _get_enemizer_symbol,
@@ -32,6 +34,21 @@ from worlds.alttp.EnemizerPatches import (
     _shuffle_damage_groups,
     _update_hidden_enemy_item_table_for_retro_mode,
     apply_enemizer_base_patch,
+)
+from worlds.alttp.enemizer_data.enemy_combat_data import (
+    BLOB_TRANSFORM_EFFECT,
+    DAMAGE_SOURCE_TABLE_ADDRESS,
+    DAMAGE_SOURCE_TABLE_SIZE,
+    EnemyCombatModel,
+    MOTHULA_SPRITE_ID,
+    SPRITE_DAMAGE_SUBCLASS_TABLE_SIZE,
+    SPRITE_DAMAGE_SUBCLASSES,
+    VANILLA_COMBAT_MODEL,
+    build_damage_source_table_bytes,
+    build_packed_sprite_damage_subclass_table,
+    get_blob_transform_damage_classes,
+    get_damage_effect,
+    get_killing_damage_classes,
 )
 
 
@@ -77,6 +94,59 @@ class TestEnemizerPatches(unittest.TestCase):
 
         self.assertEqual(tuple(rom.read_bytes(TRINEXX_ICE_PROJECTILE_TILE_ADDRESS, 2)), (0x88, 0x01))
         self.assertEqual(rom.read_byte(TILE_TRAP_FLOOR_TILE_ADDRESS), 0x12)
+
+    def test_enemy_combat_data_is_written_from_python_tables(self) -> None:
+        rom = FakeRom()
+
+        apply_enemy_combat_data(rom)
+
+        damage_sources = build_damage_source_table_bytes()
+        packed_subclasses = build_packed_sprite_damage_subclass_table()
+        mothula_packed_offset = SPRITE_DAMAGE_SUBCLASS_TABLE_ADDRESS + (MOTHULA_SPRITE_ID * 8)
+
+        self.assertEqual(len(damage_sources), DAMAGE_SOURCE_TABLE_SIZE)
+        self.assertEqual(len(packed_subclasses), SPRITE_DAMAGE_SUBCLASS_TABLE_SIZE)
+        self.assertEqual(tuple(rom.read_bytes(DAMAGE_SOURCE_TABLE_ADDRESS, len(damage_sources))), tuple(damage_sources))
+        self.assertEqual(
+            tuple(rom.read_bytes(SPRITE_DAMAGE_SUBCLASS_TABLE_ADDRESS, len(packed_subclasses))),
+            tuple(packed_subclasses),
+        )
+        self.assertEqual(SPRITE_DAMAGE_SUBCLASSES[MOTHULA_SPRITE_ID][4:6], (1, 1))
+        self.assertEqual(get_damage_effect(MOTHULA_SPRITE_ID, 4), 0x10)
+        self.assertEqual(get_damage_effect(MOTHULA_SPRITE_ID, 5), 0x10)
+        self.assertIn(4, get_killing_damage_classes(MOTHULA_SPRITE_ID))
+        self.assertIn(5, get_killing_damage_classes(MOTHULA_SPRITE_ID))
+        self.assertEqual(get_damage_effect(0x27, 10), BLOB_TRANSFORM_EFFECT)
+        self.assertEqual(get_blob_transform_damage_classes(0x27), (10, 15))
+        self.assertEqual(
+            tuple(rom.read_bytes(mothula_packed_offset, 8)),
+            (0x01, 0x11, 0x11, 0x00, 0x00, 0x04, 0x00, 0x00),
+        )
+
+    def test_enemy_combat_data_uses_supplied_combat_model(self) -> None:
+        rom = FakeRom()
+        custom_damage_sources = list(VANILLA_COMBAT_MODEL.damage_sources)
+        custom_damage_sources[0] = custom_damage_sources[0]._replace(subclasses=(0x7F,) + custom_damage_sources[0].subclasses[1:])
+        custom_sprite_rows = list(VANILLA_COMBAT_MODEL.sprite_damage_subclasses)
+        mothula_row = list(custom_sprite_rows[MOTHULA_SPRITE_ID])
+        mothula_row[0] = 0x07
+        custom_sprite_rows[MOTHULA_SPRITE_ID] = tuple(mothula_row)
+        custom_combat_model = EnemyCombatModel(
+            damage_sources=tuple(custom_damage_sources),
+            sprite_damage_subclasses=tuple(custom_sprite_rows),
+            enemy_health_table=VANILLA_COMBAT_MODEL.enemy_health_table,
+        )
+
+        apply_enemy_combat_data(rom, custom_combat_model)
+
+        self.assertEqual(
+            tuple(rom.read_bytes(DAMAGE_SOURCE_TABLE_ADDRESS, DAMAGE_SOURCE_TABLE_SIZE)),
+            tuple(build_damage_source_table_bytes(custom_combat_model.damage_sources)),
+        )
+        self.assertEqual(
+            tuple(rom.read_bytes(SPRITE_DAMAGE_SUBCLASS_TABLE_ADDRESS, SPRITE_DAMAGE_SUBCLASS_TABLE_SIZE)),
+            tuple(build_packed_sprite_damage_subclass_table(custom_combat_model.sprite_damage_subclasses)),
+        )
 
     def test_enemy_shuffle_enables_hidden_enemy_and_mimic_support(self) -> None:
         rom = FakeRom()

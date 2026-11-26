@@ -58,10 +58,10 @@ class TestDungeons(TestVanillaOWG):
             ["Swamp Palace - Entrance", False, [], ['Magic Mirror']],
             ["Swamp Palace - Entrance", False, [], ['Moon Pearl']],
             ["Swamp Palace - Entrance", False, [], ['Flippers']],
-            ["Swamp Palace - Entrance", True, ['Magic Mirror', 'Moon Pearl', 'Flippers', 'Pegasus Boots']],
-            ["Swamp Palace - Entrance", True, ['Magic Mirror', 'Moon Pearl', 'Flippers', 'Flute']],
+            ["Swamp Palace - Entrance", True, ['Magic Mirror', 'Moon Pearl', 'Flippers', 'Pegasus Boots', 'Fighter Sword']],
+            ["Swamp Palace - Entrance", True, ['Magic Mirror', 'Moon Pearl', 'Flippers', 'Flute', 'Fighter Sword']],
             ["Swamp Palace - Entrance", True, ['Magic Mirror', 'Moon Pearl', 'Flippers', 'Hammer', 'Progressive Glove']],
-            ["Swamp Palace - Entrance", True, ['Magic Mirror', 'Moon Pearl', 'Flippers', 'Progressive Glove', 'Progressive Glove']],
+            ["Swamp Palace - Entrance", True, ['Magic Mirror', 'Moon Pearl', 'Flippers', 'Progressive Glove', 'Progressive Glove', 'Fighter Sword']],
 
             ["Skull Woods - Compass Chest", False, []],
             ["Skull Woods - Compass Chest", True, ['Magic Mirror', 'Pegasus Boots']],
