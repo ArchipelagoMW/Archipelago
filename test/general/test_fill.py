@@ -625,6 +625,28 @@ class TestDistributeItemsRestrictive(unittest.TestCase):
 
         self.assertTrue(player1.locations[0].item.advancement)
 
+    def test_priority_retry(self):
+        multiworld = generate_test_multiworld(2)
+        player1 = generate_player_data(multiworld, 1, 1, prog_item_count=1, basic_item_count=0)
+        player2 = generate_player_data(multiworld, 2, 2, prog_item_count=1, basic_item_count=1)
+
+        set_rule(player2.locations[1], lambda state: state.has(player2.prog_items[0].name, player2.id))
+        player2.locations[1].progress_type = LocationProgressType.PRIORITY
+
+        # Ensure that the priority location is last in the order,
+        # so that it wouldn't receive progression if priority fill is unsuccessful
+        location_order = [player1.locations[0], player2.locations[0], player2.locations[1]]
+
+        def fill_hook(progitempool, _, _2, fill_locations):
+            fill_locations.sort(key=lambda location: location_order.index(location))
+
+        multiworld.worlds[player2.id].fill_hook = fill_hook
+
+        # Old priority fill couldn't solve this. Priority retry can solve it.
+        distribute_items_restrictive(multiworld)
+
+        self.assertTrue(player2.locations[1].advancement)
+
     def test_can_remove_locations_in_fill_hook(self):
         """Test that distribute_items_restrictive calls the fill hook and allows for item and location removal"""
         multiworld = generate_test_multiworld()
