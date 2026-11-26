@@ -86,12 +86,8 @@ class SavingPrincessWorld(World):
 
     topology_present = False
 
-    item_name_to_id = {
-        key: value.code for key, value in (Items.item_dict.items() - Items.item_dict_events.items())
-    }
-    location_name_to_id = {
-        key: value.code for key, value in (Locations.location_dict.items() - Locations.location_dict_events.items())
-    }
+    item_name_to_id = {key: value.code for key, value in Items.item_dict_no_events.items()}
+    location_name_to_id = {key: value.code for key, value in Locations.location_dict_expanded.items()}
 
     item_name_groups = {
         "Weapons": {key for key in Items.item_dict_weapons.keys()},
