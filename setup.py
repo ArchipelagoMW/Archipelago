@@ -63,17 +63,12 @@ from Cython.Build import cythonize
 
 
 non_apworlds: set[str] = {
-    "A Link to the Past",
-    "Adventure",
-    "Archipelago",
-    "Lufia II Ancient Cave",
-    "Meritous",
-    "Ocarina of Time",
-    "Overcooked! 2",
-    "Raft",
-    "Super Mario 64",
-    "VVVVVV",
-    "Wargroove",
+    "Archipelago",  # needs a way to specify load order
+    "Adventure", # loads basepatch badly
+    "Final Fantasy",  # loads json files badly
+    "Lufia II Ancient Cave",  # loads basepatch badly
+    "Ocarina of Time",  # has executables in folder
+    "Raft",  # loads json files badly
 }
 
 
