@@ -367,7 +367,10 @@ class World(metaclass=AutoWorldRegister):
     def __getattr__(self, item: str) -> Any:
         if item == "settings":
             return getattr(self.__class__, item)
-        raise AttributeError
+        err = f"{self.game} world has no attribute '{item}'"
+        if item in self.options_dataclass.type_hints:
+            err += f". Did you mean 'self.options.{item}'?"
+        raise AttributeError(err)
 
     # overridable methods that get called by Main.py, sorted by execution order
     # can also be implemented as a classmethod and called "stage_<original_name>",
