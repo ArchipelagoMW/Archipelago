@@ -42,14 +42,17 @@ jobs:
       run: |
         wget https://apt.llvm.org/llvm.sh
         chmod +x ./llvm.sh
-        sudo ./llvm.sh 19
+        sudo ./llvm.sh 23
     - name: Install scan-build command
       run: |
-        sudo apt install clang-tools-19
+        sudo apt install clang-tools-23
     - name: Get a recent python
       uses: actions/setup-python@v6.2.0
       with:
         python-version: '3.12'
+    - name: Install libcairo
+      run: |
+        sudo apt install libcairo2-dev
     - name: Install dependencies
       run: |
         python -m venv venv
@@ -58,7 +61,7 @@ jobs:
     - name: scan-build
       run: |
         source venv/bin/activate
-        scan-build-19 --status-bugs -o scan-build-reports -disable-checker deadcode.DeadStores python setup.py build -y
+        scan-build-23 --status-bugs -o scan-build-reports -disable-checker deadcode.DeadStores python setup.py build -y
     - name: Store report
       if: failure()
       uses: actions/upload-artifact@v7.0.0
