@@ -213,7 +213,7 @@ portal_mapping: list[Portal] = [
            destination="East Forest Redux Interior", tag="_upper", direction=Direction.east),
     Portal(name="Forest Grave Path Lower Entrance", region="East Forest",
            destination="Sword Access", tag="_lower", direction=Direction.east),
-    Portal(name="Forest Grave Path Upper Entrance", region="East Forest",
+    Portal(name="Forest Grave Path Upper Entrance", region="East Forest above Guard House 2",
            destination="Sword Access", tag="_upper", direction=Direction.east),
 
     Portal(name="Forest Grave Path Upper Exit", region="Forest Grave Path Upper",
@@ -618,6 +618,7 @@ tunic_er_regions: dict[str, RegionInfo] = {
     "Forest Belltower Main behind bushes": RegionInfo("Forest Belltower"),
     "Forest Belltower Lower": RegionInfo("Forest Belltower"),
     "East Forest": RegionInfo("East Forest Redux"),
+    "East Forest above Guard House 2": RegionInfo("East Forest Redux"),
     "East Forest Dance Fox Spot": RegionInfo("East Forest Redux"),
     "East Forest Portal": RegionInfo("East Forest Redux", outlet_region="East Forest"),
     "Lower Forest": RegionInfo("East Forest Redux"),  # bottom of the forest

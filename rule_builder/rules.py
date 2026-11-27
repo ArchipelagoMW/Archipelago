@@ -425,6 +425,7 @@ class NestedRule(Rule[TWorld], game="Archipelago"):
             return combined_deps
 
 
+@dataclasses.dataclass(init=False)
 class AtLeast(NestedRule[TWorld], game="Archipelago"):
     """A rule that returns true when at least N child rules evaluate as true"""
 

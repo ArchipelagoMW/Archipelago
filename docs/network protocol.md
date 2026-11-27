@@ -310,7 +310,6 @@ Sent by the client to initiate a connection to an Archipelago game session.
 | 0b001 | Indicates you get items sent from other worlds. |
 | 0b010 | Indicates you get items sent from your own world. Requires 0b001 to be set. |
 | 0b100 | Indicates you get your starting inventory sent. Requires 0b001 to be set. |
-| null  | Null or undefined loads settings from world definition for backwards compatibility. This is deprecated. |
 
 #### Authentication
 Many, if not all, other packets require a successfully authenticated client. This is described in more detail in [Archipelago Connection Handshake](#Archipelago-Connection-Handshake).
@@ -413,16 +412,16 @@ Basic chat command which sends text to the server to be distributed to other cli
 Requests the data package from the server. Does not require client authentication.
 
 #### Arguments
-| Name  | Type | Notes                                                                                                                           |
-|-------| ----- |---------------------------------------------------------------------------------------------------------------------------------|
-| games | list\[str\]  | Optional. If specified, will only send back the specified data. Such as, \["Factorio"\] -> Datapackage with only Factorio data. |
+| Name  | Type        | Notes                                                                                                                                                         |
+|-------|-------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| games | list\[str\] | The server will send datapackage(s) for the specified game(s) requested in the supplied list. Such as, \["Factorio"\] -> Datapackage with only Factorio data. |
 
 ### Bounce
 Send this message to the server, tell it which clients should receive the message and the server will forward
 the message to all those targets to which the requirements ("teams", "games", "slots", "tags") apply according
 to the operator chosen:
 - "or": Conditions are chained with "or".
-- "and": Conditions are chained with "and". Important note: If a condition is empty, it evaluates as **True**.
+- "and": Conditions are chained with "and". (Important note: A completely missing key evaluates as **True**, whereas an empty list evaluates as **False**)
 - "legacy": Evaluates as `teams and (games or slots or tags)`.
 
 #### Arguments
