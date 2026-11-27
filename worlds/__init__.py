@@ -88,22 +88,12 @@ class WorldSource:
                     )
                     logging.error(e)
                 else:
-                    if sys.stdout:
-                        e.add_note(f"Affected world source: {self.resolved_path}")
-                        raise e
-                    else:
-                        err_message = f"{e}\nAffected world source: {self.resolved_path}"
-                        messagebox("Couldn't load worlds", err_message, error=True)
-                        sys.exit(1)
+                    raise
             except BadZipFile as e:
-                err_message = (f"The world source {self.resolved_path} is not a valid zip. "
-                               "It is likely either corrupted, or was packaged incorrectly.")
-
-                if sys.stdout:
-                    raise RuntimeError(err_message) from e
-                else:
-                    messagebox("Couldn't load worlds", err_message, error=True)
-                    sys.exit(1)
+                raise RuntimeError(
+                    f"The world source {self.resolved_path} is not a valid zip. "
+                    "It is likely either corrupted, or was packaged incorrectly."
+                ) from e
             else:
                 # re-read and add in manifest
                 assert apworld.path
