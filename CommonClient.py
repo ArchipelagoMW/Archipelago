@@ -9,7 +9,6 @@ import sys
 import typing
 import time
 import functools
-import warnings
 
 import ModuleUpdate
 ModuleUpdate.update()
@@ -25,9 +24,11 @@ from MultiServer import CommandProcessor, mark_raw
 from NetUtils import (Endpoint, decode, NetworkItem, encode, JSONtoTextParser, ClientStatus, Permission, NetworkSlot,
                       RawJSONtoTextParser, add_json_text, add_json_location, add_json_item, JSONTypes, HintStatus, SlotType)
 from Utils import gui_enabled, Version, stream_input, async_start
-from worlds import network_data_package, AutoWorldRegister
+from worlds import network_data_package, load_world_sources
 import os
 import ssl
+
+load_world_sources()
 
 if typing.TYPE_CHECKING:
     import kvui

@@ -13,6 +13,7 @@ import warnings
 from collections.abc import Iterator, Sequence
 from enum import IntEnum
 from threading import Lock
+from inspect import get_annotations
 from typing import cast, Any, BinaryIO, ClassVar, TextIO, TypeVar, Union
 
 __all__ = [
@@ -38,7 +39,7 @@ def _update_cache() -> None:
     try:
         from worlds.AutoWorld import AutoWorldRegister
         for world in AutoWorldRegister.world_types.values():
-            annotation = world.__annotations__.get("settings", None)
+            annotation = get_annotations(world).get("settings", None)
             if annotation is None or annotation == "ClassVar[Optional['Group']]":
                 continue
             _world_settings_name_cache[world.settings_key] = f"{world.__module__}.{world.__name__}"
@@ -68,9 +69,10 @@ class Group:
 
     def __iter__(self) -> Iterator[str]:
         cls_members = dir(self.__class__)
-        members = filter(lambda k: not k.startswith("_") and (k not in cls_members or k in self.__annotations__),
-                         list(self.__annotations__) +
-                         [name for name in dir(self) if name not in self.__annotations__])
+        annotations = get_annotations(self.__class__)
+        members = filter(lambda k: not k.startswith("_") and (k not in cls_members or k in annotations),
+                         list(annotations) +
+                         [name for name in dir(self) if name not in annotations])
         return members.__iter__()
 
     def __contains__(self, key: str) -> bool:
@@ -112,9 +114,10 @@ class Group:
     def get_type_hints(cls) -> dict[str, Any]:
         """Returns resolved type hints for the class"""
         if cls._type_cache is None:
-            if not cls.__annotations__ or not isinstance(next(iter(cls.__annotations__.values())), str):
+            annotations = get_annotations(cls)
+            if not annotations or not isinstance(next(iter(annotations.values())), str):
                 # non-str: assume already resolved
-                cls._type_cache = cls.__annotations__
+                cls._type_cache = annotations
             else:
                 # str: build dicts and resolve with eval
                 mod = sys.modules[cls.__module__]  # assume the module wasn't deleted
@@ -134,7 +137,7 @@ class Group:
         assert isinstance(dct, dict), f"{self.__class__.__name__}.update called with " \
                                       f"{dct.__class__.__name__} instead of dict."
 
-        for k in self.__annotations__:
+        for k in get_annotations(self.__class__):
             if not k.startswith("_") and k not in dct:
                 self._changed = True  # key missing from host.yaml
 
@@ -278,7 +281,7 @@ class Group:
                 # write empty dict for empty Group with no instance values
                 cls._dump_value({}, f, indent="  " * level)
             # validate group
-            for name in cls.__annotations__.keys():
+            for name in get_annotations(cls):
                 assert hasattr(cls, name), f"{cls}.{name} is missing a default value"
             # dump ordered members
             for name in entries:
@@ -778,7 +781,7 @@ class Settings(Group):
                 return super().__getattribute__(key)
             assert getattr(world, "settings_key") == key
             try:
-                cls_or_name = world.__annotations__["settings"]
+                cls_or_name = get_annotations(world)["settings"]
             except KeyError:
                 import warnings
                 warnings.warn(f"World {world_cls_name} does not define settings. Please consider upgrading the world.")

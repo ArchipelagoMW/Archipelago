@@ -43,10 +43,11 @@ jobs:
         python:
           - {version: '3.12'}
           - {version: '3.13'}
+          - {version: '3.14'}
         include:
-          - python: {version: '3.13'}  # current
+          - python: {version: '3.14'}  # current
             os: windows-latest
-          - python: {version: '3.13'}  # current
+          - python: {version: '3.14'}  # current
             os: macos-26-intel
 
     steps:
@@ -78,7 +79,7 @@ jobs:
         os:
           - ubuntu-latest
         python:
-          - {version: '3.13'}  # current
+          - {version: '3.14'}  # current
 
     steps:
     - uses: actions/checkout@v6.0.2

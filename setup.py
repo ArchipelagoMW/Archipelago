@@ -57,6 +57,10 @@ if __name__ == "__main__":
     import ModuleUpdate
     ModuleUpdate.update(yes="--yes" in sys.argv or "-y" in sys.argv)
 
+from worlds import load_world_sources
+
+load_world_sources()
+
 from worlds.LauncherComponents import components, icon_paths
 from Utils import version_tuple, is_windows, is_linux
 from Cython.Build import cythonize

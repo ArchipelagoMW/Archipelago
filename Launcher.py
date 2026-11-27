@@ -19,7 +19,7 @@ from collections.abc import Callable, Sequence
 from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
-    from worlds.LauncherComponents import Component, Type
+    from worlds.LauncherComponents import Component
 
 if __name__ == "__main__":
     import ModuleUpdate
@@ -129,7 +129,7 @@ def run_gui(launch_components: list["Component"], args: Any) -> None:
         button_layout: ScrollBox = ObjectProperty(None)
         search_box: MDTextField = ObjectProperty(None)
         cards: list[LauncherCard]
-        current_filter: Sequence[str, "Type"] | None
+        current_filter: Sequence[str] | None
         failed_worlds: bool = BooleanProperty(False)
 
         def __init__(self, ctx=None, components=None, args=None):
@@ -195,11 +195,16 @@ def run_gui(launch_components: list["Component"], args: Any) -> None:
 
             return button_card
 
-        def _refresh_components(self, type_filter: Sequence["Type"] | None = None) -> None:
+        def _refresh_components(self, type_filter: Sequence[str] | None = None, reset_scroll: bool = False) -> None:
+            from worlds.LauncherComponents import Type, components
             if not type_filter:
-                from worlds.LauncherComponents import Type
-                type_filter = [Type.CLIENT, Type.ADJUSTER, Type.TOOL, Type.MISC]
+                type_filter = self.current_filter or (Type.CLIENT, Type.ADJUSTER, Type.TOOL, Type.MISC)
             favorites = "favorites" in type_filter
+
+            existing_card_components = {card.component for card in self.cards if card.component}
+            for component in components:
+                if component not in existing_card_components:
+                    self.cards.append(self.build_card(component))
 
             # clear before repopulating
             assert self.button_layout, "must call `build` first"
@@ -215,18 +220,19 @@ def run_gui(launch_components: list["Component"], args: Any) -> None:
             for card in cards:
                 self.button_layout.layout.add_widget(card)
 
-            top = self.button_layout.children[0].y + self.button_layout.children[0].height \
-                           - self.button_layout.height
-            scroll_percent = self.button_layout.convert_distance_to_scroll(0, top)
-            self.button_layout.scroll_y = max(0, min(1, scroll_percent[1]))
+            if reset_scroll:
+                top = self.button_layout.children[0].y + self.button_layout.children[0].height \
+                            - self.button_layout.height
+                scroll_percent = self.button_layout.convert_distance_to_scroll(0, top)
+                self.button_layout.scroll_y = max(0, min(1, scroll_percent[1]))
 
         def filter_clients_by_type(self, caller: MDButton):
-            self._refresh_components(caller.type)
+            self._refresh_components(caller.type, reset_scroll=True)
             self.search_box.text = ""
 
         def filter_clients_by_name(self, caller: MDTextField, name: str) -> None:
             if len(name) == 0:
-                self._refresh_components(self.current_filter)
+                self._refresh_components(self.current_filter, reset_scroll=True)
                 return
             from worlds.LauncherComponents import Type
 
@@ -281,10 +287,10 @@ def run_gui(launch_components: list["Component"], args: Any) -> None:
             if "worlds" in sys.modules:
                 logging.warning("worlds module already loaded.")
             else:
-                import importlib
                 import time
                 start = time.perf_counter()
-                importlib.import_module("worlds")
+                from worlds import load_world_sources
+                load_world_sources()
                 logging.error(f"Worlds module loaded in {time.perf_counter() - start:.2f} seconds")
 
             global refresh_components
@@ -301,8 +307,6 @@ def run_gui(launch_components: list["Component"], args: Any) -> None:
             from worlds import failed_world_loads
             logger = logging.getLogger("Worlds")
             self.failed_worlds = bool(failed_world_loads)
-            for component in components:
-                self.cards.append(self.build_card(component))
             self._refresh_components(self.current_filter)
             logger.removeHandler(self.loading_handler)
             self.screen_manager.current = "main"
@@ -318,6 +322,11 @@ def run_gui(launch_components: list["Component"], args: Any) -> None:
                 from worlds.LauncherComponents import get_exe
                 if not launch(get_exe(button.component), button.component.cli) and button.component.cli:
                     open_text = "Running in the background..."
+
+            # This function and run_component() are fairly redundant with component.run(), but duplicate this here for
+            # now so refresh works when using the button on install_apworld like with drag-and-drop
+            if refresh_components:
+                refresh_components()
 
             MDSnackbar(MDSnackbarText(text=open_text), y=dp(24), pos_hint={"center_x": 0.5},
                        size_hint_x=0.5).open()
@@ -396,7 +405,6 @@ def run_gui(launch_components: list["Component"], args: Any) -> None:
 
 
 def run_component(component: "Component", *args):
-    global refresh_components
     component.run(*args)
     if refresh_components:
         refresh_components()
@@ -419,6 +427,9 @@ def main(args: argparse.Namespace | dict | None = None):
             else:
                 args['launch_components'] = [text_client_component, *components]
         else:
+            from worlds import load_world_sources
+            load_world_sources()
+
             from worlds.LauncherComponents import identify
             file, component = identify(path)
             if file:

@@ -374,7 +374,7 @@ def run_server_process(
     del ponyconfig
     gc.collect()  # free intermediate objects used during setup
 
-    loop = asyncio.get_event_loop()
+    loop = asyncio.new_event_loop()
     socket_creator = RandomPortSocketCreator(game_ports)
 
     async def start_room(room_id):
