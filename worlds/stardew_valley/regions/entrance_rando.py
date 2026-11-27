@@ -179,7 +179,9 @@ def connect_regions(
 
             eligible = connection_data.is_eligible_for_randomization(player_randomization_flag) or plando_details.is_disconnected(exit_name)
             if eligible and ERBehavior.chaos in er_behavior:
-                special_randomized_entrances[connection_data.name] = connection_data.name
+                destination_entrance = f"{connection_data.name} Exit" if RandomizationFlag.IS_ONE_WAY in connection_data.flag else connection_data.name
+
+                special_randomized_entrances[connection_data.name] = destination_entrance
                 origin_region.connect(destination_region, connection_data.name)
                 plando_details.mark_target_created(exit_name)
                 continue
