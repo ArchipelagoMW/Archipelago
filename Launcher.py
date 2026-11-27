@@ -307,8 +307,6 @@ def run_gui(launch_components: list["Component"], args: Any) -> None:
             from worlds import failed_world_loads
             logger = logging.getLogger("Worlds")
             self.failed_worlds = bool(failed_world_loads)
-            for component in components:
-                self.cards.append(self.build_card(component))
             self._refresh_components(self.current_filter)
             logger.removeHandler(self.loading_handler)
             self.screen_manager.current = "main"
