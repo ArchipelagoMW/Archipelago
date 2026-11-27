@@ -323,6 +323,11 @@ def run_gui(launch_components: list["Component"], args: Any) -> None:
                 if not launch(get_exe(button.component), button.component.cli) and button.component.cli:
                     open_text = "Running in the background..."
 
+            # This function and run_component() are fairly redundant with component.run(), but duplicate this here for
+            # now so refresh works when using the button on install_apworld like with drag-and-drop
+            if refresh_components:
+                refresh_components()
+
             MDSnackbar(MDSnackbarText(text=open_text), y=dp(24), pos_hint={"center_x": 0.5},
                        size_hint_x=0.5).open()
 
@@ -400,7 +405,6 @@ def run_gui(launch_components: list["Component"], args: Any) -> None:
 
 
 def run_component(component: "Component", *args):
-    global refresh_components
     component.run(*args)
     if refresh_components:
         refresh_components()
