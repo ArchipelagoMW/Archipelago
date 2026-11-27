@@ -761,4 +761,10 @@ SONG_DATA: Dict[str, SongData] = {
     "Waraenai": SongData(2900885, "103-3", "Happy Otaku Pack Vol.21", False, 2, 5, 8),
     "YOU MAKE ME DASH!!": SongData(2900886, "103-4", "Happy Otaku Pack Vol.21", True, 4, 7, 9),
     "Ambivalence Emotion": SongData(2900887, "103-5", "Happy Otaku Pack Vol.21", False, 5, 8, 11),
+    "Dadbattle Erect Kawai Sprite Remix": SongData(2900888, "104-0", "SO FUNKIN' MUSE", True, 6, 8, 10),
+    "Satin Panties Erect Kawai Sprite Remix": SongData(2900889, "104-1", "SO FUNKIN' MUSE", True, 6, 8, 10),
+    "High Erect Kohta Takahashi & Kawai Sprite Remix": SongData(2900890, "104-2", "SO FUNKIN' MUSE", True, 5, 7, 9),
+    "M.I.L.F": SongData(2900891, "104-3", "SO FUNKIN' MUSE", True, 5, 7, 10),
+    "Ugh": SongData(2900892, "104-4", "SO FUNKIN' MUSE", True, 6, 8, 10),
+    "Stress Pico Mix": SongData(2900893, "104-5", "SO FUNKIN' MUSE", True, 5, 7, 10),
 }
