@@ -19,7 +19,7 @@ from collections.abc import Callable, Sequence
 from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
-    from worlds.LauncherComponents import Component, Type
+    from worlds.LauncherComponents import Component
 
 if __name__ == "__main__":
     import ModuleUpdate
@@ -129,7 +129,7 @@ def run_gui(launch_components: list["Component"], args: Any) -> None:
         button_layout: ScrollBox = ObjectProperty(None)
         search_box: MDTextField = ObjectProperty(None)
         cards: list[LauncherCard]
-        current_filter: Sequence[str, "Type"] | None
+        current_filter: Sequence[str] | None
         failed_worlds: bool = BooleanProperty(False)
 
         def __init__(self, ctx=None, components=None, args=None):
@@ -195,11 +195,16 @@ def run_gui(launch_components: list["Component"], args: Any) -> None:
 
             return button_card
 
-        def _refresh_components(self, type_filter: Sequence["Type"] | None = None) -> None:
+        def _refresh_components(self, type_filter: Sequence[str] | None = None, reset_scroll: bool = False) -> None:
+            from worlds.LauncherComponents import Type, components
             if not type_filter:
-                from worlds.LauncherComponents import Type
-                type_filter = [Type.CLIENT, Type.ADJUSTER, Type.TOOL, Type.MISC]
+                type_filter = self.current_filter or (Type.CLIENT, Type.ADJUSTER, Type.TOOL, Type.MISC)
             favorites = "favorites" in type_filter
+
+            existing_card_components = {card.component for card in self.cards if card.component}
+            for component in components:
+                if component not in existing_card_components:
+                    self.cards.append(self.build_card(component))
 
             # clear before repopulating
             assert self.button_layout, "must call `build` first"
@@ -215,18 +220,19 @@ def run_gui(launch_components: list["Component"], args: Any) -> None:
             for card in cards:
                 self.button_layout.layout.add_widget(card)
 
-            top = self.button_layout.children[0].y + self.button_layout.children[0].height \
-                           - self.button_layout.height
-            scroll_percent = self.button_layout.convert_distance_to_scroll(0, top)
-            self.button_layout.scroll_y = max(0, min(1, scroll_percent[1]))
+            if reset_scroll:
+                top = self.button_layout.children[0].y + self.button_layout.children[0].height \
+                            - self.button_layout.height
+                scroll_percent = self.button_layout.convert_distance_to_scroll(0, top)
+                self.button_layout.scroll_y = max(0, min(1, scroll_percent[1]))
 
         def filter_clients_by_type(self, caller: MDButton):
-            self._refresh_components(caller.type)
+            self._refresh_components(caller.type, reset_scroll=True)
             self.search_box.text = ""
 
         def filter_clients_by_name(self, caller: MDTextField, name: str) -> None:
             if len(name) == 0:
-                self._refresh_components(self.current_filter)
+                self._refresh_components(self.current_filter, reset_scroll=True)
                 return
             from worlds.LauncherComponents import Type
 
