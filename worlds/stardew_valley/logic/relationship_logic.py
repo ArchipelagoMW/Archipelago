@@ -2,7 +2,7 @@ import math
 from typing import Union
 
 from Utils import cache_self1
-from .base_logic import BaseLogic, BaseLogicMixin
+
 from ..content.feature import friendsanity
 from ..data.villagers_data import Villager
 from ..stardew_rule import StardewRule, True_, false_
@@ -13,9 +13,11 @@ from ..strings.building_names import Building
 from ..strings.generic_names import Generic
 from ..strings.gift_names import Gift
 from ..strings.metal_names import Mineral
-from ..strings.region_names import Region, LogicRegion
+from ..strings.region_names import LogicRegion, Region
 from ..strings.season_names import Season
 from ..strings.villager_names import NPC, ModNPC
+from ..strings.wallet_item_names import Wallet
+from .base_logic import BaseLogic, BaseLogicMixin
 
 possible_kids = ("Cute Baby", "Ugly Baby")
 
@@ -198,6 +200,7 @@ class RelationshipLogic(BaseLogic):
         elif npc == ModNPC.goblin:
             rules.append(self.logic.region.can_reach_all(Region.witch_hut, Region.wizard_tower))
             rules.append(self.logic.has(ArtisanGood.void_mayonnaise))
+            rules.append(self.logic.quest.has_magic_ink())
 
         elif npc == ModNPC.juna:
             rules.append(self.logic.region.can_reach_all(Region.farm, Region.forest))
