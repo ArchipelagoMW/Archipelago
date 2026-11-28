@@ -30,7 +30,7 @@ class GrindLogicMixin(BaseLogicMixin):
 class GrindLogic(BaseLogic):
 
     def can_grind_mystery_boxes(self, quantity: int) -> StardewRule:
-        opening_rule = self.logic.region.can_reach(Region.blacksmith)
+        opening_rule = self.logic.region.can_reach(Region.blacksmith_shop)
         mystery_box_rule = self.logic.has(Consumable.mystery_box)
         book_of_mysteries_rule = self.logic.true_ \
             if not self.content.features.booksanity.is_enabled \
@@ -41,7 +41,7 @@ class GrindLogic(BaseLogic):
                                book_of_mysteries_rule, time_rule, )
 
     def can_grind_artifact_troves(self, quantity: int) -> StardewRule:
-        opening_rule = self.logic.region.can_reach(Region.blacksmith)
+        opening_rule = self.logic.region.can_reach(Region.blacksmith_shop)
         return self.logic.and_(opening_rule, self.logic.has(Geode.artifact_trove),
                                # Assuming one per month if the player does not grind it.
                                self.logic.time.has_lived_months(quantity))

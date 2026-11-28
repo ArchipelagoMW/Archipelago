@@ -63,4 +63,4 @@ class AbilityLogic(BaseLogic):
                     self.options.farm_type == FarmType.option_beach:
                 return True_()
 
-        return self.logic.money.can_spend_at(Region.carpenter, 350)
+        return self.logic.money.can_spend_at(Region.carpenter_shop, 350)

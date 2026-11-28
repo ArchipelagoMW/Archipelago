@@ -1,11 +1,22 @@
 import logging
 
 import Options as ap_options
+
+from ..data.regions import reverse_connection_name
+from ..mods.mod_data import get_invalid_mod_combination, mod_combination_is_valid
+from ..options.settings import StardewSettings
+from ..strings.ap_names.ap_option_names import (
+    DataRandomizationOptionName,
+    EatsanityOptionName,
+    EntranceRandomizationBehaviorOptionName,
+    HatsanityOptionName,
+)
 from . import options
 from .jojapocalypse_options import Jojapocalypse, JojaAreYouSure
 from ..mods.mod_data import mod_combination_is_valid, get_invalid_mod_combination
 from ..options.settings import StardewSettings
-from ..strings.ap_names.ap_option_names import EatsanityOptionName, HatsanityOptionName
+from ..strings.ap_names.ap_option_names import EatsanityOptionName, HatsanityOptionName, EntranceRandomizationBehaviorOptionName, DataRandomizationOptionName, \
+    SecretsanityOptionName
 
 logger = logging.getLogger(__name__)
 
@@ -32,9 +43,17 @@ def force_change_options_if_banned(world_options: options.StardewValleyOptions, 
         world_options.bundle_price.value = options.BundlePrice.option_very_expensive
         message = f"Max Bundles Price {message_template} Replaced with 'Very Expensive'"
         logger.warning(message)
-    if not settings.allow_chaos_er and world_options.entrance_randomization == options.EntranceRandomization.option_chaos:
+    if not settings.allow_chaos_er and EntranceRandomizationBehaviorOptionName.chaos in world_options.entrance_randomization_behavior:
+        world_options.entrance_randomization_behavior.value.remove(EntranceRandomizationBehaviorOptionName.chaos)
+        message = f"Chaos Entrance Randomization {message_template} removed from Entrance Randomization Behavior"
+        logger.warning(message)
+    if not settings.allow_decoupled_er and EntranceRandomizationBehaviorOptionName.decoupled in world_options.entrance_randomization_behavior:
+        world_options.entrance_randomization_behavior.value.remove(EntranceRandomizationBehaviorOptionName.decoupled)
+        message = f"Decoupled Entrance Randomization {message_template} removed from Entrance Randomization Behavior"
+        logger.warning(message)
+    if not settings.allow_overworld_er and world_options.entrance_randomization >= options.EntranceRandomization.option_overworld:
         world_options.entrance_randomization.value = options.EntranceRandomization.option_buildings
-        message = f"Chaos Entrance Randomization {message_template} Replaced with 'Buildings'"
+        message = f"Entrance Randomization {message_template} Replaced with 'Buildings'"
         logger.warning(message)
     if not settings.allow_shipsanity_everything and world_options.shipsanity == options.Shipsanity.option_everything:
         world_options.shipsanity.value = options.Shipsanity.option_full_shipment_with_fish
@@ -52,9 +71,29 @@ def force_change_options_if_banned(world_options: options.StardewValleyOptions, 
             world_options.hatsanity.value.add(HatsanityOptionName.difficult)
             message = f"Hatsanity Near or Post Perfection {message_template} Hatsanity setting reduced."
             logger.warning(message)
+    if not settings.allow_secretsanity_difficult and SecretsanityOptionName.difficult in world_options.secretsanity.value:
+        world_options.secretsanity.value.remove(SecretsanityOptionName.difficult)
+        message = f"Secretsanity Difficult {message_template} Secretsanity setting reduced."
+        logger.warning(message)
+    if not settings.allow_eldritch_traps and world_options.trap_difficulty.value >= options.TrapDifficulty.option_eldritch:
+        world_options.trap_difficulty.value = options.TrapDifficulty.option_nightmare
+        message = f"Eldritch Traps {message_template} Replaced with Nightmare"
+        logger.warning(message)
+    if not settings.allow_hell_and_nightmare_traps and world_options.trap_difficulty.value >= options.TrapDifficulty.option_hell:
+        world_options.trap_difficulty.value = options.TrapDifficulty.option_hard
+        message = f"Hell and Nightmare Traps {message_template} Replaced with Hard"
+        logger.warning(message)
     if not settings.allow_custom_logic:
         world_options.custom_logic.value = options.CustomLogic.preset_none
         message = f"Custom Logic {message_template} All flags toggled off."
+        logger.warning(message)
+    if not settings.allow_data_randomization:
+        world_options.data_randomization.value = options.DataRandomization.preset_none
+        message = f"Data Randomization {message_template} All flags toggled off."
+        logger.warning(message)
+    if not settings.allow_unbalanced_data_randomization_behavior and world_options.data_randomization_behavior.value >= options.DataRandomizationBehavior.option_randomized:
+        world_options.data_randomization_behavior.value = options.DataRandomizationBehavior.option_weighted_randomized
+        message = f"Unbalanced Data Randomization Behavior {message_template} Reduced to `Weighted Randomized`"
         logger.warning(message)
     if not settings.allow_jojapocalypse and world_options.jojapocalypse >= options.Jojapocalypse.option_allowed:
         world_options.jojapocalypse.value = options.Jojapocalypse.option_disabled
@@ -75,7 +114,9 @@ def force_change_options_if_incompatible(world_options: options.StardewValleyOpt
     force_ginger_island_inclusion_when_goal_is_ginger_island_related(world_options, player, player_name)
     force_walnutsanity_deactivation_when_ginger_island_is_excluded(world_options, player, player_name)
     force_qi_special_orders_deactivation_when_ginger_island_is_excluded(world_options, player, player_name)
-    force_accessibility_to_full_when_goal_requires_all_locations(player, player_name, world_options)
+    force_accessibility_to_full_when_goal_requires_all_locations(world_options, player, player_name)
+    warn_suspicious_plando_connections(world_options, player, player_name)
+    force_data_randomization_toggles_that_need_each_other(world_options, player, player_name)
 
 
 def force_no_jojapocalypse_without_being_sure(world_options: options.StardewValleyOptions, player: int, player_name: str) -> None:
@@ -150,7 +191,9 @@ def force_ginger_island_inclusion_when_goal_is_ginger_island_related(world_optio
                        f"Exclude Ginger Island option forced to 'False' for player {player} ({player_name})")
 
 
-def force_walnutsanity_deactivation_when_ginger_island_is_excluded(world_options: options.StardewValleyOptions, player: int, player_name: str):
+def force_walnutsanity_deactivation_when_ginger_island_is_excluded(
+    world_options: options.StardewValleyOptions, player: int, player_name: str
+) -> None:
     ginger_island_is_excluded = world_options.exclude_ginger_island == options.ExcludeGingerIsland.option_true
     walnutsanity_is_active = world_options.walnutsanity != options.Walnutsanity.preset_none
 
@@ -160,7 +203,9 @@ def force_walnutsanity_deactivation_when_ginger_island_is_excluded(world_options
                        f"Ginger Island was excluded from {player} ({player_name})'s world, so walnutsanity was force disabled")
 
 
-def force_qi_special_orders_deactivation_when_ginger_island_is_excluded(world_options: options.StardewValleyOptions, player: int, player_name: str):
+def force_qi_special_orders_deactivation_when_ginger_island_is_excluded(
+    world_options: options.StardewValleyOptions, player: int, player_name: str
+) -> None:
     ginger_island_is_excluded = world_options.exclude_ginger_island == options.ExcludeGingerIsland.option_true
     qi_board_is_active = world_options.special_order_locations.value & options.SpecialOrderLocations.value_qi
 
@@ -171,7 +216,36 @@ def force_qi_special_orders_deactivation_when_ginger_island_is_excluded(world_op
                        f"Ginger Island was excluded from {player} ({player_name})'s world, so Special Order Locations was changed from {original_option_name} to {world_options.special_order_locations.current_option_name}")
 
 
-def force_accessibility_to_full_when_goal_requires_all_locations(player, player_name, world_options):
+def warn_suspicious_plando_connections(
+    world_options: options.StardewValleyOptions, player: int, player_name: str
+) -> None:
+    if EntranceRandomizationBehaviorOptionName.decoupled in world_options.entrance_randomization_behavior:
+        return
+    plando_map = world_options.entrance_plando.value
+    for plando_connection in plando_map:
+        after_rev = reverse_connection_name(plando_connection.exit)
+        before_rev = reverse_connection_name(plando_connection.entrance)
+        if after_rev in plando_map:
+            continue
+        if after_rev is None and before_rev is None:  # a one-way
+            continue
+        if after_rev is None:  # A two-way connected to a one-way
+            logger.warning(
+                f"A two-way {plando_connection.entrance} was connected to a one-way {plando_connection.exit}. "
+                f"This might cause issues with GER if not being careful"
+            )
+            continue
+        if before_rev is None:  # A one-way connected to a two-way
+            logger.warning(
+                f"A one-way {plando_connection.entrance} was connected to a two-way {plando_connection.exit}. "
+                f"This might cause issues with GER if not being careful"
+            )
+            continue
+
+
+def force_accessibility_to_full_when_goal_requires_all_locations(
+    world_options: options.StardewValleyOptions, player: int, player_name: str
+) -> None:
     goal_is_allsanity = world_options.goal == options.Goal.option_allsanity
     goal_is_perfection = world_options.goal == options.Goal.option_perfection
     goal_requires_all_locations = goal_is_allsanity or goal_is_perfection
@@ -182,3 +256,17 @@ def force_accessibility_to_full_when_goal_requires_all_locations(player, player_
         goal_name = world_options.goal.current_option_name
         logger.warning(f"Goal '{goal_name}' requires full accessibility. "
                        f"Accessibility option forced to 'Full' for player {player} ({player_name})")
+
+
+def force_data_randomization_toggles_that_need_each_other(
+    world_options: options.StardewValleyOptions, player: int, player_name: str
+) -> None:
+    data_to_randomize = world_options.data_randomization.value
+    if len(data_to_randomize) <= 0:
+        return
+
+    if DataRandomizationOptionName.fish_catch_method in data_to_randomize and DataRandomizationOptionName.fish_location not in data_to_randomize:
+        world_options.data_randomization.value.remove(DataRandomizationOptionName.fish_catch_method)
+        logger.warning(f"Randomizing fish catch methods requires randomizing their locations. "
+                       f"Fish catch methods was removed from the DataRandomization in {player} ({player_name})'s world")
+

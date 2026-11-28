@@ -15,7 +15,7 @@ class Currency:
                         MemeCurrency.code, MemeCurrency.clic, MemeCurrency.steps, MemeCurrency.time, MemeCurrency.energy, MemeCurrency.blood,
                         MemeCurrency.cookies, MemeCurrency.child, MemeCurrency.dead_crops, MemeCurrency.dead_pumpkins, MemeCurrency.missed_fish,
                         MemeCurrency.time_elapsed, MemeCurrency.honeywell, MemeCurrency.sleep_days, MemeCurrency.bank_money, MemeCurrency.deathlinks,
-                        MemeCurrency.goat]
+                        MemeCurrency.goat, MemeCurrency.yeehaw, MemeCurrency.error]
 
 
 class MemeCurrency:
@@ -36,3 +36,5 @@ class MemeCurrency:
     time_elapsed = "Time Elapsed"
     honeywell = "Honeywell"
     missed_fish = "Missed Fish"
+    yeehaw = "YeeHaw!"
+    error = "Error"

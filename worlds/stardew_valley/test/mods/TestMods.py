@@ -1,28 +1,28 @@
-from ..TestGeneration import get_all_permanent_progression_items
-from ..assertion import ModAssertMixin, WorldAssertMixin
-from ..bases import SVTestCase, SVTestBase, solo_multiworld
-from ..options.presets import maxsanity_mods_7_x_x
 from ... import options
 from ...items import Group
-from ...mods.mod_data import invalid_mod_combinations
-from ...options.options import all_mods
+from ...mods.mod_data import ModNames, invalid_mod_combinations
+from ...options.options import JourneyOfThePrairieKing, JunimoKart
+from ..assertion import ModAssertMixin, WorldAssertMixin
+from ..bases import SVTestBase, SVTestCase, solo_multiworld
+from ..options.presets import maxsanity_mods_8_x_x
+from ..TestGeneration import get_all_permanent_progression_items
 
 
 class TestCanGenerateMaxsanityWithMods(WorldAssertMixin, ModAssertMixin, SVTestCase):
 
     def test_maxsanity_all_mods_when_generate_then_basic_checks(self):
-        with solo_multiworld(maxsanity_mods_7_x_x()) as (multi_world, _):
+        with solo_multiworld(maxsanity_mods_8_x_x()) as (multi_world, _):
             self.assert_basic_checks(multi_world)
 
     def test_maxsanity_all_mods_exclude_island_when_generate_then_basic_checks(self):
-        world_options = maxsanity_mods_7_x_x()
+        world_options = maxsanity_mods_8_x_x()
         world_options.update({options.ExcludeGingerIsland.internal_name: options.ExcludeGingerIsland.option_true})
         with solo_multiworld(world_options) as (multi_world, _):
             self.assert_basic_checks(multi_world)
 
 
 class TestCanGenerateWithEachMod(WorldAssertMixin, ModAssertMixin, SVTestCase):
-    mods = all_mods
+    mods = ModNames.enabled_mods()
 
     def test_given_single_mods_when_generate_then_basic_checks(self):
         for invalid_combination in invalid_mod_combinations:
@@ -40,15 +40,16 @@ class TestCanGenerateWithEachMod(WorldAssertMixin, ModAssertMixin, SVTestCase):
 
 
 class TestBaseLocationDependencies(SVTestBase):
-    options = {
-        options.Mods.internal_name: frozenset(options.all_mods_except_invalid_combinations),
+    options = {  # noqa: RUF012
+        options.Mods.internal_name: frozenset(ModNames.enabled_mods_except_invalid_combinations()),
         options.ToolProgression.internal_name: options.ToolProgression.option_progressive,
-        options.SeasonRandomization.internal_name: options.SeasonRandomization.option_randomized
+        options.SeasonRandomization.internal_name: options.SeasonRandomization.option_randomized,
     }
 
 
 class TestBaseItemGeneration(SVTestBase):
-    options = {
+    options = {  # noqa: RUF012
+        options.StartWithout.internal_name: options.StartWithout.preset_all,
         options.SeasonRandomization.internal_name: options.SeasonRandomization.option_progressive,
         options.SkillProgression.internal_name: options.SkillProgression.option_progressive_with_masteries,
         options.ExcludeGingerIsland.internal_name: options.ExcludeGingerIsland.option_false,
@@ -59,11 +60,13 @@ class TestBaseItemGeneration(SVTestBase):
         options.Craftsanity.internal_name: options.Craftsanity.option_all,
         options.Booksanity.internal_name: options.Booksanity.option_all,
         options.Walnutsanity.internal_name: options.Walnutsanity.preset_all,
+        options.JourneyOfThePrairieKing.internal_name: JourneyOfThePrairieKing.option_full_shuffle,
+        options.JunimoKart.internal_name: JunimoKart.option_full_shuffle,
         options.Moviesanity.internal_name: options.Moviesanity.option_all_movies_and_all_loved_snacks,
         options.Eatsanity.internal_name: options.Eatsanity.preset_all,
         options.Secretsanity.internal_name: options.Secretsanity.preset_all,
         options.IncludeEndgameLocations.internal_name: options.IncludeEndgameLocations.option_true,
-        options.Mods.internal_name: frozenset(options.all_mods_except_invalid_combinations),
+        options.Mods.internal_name: frozenset(ModNames.enabled_mods_except_invalid_combinations()),
     }
 
     def test_all_progression_items_are_added_to_the_pool(self):
@@ -75,7 +78,8 @@ class TestBaseItemGeneration(SVTestBase):
 
 
 class TestNoGingerIslandModItemGeneration(SVTestBase):
-    options = {
+    options = {  # noqa: RUF012
+        options.StartWithout.internal_name: options.StartWithout.preset_all,
         options.SeasonRandomization.internal_name: options.SeasonRandomization.option_progressive,
         options.SkillProgression.internal_name: options.SkillProgression.option_progressive_with_masteries,
         options.Friendsanity.internal_name: options.Friendsanity.option_all_with_marriage,
@@ -83,12 +87,14 @@ class TestNoGingerIslandModItemGeneration(SVTestBase):
         options.Chefsanity.internal_name: options.Chefsanity.preset_all,
         options.Craftsanity.internal_name: options.Craftsanity.option_all,
         options.Booksanity.internal_name: options.Booksanity.option_all,
+        options.JourneyOfThePrairieKing.internal_name: JourneyOfThePrairieKing.option_full_shuffle,
+        options.JunimoKart.internal_name: JunimoKart.option_full_shuffle,
         options.Secretsanity.internal_name: options.Secretsanity.preset_all,
         options.Moviesanity.internal_name: options.Moviesanity.option_all_movies_and_all_loved_snacks,
         options.Eatsanity.internal_name: options.Eatsanity.preset_all,
         options.ExcludeGingerIsland.internal_name: options.ExcludeGingerIsland.option_true,
         options.IncludeEndgameLocations.internal_name: options.IncludeEndgameLocations.option_true,
-        options.Mods.internal_name: frozenset(options.all_mods_except_invalid_combinations),
+        options.Mods.internal_name: frozenset(ModNames.enabled_mods_except_invalid_combinations()),
     }
 
     def test_all_progression_items_except_island_are_added_to_the_pool(self):
@@ -106,7 +112,7 @@ class TestVanillaLogicAlternativeWhenQuestsAreNotRandomized(WorldAssertMixin, SV
     """We often forget to add an alternative rule that works when quests are not randomized. When this happens, some
     Location are not reachable because they depend on items that are only added to the pool when quests are randomized.
     """
-    options = maxsanity_mods_7_x_x() | {
+    options = maxsanity_mods_8_x_x() | {
         options.QuestLocations.internal_name: options.QuestLocations.special_range_names["none"],
         options.Goal.internal_name: options.Goal.option_perfection,
     }

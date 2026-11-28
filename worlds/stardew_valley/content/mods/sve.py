@@ -1,31 +1,41 @@
-from ..game_content import ContentPack, StardewContent
-from ..mod_registry import register_mod_content_pack
-from ..override import override
-from ..vanilla.ginger_island import ginger_island_content_pack as ginger_island_content_pack
-from ...data import villagers_data, fish_data
+from ...data import fish_data, villagers_data
+from ...data.cooking_recipe import CookingRecipe
+from ...data.craftable_data import CraftingRecipe
 from ...data.game_item import ItemTag, Tag
 from ...data.harvest import ForagingSource, HarvestCropSource
-from ...data.requirement import YearRequirement, CombatRequirement, SpecificFriendRequirement, ToolRequirement, SkillRequirement, FishingRequirement
+from ...data.requirement import (
+    CombatRequirement,
+    FishingRequirement,
+    SkillRequirement,
+    SpecificFriendRequirement,
+    ToolRequirement,
+    YearRequirement,
+)
 from ...data.shop import ShopSource
-from ...mods.mod_data import ModNames
+from ...mods.mod_data import SVE_GINGER_ISLAND_PACK, ModNames
+from ...strings.animal_product_names import AnimalProduct
+from ...strings.artisan_good_names import ArtisanGood
 from ...strings.craftable_names import ModEdible
-from ...strings.crop_names import Fruit, SVEVegetable, SVEFruit
-from ...strings.fish_names import WaterItem, SVEWaterItem
+from ...strings.crop_names import Fruit, SVEFruit, SVEVegetable
+from ...strings.fish_names import Fish, SVEFish, SVEWaterItem, WaterItem
 from ...strings.flower_names import Flower
-from ...strings.food_names import SVEMeal, SVEBeverage
-from ...strings.forageable_names import Mushroom, Forageable, SVEForage
+from ...strings.food_names import Meal, SVEBeverage, SVEMeal
+from ...strings.forageable_names import Forageable, Mushroom, SVEForage
 from ...strings.gift_names import SVEGift
-from ...strings.monster_drop_names import ModLoot
+from ...strings.ingredient_names import Ingredient
+from ...strings.metal_names import Fossil
+from ...strings.monster_drop_names import Loot, ModLoot
 from ...strings.performance_names import Performance
 from ...strings.region_names import Region, SVERegion
 from ...strings.season_names import Season
 from ...strings.seed_names import SVESeed
 from ...strings.skill_names import Skill
 from ...strings.tool_names import Tool, ToolMaterial
-from ...strings.villager_names import ModNPC
-
-# Used to adapt content not yet moved to content packs to easily detect when SVE and Ginger Island are both enabled.
-SVE_GINGER_ISLAND_PACK = ModNames.sve + "+" + ginger_island_content_pack.name
+from ...strings.villager_names import NPC, ModNPC
+from ..game_content import ContentPack, StardewContent
+from ..mod_registry import register_mod_content_pack
+from ..override import override
+from ..vanilla.ginger_island import ginger_island_content_pack
 
 
 class SVEContentPack(ContentPack):
@@ -88,12 +98,12 @@ register_mod_content_pack(SVEContentPack(
         ModEdible.barbarian_elixir: (ShopSource(price=22000, shop_region=SVERegion.galmoran_outpost),),
         ModEdible.gravity_elixir: (ShopSource(price=4000, shop_region=SVERegion.galmoran_outpost),),
         SVEMeal.grampleton_orange_chicken: (ShopSource(price=650,
-                                                       shop_region=Region.saloon,
+                                                       shop_region=Region.saloon_shop,
                                                        other_requirements=(SpecificFriendRequirement(ModNPC.sophia, 6),)),),
         ModEdible.hero_elixir: (ShopSource(price=8000, shop_region=SVERegion.isaac_shop),),
         ModEdible.aegis_elixir: (ShopSource(price=28000, shop_region=SVERegion.galmoran_outpost),),
-        SVEBeverage.sports_drink: (ShopSource(price=750, shop_region=Region.hospital),),
-        SVEMeal.stamina_capsule: (ShopSource(price=4000, shop_region=Region.hospital),),
+        SVEBeverage.sports_drink: (ShopSource(price=750, shop_region=Region.hospital_shop),),
+        SVEMeal.stamina_capsule: (ShopSource(price=4000, shop_region=Region.hospital_shop),),
     },
     harvest_sources={
         Mushroom.red: (
@@ -217,5 +227,22 @@ register_mod_content_pack(SVEContentPack(
         villagers_data.susan,
         villagers_data.morris,
         override(villagers_data.wizard, bachelor=True, mod_name=ModNames.sve),
-    )
+    ),
+    cooking_recipes=(
+        CookingRecipe(name=SVEMeal.baked_berry_oatmeal, ingredients=((Forageable.salmonberry, 15), (Forageable.blackberry, 15), (Ingredient.sugar, 1), (Ingredient.wheat_flour, 2),), sources=(ShopSource(shop_region=SVERegion.bear_shop, price=0),),),
+        CookingRecipe(name=SVEMeal.big_bark_burger, ingredients=((SVEFish.puppyfish, 1), (Meal.bread, 1), (Ingredient.oil, 1),), sources=(ShopSource(shop_region=Region.saloon_shop, price=5500, other_requirements=(SpecificFriendRequirement(npc=NPC.gus, hearts=5),)),),),
+        CookingRecipe(name=SVEMeal.flower_cookie, ingredients=((SVEForage.ferngill_primrose, 1), (SVEForage.goldenrod, 1), (SVEForage.winter_star_rose, 1), (Ingredient.wheat_flour, 1), (Ingredient.sugar, 1), (AnimalProduct.large_egg, 1),), sources=(ShopSource(shop_region=SVERegion.bear_shop, price=0),),),
+        CookingRecipe(name=SVEMeal.frog_legs, ingredients=((SVEFish.frog, 1), (Ingredient.oil, 1), (Ingredient.wheat_flour, 1),), sources=(ShopSource(shop_region=Region.adventurer_guild, price=2000),),),
+        CookingRecipe(name=SVEMeal.glazed_butterfish, ingredients=((SVEFish.butterfish, 1), (Ingredient.wheat_flour, 1), (Ingredient.oil, 1),), sources=(ShopSource(shop_region=Region.saloon_shop, price=4000, other_requirements=(SpecificFriendRequirement(npc=NPC.gus, hearts=10),)),),),
+        CookingRecipe(name=SVEMeal.mixed_berry_pie, ingredients=((Fruit.strawberry, 6), (SVEFruit.salal_berry, 6), (Forageable.blackberry, 6), (SVEForage.bearberry, 6), (Ingredient.sugar, 1), (Ingredient.wheat_flour, 1),), sources=(ShopSource(shop_region=Region.saloon_shop, price=3500),),),
+        CookingRecipe(name=SVEMeal.mushroom_berry_rice, ingredients=((SVEForage.poison_mushroom, 3), (SVEForage.red_baneberry, 10), (Ingredient.rice, 1), (Ingredient.sugar, 2),), sources=(ShopSource(shop_region=Region.adventurer_guild, price=1500, other_requirements=(SpecificFriendRequirement(npc=ModNPC.marlon, hearts=6),)),),),
+        CookingRecipe(name=SVEMeal.seaweed_salad, ingredients=((SVEWaterItem.dulse_seaweed, 2), (WaterItem.seaweed, 2), (Ingredient.oil, 1),), sources=(ShopSource(shop_region=Region.fish_shop, price=1250),),),
+        CookingRecipe(name=SVEMeal.void_delight, ingredients=((SVEFish.void_eel, 1), (Loot.void_essence, 50), (Loot.solar_essence, 20),), sources=(ShopSource(shop_region=Region.sewer_shop, price=5000, other_requirements=(SpecificFriendRequirement(npc=NPC.krobus, hearts=10),)),),),
+        CookingRecipe(name=SVEMeal.void_salmon_sushi, ingredients=((Fish.void_salmon, 1), (ArtisanGood.void_mayonnaise, 1), (WaterItem.seaweed, 3),), sources=(ShopSource(shop_region=Region.sewer_shop, price=5000, other_requirements=(SpecificFriendRequirement(npc=NPC.krobus, hearts=10),)),),),
+    ),
+    crafting_recipes=(
+        CraftingRecipe(name=ModEdible.haste_elixir, ingredients=((Loot.void_essence, 35), (ModLoot.void_soul, 5), (Ingredient.sugar, 1), (Meal.spicy_eel, 1),), sources=(ShopSource(shop_region=SVERegion.alesia_shop, price=35000),),),
+        CraftingRecipe(name=ModEdible.hero_elixir, ingredients=((ModLoot.void_pebble, 3), (ModLoot.void_soul, 5), (Ingredient.oil, 1), (Loot.slime, 10),), sources=(ShopSource(shop_region=SVERegion.isaac_shop, price=65000),),),
+        CraftingRecipe(name=ModEdible.armor_elixir, ingredients=((Loot.solar_essence, 30), (ModLoot.void_soul, 5), (Ingredient.vinegar, 5), (Fossil.bone_fragment, 5),), sources=(ShopSource(shop_region=SVERegion.alesia_shop, price=50000),),),
+    ),
 ))

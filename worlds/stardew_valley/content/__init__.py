@@ -1,16 +1,39 @@
-from . import content_packs
-from .feature import cropsanity, friendsanity, fishsanity, booksanity, building_progression, skill_progression, tool_progression, hatsanity, museumsanity
-from .game_content import ContentPack, StardewContent, StardewFeatures
-from .unpacking import unpack_content
+from random import Random
+
 from .. import options
+from ..data_randomization.data_randomizer import randomize_data
 from ..strings.ap_names.ap_option_names import StartWithoutOptionName
 from ..strings.building_names import Building
+from . import content_packs
+from .feature import booksanity, building_progression, cropsanity, fishsanity, friendsanity, hatsanity, museumsanity, skill_progression, tool_progression
+from .game_content import ContentPack, StardewContent, StardewFeatures
+from .unpacking import unpack_content
+
+__all__ = [
+    "ContentPack",
+    "StardewContent",
+    "StardewFeatures",
+    "booksanity",
+    "building_progression",
+    "content_packs",
+    "create_content",
+    "cropsanity",
+    "fishsanity",
+    "friendsanity",
+    "hatsanity",
+    "museumsanity",
+    "skill_progression",
+    "tool_progression",
+    "unpack_content",
+]
 
 
-def create_content(player_options: options.StardewValleyOptions) -> StardewContent:
+def create_content(player_options: options.StardewValleyOptions, random: Random) -> StardewContent:
     active_packs = choose_content_packs(player_options)
     features = choose_features(player_options)
-    return unpack_content(features, active_packs)
+    content = unpack_content(features, active_packs)
+    randomize_data(content, player_options, random)
+    return content
 
 
 def choose_content_packs(player_options: options.StardewValleyOptions):
@@ -75,6 +98,7 @@ def choose_building_progression(building_option: options.BuildingProgression,
 
     starting_buildings.remove(Building.shipping_bin)
     starting_buildings.remove(Building.pet_bowl)
+    starting_buildings.remove(Building.farm_house)
 
     if (building_option == options.BuildingProgression.option_progressive
             or building_option == options.BuildingProgression.option_progressive_cheap

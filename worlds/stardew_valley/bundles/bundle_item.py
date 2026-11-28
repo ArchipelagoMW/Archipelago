@@ -4,6 +4,7 @@ from abc import ABC, abstractmethod
 from dataclasses import dataclass
 
 from ..content import StardewContent, content_packs
+from ..data.fish_data import crab_pot_difficulty
 from ..options import StardewValleyOptions, FestivalLocations
 from ..strings.crop_names import Fruit
 from ..strings.currency_names import Currency
@@ -49,6 +50,13 @@ class ContentItemSource(BundleItemSource):
         raise ValueError("This should not be called, check if the item is in the content instead.")
 
 
+class ContentCurrencySource(BundleItemSource):
+    """This is meant to be used for currencies that are managed by the content packs."""
+
+    def can_appear(self, content: StardewContent, options: StardewValleyOptions) -> bool:
+        raise ValueError("This should not be called, check if the currency is in the content instead.")
+
+
 @dataclass(frozen=True, order=True)
 class BundleItem:
     class Sources:
@@ -58,6 +66,7 @@ class BundleItem:
         masteries = MasteryItemSource()
         qi_board = QiBoardItemSource()
         content = ContentItemSource()
+        content_currency = ContentCurrencySource()
 
     item_name: str
     amount: int = 1
@@ -101,7 +110,15 @@ class BundleItem:
         return f"{self.amount} {quality} {self.get_item()}"
 
     def can_appear(self, content: StardewContent, options: StardewValleyOptions) -> bool:
+        if self.item_name in content.fishes:
+            crab_pot_illegal_qualities = [FishQuality.gold, FishQuality.iridium]
+            if content.fishes[self.item_name].difficulty == crab_pot_difficulty and self.quality in crab_pot_illegal_qualities:
+                return False
+
         if isinstance(self.source, ContentItemSource):
             return self.get_item() in content.game_items
+
+        if isinstance(self.source, ContentCurrencySource):
+            return self.get_item() in content.currencies
 
         return self.source.can_appear(content, options)

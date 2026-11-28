@@ -1,15 +1,16 @@
 from collections import Counter
 
-from ..bases import SVTestBase
+from Options import PlandoConnection
+
 from ... import options
-from ...options import ToolProgression, SeasonRandomization, Secretsanity
+from ...options import SeasonRandomization, Secretsanity, ToolProgression
 from ...strings.entrance_names import Entrance
-from ...strings.region_names import Region
-from ...strings.tool_names import Tool, ToolMaterial, FishingRod
+from ...strings.tool_names import FishingRod, Tool, ToolMaterial
+from ..bases import SVTestBase
 
 
 class TestProgressiveToolsLogic(SVTestBase):
-    options = {
+    options = {  # noqa: RUF012
         ToolProgression.internal_name: ToolProgression.option_progressive,
         SeasonRandomization.internal_name: SeasonRandomization.option_randomized,
         Secretsanity.internal_name: Secretsanity.preset_simple,
@@ -92,57 +93,48 @@ class TestProgressiveToolsLogic(SVTestBase):
 
 
 class TestToolVanillaRequiresBlacksmith(SVTestBase):
-    options = {
+    options = {  # noqa: RUF012
         options.EntranceRandomization: options.EntranceRandomization.option_buildings,
+        options.EntranceRandomizationBehavior: {},
         options.ToolProgression: options.ToolProgression.option_vanilla,
+        options.EntrancePlando: [
+            PlandoConnection(Entrance.enter_mens_locker_room, Entrance.town_to_blacksmith, "both", 100),
+            PlandoConnection(Entrance.enter_womens_locker_room, Entrance.beach_to_willy_fish_cabin, "both", 100),
+            PlandoConnection(Entrance.fish_cabin_to_boat_tunnel, Entrance.enter_sunroom, "both", 100),
+        ],
     }
-    seed = 4111845104987680262
-
-    # Seed is hardcoded to make sure the ER is a valid roll that actually lock the blacksmith behind the Railroad Boulder Removed.
 
     def test_cannot_get_any_tool_without_blacksmith_access(self):
-        railroad_item = "Railroad Boulder Removed"
-        place_region_at_entrance(self.multiworld, self.player, Region.blacksmith, Entrance.enter_bathhouse_entrance)
-        self.collect_all_except(railroad_item)
+        mens_locker_item = "Men's Locker Key"
+        self.collect_all_except(mens_locker_item)
 
         for tool in [Tool.pickaxe, Tool.axe, Tool.hoe, Tool.trash_can, Tool.watering_can]:
             for material in [ToolMaterial.copper, ToolMaterial.iron, ToolMaterial.gold, ToolMaterial.iridium]:
                 self.assert_rule_false(self.world.logic.tool.has_tool(tool, material))
 
-        self.collect(railroad_item)
+        self.collect(mens_locker_item)
 
         for tool in [Tool.pickaxe, Tool.axe, Tool.hoe, Tool.trash_can, Tool.watering_can]:
             for material in [ToolMaterial.copper, ToolMaterial.iron, ToolMaterial.gold, ToolMaterial.iridium]:
                 self.assert_rule_true(self.world.logic.tool.has_tool(tool, material))
 
     def test_cannot_get_fishing_rod_without_willy_access(self):
-        railroad_item = "Railroad Boulder Removed"
-        place_region_at_entrance(self.multiworld, self.player, Region.fish_shop, Entrance.enter_bathhouse_entrance)
-        self.collect_all_except(railroad_item)
+        mens_locker_item = "Women's Locker Key"
+        self.collect_all_except(mens_locker_item)
         self.collect("Fishing Level", 10)
         self.collect("Fishing Mastery")
 
         for fishing_rod in [FishingRod.training, FishingRod.bamboo, FishingRod.fiberglass, FishingRod.iridium, FishingRod.advanced_iridium]:
             self.assert_rule_false(self.world.logic.tool.has_fishing_rod(fishing_rod))
 
-        self.collect(railroad_item)
+        self.collect(mens_locker_item)
 
         for fishing_rod in [FishingRod.training, FishingRod.bamboo, FishingRod.fiberglass, FishingRod.iridium, FishingRod.advanced_iridium]:
             self.assert_rule_true(self.world.logic.tool.has_fishing_rod(fishing_rod))
 
 
-def place_region_at_entrance(multiworld, player, region, entrance):
-    region_to_place = multiworld.get_region(region, player)
-    entrance_to_place_region = multiworld.get_entrance(entrance, player)
-
-    entrance_to_switch = region_to_place.entrances[0]
-    region_to_switch = entrance_to_place_region.connected_region
-    entrance_to_switch.connect(region_to_switch)
-    entrance_to_place_region.connect(region_to_place)
-
-
 class TestVanillaFishingRodsRequiresLevelsAndMasteries(SVTestBase):
-    options = {
+    options = {  # noqa: RUF012
         options.SeasonRandomization: options.SeasonRandomization.option_disabled,
         options.Cropsanity: options.Cropsanity.option_disabled,
         options.SkillProgression: options.SkillProgression.option_progressive_with_masteries,
