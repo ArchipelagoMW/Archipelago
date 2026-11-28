@@ -63,7 +63,6 @@ Currently, the following games are supported:
 * Bomb Rush Cyberfunk
 * Aquaria
 * Yu-Gi-Oh! Ultimate Masters: World Championship Tournament 2006
-* A Hat in Time
 * Old School Runescape
 * Kingdom Hearts 1
 * Mega Man 2
