@@ -32,7 +32,7 @@ class FestivalLogic(BaseLogic):
     def initialize_rules(self):
         self.registry.festival_rules.update({
             FestivalCheck.egg_hunt: self.logic.festival.can_win_egg_hunt(),
-            FestivalCheck.strawberry_seeds: self.logic.source.has_access_to_any_with_multiplier(self.content.game_items[Seed.strawberry].sources, 10),
+            FestivalCheck.strawberry_seeds: self.logic.source.has_access_to_any_with_multiplier(self.content.game_items[Seed.strawberry].sources, 10.0, 2.0),
             FestivalCheck.dance: self.logic.relationship.has_hearts_with_any_bachelor(4) & self.logic.relationship.exists(NPC.lewis),
             FestivalCheck.tub_o_flowers: self.logic.festival.has_access_to_source(FestivalCheck.tub_o_flowers),
             FestivalCheck.rarecrow_5: self.logic.festival.has_access_to_source(FestivalCheck.rarecrow_5),

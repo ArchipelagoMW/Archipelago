@@ -36,6 +36,7 @@ from ..data.shop import (
     TailoringSource,
 )
 from ..strings.ap_names.ap_option_names import CustomLogicOptionName
+from ..strings.currency_names import Currency
 from ..strings.skill_names import Skill
 from ..strings.tv_channel_names import Channel
 from .base_logic import BaseLogic, BaseLogicMixin
@@ -66,14 +67,15 @@ class SourceLogic(BaseLogic):
         return self.logic.or_(*(self.logic.source.has_access_to(source) & self.logic.requirement.meet_all_requirements(source.other_requirements)
                                 for source in sources))
 
-    def has_access_to_any_with_multiplier(self, sources: Iterable[Source], multiplier: float):
+    def has_access_to_any_with_multiplier(self, sources: Iterable[Source], multiplier_money: float, multiplier_other: float):
         multiplied_sources = []
         for source in sources:
             # There might be other source types to multiply later, but for now it's the only one so I didn't code them all
             if isinstance(source, ShopSource):
+                price_multiplier = multiplier_money if source.currency == Currency.money else multiplier_other
                 multiplied_source = ShopSource(shop_region=source.shop_region,
-                                               price=math.ceil(source.price * multiplier),
-                                               items_price=tuple((math.ceil(price * multiplier), item) for price, item in source.items_price) if source.items_price else None,
+                                               price=math.ceil(source.price * price_multiplier),
+                                               items_price=tuple((math.ceil(price * multiplier_other), item) for price, item in source.items_price) if source.items_price else None,
                                                seasons=source.seasons,
                                                currency=source.currency,
                                                forbidden_items=source.forbidden_items,
