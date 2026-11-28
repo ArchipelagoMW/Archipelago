@@ -359,6 +359,8 @@ def set_rules(world: "MM3World") -> None:
         add_rule(world.get_location(names.wily_1_c8), lambda state: has_rush_vertical(state, world.player))
         for location in [names.wily_1_c4, names.wily_1_c8]:
             add_rule(world.get_location(location), lambda state: state.has(names.hard_knuckle, world.player))
+        for location in [names.wily_3_c10, names.wily_3_c11]:
+            add_rule(world.get_location(location), lambda state: state.has(names.hard_knuckle, world.player))
         for location in get_oneup_locations("Wily Stage 2"):
             if location == names.wily_2_c3:
                 continue
@@ -382,6 +384,8 @@ def set_rules(world: "MM3World") -> None:
             add_rule(world.get_location(location), lambda state: state.has(names.hard_knuckle, world.player))
         for location in [names.wily_1_c6, names.wily_1_c7, names.wily_1_c11, names.wily_1_c12]:
             add_rule(world.get_location(location), lambda state: has_rush_vertical(state, world.player))
+        for location in [names.wily_3_c1, names.wily_3_c2]:
+            add_rule(world.get_location(location), lambda state: state.has(names.hard_knuckle, world.player))
         for location in get_energy_locations("Wily Stage 2"):
             if location in (names.wily_2_c1, names.wily_2_c2, names.wily_2_c4):
                 continue
